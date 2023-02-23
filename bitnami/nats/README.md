@@ -7,12 +7,12 @@ NATS is an open source, lightweight and high-performance messaging system. It is
 [Overview of NATS](https://nats.io/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/nats
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/nats
 ```
 
 ## Introduction
@@ -31,8 +31,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/nats
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/nats
 ```
 
 The command deploys NATS on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -44,7 +44,7 @@ The command deploys NATS on the Kubernetes cluster in the default configuration.
 To uninstall/delete the `my-release` deployment:
 
 ```console
-$ helm delete my-release
+helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -57,7 +57,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------- | ----------------------------------------------- | ----- |
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-
 
 ### Common parameters
 
@@ -74,14 +73,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.command` | Command to override all containers in the deployment                                         | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                            | `["infinity"]`  |
 
-
 ### NATS parameters
 
 | Name                     | Description                                                                                           | Value                 |
 | ------------------------ | ----------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`         | NATS image registry                                                                                   | `docker.io`           |
 | `image.repository`       | NATS image repository                                                                                 | `bitnami/nats`        |
-| `image.tag`              | NATS image tag (immutable tags are recommended)                                                       | `2.9.14-debian-11-r0` |
+| `image.tag`              | NATS image tag (immutable tags are recommended)                                                       | `2.9.14-debian-11-r3` |
 | `image.digest`           | NATS image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag  | `""`                  |
 | `image.pullPolicy`       | NATS image pull policy                                                                                | `IfNotPresent`        |
 | `image.pullSecrets`      | NATS image pull secrets                                                                               | `[]`                  |
@@ -115,7 +113,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraEnvVars`           | Extra environment variables to be set on NATS container                                               | `[]`                  |
 | `extraEnvVarsCM`         | ConfigMap with extra environment variables                                                            | `""`                  |
 | `extraEnvVarsSecret`     | Secret with extra environment variables                                                               | `""`                  |
-
 
 ### NATS deployment/statefulset parameters
 
@@ -175,7 +172,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `initContainers`                        | Add additional init containers to the NATS pods                                                       | `[]`            |
 | `sidecars`                              | Add additional sidecar containers to the NATS pods                                                    | `[]`            |
 
-
 ### Traffic Exposure parameters
 
 | Name                               | Description                                                                                                                      | Value                    |
@@ -213,36 +209,34 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.allowExternal`      | The Policy model to apply                                                                                                        | `true`                   |
 | `networkPolicy.additionalRules`    | Additional NetworkPolicy Ingress "from" rules to set. Note that all rules are OR-ed.                                             | `{}`                     |
 
-
 ### Metrics parameters
 
-| Name                                       | Description                                                                                            | Value                   |
-| ------------------------------------------ | ------------------------------------------------------------------------------------------------------ | ----------------------- |
-| `metrics.enabled`                          | Enable Prometheus metrics via exporter side-car                                                        | `false`                 |
-| `metrics.image.registry`                   | Prometheus metrics exporter image registry                                                             | `docker.io`             |
-| `metrics.image.repository`                 | Prometheus metrics exporter image repository                                                           | `bitnami/nats-exporter` |
-| `metrics.image.tag`                        | Prometheus metrics exporter image tag (immutable tags are recommended)                                 | `0.10.1-debian-11-r32`  |
-| `metrics.image.digest`                     | Petete image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
-| `metrics.image.pullPolicy`                 | Prometheus metrics image pull policy                                                                   | `IfNotPresent`          |
-| `metrics.image.pullSecrets`                | Prometheus metrics image pull secrets                                                                  | `[]`                    |
-| `metrics.resources`                        | Metrics exporter resource requests and limits                                                          | `{}`                    |
-| `metrics.containerPort`                    | Prometheus metrics exporter port                                                                       | `7777`                  |
-| `metrics.flags`                            | Flags to be passed to Prometheus metrics                                                               | `[]`                    |
-| `metrics.service.type`                     | Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`)                                    | `ClusterIP`             |
-| `metrics.service.port`                     | Prometheus metrics service port                                                                        | `7777`                  |
-| `metrics.service.loadBalancerIP`           | Use serviceLoadBalancerIP to request a specific static IP, otherwise leave blank                       | `""`                    |
-| `metrics.service.annotations`              | Annotations for Prometheus metrics service                                                             | `{}`                    |
-| `metrics.service.labels`                   | Labels for Prometheus metrics service                                                                  | `{}`                    |
-| `metrics.serviceMonitor.enabled`           | Specify if a ServiceMonitor will be deployed for Prometheus Operator                                   | `false`                 |
-| `metrics.serviceMonitor.namespace`         | Namespace in which Prometheus is running                                                               | `monitoring`            |
-| `metrics.serviceMonitor.labels`            | Extra labels for the ServiceMonitor                                                                    | `{}`                    |
-| `metrics.serviceMonitor.jobLabel`          | The name of the label on the target service to use as the job name in Prometheus                       | `""`                    |
-| `metrics.serviceMonitor.interval`          | How frequently to scrape metrics                                                                       | `""`                    |
-| `metrics.serviceMonitor.scrapeTimeout`     | Timeout after which the scrape is ended                                                                | `""`                    |
-| `metrics.serviceMonitor.metricRelabelings` | Specify additional relabeling of metrics                                                               | `[]`                    |
-| `metrics.serviceMonitor.relabelings`       | Specify general relabeling                                                                             | `[]`                    |
-| `metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                                                    | `{}`                    |
-
+| Name                                       | Description                                                                                                   | Value                   |
+| ------------------------------------------ | ------------------------------------------------------------------------------------------------------------- | ----------------------- |
+| `metrics.enabled`                          | Enable Prometheus metrics via exporter side-car                                                               | `false`                 |
+| `metrics.image.registry`                   | Prometheus metrics exporter image registry                                                                    | `docker.io`             |
+| `metrics.image.repository`                 | Prometheus metrics exporter image repository                                                                  | `bitnami/nats-exporter` |
+| `metrics.image.tag`                        | Prometheus metrics exporter image tag (immutable tags are recommended)                                        | `0.10.1-debian-11-r35`  |
+| `metrics.image.digest`                     | NATS Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
+| `metrics.image.pullPolicy`                 | Prometheus metrics image pull policy                                                                          | `IfNotPresent`          |
+| `metrics.image.pullSecrets`                | Prometheus metrics image pull secrets                                                                         | `[]`                    |
+| `metrics.resources`                        | Metrics exporter resource requests and limits                                                                 | `{}`                    |
+| `metrics.containerPort`                    | Prometheus metrics exporter port                                                                              | `7777`                  |
+| `metrics.flags`                            | Flags to be passed to Prometheus metrics                                                                      | `[]`                    |
+| `metrics.service.type`                     | Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`)                                           | `ClusterIP`             |
+| `metrics.service.port`                     | Prometheus metrics service port                                                                               | `7777`                  |
+| `metrics.service.loadBalancerIP`           | Use serviceLoadBalancerIP to request a specific static IP, otherwise leave blank                              | `""`                    |
+| `metrics.service.annotations`              | Annotations for Prometheus metrics service                                                                    | `{}`                    |
+| `metrics.service.labels`                   | Labels for Prometheus metrics service                                                                         | `{}`                    |
+| `metrics.serviceMonitor.enabled`           | Specify if a ServiceMonitor will be deployed for Prometheus Operator                                          | `false`                 |
+| `metrics.serviceMonitor.namespace`         | Namespace in which Prometheus is running                                                                      | `monitoring`            |
+| `metrics.serviceMonitor.labels`            | Extra labels for the ServiceMonitor                                                                           | `{}`                    |
+| `metrics.serviceMonitor.jobLabel`          | The name of the label on the target service to use as the job name in Prometheus                              | `""`                    |
+| `metrics.serviceMonitor.interval`          | How frequently to scrape metrics                                                                              | `""`                    |
+| `metrics.serviceMonitor.scrapeTimeout`     | Timeout after which the scrape is ended                                                                       | `""`                    |
+| `metrics.serviceMonitor.metricRelabelings` | Specify additional relabeling of metrics                                                                      | `[]`                    |
+| `metrics.serviceMonitor.relabelings`       | Specify general relabeling                                                                                    | `[]`                    |
+| `metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                                                           | `{}`                    |
 
 ### Persistence parameters
 
@@ -255,7 +249,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.annotations`  | Annotations for the PVC                                             | `{}`                |
 | `persistence.selector`     | Selector to match an existing Persistent Volume for NATS's data PVC | `{}`                |
 
-
 ### Other parameters
 
 | Name                 | Description                                                    | Value   |
@@ -264,11 +257,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `pdb.minAvailable`   | Minimum number/percentage of pods that should remain scheduled | `1`     |
 | `pdb.maxUnavailable` | Maximum number/percentage of pods that may be made unavailable | `""`    |
 
-
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release \
+helm install my-release \
   --set auth.enabled=true,auth.user=my-user,auth.password=T0pS3cr3t \
     my-repo/nats
 ```
@@ -280,7 +272,7 @@ The above command enables NATS client authentication with `my-user` as user and 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml my-repo/nats
+helm install my-release -f values.yaml my-repo/nats
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -333,7 +325,7 @@ NATS version 2.0.0 has renamed the server binary filename from `gnatsd` to `nats
 however, it is still possible to use the chart to deploy NATS version 1.x.x using the `natsFilename` property.
 
 ```console
-$ helm install nats-v1 --set natsFilename=gnatsd --set image.tag=1.4.1 my-repo/nats
+helm install nats-v1 --set natsFilename=gnatsd --set image.tag=1.4.1 my-repo/nats
 ```
 
 ### To 7.0.0
@@ -377,7 +369,7 @@ Backwards compatibility is not guaranteed unless you modify the labels used on t
 Use the workaround below to upgrade from versions previous to 1.0.0. The following example assumes that the release name is nats:
 
 ```console
-$ kubectl delete statefulset nats-nats --cascade=false
+kubectl delete statefulset nats-nats --cascade=false
 ```
 
 ## License
@@ -388,7 +380,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

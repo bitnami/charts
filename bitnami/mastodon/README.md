@@ -11,8 +11,8 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/mastodon
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/mastodon
 ```
 
 ## Introduction
@@ -23,7 +23,7 @@ This chart bootstraps an [Mastodon](https://www.mastodon.com/) Deployment in a [
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm charts in clusters.
 
-[Learn more about the default configuration of the chart](https://docs.bitnami.com/kubernetes/infrastructure/mastodon/get-started/).
+[Learn more about the default configuration of the chart](https://docs.bitnami.com/kubernetes/apps/mastodon/get-started/).
 
 ## Prerequisites
 
@@ -36,8 +36,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/mastodon
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/mastodon
 ```
 
 The command deploys Mastodon on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -49,7 +49,7 @@ The command deploys Mastodon on the Kubernetes cluster in the default configurat
 To uninstall/delete the `my-release` deployment:
 
 ```console
-$ helm delete my-release
+helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -64,51 +64,68 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
-| Name                     | Description                                                                                                                                         | Value                 |
-| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
-| `kubeVersion`            | Override Kubernetes version                                                                                                                         | `""`                  |
-| `nameOverride`           | String to partially override common.names.name                                                                                                      | `""`                  |
-| `fullnameOverride`       | String to fully override common.names.fullname                                                                                                      | `""`                  |
-| `namespaceOverride`      | String to fully override common.names.namespace                                                                                                     | `""`                  |
-| `commonLabels`           | Labels to add to all deployed objects                                                                                                               | `{}`                  |
-| `commonAnnotations`      | Annotations to add to all deployed objects                                                                                                          | `{}`                  |
-| `clusterDomain`          | Kubernetes cluster domain name                                                                                                                      | `cluster.local`       |
-| `extraDeploy`            | Array of extra objects to deploy with the release                                                                                                   | `[]`                  |
-| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                                                             | `false`               |
-| `diagnosticMode.command` | Command to override all containers in the deployment                                                                                                | `["sleep"]`           |
-| `diagnosticMode.args`    | Args to override all containers in the deployment                                                                                                   | `["infinity"]`        |
-| `image.registry`         | Mastodon image registry                                                                                                                             | `docker.io`           |
-| `image.repository`       | Mastodon image repository                                                                                                                           | `bitnami/mastodon`    |
-| `image.tag`              | Mastodon image tag (immutable tags are recommended)                                                                                                 | `4.0.2-debian-11-r18` |
-| `image.digest`           | Mastodon image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended) | `""`                  |
-| `image.pullPolicy`       | Mastodon image pull policy                                                                                                                          | `IfNotPresent`        |
-| `image.pullSecrets`      | Mastodon image pull secrets                                                                                                                         | `[]`                  |
-| `image.debug`            | Enable Mastodon image debug mode                                                                                                                    | `false`               |
-
+| Name                     | Description                                                                                                                                         | Value                |
+| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------- |
+| `kubeVersion`            | Override Kubernetes version                                                                                                                         | `""`                 |
+| `nameOverride`           | String to partially override common.names.name                                                                                                      | `""`                 |
+| `fullnameOverride`       | String to fully override common.names.fullname                                                                                                      | `""`                 |
+| `namespaceOverride`      | String to fully override common.names.namespace                                                                                                     | `""`                 |
+| `commonLabels`           | Labels to add to all deployed objects                                                                                                               | `{}`                 |
+| `commonAnnotations`      | Annotations to add to all deployed objects                                                                                                          | `{}`                 |
+| `clusterDomain`          | Kubernetes cluster domain name                                                                                                                      | `cluster.local`      |
+| `extraDeploy`            | Array of extra objects to deploy with the release                                                                                                   | `[]`                 |
+| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                                                             | `false`              |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                                                                                | `["sleep"]`          |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                                                                                   | `["infinity"]`       |
+| `image.registry`         | Mastodon image registry                                                                                                                             | `docker.io`          |
+| `image.repository`       | Mastodon image repository                                                                                                                           | `bitnami/mastodon`   |
+| `image.tag`              | Mastodon image tag (immutable tags are recommended)                                                                                                 | `4.1.0-debian-11-r0` |
+| `image.digest`           | Mastodon image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended) | `""`                 |
+| `image.pullPolicy`       | Mastodon image pull policy                                                                                                                          | `IfNotPresent`       |
+| `image.pullSecrets`      | Mastodon image pull secrets                                                                                                                         | `[]`                 |
+| `image.debug`            | Enable Mastodon image debug mode                                                                                                                    | `false`              |
 
 ### Mastodon common parameters
 
-| Name                           | Description                                                                    | Value               |
-| ------------------------------ | ------------------------------------------------------------------------------ | ------------------- |
-| `adminUser`                    | Mastodon admin username                                                        | `user`              |
-| `adminEmail`                   | Mastodon admin email                                                           | `user@changeme.com` |
-| `adminPassword`                | Mastodon admin password                                                        | `""`                |
-| `defaultConfig`                | Default configuration for Mastodon in the form of environment variables        | `""`                |
-| `defaultSecretConfig`          | Default secret configuration for Mastodon in the form of environment variables | `""`                |
-| `extraConfig`                  | Extra configuration for Mastodon in the form of environment variables          | `{}`                |
-| `extraSecretConfig`            | Extra secret configuration for Mastodon in the form of environment variables   | `{}`                |
-| `existingConfigmap`            | The name of an existing ConfigMap with your default configuration for Mastodon | `""`                |
-| `existingSecret`               | The name of an existing Secret with your default configuration for Mastodon    | `""`                |
-| `extraConfigExistingConfigmap` | The name of an existing ConfigMap with your extra configuration for Mastodon   | `""`                |
-| `extraConfigExistingSecret`    | The name of an existing Secret with your extra configuration for Mastodon      | `""`                |
-| `enableSearches`               | Enable the search engine (uses Elasticsearch under the hood)                   | `true`              |
-| `enableS3`                     | Enable the S3 storage engine                                                   | `true`              |
-| `webDomain`                    | Web domain for Mastodon                                                        | `""`                |
-| `s3AliasHost`                  | S3 alias host for Mastodon (will use http://webDomain/bucket if not set)       | `""`                |
-
+| Name                             | Description                                                                                                                  | Value                                |
+| -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | ------------------------------------ |
+| `environment`                    | Mastodon Rails and Node environment. Should be one of 'production',                                                          | `production`                         |
+| `adminUser`                      | Mastodon admin username                                                                                                      | `user`                               |
+| `adminEmail`                     | Mastodon admin email                                                                                                         | `user@changeme.com`                  |
+| `adminPassword`                  | Mastodon admin password                                                                                                      | `""`                                 |
+| `defaultConfig`                  | Default configuration for Mastodon in the form of environment variables                                                      | `""`                                 |
+| `defaultSecretConfig`            | Default secret configuration for Mastodon in the form of environment variables                                               | `""`                                 |
+| `extraConfig`                    | Extra configuration for Mastodon in the form of environment variables                                                        | `{}`                                 |
+| `extraSecretConfig`              | Extra secret configuration for Mastodon in the form of environment variables                                                 | `{}`                                 |
+| `existingConfigmap`              | The name of an existing ConfigMap with your default configuration for Mastodon                                               | `""`                                 |
+| `existingSecret`                 | The name of an existing Secret with your default configuration for Mastodon                                                  | `""`                                 |
+| `extraConfigExistingConfigmap`   | The name of an existing ConfigMap with your extra configuration for Mastodon                                                 | `""`                                 |
+| `extraConfigExistingSecret`      | The name of an existing Secret with your extra configuration for Mastodon                                                    | `""`                                 |
+| `enableSearches`                 | Enable the search engine (uses Elasticsearch under the hood)                                                                 | `true`                               |
+| `enableS3`                       | Enable the S3 storage engine                                                                                                 | `true`                               |
+| `local_https`                    | Set this instance to advertise itself to the fediverse using HTTPS rather than HTTP URLs. This should almost always be true. | `true`                               |
+| `localDomain`                    | The domain name used by accounts on this instance. Unless you're using                                                       | `""`                                 |
+| `webDomain`                      | Optional alternate domain used when you want to host Mastodon at a                                                           | `""`                                 |
+| `defaultLocale`                  | Set the default locale for this instance                                                                                     | `en`                                 |
+| `s3AliasHost`                    | S3 alias host for Mastodon (will use http://webDomain/bucket if not set)                                                     | `""`                                 |
+| `smtp.server`                    | SMTP server                                                                                                                  | `""`                                 |
+| `smtp.port`                      | SMTP port                                                                                                                    | `587`                                |
+| `smtp.from_address`              | From address for sent emails                                                                                                 | `""`                                 |
+| `smtp.domain`                    | SMTP domain                                                                                                                  | `""`                                 |
+| `smtp.reply_to`                  | Reply-To value for sent emails                                                                                               | `""`                                 |
+| `smtp.delivery_method`           | SMTP delivery method                                                                                                         | `smtp`                               |
+| `smtp.ca_file`                   | SMTP CA file location                                                                                                        | `/etc/ssl/certs/ca-certificates.crt` |
+| `smtp.openssl_verify_mode`       | OpenSSL verify mode                                                                                                          | `none`                               |
+| `smtp.enable_starttls_auto`      | Automatically enable StartTLS                                                                                                | `true`                               |
+| `smtp.tls`                       | SMTP TLS                                                                                                                     | `false`                              |
+| `smtp.auth_method`               | SMTP auth method (set to "none" to disable SMTP auth)                                                                        | `plain`                              |
+| `smtp.login`                     | SMTP auth username                                                                                                           | `""`                                 |
+| `smtp.password`                  | SMTP auth password                                                                                                           | `""`                                 |
+| `smtp.existingSecret`            | Name of an existing secret resource containing the SMTP                                                                      | `""`                                 |
+| `smtp.existingSecretLoginKey`    | Name of the key for the SMTP login credential                                                                                | `""`                                 |
+| `smtp.existingSecretPasswordKey` | Name of the key for the SMTP password credential                                                                             | `""`                                 |
 
 ### Mastodon Web Parameters
 
@@ -175,7 +192,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `web.sidecars`                                          | Add additional sidecar containers to the Mastodon web pod(s)                                                             | `[]`             |
 | `web.initContainers`                                    | Add additional init containers to the Mastodon web pod(s)                                                                | `[]`             |
 
-
 ### Mastodon Web Traffic Exposure Parameters
 
 | Name                                   | Description                                                                             | Value       |
@@ -191,7 +207,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `web.service.extraPorts`               | Extra ports to expose in Mastodon web service (normally used with the `sidecars` value) | `[]`        |
 | `web.service.sessionAffinity`          | Control where web requests go, to the same pod or round-robin                           | `None`      |
 | `web.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                             | `{}`        |
-
 
 ### Mastodon Sidekiq Parameters
 
@@ -256,7 +271,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sidekiq.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Mastodon sidekiq container(s)                           | `[]`             |
 | `sidekiq.sidecars`                                          | Add additional sidecar containers to the Mastodon sidekiq pod(s)                                                         | `[]`             |
 | `sidekiq.initContainers`                                    | Add additional init containers to the Mastodon sidekiq pod(s)                                                            | `[]`             |
-
 
 ### Mastodon Streaming Parameters
 
@@ -323,7 +337,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `streaming.sidecars`                                          | Add additional sidecar containers to the Mastodon streaming pod(s)                                                       | `[]`             |
 | `streaming.initContainers`                                    | Add additional init containers to the Mastodon streaming pod(s)                                                          | `[]`             |
 
-
 ### Mastodon Streaming Traffic Exposure Parameters
 
 | Name                                         | Description                                                                                   | Value       |
@@ -339,7 +352,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `streaming.service.extraPorts`               | Extra ports to expose in Mastodon streaming service (normally used with the `sidecars` value) | `[]`        |
 | `streaming.service.sessionAffinity`          | Control where streaming requests go, to the same pod or round-robin                           | `None`      |
 | `streaming.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                   | `{}`        |
-
 
 ### Mastodon Migration job Parameters
 
@@ -371,7 +383,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `initJob.podLabels`                                         | Additional pod labels                                                                                                          | `{}`             |
 | `initJob.podAnnotations`                                    | Additional pod annotations                                                                                                     | `{}`             |
 
-
 ### Persistence Parameters (only when S3 is disabled)
 
 | Name                        | Description                                                                                             | Value               |
@@ -387,7 +398,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.selector`      | Selector to match an existing Persistent Volume for WordPress data PVC                                  | `{}`                |
 | `persistence.dataSource`    | Custom PVC data source                                                                                  | `{}`                |
 
-
 ### Init Container Parameters
 
 | Name                                                   | Description                                                                                     | Value                   |
@@ -395,13 +405,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `11-debian-11-r71`      |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `11-debian-11-r86`      |
 | `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                    |
 | `volumePermissions.resources.requests`                 | The requested resources for the init container                                                  | `{}`                    |
 | `volumePermissions.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                 | `0`                     |
-
 
 ### Other Parameters
 
@@ -419,7 +428,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.existingSecret`             | Name of an existing secret resource containing the database credentials | `""`          |
 | `externalDatabase.existingSecretPasswordKey`  | Name of an existing secret key containing the database credentials      | `db-password` |
 
-
 ### External Redis parameters
 
 | Name                                      | Description                                                          | Value  |
@@ -429,7 +437,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalRedis.password`                  | Password for the Redis                                               | `""`   |
 | `externalRedis.existingSecret`            | Name of an existing secret resource containing the Redis credentials | `""`   |
 | `externalRedis.existingSecretPasswordKey` | Name of an existing secret key containing the Redis credentials      | `""`   |
-
 
 ### External S3 parameters
 
@@ -446,7 +453,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalS3.bucket`                       | External S3 bucket                                                 | `mastodon`      |
 | `externalS3.region`                       | External S3 region                                                 | `us-east-1`     |
 
-
 ### External elasticsearch configuration
 
 | Name                                              | Description                                                                  | Value                    |
@@ -456,7 +462,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalElasticsearch.password`                  | Password for the external elasticsearch server                               | `""`                     |
 | `externalElasticsearch.existingSecret`            | Name of an existing secret resource containing the elasticsearch credentials | `""`                     |
 | `externalElasticsearch.existingSecretPasswordKey` | Name of an existing secret key containing the elasticsearch credentials      | `elasticsearch-password` |
-
 
 ### Redis sub-chart parameters
 
@@ -470,7 +475,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `redis.auth.password`              | Redis password                                 | `""`         |
 | `redis.auth.existingSecret`        | Name of a secret containing the Redis password | `""`         |
 
-
 ### PostgreSQL chart configuration
 
 | Name                                          | Description                                               | Value              |
@@ -482,7 +486,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `postgresql.auth.existingSecret`              | Name of existing secret to use for PostgreSQL credentials | `""`               |
 | `postgresql.architecture`                     | PostgreSQL architecture (`standalone` or `replication`)   | `standalone`       |
 | `postgresql.primary.service.ports.postgresql` | PostgreSQL service port                                   | `5432`             |
-
 
 ### MinIO&reg; chart parameters
 
@@ -501,7 +504,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `minio.service.loadBalancerIP`     | MinIO&reg; service LoadBalancer IP                                                                                                | `""`                                                   |
 | `minio.service.ports.api`          | MinIO&reg; service port                                                                                                           | `80`                                                   |
 
-
 ### Elasticsearch chart configuration
 
 | Name                                        | Description                                                                 | Value   |
@@ -516,7 +518,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `elasticsearch.data.replicaCount`           | Desired number of Elasticsearch data nodes                                  | `1`     |
 | `elasticsearch.ingest.replicaCount`         | Desired number of Elasticsearch ingest nodes                                | `1`     |
 | `elasticsearch.service.ports.restAPI`       | Elasticsearch REST API port                                                 | `9200`  |
-
 
 ### Apache chart configuration
 
@@ -534,12 +535,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `apache.ingress.enabled`        | Enable ingress                                                  | `false`                    |
 | `apache.ingress.hostname`       | Ingress hostname                                                | `mastodon.local`           |
 
-
-
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release \
+helm install my-release \
   --set adminUsername=admin \
   --set adminPassword=password \
     my-repo/mastodon
@@ -552,7 +551,7 @@ The above command sets the mastodon administrator account username and password 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml my-repo/mastodon
+helm install my-release -f values.yaml my-repo/mastodon
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -619,11 +618,11 @@ To enable Ingress integration, set `apache.ingress.enabled` to `true`. The `apac
 
 ### TLS secrets
 
-The chart also facilitates the creation of TLS secrets for use with the Ingress controller, with different options for certificate management. [Learn more about TLS secrets](https://docs.bitnami.com/kubernetes/apps/mastodon/administration/enable-tls/).
+The chart also facilitates the creation of TLS secrets for use with the Ingress controller, with different options for certificate management. [Learn more about TLS secrets](https://docs.bitnami.com/kubernetes/apps/mastodon/administration/enable-tls-ingress/).
 
 ## Persistence
 
-The [Bitnami mastodon](https://github.com/bitnami/containers/tree/main/bitnami/mastodon) image stores the mastodon data and configurations at the `/bitnami` path of the container. Persistent Volume Claims are used to keep the data across deployments. [Learn more about persistence in the chart documentation](https://docs.bitnami.com/kubernetes/apps/mastodon/configuration/chart-persistence/).
+The [Bitnami mastodon](https://github.com/bitnami/containers/tree/main/bitnami/mastodon) image stores the mastodon data and configurations at the `/bitnami` path of the container. Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
 
 ### Additional environment variables
 
@@ -666,7 +665,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

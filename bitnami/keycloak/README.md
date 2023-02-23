@@ -7,12 +7,12 @@ Keycloak is a high performance Java-based identity and access management solutio
 [Overview of Keycloak](https://www.keycloak.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/keycloak
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/keycloak
 ```
 
 ## Introduction
@@ -33,8 +33,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/keycloak
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/keycloak
 ```
 
 These commands deploy a Keycloak application on the Kubernetes cluster in the default configuration.
@@ -46,7 +46,7 @@ These commands deploy a Keycloak application on the Kubernetes cluster in the de
 To uninstall/delete the `my-release` deployment:
 
 ```console
-$ helm delete my-release
+helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -60,7 +60,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
-
 
 ### Common parameters
 
@@ -78,14 +77,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.command` | Command to override all containers in the the statefulset                               | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the the statefulset                                  | `["infinity"]`  |
 
-
 ### Keycloak parameters
 
 | Name                             | Description                                                                                                                  | Value                         |
 | -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | ----------------------------- |
 | `image.registry`                 | Keycloak image registry                                                                                                      | `docker.io`                   |
 | `image.repository`               | Keycloak image repository                                                                                                    | `bitnami/keycloak`            |
-| `image.tag`                      | Keycloak image tag (immutable tags are recommended)                                                                          | `20.0.3-debian-11-r10`        |
+| `image.tag`                      | Keycloak image tag (immutable tags are recommended)                                                                          | `20.0.5-debian-11-r1`         |
 | `image.digest`                   | Keycloak image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                     | `""`                          |
 | `image.pullPolicy`               | Keycloak image pull policy                                                                                                   | `IfNotPresent`                |
 | `image.pullSecrets`              | Specify docker-registry secret names as an array                                                                             | `[]`                          |
@@ -122,7 +120,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraEnvVarsCM`                 | Name of existing ConfigMap containing extra env vars                                                                         | `""`                          |
 | `extraEnvVarsSecret`             | Name of existing Secret containing extra env vars                                                                            | `""`                          |
 
-
 ### Keycloak statefulset parameters
 
 | Name                                    | Description                                                                                                              | Value           |
@@ -130,6 +127,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `replicaCount`                          | Number of Keycloak replicas to deploy                                                                                    | `1`             |
 | `containerPorts.http`                   | Keycloak HTTP container port                                                                                             | `8080`          |
 | `containerPorts.https`                  | Keycloak HTTPS container port                                                                                            | `8443`          |
+| `containerPorts.infinispan`             | Keycloak infinispan container port                                                                                       | `7800`          |
 | `extraContainerPorts`                   | Optionally specify extra list of additional port-mappings for Keycloak container                                         | `[]`            |
 | `podSecurityContext.enabled`            | Enabled Keycloak pods' Security Context                                                                                  | `true`          |
 | `podSecurityContext.fsGroup`            | Set Keycloak pod's Security Context fsGroup                                                                              | `1001`          |
@@ -183,7 +181,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `initContainers`                        | Add additional init containers to the Keycloak pods                                                                      | `[]`            |
 | `sidecars`                              | Add additional sidecar containers to the Keycloak pods                                                                   | `[]`            |
 
-
 ### Exposure parameters
 
 | Name                               | Description                                                                                                                      | Value                    |
@@ -221,7 +218,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.allowExternal`      | Don't require client label for connections                                                                                       | `true`                   |
 | `networkPolicy.additionalRules`    | Additional NetworkPolicy rules                                                                                                   | `{}`                     |
 
-
 ### RBAC parameter
 
 | Name                                          | Description                                               | Value   |
@@ -230,9 +226,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.name`                         | Name of the created ServiceAccount                        | `""`    |
 | `serviceAccount.automountServiceAccountToken` | Auto-mount the service account token in the pod           | `true`  |
 | `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount      | `{}`    |
+| `serviceAccount.extraLabels`                  | Additional labels for the ServiceAccount                  | `{}`    |
 | `rbac.create`                                 | Whether to create and use RBAC resources or not           | `false` |
 | `rbac.rules`                                  | Custom RBAC rules                                         | `[]`    |
-
 
 ### Other parameters
 
@@ -246,7 +242,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `autoscaling.maxReplicas`  | Maximum number of Keycloak replicas                            | `11`    |
 | `autoscaling.targetCPU`    | Target CPU utilization percentage                              | `""`    |
 | `autoscaling.targetMemory` | Target Memory utilization percentage                           | `""`    |
-
 
 ### Metrics parameters
 
@@ -273,7 +268,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.prometheusRule.labels`            | Additional labels that can be used so PrometheusRule will be discovered by Prometheus                                     | `{}`    |
 | `metrics.prometheusRule.groups`            | Groups, containing the alert rules.                                                                                       | `[]`    |
 
-
 ### keycloak-config-cli parameters
 
 | Name                                                      | Description                                                                                                                   | Value                         |
@@ -281,7 +275,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `keycloakConfigCli.enabled`                               | Whether to enable keycloak-config-cli job                                                                                     | `false`                       |
 | `keycloakConfigCli.image.registry`                        | keycloak-config-cli container image registry                                                                                  | `docker.io`                   |
 | `keycloakConfigCli.image.repository`                      | keycloak-config-cli container image repository                                                                                | `bitnami/keycloak-config-cli` |
-| `keycloakConfigCli.image.tag`                             | keycloak-config-cli container image tag                                                                                       | `5.5.0-debian-11-r27`         |
+| `keycloakConfigCli.image.tag`                             | keycloak-config-cli container image tag                                                                                       | `5.5.0-debian-11-r33`         |
 | `keycloakConfigCli.image.digest`                          | keycloak-config-cli container image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                          |
 | `keycloakConfigCli.image.pullPolicy`                      | keycloak-config-cli container image pull policy                                                                               | `IfNotPresent`                |
 | `keycloakConfigCli.image.pullSecrets`                     | keycloak-config-cli container image pull secrets                                                                              | `[]`                          |
@@ -310,7 +304,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `keycloakConfigCli.configuration`                         | keycloak-config-cli realms configuration                                                                                      | `{}`                          |
 | `keycloakConfigCli.existingConfigmap`                     | ConfigMap with keycloak-config-cli configuration. This will override `keycloakConfigCli.config`                               | `""`                          |
 
-
 ### Database parameters
 
 | Name                                         | Description                                                                                                       | Value              |
@@ -330,7 +323,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.existingSecret`            | Name of an existing secret resource containing the database credentials                                           | `""`               |
 | `externalDatabase.existingSecretPasswordKey` | Name of an existing secret key containing the database credentials                                                | `""`               |
 
-
 ### Keycloak Cache parameters
 
 | Name              | Description                                                                | Value        |
@@ -339,7 +331,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cache.stackName` | Set infinispan cache stack to use                                          | `kubernetes` |
 | `cache.stackFile` | Set infinispan cache stack filename to use                                 | `""`         |
 
-
 ### Keycloak Logging parameters
 
 | Name             | Description                                                                    | Value     |
@@ -347,11 +338,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `logging.output` | Alternates between the default log output format or json format                | `default` |
 | `logging.level`  | Allowed values as documented: FATAL, ERROR, WARN, INFO, DEBUG, TRACE, ALL, OFF | `INFO`    |
 
-
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release --set auth.adminPassword=secretpassword my-repo/keycloak
+helm install my-release --set auth.adminPassword=secretpassword my-repo/keycloak
 ```
 
 The above command sets the Keycloak administrator password to `secretpassword`.
@@ -361,7 +351,7 @@ The above command sets the Keycloak administrator password to `secretpassword`.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml my-repo/keycloak
+helm install my-release -f values.yaml my-repo/keycloak
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -454,9 +444,9 @@ If your ingress controller has the SSL Termination, you should set `proxy` to `e
 
 This chart provides several ways to manage passwords:
 
-* Values passed to the chart
-* An existing secret with all the passwords (via the `existingSecret` parameter)
-* Multiple existing secrets with all the passwords (via the `existingSecretPerPassword` parameter)
+- Values passed to the chart
+- An existing secret with all the passwords (via the `existingSecret` parameter)
+- Multiple existing secrets with all the passwords (via the `existingSecretPerPassword` parameter)
 
 Refer to the [chart documentation on managing passwords](https://docs.bitnami.com/kubernetes/apps/keycloak/configuration/manage-passwords/) for examples of each method.
 
@@ -482,7 +472,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

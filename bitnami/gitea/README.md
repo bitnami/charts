@@ -7,12 +7,12 @@ Gitea is a lightweight code hosting solution. Written in Go, features low resour
 [Overview of Gitea](https://gitea.io/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/gitea
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/gitea
 ```
 
 ## Introduction
@@ -35,8 +35,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/gitea
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/gitea
 ```
 
 The command deploys Gitea on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -48,7 +48,7 @@ The command deploys Gitea on the Kubernetes cluster in the default configuration
 To uninstall/delete the `my-release` deployment:
 
 ```console
-$ helm delete my-release
+helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -63,7 +63,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
 | Name                | Description                                                                                               | Value |
@@ -76,14 +75,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `commonLabels`      | Common labels to add to all Gitea resources (sub-charts are not considered). Evaluated as a template      | `{}`  |
 | `extraDeploy`       | Array of extra objects to deploy with the release (evaluated as a template).                              | `[]`  |
 
-
 ### Gitea parameters
 
 | Name                                    | Description                                                                                                           | Value                 |
 | --------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`                        | Gitea image registry                                                                                                  | `docker.io`           |
 | `image.repository`                      | Gitea Image name                                                                                                      | `bitnami/gitea`       |
-| `image.tag`                             | Gitea Image tag                                                                                                       | `1.18.3-debian-11-r0` |
+| `image.tag`                             | Gitea Image tag                                                                                                       | `1.18.5-debian-11-r0` |
 | `image.digest`                          | Gitea image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                 | `""`                  |
 | `image.pullPolicy`                      | Gitea image pull policy                                                                                               | `IfNotPresent`        |
 | `image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                      | `[]`                  |
@@ -170,7 +168,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podAnnotations`                        | Pod annotations                                                                                                       | `{}`                  |
 | `podLabels`                             | Add additional labels to the pod (evaluated as a template)                                                            | `{}`                  |
 
-
 ### Traffic Exposure Parameters
 
 | Name                               | Description                                                                                                                      | Value                    |
@@ -202,7 +199,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
 | `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
-
 ### Other Parameters
 
 | Name                                          | Description                                                            | Value  |
@@ -211,7 +207,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.name`                         | The name of the ServiceAccount to use.                                 | `""`   |
 | `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created | `true` |
 | `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                   | `{}`   |
-
 
 ### Database parameters
 
@@ -232,7 +227,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.existingSecret`            | Name of an existing secret resource containing the database credentials | `""`            |
 | `externalDatabase.existingSecretPasswordKey` | Name of an existing secret key containing the database credentials      | `db-password`   |
 
-
 ### Volume Permissions parameters
 
 | Name                                   | Description                                                                                                                                               | Value                   |
@@ -240,19 +234,15 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                                          | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                                                              | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `11-debian-11-r75`      |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `11-debian-11-r87`      |
 | `volumePermissions.image.digest`       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                         | `""`                    |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                                          | `[]`                    |
 | `volumePermissions.resources.limits`   | The resources limits for the container                                                                                                                    | `{}`                    |
 | `volumePermissions.resources.requests` | The requested resources for the container                                                                                                                 | `{}`                    |
 
-
-
-Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
-
 ```console
-$ helm install my-release \
+helm install my-release \
   --set adminUsername=user,giteaPassword=password,postgresql.auth.rootPassword=secretpassword \
     my-repo/gitea
 ```
@@ -264,7 +254,7 @@ The above command sets the Gitea administrator account username and password to 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml my-repo/gitea
+helm install my-release -f values.yaml my-repo/gitea
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -286,14 +276,14 @@ The `image` parameter allows specifying which image will be pulled for the chart
 If you configure the `image` value to one in a private registry, you will need to [specify an image pull secret](https://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod).
 
 1. Manually create image pull secret(s) in the namespace. See [this YAML example reference](https://kubernetes.io/docs/concepts/containers/images/#creating-a-secret-with-a-docker-config). Consult your image registry's documentation about getting the appropriate secret.
-1. Note that the `imagePullSecrets` configuration value cannot currently be passed to helm using the `--set` parameter, so you must supply these using a `values.yaml` file, such as:
+2. Note that the `imagePullSecrets` configuration value cannot currently be passed to helm using the `--set` parameter, so you must supply these using a `values.yaml` file, such as:
 
-```yaml
-imagePullSecrets:
-  - name: SECRET_NAME
-```
+    ```yaml
+    imagePullSecrets:
+      - name: SECRET_NAME
+    ```
 
-1. Install the chart
+3. Install the chart
 
 ### Setting Pod's affinity
 
@@ -311,11 +301,11 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 ### Existing PersistentVolumeClaim
 
 1. Create the PersistentVolume
-1. Create the PersistentVolumeClaim
-1. Install the chart
+2. Create the PersistentVolumeClaim
+3. Install the chart
 
 ```console
-$ helm install my-release --set persistence.existingClaim=PVC_NAME my-repo/gitea
+helm install my-release --set persistence.existingClaim=PVC_NAME my-repo/gitea
 ```
 
 ### Host path
@@ -328,14 +318,14 @@ $ helm install my-release --set persistence.existingClaim=PVC_NAME my-repo/gitea
 #### Mounting steps
 
 1. The specified `hostPath` directory must already exist (create one if it does not).
-1. Install the chart
+2. Install the chart
 
     ```console
-    $ helm install my-release --set persistence.hostPath=/PATH/TO/HOST/MOUNT my-repo/gitea
+    helm install my-release --set persistence.hostPath=/PATH/TO/HOST/MOUNT my-repo/gitea
     ```
 
     This will mount the `gitea-data` volume into the `hostPath` directory. The site data will be persisted if the mount path contains valid data, else the site data will be initialized at first launch.
-1. Because the container cannot control the host machine's directory permissions, you must set the Gitea file directory permissions yourself
+3. Because the container cannot control the host machine's directory permissions, you must set the Gitea file directory permissions yourself
 
 ## Troubleshooting
 
@@ -349,7 +339,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

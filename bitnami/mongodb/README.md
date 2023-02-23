@@ -11,8 +11,8 @@ Disclaimer: The respective trademarks mentioned in the offering are owned by the
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/mongodb
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/mongodb
 ```
 
 ## Introduction
@@ -32,8 +32,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/mongodb
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/mongodb
 ```
 
 The command deploys MongoDB(&reg;) on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -45,7 +45,7 @@ The command deploys MongoDB(&reg;) on the Kubernetes cluster in the default conf
 To uninstall/delete the `my-release` deployment:
 
 ```console
-$ helm delete my-release
+helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -72,80 +72,78 @@ Refer to the [chart documentation for more information on each of these architec
 | `global.storageClass`      | Global StorageClass for Persistent Volume(s)                                                                           | `""`  |
 | `global.namespaceOverride` | Override the namespace for resource deployed by the chart, but can itself be overridden by the local namespaceOverride | `""`  |
 
-
 ### Common parameters
 
-| Name                     | Description                                                                                               | Value           |
-| ------------------------ | --------------------------------------------------------------------------------------------------------- | --------------- |
-| `nameOverride`           | String to partially override mongodb.fullname template (will maintain the release name)                   | `""`            |
-| `fullnameOverride`       | String to fully override mongodb.fullname template                                                        | `""`            |
-| `namespaceOverride`      | String to fully override common.names.namespace                                                           | `""`            |
-| `kubeVersion`            | Force target Kubernetes version (using Helm capabilities if not set)                                      | `""`            |
-| `clusterDomain`          | Default Kubernetes cluster domain                                                                         | `cluster.local` |
-| `extraDeploy`            | Array of extra objects to deploy with the release                                                         | `[]`            |
-| `commonLabels`           | Add labels to all the deployed resources (sub-charts are not considered). Evaluated as a template         | `{}`            |
-| `commonAnnotations`      | Common annotations to add to all Mongo resources (sub-charts are not considered). Evaluated as a template | `{}`            |
-| `topologyKey`            | Override common lib default topology key. If empty - "kubernetes.io/hostname" is used                     | `""`            |
-| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                   | `false`         |
-| `diagnosticMode.command` | Command to override all containers in the deployment                                                      | `["sleep"]`     |
-| `diagnosticMode.args`    | Args to override all containers in the deployment                                                         | `["infinity"]`  |
-
+| Name                      | Description                                                                                               | Value           |
+| ------------------------- | --------------------------------------------------------------------------------------------------------- | --------------- |
+| `nameOverride`            | String to partially override mongodb.fullname template (will maintain the release name)                   | `""`            |
+| `fullnameOverride`        | String to fully override mongodb.fullname template                                                        | `""`            |
+| `namespaceOverride`       | String to fully override common.names.namespace                                                           | `""`            |
+| `kubeVersion`             | Force target Kubernetes version (using Helm capabilities if not set)                                      | `""`            |
+| `clusterDomain`           | Default Kubernetes cluster domain                                                                         | `cluster.local` |
+| `extraDeploy`             | Array of extra objects to deploy with the release                                                         | `[]`            |
+| `commonLabels`            | Add labels to all the deployed resources (sub-charts are not considered). Evaluated as a template         | `{}`            |
+| `commonAnnotations`       | Common annotations to add to all Mongo resources (sub-charts are not considered). Evaluated as a template | `{}`            |
+| `topologyKey`             | Override common lib default topology key. If empty - "kubernetes.io/hostname" is used                     | `""`            |
+| `serviceBindings.enabled` | Create secret for service binding (Experimental)                                                          | `false`         |
+| `diagnosticMode.enabled`  | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                   | `false`         |
+| `diagnosticMode.command`  | Command to override all containers in the deployment                                                      | `["sleep"]`     |
+| `diagnosticMode.args`     | Args to override all containers in the deployment                                                         | `["infinity"]`  |
 
 ### MongoDB(&reg;) parameters
 
-| Name                             | Description                                                                                                                                                  | Value                  |
-| -------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------- |
-| `image.registry`                 | MongoDB(&reg;) image registry                                                                                                                                | `docker.io`            |
-| `image.repository`               | MongoDB(&reg;) image registry                                                                                                                                | `bitnami/mongodb`      |
-| `image.tag`                      | MongoDB(&reg;) image tag (immutable tags are recommended)                                                                                                    | `6.0.4-debian-11-r0`   |
-| `image.digest`                   | MongoDB(&reg;) image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                               | `""`                   |
-| `image.pullPolicy`               | MongoDB(&reg;) image pull policy                                                                                                                             | `IfNotPresent`         |
-| `image.pullSecrets`              | Specify docker-registry secret names as an array                                                                                                             | `[]`                   |
-| `image.debug`                    | Set to true if you would like to see extra information on logs                                                                                               | `false`                |
-| `schedulerName`                  | Name of the scheduler (other than default) to dispatch pods                                                                                                  | `""`                   |
-| `architecture`                   | MongoDB(&reg;) architecture (`standalone` or `replicaset`)                                                                                                   | `standalone`           |
-| `useStatefulSet`                 | Set to true to use a StatefulSet instead of a Deployment (only when `architecture=standalone`)                                                               | `false`                |
-| `auth.enabled`                   | Enable authentication                                                                                                                                        | `true`                 |
-| `auth.rootUser`                  | MongoDB(&reg;) root user                                                                                                                                     | `root`                 |
-| `auth.rootPassword`              | MongoDB(&reg;) root password                                                                                                                                 | `""`                   |
-| `auth.usernames`                 | List of custom users to be created during the initialization                                                                                                 | `[]`                   |
-| `auth.passwords`                 | List of passwords for the custom users set at `auth.usernames`                                                                                               | `[]`                   |
-| `auth.databases`                 | List of custom databases to be created during the initialization                                                                                             | `[]`                   |
-| `auth.username`                  | DEPRECATED: use `auth.usernames` instead                                                                                                                     | `""`                   |
-| `auth.password`                  | DEPRECATED: use `auth.passwords` instead                                                                                                                     | `""`                   |
-| `auth.database`                  | DEPRECATED: use `auth.databases` instead                                                                                                                     | `""`                   |
-| `auth.replicaSetKey`             | Key used for authentication in the replicaset (only when `architecture=replicaset`)                                                                          | `""`                   |
-| `auth.existingSecret`            | Existing secret with MongoDB(&reg;) credentials (keys: `mongodb-passwords`, `mongodb-root-password`, `mongodb-metrics-password`, ` mongodb-replica-set-key`) | `""`                   |
-| `tls.enabled`                    | Enable MongoDB(&reg;) TLS support between nodes in the cluster as well as between mongo clients and nodes                                                    | `false`                |
-| `tls.autoGenerated`              | Generate a custom CA and self-signed certificates                                                                                                            | `true`                 |
-| `tls.existingSecret`             | Existing secret with TLS certificates (keys: `mongodb-ca-cert`, `mongodb-ca-key`)                                                                            | `""`                   |
-| `tls.caCert`                     | Custom CA certificated (base64 encoded)                                                                                                                      | `""`                   |
-| `tls.caKey`                      | CA certificate private key (base64 encoded)                                                                                                                  | `""`                   |
-| `tls.standalone.existingSecret`  | Existing secret with TLS certificates (`tls.key`, `tls.crt`, `ca.crt`).                                                                                      | `""`                   |
-| `tls.replicaset.existingSecrets` | Array of existing secrets with TLS certificates (`tls.key`, `tls.crt`, `ca.crt`).                                                                            | `[]`                   |
-| `tls.hidden.existingSecrets`     | Array of existing secrets with TLS certificates (`tls.key`, `tls.crt`, `ca.crt`).                                                                            | `[]`                   |
-| `tls.arbiter.existingSecret`     | Existing secret with TLS certificates (`tls.key`, `tls.crt`, `ca.crt`).                                                                                      | `""`                   |
-| `tls.image.registry`             | Init container TLS certs setup image registry                                                                                                                | `docker.io`            |
-| `tls.image.repository`           | Init container TLS certs setup image repository                                                                                                              | `bitnami/nginx`        |
-| `tls.image.tag`                  | Init container TLS certs setup image tag (immutable tags are recommended)                                                                                    | `1.23.3-debian-11-r15` |
-| `tls.image.digest`               | Init container TLS certs setup image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                               | `""`                   |
-| `tls.image.pullPolicy`           | Init container TLS certs setup image pull policy                                                                                                             | `IfNotPresent`         |
-| `tls.image.pullSecrets`          | Init container TLS certs specify docker-registry secret names as an array                                                                                    | `[]`                   |
-| `tls.extraDnsNames`              | Add extra dns names to the CA, can solve x509 auth issue for pod clients                                                                                     | `[]`                   |
-| `tls.mode`                       | Allows to set the tls mode which should be used when tls is enabled (options: `allowTLS`, `preferTLS`, `requireTLS`)                                         | `requireTLS`           |
-| `tls.resources.limits`           | Init container generate-tls-certs resource limits                                                                                                            | `{}`                   |
-| `tls.resources.requests`         | Init container generate-tls-certs resource requests                                                                                                          | `{}`                   |
-| `hostAliases`                    | Add deployment host aliases                                                                                                                                  | `[]`                   |
-| `replicaSetName`                 | Name of the replica set (only when `architecture=replicaset`)                                                                                                | `rs0`                  |
-| `replicaSetHostnames`            | Enable DNS hostnames in the replicaset config (only when `architecture=replicaset`)                                                                          | `true`                 |
-| `enableIPv6`                     | Switch to enable/disable IPv6 on MongoDB(&reg;)                                                                                                              | `false`                |
-| `directoryPerDB`                 | Switch to enable/disable DirectoryPerDB on MongoDB(&reg;)                                                                                                    | `false`                |
-| `systemLogVerbosity`             | MongoDB(&reg;) system log verbosity level                                                                                                                    | `0`                    |
-| `disableSystemLog`               | Switch to enable/disable MongoDB(&reg;) system log                                                                                                           | `false`                |
-| `disableJavascript`              | Switch to enable/disable MongoDB(&reg;) server-side JavaScript execution                                                                                     | `false`                |
-| `enableJournal`                  | Switch to enable/disable MongoDB(&reg;) Journaling                                                                                                           | `true`                 |
-| `configuration`                  | MongoDB(&reg;) configuration file to be used for Primary and Secondary nodes                                                                                 | `""`                   |
-
+| Name                             | Description                                                                                                                                                 | Value                  |
+| -------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
+| `image.registry`                 | MongoDB(&reg;) image registry                                                                                                                               | `docker.io`            |
+| `image.repository`               | MongoDB(&reg;) image registry                                                                                                                               | `bitnami/mongodb`      |
+| `image.tag`                      | MongoDB(&reg;) image tag (immutable tags are recommended)                                                                                                   | `6.0.4-debian-11-r10`  |
+| `image.digest`                   | MongoDB(&reg;) image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                              | `""`                   |
+| `image.pullPolicy`               | MongoDB(&reg;) image pull policy                                                                                                                            | `IfNotPresent`         |
+| `image.pullSecrets`              | Specify docker-registry secret names as an array                                                                                                            | `[]`                   |
+| `image.debug`                    | Set to true if you would like to see extra information on logs                                                                                              | `false`                |
+| `schedulerName`                  | Name of the scheduler (other than default) to dispatch pods                                                                                                 | `""`                   |
+| `architecture`                   | MongoDB(&reg;) architecture (`standalone` or `replicaset`)                                                                                                  | `standalone`           |
+| `useStatefulSet`                 | Set to true to use a StatefulSet instead of a Deployment (only when `architecture=standalone`)                                                              | `false`                |
+| `auth.enabled`                   | Enable authentication                                                                                                                                       | `true`                 |
+| `auth.rootUser`                  | MongoDB(&reg;) root user                                                                                                                                    | `root`                 |
+| `auth.rootPassword`              | MongoDB(&reg;) root password                                                                                                                                | `""`                   |
+| `auth.usernames`                 | List of custom users to be created during the initialization                                                                                                | `[]`                   |
+| `auth.passwords`                 | List of passwords for the custom users set at `auth.usernames`                                                                                              | `[]`                   |
+| `auth.databases`                 | List of custom databases to be created during the initialization                                                                                            | `[]`                   |
+| `auth.username`                  | DEPRECATED: use `auth.usernames` instead                                                                                                                    | `""`                   |
+| `auth.password`                  | DEPRECATED: use `auth.passwords` instead                                                                                                                    | `""`                   |
+| `auth.database`                  | DEPRECATED: use `auth.databases` instead                                                                                                                    | `""`                   |
+| `auth.replicaSetKey`             | Key used for authentication in the replicaset (only when `architecture=replicaset`)                                                                         | `""`                   |
+| `auth.existingSecret`            | Existing secret with MongoDB(&reg;) credentials (keys: `mongodb-passwords`, `mongodb-root-password`, `mongodb-metrics-password`, `mongodb-replica-set-key`) | `""`                   |
+| `tls.enabled`                    | Enable MongoDB(&reg;) TLS support between nodes in the cluster as well as between mongo clients and nodes                                                   | `false`                |
+| `tls.autoGenerated`              | Generate a custom CA and self-signed certificates                                                                                                           | `true`                 |
+| `tls.existingSecret`             | Existing secret with TLS certificates (keys: `mongodb-ca-cert`, `mongodb-ca-key`)                                                                           | `""`                   |
+| `tls.caCert`                     | Custom CA certificated (base64 encoded)                                                                                                                     | `""`                   |
+| `tls.caKey`                      | CA certificate private key (base64 encoded)                                                                                                                 | `""`                   |
+| `tls.standalone.existingSecret`  | Existing secret with TLS certificates (`tls.key`, `tls.crt`, `ca.crt`).                                                                                     | `""`                   |
+| `tls.replicaset.existingSecrets` | Array of existing secrets with TLS certificates (`tls.key`, `tls.crt`, `ca.crt`).                                                                           | `[]`                   |
+| `tls.hidden.existingSecrets`     | Array of existing secrets with TLS certificates (`tls.key`, `tls.crt`, `ca.crt`).                                                                           | `[]`                   |
+| `tls.arbiter.existingSecret`     | Existing secret with TLS certificates (`tls.key`, `tls.crt`, `ca.crt`).                                                                                     | `""`                   |
+| `tls.image.registry`             | Init container TLS certs setup image registry                                                                                                               | `docker.io`            |
+| `tls.image.repository`           | Init container TLS certs setup image repository                                                                                                             | `bitnami/nginx`        |
+| `tls.image.tag`                  | Init container TLS certs setup image tag (immutable tags are recommended)                                                                                   | `1.23.3-debian-11-r26` |
+| `tls.image.digest`               | Init container TLS certs setup image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                              | `""`                   |
+| `tls.image.pullPolicy`           | Init container TLS certs setup image pull policy                                                                                                            | `IfNotPresent`         |
+| `tls.image.pullSecrets`          | Init container TLS certs specify docker-registry secret names as an array                                                                                   | `[]`                   |
+| `tls.extraDnsNames`              | Add extra dns names to the CA, can solve x509 auth issue for pod clients                                                                                    | `[]`                   |
+| `tls.mode`                       | Allows to set the tls mode which should be used when tls is enabled (options: `allowTLS`, `preferTLS`, `requireTLS`)                                        | `requireTLS`           |
+| `tls.resources.limits`           | Init container generate-tls-certs resource limits                                                                                                           | `{}`                   |
+| `tls.resources.requests`         | Init container generate-tls-certs resource requests                                                                                                         | `{}`                   |
+| `hostAliases`                    | Add deployment host aliases                                                                                                                                 | `[]`                   |
+| `replicaSetName`                 | Name of the replica set (only when `architecture=replicaset`)                                                                                               | `rs0`                  |
+| `replicaSetHostnames`            | Enable DNS hostnames in the replicaset config (only when `architecture=replicaset`)                                                                         | `true`                 |
+| `enableIPv6`                     | Switch to enable/disable IPv6 on MongoDB(&reg;)                                                                                                             | `false`                |
+| `directoryPerDB`                 | Switch to enable/disable DirectoryPerDB on MongoDB(&reg;)                                                                                                   | `false`                |
+| `systemLogVerbosity`             | MongoDB(&reg;) system log verbosity level                                                                                                                   | `0`                    |
+| `disableSystemLog`               | Switch to enable/disable MongoDB(&reg;) system log                                                                                                          | `false`                |
+| `disableJavascript`              | Switch to enable/disable MongoDB(&reg;) server-side JavaScript execution                                                                                    | `false`                |
+| `enableJournal`                  | Switch to enable/disable MongoDB(&reg;) Journaling                                                                                                          | `true`                 |
+| `configuration`                  | MongoDB(&reg;) configuration file to be used for Primary and Secondary nodes                                                                                | `""`                   |
 
 ### replicaSetConfigurationSettings settings applied during runtime (not via configuration file)
 
@@ -162,7 +160,6 @@ Refer to the [chart documentation for more information on each of these architec
 | `extraEnvVars`                                  | Extra environment variables to add to MongoDB(&reg;) pods                                           | `[]`    |
 | `extraEnvVarsCM`                                | Name of existing ConfigMap containing extra env vars                                                | `""`    |
 | `extraEnvVarsSecret`                            | Name of existing Secret containing extra env vars (in case of sensitive data)                       | `""`    |
-
 
 ### MongoDB(&reg;) statefulset parameters
 
@@ -226,64 +223,65 @@ Refer to the [chart documentation for more information on each of these architec
 | `pdb.minAvailable`                      | Minimum number/percentage of MongoDB(&reg;) pods that must still be available after the eviction                | `1`             |
 | `pdb.maxUnavailable`                    | Maximum number/percentage of MongoDB(&reg;) pods that may be made unavailable after the eviction                | `""`            |
 
-
 ### Traffic exposure parameters
 
-| Name                                                     | Description                                                                                                                                     | Value                  |
-| -------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
-| `service.nameOverride`                                   | MongoDB(&reg;) service name                                                                                                                     | `""`                   |
-| `service.type`                                           | Kubernetes Service type (only for standalone architecture)                                                                                      | `ClusterIP`            |
-| `service.portName`                                       | MongoDB(&reg;) service port name (only for standalone architecture)                                                                             | `mongodb`              |
-| `service.ports.mongodb`                                  | MongoDB(&reg;) service port.                                                                                                                    | `27017`                |
-| `service.nodePorts.mongodb`                              | Port to bind to for NodePort and LoadBalancer service types (only for standalone architecture)                                                  | `""`                   |
-| `service.clusterIP`                                      | MongoDB(&reg;) service cluster IP (only for standalone architecture)                                                                            | `""`                   |
-| `service.externalIPs`                                    | Specify the externalIP value ClusterIP service type (only for standalone architecture)                                                          | `[]`                   |
-| `service.loadBalancerIP`                                 | loadBalancerIP for MongoDB(&reg;) Service (only for standalone architecture)                                                                    | `""`                   |
-| `service.loadBalancerClass`                              | loadBalancerClass for MongoDB(&reg;) Service (only for standalone architecture)                                                                 | `""`                   |
-| `service.loadBalancerSourceRanges`                       | Address(es) that are allowed when service is LoadBalancer (only for standalone architecture)                                                    | `[]`                   |
-| `service.extraPorts`                                     | Extra ports to expose (normally used with the `sidecar` value)                                                                                  | `[]`                   |
-| `service.annotations`                                    | Provide any additional annotations that may be required                                                                                         | `{}`                   |
-| `service.externalTrafficPolicy`                          | service external traffic policy (only for standalone architecture)                                                                              | `Local`                |
-| `service.sessionAffinity`                                | Control where client requests go, to the same pod or round-robin                                                                                | `None`                 |
-| `service.sessionAffinityConfig`                          | Additional settings for the sessionAffinity                                                                                                     | `{}`                   |
-| `externalAccess.enabled`                                 | Enable Kubernetes external cluster access to MongoDB(&reg;) nodes (only for replicaset architecture)                                            | `false`                |
-| `externalAccess.autoDiscovery.enabled`                   | Enable using an init container to auto-detect external IPs by querying the K8s API                                                              | `false`                |
-| `externalAccess.autoDiscovery.image.registry`            | Init container auto-discovery image registry                                                                                                    | `docker.io`            |
-| `externalAccess.autoDiscovery.image.repository`          | Init container auto-discovery image repository                                                                                                  | `bitnami/kubectl`      |
-| `externalAccess.autoDiscovery.image.tag`                 | Init container auto-discovery image tag (immutable tags are recommended)                                                                        | `1.25.5-debian-11-r14` |
-| `externalAccess.autoDiscovery.image.digest`              | Init container auto-discovery image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                   | `""`                   |
-| `externalAccess.autoDiscovery.image.pullPolicy`          | Init container auto-discovery image pull policy                                                                                                 | `IfNotPresent`         |
-| `externalAccess.autoDiscovery.image.pullSecrets`         | Init container auto-discovery image pull secrets                                                                                                | `[]`                   |
-| `externalAccess.autoDiscovery.resources.limits`          | Init container auto-discovery resource limits                                                                                                   | `{}`                   |
-| `externalAccess.autoDiscovery.resources.requests`        | Init container auto-discovery resource requests                                                                                                 | `{}`                   |
-| `externalAccess.service.type`                            | Kubernetes Service type for external access. Allowed values: NodePort, LoadBalancer or ClusterIP                                                | `LoadBalancer`         |
-| `externalAccess.service.portName`                        | MongoDB(&reg;) port name used for external access when service type is LoadBalancer                                                             | `mongodb`              |
-| `externalAccess.service.ports.mongodb`                   | MongoDB(&reg;) port used for external access when service type is LoadBalancer                                                                  | `27017`                |
-| `externalAccess.service.loadBalancerIPs`                 | Array of load balancer IPs for MongoDB(&reg;) nodes                                                                                             | `[]`                   |
-| `externalAccess.service.loadBalancerClass`               | loadBalancerClass when service type is LoadBalancer                                                                                             | `""`                   |
-| `externalAccess.service.loadBalancerSourceRanges`        | Address(es) that are allowed when service is LoadBalancer                                                                                       | `[]`                   |
-| `externalAccess.service.externalTrafficPolicy`           | MongoDB(&reg;) service external traffic policy                                                                                                  | `Local`                |
-| `externalAccess.service.nodePorts`                       | Array of node ports used to configure MongoDB(&reg;) advertised hostname when service type is NodePort                                          | `[]`                   |
-| `externalAccess.service.domain`                          | Domain or external IP used to configure MongoDB(&reg;) advertised hostname when service type is NodePort                                        | `""`                   |
-| `externalAccess.service.extraPorts`                      | Extra ports to expose (normally used with the `sidecar` value)                                                                                  | `[]`                   |
-| `externalAccess.service.annotations`                     | Service annotations for external access                                                                                                         | `{}`                   |
-| `externalAccess.service.sessionAffinity`                 | Control where client requests go, to the same pod or round-robin                                                                                | `None`                 |
-| `externalAccess.service.sessionAffinityConfig`           | Additional settings for the sessionAffinity                                                                                                     | `{}`                   |
-| `externalAccess.hidden.enabled`                          | Enable Kubernetes external cluster access to MongoDB(&reg;) hidden nodes                                                                        | `false`                |
-| `externalAccess.hidden.service.type`                     | Kubernetes Service type for external access. Allowed values: NodePort or LoadBalancer                                                           | `LoadBalancer`         |
-| `externalAccess.hidden.service.portName`                 | MongoDB(&reg;) port name used for external access when service type is LoadBalancer                                                             | `mongodb`              |
-| `externalAccess.hidden.service.ports.mongodb`            | MongoDB(&reg;) port used for external access when service type is LoadBalancer                                                                  | `27017`                |
-| `externalAccess.hidden.service.loadBalancerIPs`          | Array of load balancer IPs for MongoDB(&reg;) nodes                                                                                             | `[]`                   |
-| `externalAccess.hidden.service.loadBalancerClass`        | loadBalancerClass when service type is LoadBalancer                                                                                             | `""`                   |
-| `externalAccess.hidden.service.loadBalancerSourceRanges` | Address(es) that are allowed when service is LoadBalancer                                                                                       | `[]`                   |
-| `externalAccess.hidden.service.externalTrafficPolicy`    | MongoDB(&reg;) service external traffic policy                                                                                                  | `Local`                |
-| `externalAccess.hidden.service.nodePorts`                | Array of node ports used to configure MongoDB(&reg;) advertised hostname when service type is NodePort. Length must be the same as replicaCount | `[]`                   |
-| `externalAccess.hidden.service.domain`                   | Domain or external IP used to configure MongoDB(&reg;) advertised hostname when service type is NodePort                                        | `""`                   |
-| `externalAccess.hidden.service.extraPorts`               | Extra ports to expose (normally used with the `sidecar` value)                                                                                  | `[]`                   |
-| `externalAccess.hidden.service.annotations`              | Service annotations for external access                                                                                                         | `{}`                   |
-| `externalAccess.hidden.service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin                                                                                | `None`                 |
-| `externalAccess.hidden.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                                     | `{}`                   |
-
+| Name                                                          | Description                                                                                                                                     | Value                  |
+| ------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
+| `service.nameOverride`                                        | MongoDB(&reg;) service name                                                                                                                     | `""`                   |
+| `service.type`                                                | Kubernetes Service type (only for standalone architecture)                                                                                      | `ClusterIP`            |
+| `service.portName`                                            | MongoDB(&reg;) service port name (only for standalone architecture)                                                                             | `mongodb`              |
+| `service.ports.mongodb`                                       | MongoDB(&reg;) service port.                                                                                                                    | `27017`                |
+| `service.nodePorts.mongodb`                                   | Port to bind to for NodePort and LoadBalancer service types (only for standalone architecture)                                                  | `""`                   |
+| `service.clusterIP`                                           | MongoDB(&reg;) service cluster IP (only for standalone architecture)                                                                            | `""`                   |
+| `service.externalIPs`                                         | Specify the externalIP value ClusterIP service type (only for standalone architecture)                                                          | `[]`                   |
+| `service.loadBalancerIP`                                      | loadBalancerIP for MongoDB(&reg;) Service (only for standalone architecture)                                                                    | `""`                   |
+| `service.loadBalancerClass`                                   | loadBalancerClass for MongoDB(&reg;) Service (only for standalone architecture)                                                                 | `""`                   |
+| `service.loadBalancerSourceRanges`                            | Address(es) that are allowed when service is LoadBalancer (only for standalone architecture)                                                    | `[]`                   |
+| `service.allocateLoadBalancerNodePorts`                       | Wheter to allocate node ports when service type is LoadBalancer                                                                                 | `true`                 |
+| `service.extraPorts`                                          | Extra ports to expose (normally used with the `sidecar` value)                                                                                  | `[]`                   |
+| `service.annotations`                                         | Provide any additional annotations that may be required                                                                                         | `{}`                   |
+| `service.externalTrafficPolicy`                               | service external traffic policy (only for standalone architecture)                                                                              | `Local`                |
+| `service.sessionAffinity`                                     | Control where client requests go, to the same pod or round-robin                                                                                | `None`                 |
+| `service.sessionAffinityConfig`                               | Additional settings for the sessionAffinity                                                                                                     | `{}`                   |
+| `externalAccess.enabled`                                      | Enable Kubernetes external cluster access to MongoDB(&reg;) nodes (only for replicaset architecture)                                            | `false`                |
+| `externalAccess.autoDiscovery.enabled`                        | Enable using an init container to auto-detect external IPs by querying the K8s API                                                              | `false`                |
+| `externalAccess.autoDiscovery.image.registry`                 | Init container auto-discovery image registry                                                                                                    | `docker.io`            |
+| `externalAccess.autoDiscovery.image.repository`               | Init container auto-discovery image repository                                                                                                  | `bitnami/kubectl`      |
+| `externalAccess.autoDiscovery.image.tag`                      | Init container auto-discovery image tag (immutable tags are recommended)                                                                        | `1.25.6-debian-11-r10` |
+| `externalAccess.autoDiscovery.image.digest`                   | Init container auto-discovery image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                   | `""`                   |
+| `externalAccess.autoDiscovery.image.pullPolicy`               | Init container auto-discovery image pull policy                                                                                                 | `IfNotPresent`         |
+| `externalAccess.autoDiscovery.image.pullSecrets`              | Init container auto-discovery image pull secrets                                                                                                | `[]`                   |
+| `externalAccess.autoDiscovery.resources.limits`               | Init container auto-discovery resource limits                                                                                                   | `{}`                   |
+| `externalAccess.autoDiscovery.resources.requests`             | Init container auto-discovery resource requests                                                                                                 | `{}`                   |
+| `externalAccess.service.type`                                 | Kubernetes Service type for external access. Allowed values: NodePort, LoadBalancer or ClusterIP                                                | `LoadBalancer`         |
+| `externalAccess.service.portName`                             | MongoDB(&reg;) port name used for external access when service type is LoadBalancer                                                             | `mongodb`              |
+| `externalAccess.service.ports.mongodb`                        | MongoDB(&reg;) port used for external access when service type is LoadBalancer                                                                  | `27017`                |
+| `externalAccess.service.loadBalancerIPs`                      | Array of load balancer IPs for MongoDB(&reg;) nodes                                                                                             | `[]`                   |
+| `externalAccess.service.loadBalancerClass`                    | loadBalancerClass when service type is LoadBalancer                                                                                             | `""`                   |
+| `externalAccess.service.loadBalancerSourceRanges`             | Address(es) that are allowed when service is LoadBalancer                                                                                       | `[]`                   |
+| `externalAccess.service.allocateLoadBalancerNodePorts`        | Wheter to allocate node ports when service type is LoadBalancer                                                                                 | `true`                 |
+| `externalAccess.service.externalTrafficPolicy`                | MongoDB(&reg;) service external traffic policy                                                                                                  | `Local`                |
+| `externalAccess.service.nodePorts`                            | Array of node ports used to configure MongoDB(&reg;) advertised hostname when service type is NodePort                                          | `[]`                   |
+| `externalAccess.service.domain`                               | Domain or external IP used to configure MongoDB(&reg;) advertised hostname when service type is NodePort                                        | `""`                   |
+| `externalAccess.service.extraPorts`                           | Extra ports to expose (normally used with the `sidecar` value)                                                                                  | `[]`                   |
+| `externalAccess.service.annotations`                          | Service annotations for external access                                                                                                         | `{}`                   |
+| `externalAccess.service.sessionAffinity`                      | Control where client requests go, to the same pod or round-robin                                                                                | `None`                 |
+| `externalAccess.service.sessionAffinityConfig`                | Additional settings for the sessionAffinity                                                                                                     | `{}`                   |
+| `externalAccess.hidden.enabled`                               | Enable Kubernetes external cluster access to MongoDB(&reg;) hidden nodes                                                                        | `false`                |
+| `externalAccess.hidden.service.type`                          | Kubernetes Service type for external access. Allowed values: NodePort or LoadBalancer                                                           | `LoadBalancer`         |
+| `externalAccess.hidden.service.portName`                      | MongoDB(&reg;) port name used for external access when service type is LoadBalancer                                                             | `mongodb`              |
+| `externalAccess.hidden.service.ports.mongodb`                 | MongoDB(&reg;) port used for external access when service type is LoadBalancer                                                                  | `27017`                |
+| `externalAccess.hidden.service.loadBalancerIPs`               | Array of load balancer IPs for MongoDB(&reg;) nodes                                                                                             | `[]`                   |
+| `externalAccess.hidden.service.loadBalancerClass`             | loadBalancerClass when service type is LoadBalancer                                                                                             | `""`                   |
+| `externalAccess.hidden.service.loadBalancerSourceRanges`      | Address(es) that are allowed when service is LoadBalancer                                                                                       | `[]`                   |
+| `externalAccess.hidden.service.allocateLoadBalancerNodePorts` | Wheter to allocate node ports when service type is LoadBalancer                                                                                 | `true`                 |
+| `externalAccess.hidden.service.externalTrafficPolicy`         | MongoDB(&reg;) service external traffic policy                                                                                                  | `Local`                |
+| `externalAccess.hidden.service.nodePorts`                     | Array of node ports used to configure MongoDB(&reg;) advertised hostname when service type is NodePort. Length must be the same as replicaCount | `[]`                   |
+| `externalAccess.hidden.service.domain`                        | Domain or external IP used to configure MongoDB(&reg;) advertised hostname when service type is NodePort                                        | `""`                   |
+| `externalAccess.hidden.service.extraPorts`                    | Extra ports to expose (normally used with the `sidecar` value)                                                                                  | `[]`                   |
+| `externalAccess.hidden.service.annotations`                   | Service annotations for external access                                                                                                         | `{}`                   |
+| `externalAccess.hidden.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin                                                                                | `None`                 |
+| `externalAccess.hidden.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                                                                     | `{}`                   |
 
 ### Persistence parameters
 
@@ -303,7 +301,6 @@ Refer to the [chart documentation for more information on each of these architec
 | `persistence.volumeClaimTemplates.requests`   | Custom PVC requests attributes                                                                                                        | `{}`                |
 | `persistence.volumeClaimTemplates.dataSource` | Add dataSource to the VolumeClaimTemplate                                                                                             | `{}`                |
 
-
 ### RBAC parameters
 
 | Name                                          | Description                                                                                                                                 | Value   |
@@ -319,7 +316,6 @@ Refer to the [chart documentation for more information on each of these architec
 | `podSecurityPolicy.privileged`                | Allow privileged                                                                                                                            | `false` |
 | `podSecurityPolicy.spec`                      | Specify the full spec to use for Pod Security Policy                                                                                        | `{}`    |
 
-
 ### Volume Permissions parameters
 
 | Name                                          | Description                                                                                                                       | Value                   |
@@ -327,14 +323,13 @@ Refer to the [chart documentation for more information on each of these architec
 | `volumePermissions.enabled`                   | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup`              | `false`                 |
 | `volumePermissions.image.registry`            | Init container volume-permissions image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`          | Init container volume-permissions image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r74`      |
+| `volumePermissions.image.tag`                 | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r86`      |
 | `volumePermissions.image.digest`              | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`          | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`         | Specify docker-registry secret names as an array                                                                                  | `[]`                    |
 | `volumePermissions.resources.limits`          | Init container volume-permissions resource limits                                                                                 | `{}`                    |
 | `volumePermissions.resources.requests`        | Init container volume-permissions resource requests                                                                               | `{}`                    |
 | `volumePermissions.securityContext.runAsUser` | User ID for the volumePermissions container                                                                                       | `0`                     |
-
 
 ### Arbiter parameters
 
@@ -411,7 +406,6 @@ Refer to the [chart documentation for more information on each of these architec
 | `arbiter.service.ports.mongodb`                 | MongoDB(&reg;) service port                                                                       | `27017`         |
 | `arbiter.service.extraPorts`                    | Extra ports to expose (normally used with the `sidecar` value)                                    | `[]`            |
 | `arbiter.service.annotations`                   | Provide any additional annotations that may be required                                           | `{}`            |
-
 
 ### Hidden Node parameters
 
@@ -501,7 +495,6 @@ Refer to the [chart documentation for more information on each of these architec
 | `hidden.service.extraPorts`                          | Extra ports to expose (normally used with the `sidecar` value)                                       | `[]`                |
 | `hidden.service.annotations`                         | Provide any additional annotations that may be required                                              | `{}`                |
 
-
 ### Metrics parameters
 
 | Name                                         | Description                                                                                                           | Value                      |
@@ -509,7 +502,7 @@ Refer to the [chart documentation for more information on each of these architec
 | `metrics.enabled`                            | Enable using a sidecar Prometheus exporter                                                                            | `false`                    |
 | `metrics.image.registry`                     | MongoDB(&reg;) Prometheus exporter image registry                                                                     | `docker.io`                |
 | `metrics.image.repository`                   | MongoDB(&reg;) Prometheus exporter image repository                                                                   | `bitnami/mongodb-exporter` |
-| `metrics.image.tag`                          | MongoDB(&reg;) Prometheus exporter image tag (immutable tags are recommended)                                         | `0.36.0-debian-11-r6`      |
+| `metrics.image.tag`                          | MongoDB(&reg;) Prometheus exporter image tag (immutable tags are recommended)                                         | `0.37.0-debian-11-r2`      |
 | `metrics.image.digest`                       | MongoDB(&reg;) image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag        | `""`                       |
 | `metrics.image.pullPolicy`                   | MongoDB(&reg;) Prometheus exporter image pull policy                                                                  | `IfNotPresent`             |
 | `metrics.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                      | `[]`                       |
@@ -562,10 +555,9 @@ Refer to the [chart documentation for more information on each of these architec
 | `metrics.prometheusRule.rules`               | Rules to be created, check values for an example                                                                      | `[]`                       |
 
 
-Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release \
+helm install my-release \
     --set auth.rootPassword=secretpassword,auth.username=my-user,auth.password=my-password,auth.database=my-database \
     my-repo/mongodb
 ```
@@ -577,7 +569,7 @@ The above command sets the MongoDB(&reg;) `root` account password to `secretpass
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml my-repo/mongodb
+helm install my-release -f values.yaml my-repo/mongodb
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -594,8 +586,8 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 The [Bitnami MongoDB(&reg;) image](https://github.com/bitnami/containers/tree/main/bitnami/mongodb) supports the use of custom scripts to initialize a fresh instance. In order to execute the scripts, two options are available:
 
-* Specify them using the `initdbScripts` parameter as dict.
-* Define an external Kubernetes ConfigMap with all the initialization scripts by setting the `initdbScriptsConfigMap` parameter. Note that this will override the previous option.
+- Specify them using the `initdbScripts` parameter as dict.
+- Define an external Kubernetes ConfigMap with all the initialization scripts by setting the `initdbScriptsConfigMap` parameter. Note that this will override the previous option.
 
 The allowed script extensions are `.sh` and `.js`.
 
@@ -661,7 +653,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 If authentication is enabled, it's necessary to set the `auth.rootPassword` (also `auth.replicaSetKey` when using a replicaset architecture) when upgrading for readiness/liveness probes to work properly. When you install this chart for the first time, some notes will be displayed providing the credentials you must use under the 'Credentials' section. Please note down the password, and run the command below to upgrade your chart:
 
 ```console
-$ helm upgrade my-release my-repo/mongodb --set auth.rootPassword=[PASSWORD] (--set auth.replicaSetKey=[REPLICASETKEY])
+helm upgrade my-release my-repo/mongodb --set auth.rootPassword=[PASSWORD] (--set auth.replicaSetKey=[REPLICASETKEY])
 ```
 
 > Note: you need to substitute the placeholders [PASSWORD] and [REPLICASETKEY] with the values obtained in the installation notes.
@@ -687,7 +679,7 @@ Additionally also updates the MongoDB image dependency to it newest major, 5.0
 ### To 11.0.0
 
 In this version, the mongodb-exporter bundled as part of this Helm chart was updated to a new version which, even it is not a major change, can contain breaking changes (from `0.11.X` to `0.30.X`).
-Please visit the release notes from the upstream project at https://github.com/percona/mongodb_exporter/releases
+Please visit the release notes from the upstream project at <https://github.com/percona/mongodb_exporter/releases>
 
 ### To 10.0.0
 
@@ -742,7 +734,7 @@ When enabling replicaset configuration, backwards compatibility is not guarantee
 Use the workaround below to upgrade from versions previous to 5.0.0. The following example assumes that the release name is `my-release`:
 
 ```console
-$ kubectl delete statefulset my-release-mongodb-arbiter my-release-mongodb-primary my-release-mongodb-secondary --cascade=false
+kubectl delete statefulset my-release-mongodb-arbiter my-release-mongodb-primary my-release-mongodb-secondary --cascade=false
 ```
 
 ### Add extra deployment options
@@ -787,7 +779,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

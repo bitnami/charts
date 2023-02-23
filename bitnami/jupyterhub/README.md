@@ -7,12 +7,12 @@ JupyterHub brings the power of notebooks to groups of users. It gives users acce
 [Overview of JupyterHub](https://jupyter.org/hub)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/jupyterhub
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/jupyterhub
 ```
 
 ## Introduction
@@ -36,8 +36,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/jupyterhub
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/jupyterhub
 ```
 
 These commands deploy JupyterHub on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -49,7 +49,7 @@ These commands deploy JupyterHub on the Kubernetes cluster in the default config
 To uninstall/delete the `my-release` helm release:
 
 ```console
-$ helm uninstall my-release
+helm uninstall my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -63,7 +63,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
-
 
 ### Common parameters
 
@@ -80,14 +79,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.command` | Command to override all containers in the the deployment(s)/daemonset(s)                | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the the deployment(s)/daemonset(s)                   | `["infinity"]`  |
 
-
 ### Hub deployment parameters
 
 | Name                                        | Description                                                                                                              | Value                |
 | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | -------------------- |
 | `hub.image.registry`                        | Hub image registry                                                                                                       | `docker.io`          |
 | `hub.image.repository`                      | Hub image repository                                                                                                     | `bitnami/jupyterhub` |
-| `hub.image.tag`                             | Hub image tag (immutable tags are recommended)                                                                           | `3.1.1-debian-11-r2` |
+| `hub.image.tag`                             | Hub image tag (immutable tags are recommended)                                                                           | `3.1.1-debian-11-r7` |
 | `hub.image.digest`                          | Hub image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                      | `""`                 |
 | `hub.image.pullPolicy`                      | Hub image pull policy                                                                                                    | `IfNotPresent`       |
 | `hub.image.pullSecrets`                     | Hub image pull secrets                                                                                                   | `[]`                 |
@@ -157,7 +155,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `hub.pdb.minAvailable`                      | Set minimum available hub instances                                                                                      | `""`                 |
 | `hub.pdb.maxUnavailable`                    | Set maximum available hub instances                                                                                      | `""`                 |
 
-
 ### Hub RBAC parameters
 
 | Name                                              | Description                                                            | Value  |
@@ -168,7 +165,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `hub.serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                   | `{}`   |
 | `hub.rbac.create`                                 | Specifies whether RBAC resources should be created                     | `true` |
 | `hub.rbac.rules`                                  | Custom RBAC rules to set                                               | `[]`   |
-
 
 ### Hub Traffic Exposure Parameters
 
@@ -190,7 +186,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `hub.service.annotations`                 | Additional custom annotations for Hub service                    | `{}`        |
 | `hub.service.extraPorts`                  | Extra port to expose on Hub service                              | `[]`        |
 
-
 ### Hub Metrics parameters
 
 | Name                                           | Description                                                                                 | Value          |
@@ -208,14 +203,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `hub.metrics.serviceMonitor.honorLabels`       | Specify honorLabels parameter to add the scrape endpoint                                    | `false`        |
 | `hub.metrics.serviceMonitor.jobLabel`          | The name of the label on the target service to use as the job name in prometheus.           | `""`           |
 
-
 ### Proxy deployment parameters
 
 | Name                                          | Description                                                                                                              | Value                             |
 | --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | --------------------------------- |
 | `proxy.image.registry`                        | Proxy image registry                                                                                                     | `docker.io`                       |
 | `proxy.image.repository`                      | Proxy image repository                                                                                                   | `bitnami/configurable-http-proxy` |
-| `proxy.image.tag`                             | Proxy image tag (immutable tags are recommended)                                                                         | `4.5.4-debian-11-r19`             |
+| `proxy.image.tag`                             | Proxy image tag (immutable tags are recommended)                                                                         | `4.5.4-debian-11-r25`             |
 | `proxy.image.digest`                          | Proxy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                    | `""`                              |
 | `proxy.image.pullPolicy`                      | Proxy image pull policy                                                                                                  | `IfNotPresent`                    |
 | `proxy.image.pullSecrets`                     | Proxy image pull secrets                                                                                                 | `[]`                              |
@@ -283,7 +277,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `proxy.pdb.minAvailable`                      | Set minimum available proxy instances                                                                                    | `""`                              |
 | `proxy.pdb.maxUnavailable`                    | Set maximum available proxy instances                                                                                    | `""`                              |
 
-
 ### Proxy Traffic Exposure Parameters
 
 | Name                                             | Description                                                                                                                      | Value                    |
@@ -340,7 +333,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `proxy.ingress.secrets`                          | Custom TLS certificates as secrets                                                                                               | `[]`                     |
 | `proxy.ingress.extraRules`                       | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
-
 ### Proxy Metrics parameters
 
 | Name                                             | Description                                                                                 | Value      |
@@ -356,7 +348,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `proxy.metrics.serviceMonitor.metricRelabelings` | MetricRelabelConfigs to apply to samples before ingestion                                   | `[]`       |
 | `proxy.metrics.serviceMonitor.honorLabels`       | Specify honorLabels parameter to add the scrape endpoint                                    | `false`    |
 | `proxy.metrics.serviceMonitor.jobLabel`          | The name of the label on the target service to use as the job name in prometheus.           | `""`       |
-
 
 ### Image puller deployment parameters
 
@@ -401,14 +392,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `imagePuller.initContainers`                        | Add additional init containers to the ImagePuller pods                                                                   | `[]`            |
 | `imagePuller.sidecars`                              | Add additional sidecar containers to the ImagePuller pod                                                                 | `[]`            |
 
-
 ### Singleuser deployment parameters
 
 | Name                                            | Description                                                                                                 | Value                                |
 | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------- | ------------------------------------ |
 | `singleuser.image.registry`                     | Single User image registry                                                                                  | `docker.io`                          |
 | `singleuser.image.repository`                   | Single User image repository                                                                                | `bitnami/jupyter-base-notebook`      |
-| `singleuser.image.tag`                          | Single User image tag (immutabe tags are recommended)                                                       | `3.1.1-debian-11-r1`                 |
+| `singleuser.image.tag`                          | Single User image tag (immutabe tags are recommended)                                                       | `3.1.1-debian-11-r7`                 |
 | `singleuser.image.digest`                       | Single User image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                                 |
 | `singleuser.image.pullPolicy`                   | Single User image pull policy                                                                               | `IfNotPresent`                       |
 | `singleuser.image.pullSecrets`                  | Single User image pull secrets                                                                              | `[]`                                 |
@@ -434,7 +424,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `singleuser.initContainers`                     | Add additional init containers to the Single User pods                                                      | `[]`                                 |
 | `singleuser.sidecars`                           | Add additional sidecar containers to the Single User pod                                                    | `[]`                                 |
 
-
 ### Single User RBAC parameters
 
 | Name                                                     | Description                                                            | Value  |
@@ -444,7 +433,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `singleuser.serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created | `true` |
 | `singleuser.serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                   | `{}`   |
 
-
 ### Single User Persistence parameters
 
 | Name                                  | Description                                                | Value               |
@@ -453,7 +441,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `singleuser.persistence.storageClass` | Persistent Volumes storage class                           | `""`                |
 | `singleuser.persistence.accessModes`  | Persistent Volumes access modes                            | `["ReadWriteOnce"]` |
 | `singleuser.persistence.size`         | Persistent Volumes size                                    | `10Gi`              |
-
 
 ### Traffic exposure parameters
 
@@ -465,18 +452,16 @@ The command removes all the Kubernetes components associated with the chart and 
 | `singleuser.networkPolicy.extraIngress`             | Add extra ingress rules to the NetworkPolicy             | `""`    |
 | `singleuser.networkPolicy.extraEgress`              | Add extra egress rules to the NetworkPolicy              | `""`    |
 
-
 ### Auxiliary image parameters
 
 | Name                         | Description                                                                                               | Value                   |
 | ---------------------------- | --------------------------------------------------------------------------------------------------------- | ----------------------- |
 | `auxiliaryImage.registry`    | Auxiliary image registry                                                                                  | `docker.io`             |
 | `auxiliaryImage.repository`  | Auxiliary image repository                                                                                | `bitnami/bitnami-shell` |
-| `auxiliaryImage.tag`         | Auxiliary image tag (immutabe tags are recommended)                                                       | `11-debian-11-r79`      |
+| `auxiliaryImage.tag`         | Auxiliary image tag (immutabe tags are recommended)                                                       | `11-debian-11-r86`      |
 | `auxiliaryImage.digest`      | Auxiliary image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `auxiliaryImage.pullPolicy`  | Auxiliary image pull policy                                                                               | `IfNotPresent`          |
 | `auxiliaryImage.pullSecrets` | Auxiliary image pull secrets                                                                              | `[]`                    |
-
 
 ### JupyterHub database parameters
 
@@ -497,11 +482,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.existingSecret`            | Name of an existing secret resource containing the database credentials | `""`                 |
 | `externalDatabase.existingSecretPasswordKey` | Name of an existing secret key containing the database credentials      | `""`                 |
 
-
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release \
+helm install my-release \
   --set proxy.livenessProbe.successThreshold=5 \
     my-repo/jupyterhub
 ```
@@ -511,7 +495,7 @@ The above command sets the `proxy.livenessProbe.successThreshold` to `5`.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml my-repo/jupyterhub
+helm install my-release -f values.yaml my-repo/jupyterhub
 ```
 
 ## Configuration and installation details
@@ -559,10 +543,10 @@ Learn more about [configuring and using Ingress in the chart documentation](http
 
 This chart facilitates the creation of TLS secrets for use with the Ingress controller (although this is not mandatory). There are four common use cases:
 
-* Helm generates/manages certificate secrets based on the parameters.
-* User generates/manages certificates separately.
-* Helm creates self-signed certificates and generates/manages certificate secrets.
-* An additional tool (like [cert-manager](https://github.com/jetstack/cert-manager/)) manages the secrets for the application.
+- Helm generates/manages certificate secrets based on the parameters.
+- User generates/manages certificates separately.
+- Helm creates self-signed certificates and generates/manages certificate secrets.
+- An additional tool (like [cert-manager](https://github.com/jetstack/cert-manager/)) manages the secrets for the application.
 
 Refer to the [chart documentation for more information on working with TLS](https://docs.bitnami.com/kubernetes/infrastructure/jupyterhub/administration/enable-tls-ingress/).
 
@@ -596,7 +580,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

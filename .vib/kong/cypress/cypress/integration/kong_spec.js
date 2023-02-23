@@ -29,8 +29,8 @@ it('allows accessing a restricted service (CRD) when API key is presented', () =
 });
 
 it('allows adding a new service and route through admin API', () => {
-  // As adminAPI is exposed in another port, we need to use the external IP to access it
-  const BASE_URL = `http://${Cypress.env('externalIp')}:${Cypress.env(
+  // As adminAPI is exposed in another port, we need to use a different base url.
+  const BASE_URL = `${Cypress.config('baseUrl')}:${Cypress.env(
     'adminHttpPort'
   )}`;
 

@@ -77,7 +77,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mariadb-galera
-  tag: 10.6.12-debian-11-r0
+  tag: 10.6.12-debian-11-r3
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -795,7 +795,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mysqld-exporter
-    tag: 0.14.0-debian-11-r86
+    tag: 0.14.0-debian-11-r90
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
@@ -832,6 +832,11 @@ metrics:
     ##    cpu: 0.5
     ##    memory: 256Mi
     requests: {}
+  ## MySQL Prometheus exporter's Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param metrics.containerSecurityContext.enabled Enabled exporter's container Security Context
+  containerSecurityContext:
+    enabled: false
   ## MySQL Prometheus exporter service parameters
   ## @param metrics.service.type Prometheus exporter service type
   ## @param metrics.service.port Prometheus exporter service port

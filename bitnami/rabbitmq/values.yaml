@@ -31,7 +31,7 @@ global:
 image:
   registry: docker.io
   repository: bitnami/rabbitmq
-  tag: 3.11.8-debian-11-r0
+  tag: 3.11.9-debian-11-r1
   digest: ""
   ## set to true if you would like to see extra information on logs
   ## It turns BASH and/or NAMI debugging in the image
@@ -81,6 +81,13 @@ servicenameOverride: ""
 ## @param commonLabels Labels to add to all deployed objects
 ##
 commonLabels: {}
+
+## @param serviceBindings.enabled Create secret for service binding (Experimental)
+## Ref: https://servicebinding.io/service-provider/
+##
+serviceBindings:
+  enabled: false
+
 ## Enable diagnostic mode in the deployment
 ##
 diagnosticMode:
@@ -181,8 +188,6 @@ auth:
     existingSecret: ""
     existingSecretFullChain: false
     overrideCaCertificate: ""
-    
-
 
 ## @param logs Path of the RabbitMQ server's Erlang log file. Value for the `RABBITMQ_LOGS` environment variable
 ## ref: https://www.rabbitmq.com/logging.html#log-file-location
@@ -356,15 +361,15 @@ tcpListenOptions:
   ## tcpListenOptions.linger
   ##
   linger:
-    ## @param tcpListenOptions.linger.on Enable Server socket lingering
+    ## @param tcpListenOptions.linger.lingerOn Enable Server socket lingering
     ##
-    on: true
+    lingerOn: true
     ## @param tcpListenOptions.linger.timeout Server Socket lingering timeout
     ##
     timeout: 0
   ## @param tcpListenOptions.keepalive When set to true, enables TCP keepalives
-  ##  
-  keepalive: false  
+  ##
+  keepalive: false
 
 configuration: |-
   ## Username and password
@@ -467,7 +472,7 @@ configuration: |-
   ##
   tcp_listen_options.backlog = {{ .Values.tcpListenOptions.backlog }}
   tcp_listen_options.nodelay = {{ .Values.tcpListenOptions.nodelay }}
-  tcp_listen_options.linger.on      = {{ .Values.tcpListenOptions.linger.on }}
+  tcp_listen_options.linger.on      = {{ .Values.tcpListenOptions.linger.lingerOn }}
   tcp_listen_options.linger.timeout = {{ .Values.tcpListenOptions.linger.timeout }}
   tcp_listen_options.keepalive = {{ .Values.tcpListenOptions.keepalive }}
   {{- end }}
@@ -518,6 +523,7 @@ advancedConfigurationExistingSecret: ""
 ## Feature flags are a mechanism that controls what features are considered to be enabled or available on all cluster nodes. If a feature flag is enabled, so is its associated feature (or behavior). If not then all nodes in the cluster will disable the feature (behavior).
 ## e.g, drop_unroutable_metric,empty_basic_get_metric,implicit_default_bindings,maintenance_mode_status,quorum_queue,virtual_host_metadata
 ## @param featureFlags that controls what features are considered to be enabled or available on all cluster nodes.
+##
 featureFlags: ""
 
 ## LDAP configuration
@@ -555,6 +561,7 @@ ldap:
   ##��ref: https://www.rabbitmq.com/ldap.html#usernames-and-dns
   ##
   ## @param ldap.uidField Field used to match with the user name (uid, samAccountName, cn, etc). It matches with 'dn_lookup_attribute' in RabbitMQ configuration
+  ##
   uidField: ""
   ## @param ldap.authorisationEnabled Enable LDAP authorisation. Please set 'advancedConfiguration' with tag, topic, resources and vhost mappings
   ## ref: https://www.rabbitmq.com/ldap.html#authorisation
@@ -1153,6 +1160,7 @@ ingress:
   ##
   ingressClassName: ""
   ## @param ingress.existingSecret It is you own the certificate as secret.
+  ##
   existingSecret: ""
 
 ## Network Policy configuration
@@ -1354,7 +1362,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r78
+    tag: 11-debian-11-r86
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

@@ -7,12 +7,12 @@ Grafana Loki is a horizontally scalable, highly available, and multi-tenant log 
 [Overview of Grafana Loki](https://grafana.com/oss/loki/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/grafana-loki
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/grafana-loki
 ```
 
 ## Introduction
@@ -36,8 +36,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/grafana-loki
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/grafana-loki
 ```
 
 The command deploys grafana-loki on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -49,7 +49,7 @@ The command deploys grafana-loki on the Kubernetes cluster in the default config
 To uninstall/delete the `my-release` deployment:
 
 ```console
-$ helm delete my-release
+helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -63,7 +63,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
-
 
 ### Common parameters
 
@@ -80,14 +79,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.command` | Command to override all containers in the deployments/statefulsets                      | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the deployments/statefulsets                         | `["infinity"]`  |
 
-
 ### Common Grafana Loki Parameters
 
 | Name                                  | Description                                                                                                  | Value                   |
 | ------------------------------------- | ------------------------------------------------------------------------------------------------------------ | ----------------------- |
 | `loki.image.registry`                 | Grafana Loki image registry                                                                                  | `docker.io`             |
 | `loki.image.repository`               | Grafana Loki image repository                                                                                | `bitnami/grafana-loki`  |
-| `loki.image.tag`                      | Grafana Loki image tag (immutable tags are recommended)                                                      | `2.7.3-debian-11-r0`    |
+| `loki.image.tag`                      | Grafana Loki image tag (immutable tags are recommended)                                                      | `2.7.3-debian-11-r5`    |
 | `loki.image.digest`                   | Grafana Loki image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `loki.image.pullPolicy`               | Grafana Loki image pull policy                                                                               | `IfNotPresent`          |
 | `loki.image.pullSecrets`              | Grafana Loki image pull secrets                                                                              | `[]`                    |
@@ -100,7 +98,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `loki.containerPorts.gossipRing`      | Loki components Gossip Ring container port                                                                   | `7946`                  |
 | `loki.gossipRing.service.ports.http`  | Gossip Ring HTTP headless service port                                                                       | `7946`                  |
 | `loki.gossipRing.service.annotations` | Additional custom annotations for Gossip Ring headless service                                               | `{}`                    |
-
 
 ### Compactor Deployment Parameters
 
@@ -171,7 +168,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `compactor.persistence.selector`                  | Selector to match an existing Persistent Volume for Compactor's data PVC                            | `{}`                |
 | `compactor.persistence.dataSource`                | PVC data source                                                                                     | `{}`                |
 
-
 ### Compactor Traffic Exposure Parameters
 
 | Name                                         | Description                                                      | Value       |
@@ -188,7 +184,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `compactor.service.annotations`              | Additional custom annotations for Compactor service              | `{}`        |
 | `compactor.service.extraPorts`               | Extra ports to expose in the Compactor service                   | `[]`        |
 
-
 ### Gateway Deployment Parameters
 
 | Name                                            | Description                                                                                           | Value                  |
@@ -196,7 +191,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `gateway.enabled`                               | Enable Gateway deployment                                                                             | `true`                 |
 | `gateway.image.registry`                        | Nginx image registry                                                                                  | `docker.io`            |
 | `gateway.image.repository`                      | Nginx image repository                                                                                | `bitnami/nginx`        |
-| `gateway.image.tag`                             | Nginx image tag (immutable tags are recommended)                                                      | `1.23.3-debian-11-r19` |
+| `gateway.image.tag`                             | Nginx image tag (immutable tags are recommended)                                                      | `1.23.3-debian-11-r25` |
 | `gateway.image.digest`                          | Nginx image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
 | `gateway.image.pullPolicy`                      | Nginx image pull policy                                                                               | `IfNotPresent`         |
 | `gateway.image.pullSecrets`                     | Nginx image pull secrets                                                                              | `[]`                   |
@@ -263,7 +258,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `gateway.sidecars`                              | Add additional sidecar containers to the Gateway pod(s)                                               | `[]`                   |
 | `gateway.initContainers`                        | Add additional init containers to the Gateway pod(s)                                                  | `[]`                   |
 
-
 ### Gateway Traffic Exposure Parameters
 
 | Name                                       | Description                                                                                                                      | Value                    |
@@ -292,7 +286,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `gateway.ingress.extraPaths`               | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                     |
 | `gateway.ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
 | `gateway.ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                     |
-
 
 ### index-gateway Deployment Parameters
 
@@ -356,7 +349,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `indexGateway.sidecars`                              | Add additional sidecar containers to the index-gateway pod(s)                                          | `[]`            |
 | `indexGateway.initContainers`                        | Add additional init containers to the index-gateway pod(s)                                             | `[]`            |
 
-
 ### index-gateway Traffic Exposure Parameters
 
 | Name                                            | Description                                                      | Value       |
@@ -374,7 +366,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `indexGateway.service.externalTrafficPolicy`    | index-gateway service external traffic policy                    | `Cluster`   |
 | `indexGateway.service.annotations`              | Additional custom annotations for index-gateway service          | `{}`        |
 | `indexGateway.service.extraPorts`               | Extra ports to expose in the index-gateway service               | `[]`        |
-
 
 ### Distributor Deployment Parameters
 
@@ -436,7 +427,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `distributor.sidecars`                              | Add additional sidecar containers to the Distributor pod(s)                                           | `[]`            |
 | `distributor.initContainers`                        | Add additional init containers to the Distributor pod(s)                                              | `[]`            |
 
-
 ### Distributor Traffic Exposure Parameters
 
 | Name                                           | Description                                                      | Value       |
@@ -454,7 +444,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `distributor.service.externalTrafficPolicy`    | Distributor service external traffic policy                      | `Cluster`   |
 | `distributor.service.annotations`              | Additional custom annotations for Distributor service            | `{}`        |
 | `distributor.service.extraPorts`               | Extra ports to expose in the Distributor service                 | `[]`        |
-
 
 ### Ingester Deployment Parameters
 
@@ -517,7 +506,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingester.sidecars`                              | Add additional sidecar containers to the Ingester pod(s)                                           | `[]`            |
 | `ingester.initContainers`                        | Add additional init containers to the Ingester pod(s)                                              | `[]`            |
 
-
 ### Ingester Persistence Parameters
 
 | Name                                | Description                                                             | Value               |
@@ -529,7 +517,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingester.persistence.size`         | PVC Storage Request for Memcached data volume                           | `8Gi`               |
 | `ingester.persistence.annotations`  | Additional PVC annotations                                              | `{}`                |
 | `ingester.persistence.selector`     | Selector to match an existing Persistent Volume for Ingester's data PVC | `{}`                |
-
 
 ### Ingester Traffic Exposure Parameters
 
@@ -548,7 +535,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingester.service.externalTrafficPolicy`    | Ingester service external traffic policy                         | `Cluster`   |
 | `ingester.service.annotations`              | Additional custom annotations for Ingester service               | `{}`        |
 | `ingester.service.extraPorts`               | Extra ports to expose in the Ingester service                    | `[]`        |
-
 
 ### Querier Deployment Parameters
 
@@ -611,7 +597,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `querier.sidecars`                              | Add additional sidecar containers to the Querier pod(s)                                           | `[]`            |
 | `querier.initContainers`                        | Add additional init containers to the Querier pod(s)                                              | `[]`            |
 
-
 ### Querier Persistence Parameters
 
 | Name                               | Description                                                            | Value               |
@@ -623,7 +608,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `querier.persistence.size`         | PVC Storage Request for Memcached data volume                          | `8Gi`               |
 | `querier.persistence.annotations`  | Additional PVC annotations                                             | `{}`                |
 | `querier.persistence.selector`     | Selector to match an existing Persistent Volume for Querier's data PVC | `{}`                |
-
 
 ### Querier Traffic Exposure Parameters
 
@@ -642,7 +626,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `querier.service.externalTrafficPolicy`    | Querier service external traffic policy                          | `Cluster`   |
 | `querier.service.annotations`              | Additional custom annotations for Querier service                | `{}`        |
 | `querier.service.extraPorts`               | Extra ports to expose in the Querier service                     | `[]`        |
-
 
 ### Query Frontend Deployment Parameters
 
@@ -704,7 +687,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryFrontend.sidecars`                              | Add additional sidecar containers to the queryFrontend pod(s)                                           | `[]`            |
 | `queryFrontend.initContainers`                        | Add additional init containers to the queryFrontend pod(s)                                              | `[]`            |
 
-
 ### Query Frontend Traffic Exposure Parameters
 
 | Name                                             | Description                                                      | Value       |
@@ -722,7 +704,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryFrontend.service.externalTrafficPolicy`    | queryFrontend service external traffic policy                    | `Cluster`   |
 | `queryFrontend.service.annotations`              | Additional custom annotations for queryFrontend service          | `{}`        |
 | `queryFrontend.service.extraPorts`               | Extra ports to expose in the queryFrontend service               | `[]`        |
-
 
 ### Query Scheduler Deployment Parameters
 
@@ -785,8 +766,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryScheduler.sidecars`                              | Add additional sidecar containers to the queryScheduler pod(s)                                           | `[]`            |
 | `queryScheduler.initContainers`                        | Add additional init containers to the queryScheduler pod(s)                                              | `[]`            |
 
-
-### Query Frontend Traffic Exposure Parameters
+### Query Scheduler Traffic Exposure Parameters
 
 | Name                                              | Description                                                      | Value       |
 | ------------------------------------------------- | ---------------------------------------------------------------- | ----------- |
@@ -803,7 +783,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryScheduler.service.externalTrafficPolicy`    | queryScheduler service external traffic policy                   | `Cluster`   |
 | `queryScheduler.service.annotations`              | Additional custom annotations for queryScheduler service         | `{}`        |
 | `queryScheduler.service.extraPorts`               | Extra ports to expose in the queryScheduler service              | `[]`        |
-
 
 ### Ruler Deployment Parameters
 
@@ -867,7 +846,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ruler.sidecars`                              | Add additional sidecar containers to the Ruler pod(s)                                           | `[]`            |
 | `ruler.initContainers`                        | Add additional init containers to the Ruler pod(s)                                              | `[]`            |
 
-
 ### Ruler Persistence Parameters
 
 | Name                             | Description                                                          | Value               |
@@ -879,7 +857,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ruler.persistence.size`         | PVC Storage Request for Memcached data volume                        | `8Gi`               |
 | `ruler.persistence.annotations`  | Additional PVC annotations                                           | `{}`                |
 | `ruler.persistence.selector`     | Selector to match an existing Persistent Volume for Ruler's data PVC | `{}`                |
-
 
 ### Ruler Traffic Exposure Parameters
 
@@ -898,7 +875,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ruler.service.externalTrafficPolicy`    | Ruler service external traffic policy                            | `Cluster`   |
 | `ruler.service.annotations`              | Additional custom annotations for Ruler service                  | `{}`        |
 | `ruler.service.extraPorts`               | Extra ports to expose in the Ruler service                       | `[]`        |
-
 
 ### table-manager Deployment Parameters
 
@@ -961,7 +937,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `tableManager.sidecars`                              | Add additional sidecar containers to the table-manager pod(s)                                          | `[]`            |
 | `tableManager.initContainers`                        | Add additional init containers to the table-manager pod(s)                                             | `[]`            |
 
-
 ### table-manager Traffic Exposure Parameters
 
 | Name                                            | Description                                                      | Value       |
@@ -980,7 +955,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `tableManager.service.annotations`              | Additional custom annotations for table-manager service          | `{}`        |
 | `tableManager.service.extraPorts`               | Extra ports to expose in the table-manager service               | `[]`        |
 
-
 ### Promtail Deployment Parameters
 
 | Name                                             | Description                                                                                                      | Value                |
@@ -988,7 +962,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `promtail.enabled`                               | Deploy promtail                                                                                                  | `true`               |
 | `promtail.image.registry`                        | Grafana Promtail image registry                                                                                  | `docker.io`          |
 | `promtail.image.repository`                      | Grafana Promtail image repository                                                                                | `bitnami/promtail`   |
-| `promtail.image.tag`                             | Grafana Promtail image tag (immutable tags are recommended)                                                      | `2.7.2-debian-11-r1` |
+| `promtail.image.tag`                             | Grafana Promtail image tag (immutable tags are recommended)                                                      | `2.7.3-debian-11-r4` |
 | `promtail.image.digest`                          | Grafana Promtail image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                 |
 | `promtail.image.pullPolicy`                      | Grafana Promtail image pull policy                                                                               | `IfNotPresent`       |
 | `promtail.image.pullSecrets`                     | Grafana Promtail image pull secrets                                                                              | `[]`                 |
@@ -1051,7 +1025,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `promtail.existingSecret`                        | Name of a Secret that contains the Promtail configuration                                                        | `""`                 |
 | `promtail.logLevel`                              | Promtail logging level                                                                                           | `info`               |
 
-
 ### Promtail Traffic Exposure Parameters
 
 | Name                                                   | Description                                                                     | Value       |
@@ -1073,7 +1046,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `promtail.serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the promtail.serviceAccount.created | `true`      |
 | `promtail.serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                            | `{}`        |
 
-
 ### Init Container Parameters
 
 | Name                                                   | Description                                                                                                   | Value                   |
@@ -1081,14 +1053,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`               | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r79`      |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r86`      |
 | `volumePermissions.image.digest`                       | Bitnami Shell image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                              | `[]`                    |
 | `volumePermissions.resources.limits`                   | The resources limits for the init container                                                                   | `{}`                    |
 | `volumePermissions.resources.requests`                 | The requested resources for the init container                                                                | `{}`                    |
 | `volumePermissions.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                               | `0`                     |
-
 
 ### Other Parameters
 
@@ -1098,7 +1069,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.name`                         | The name of the ServiceAccount to use                                  | `""`    |
 | `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created | `true`  |
 | `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                   | `{}`    |
-
 
 ### Metrics Parameters
 
@@ -1116,7 +1086,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.serviceMonitor.honorLabels`       | Specify honorLabels parameter to add the scrape endpoint                              | `false` |
 | `metrics.serviceMonitor.jobLabel`          | The name of the label on the target service to use as the job name in prometheus.     | `""`    |
 
-
 ### External Memcached (Chunks) Parameters
 
 | Name                           | Description                                   | Value   |
@@ -1124,20 +1093,18 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalMemcachedChunks.host` | Host of a running external memcached instance | `""`    |
 | `externalMemcachedChunks.port` | Port of a running external memcached instance | `11211` |
 
-
 ### Memcached Sub-chart Parameters (Chunks)
 
-| Name                                      | Description                                                                                               | Value                 |
-| ----------------------------------------- | --------------------------------------------------------------------------------------------------------- | --------------------- |
-| `memcachedchunks.enabled`                 | Deploy memcached sub-chart                                                                                | `true`                |
-| `memcachedchunks.image.registry`          | Memcached image registry                                                                                  | `docker.io`           |
-| `memcachedchunks.image.repository`        | Memcached image repository                                                                                | `bitnami/memcached`   |
-| `memcachedchunks.image.tag`               | Memcached image tag (immutable tags are recommended)                                                      | `1.6.18-debian-11-r8` |
-| `memcachedchunks.image.digest`            | Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
-| `memcachedchunks.nameOverride`            | override the subchart name                                                                                | `""`                  |
-| `memcachedchunks.architecture`            | Memcached architecture                                                                                    | `high-availability`   |
-| `memcachedchunks.service.ports.memcached` | Memcached service port                                                                                    | `11211`               |
-
+| Name                                      | Description                                                                                               | Value                  |
+| ----------------------------------------- | --------------------------------------------------------------------------------------------------------- | ---------------------- |
+| `memcachedchunks.enabled`                 | Deploy memcached sub-chart                                                                                | `true`                 |
+| `memcachedchunks.image.registry`          | Memcached image registry                                                                                  | `docker.io`            |
+| `memcachedchunks.image.repository`        | Memcached image repository                                                                                | `bitnami/memcached`    |
+| `memcachedchunks.image.tag`               | Memcached image tag (immutable tags are recommended)                                                      | `1.6.18-debian-11-r13` |
+| `memcachedchunks.image.digest`            | Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
+| `memcachedchunks.nameOverride`            | override the subchart name                                                                                | `""`                   |
+| `memcachedchunks.architecture`            | Memcached architecture                                                                                    | `high-availability`    |
+| `memcachedchunks.service.ports.memcached` | Memcached service port                                                                                    | `11211`                |
 
 ### External Memcached (Frontend) Parameters
 
@@ -1146,20 +1113,18 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalMemcachedFrontend.host` | Host of a running external memcached instance | `""`    |
 | `externalMemcachedFrontend.port` | Port of a running external memcached instance | `11211` |
 
-
 ### Memcached Sub-chart Parameters (Frontend)
 
-| Name                                        | Description                                                                                               | Value                 |
-| ------------------------------------------- | --------------------------------------------------------------------------------------------------------- | --------------------- |
-| `memcachedfrontend.enabled`                 | Deploy memcached sub-chart                                                                                | `true`                |
-| `memcachedfrontend.image.registry`          | Memcached image registry                                                                                  | `docker.io`           |
-| `memcachedfrontend.image.repository`        | Memcached image repository                                                                                | `bitnami/memcached`   |
-| `memcachedfrontend.image.tag`               | Memcached image tag (immutable tags are recommended)                                                      | `1.6.18-debian-11-r8` |
-| `memcachedfrontend.image.digest`            | Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
-| `memcachedfrontend.architecture`            | Memcached architecture                                                                                    | `high-availability`   |
-| `memcachedfrontend.nameOverride`            | override the subchart name                                                                                | `""`                  |
-| `memcachedfrontend.service.ports.memcached` | Memcached service port                                                                                    | `11211`               |
-
+| Name                                        | Description                                                                                               | Value                  |
+| ------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ---------------------- |
+| `memcachedfrontend.enabled`                 | Deploy memcached sub-chart                                                                                | `true`                 |
+| `memcachedfrontend.image.registry`          | Memcached image registry                                                                                  | `docker.io`            |
+| `memcachedfrontend.image.repository`        | Memcached image repository                                                                                | `bitnami/memcached`    |
+| `memcachedfrontend.image.tag`               | Memcached image tag (immutable tags are recommended)                                                      | `1.6.18-debian-11-r13` |
+| `memcachedfrontend.image.digest`            | Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
+| `memcachedfrontend.architecture`            | Memcached architecture                                                                                    | `high-availability`    |
+| `memcachedfrontend.nameOverride`            | override the subchart name                                                                                | `""`                   |
+| `memcachedfrontend.service.ports.memcached` | Memcached service port                                                                                    | `11211`                |
 
 ### External Memcached (Index-Queries) Parameters
 
@@ -1168,20 +1133,18 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalMemcachedIndexQueries.host` | Host of a running external memcached instance | `""`    |
 | `externalMemcachedIndexQueries.port` | Port of a running external memcached instance | `11211` |
 
-
 ### Memcached Sub-chart Parameters (Index-Queries)
 
-| Name                                            | Description                                                                                               | Value                 |
-| ----------------------------------------------- | --------------------------------------------------------------------------------------------------------- | --------------------- |
-| `memcachedindexqueries.enabled`                 | Deploy memcached sub-chart                                                                                | `true`                |
-| `memcachedindexqueries.image.registry`          | Memcached image registry                                                                                  | `docker.io`           |
-| `memcachedindexqueries.image.repository`        | Memcached image repository                                                                                | `bitnami/memcached`   |
-| `memcachedindexqueries.image.tag`               | Memcached image tag (immutable tags are recommended)                                                      | `1.6.18-debian-11-r8` |
-| `memcachedindexqueries.image.digest`            | Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
-| `memcachedindexqueries.architecture`            | Memcached architecture                                                                                    | `high-availability`   |
-| `memcachedindexqueries.nameOverride`            | override the subchart name                                                                                | `""`                  |
-| `memcachedindexqueries.service.ports.memcached` | Memcached service port                                                                                    | `11211`               |
-
+| Name                                            | Description                                                                                               | Value                  |
+| ----------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ---------------------- |
+| `memcachedindexqueries.enabled`                 | Deploy memcached sub-chart                                                                                | `true`                 |
+| `memcachedindexqueries.image.registry`          | Memcached image registry                                                                                  | `docker.io`            |
+| `memcachedindexqueries.image.repository`        | Memcached image repository                                                                                | `bitnami/memcached`    |
+| `memcachedindexqueries.image.tag`               | Memcached image tag (immutable tags are recommended)                                                      | `1.6.18-debian-11-r13` |
+| `memcachedindexqueries.image.digest`            | Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
+| `memcachedindexqueries.architecture`            | Memcached architecture                                                                                    | `high-availability`    |
+| `memcachedindexqueries.nameOverride`            | override the subchart name                                                                                | `""`                   |
+| `memcachedindexqueries.service.ports.memcached` | Memcached service port                                                                                    | `11211`                |
 
 ### External Memcached (IndexWrites) Parameters
 
@@ -1190,29 +1153,25 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalMemcachedIndexWrites.host` | Host of a running external memcached instance | `""`    |
 | `externalMemcachedIndexWrites.port` | Port of a running external memcached instance | `11211` |
 
-
 ### Memcached Sub-chart Parameters (Index-Writes)
 
-| Name                                           | Description                                                                                               | Value                 |
-| ---------------------------------------------- | --------------------------------------------------------------------------------------------------------- | --------------------- |
-| `memcachedindexwrites.enabled`                 | Deploy memcached sub-chart                                                                                | `false`               |
-| `memcachedindexwrites.image.registry`          | Memcached image registry                                                                                  | `docker.io`           |
-| `memcachedindexwrites.image.repository`        | Memcached image repository                                                                                | `bitnami/memcached`   |
-| `memcachedindexwrites.image.tag`               | Memcached image tag (immutable tags are recommended)                                                      | `1.6.18-debian-11-r8` |
-| `memcachedindexwrites.image.digest`            | Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
-| `memcachedindexwrites.architecture`            | Memcached architecture                                                                                    | `high-availability`   |
-| `memcachedindexwrites.nameOverride`            | override the subchart name                                                                                | `""`                  |
-| `memcachedindexwrites.service.ports.memcached` | Memcached service port                                                                                    | `11211`               |
-
-
-See https://github.com/bitnami-labs/readme-generator-for-helm to create the table
+| Name                                           | Description                                                                                               | Value                  |
+| ---------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ---------------------- |
+| `memcachedindexwrites.enabled`                 | Deploy memcached sub-chart                                                                                | `false`                |
+| `memcachedindexwrites.image.registry`          | Memcached image registry                                                                                  | `docker.io`            |
+| `memcachedindexwrites.image.repository`        | Memcached image repository                                                                                | `bitnami/memcached`    |
+| `memcachedindexwrites.image.tag`               | Memcached image tag (immutable tags are recommended)                                                      | `1.6.18-debian-11-r13` |
+| `memcachedindexwrites.image.digest`            | Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
+| `memcachedindexwrites.architecture`            | Memcached architecture                                                                                    | `high-availability`    |
+| `memcachedindexwrites.nameOverride`            | override the subchart name                                                                                | `""`                   |
+| `memcachedindexwrites.service.ports.memcached` | Memcached service port                                                                                    | `11211`                |
 
 The above parameters map to the env variables defined in [bitnami/grafana-loki](https://github.com/bitnami/containers/tree/main/bitnami/grafana-loki). For more information please refer to the [bitnami/grafana-loki](https://github.com/bitnami/containers/tree/main/bitnami/grafana-loki) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release \
+helm install my-release \
   --set loki.traces.jaeger.grpc=true \
   my-repo/grafana-loki
 ```
@@ -1222,7 +1181,7 @@ The above command enables the Jaeger GRPC traces.
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml my-repo/grafana-loki
+helm install my-release -f values.yaml my-repo/grafana-loki
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -1234,6 +1193,7 @@ $ helm install my-release -f values.yaml my-repo/grafana-loki
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
 ### Loki configuration
 
 The loki configuration file `loki.yaml` is shared across the different components: `distributor`, `compactor`, `ingester`, `querier` and `queryFrontend`. This is set in the `loki.configuration` value. Check the official [Loki Grafana documentation](https://grafana.com/docs/loki/latest/configuration/) for the list of possible configurations.
@@ -1331,7 +1291,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

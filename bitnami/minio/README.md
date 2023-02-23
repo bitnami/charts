@@ -7,12 +7,12 @@ MinIO(R) is an object storage server, compatible with Amazon S3 cloud storage se
 [Overview of Bitnami Object Storage based on MinIO&reg;](https://min.io/)
 
 Disclaimer: All software products, projects and company names are trademark(TM) or registered(R) trademarks of their respective holders, and use of them does not imply any affiliation or endorsement. This software is licensed to you subject to one or more open source licenses and VMware provides the software on an AS-IS basis. MinIO(R) is a registered trademark of the MinIO Inc. in the US and other countries. Bitnami is not affiliated, associated, authorized, endorsed by, or in any way officially connected with MinIO Inc. MinIO(R) is licensed under GNU AGPL v3.0.
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/minio
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/minio
 ```
 
 ## Introduction
@@ -32,8 +32,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/minio
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/minio
 ```
 
 These commands deploy MinIO&reg; on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -45,7 +45,7 @@ These commands deploy MinIO&reg; on the Kubernetes cluster in the default config
 To uninstall/delete the `my-release` deployment:
 
 ```console
-$ helm delete my-release
+helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -60,7 +60,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
 | Name                | Description                                                                                  | Value           |
@@ -73,21 +72,20 @@ The command removes all the Kubernetes components associated with the chart and 
 | `clusterDomain`     | Default Kubernetes cluster domain                                                            | `cluster.local` |
 | `extraDeploy`       | Array of extra objects to deploy with the release                                            | `[]`            |
 
-
 ### MinIO&reg; parameters
 
 | Name                       | Description                                                                                                                                                                                               | Value                    |
 | -------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
 | `image.registry`           | MinIO&reg; image registry                                                                                                                                                                                 | `docker.io`              |
 | `image.repository`         | MinIO&reg; image repository                                                                                                                                                                               | `bitnami/minio`          |
-| `image.tag`                | MinIO&reg; image tag (immutable tags are recommended)                                                                                                                                                     | `2023.2.9-debian-11-r0`  |
+| `image.tag`                | MinIO&reg; image tag (immutable tags are recommended)                                                                                                                                                     | `2023.2.22-debian-11-r0` |
 | `image.digest`             | MinIO&reg; image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                | `""`                     |
 | `image.pullPolicy`         | Image pull policy                                                                                                                                                                                         | `IfNotPresent`           |
 | `image.pullSecrets`        | Specify docker-registry secret names as an array                                                                                                                                                          | `[]`                     |
 | `image.debug`              | Specify if debug logs should be enabled                                                                                                                                                                   | `false`                  |
 | `clientImage.registry`     | MinIO&reg; Client image registry                                                                                                                                                                          | `docker.io`              |
 | `clientImage.repository`   | MinIO&reg; Client image repository                                                                                                                                                                        | `bitnami/minio-client`   |
-| `clientImage.tag`          | MinIO&reg; Client image tag (immutable tags are recommended)                                                                                                                                              | `2023.1.28-debian-11-r2` |
+| `clientImage.tag`          | MinIO&reg; Client image tag (immutable tags are recommended)                                                                                                                                              | `2023.2.16-debian-11-r1` |
 | `clientImage.digest`       | MinIO&reg; Client image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                         | `""`                     |
 | `mode`                     | MinIO&reg; server mode (`standalone` or `distributed`)                                                                                                                                                    | `standalone`             |
 | `auth.rootUser`            | MinIO&reg; root username                                                                                                                                                                                  | `admin`                  |
@@ -107,7 +105,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraEnvVarsSecret`       | Secret with extra environment variables                                                                                                                                                                   | `""`                     |
 | `command`                  | Default container command (useful when using custom images). Use array form                                                                                                                               | `[]`                     |
 | `args`                     | Default container args (useful when using custom images). Use array form                                                                                                                                  | `[]`                     |
-
 
 ### MinIO&reg; deployment/statefulset parameters
 
@@ -191,7 +188,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `initContainers`                                     | Add additional init containers to the MinIO&reg; pods                                                                                                                                         | `[]`            |
 | `sidecars`                                           | Add additional sidecar containers to the MinIO&reg; pods                                                                                                                                      | `[]`            |
 
-
 ### Traffic exposure parameters
 
 | Name                               | Description                                                                                                                      | Value                    |
@@ -241,7 +237,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.allowExternal`      | Don't require client label for connections                                                                                       | `true`                   |
 | `networkPolicy.extraFromClauses`   | Allows to add extra 'from' clauses to the NetworkPolicy                                                                          | `{}`                     |
 
-
 ### Persistence parameters
 
 | Name                        | Description                                                          | Value               |
@@ -254,7 +249,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.annotations`   | Annotations for the PVC                                              | `{}`                |
 | `persistence.existingClaim` | Name of an existing PVC to use (only in `standalone` mode)           | `""`                |
 
-
 ### Volume Permissions parameters
 
 | Name                                                   | Description                                                                                                                       | Value                   |
@@ -262,14 +256,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup`              | `false`                 |
 | `volumePermissions.image.registry`                     | Init container volume-permissions image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`                   | Init container volume-permissions image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r81`      |
+| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r87`      |
 | `volumePermissions.image.digest`                       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                                  | `[]`                    |
 | `volumePermissions.resources.limits`                   | Init container volume-permissions resource limits                                                                                 | `{}`                    |
 | `volumePermissions.resources.requests`                 | Init container volume-permissions resource requests                                                                               | `{}`                    |
 | `volumePermissions.containerSecurityContext.runAsUser` | User ID for the init container                                                                                                    | `0`                     |
-
 
 ### RBAC parameters
 
@@ -280,7 +273,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.automountServiceAccountToken` | Enable/disable auto mounting of the service account token   | `true` |
 | `serviceAccount.annotations`                  | Custom annotations for MinIO&reg; ServiceAccount            | `{}`   |
 
-
 ### Other parameters
 
 | Name                 | Description                                                                       | Value   |
@@ -288,7 +280,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `pdb.create`         | Enable/disable a Pod Disruption Budget creation                                   | `false` |
 | `pdb.minAvailable`   | Minimum number/percentage of pods that must still be available after the eviction | `1`     |
 | `pdb.maxUnavailable` | Maximum number/percentage of pods that may be made unavailable after the eviction | `""`    |
-
 
 ### Metrics parameters
 
@@ -312,11 +303,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.prometheusRule.additionalLabels`  | Additional labels that can be used so PrometheusRule will be discovered by Prometheus                                         | `{}`                        |
 | `metrics.prometheusRule.rules`             | Prometheus Rule definitions                                                                                                   | `[]`                        |
 
-
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release \
+helm install my-release \
   --set auth.rootUser=minio-admin \
   --set auth.rootPassword=minio-secret-password \
     my-repo/minio
@@ -327,7 +317,7 @@ The above command sets the MinIO&reg; Server root user and password to `minio-ad
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml my-repo/minio
+helm install my-release -f values.yaml my-repo/minio
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -374,7 +364,7 @@ MinIO&reg; exports Prometheus metrics at `/minio/v2/metrics/cluster`. To allow P
 +   prometheus.io/port: "9000"
 ```
 
-> Find more information about MinIO&reg; metrics at https://docs.min.io/docs/how-to-monitor-minio-using-prometheus.html
+> Find more information about MinIO&reg; metrics at <https://docs.min.io/docs/how-to-monitor-minio-using-prometheus.html>
 
 ## Persistence
 
@@ -395,11 +385,11 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 
 This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application.
 
-To enable Ingress integration, set `ingress.enabled` to `true`. The `ingress.hostname` property can be used to set the host name. The `ingress.tls` parameter can be used to add the TLS configuration for this host. It is also possible to have more than one host, with a separate TLS configuration for each host. [Learn more about configuring and using Ingress](https://docs.bitnami.com/kubernetes/infrastructure/geode/configuration/configure-ingress/).
+To enable Ingress integration, set `ingress.enabled` to `true`. The `ingress.hostname` property can be used to set the host name. The `ingress.tls` parameter can be used to add the TLS configuration for this host. It is also possible to have more than one host, with a separate TLS configuration for each host. [Learn more about configuring and using Ingress](https://docs.bitnami.com/kubernetes/infrastructure/minio/configuration/configure-ingress/).
 
 ### TLS secrets
 
-The chart also facilitates the creation of TLS secrets for use with the Ingress controller, with different options for certificate management. [Learn more about TLS secrets](https://docs.bitnami.com/kubernetes/infrastructure/geode/administration/enable-tls-ingress/).
+The chart also facilitates the creation of TLS secrets for use with the Ingress controller, with different options for certificate management. [Learn more about TLS secrets](https://docs.bitnami.com/kubernetes/infrastructure/minio/administration/enable-tls-ingress/).
 
 ### Adding extra environment variables
 
@@ -477,6 +467,7 @@ This version updates MinIO&reg; authentication parameters so they're aligned wit
 ### To 8.0.0
 
 This version updates MinIO&reg; after some major changes, affecting its Web UI. MinIO&reg; has replaced its MinIO&reg; Browser with the MinIO&reg; Console, and Web UI has been moved to a separated port. As a result the following variables have been affected:
+
 - `service.port` has been slit into `service.ports.api` (default: 9000) and `service.ports.console` (default: 9001).
 - `containerPort` has been slit into `containerPorts.api` (default: 9000) and `containerPort.console` (default: 9001).
 - `service.nodePort`has been slit into `service.nodePorts.api` and `service.nodePorts.console`.
@@ -501,22 +492,22 @@ This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs
 
 [On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
 
-**What changes were introduced in this major version?**
+#### What changes were introduced in this major version?
 
 - Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
 - The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
 
-**Considerations when upgrading to this version**
+#### Considerations when upgrading to this version
 
 - If you want to upgrade to this version from a previous one installed with Helm v3, you shouldn't face any issues
 - If you want to upgrade to this version using Helm v2, this scenario is not supported as this version doesn't support Helm v2 anymore
 - If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3
 
-**Useful links**
+#### Useful links
 
-- https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
-- https://helm.sh/docs/topics/v2_v3_migration/
-- https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
+- <https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/>
+- <https://helm.sh/docs/topics/v2_v3_migration/>
+- <https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/>
 
 ## License
 
@@ -526,7 +517,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
