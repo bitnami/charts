@@ -7,6 +7,8 @@ mimir:
     service:
       ports:
         http: 8946
+  httpPrefix:
+    prometheus: /prometheus-test
 gateway:
   enabled: true
   service:

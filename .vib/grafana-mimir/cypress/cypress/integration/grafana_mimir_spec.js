@@ -29,7 +29,7 @@ it('can read metrics', () => {
   cy.request({
     method: 'GET',
     headers: {'X-Scope-OrgID': 'demo' },
-    url: `/prometheus/api/v1/query?query=test`,
+    url: `/prometheus-test/api/v1/query?query=test`,
     form: false,
   }).then((response) => {
     expect(response.status).to.eq(200);

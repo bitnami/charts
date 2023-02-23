@@ -229,6 +229,9 @@ mimir:
       grpc_server_max_connection_idle: 1m
       http_listen_port: {{ .Values.mimir.containerPorts.http }}
       grpc_listen_port: {{ .Values.mimir.containerPorts.grpc }}
+    api:
+      alertmanager_http_prefix: {{ .Values.mimir.httpPrefix.alertmanager }}
+      prometheus_http_prefix: {{ .Values.mimir.httpPrefix.prometheus }}
     store_gateway:
       sharding_ring:
         wait_stability_min_duration: 1m

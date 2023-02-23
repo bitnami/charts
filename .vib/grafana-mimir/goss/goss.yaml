@@ -22,6 +22,10 @@ http:
     - "!Stopping"
     - "!Terminated"
     - "!Failed"
+  http://grafana-mimir-gateway:{{ .Vars.gateway.service.ports.http }}/{{ .Vars.mimir.httpPrefix.prometheu }}/api/v1/status/buildinfo:
+    status: 200
+    body:
+      - "Grafana Mimir"
   http://grafana-mimir-store-gateway:{{ .Vars.storeGateway.service.ports.http }}/config:
     status: 200
     body:
