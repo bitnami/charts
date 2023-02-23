@@ -85,7 +85,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------- | ------------------------------------------------------------------------------------------------------------- | ----------------------------- |
 | `tempo.image.registry`                 | Grafana Tempo image registry                                                                                  | `docker.io`                   |
 | `tempo.image.repository`               | Grafana Tempo image repository                                                                                | `bitnami/grafana-tempo`       |
-| `tempo.image.tag`                      | Grafana Tempo image tag (immutable tags are recommended)                                                      | `1.5.0-debian-11-r62`         |
+| `tempo.image.tag`                      | Grafana Tempo image tag (immutable tags are recommended)                                                      | `2.0.0-debian-11-r2`          |
 | `tempo.image.digest`                   | Grafana Tempo image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                          |
 | `tempo.image.pullPolicy`               | Grafana Tempo image pull policy                                                                               | `IfNotPresent`                |
 | `tempo.image.pullSecrets`              | Grafana Tempo image pull secrets                                                                              | `[]`                          |
@@ -99,7 +99,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `tempo.traces.otlp.grpc`               | Enable Tempo to ingest Open Telemetry GRPC traces                                                             | `false`                       |
 | `tempo.traces.opencensus`              | Enable Tempo to ingest Open Census traces                                                                     | `false`                       |
 | `tempo.traces.zipkin`                  | Enable Tempo to ingest Zipkin traces                                                                          | `false`                       |
-| `tempo.search.enabled`                 | Enable Tempo search                                                                                           | `false`                       |
 | `tempo.configuration`                  | Tempo components configuration                                                                                | `""`                          |
 | `tempo.existingConfigmap`              | Name of a ConfigMap with the Tempo configuration                                                              | `""`                          |
 | `tempo.overridesConfiguration`         | Tempo components overrides configuration settings                                                             | `""`                          |
@@ -269,7 +268,6 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                                                     | Description                                                                                                | Value           |
 | -------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | --------------- |
-| `metricsGenerator.enabled`                               | enable metricsGenerator                                                                                    | `false`         |
 | `metricsGenerator.remoteWrite`                           | remoteWrite configuration for metricsGenerator                                                             | `[]`            |
 | `metricsGenerator.extraEnvVars`                          | Array with extra environment variables to add to metricsGenerator nodes                                    | `[]`            |
 | `metricsGenerator.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars for metricsGenerator nodes                            | `""`            |
@@ -574,7 +572,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryFrontend.initContainers`                              | Add additional init containers to the queryFrontend pod(s)                                                          | `[]`                          |
 | `queryFrontend.query.image.registry`                        | Grafana Tempo Query image registry                                                                                  | `docker.io`                   |
 | `queryFrontend.query.image.repository`                      | Grafana Tempo Query image repository                                                                                | `bitnami/grafana-tempo-query` |
-| `queryFrontend.query.image.tag`                             | Grafana Tempo Query image tag (immutable tags are recommended)                                                      | `1.5.0-debian-11-r59`         |
+| `queryFrontend.query.image.tag`                             | Grafana Tempo Query image tag (immutable tags are recommended)                                                      | `2.0.0-debian-11-r0`          |
 | `queryFrontend.query.image.digest`                          | Grafana Tempo Query image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                          |
 | `queryFrontend.query.image.pullPolicy`                      | Grafana Tempo Query image pull policy                                                                               | `IfNotPresent`                |
 | `queryFrontend.query.image.pullSecrets`                     | Grafana Tempo Query image pull secrets                                                                              | `[]`                          |
@@ -641,7 +639,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `vulture.enabled`                               | Enable vulture deployment                                                                                       | `true`                          |
 | `vulture.image.registry`                        | Grafana Vulture image registry                                                                                  | `docker.io`                     |
 | `vulture.image.repository`                      | Grafana Vulture image repository                                                                                | `bitnami/grafana-tempo-vulture` |
-| `vulture.image.tag`                             | Grafana Vulture image tag (immutable tags are recommended)                                                      | `1.5.0-debian-11-r60`           |
+| `vulture.image.tag`                             | Grafana Vulture image tag (immutable tags are recommended)                                                      | `2.0.0-debian-11-r0`            |
 | `vulture.image.digest`                          | Grafana Vulture image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                            |
 | `vulture.image.pullPolicy`                      | Grafana Vulture image pull policy                                                                               | `IfNotPresent`                  |
 | `vulture.image.pullSecrets`                     | Grafana Vulture image pull secrets                                                                              | `[]`                            |
@@ -775,7 +773,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `memcached.auth.password`           | Memcached admin password        | `""`    |
 | `memcached.service.ports.memcached` | Memcached service port          | `11211` |
 
-The above parameters map to the env variables defined in [bitnami/grafana-tempo](https://github.com/bitnami/containers/tree/main/bitnami/grafana-tempo). For more information please refer to the [bitnami/grafana-tempo](https://github.com/bitnami/containers/tree/main/bitnami/grafana-tempo) image documentation.
+
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -874,6 +872,10 @@ externalMemcached.port=11211
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 2.0.0
+
+This major release removes `search_enabled` and `metrics_generator_enabled` configuration parameters, assuming they are always enabled.
 
 ### To 1.0.0
 

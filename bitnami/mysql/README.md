@@ -62,19 +62,20 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common parameters
 
-| Name                     | Description                                                                                               | Value           |
-| ------------------------ | --------------------------------------------------------------------------------------------------------- | --------------- |
-| `kubeVersion`            | Force target Kubernetes version (using Helm capabilities if not set)                                      | `""`            |
-| `nameOverride`           | String to partially override common.names.fullname template (will maintain the release name)              | `""`            |
-| `fullnameOverride`       | String to fully override common.names.fullname template                                                   | `""`            |
-| `namespaceOverride`      | String to fully override common.names.namespace                                                           | `""`            |
-| `clusterDomain`          | Cluster domain                                                                                            | `cluster.local` |
-| `commonAnnotations`      | Common annotations to add to all MySQL resources (sub-charts are not considered). Evaluated as a template | `{}`            |
-| `commonLabels`           | Common labels to add to all MySQL resources (sub-charts are not considered). Evaluated as a template      | `{}`            |
-| `extraDeploy`            | Array with extra yaml to deploy with the chart. Evaluated as a template                                   | `[]`            |
-| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                   | `false`         |
-| `diagnosticMode.command` | Command to override all containers in the deployment                                                      | `["sleep"]`     |
-| `diagnosticMode.args`    | Args to override all containers in the deployment                                                         | `["infinity"]`  |
+| Name                      | Description                                                                                               | Value           |
+| ------------------------- | --------------------------------------------------------------------------------------------------------- | --------------- |
+| `kubeVersion`             | Force target Kubernetes version (using Helm capabilities if not set)                                      | `""`            |
+| `nameOverride`            | String to partially override common.names.fullname template (will maintain the release name)              | `""`            |
+| `fullnameOverride`        | String to fully override common.names.fullname template                                                   | `""`            |
+| `namespaceOverride`       | String to fully override common.names.namespace                                                           | `""`            |
+| `clusterDomain`           | Cluster domain                                                                                            | `cluster.local` |
+| `commonAnnotations`       | Common annotations to add to all MySQL resources (sub-charts are not considered). Evaluated as a template | `{}`            |
+| `commonLabels`            | Common labels to add to all MySQL resources (sub-charts are not considered). Evaluated as a template      | `{}`            |
+| `extraDeploy`             | Array with extra yaml to deploy with the chart. Evaluated as a template                                   | `[]`            |
+| `serviceBindings.enabled` | Create secret for service binding (Experimental)                                                          | `false`         |
+| `diagnosticMode.enabled`  | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                   | `false`         |
+| `diagnosticMode.command`  | Command to override all containers in the deployment                                                      | `["sleep"]`     |
+| `diagnosticMode.args`     | Args to override all containers in the deployment                                                         | `["infinity"]`  |
 
 ### MySQL common parameters
 
@@ -355,6 +356,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.prometheusRule.namespace`           | Namespace for the prometheusRule Resource (defaults to the Release Namespace)                                                  | `""`                      |
 | `metrics.prometheusRule.additionalLabels`    | Additional labels that can be used so prometheusRule will be discovered by Prometheus                                          | `{}`                      |
 | `metrics.prometheusRule.rules`               | Prometheus Rule definitions                                                                                                    | `[]`                      |
+
 
 The above parameters map to the env variables defined in [bitnami/mysql](https://github.com/bitnami/containers/tree/main/bitnami/mysql). For more information please refer to the [bitnami/mysql](https://github.com/bitnami/containers/tree/main/bitnami/mysql) image documentation.
 

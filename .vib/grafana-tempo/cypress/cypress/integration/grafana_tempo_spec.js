@@ -13,7 +13,7 @@ it('(ring) is aware of all the replicas', () => {
 });
 
 it('lists all components in a healthy state', () => {
-  const members = ['compactor', 'distributor', 'ingester', 'querier']
+  const members = ['compactor', 'distributor', 'ingester', 'querier', 'metrics']
   var numMembers = 0
   members.forEach((e) => {
     numMembers += parseInt(Cypress.env(`${e}ReplicaCount`), 10)
