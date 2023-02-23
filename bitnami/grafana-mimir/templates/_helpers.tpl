@@ -19,7 +19,7 @@ Return the proper the name of the secret with the auth credentials for the gatew
 {{- if not .Values.gateway.auth.existingSecret }}
   {{- include "grafana-mimir.gateway.fullname" . }}
 {{- else }}
-  {{- tpl .Values.gateway.auth.existingSecret }}
+  {{- include "" .Values.gateway.auth.existingSecret }}
 {{- end }}
 {{- end -}}
 
@@ -112,7 +112,7 @@ Get the Grafana Mimir configuration configmap.
 */}}
 {{- define "grafana-mimir.mimir.configmapName" -}}
 {{- if .Values.mimir.existingConfigmap -}}
-    {{- tpl .Values.mimir.existingConfigmap -}}
+    {{- include "common.tplvalues.render" (dict "value" .Values.mimir.existingConfigmap "context" .) -}}
 {{- else }}
     {{- printf "%s" (include "common.names.fullname" . ) -}}
 {{- end -}}
@@ -261,7 +261,7 @@ Return the S3 credentials secret name
 */}}
 {{- define "grafana-mimir.minio.secretName" -}}
     {{- if .Values.minio.auth.existingSecret -}}
-    {{- tpl .Values.minio.auth.existingSecret -}}
+    {{- include "common.tplvalues.render" (dict "value" .Values.minio.auth.existingSecret "context" .) -}}
     {{- else -}}
     {{- print (include "grafana-mimir.minio.fullname" .) -}}
     {{- end -}}
