@@ -45,7 +45,9 @@
               "path": "/.vib/airflow/goss"
             },
             "remote": {
-              "workload": "deploy-airflow-web"
+              "pod": {
+                "workload": "deploy-airflow-web"
+              }
             }
           }
         },

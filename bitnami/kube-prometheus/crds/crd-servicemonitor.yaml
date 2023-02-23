@@ -1,9 +1,9 @@
-# https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.57.0/example/prometheus-operator-crd/monitoring.coreos.com_servicemonitors.yaml
+# https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.63.0/example/prometheus-operator-crd/monitoring.coreos.com_servicemonitors.yaml
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.8.0
+    controller-gen.kubebuilder.io/version: v0.11.1
   creationTimestamp: null
   name: servicemonitors.monitoring.coreos.com
 spec:
@@ -40,6 +40,15 @@ spec:
             description: Specification of desired Service selection for target discovery
               by Prometheus.
             properties:
+              attachMetadata:
+                description: Attaches node metadata to discovered targets. Requires
+                  Prometheus v2.37.0 and above.
+                properties:
+                  node:
+                    description: When set to true, Prometheus must have permissions
+                      to get Nodes.
+                    type: boolean
+                type: object
               endpoints:
                 description: A list of endpoints allowed as part of this ServiceMonitor.
                 items:
@@ -68,6 +77,7 @@ spec:
                           required:
                           - key
                           type: object
+                          x-kubernetes-map-type: atomic
                         type:
                           description: Set the authentication type. Defaults to Bearer,
                             Basic will cause an error
@@ -96,6 +106,7 @@ spec:
                           required:
                           - key
                           type: object
+                          x-kubernetes-map-type: atomic
                         username:
                           description: The secret in the service monitor namespace
                             that contains the username for authentication.
@@ -115,6 +126,7 @@ spec:
                           required:
                           - key
                           type: object
+                          x-kubernetes-map-type: atomic
                       type: object
                     bearerTokenFile:
                       description: File to read bearer token for scraping targets.
@@ -139,6 +151,14 @@ spec:
                       required:
                       - key
                       type: object
+                      x-kubernetes-map-type: atomic
+                    enableHttp2:
+                      description: Whether to enable HTTP2.
+                      type: boolean
+                    filterRunning:
+                      description: 'Drop pods that are not running. (Failed, Succeeded).
+                        Enabled by default. More info: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#pod-phase'
+                      type: boolean
                     followRedirects:
                       description: FollowRedirects configures whether scrape requests
                         follow HTTP 3xx redirects.
@@ -168,15 +188,27 @@ spec:
                           action:
                             default: replace
                             description: Action to perform based on regex matching.
-                              Default is 'replace'
+                              Default is 'replace'. uppercase and lowercase actions
+                              require Prometheus >= 2.36.
                             enum:
                             - replace
+                            - Replace
                             - keep
+                            - Keep
                             - drop
+                            - Drop
                             - hashmod
+                            - HashMod
                             - labelmap
+                            - LabelMap
                             - labeldrop
+                            - LabelDrop
                             - labelkeep
+                            - LabelKeep
+                            - lowercase
+                            - Lowercase
+                            - uppercase
+                            - Uppercase
                             type: string
                           modulus:
                             description: Modulus to take of the hash of the source
@@ -242,6 +274,7 @@ spec:
                               required:
                               - key
                               type: object
+                              x-kubernetes-map-type: atomic
                             secret:
                               description: Secret containing data to use for the targets.
                               properties:
@@ -261,6 +294,7 @@ spec:
                               required:
                               - key
                               type: object
+                              x-kubernetes-map-type: atomic
                           type: object
                         clientSecret:
                           description: The secret containing the OAuth2 client secret
@@ -280,6 +314,7 @@ spec:
                           required:
                           - key
                           type: object
+                          x-kubernetes-map-type: atomic
                         endpointParams:
                           additionalProperties:
                             type: string
@@ -307,7 +342,8 @@ spec:
                       description: Optional HTTP URL parameters
                       type: object
                     path:
-                      description: HTTP path to scrape for metrics.
+                      description: HTTP path to scrape for metrics. If empty, Prometheus
+                        uses the default value (e.g. `/metrics`).
                       type: string
                     port:
                       description: Name of the service port this endpoint refers to.
@@ -332,15 +368,27 @@ spec:
                           action:
                             default: replace
                             description: Action to perform based on regex matching.
-                              Default is 'replace'
+                              Default is 'replace'. uppercase and lowercase actions
+                              require Prometheus >= 2.36.
                             enum:
                             - replace
+                            - Replace
                             - keep
+                            - Keep
                             - drop
+                            - Drop
                             - hashmod
+                            - HashMod
                             - labelmap
+                            - LabelMap
                             - labeldrop
+                            - LabelDrop
                             - labelkeep
+                            - LabelKeep
+                            - lowercase
+                            - Lowercase
+                            - uppercase
+                            - Uppercase
                             type: string
                           modulus:
                             description: Modulus to take of the hash of the source
@@ -400,8 +448,8 @@ spec:
                       description: TLS configuration to use when scraping the endpoint
                       properties:
                         ca:
-                          description: Struct containing the CA cert to use for the
-                            targets.
+                          description: Certificate authority used when verifying server
+                            certificates.
                           properties:
                             configMap:
                               description: ConfigMap containing data to use for the
@@ -422,6 +470,7 @@ spec:
                               required:
                               - key
                               type: object
+                              x-kubernetes-map-type: atomic
                             secret:
                               description: Secret containing data to use for the targets.
                               properties:
@@ -441,14 +490,14 @@ spec:
                               required:
                               - key
                               type: object
+                              x-kubernetes-map-type: atomic
                           type: object
                         caFile:
                           description: Path to the CA cert in the Prometheus container
                             to use for the targets.
                           type: string
                         cert:
-                          description: Struct containing the client cert file for
-                            the targets.
+                          description: Client certificate to present when doing client-authentication.
                           properties:
                             configMap:
                               description: ConfigMap containing data to use for the
@@ -469,6 +518,7 @@ spec:
                               required:
                               - key
                               type: object
+                              x-kubernetes-map-type: atomic
                             secret:
                               description: Secret containing data to use for the targets.
                               properties:
@@ -488,6 +538,7 @@ spec:
                               required:
                               - key
                               type: object
+                              x-kubernetes-map-type: atomic
                           type: object
                         certFile:
                           description: Path to the client cert file in the Prometheus
@@ -519,6 +570,7 @@ spec:
                           required:
                           - key
                           type: object
+                          x-kubernetes-map-type: atomic
                         serverName:
                           description: Used to verify the hostname for the targets.
                           type: string
@@ -526,10 +578,13 @@ spec:
                   type: object
                 type: array
               jobLabel:
-                description: "Chooses the label of the Kubernetes `Endpoints`. Its
-                  value will be used for the `job`-label's value of the created metrics.
-                  \n Default & fallback value: the name of the respective Kubernetes
-                  `Endpoint`."
+                description: "JobLabel selects the label from the associated Kubernetes
+                  service which will be used as the `job` label for all metrics. \n
+                  For example: If in `ServiceMonitor.spec.jobLabel: foo` and in `Service.metadata.labels.foo:
+                  bar`, then the `job=\"bar\"` label is added to all metrics. \n If
+                  the value of this field is empty or if the label doesn't exist for
+                  the given Service, the `job` label of the metrics defaults to the
+                  name of the Kubernetes Service."
                 type: string
               labelLimit:
                 description: Per-scrape limit on number of labels that will be accepted
@@ -617,6 +672,7 @@ spec:
                       are ANDed.
                     type: object
                 type: object
+                x-kubernetes-map-type: atomic
               targetLabels:
                 description: TargetLabels transfers labels from the Kubernetes `Service`
                   onto the created metrics.
@@ -637,9 +693,3 @@ spec:
         type: object
     served: true
     storage: true
-status:
-  acceptedNames:
-    kind: ""
-    plural: ""
-  conditions: []
-  storedVersions: []

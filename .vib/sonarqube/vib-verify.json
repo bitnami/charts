@@ -59,7 +59,9 @@
               "path": "/.vib/sonarqube/goss"
             },
             "remote": {
-              "workload": "deploy-sonarqube"
+              "pod": {
+                "workload": "deploy-sonarqube"
+              }
             },
             "vars_file": "vars.yaml"
           }

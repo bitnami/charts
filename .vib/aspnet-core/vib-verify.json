@@ -46,7 +46,9 @@
             },
             "vars_file": "vars.yaml",
             "remote": {
-              "workload": "deploy-aspnet-core"
+              "pod": {
+                "workload": "deploy-aspnet-core"
+              }
             }
           }
         },

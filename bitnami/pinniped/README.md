@@ -77,7 +77,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraDeploy`       | Array of extra objects to deploy with the release                                                        | `[]`                |
 | `image.registry`    | Pinniped image registry                                                                                  | `docker.io`         |
 | `image.repository`  | Pinniped image repository                                                                                | `bitnami/pinniped`  |
-| `image.tag`         | Pinniped image tag (immutable tags are recommended)                                                      | `0.22.0-scratch-r1` |
+| `image.tag`         | Pinniped image tag (immutable tags are recommended)                                                      | `0.22.0-scratch-r3` |
 | `image.digest`      | Pinniped image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                |
 | `image.pullPolicy`  | Pinniped image pull policy                                                                               | `IfNotPresent`      |
 | `image.pullSecrets` | Pinniped image pull secrets                                                                              | `[]`                |
@@ -358,7 +358,7 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 
 ### Sidecars
 
-If additional containers are needed in the same pod as pinniped (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter. If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter. [Learn more about configuring and using sidecar containers](https://docs.bitnami.com/kubernetes/infrasctructure/pinniped/administration/configure-use-sidecars/).
+If additional containers are needed in the same pod as pinniped (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter. If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter. [Learn more about configuring and using sidecar containers](https://docs.bitnami.com/kubernetes/infrastructure/pinniped/administration/configure-use-sidecars/).
 
 ### Pod affinity
 

@@ -45,7 +45,9 @@
             },
             "vars_file": "vars.yaml",
             "remote": {
-              "workload": "deploy-mongodb"
+              "pod": {
+                "workload": "deploy-mongodb"
+              }
             }
           }
         }

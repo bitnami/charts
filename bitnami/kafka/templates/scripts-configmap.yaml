@@ -76,12 +76,35 @@ data:
     #!/bin/bash
 
     ID="${MY_POD_NAME#"{{ $fullname }}-"}"
+    # If process.roles is not set at all, it is assumed to be in ZooKeeper mode.
+    # https://kafka.apache.org/documentation/#kraft_role
+    
     if [[ -f "{{ .Values.logsDirs | splitList "," | first }}/meta.properties" ]]; then
-        export KAFKA_CFG_BROKER_ID="$(grep "broker.id" "{{ .Values.logsDirs | splitList "," | first }}/meta.properties" | awk -F '=' '{print $2}')"
+        if [[ $KAFKA_CFG_PROCESS_ROLES == "" ]]; then
+            export KAFKA_CFG_BROKER_ID="$(grep "broker.id" "{{ .Values.logsDirs | splitList "," | first }}/meta.properties" | awk -F '=' '{print $2}')"
+        else
+            export KAFKA_CFG_BROKER_ID="$(grep "node.id" "{{ .Values.logsDirs | splitList "," | first }}/meta.properties" | awk -F '=' '{print $2}')"
+        fi
     else
         export KAFKA_CFG_BROKER_ID="$((ID + {{ .Values.minBrokerId }}))"
     fi
 
+    if [[ $KAFKA_CFG_PROCESS_ROLES == *"controller"* ]]; then
+        node_id={{ .Values.minBrokerId }}
+        pod_id=0
+        while :
+        do 
+            VOTERS="${VOTERS}$node_id@{{  include "common.names.fullname" . }}-$pod_id.{{ include "common.names.fullname" . }}-headless.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ .Values.containerPorts.controller }}"
+            node_id=$(( $node_id + 1 ))
+            pod_id=$(( $pod_id + 1 ))
+            if [[ $pod_id -ge {{ .Values.replicaCount }} ]]; then
+                break
+            else
+                VOTERS="$VOTERS,"
+            fi
+        done
+        export KAFKA_CFG_CONTROLLER_QUORUM_VOTERS=$VOTERS
+    fi
     {{- if eq .Values.brokerRackAssignment "aws-az" }}
     export KAFKA_CFG_BROKER_RACK=$(curl "http://169.254.169.254/latest/meta-data/placement/availability-zone-id")
     {{- end }}
@@ -100,6 +123,8 @@ data:
     export EXTERNAL_ACCESS_HOST="${MY_POD_IP}"
     {{- else if or .Values.externalAccess.service.useHostIPs .Values.externalAccess.autoDiscovery.enabled }}
     export EXTERNAL_ACCESS_HOST="${HOST_IP}"
+    {{- else if and .Values.externalAccess.service.externalIPs (not .Values.externalAccess.autoDiscovery.enabled) }}
+    export EXTERNAL_ACCESS_HOST=$(echo '{{ .Values.externalAccess.service.externalIPs }}' | tr -d '[]' | cut -d ' ' -f "$(($ID + 1))")
     {{- else if .Values.externalAccess.service.domain }}
     export EXTERNAL_ACCESS_HOST={{ .Values.externalAccess.service.domain }}
     {{- else }}
@@ -107,6 +132,8 @@ data:
     {{- end }}
     {{- if .Values.externalAccess.autoDiscovery.enabled }}
     export EXTERNAL_ACCESS_PORT="$(<${SHARED_FILE})"
+    {{- else if and .Values.externalAccess.service.externalIPs (empty .Values.externalAccess.service.nodePorts)}}
+    export EXTERNAL_ACCESS_PORT="{{ .Values.externalAccess.service.ports.external }}"
     {{- else }}
     export EXTERNAL_ACCESS_PORT=$(echo '{{ .Values.externalAccess.service.nodePorts }}' | tr -d '[]' | cut -d ' ' -f "$(($ID + 1))")
     {{- end }}

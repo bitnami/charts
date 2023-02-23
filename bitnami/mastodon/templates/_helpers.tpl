@@ -564,7 +564,7 @@ Init container definition for waiting for the database to be ready
 Init container definition for waiting for Redis(TM) to be ready
 */}}
 {{- define "mastodon.waitForRedisInitContainer" }}
-# We need to wait for the PostgreSQL database to be ready in order to start with Mastodon.
+# We need to wait for the Redis(TM) to be ready in order to start with Mastodon.
 # As it is a ReplicaSet, we need that all nodes are configured in order to start with
 # the application or race conditions can occur
 - name: wait-for-redis

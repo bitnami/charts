@@ -45,7 +45,9 @@
               "path": "/.vib/osclass/goss"
             },
             "remote": {
-              "workload": "deploy-osclass"
+              "pod": {
+                "workload": "deploy-osclass"
+              }
             },
             "vars_file": "vars.yaml"
           }

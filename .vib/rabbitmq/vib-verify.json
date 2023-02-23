@@ -45,7 +45,9 @@
               "path": "/.vib/rabbitmq/goss"
             },
             "remote": {
-              "workload": "sts-rabbitmq"
+              "pod": {
+                "workload": "sts-rabbitmq"
+              }
             },
             "vars_file": "vars.yaml"
           }

@@ -45,7 +45,9 @@
               "path": "/.vib/matomo/goss"
             },
             "remote": {
-              "workload": "deploy-matomo"
+              "pod": {
+                "workload": "deploy-matomo"
+              }
             }
           }
         },

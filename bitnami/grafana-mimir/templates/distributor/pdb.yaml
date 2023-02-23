@@ -1,0 +1,28 @@
+{{- $replicaCount := int .Values.distributor.replicaCount }}
+{{- if and .Values.distributor.pdb.create (gt $replicaCount 1) }}
+apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
+kind: PodDisruptionBudget
+metadata:
+  name: {{ template "grafana-mimir.distributor.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/part-of: grafana-mimir
+    app.kubernetes.io/component: distributor
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if .Values.distributor.pdb.minAvailable }}
+  minAvailable: {{ .Values.distributor.pdb.minAvailable }}
+  {{- end  }}
+  {{- if .Values.distributor.pdb.maxUnavailable }}
+  maxUnavailable: {{ .Values.distributor.pdb.maxUnavailable }}
+  {{- end  }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/part-of: grafana-mimir
+      app.kubernetes.io/component: distributor
+{{- end }}

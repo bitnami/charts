@@ -45,7 +45,9 @@
               "path": "/.vib/kibana/goss"
             },
             "remote": {
-              "workload": "deploy-kibana"
+              "pod": {
+                "workload": "deploy-kibana"
+              }
             },
             "vars_file": "vars.yaml"
           }

@@ -109,7 +109,7 @@ For more information, refer to the [documentation on the differences between the
 | `operator.updateStrategy.type`                               | Set up update strategy for Grafana Operator installation.                                                                                 | `Recreate`                 |
 | `operator.image.registry`                                    | Grafana Operator image registry                                                                                                           | `docker.io`                |
 | `operator.image.repository`                                  | Grafana Operator image name                                                                                                               | `bitnami/grafana-operator` |
-| `operator.image.tag`                                         | Grafana Operator image tag                                                                                                                | `4.9.0-debian-11-r2`       |
+| `operator.image.tag`                                         | Grafana Operator image tag                                                                                                                | `4.9.0-debian-11-r6`       |
 | `operator.image.digest`                                      | Grafana Operator image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                          | `""`                       |
 | `operator.image.pullPolicy`                                  | Grafana Operator image pull policy                                                                                                        | `IfNotPresent`             |
 | `operator.image.pullSecrets`                                 | Grafana Operator image pull secrets                                                                                                       | `[]`                       |
@@ -193,7 +193,7 @@ For more information, refer to the [documentation on the differences between the
 | `grafana.enabled`                                           | Enabled the deployment of the Grafana CRD object into the cluster                                          | `true`                   |
 | `grafana.image.registry`                                    | Grafana image registry                                                                                     | `docker.io`              |
 | `grafana.image.repository`                                  | Grafana image name                                                                                         | `bitnami/grafana`        |
-| `grafana.image.tag`                                         | Grafana image tag                                                                                          | `9.3.6-debian-11-r6`     |
+| `grafana.image.tag`                                         | Grafana image tag                                                                                          | `9.3.6-debian-11-r10`    |
 | `grafana.image.digest`                                      | Grafana image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag    | `""`                     |
 | `grafana.image.pullSecrets`                                 | Grafana image pull secrets                                                                                 | `[]`                     |
 | `grafana.pluginsInitContainerImage.registry`                | Grafana Plugins image registry                                                                             | `""`                     |
@@ -243,6 +243,7 @@ For more information, refer to the [documentation on the differences between the
 | `grafana.ingress.tlsSecret`                                 | The name for the secret to use for the tls termination                                                     | `grafana.local-tls`      |
 | `grafana.persistence.enabled`                               | Enable persistent storage for the grafana deployment                                                       | `false`                  |
 | `grafana.persistence.storageClass`                          | Define the storageClass for the persistent storage if not defined default is used                          | `""`                     |
+| `grafana.persistence.existingVolume`                        | Define the existingVolume for the persistent storage provisioned outside this chart                        | `""`                     |
 | `grafana.persistence.accessModes`                           | Define the accessModes for the persistent storage                                                          | `["ReadWriteOnce"]`      |
 | `grafana.persistence.annotations`                           | Add annotations to the persistent volume                                                                   | `{}`                     |
 | `grafana.persistence.size`                                  | Define the size of the PersistentVolumeClaim to request for                                                | `10Gi`                   |

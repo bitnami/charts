@@ -45,7 +45,9 @@
               "path": "/.vib/metrics-server/goss"
             },
             "remote": {
-              "workload": "deploy-metrics-server"
+              "pod": {
+                "workload": "deploy-metrics-server"
+              }
             },
             "vars_file": "vars.yaml"
           }

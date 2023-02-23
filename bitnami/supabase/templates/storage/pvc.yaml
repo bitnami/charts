@@ -1,0 +1,37 @@
+{{- if and .Values.storage.persistence.enabled (not .Values.storage.persistence.existingClaim) -}}
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ include "supabase.storage.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/part-of: supabase
+    app.kubernetes.io/component: storage
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if or .Values.storage.persistence.annotations .Values.commonAnnotations }}
+  annotations:
+    {{- if .Values.storage.persistence.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.storage.persistence.annotations "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+spec:
+  accessModes:
+  {{- range .Values.storage.persistence.accessModes }}
+    - {{ . | quote }}
+  {{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.storage.persistence.size | quote }}
+  {{- if .Values.storage.persistence.selector }}
+  selector: {{- include "common.tplvalues.render" (dict "value" .Values.storage.persistence.selector "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.storage.persistence.dataSource }}
+  dataSource: {{- include "common.tplvalues.render" (dict "value" .Values.storage.persistence.dataSource "context" $) | nindent 4 }}
+  {{- end }}
+  {{- include "common.storage.class" (dict "persistence" .Values.storage.persistence "global" .Values.global) | nindent 2 }}
+{{- end -}}

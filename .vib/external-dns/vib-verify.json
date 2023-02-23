@@ -38,7 +38,9 @@
               "path": "/.vib/external-dns/goss"
             },
             "remote": {
-              "workload": "deploy-external-dns"
+              "pod": {
+                "workload": "deploy-external-dns"
+              }
             },
             "vars_file": "vars.yaml"
           }

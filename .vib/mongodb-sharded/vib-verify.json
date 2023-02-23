@@ -44,7 +44,9 @@
               "path": "/.vib/mongodb-sharded/goss"
             },
             "remote": {
-              "workload": "sts-mongodb-sharded-mongos"
+              "pod": {
+                "workload": "sts-mongodb-sharded-mongos"
+              }
             },
             "vars_file": "vars.yaml"
           }

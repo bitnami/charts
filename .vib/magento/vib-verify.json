@@ -45,7 +45,9 @@
               "path": "/.vib/magento/goss"
             },
             "remote": {
-              "workload": "deploy-magento"
+              "pod": {
+                "workload": "deploy-magento"
+              }
             }
           }
         },

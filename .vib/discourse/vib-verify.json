@@ -45,7 +45,9 @@
               "path": "/.vib/discourse/goss"
             },
             "remote": {
-              "workload": "deploy-discourse"
+              "pod": {
+                "workload": "deploy-discourse"
+              }
             },
             "vars_file": "vars.yaml"
           }

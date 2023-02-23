@@ -45,7 +45,9 @@
               "path": "/.vib/wavefront-prometheus-storage-adapter/goss"
             },
             "remote": {
-              "workload": "deploy-wavefront-prometheus-storage-adapter"
+              "pod": {
+                "workload": "deploy-wavefront-prometheus-storage-adapter"
+              }
             },
             "vars_file": "vars.yaml"
           }

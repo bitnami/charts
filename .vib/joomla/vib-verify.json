@@ -45,7 +45,9 @@
               "path": "/.vib/joomla/goss"
             },
             "remote": {
-              "workload": "deploy-joomla"
+              "pod": {
+                "workload": "deploy-joomla"
+              }
             },
             "vars_file": "vars.yaml"
           }

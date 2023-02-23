@@ -45,7 +45,9 @@
               "path": "/.vib/wordpress/goss"
             },
             "remote": {
-              "workload": "deploy-wordpress"
+              "pod": {
+                "workload": "deploy-wordpress"
+              }
             },
             "vars_file": "vars.yaml",
             "wait": {

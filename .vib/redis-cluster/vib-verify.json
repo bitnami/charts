@@ -44,7 +44,9 @@
               "path": "/.vib/redis-cluster/goss"
             },
             "remote": {
-              "workload": "sts-redis-cluster"
+              "pod": {
+                "workload": "sts-redis-cluster"
+              }
             },
             "vars_file": "vars.yaml"
           }

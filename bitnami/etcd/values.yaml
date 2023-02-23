@@ -70,7 +70,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/etcd
-  tag: 3.5.7-debian-11-r10
+  tag: 3.5.7-debian-11-r14
   digest: ""
   ## @param image.pullPolicy etcd image pull policy
   ## Specify a imagePullPolicy
@@ -559,6 +559,12 @@ service:
   ##     timeoutSeconds: 300
   ##
   sessionAffinityConfig: {}
+  ## Headless service properties
+  ##
+  headless:
+    ## @param service.headless.annotations Annotations for the headless service.
+    ##
+    annotations: {}
 
 ## @section Persistence parameters
 ##
@@ -582,6 +588,9 @@ persistence:
   ## @param persistence.annotations [object] Annotations for the PVC
   ##
   annotations: {}
+  ## @param persistence.labels [object] Labels for the PVC
+  ##
+  labels: {}
   ## @param persistence.accessModes Persistent Volume Access Modes
   ##
   accessModes:
@@ -612,7 +621,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r86
+    tag: 11-debian-11-r90
     digest: ""
     ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
     ##
@@ -744,7 +753,7 @@ metrics:
     ## @param metrics.podMonitor.relabelings [array] Prometheus relabeling rules
     ##
     relabelings: []
-  
+
   ## Prometheus Operator PrometheusRule configuration
   ##
   prometheusRule:

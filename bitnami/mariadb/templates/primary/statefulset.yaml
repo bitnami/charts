@@ -379,6 +379,9 @@ spec:
         {{- if .Values.primary.persistence.annotations }}
         annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.primary.persistence.annotations "context" $ ) | nindent 10 }}
         {{- end }}
+        {{- if .Values.primary.persistence.labels }}
+        labels: {{- include "common.tplvalues.render" (dict "value" .Values.primary.persistence.labels "context" $) | nindent 10 }}
+        {{- end }}
       spec:
         accessModes:
           {{- range .Values.primary.persistence.accessModes }}

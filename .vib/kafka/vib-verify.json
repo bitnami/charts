@@ -44,7 +44,9 @@
               "path": "/.vib/kafka/goss"
             },
             "remote": {
-              "workload": "sts-kafka"
+              "pod": {
+                "workload": "sts-kafka"
+              }
             },
             "vars_file": "vars.yaml"
           }

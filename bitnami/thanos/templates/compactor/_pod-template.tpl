@@ -20,7 +20,7 @@ metadata:
     {{- end }}
 spec:
   {{- include "thanos.imagePullSecrets" . | nindent 2 }}
-  serviceAccount: {{ include "thanos.serviceAccountName" (dict "component" "compactor" "context" $) }}
+  serviceAccountName: {{ include "thanos.serviceAccountName" (dict "component" "compactor" "context" $) }}
   automountServiceAccountToken: {{ .Values.compactor.automountServiceAccountToken }}
   {{- if .Values.compactor.hostAliases }}
   hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.compactor.hostAliases "context" $) | nindent 4 }}

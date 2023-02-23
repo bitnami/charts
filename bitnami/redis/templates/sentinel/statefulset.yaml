@@ -22,7 +22,7 @@ spec:
   {{- if .Values.replica.updateStrategy }}
   updateStrategy: {{- toYaml .Values.replica.updateStrategy | nindent 4 }}
   {{- end }}
-  {{- if and .Values.replica.minReadySeconds (semverCompare ">= 1.25" (include "common.capabilities.kubeVersion" .)) }}
+  {{- if and .Values.replica.minReadySeconds (semverCompare ">= 1.23-0" (include "common.capabilities.kubeVersion" .)) }}
   minReadySeconds: {{ .Values.replica.minReadySeconds }}
   {{- end }}
   {{- if .Values.replica.podManagementPolicy }}
@@ -753,6 +753,9 @@ spec:
         name: sentinel-data
         labels: {{- include "common.labels.matchLabels" . | nindent 10 }}
           app.kubernetes.io/component: node
+          {{- if .Values.sentinel.persistence.labels }}
+          {{- toYaml .Values.sentinel.persistence.labels | nindent 4 }}
+          {{- end }}
         {{- if .Values.sentinel.persistence.annotations }}
         annotations: {{- toYaml .Values.sentinel.persistence.annotations | nindent 10 }}
         {{- end }}
