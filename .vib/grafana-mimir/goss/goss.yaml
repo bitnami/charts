@@ -22,7 +22,7 @@ http:
     - "!Stopping"
     - "!Terminated"
     - "!Failed"
-  http://grafana-mimir-gateway:{{ .Vars.gateway.service.ports.http }}/{{ .Vars.mimir.httpPrefix.prometheu }}/api/v1/status/buildinfo:
+  http://grafana-mimir-gateway:{{ .Vars.gateway.service.ports.http }}/{{ .Vars.mimir.httpPrefix.prometheus }}/api/v1/status/buildinfo:
     status: 200
     body:
       - "Grafana Mimir"
