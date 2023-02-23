@@ -32901,6 +32901,64 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/grafana-loki-2.0.4.tgz
     version: 2.0.4
+  grafana-mimir:
+  - annotations:
+      category: Infrastructure
+      licenses: |
+        - Apache-2.0
+    apiVersion: v2
+    appVersion: 2.5.0
+    created: "2023-02-23T17:30:04.506137202Z"
+    dependencies:
+    - condition: minio.enabled
+      name: minio
+      repository: https://charts.bitnami.com/bitnami
+      version: 12.x.x
+    - alias: memcachedmetadata
+      condition: memcachedmetadata.enabled
+      name: memcached
+      repository: https://charts.bitnami.com/bitnami
+      version: 6.x.x
+    - alias: memcachedindex
+      condition: memcachedindex.enabled
+      name: memcached
+      repository: https://charts.bitnami.com/bitnami
+      version: 6.x.x
+    - alias: memcachedfrontend
+      condition: memcachedfrontend.enabled
+      name: memcached
+      repository: https://charts.bitnami.com/bitnami
+      version: 6.x.x
+    - alias: memcachedchunks
+      condition: memcachedchunks.enabled
+      name: memcached
+      repository: https://charts.bitnami.com/bitnami
+      version: 6.x.x
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: Grafana Mimir is an open source, horizontally scalable, highly available,
+      multi-tenant, long-term storage for Prometheus.
+    digest: 3922897952460dc3138390e41b0b18d06409eddebf408c26ba682411eb30b823
+    home: https://grafana.com/oss/mimir/
+    icon: https://bitnami.com/assets/stacks/grafana-mimir/img/grafana-mimir-stack-220x234.png
+    keywords:
+    - grafana
+    - tracing
+    - metrics
+    - infrastructure
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: grafana-mimir
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/grafana-mimir
+    - https://github.com/grafana/mimir
+    urls:
+    - https://charts.bitnami.com/bitnami/grafana-mimir-0.1.0.tgz
+    version: 0.1.0
   grafana-operator:
   - annotations:
       category: Analytics
@@ -122328,4 +122386,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-9.2.1.tgz
     version: 9.2.1
-generated: "2023-02-23T13:36:18.736039824Z"
+generated: "2023-02-23T17:30:04.488784301Z"
