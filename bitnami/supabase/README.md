@@ -69,7 +69,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.jwt.existingSecretAnonKey`    | The key in the existing secret containing the JWT anon key    | `anon-key`    |
 | `global.jwt.existingSecretServiceKey` | The key in the existing secret containing the JWT service key | `service-key` |
 
-
 ### Common parameters
 
 | Name                     | Description                                                                             | Value           |
@@ -85,7 +84,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
 | `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]`  |
-
 
 ### Supabase Common parameters
 
@@ -130,7 +128,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `jwt.autoGenerate.podAnnotations`                                    | Additional pod annotations                                                                                                                         | `{}`                   |
 | `publicURL`                                                          | Supabase API public URL                                                                                                                            | `""`                   |
 | `dbSSL`                                                              | Supabase API database connection mode for SSL. Applied to all components                                                                           | `disable`              |
-
 
 ### Supabase Auth Parameters
 
@@ -205,7 +202,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `auth.sidecars`                                        | Add additional sidecar containers to the Supabase auth pod(s)                                                                                     | `[]`                 |
 | `auth.initContainers`                                  | Add additional init containers to the Supabase auth pod(s)                                                                                        | `[]`                 |
 
-
 ### Supabase Auth Traffic Exposure Parameters
 
 | Name                                    | Description                                                                              | Value       |
@@ -221,7 +217,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `auth.service.extraPorts`               | Extra ports to expose in Supabase auth service (normally used with the `sidecars` value) | `[]`        |
 | `auth.service.sessionAffinity`          | Control where auth requests go, to the same pod or round-robin                           | `None`      |
 | `auth.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                              | `{}`        |
-
 
 ### Supabase Meta Parameters
 
@@ -296,7 +291,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `meta.sidecars`                                        | Add additional sidecar containers to the Supabase Postgres Meta pod(s)                                                                                            | `[]`                             |
 | `meta.initContainers`                                  | Add additional init containers to the Supabase Postgres Meta pod(s)                                                                                               | `[]`                             |
 
-
 ### Supabase Meta Traffic Exposure Parameters
 
 | Name                                    | Description                                                                                       | Value       |
@@ -312,7 +306,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `meta.service.extraPorts`               | Extra ports to expose in Supabase Postgres Meta service (normally used with the `sidecars` value) | `[]`        |
 | `meta.service.sessionAffinity`          | Control where meta requests go, to the same pod or round-robin                                    | `None`      |
 | `meta.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                       | `{}`        |
-
 
 ### Supabase Realtime Parameters
 
@@ -390,7 +383,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `realtime.sidecars`                                        | Add additional sidecar containers to the Supabase realtime pod(s)                                                                                   | `[]`                        |
 | `realtime.initContainers`                                  | Add additional init containers to the Supabase realtime pod(s)                                                                                      | `[]`                        |
 
-
 ### Supabase Realtime Traffic Exposure Parameters
 
 | Name                                        | Description                                                                                  | Value       |
@@ -406,7 +398,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `realtime.service.extraPorts`               | Extra ports to expose in Supabase realtime service (normally used with the `sidecars` value) | `[]`        |
 | `realtime.service.sessionAffinity`          | Control where realtime requests go, to the same pod or round-robin                           | `None`      |
 | `realtime.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                  | `{}`        |
-
 
 ### Supabase Rest Parameters
 
@@ -481,7 +472,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `rest.sidecars`                                        | Add additional sidecar containers to the Supabase rest pod(s)                                                                                        | `[]`                  |
 | `rest.initContainers`                                  | Add additional init containers to the Supabase rest pod(s)                                                                                           | `[]`                  |
 
-
 ### Supabase Rest Traffic Exposure Parameters
 
 | Name                                    | Description                                                                              | Value       |
@@ -497,7 +487,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `rest.service.extraPorts`               | Extra ports to expose in Supabase rest service (normally used with the `sidecars` value) | `[]`        |
 | `rest.service.sessionAffinity`          | Control where rest requests go, to the same pod or round-robin                           | `None`      |
 | `rest.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                              | `{}`        |
-
 
 ### Supabase Storage Parameters
 
@@ -572,7 +561,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `storage.sidecars`                                        | Add additional sidecar containers to the Supabase storage pod(s)                                                                                   | `[]`                       |
 | `storage.initContainers`                                  | Add additional init containers to the Supabase storage pod(s)                                                                                      | `[]`                       |
 
-
 ### Supabase Storage Traffic Exposure Parameters
 
 | Name                                       | Description                                                                                 | Value       |
@@ -589,7 +577,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `storage.service.sessionAffinity`          | Control where storage requests go, to the same pod or round-robin                           | `None`      |
 | `storage.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                 | `{}`        |
 
-
 ### Storage Persistence Parameters
 
 | Name                                | Description                                                                                             | Value                       |
@@ -604,7 +591,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `storage.persistence.existingClaim` | The name of an existing PVC to use for persistence                                                      | `""`                        |
 | `storage.persistence.selector`      | Selector to match an existing Persistent Volume for WordPress data PVC                                  | `{}`                        |
 | `storage.persistence.dataSource`    | Custom PVC data source                                                                                  | `{}`                        |
-
 
 ### Supabase Studio Parameters
 
@@ -680,7 +666,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `studio.sidecars`                                        | Add additional sidecar containers to the Supabase studio pod(s)                                                                                   | `[]`                      |
 | `studio.initContainers`                                  | Add additional init containers to the Supabase studio pod(s)                                                                                      | `[]`                      |
 
-
 ### Supabase Studio Traffic Exposure Parameters
 
 | Name                                      | Description                                                                                                                      | Value                    |
@@ -711,7 +696,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `studio.ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                     |
 | `studio.ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
-
 ### Init Container Parameters
 
 | Name                                                   | Description                                                                                     | Value                       |
@@ -733,7 +717,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `psqlImage.pullSecrets`                                | PostgreSQL client image pull secrets                                                            | `[]`                        |
 | `psqlImage.debug`                                      | Enable PostgreSQL client image debug mode                                                       | `false`                     |
 
-
 ### Other Parameters
 
 | Name                                          | Description                                                      | Value  |
@@ -743,7 +726,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.name`                         | The name of the ServiceAccount to use.                           | `""`   |
 | `serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template) | `{}`   |
 | `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account   | `true` |
-
 
 ### Kong sub-chart parameters
 
@@ -763,7 +745,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `kong.service.type`              | Kubernetes service type                                                        | `LoadBalancer`   |
 | `kong.service.ports.proxyHttp`   | Kong service port                                                              | `80`             |
 | `kong.postgresql.enabled`        | Switch to enable or disable the PostgreSQL helm chart inside the Kong subchart | `false`          |
-
 
 ### PostgreSQL sub-chart parameters
 
