@@ -112,6 +112,10 @@ spec:
           envFrom:
             - configMapRef:
                 name: {{ include "supabase.studio.defaultConfigmapName" . }}
+            {{- if .Values.studio.extraConfigExistingConfigmap }}
+            - configMapRef:
+                name: {{ include "supabase.studio.extraConfigmapName" . }}
+            {{- end }}
             {{- if .Values.studio.extraEnvVarsCM }}
             - configMapRef:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.studio.extraEnvVarsCM "context" $) }}

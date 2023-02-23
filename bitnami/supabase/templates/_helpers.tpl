@@ -1,5 +1,5 @@
 {{/*
-Return the proper Supabase image name
+Return the proper Supabase Studio Public URL
 */}}
 {{- define "supabase.studio.publicURL" -}}
 {{- if .Values.studio.publicURL -}}
@@ -14,7 +14,7 @@ Return the proper Supabase image name
 {{- end -}}
 
 {{/*
-Return the proper Supabase image name
+Return the proper Supabase API Public URL
 */}}
 {{- define "supabase.api.publicURL" -}}
 {{- if .Values.publicURL -}}
@@ -29,10 +29,7 @@ Return the proper Supabase image name
 {{- end -}}
 
 {{/*
-{{- end -}}
-
-{{/*
-Return the proper Supabase image name
+Return the proper Supabase auth image name
 */}}
 {{- define "supabase.auth.image" -}}
 {{ include "common.images.image" (dict "imageRoot" .Values.auth.image "global" .Values.global) }}
@@ -57,7 +54,7 @@ Default configuration ConfigMap name (auth)
 {{- end -}}
 
 {{/*
-Extra configuration ConfigMap name
+Extra configuration ConfigMap name (auth)
 */}}
 {{- define "supabase.auth.extraConfigmapName" -}}
 {{- if .Values.auth.extraConfigExistingConfigmap -}}
@@ -68,7 +65,7 @@ Extra configuration ConfigMap name
 {{- end -}}
 
 {{/*
-Return the proper Supabase image name
+Return the proper Supabase meta image name
 */}}
 {{- define "supabase.meta.image" -}}
 {{ include "common.images.image" (dict "imageRoot" .Values.meta.image "global" .Values.global) }}
@@ -93,7 +90,7 @@ Default configuration ConfigMap name (meta)
 {{- end -}}
 
 {{/*
-Extra configuration ConfigMap name
+Extra configuration ConfigMap name (meta)
 */}}
 {{- define "supabase.meta.extraConfigmapName" -}}
 {{- if .Values.meta.extraConfigExistingConfigmap -}}
@@ -104,7 +101,7 @@ Extra configuration ConfigMap name
 {{- end -}}
 
 {{/*
-Return the proper Supabase image name
+Return the proper Supabase realtime image name
 */}}
 {{- define "supabase.realtime.image" -}}
 {{ include "common.images.image" (dict "imageRoot" .Values.realtime.image "global" .Values.global) }}
@@ -129,7 +126,7 @@ Default configuration ConfigMap name (realtime)
 {{- end -}}
 
 {{/*
-Extra configuration ConfigMap name
+Extra configuration ConfigMap name (realtime)
 */}}
 {{- define "supabase.realtime.extraConfigmapName" -}}
 {{- if .Values.realtime.extraConfigExistingConfigmap -}}
@@ -140,7 +137,7 @@ Extra configuration ConfigMap name
 {{- end -}}
 
 {{/*
-Return the proper Supabase image name
+Return the proper Supabase rest image name
 */}}
 {{- define "supabase.rest.image" -}}
 {{ include "common.images.image" (dict "imageRoot" .Values.rest.image "global" .Values.global) }}
@@ -165,7 +162,7 @@ Default configuration ConfigMap name (rest)
 {{- end -}}
 
 {{/*
-Extra configuration ConfigMap name
+Extra configuration ConfigMap name (rest)
 */}}
 {{- define "supabase.rest.extraConfigmapName" -}}
 {{- if .Values.rest.extraConfigExistingConfigmap -}}
@@ -176,7 +173,7 @@ Extra configuration ConfigMap name
 {{- end -}}
 
 {{/*
-Return the proper Supabase image name
+Return the proper Supabase storage image name
 */}}
 {{- define "supabase.storage.image" -}}
 {{ include "common.images.image" (dict "imageRoot" .Values.storage.image "global" .Values.global) }}
@@ -201,7 +198,7 @@ Default configuration ConfigMap name (storage)
 {{- end -}}
 
 {{/*
-Extra configuration ConfigMap name
+Extra configuration ConfigMap name (storage)
 */}}
 {{- define "supabase.storage.extraConfigmapName" -}}
 {{- if .Values.storage.extraConfigExistingConfigmap -}}
@@ -212,7 +209,7 @@ Extra configuration ConfigMap name
 {{- end -}}
 
 {{/*
-Return the proper Supabase image name
+Return the proper Supabase studio image name
 */}}
 {{- define "supabase.studio.image" -}}
 {{ include "common.images.image" (dict "imageRoot" .Values.studio.image "global" .Values.global) }}
@@ -233,6 +230,17 @@ Default configuration ConfigMap name (studio)
     {{- print .Values.studio.existingConfigmap -}}
 {{- else -}}
     {{- printf "%s-default" (include "supabase.studio.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Extra configuration ConfigMap name
+*/}}
+{{- define "supabase.studio.extraConfigmapName" -}}
+{{- if .Values.studio.extraConfigExistingConfigmap -}}
+    {{- print .Values.studio.extraConfigExistingConfigmap -}}
+{{- else -}}
+    {{- printf "%s-extra" (include "supabase.studio.fullname" .) -}}
 {{- end -}}
 {{- end -}}
 
@@ -283,17 +291,6 @@ Extra configuration ConfigMap name
 {{- end -}}
 
 {{/*
-Extra configuration ConfigMap name
-*/}}
-{{- define "supabase.studio.extraConfigmapName" -}}
-{{- if .Values.studio.extraConfigExistingConfigmap -}}
-    {{- print .Values.studio.extraConfigExistingConfigmap -}}
-{{- else -}}
-    {{- printf "%s-extra" (include "supabase.studio.fullname" .) -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
 JWT credential secret name. Using Release.Name as it is used in subcharts as well
 */}}
 {{- define "supabase.jwt.secretName" -}}
@@ -312,14 +309,14 @@ JWT credential anon secret key
 {{- end -}}
 
 {{/*
-JWT credential secret name. Using Release.Name as it is used in subcharts as well
+Supabase Realtime credential secret name. Using Release.Name as it is used in subcharts as well
 */}}
 {{- define "supabase.realtime.secretName" -}}
 {{- coalesce .Values.realtime.existingSecret (include "supabase.realtime.fullname" .) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
-JWT credential anon secret key
+Supabase Realtime credential secret key
 */}}
 {{- define "supabase.realtime.secretKey" -}}
 {{- if .Values.realtime.existingSecret -}}

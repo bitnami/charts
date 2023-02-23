@@ -46,9 +46,6 @@ spec:
             - |
               #!/bin/bash
               echo "Generating JWT token"
-              {{- if not .Values.jwt.secret }}
-              SECRET="$(cat /dev/urandom | tr -dc 'a-z0-9' | fold -w 48 | head -n 1)"
-              {{- end }}
               # Taken from https://supabase.com/docs/guides/self-hosting#api-keys
               {{- if not .Values.jwt.anonKey }}
               ANON_KEY="$(jwt encode --secret=$SECRET '{"role":"anon","iss":"supabase","iat":1676934000,"exp":1834700400}')"
@@ -61,13 +58,11 @@ spec:
               echo -n "$ANON_KEY" > /bitnami/supabase/secrets/anon-key
               echo -n "$SERVICE_KEY" > /bitnami/supabase/secrets/service-key
           env:
-            {{- if .Values.jwt.secret }}
             - name: SECRET
               valueFrom:
                 secretKeyRef:
                   name: {{ include "supabase.jwt.secretName" . }}
                   key: secret
-            {{- end }}
             {{- if .Values.jwt.anonKey }}
             - name: ANON_KEY
               valueFrom:

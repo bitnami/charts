@@ -41,15 +41,15 @@ Access the pod you want to debug by executing
 
 {{- else }}
 
-Supabase API can be accessed through the following DNS name from within your cluster:
+Supabase Studio can be accessed through the following DNS name from within your cluster:
 
     {{ include "supabase.kong.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} (port {{ .Values.kong.service.ports.proxyHttp }})
 
-To access your Supabase site from outside the cluster follow the steps below:
+To access the Supabase API from outside the cluster follow the steps below:
 
 {{- if .Values.kong.ingress.enabled }}
 
-1. Get the Supabase URL and associate Supabase hostname to your cluster external IP:
+1. Get the Supabase API URL and associate the Supabase API hostname to your cluster external IP:
 
    export CLUSTER_IP=$(minikube ip) # On Minikube. Use: `kubectl cluster-info` on others K8s clusters
    echo "Supabase URL: http{{ if .Values.kong.ingress.tls }}s{{ end }}://{{ .Values.kong.ingress.hostname }}/"
@@ -64,7 +64,7 @@ To access your Supabase site from outside the cluster follow the steps below:
 
    export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "supabase.kong.fullname" . }})
    export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
-   echo "Supabase API URL: http://$NODE_IP:$NODE_PORT/"
+   echo "Supabase Studio URL: http://$NODE_IP:$NODE_PORT/"
 
 {{- else if contains "LoadBalancer" .Values.kong.service.type }}
 
@@ -72,12 +72,12 @@ To access your Supabase site from outside the cluster follow the steps below:
         Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ include "supabase.kong.fullname" . }}'
 
    export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "supabase.kong.fullname" . }} --include "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
-   echo "Supabase API URL: http://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.kong.service.ports.proxyHttp }}{{ end }}/"
+   echo "Supabase Studio URL: http://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.kong.service.ports.proxyHttp }}{{ end }}/"
 
 {{- else if contains "ClusterIP"  .Values.kong.service.type }}
 
    kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "supabase.kong.fullname" . }} {{ .Values.kong.service.ports.proxyHttp }}:{{ .Values.kong.service.ports.proxyHttp }} &
-   echo "Supabase API URL: http://127.0.0.1{{- if ne $port "80" }}:{{ .Values.kong.service.ports.proxyHttp }}{{ end }}/"
+   echo "Supabase Studio URL: http://127.0.0.1{{- if ne $port "80" }}:{{ .Values.kong.service.ports.proxyHttp }}{{ end }}/"
 
 {{- end }}
 {{- end }}
@@ -88,6 +88,47 @@ To access your Supabase site from outside the cluster follow the steps below:
   echo Service JWT Token: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "supabase.jwt.secretName" . }} -o jsonpath="{.data.service-key}" | base64 -d)
 
 3. Configure your application code to access the Supabase API.
+
+{{- if .Values.studio.enabled }}
+
+EXTRA: If you want to access Supabase Studio:
+
+{{- if .Values.studio.ingress.enabled }}
+
+1. Get the Supabase Studio URL and associate Supabase hostname to your cluster external IP:
+
+   export CLUSTER_IP=$(minikube ip) # On Minikube. Use: `kubectl cluster-info` on others K8s clusters
+   echo "Supabase URL: http{{ if .Values.studio.ingress.tls }}s{{ end }}://{{ .Values.studio.ingress.hostname }}/"
+   echo "$CLUSTER_IP  {{ .Values.studio.ingress.hostname }}" | sudo tee -a /etc/hosts
+
+{{- else }}
+{{- $port := .Values.studio.service.ports.http | toString }}
+
+1. Get the Supabase URL by running these commands:
+
+{{- if contains "NodePort" .Values.studio.service.type }}
+
+   export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "supabase.studio.fullname" . }})
+   export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+   echo "Supabase Studio URL: http://$NODE_IP:$NODE_PORT/"
+
+{{- else if contains "LoadBalancer" .Values.studio.service.type }}
+
+  NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+        Watch the status with: 'kubectl get svc --namespace {{ .Release.Namespace }} -w {{ include "supabase.studio.fullname" . }}'
+
+   export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "supabase.studio.fullname" . }} --include "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
+   echo "Supabase Studio URL: http://$SERVICE_IP{{- if ne $port "80" }}:{{ .Values.studio.service.ports.http }}{{ end }}/"
+
+{{- else if contains "ClusterIP"  .Values.studio.service.type }}
+
+   kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "supabase.studio.fullname" . }} {{ .Values.studio.service.ports.http }}:{{ .Values.studio.service.ports.http }} &
+   echo "Supabase Studio URL: http://127.0.0.1{{- if ne $port "80" }}:{{ .Values.studio.service.ports.http }}{{ end }}/"
+
+{{- end }}
+{{- end }}
+
+{{- end }}
 
 {{- end }}
 
