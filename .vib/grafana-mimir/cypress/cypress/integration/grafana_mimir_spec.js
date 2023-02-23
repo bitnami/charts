@@ -5,9 +5,10 @@ import {
   random
 } from '../support/utils';
 
-it('can push metrics', () => {
+it('can push metrics and read them', () => {
   // Using Open Telemetry endpoint because it allow us to use plain connection.
   // Regular prometheus endpoint requires snappy compression.
+  const orgID = { 'X-Scope-OrgID': 'demo' };
   const upToDateJson = JSON.stringify(body).replace(
     '"timestamp_placeholder"',
     lastMinuteTimestamp
@@ -17,25 +18,22 @@ it('can push metrics', () => {
   );
   cy.request({
     method: 'POST',
-    headers: { 'X-Scope-OrgID': 'demo' },
+    headers: orgID,
     url: '/otlp/v1/metrics',
     body: JSON.parse(upToDateJson),
   }).then((response) => {
     expect(response.status).to.eq(200);
   });
-});
-
-it('can read metrics', () => {
+  // Read metrics
   cy.request({
     method: 'GET',
-    headers: {'X-Scope-OrgID': 'demo' },
-    url: `/prometheus-test/api/v1/query?query=test`,
-    form: false,
+    headers: orgID,
+    url: '/prometheus-test/api/v1/query?query=test',
   }).then((response) => {
     expect(response.status).to.eq(200);
     expect(response.headers['content-type']).to.eq(
       'application/json'
     );
-  expect(response.body.data.result[0].value).to.contain(`${random}`);
+    expect(response.body.data.result[0].value).to.contain(random);
   });
 });

@@ -5,6 +5,7 @@ file:
     - "memcachedchunks:{{ .Vars.memcachedchunks.service.ports.memcached }}"
     - "memcachedfrontend:{{ .Vars.memcachedfrontend.service.ports.memcached }}"
     - "memcachedindex:{{ .Vars.memcachedindex.service.ports.memcached }}"
+    - "memcachedmetadata:{{ .Vars.memcachedmetadata.service.ports.memcached }}"
     - "http_listen_port: {{ .Vars.mimir.containerPorts.http }}"
 http:
   # As we need to make several API requests, we'll use different services (and pods)
