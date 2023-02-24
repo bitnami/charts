@@ -14,7 +14,7 @@ http:
 
 file:
   {{- $mount := index .Vars.kong.kong.extraVolumeMounts 0 }}
-  {{ $mount.mountPath }}/kong.yaml:
+  {{ $mount.mountPath }}/kong.yml:
     exists: true
     filetype: file
     mode: '0644'
