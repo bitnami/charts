@@ -13,7 +13,8 @@ http:
     status: 200
 
 file:
-  /bitnami/kong/declarative-conf/kong.yml:
+  {{- $mount := index .Vars.kong.kong.extraVolumeMounts 0 }}
+  {{ $mount.mountPath }}/kong.yaml:
     exists: true
     filetype: file
     mode: '0644'
