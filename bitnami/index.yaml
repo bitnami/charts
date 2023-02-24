@@ -25303,6 +25303,48 @@ entries:
       category: CMS
       licenses: Apache-2.0
     apiVersion: v2
+    appVersion: 5.36.0
+    created: "2023-02-24T22:28:49.371975287Z"
+    dependencies:
+    - condition: mysql.enabled
+      name: mysql
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - ghost-database
+      version: 9.x.x
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: Ghost is an open source publishing platform designed to create blogs,
+      magazines, and news sites. It includes a simple markdown editor with preview,
+      theming, and SEO built-in to simplify editing.
+    digest: c69ab393c46f3eb6f6d297553c98e3fc9a1f5e89d483c95bcfce7b9218a4b1b3
+    home: https://github.com/bitnami/charts/tree/main/bitnami/ghost
+    icon: https://bitnami.com/assets/stacks/ghost/img/ghost-stack-220x234.png
+    keywords:
+    - ghost
+    - blog
+    - http
+    - web
+    - application
+    - nodejs
+    - javascript
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: ghost
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/ghost
+    - https://www.ghost.org/
+    urls:
+    - https://charts.bitnami.com/bitnami/ghost-19.1.74.tgz
+    version: 19.1.74
+  - annotations:
+      category: CMS
+      licenses: Apache-2.0
+    apiVersion: v2
     appVersion: 5.35.1
     created: "2023-02-22T18:28:44.993760658Z"
     dependencies:
@@ -122692,4 +122734,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-9.2.1.tgz
     version: 9.2.1
-generated: "2023-02-24T22:28:26.133339995Z"
+generated: "2023-02-24T22:28:49.365009479Z"
