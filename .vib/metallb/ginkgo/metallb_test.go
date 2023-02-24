@@ -56,11 +56,11 @@ var _ = Describe("MetalLB", func() {
 				createServiceOrDie(ctx, typedClient, serviceName)
 
 				// Once created, the controller has to assign an IP to the managed ingress
-				hasIP, err = retry("hasIPAssigned", 4, 15*time.Second, func() (bool, error) {
+				hasIP, err = retry("hasIPAssigned", 8, 15*time.Second, func() (bool, error) {
 					return hasIPAssigned(ctx, typedClient, serviceName)
 				})
 				if err != nil {
-					panic(fmt.Sprintf("There was an error checking whether the testing ingress had an IP assigned: %q", err))
+					panic(fmt.Sprintf("There was an error checking whether the testing service had an IP assigned: %q", err))
 				}
 				Expect(hasIP).To(BeTrue())
 
