@@ -22,6 +22,9 @@ spec:
         {{- if .Values.jwt.autoGenerate.podLabels }}
         {{- include "common.tplvalues.render" (dict "value" .Values.jwt.autoGenerate.podLabels "context" $) | nindent 8 }}
         {{- end }}
+        {{- if .Values.commonLabels }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
+        {{- end }}
       {{- if .Values.jwt.autoGenerate.podAnnotations }}
       annotations: {{- include "common.tplvalues.render" (dict "value" .Values.jwt.autoGenerate.podAnnotations "context" $) | nindent 8 }}
       {{- end }}

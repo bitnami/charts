@@ -31,6 +31,9 @@ spec:
         {{- if .Values.storage.podLabels }}
         {{- include "common.tplvalues.render" (dict "value" .Values.storage.podLabels "context" $) | nindent 8 }}
         {{- end }}
+        {{- if .Values.commonLabels }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
+        {{- end }}
     spec:
       serviceAccountName: {{ template "supabase.serviceAccountName" . }}
       {{- include "supabase.imagePullSecrets" . | nindent 6 }}

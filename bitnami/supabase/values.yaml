@@ -2271,9 +2271,6 @@ studio:
     ## @param studio.ingress.pathType Ingress path type
     ##
     pathType: ImplementationSpecific
-    ## @param studio.ingress.apiVersion Force Ingress API version (automatically detected if not set)
-    ##
-    apiVersion: ""
     ## @param studio.ingress.hostname Default host for the ingress record
     ##
     hostname: supabase-studio.local
