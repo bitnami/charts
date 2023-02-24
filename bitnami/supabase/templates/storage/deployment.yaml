@@ -23,9 +23,15 @@ spec:
       app.kubernetes.io/component: storage
   template:
     metadata:
-      {{- if .Values.storage.podAnnotations }}
-      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.storage.podAnnotations "context" $) | nindent 8 }}
-      {{- end }}
+      annotations:
+        {{- if .Values.storage.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.storage.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+        checksum/default-configmap: {{ include (print $.Template.BasePath "/storage/default-configmap.yaml") . | sha256sum }}
+        {{- if .Values.storage.extraConfig }}
+        checksum/extra-configmap: {{ include (print $.Template.BasePath "/storage/extra-configmap.yaml") . | sha256sum }}
+        {{- end }}
+        checksum/jwt-secret: {{ include (print $.Template.BasePath "/jwt-secret.yaml") . | sha256sum }}
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: storage
         {{- if .Values.storage.podLabels }}

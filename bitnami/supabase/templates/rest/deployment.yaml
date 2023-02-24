@@ -23,9 +23,15 @@ spec:
       app.kubernetes.io/component: rest
   template:
     metadata:
-      {{- if .Values.rest.podAnnotations }}
-      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.rest.podAnnotations "context" $) | nindent 8 }}
-      {{- end }}
+      annotations:
+        {{- if .Values.rest.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.rest.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+        checksum/default-configmap: {{ include (print $.Template.BasePath "/rest/default-configmap.yaml") . | sha256sum }}
+        {{- if .Values.rest.extraConfig }}
+        checksum/extra-configmap: {{ include (print $.Template.BasePath "/rest/extra-configmap.yaml") . | sha256sum }}
+        {{- end }}
+        checksum/jwt-secret: {{ include (print $.Template.BasePath "/jwt-secret.yaml") . | sha256sum }}
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: rest
         {{- if .Values.rest.podLabels }}

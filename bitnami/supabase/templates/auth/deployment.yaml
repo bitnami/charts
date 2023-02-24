@@ -23,9 +23,15 @@ spec:
       app.kubernetes.io/component: auth
   template:
     metadata:
-      {{- if .Values.auth.podAnnotations }}
-      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.auth.podAnnotations "context" $) | nindent 8 }}
-      {{- end }}
+      annotations:
+        {{- if .Values.auth.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.auth.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+        checksum/default-configmap: {{ include (print $.Template.BasePath "/auth/default-configmap.yaml") . | sha256sum }}
+        {{- if .Values.auth.extraConfig }}
+        checksum/extra-configmap: {{ include (print $.Template.BasePath "/auth/extra-configmap.yaml") . | sha256sum }}
+        {{- end }}
+        checksum/jwt-secret: {{ include (print $.Template.BasePath "/jwt-secret.yaml") . | sha256sum }}
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: auth
         {{- if .Values.auth.podLabels }}

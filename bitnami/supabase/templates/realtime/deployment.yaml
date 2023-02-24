@@ -23,9 +23,16 @@ spec:
       app.kubernetes.io/component: realtime
   template:
     metadata:
-      {{- if .Values.realtime.podAnnotations }}
-      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.realtime.podAnnotations "context" $) | nindent 8 }}
-      {{- end }}
+      annotations:
+        {{- if .Values.realtime.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.realtime.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+        checksum/default-configmap: {{ include (print $.Template.BasePath "/realtime/default-configmap.yaml") . | sha256sum }}
+        {{- if .Values.realtime.extraConfig }}
+        checksum/extra-configmap: {{ include (print $.Template.BasePath "/realtime/extra-configmap.yaml") . | sha256sum }}
+        {{- end }}
+        checksum/jwt-secret: {{ include (print $.Template.BasePath "/jwt-secret.yaml") . | sha256sum }}
+        checksum/secret: {{ include (print $.Template.BasePath "/realtime/secret.yaml") . | sha256sum }}
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: realtime
         {{- if .Values.realtime.podLabels }}

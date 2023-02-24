@@ -23,9 +23,15 @@ spec:
       app.kubernetes.io/component: meta
   template:
     metadata:
-      {{- if .Values.meta.podAnnotations }}
-      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.meta.podAnnotations "context" $) | nindent 8 }}
-      {{- end }}
+      annotations:
+        {{- if .Values.meta.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.meta.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+        checksum/default-configmap: {{ include (print $.Template.BasePath "/meta/default-configmap.yaml") . | sha256sum }}
+        {{- if .Values.meta.extraConfig }}
+        checksum/extra-configmap: {{ include (print $.Template.BasePath "/meta/extra-configmap.yaml") . | sha256sum }}
+        {{- end }}
+        checksum/jwt-secret: {{ include (print $.Template.BasePath "/jwt-secret.yaml") . | sha256sum }}
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/component: meta
         {{- if .Values.meta.podLabels }}
