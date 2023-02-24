@@ -804,28 +804,15 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 ### External database support
 
-You may want to have supabase connect to an external database rather than installing one inside your cluster. Typical reasons for this are to use a managed database service, or to share a common database server for all your applications. To achieve this, the chart allows you to specify credentials for an external database with the [`externalDatabase` parameter](#parameters). You should also disable the MongoDB installation with the `mongodb.enabled` option. Here is an example:
+You may want to have supabase connect to an external database rather than installing one inside your cluster. Typical reasons for this are to use a managed database service, or to share a common database server for all your applications. To achieve this, the chart allows you to specify credentials for an external database with the [`externalDatabase` parameter](#parameters). You should also disable the MongoDB installation with the `postgresql.enabled` option. Here is an example:
 
 ```console
-mongodb.enabled=false
+postgresql.enabled=false
 externalDatabase.host=myexternalhost
 externalDatabase.user=myuser
 externalDatabase.password=mypassword
 externalDatabase.database=mydatabase
-externalDatabase.port=3306
-```
-
-### External redis support
-
-You may want to have supabase connect to an external redis rather than installing one inside your cluster. Typical reasons for this are to use a managed redis service, or to share a common redis server for all your applications. To achieve this, the chart allows you to specify credentials for an external redis with the [`externalDatabase` parameter](#parameters). You should also disable the Redis installation with the `redis.enabled` option. Here is an example:
-
-```console
-redis.enabled=false
-externalDatabase.host=myexternalhost
-externalDatabase.user=myuser
-externalDatabase.password=mypassword
-externalDatabase.redis=myredis
-externalDatabase.port=3306
+externalDatabase.port=5432
 ```
 
 ### Ingress
