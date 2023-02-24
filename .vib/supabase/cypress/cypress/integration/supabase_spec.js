@@ -33,7 +33,12 @@ it('can create a user and generate a token to it (auth)', () => {
       method: 'POST',
       headers: { apikey: Cypress.env('serviceKey') },
       // This one works with URL parameters, not with a body
-      url: `/auth/v1/token?grant_type=password&username=${userPayload.email}&password=${userPayload.password}`,
+      url: '/auth/v1/token',
+      qs: {
+        grant_type: 'password',
+        username: userPayload.email,
+        password: userPayload.password,
+      },
     }).then((response) => {
       expect(response.status).to.eq(200);
       expect(JSON.stringify(response.body)).to.have.string('access_token');
@@ -120,13 +125,7 @@ it('can create a bucket and upload a file (storage)', () => {
         expect(response.status).to.eq(200);
         expect(JSON.stringify(response.body)).to.have.string(`${bucketPayload.id}/${filePayload.name}`);
       });
-    });
 
-    cy.fixture('files').then((files) => {
-      const filePayload = {
-        name: `${files.newFile.name}${random}`,
-        content: `${random}_${files.newFile.content}`,
-      };
       cy.request({
         method: 'GET',
         headers: {
