@@ -545,6 +545,8 @@ Compile all warnings into a single message.
 {{- define "supabase.validateValues" -}}
 {{- $messages := list -}}
 {{- $messages := append $messages (include "supabase.validateValues.postgresql" .) -}}
+{{- $messages := append $messages (include "supabase.validateValues.secret" .) -}}
+{{- $messages := append $messages (include "supabase.validateValues.services" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
@@ -572,7 +574,15 @@ supabase: Nopostgresql
 {{/* Validate values of Supabase - postgresql */}}
 {{- define "supabase.validateValues.secret" -}}
 {{- if and (or .Values.jwt.anonKey .Values.jwt.serviceKey) (not .Values.jwt.secret)  -}}
-supabase:  JWT Secret
+supabase: JWT Secret
     You configured the JWT keys but did not set a secret. Please set a secret (--set jwt.secret)
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of Supabase - postgresql */}}
+{{- define "supabase.validateValues.services" -}}
+{{- if not (or .Values.auth.enabled .Values.meta.enabled .Values.realtime.enabled .Values.rest.enabled .Values.storage.enabled .Values.studio.enabled) -}}
+supabase: Services
+    You did not deploy any of the Supabase services. Please enable at least one service (auth, meta, realtime, rest, storage, studio)
 {{- end -}}
 {{- end -}}

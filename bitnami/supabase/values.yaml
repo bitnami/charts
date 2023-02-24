@@ -228,7 +228,8 @@ jwt:
 ## @param publicURL Supabase API public URL
 ##
 publicURL: ""
-## @param dbSSL Supabase API database connection mode for SSL. Applied to all components
+## @param dbSSL Supabase API database connection mode for SSL. Applied to all components. Allowed values: verify-ca, verify-full, disable, allow, prefer, require
+## https://www.postgresql.org/docs/current/libpq-ssl.html
 ##
 dbSSL: "disable"
 
@@ -281,7 +282,7 @@ auth:
   extraConfigExistingConfigmap: ""
 
   ## Bitnami Gotrue image
-  ## ref: https://hub.docker.com/r/bitnami/supabase/tags/
+  ## ref: https://hub.docker.com/r/bitnami/gotrue/tags/
   ## @param auth.image.registry Gotrue image registry
   ## @param auth.image.repository Gotrue image repository
   ## @param auth.image.tag Gotrue image tag (immutable tags are recommended)
@@ -605,7 +606,7 @@ meta:
   extraConfigExistingConfigmap: ""
 
   ## Bitnami Supabase Postgres Meta image
-  ## ref: https://hub.docker.com/r/bitnami/supabase/tags/
+  ## ref: https://hub.docker.com/r/bitnami/supabase-postgres-meta/tags/
   ## @param meta.image.registry Supabase Postgres Meta image registry
   ## @param meta.image.repository Supabase Postgres Meta image repository
   ## @param meta.image.tag Supabase Postgres Meta image tag (immutable tags are recommended)
@@ -925,7 +926,7 @@ realtime:
     DB_HOST: {{ include "supabase.database.host" . | quote }}
     DB_PORT: {{ include "supabase.database.port" . | quote }}
     DB_NAME: {{ include "supabase.database.name" . | quote }}
-    DB_SSL: "allow"
+    DB_SSL: {{ .Values.dbSSL | quote }}
     PORT: {{ .Values.realtime.containerPorts.http | quote }}
     FLY_ALLOC_ID: "realtime"
     FLY_APP_NAME: "realtime"
@@ -948,7 +949,7 @@ realtime:
   extraConfigExistingConfigmap: ""
 
   ## Bitnami Realtime image
-  ## ref: https://hub.docker.com/r/bitnami/supabase/tags/
+  ## ref: https://hub.docker.com/r/bitnami/supabase-realtime/tags/
   ## @param realtime.image.registry Realtime image registry
   ## @param realtime.image.repository Realtime image repository
   ## @param realtime.image.tag Realtime image tag (immutable tags are recommended)
@@ -1270,7 +1271,7 @@ rest:
   extraConfigExistingConfigmap: ""
 
   ## Bitnami PostgREST image
-  ## ref: https://hub.docker.com/r/bitnami/supabase/tags/
+  ## ref: https://hub.docker.com/r/bitnami/postgrest/tags/
   ## @param rest.image.registry PostgREST image registry
   ## @param rest.image.repository PostgREST image repository
   ## @param rest.image.tag PostgREST image tag (immutable tags are recommended)
@@ -1597,7 +1598,7 @@ storage:
   extraConfigExistingConfigmap: ""
 
   ## Bitnami Storage image
-  ## ref: https://hub.docker.com/r/bitnami/supabase/tags/
+  ## ref: https://hub.docker.com/r/bitnami/supabase-storage/tags/
   ## @param storage.image.registry Storage image registry
   ## @param storage.image.repository Storage image repository
   ## @param storage.image.tag Storage image tag (immutable tags are recommended)
@@ -1971,7 +1972,7 @@ studio:
   extraConfigExistingConfigmap: ""
 
   ## Bitnami Studio image
-  ## ref: https://hub.docker.com/r/bitnami/supabase/tags/
+  ## ref: https://hub.docker.com/r/bitnami/supabase-studio/tags/
   ## @param studio.image.registry Studio image registry
   ## @param studio.image.repository Studio image repository
   ## @param studio.image.tag Studio image tag (immutable tags are recommended)
@@ -2414,7 +2415,7 @@ volumePermissions:
     runAsUser: 0
 
 ## Bitnami PostgreSQL image
-## ref: https://hub.docker.com/r/bitnami/bitnami-shell/tags/
+## ref: https://hub.docker.com/r/bitnami/supabase-postgres/tags/
 ## @param psqlImage.registry PostgreSQL client image registry
 ## @param psqlImage.repository PostgreSQL client image repository
 ## @param psqlImage.digest PostgreSQL client image digest (overrides image tag)
@@ -2578,7 +2579,7 @@ kong:
 postgresql:
   enabled: true
   ## Bitnami PostgreSQL image version
-  ## ref: https://hub.docker.com/r/bitnami/postgresql/tags/
+  ## ref: https://hub.docker.com/r/bitnami/supabase-postgres/tags/
   ## @param postgresql.image.registry PostgreSQL image registry
   ## @param postgresql.image.repository PostgreSQL image repository
   ## @param postgresql.image.tag PostgreSQL image tag (immutable tags are recommended)
@@ -2632,9 +2633,9 @@ postgresql:
 ## All of these values are only used when postgresql.enabled is set to false
 ## @param externalDatabase.host Database host
 ## @param externalDatabase.port Database port number
-## @param externalDatabase.user Non-root username for JupyterHub
-## @param externalDatabase.password Password for the non-root username for JupyterHub
-## @param externalDatabase.database JupyterHub database name
+## @param externalDatabase.user Non-root username for PostgreSQL
+## @param externalDatabase.password Password for the non-root username for PostgreSQL
+## @param externalDatabase.database PostgreSQL database name
 ## @param externalDatabase.existingSecret Name of an existing secret resource containing the database credentials
 ## @param externalDatabase.existingSecretPasswordKey Name of an existing secret key containing the database credentials
 ##

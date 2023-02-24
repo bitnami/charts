@@ -19,8 +19,7 @@ $ helm install my-release my-repo/supabase
 
 Bitnami charts for Helm are carefully engineered, actively maintained and are the quickest and easiest way to deploy containers on a Kubernetes cluster that are ready to handle production workloads.
 
-This chart bootstraps an [Supabase](https://www.supabase.com/) Deployment in a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
-
+This chart bootstraps a [Supabase](https://www.supabase.com/) deployment in a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
 
 [Learn more about the default configuration of the chart](https://docs.bitnami.com/kubernetes/infrastructure/supabase/get-started/).
@@ -772,7 +771,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.database`                   | JupyterHub database name                                                                                   | `postgres`                                                                                                                   |
 | `externalDatabase.existingSecret`             | Name of an existing secret resource containing the database credentials                                    | `""`                                                                                                                         |
 | `externalDatabase.existingSecretPasswordKey`  | Name of an existing secret key containing the database credentials                                         | `db-password`                                                                                                                |
-
 
 The above parameters map to the env variables defined in [bitnami/supabase](https://github.com/bitnami/containers/tree/main/bitnami/supabase). For more information please refer to the [bitnami/supabase](https://github.com/bitnami/containers/tree/main/bitnami/supabase) image documentation.
 

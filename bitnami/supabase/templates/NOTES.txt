@@ -41,7 +41,7 @@ Access the pod you want to debug by executing
 
 {{- else }}
 
-Supabase Studio can be accessed through the following DNS name from within your cluster:
+Supabase API can be accessed through the following DNS name from within your cluster:
 
     {{ include "supabase.kong.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }} (port {{ .Values.kong.service.ports.proxyHttp }})
 
