@@ -683,7 +683,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `studio.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
 | `studio.ingress.enabled`                  | Enable ingress record generation for Supabase                                                                                    | `false`                  |
 | `studio.ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
-| `studio.ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
 | `studio.ingress.hostname`                 | Default host for the ingress record                                                                                              | `supabase-studio.local`  |
 | `studio.ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
 | `studio.ingress.path`                     | Default path for the ingress record                                                                                              | `/`                      |
