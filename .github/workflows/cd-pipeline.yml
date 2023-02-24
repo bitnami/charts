@@ -95,6 +95,7 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/spark/**'
       - 'bitnami/spring-cloud-dataflow/**'
       - 'bitnami/suitecrm/**'
+      - 'bitnami/supabase/**'
       - 'bitnami/tensorflow-resnet/**'
       - 'bitnami/thanos/**'
       - 'bitnami/tomcat/**'
