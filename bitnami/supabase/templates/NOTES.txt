@@ -133,6 +133,8 @@ EXTRA: If you want to access Supabase Studio:
 WARNING: Some of the Supabase components are deactivated. This may cause issues in some of the Studio features.
 {{- end }}
 
+IMPORTANT: When accessing Studio via browser, it will try to access the API via {{ include "supabase.api.publicURL" . }}. Make sure that this address is accessible or update the release setting the `publicURL` value.
+
 {{- end }}
 
 {{- end }}
