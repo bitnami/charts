@@ -89,23 +89,43 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Mastodon common parameters
 
-| Name                           | Description                                                                    | Value               |
-| ------------------------------ | ------------------------------------------------------------------------------ | ------------------- |
-| `adminUser`                    | Mastodon admin username                                                        | `user`              |
-| `adminEmail`                   | Mastodon admin email                                                           | `user@changeme.com` |
-| `adminPassword`                | Mastodon admin password                                                        | `""`                |
-| `defaultConfig`                | Default configuration for Mastodon in the form of environment variables        | `""`                |
-| `defaultSecretConfig`          | Default secret configuration for Mastodon in the form of environment variables | `""`                |
-| `extraConfig`                  | Extra configuration for Mastodon in the form of environment variables          | `{}`                |
-| `extraSecretConfig`            | Extra secret configuration for Mastodon in the form of environment variables   | `{}`                |
-| `existingConfigmap`            | The name of an existing ConfigMap with your default configuration for Mastodon | `""`                |
-| `existingSecret`               | The name of an existing Secret with your default configuration for Mastodon    | `""`                |
-| `extraConfigExistingConfigmap` | The name of an existing ConfigMap with your extra configuration for Mastodon   | `""`                |
-| `extraConfigExistingSecret`    | The name of an existing Secret with your extra configuration for Mastodon      | `""`                |
-| `enableSearches`               | Enable the search engine (uses Elasticsearch under the hood)                   | `true`              |
-| `enableS3`                     | Enable the S3 storage engine                                                   | `true`              |
-| `webDomain`                    | Web domain for Mastodon                                                        | `""`                |
-| `s3AliasHost`                  | S3 alias host for Mastodon (will use http://webDomain/bucket if not set)       | `""`                |
+| Name                             | Description                                                                                                                  | Value                                |
+| -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | ------------------------------------ |
+| `environment`                    | Mastodon Rails and Node environment. Should be one of 'production',                                                          | `production`                         |
+| `adminUser`                      | Mastodon admin username                                                                                                      | `user`                               |
+| `adminEmail`                     | Mastodon admin email                                                                                                         | `user@changeme.com`                  |
+| `adminPassword`                  | Mastodon admin password                                                                                                      | `""`                                 |
+| `defaultConfig`                  | Default configuration for Mastodon in the form of environment variables                                                      | `""`                                 |
+| `defaultSecretConfig`            | Default secret configuration for Mastodon in the form of environment variables                                               | `""`                                 |
+| `extraConfig`                    | Extra configuration for Mastodon in the form of environment variables                                                        | `{}`                                 |
+| `extraSecretConfig`              | Extra secret configuration for Mastodon in the form of environment variables                                                 | `{}`                                 |
+| `existingConfigmap`              | The name of an existing ConfigMap with your default configuration for Mastodon                                               | `""`                                 |
+| `existingSecret`                 | The name of an existing Secret with your default configuration for Mastodon                                                  | `""`                                 |
+| `extraConfigExistingConfigmap`   | The name of an existing ConfigMap with your extra configuration for Mastodon                                                 | `""`                                 |
+| `extraConfigExistingSecret`      | The name of an existing Secret with your extra configuration for Mastodon                                                    | `""`                                 |
+| `enableSearches`                 | Enable the search engine (uses Elasticsearch under the hood)                                                                 | `true`                               |
+| `enableS3`                       | Enable the S3 storage engine                                                                                                 | `true`                               |
+| `local_https`                    | Set this instance to advertise itself to the fediverse using HTTPS rather than HTTP URLs. This should almost always be true. | `true`                               |
+| `localDomain`                    | The domain name used by accounts on this instance. Unless you're using                                                       | `""`                                 |
+| `webDomain`                      | Optional alternate domain used when you want to host Mastodon at a                                                           | `""`                                 |
+| `defaultLocale`                  | Set the default locale for this instance                                                                                     | `en`                                 |
+| `s3AliasHost`                    | S3 alias host for Mastodon (will use http://webDomain/bucket if not set)                                                     | `""`                                 |
+| `smtp.server`                    | SMTP server                                                                                                                  | `""`                                 |
+| `smtp.port`                      | SMTP port                                                                                                                    | `587`                                |
+| `smtp.from_address`              | From address for sent emails                                                                                                 | `""`                                 |
+| `smtp.domain`                    | SMTP domain                                                                                                                  | `""`                                 |
+| `smtp.reply_to`                  | Reply-To value for sent emails                                                                                               | `""`                                 |
+| `smtp.delivery_method`           | SMTP delivery method                                                                                                         | `smtp`                               |
+| `smtp.ca_file`                   | SMTP CA file location                                                                                                        | `/etc/ssl/certs/ca-certificates.crt` |
+| `smtp.openssl_verify_mode`       | OpenSSL verify mode                                                                                                          | `none`                               |
+| `smtp.enable_starttls_auto`      | Automatically enable StartTLS                                                                                                | `true`                               |
+| `smtp.tls`                       | SMTP TLS                                                                                                                     | `false`                              |
+| `smtp.auth_method`               | SMTP auth method (set to "none" to disable SMTP auth)                                                                        | `plain`                              |
+| `smtp.login`                     | SMTP auth username                                                                                                           | `""`                                 |
+| `smtp.password`                  | SMTP auth password                                                                                                           | `""`                                 |
+| `smtp.existingSecret`            | Name of an existing secret resource containing the SMTP                                                                      | `""`                                 |
+| `smtp.existingSecretLoginKey`    | Name of the key for the SMTP login credential                                                                                | `""`                                 |
+| `smtp.existingSecretPasswordKey` | Name of the key for the SMTP password credential                                                                             | `""`                                 |
 
 ### Mastodon Web Parameters
 

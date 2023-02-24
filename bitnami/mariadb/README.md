@@ -64,20 +64,21 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common parameters
 
-| Name                     | Description                                                                             | Value           |
-| ------------------------ | --------------------------------------------------------------------------------------- | --------------- |
-| `kubeVersion`            | Force target Kubernetes version (using Helm capabilities if not set)                    | `""`            |
-| `nameOverride`           | String to partially override mariadb.fullname                                           | `""`            |
-| `fullnameOverride`       | String to fully override mariadb.fullname                                               | `""`            |
-| `clusterDomain`          | Default Kubernetes cluster domain                                                       | `cluster.local` |
-| `commonAnnotations`      | Common annotations to add to all MariaDB resources (sub-charts are not considered)      | `{}`            |
-| `commonLabels`           | Common labels to add to all MariaDB resources (sub-charts are not considered)           | `{}`            |
-| `schedulerName`          | Name of the scheduler (other than default) to dispatch pods                             | `""`            |
-| `runtimeClassName`       | Name of the Runtime Class for all MariaDB pods                                          | `""`            |
-| `extraDeploy`            | Array of extra objects to deploy with the release (evaluated as a template)             | `[]`            |
-| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
-| `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`     |
-| `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]`  |
+| Name                      | Description                                                                             | Value           |
+| ------------------------- | --------------------------------------------------------------------------------------- | --------------- |
+| `kubeVersion`             | Force target Kubernetes version (using Helm capabilities if not set)                    | `""`            |
+| `nameOverride`            | String to partially override mariadb.fullname                                           | `""`            |
+| `fullnameOverride`        | String to fully override mariadb.fullname                                               | `""`            |
+| `clusterDomain`           | Default Kubernetes cluster domain                                                       | `cluster.local` |
+| `commonAnnotations`       | Common annotations to add to all MariaDB resources (sub-charts are not considered)      | `{}`            |
+| `commonLabels`            | Common labels to add to all MariaDB resources (sub-charts are not considered)           | `{}`            |
+| `schedulerName`           | Name of the scheduler (other than default) to dispatch pods                             | `""`            |
+| `runtimeClassName`        | Name of the Runtime Class for all MariaDB pods                                          | `""`            |
+| `extraDeploy`             | Array of extra objects to deploy with the release (evaluated as a template)             | `[]`            |
+| `diagnosticMode.enabled`  | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
+| `diagnosticMode.command`  | Command to override all containers in the deployment                                    | `["sleep"]`     |
+| `diagnosticMode.args`     | Args to override all containers in the deployment                                       | `["infinity"]`  |
+| `serviceBindings.enabled` | Create secret for service binding (Experimental)                                        | `false`         |
 
 ### MariaDB common parameters
 
@@ -376,6 +377,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.ingressRules.secondaryAccessOnlyFrom.customRules`       | Custom network policy for the secondary nodes.                                                                                         | `{}`    |
 | `networkPolicy.egressRules.denyConnectionsToExternal`                  | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).                                         | `false` |
 | `networkPolicy.egressRules.customRules`                                | Custom network policy rule                                                                                                             | `{}`    |
+
 
 The above parameters map to the env variables defined in [bitnami/mariadb](https://github.com/bitnami/containers/tree/main/bitnami/mariadb). For more information please refer to the [bitnami/mariadb](https://github.com/bitnami/containers/tree/main/bitnami/mariadb) image documentation.
 

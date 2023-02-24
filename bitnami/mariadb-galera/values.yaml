@@ -832,6 +832,11 @@ metrics:
     ##    cpu: 0.5
     ##    memory: 256Mi
     requests: {}
+  ## MySQL Prometheus exporter's Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param metrics.containerSecurityContext.enabled Enabled exporter's container Security Context
+  containerSecurityContext:
+    enabled: false
   ## MySQL Prometheus exporter service parameters
   ## @param metrics.service.type Prometheus exporter service type
   ## @param metrics.service.port Prometheus exporter service port

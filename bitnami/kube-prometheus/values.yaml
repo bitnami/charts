@@ -645,7 +645,7 @@ prometheus:
     relabelings: []
 
   ## Configure the ingress resource that allows you to access the
-  ## Alertmanager installation. Set up the URL
+  ## Prometheus installation. Set up the URL
   ## ref: https://kubernetes.io/docs/user-guide/ingress/
   ##
   ingress:
