@@ -19,10 +19,10 @@ body:
   - type: dropdown
     attributes:
       label: What architecture are you using?
-      description: Choose the architecture of the host where the containers are executed (AMD by default)
+      description: Choose the architecture of the host where the containers are executed
       options:
-        - AMD
-        - ARM
+        - amd64
+        - arm64
   - type: textarea
     attributes:
       label: What steps will reproduce the bug?
