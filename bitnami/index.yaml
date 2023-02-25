@@ -101694,6 +101694,43 @@ entries:
       category: Infrastructure
       licenses: Apache-2.0
     apiVersion: v2
+    appVersion: 7.3.2
+    created: "2023-02-25T16:49:07.514765413Z"
+    dependencies:
+    - condition: kafka.enabled
+      name: kafka
+      repository: https://charts.bitnami.com/bitnami
+      version: 20.x.x
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: Confluent Schema Registry provides a RESTful interface by adding
+      a serving layer for your metadata on top of Kafka. It expands Kafka enabling
+      support for Apache Avro, JSON, and Protobuf schemas.
+    digest: b929c378f885ab56ea0c0000983017f0a8f0cd264305ac5fa7b809e78aee62b5
+    home: https://confluent.io/
+    icon: https://bitnami.com/assets/stacks/schema-registry/img/schema-registry-stack-220x234.png
+    keywords:
+    - schema-registry
+    - confluent
+    - kafka
+    - zookeeper
+    - streaming
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: schema-registry
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/schema-registry
+    urls:
+    - https://charts.bitnami.com/bitnami/schema-registry-8.0.7.tgz
+    version: 8.0.7
+  - annotations:
+      category: Infrastructure
+      licenses: Apache-2.0
+    apiVersion: v2
     appVersion: 7.3.1
     created: "2023-02-18T00:46:36.672479606Z"
     dependencies:
@@ -122734,4 +122771,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-9.2.1.tgz
     version: 9.2.1
-generated: "2023-02-24T22:28:49.365009479Z"
+generated: "2023-02-25T16:49:07.501962896Z"
