@@ -94,7 +94,7 @@ data:
         pod_id=0
         while :
         do 
-            VOTERS="${VOTERS}$node_id@{{  include "common.names.fullname" . }}-$pod_id.{{ include "common.names.fullname" . }}-headless.{{ $releaseNamespace }}.svc.cluster.local:{{ .Values.kraft.controllerPort }}"
+            VOTERS="${VOTERS}$node_id@{{  include "common.names.fullname" . }}-$pod_id.{{ include "common.names.fullname" . }}-headless.{{ $releaseNamespace }}.svc.cluster.local:{{ .Values.containerPorts.controller }}"
             node_id=$(( $node_id + 1 ))
             pod_id=$(( $pod_id + 1 ))
             if [[ $pod_id -ge {{ .Values.replicaCount }} ]]; then

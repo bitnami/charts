@@ -174,6 +174,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `containerPorts.client`                             | Kafka client container port                                                                                                                                                                   | `9092`          |
 | `containerPorts.internal`                           | Kafka inter-broker container port                                                                                                                                                             | `9093`          |
 | `containerPorts.external`                           | Kafka external container port                                                                                                                                                                 | `9094`          |
+| `containerPorts.controller`                         | Kafka Controller listener port. It is used if "kraft.enabled: true"                                                                                                                           | `9095`          |
 | `livenessProbe.enabled`                             | Enable livenessProbe on Kafka containers                                                                                                                                                      | `true`          |
 | `livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                                                                                       | `10`            |
 | `livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                                                                                              | `10`            |
@@ -479,14 +480,13 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Kraft chart parameters
 
-| Name                            | Description                                                                             | Value               |
-| ------------------------------- | --------------------------------------------------------------------------------------- | ------------------- |
-| `kraft.enabled`                 | Switch to enable or disable the Kraft mode for Kafka                                    | `false`             |
-| `kraft.controllerPort`          | Kafka Controller listener port                                                          | `9095`              |
-| `kraft.processRoles`            | Roles of your Kafka nodes. Nodes can have 'broker', 'controller' roles or both of them. | `broker,controller` |
-| `kraft.controllerListenerNames` | Controller listener names                                                               | `CONTROLLER`        |
-| `kraft.clusterId`               | Kafka ClusterID. You must set it if your cluster contains more than one node.           | `""`                |
-| `kraft.controllerQuorumVoters`  | Quorum voters of Kafka Kraft cluster. Use it for nodes with 'broker' role only.         | `""`                |
+| Name                            | Description                                                                             | Value                    |
+| ------------------------------- | --------------------------------------------------------------------------------------- | ------------------------ |
+| `kraft.enabled`                 | Switch to enable or disable the Kraft mode for Kafka                                    | `false`                  |
+| `kraft.processRoles`            | Roles of your Kafka nodes. Nodes can have 'broker', 'controller' roles or both of them. | `broker,controller`      |
+| `kraft.controllerListenerNames` | Controller listener names                                                               | `CONTROLLER`             |
+| `kraft.clusterId`               | Kafka ClusterID. You must set it if your cluster contains more than one node.           | `kafka_cluster_id_test1` |
+| `kraft.controllerQuorumVoters`  | Quorum voters of Kafka Kraft cluster. Use it for nodes with 'broker' role only.         | `""`                     |
 
 
 ### ZooKeeper chart parameters
@@ -504,7 +504,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `zookeeper.persistence.storageClass`    | Persistent Volume storage class                                                                                                                                         | `""`                |
 | `zookeeper.persistence.accessModes`     | Persistent Volume access modes                                                                                                                                          | `["ReadWriteOnce"]` |
 | `zookeeper.persistence.size`            | Persistent Volume size                                                                                                                                                  | `8Gi`               |
-| `externalZookeeper.servers`             | List of external zookeeper servers to use. Typically used in combination with 'zookeeperChrootPath'. Must be false if you use Kraft mode.                               | `[]`                |
+| `externalZookeeper.servers`             | List of external zookeeper servers to use. Typically used in combination with 'zookeeperChrootPath'. Must be empty if you use Kraft mode.                               | `[]`                |
 
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
