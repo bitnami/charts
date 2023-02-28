@@ -2,7 +2,7 @@ annotations:
   category: Database
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 7.0.8
+appVersion: 7.0.9
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -22,4 +22,4 @@ maintainers:
 name: redis
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/redis
-version: 17.8.0
+version: 17.8.1
