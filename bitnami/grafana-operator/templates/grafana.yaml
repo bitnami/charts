@@ -36,6 +36,9 @@ spec:
         - {{ . | quote }}
       {{- end }}
     size: {{ .Values.grafana.persistence.size }}
+    {{- if .Values.grafana.persistence.existingVolume }}
+    volumeName: {{ .Values.grafana.persistence.existingVolume }}
+    {{- end }}
     {{- if .Values.grafana.persistence.storageClass }}
     class: {{ .Values.grafana.persistence.storageClass }}
     {{- end }}
