@@ -35,11 +35,9 @@ namespaceOverride: ""
 ## @param commonLabels Labels to add to all deployed objects
 ##
 commonLabels: {}
-## @param serviceLinks Boolean to disable kubernetes service links
+## @param serviceLinks.disabled Disable kubernetes service links (enabled by default in kubernetes)
 ##
 serviceLinks:
-  ## @param serviceLinks.disabled Disable kubernetes service links (enabled by default in kubernetes)
-  ##
   disabled: false
 ## @param commonAnnotations Annotations to add to all deployed objects
 ##
