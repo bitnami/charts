@@ -19,9 +19,11 @@ spec:
   policyTypes:
     - Ingress
   ingress:
-    # Allow prometheus scrapes for metrics
+    # Allow prometheus scrapes for metrics and webhook traffic
     - ports:
         - port: {{ .Values.controller.containerPorts.metrics }}
+          protocol: TCP
+        - port: 9443
           protocol: TCP
       {{- if .Values.networkPolicy.ingressNSMatchLabels }}
       from:
