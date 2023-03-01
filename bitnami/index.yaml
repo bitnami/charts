@@ -109135,6 +109135,45 @@ entries:
       licenses: Apache-2.0
     apiVersion: v2
     appVersion: 0.23.1
+    created: "2023-03-01T09:55:18.241978898Z"
+    dependencies:
+    - condition: postgresql.enabled
+      name: postgresql
+      repository: https://charts.bitnami.com/bitnami
+      version: 12.x.x
+    - condition: kong.enabled
+      name: kong
+      repository: https://charts.bitnami.com/bitnami
+      version: 9.x.x
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: Supabase is an open source Firebase alternative. Provides all the
+      necessary backend features to build your application in a scalable way. Uses
+      PostgreSQL as datastore.
+    digest: 4d217c4c6a1613d341ec5dfeff3eaff8243f7f647d2f1c6f67dfa61241f71eb1
+    home: https://www.supabase.com/
+    icon: https://bitnami.com/assets/stacks/supabase/img/supabase-stack-220x234.png
+    keywords:
+    - development
+    - dashboards
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: supabase
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/supabase
+    - https://github.com/supabaseorg/supabase/
+    urls:
+    - https://charts.bitnami.com/bitnami/supabase-0.1.2.tgz
+    version: 0.1.2
+  - annotations:
+      category: CMS
+      licenses: Apache-2.0
+    apiVersion: v2
+    appVersion: 0.23.1
     created: "2023-02-24T20:14:53.669293544Z"
     dependencies:
     - condition: postgresql.enabled
@@ -123163,4 +123202,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-9.2.1.tgz
     version: 9.2.1
-generated: "2023-03-01T09:53:07.007336158Z"
+generated: "2023-03-01T09:55:18.206097041Z"
