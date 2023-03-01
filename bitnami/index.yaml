@@ -33398,6 +33398,37 @@ entries:
       licenses: Apache-2.0
     apiVersion: v2
     appVersion: 4.9.0
+    created: "2023-03-01T10:00:56.89968353Z"
+    dependencies:
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: Grafana Operator is a Kubernetes operator that enables the installation
+      and management of Grafana instances, dashboards and plugins.
+    digest: ab6996cb9dffd941af723aa0c5afac1bdd0a59970e02c8b4e80a18d56cefaea5
+    home: https://github.com/grafana-operator/grafana-operator
+    icon: https://bitnami.com/assets/stacks/grafana/img/grafana-stack-220x234.png
+    keywords:
+    - grafana
+    - operator
+    - monitoring
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: grafana-operator
+    sources:
+    - https://github.com/grafana-operator/grafana-operator
+    - https://github.com/bitnami/containers/tree/main/bitnami/grafana-operator
+    urls:
+    - https://charts.bitnami.com/bitnami/grafana-operator-2.7.22.tgz
+    version: 2.7.22
+  - annotations:
+      category: Analytics
+      licenses: Apache-2.0
+    apiVersion: v2
+    appVersion: 4.9.0
     created: "2023-03-01T07:02:39.309942007Z"
     dependencies:
     - name: common
@@ -123370,4 +123401,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-9.2.1.tgz
     version: 9.2.1
-generated: "2023-03-01T10:00:09.647050774Z"
+generated: "2023-03-01T10:00:56.894019716Z"
