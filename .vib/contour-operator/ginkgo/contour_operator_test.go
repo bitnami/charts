@@ -32,55 +32,48 @@ var _ = Describe("Contour Operator:", func() {
 	})
 
 	Context("When both operator and testing resources are deployed", func() {
-		var ingressName, ingressHost, contourName string
+		var ingressHost string
 		var envoySvc *v1.Service
 		var hasIP, isReady bool
 		var err error
 
-		BeforeEach(func() {
-			contourName = "contour-crd-vib"
-			ingressName = "contour-ing-vib"
+		const contourName = "contour-crd-vib"
+		const ingressName = "contour-ing-vib"
 
-			// If the Contour obj has already been created
-			// (for a previous test) reuse it. If not, do it here.
-			isReady, _ = isContourReady(ctx, dynamicClient, contourName)
-			if !isReady {
+		BeforeAll(func() {
+			// The tests evaluate the Operator by deploying both Contour and Ingress resources.
+			// Their creation takes some time, so they will be deployed once and reused across the different checks.
+			createContourResourceOrDie(ctx, dynamicClient, contourName)
 
-				// A countour resource will deploy the related contour and envoy pods
-				// and the envoy LB service managed by the operator
-				createContourResourceOrDie(ctx, dynamicClient, contourName)
+			isReady, err = retry("isContourReady", 10, 30*time.Second, func() (bool, error) {
+				return isContourReady(ctx, dynamicClient, contourName)
+			})
+			Expect(isReady).To(BeTrue())
 
-				isReady, err = retry("isContourReady", 10, 30*time.Second, func() (bool, error) {
-					return isContourReady(ctx, dynamicClient, contourName)
-				})
-				Expect(isReady).To(BeTrue())
-			}
-			hasIP, err = retry("isServiceLBReady", 10, 30*time.Second, func() (bool, error) {
-				return isServiceLBReady(ctx, coreclient, "envoy")
+			hasIP, err = retry("isServiceReady", 10, 30*time.Second, func() (bool, error) {
+				return isServiceReady(ctx, coreclient, "envoy")
 			})
 			if err != nil {
-				panic(fmt.Sprintf("There was an error checking whether the testing service had an IP assigned: %q", err))
+				panic(fmt.Sprintf("There was an error checking whether the testing Envoy service had an IP assigned: %q", err))
 			}
 			Expect(hasIP).To(BeTrue())
 
 			envoySvc, err = coreclient.Services(*namespace).Get(ctx, "envoy", metav1.GetOptions{})
 			if err != nil {
-				panic(fmt.Sprintf("There was an error retrieving the envoy service created by contour: %q", err))
+				panic(fmt.Sprintf("There was an error retrieving the Envoy service created by contour: %q", err))
 			}
 
+			// AWS based clusters will use a host instead of an IP for the svc address
 			ingressHost = returnValidHost(envoySvc.Status.LoadBalancer.Ingress[0])
-			isReady, _ = isIngressLBReady(ctx, netclient, ingressName)
-			if !isReady {
-				createIngressOrDie(ctx, netclient, ingressName, ingressHost)
-				// Once created, the operator has to assign an IP to the managed ingress
-				hasIP, err = retry("isIngressLBReady", 10, 30*time.Second, func() (bool, error) {
-					return isIngressLBReady(ctx, netclient, ingressName)
-				})
-				if err != nil {
-					panic(fmt.Sprintf("There was an error checking whether the testing ingress had a host assigned: %q", err))
-				}
-				Expect(hasIP).To(BeTrue())
+			createIngressOrDie(ctx, netclient, ingressName, ingressHost)
+			// Once created, the operator has to assign an IP to the managed ingress
+			hasIP, err = retry("isIngressReady", 10, 30*time.Second, func() (bool, error) {
+				return isIngressReady(ctx, netclient, ingressName)
+			})
+			if err != nil {
+				panic(fmt.Sprintf("There was an error checking whether the testing ingress had a host assigned: %q", err))
 			}
+			Expect(hasIP).To(BeTrue())
 		})
 
 		It("the operator manages the contour resource", func() {
@@ -96,7 +89,8 @@ var _ = Describe("Contour Operator:", func() {
 			}
 			Expect(returnValidHost(testingIngress.Status.LoadBalancer.Ingress[0])).To(Equal(returnValidHost(envoySvc.Status.LoadBalancer.Ingress[0])))
 
-			// Given the flakiness of the Contour object, we would reuse the same one for the whole test suite and delete it at the end
+		})
+		AfterAll(func() {
 			// No need to panic here if failed, the cluster is expected to clean up with the undeployment
 			dynamicClient.Resource(contourType).Namespace(*namespace).Delete(ctx, contourName, metav1.DeleteOptions{})
 			netclient.Ingresses(*namespace).Delete(ctx, ingressName, metav1.DeleteOptions{})

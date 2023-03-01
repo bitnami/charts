@@ -156,7 +156,7 @@ func isContourReady(ctx context.Context, dC dynamic.Interface, name string) (boo
 	mostRecentConditionUpdate := conditions[len(conditions)-1]
 	conditionToMap, conversionOk := mostRecentConditionUpdate.(map[string]interface{})
 	if !conversionOk {
-		return false, fmt.Errorf("Error converting last Certificate condition to type map[string]interface{};  got %T", conditionToMap)
+		return false, fmt.Errorf("Error converting last Contour condition to type map[string]interface{};  got %T", conditionToMap)
 	}
 
 	return conditionToMap["type"] == "Available" && conditionToMap["status"] == "True", nil
@@ -217,7 +217,7 @@ func (r interruptableReader) Read(p []byte) (int, error) {
 	return n, r.ctx.Err()
 }
 
-func isServiceLBReady(ctx context.Context, c cv1.CoreV1Interface, resourceName string) (bool, error) {
+func isServiceReady(ctx context.Context, c cv1.CoreV1Interface, resourceName string) (bool, error) {
 	var err error
 
 	netResource, err := c.Services(*namespace).Get(ctx, resourceName, metav1.GetOptions{})
@@ -229,7 +229,7 @@ func isServiceLBReady(ctx context.Context, c cv1.CoreV1Interface, resourceName s
 	}
 }
 
-func isIngressLBReady(ctx context.Context, c netcv1.NetworkingV1Interface, resourceName string) (bool, error) {
+func isIngressReady(ctx context.Context, c netcv1.NetworkingV1Interface, resourceName string) (bool, error) {
 	var err error
 
 	netResource, err := c.Ingresses(*namespace).Get(ctx, resourceName, metav1.GetOptions{})
