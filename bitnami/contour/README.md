@@ -66,7 +66,6 @@ helm uninstall my-release
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
 | Name                     | Description                                                                             | Value   |
@@ -82,7 +81,6 @@ helm uninstall my-release
 | `diagnosticMode.command` | Command to override all containers in the deployment                                    | `[]`    |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `[]`    |
 
-
 ### Contour parameters
 
 | Name                                                          | Description                                                                                                                        | Value                 |
@@ -92,7 +90,7 @@ helm uninstall my-release
 | `contour.enabled`                                             | Contour Deployment creation.                                                                                                       | `true`                |
 | `contour.image.registry`                                      | Contour image registry                                                                                                             | `docker.io`           |
 | `contour.image.repository`                                    | Contour image name                                                                                                                 | `bitnami/contour`     |
-| `contour.image.tag`                                           | Contour image tag                                                                                                                  | `1.24.1-debian-11-r0` |
+| `contour.image.tag`                                           | Contour image tag                                                                                                                  | `1.24.1-debian-11-r4` |
 | `contour.image.digest`                                        | Contour image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                            | `""`                  |
 | `contour.image.pullPolicy`                                    | Contour Image pull policy                                                                                                          | `IfNotPresent`        |
 | `contour.image.pullSecrets`                                   | Contour Image pull secrets                                                                                                         | `[]`                  |
@@ -189,7 +187,6 @@ helm uninstall my-release
 | `contour.kubernetesDebug`                                     | Contour kubernetes debug log level, Default 0, minimum 0, maximum 9.                                                               | `0`                   |
 | `contour.rootNamespaces`                                      | Restrict Contour to searching these namespaces for root ingress routes.                                                            | `""`                  |
 
-
 ### Envoy parameters
 
 | Name                                                | Description                                                                                                           | Value                 |
@@ -197,7 +194,7 @@ helm uninstall my-release
 | `envoy.enabled`                                     | Envoy Proxy creation                                                                                                  | `true`                |
 | `envoy.image.registry`                              | Envoy Proxy image registry                                                                                            | `docker.io`           |
 | `envoy.image.repository`                            | Envoy Proxy image repository                                                                                          | `bitnami/envoy`       |
-| `envoy.image.tag`                                   | Envoy Proxy image tag (immutable tags are recommended)                                                                | `1.24.2-debian-11-r2` |
+| `envoy.image.tag`                                   | Envoy Proxy image tag (immutable tags are recommended)                                                                | `1.24.2-debian-11-r6` |
 | `envoy.image.digest`                                | Envoy Proxy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag           | `""`                  |
 | `envoy.image.pullPolicy`                            | Envoy image pull policy                                                                                               | `IfNotPresent`        |
 | `envoy.image.pullSecrets`                           | Envoy image pull secrets                                                                                              | `[]`                  |
@@ -305,7 +302,6 @@ helm uninstall my-release
 | `envoy.extraEnvVarsCM`                              | ConfigMap containing extra env vars to be added to all Envoy containers                                               | `""`                  |
 | `envoy.extraEnvVarsSecret`                          | Secret containing extra env vars to be added to all Envoy containers                                                  | `""`                  |
 
-
 ### Default backend parameters
 
 | Name                                                   | Description                                                                                                     | Value                    |
@@ -313,7 +309,7 @@ helm uninstall my-release
 | `defaultBackend.enabled`                               | Enable a default backend based on NGINX                                                                         | `false`                  |
 | `defaultBackend.image.registry`                        | Default backend image registry                                                                                  | `docker.io`              |
 | `defaultBackend.image.repository`                      | Default backend image name                                                                                      | `bitnami/nginx`          |
-| `defaultBackend.image.tag`                             | Default backend image tag                                                                                       | `1.23.3-debian-11-r25`   |
+| `defaultBackend.image.tag`                             | Default backend image tag                                                                                       | `1.23.3-debian-11-r29`   |
 | `defaultBackend.image.digest`                          | Default backend image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                     |
 | `defaultBackend.image.pullPolicy`                      | Image pull policy                                                                                               | `IfNotPresent`           |
 | `defaultBackend.image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                | `[]`                     |
@@ -399,7 +395,6 @@ helm uninstall my-release
 | `ingress.secrets`                                      | If you're providing your own certificates, please use this to add the certificates as secrets                   | `[]`                     |
 | `ingress.extraRules`                                   | Additional rules to be covered with this ingress record                                                         | `[]`                     |
 
-
 ### Metrics parameters
 
 | Name                                       | Description                                                                                                                          | Value                    |
@@ -414,7 +409,6 @@ helm uninstall my-release
 | `metrics.serviceMonitor.scrapeTimeout`     | The timeout after which the scrape is ended                                                                                          | `""`                     |
 | `metrics.serviceMonitor.selector`          | Specify honorLabels parameter to add the scrape endpoint                                                                             | `{}`                     |
 | `metrics.serviceMonitor.labels`            | Extra labels for the ServiceMonitor                                                                                                  | `{}`                     |
-
 
 ### Other parameters
 
