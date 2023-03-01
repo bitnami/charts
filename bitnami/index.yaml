@@ -7315,6 +7315,38 @@ entries:
       licenses: Apache-2.0
     apiVersion: v2
     appVersion: 4.1.0
+    created: "2023-03-01T09:59:48.125852965Z"
+    dependencies:
+    - name: common
+      repository: https://charts.bitnami.com/bitnami
+      tags:
+      - bitnami-common
+      version: 2.x.x
+    description: Apache Cassandra is an open source distributed database management
+      system designed to handle large amounts of data across many servers, providing
+      high availability with no single point of failure.
+    digest: 43bec53bec503894898b6496221fa98eb68a7cdbe49a458ab2444ff82f304f3a
+    home: https://github.com/bitnami/charts/tree/main/bitnami/cassandra
+    icon: https://bitnami.com/assets/stacks/cassandra/img/cassandra-stack-220x234.png
+    keywords:
+    - cassandra
+    - database
+    - nosql
+    maintainers:
+    - name: Bitnami
+      url: https://github.com/bitnami/charts
+    name: cassandra
+    sources:
+    - https://github.com/bitnami/containers/tree/main/bitnami/cassandra
+    - http://cassandra.apache.org
+    urls:
+    - https://charts.bitnami.com/bitnami/cassandra-10.0.4.tgz
+    version: 10.0.4
+  - annotations:
+      category: Database
+      licenses: Apache-2.0
+    apiVersion: v2
+    appVersion: 4.1.0
     created: "2023-02-17T16:53:48.030010783Z"
     dependencies:
     - name: common
@@ -123303,4 +123335,4 @@ entries:
     urls:
     - https://charts.bitnami.com/bitnami/zookeeper-9.2.1.tgz
     version: 9.2.1
-generated: "2023-03-01T09:57:11.922779465Z"
+generated: "2023-03-01T09:59:48.121484391Z"
