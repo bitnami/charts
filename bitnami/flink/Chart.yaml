@@ -1,0 +1,24 @@
+annotations:
+  category: Infrastructure
+  licenses: Apache-2.0
+apiVersion: v2
+appVersion: 1.42.0
+dependencies:
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - bitnami-common
+    version: 2.x.x
+description: Apache Flink is a distributed tracing system. It is used for monitoring and troubleshooting microservices-based distributed systems.
+home: https://github.com/bitnami/charts/tree/main/bitnami/flink
+icon: https://bitnami.com/assets/stacks/flink/img/flink-stack-220x234.png
+keywords:
+  - flink
+maintainers:
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
+name: flink
+sources:
+  - https://github.com/apache/flink
+  - https://flink.apache.org/
+version: 1.0.2
