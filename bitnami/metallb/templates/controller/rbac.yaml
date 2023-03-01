@@ -37,6 +37,14 @@ rules:
       - create
       - patch
   - apiGroups:
+      - ''
+    resources:
+      - namespaces
+    verbs:
+      - list
+      - watch
+      - get
+  - apiGroups:
       - policy
     resourceNames:
       - {{ printf "%s-controller" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
