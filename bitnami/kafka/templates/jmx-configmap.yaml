@@ -33,10 +33,6 @@ data:
         name: kafka_network_$1_$2_$4
         labels:
           network_processor: $3
-      - pattern : kafka.network<type=(Processor), name=(IdlePercent), networkProcessor=(.+)><>(Value)
-        name: kafka_network_$1_$2_$4
-        labels:
-          network_processor: $3
       - pattern : kafka.network<type=(RequestMetrics), name=(.+), request=(.+)><>(Count|Value)
         name: kafka_network_$1_$2_$4
         labels:
