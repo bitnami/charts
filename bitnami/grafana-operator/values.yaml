@@ -666,6 +666,9 @@ grafana:
     ##   GKE, AWS & OpenStack)
     ##
     storageClass: ""
+    ## @param grafana.persistence.existingVolume Define the existingVolume for the persistent storage provisioned outside this chart
+    ## https://github.com/grafana-operator/grafana-operator/blob/master/deploy/examppersistentvolume/Grafana-existingVolume.yaml
+    existingVolume: ""
     ## @param grafana.persistence.accessModes Define the accessModes for the persistent storage
     ##
     accessModes:
