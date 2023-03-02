@@ -176,6 +176,10 @@ spec:
             {{- include "common.tplvalues.render" (dict "value" .Values.master.extraContainerPorts "context" $) | nindent 12 }}
             {{- end }}
           volumeMounts:
+            {{- if .Values.master.nfs_server_ip }}
+            - name: nfs-storage
+              mountPath: {{ .Values.master.nfs_mount_path }}
+            {{- end }}
             {{- if .Values.master.existingConfigmap }}
             - name: config
               mountPath: /bitnami/spark/conf/
@@ -313,6 +317,12 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.master.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        {{- if .Values.master.nfs_server_ip }}
+        - name: nfs-storage
+          nfs:
+            server: {{ .Values.master.nfs_server_ip }}
+            path: {{ .Values.master.nfs_server_path }}
+        {{- end }}
         {{- if .Values.master.existingConfigmap }}
         - name: config
           configMap:
