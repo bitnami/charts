@@ -117,7 +117,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `initHookScriptsCM`      | ConfigMap containing the `$JENKINS_HOME/init.groovy.d` scripts. Evaluated as a template.                                                            | `""`                    |
 | `initHookScriptsSecret`  | Secret containing `$JENKINS_HOME/init.groovy.d` scripts to be executed at initialization time that contain sensitive data. Evaluated as a template. | `""`                    |
 
-
 ### Jenkins TLS configuration
 
 | Name                     | Description                                                                                                                     | Value   |
@@ -129,7 +128,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `tls.passwordsSecret`    | Name of the existing secret containing the JKS keystore password.                                                               | `""`    |
 | `tls.resources.limits`   | Init container generate-tls-certs resource limits                                                                               | `{}`    |
 | `tls.resources.requests` | Init container generate-tls-certs resource requests                                                                             | `{}`    |
-
 
 ### Jenkins Configuration as Code plugin settings (EXPERIMENTAL)
 
@@ -305,7 +303,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.resources.limits`          | The resources limits for the init container                                                                   | `{}`                    |
 | `volumePermissions.resources.requests`        | The requested resources for the init container                                                                | `{}`                    |
 | `volumePermissions.securityContext.runAsUser` | Set init container's Security Context runAsUser                                                               | `0`                     |
-
 
 ### Other Parameters
 
