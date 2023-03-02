@@ -46,7 +46,7 @@ webhooks:
       - v1
     clientConfig:
       {{- if not .Values.useCertManager }}
-      caBundle: {{ default $ca.Cert .Values.msgTopologyOperator.existingWebhookCertCABundle | b64enc | quote }}
+      caBundle: {{ include "common.secrets.lookup" (dict "secret" $secretName "key" "ca.crt" "defaultValue" (default $ca.Cert .Values.msgTopologyOperator.existingWebhookCertCABundle) "context" $) }}
       {{- end }}
       service:
         name: {{ template "rmqco.msgTopologyOperator.webhook.fullname" . }}
@@ -70,7 +70,7 @@ webhooks:
       - v1
     clientConfig:
       {{- if not .Values.useCertManager }}
-      caBundle: {{ default $ca.Cert .Values.msgTopologyOperator.existingWebhookCertCABundle | b64enc | quote }}
+      caBundle: {{ include "common.secrets.lookup" (dict "secret" $secretName "key" "ca.crt" "defaultValue" (default $ca.Cert .Values.msgTopologyOperator.existingWebhookCertCABundle) "context" $) }}
       {{- end }}
       service:
         name: {{ template "rmqco.msgTopologyOperator.webhook.fullname" . }}
@@ -94,7 +94,7 @@ webhooks:
       - v1
     clientConfig:
       {{- if not .Values.useCertManager }}
-      caBundle: {{ default $ca.Cert .Values.msgTopologyOperator.existingWebhookCertCABundle | b64enc | quote }}
+      caBundle: {{ include "common.secrets.lookup" (dict "secret" $secretName "key" "ca.crt" "defaultValue" (default $ca.Cert .Values.msgTopologyOperator.existingWebhookCertCABundle) "context" $) }}
       {{- end }}
       service:
         name: {{ template "rmqco.msgTopologyOperator.webhook.fullname" . }}
@@ -118,7 +118,7 @@ webhooks:
       - v1
     clientConfig:
       {{- if not .Values.useCertManager }}
-      caBundle: {{ default $ca.Cert .Values.msgTopologyOperator.existingWebhookCertCABundle | b64enc | quote }}
+      caBundle: {{ include "common.secrets.lookup" (dict "secret" $secretName "key" "ca.crt" "defaultValue" (default $ca.Cert .Values.msgTopologyOperator.existingWebhookCertCABundle) "context" $) }}
       {{- end }}
       service:
         name: {{ template "rmqco.msgTopologyOperator.webhook.fullname" . }}
@@ -142,7 +142,7 @@ webhooks:
       - v1
     clientConfig:
       {{- if not .Values.useCertManager }}
-      caBundle: {{ default $ca.Cert .Values.msgTopologyOperator.existingWebhookCertCABundle | b64enc | quote }}
+      caBundle: {{ include "common.secrets.lookup" (dict "secret" $secretName "key" "ca.crt" "defaultValue" (default $ca.Cert .Values.msgTopologyOperator.existingWebhookCertCABundle) "context" $) }}
       {{- end }}
       service:
         name: {{ template "rmqco.msgTopologyOperator.webhook.fullname" . }}
@@ -166,7 +166,7 @@ webhooks:
       - v1
     clientConfig:
       {{- if not .Values.useCertManager }}
-      caBundle: {{ default $ca.Cert .Values.msgTopologyOperator.existingWebhookCertCABundle | b64enc | quote }}
+      caBundle: {{ include "common.secrets.lookup" (dict "secret" $secretName "key" "ca.crt" "defaultValue" (default $ca.Cert .Values.msgTopologyOperator.existingWebhookCertCABundle) "context" $) }}
       {{- end }}
       service:
         name: {{ template "rmqco.msgTopologyOperator.webhook.fullname" . }}
@@ -190,7 +190,7 @@ webhooks:
       - v1
     clientConfig:
       {{- if not .Values.useCertManager }}
-      caBundle: {{ default $ca.Cert .Values.msgTopologyOperator.existingWebhookCertCABundle | b64enc | quote }}
+      caBundle: {{ include "common.secrets.lookup" (dict "secret" $secretName "key" "ca.crt" "defaultValue" (default $ca.Cert .Values.msgTopologyOperator.existingWebhookCertCABundle) "context" $) }}
       {{- end }}
       service:
         name: {{ template "rmqco.msgTopologyOperator.webhook.fullname" . }}
@@ -214,7 +214,7 @@ webhooks:
       - v1
     clientConfig:
       {{- if not .Values.useCertManager }}
-      caBundle: {{ default $ca.Cert .Values.msgTopologyOperator.existingWebhookCertCABundle | b64enc | quote }}
+      caBundle: {{ include "common.secrets.lookup" (dict "secret" $secretName "key" "ca.crt" "defaultValue" (default $ca.Cert .Values.msgTopologyOperator.existingWebhookCertCABundle) "context" $) }}
       {{- end }}
       service:
         name: {{ template "rmqco.msgTopologyOperator.webhook.fullname" . }}
@@ -238,7 +238,7 @@ webhooks:
       - v1
     clientConfig:
       {{- if not .Values.useCertManager }}
-      caBundle: {{ default $ca.Cert .Values.msgTopologyOperator.existingWebhookCertCABundle | b64enc | quote }}
+      caBundle: {{ include "common.secrets.lookup" (dict "secret" $secretName "key" "ca.crt" "defaultValue" (default $ca.Cert .Values.msgTopologyOperator.existingWebhookCertCABundle) "context" $) }}
       {{- end }}
       service:
         name: {{ template "rmqco.msgTopologyOperator.webhook.fullname" . }}
@@ -262,7 +262,7 @@ webhooks:
       - v1
     clientConfig:
       {{- if not .Values.useCertManager }}
-      caBundle: {{ default $ca.Cert .Values.msgTopologyOperator.existingWebhookCertCABundle | b64enc | quote }}
+      caBundle: {{ include "common.secrets.lookup" (dict "secret" $secretName "key" "ca.crt" "defaultValue" (default $ca.Cert .Values.msgTopologyOperator.existingWebhookCertCABundle) "context" $) }}
       {{- end }}
       service:
         name: {{ template "rmqco.msgTopologyOperator.webhook.fullname" . }}
@@ -286,7 +286,7 @@ webhooks:
       - v1
     clientConfig:
       {{- if not .Values.useCertManager }}
-      caBundle: {{ default $ca.Cert .Values.msgTopologyOperator.existingWebhookCertCABundle | b64enc | quote }}
+      caBundle: {{ include "common.secrets.lookup" (dict "secret" $secretName "key" "ca.crt" "defaultValue" (default $ca.Cert .Values.msgTopologyOperator.existingWebhookCertCABundle) "context" $) }}
       {{- end }}
       service:
         name: {{ template "rmqco.msgTopologyOperator.webhook.fullname" . }}

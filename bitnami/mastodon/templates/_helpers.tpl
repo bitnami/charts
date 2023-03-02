@@ -359,7 +359,7 @@ Return if Redis(TM) authentication is enabled
     {{- if .Values.redis.auth.enabled -}}
         {{- true -}}
     {{- end -}}
-{{- else if .Values.externalRedis.password -}}
+{{- else if or .Values.externalRedis.password .Values.externalRedis.existingSecret -}}
     {{- true -}}
 {{- end -}}
 {{- end -}}
@@ -476,6 +476,39 @@ Retrieve key of the PostgreSQL secret
     {{- print "password" -}}
 {{- else -}}
     {{- print .Values.externalDatabase.existingSecretPasswordKey -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the SMTP Secret Name
+*/}}
+{{- define "mastodon.smtp.secretName" -}}
+{{- if .Values.smtp.existingSecret -}}
+    {{- print .Values.smtp.existingSecret -}}
+{{- else -}}
+    {{- printf "%s-%s" (include "common.names.fullname" .) "smtp" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Retrieve SMTP login key
+*/}}
+{{- define "mastodon.smtp.loginKey" -}}
+{{- if .Values.smtp.existingSecretLoginKey -}}
+    {{- print .Values.smtp.existingSecretLoginKey -}}
+{{- else -}}
+    {{- print "login" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Retrieve SMTP password key
+*/}}
+{{- define "mastodon.smtp.passwordKey" -}}
+{{- if .Values.smtp.existingSecretPasswordKey -}}
+    {{- print .Values.smtp.existingSecretPasswordKey -}}
+{{- else -}}
+    {{- print "password" -}}
 {{- end -}}
 {{- end -}}
 

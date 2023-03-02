@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"net"
 	"testing"
+	"time"
 
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -154,6 +155,33 @@ func checkValidIP(ipToCheck string, addressFrom string, addressTo string) bool {
 		}
 	}
 	return false
+}
+
+func hasIPAssigned(ctx context.Context, c corev1.CoreV1Interface, resourceName string) (bool, error) {
+	var err error
+
+	service, err := c.Services(*namespace).Get(ctx, resourceName, metav1.GetOptions{})
+
+	if service != nil && len(service.Status.LoadBalancer.Ingress) > 0 {
+		return true, err
+	} else {
+		return false, err
+	}
+}
+
+func retry(name string, attempts int, sleep time.Duration, f func() (bool, error)) (res bool, err error) {
+	for i := 0; i < attempts; i++ {
+		fmt.Printf("[retriable] operation %q executing now [attempt %d/%d]\n", name, (i + 1), attempts)
+		res, err = f()
+		if res {
+			fmt.Printf("[retriable] operation %q succedeed [attempt %d/%d]\n", name, (i + 1), attempts)
+			return res, err
+		}
+		fmt.Printf("[retriable] operation %q failed, sleeping for %q now...\n", name, sleep)
+		time.Sleep(sleep)
+	}
+	fmt.Printf("[retriable] operation %q failed [attempt %d/%d]\n", name, attempts, attempts)
+	return res, err
 }
 
 func CheckRequirements() {

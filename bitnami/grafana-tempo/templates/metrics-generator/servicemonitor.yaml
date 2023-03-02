@@ -1,4 +1,3 @@
-{{- if .Values.metricsGenerator.enabled }}
 {{- if and .Values.metrics.enabled .Values.metrics.serviceMonitor.enabled }}
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
@@ -50,5 +49,4 @@ spec:
   namespaceSelector:
     matchNames:
       - {{ .Release.Namespace }}
-{{- end }}
 {{- end }}

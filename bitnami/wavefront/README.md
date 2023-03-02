@@ -7,12 +7,12 @@ Wavefront is a high-performance streaming analytics platform for monitoring and 
 [Overview of Wavefront](https://github.com/wavefrontHQ/wavefront-collector-for-kubernetes)
 
 
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/wavefront --namespace wavefront --create-namespace \
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/wavefront --namespace wavefront --create-namespace \
     --set clusterName=<K8s-CLUSTER-NAME> \
     --set wavefront.url=https://<YOUR_CLUSTER>.wavefront.com \
     --set wavefront.token=<YOUR_API_TOKEN>
@@ -37,8 +37,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/wavefront --namespace wavefront --create-namespace\
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/wavefront --namespace wavefront --create-namespace\
     --set clusterName=<K8s-CLUSTER-NAME> \
     --set wavefront.url=https://<YOUR_CLUSTER>.wavefront.com \
     --set wavefront.token=<YOUR_API_TOKEN>
@@ -55,7 +55,7 @@ The **required** parameters are `clusterName`, `wavefront.url` and `wavefront.to
 To uninstall/delete the `my-release` deployment:
 
 ```console
-$ helm delete my-release
+helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release. If you want to also remove the namespace please execute `kubectl delete namespace wavefront`.
@@ -70,7 +70,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
 | Name                     | Description                                                                                                     | Value          |
@@ -84,7 +83,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                         | `false`        |
 | `diagnosticMode.command` | Command to override all containers in the the deployment(s)/statefulset(s)                                      | `["sleep"]`    |
 | `diagnosticMode.args`    | Args to override all containers in the the deployment(s)/statefulset(s)                                         | `["infinity"]` |
-
 
 ### Wavefront Common parameters
 
@@ -104,7 +102,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `projectPacific.enabled`                      | Enable and create role binding for Tanzu Kubernetes cluster                                                                                 | `false`                              |
 | `tkgi.enabled`                                | Properties for TKGI environments. If enabled, a role binding to handle pod security policy will be installed within the TKGI cluster        | `false`                              |
 
-
 ### Collector parameters
 
 | Name                                                        | Description                                                                                                             | Value                                    |
@@ -112,7 +109,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `collector.enabled`                                         | Setup and enable the Wavefront collector to gather metrics                                                              | `true`                                   |
 | `collector.image.registry`                                  | Wavefront collector image registry                                                                                      | `docker.io`                              |
 | `collector.image.repository`                                | Wavefront collector image repository                                                                                    | `bitnami/wavefront-kubernetes-collector` |
-| `collector.image.tag`                                       | Wavefront collector image tag (immutable tags are recommended)                                                          | `1.13.0-scratch-r4`                      |
+| `collector.image.tag`                                       | Wavefront collector image tag (immutable tags are recommended)                                                          | `1.13.0-scratch-r8`                      |
 | `collector.image.digest`                                    | Wavefront collector image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag     | `""`                                     |
 | `collector.image.pullPolicy`                                | image pull policy                                                                                                       | `IfNotPresent`                           |
 | `collector.image.pullSecrets`                               | Specify docker-registry secret names as an array                                                                        | `[]`                                     |
@@ -179,7 +176,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `collector.initContainers`                                  | Add init containers to the Wavefront proxy pods                                                                         | `[]`                                     |
 | `collector.sidecars`                                        | Add sidecars to the Wavefront proxy pods                                                                                | `[]`                                     |
 
-
 ### Proxy parameters
 
 | Name                                                    | Description                                                                                                                             | Value                     |
@@ -187,7 +183,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `proxy.enabled`                                         | Setup and enable Wavefront proxy to send metrics through                                                                                | `true`                    |
 | `proxy.image.registry`                                  | Wavefront proxy image registry                                                                                                          | `docker.io`               |
 | `proxy.image.repository`                                | Wavefront proxy image repository                                                                                                        | `bitnami/wavefront-proxy` |
-| `proxy.image.tag`                                       | Wavefront proxy image tag (immutable tags are recommended)                                                                              | `11.4.0-debian-11-r48`    |
+| `proxy.image.tag`                                       | Wavefront proxy image tag (immutable tags are recommended)                                                                              | `11.4.0-debian-11-r62`    |
 | `proxy.image.digest`                                    | Wavefront proxy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                         | `""`                      |
 | `proxy.image.pullPolicy`                                | Wavefront proxy image pull policy                                                                                                       | `IfNotPresent`            |
 | `proxy.image.pullSecrets`                               | Specify docker-registry secret names as an array                                                                                        | `[]`                      |
@@ -266,18 +262,16 @@ The command removes all the Kubernetes components associated with the chart and 
 | `proxy.existingConfigmap`                               | Name of existing ConfigMap with Proxy preprocessor configuration                                                                        | `""`                      |
 | `proxy.preprocessor`                                    | Preprocessor rules is a powerful way to apply filtering or to enhance metrics as they flow                                              | `{}`                      |
 
-
 ### Kube State Metrics parameters
 
 | Name                         | Description                                                                                                                      | Value   |
 | ---------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------- |
 | `kube-state-metrics.enabled` | If enabled the kube-state-metrics chart will be installed as a subchart and the collector will be configured to capture metrics. | `false` |
 
-
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release \
+helm install my-release \
   --set proxy.replicaCount=3 \
     my-repo/wavefront
 ```
@@ -287,7 +281,7 @@ The above command sets 3 proxy replicas.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml my-repo/wavefront
+helm install my-release -f values.yaml my-repo/wavefront
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -366,7 +360,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
