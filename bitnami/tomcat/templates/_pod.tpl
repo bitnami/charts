@@ -78,7 +78,7 @@ containers:
         value: {{ .Values.tomcatAllowRemoteManagement | quote }}
       {{- if or .Values.catalinaOpts .Values.metrics.jmx.enabled }}
       - name: CATALINA_OPTS
-        value: {{ include "tomcat.catalinaOpts" . | quote }} 
+        value: {{ include "tomcat.catalinaOpts" . | quote }}
       {{- end }}
       {{- if .Values.extraEnvVars }}
       {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 6 }}
@@ -103,32 +103,32 @@ containers:
       {{- if .Values.containerExtraPorts }}
       {{- include "common.tplvalues.render" (dict "value" .Values.containerExtraPorts "context" $) | nindent 6 }}
       {{- end }}
-    {{- if .Values.livenessProbe.enabled }}
+    {{- if .Values.customLivenessProbe }}
+    livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 6 }}
+    {{- else if .Values.livenessProbe.enabled }}
     livenessProbe:
       httpGet:
         path: /
         port: http
         {{- include "common.tplvalues.render" (dict "value" (omit .Values.livenessProbe "enabled") "context" $) | nindent 6 }}
-    {{- else if .Values.customLivenessProbe }}
-    livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customLivenessProbe "context" $) | nindent 6 }}
     {{- end }}
-    {{- if .Values.readinessProbe.enabled }}
+    {{- if .Values.customReadinessProbe }}
+    readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 6 }}
+    {{- else if .Values.readinessProbe.enabled }}
     readinessProbe:
       httpGet:
         path: /
         port: http
       {{- include "common.tplvalues.render" (dict "value" (omit .Values.readinessProbe "enabled") "context" $) | nindent 6 }}
-    {{- else if .Values.customReadinessProbe }}
-    readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 6 }}
     {{- end }}
-    {{- if .Values.startupProbe.enabled }}
+    {{- if .Values.customStartupProbe }}
+    startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customStartupProbe "context" $) | nindent 6 }}
+    {{- else if .Values.startupProbe.enabled }}
     startupProbe:
       httpGet:
         path: /
         port: http
       {{- include "common.tplvalues.render" (dict "value" (omit .Values.startupProbe "enabled") "context" $) | nindent 6 }}
-    {{- else if .Values.customStartupProbe }}
-    startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customStartupProbe "context" $) | nindent 6 }}
     {{- end }}
     {{- if .Values.resources }}
     resources: {{- toYaml .Values.resources | nindent 6 }}
@@ -143,11 +143,13 @@ containers:
   - name: jmx-exporter
     image: {{ template "tomcat.metrics.jmx.image" . }}
     imagePullPolicy: {{ .Values.metrics.jmx.image.pullPolicy | quote }}
+    {{- if .Values.metrics.jmx.containerSecurityContext.enabled }}
+    securityContext: {{- omit .Values.metrics.jmx.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+    {{- end }}
     command:
       - java
-      - -XX:+UnlockExperimentalVMOptions
-      - -XX:+UseCGroupMemoryLimitForHeap
-      - -XX:MaxRAMFraction=1
+    args:
+      - -XX:MaxRAMPercentage=100
       - -XshowSettings:vm
       - -jar
       - jmx_prometheus_httpserver.jar
@@ -188,6 +190,6 @@ volumes:
   {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 2 }}
   {{- end }}
 {{- if .Values.extraPodSpec }}
-{{- include "common.tplvalues.render" (dict "value" .Values.extraPodSpec "context" $) }}
+{{- include "common.tplvalues.render" (dict "value" .Values.extraPodSpec "context" $) | nindent 0}}
 {{- end }}
 {{- end -}}

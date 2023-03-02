@@ -197,6 +197,7 @@ frontend:
   ## @param frontend.image.registry NGINX image registry
   ## @param frontend.image.repository NGINX image repository
   ## @param frontend.image.tag NGINX image tag (immutable tags are recommended)
+  ## @param frontend.image.digest NGINX image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param frontend.image.pullPolicy NGINX image pull policy
   ## @param frontend.image.pullSecrets NGINX image pull secrets
   ## @param frontend.image.debug Enable image debug mode
@@ -204,7 +205,8 @@ frontend:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.21.6-debian-10-r112
+    tag: 1.23.3-debian-11-r30
+    digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -226,8 +228,6 @@ frontend:
   ##
   proxypassAccessTokenAsBearer: false
   ## @param frontend.proxypassExtraSetHeader Set an additional proxy header for all requests proxied via NGINX
-  ## Authorization header(s) set in this way will be included with the request from kubeops to the k8s service API URL.
-  ## ref: https://github.com/vmware-tanzu/kubeapps/blob/7e31d0e7241f826aa365856c134cf901d40890e7/pkg/http-handler/http-handler.go#L247
   ## e.g:
   ## proxypassExtraSetHeader: Authorization "Bearer $cookie_sessionid";
   ##
@@ -508,11 +508,15 @@ frontend:
 ## Dashboard parameters
 ##
 dashboard:
+  ## @param dashboard.enabled Specifies whether Kubeapps Dashboard should be deployed or not
+  ##
+  enabled: true
   ## Bitnami Kubeapps Dashboard image
-  ## ref: https://hub.docker.com/r/bitnami/kubeops/tags/
+  ## ref: https://hub.docker.com/r/bitnami/kubeapps-dashboard/
   ## @param dashboard.image.registry Dashboard image registry
   ## @param dashboard.image.repository Dashboard image repository
   ## @param dashboard.image.tag Dashboard image tag (immutable tags are recommended)
+  ## @param dashboard.image.digest Dashboard image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param dashboard.image.pullPolicy Dashboard image pull policy
   ## @param dashboard.image.pullSecrets Dashboard image pull secrets
   ## @param dashboard.image.debug Enable image debug mode
@@ -520,7 +524,8 @@ dashboard:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-dashboard
-    tag: 2.4.5-debian-10-r21
+    tag: 2.6.3-debian-11-r8
+    digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -579,6 +584,11 @@ dashboard:
   defaultTheme: ""
   ## @param dashboard.replicaCount Number of Dashboard replicas to deploy
   ##
+  ## @param dashboard.createNamespaceLabels Labels added to newly created namespaces
+  ## e.g:
+  # createNamespaceLabels:
+  #   "managed-by": "kubeapps"
+  createNamespaceLabels: {}
   replicaCount: 2
   ## @param dashboard.updateStrategy.type Dashboard deployment strategy type.
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
@@ -704,11 +714,11 @@ dashboard:
   ## @param dashboard.args Override default container args (useful when using custom images)
   ##
   args: []
-  ## @param dashboard.podLabels Extra labels for Dasbhoard pods
+  ## @param dashboard.podLabels Extra labels for Dashboard pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##
   podLabels: {}
-  ## @param dashboard.podAnnotations Annotations for Dasbhoard pods
+  ## @param dashboard.podAnnotations Annotations for Dashboard pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
   podAnnotations: {}
@@ -766,13 +776,13 @@ dashboard:
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
-  ## @param dashboard.extraVolumes Optionally specify extra list of additional volumes for Dasbhoard pods
+  ## @param dashboard.extraVolumes Optionally specify extra list of additional volumes for Dashboard pods
   ##
   extraVolumes: []
-  ## @param dashboard.extraVolumeMounts Optionally specify extra list of additional volumeMounts for Dasbhoard container(s)
+  ## @param dashboard.extraVolumeMounts Optionally specify extra list of additional volumeMounts for Dashboard container(s)
   ##
   extraVolumeMounts: []
-  ## @param dashboard.sidecars Add additional sidecar containers to the Dasbhoard pod
+  ## @param dashboard.sidecars Add additional sidecar containers to the Dashboard pod
   ## e.g:
   ## sidecars:
   ##   - name: your-image-name
@@ -783,7 +793,7 @@ dashboard:
   ##         containerPort: 1234
   ##
   sidecars: []
-  ## @param dashboard.initContainers Add additional init containers to the Dasbhoard pods
+  ## @param dashboard.initContainers Add additional init containers to the Dashboard pods
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
   ## initContainers:
@@ -793,14 +803,14 @@ dashboard:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
-  ## Dasbhoard service parameters
+  ## Dashboard service parameters
   ##
   service:
-    ## @param dashboard.service.ports.http Dasbhoard service HTTP port
+    ## @param dashboard.service.ports.http Dashboard service HTTP port
     ##
     ports:
       http: 8080
-    ## @param dashboard.service.annotations Additional custom annotations for Dasbhoard service
+    ## @param dashboard.service.annotations Additional custom annotations for Dashboard service
     ##
     annotations: {}
 
@@ -814,13 +824,15 @@ apprepository:
   ## @param apprepository.image.registry Kubeapps AppRepository Controller image registry
   ## @param apprepository.image.repository Kubeapps AppRepository Controller image repository
   ## @param apprepository.image.tag Kubeapps AppRepository Controller image tag (immutable tags are recommended)
+  ## @param apprepository.image.digest Kubeapps AppRepository Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param apprepository.image.pullPolicy Kubeapps AppRepository Controller image pull policy
   ## @param apprepository.image.pullSecrets Kubeapps AppRepository Controller image pull secrets
   ##
   image:
     registry: docker.io
     repository: bitnami/kubeapps-apprepository-controller
-    tag: 2.4.5-scratch-r0
+    tag: 2.6.3-scratch-r3
+    digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -839,13 +851,15 @@ apprepository:
   ## @param apprepository.syncImage.registry Kubeapps Asset Syncer image registry
   ## @param apprepository.syncImage.repository Kubeapps Asset Syncer image repository
   ## @param apprepository.syncImage.tag Kubeapps Asset Syncer image tag (immutable tags are recommended)
+  ## @param apprepository.syncImage.digest Kubeapps Asset Syncer image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param apprepository.syncImage.pullPolicy Kubeapps Asset Syncer image pull policy
   ## @param apprepository.syncImage.pullSecrets Kubeapps Asset Syncer image pull secrets
   ##
   syncImage:
     registry: docker.io
     repository: bitnami/kubeapps-asset-syncer
-    tag: 2.4.5-scratch-r0
+    tag: 2.6.3-scratch-r2
+    digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -859,7 +873,7 @@ apprepository:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-  ## @param apprepository.globalReposNamespaceSuffix Suffix for the namespace of global repos. Defaults to empty for backwards compatibility.
+  ## @param apprepository.globalReposNamespaceSuffix Suffix for the namespace of global repos in the Helm plugin. Defaults to empty for backwards compatibility. Ignored if kubeappsapis.pluginConfig.helm.packages.v1alpha1.globalPackagingNamespace is set.
   ##
   globalReposNamespaceSuffix: ""
   ## @param apprepository.initialRepos [array] Initial chart repositories to configure
@@ -867,8 +881,14 @@ apprepository:
   ## initialRepos:
   ##   - name: chartmuseum
   ##     url: https://chartmuseum.default:8080
+  ##     # Specify nodeSelector and tolerations:
   ##     nodeSelector:
   ##       somelabel: somevalue
+  ##     tolerations:
+  ##       - key: "cattle.io/os"
+  ##         operator: "Equal"
+  ##         value: "linux"
+  ##         effect: "NoSchedule"
   ##     # Specify an Authorization Header if you are using an authentication method:
   ##     authorizationHeader: "Bearer xrxNC..."
   ##     # Specify the credentials if you are using a basic authentication method:
@@ -917,7 +937,7 @@ apprepository:
     httpProxy: ""
     httpsProxy: ""
     noProxy: ""
-  ## @param apprepository.crontab Schedule for syncing App repositories (default to 10 minutes)
+  ## @param apprepository.crontab Default schedule for syncing App repositories (defaults to every 10 minutes)
   ## e.g:
   ## crontab: "*/10 * * * *"
   ##
@@ -1101,567 +1121,6 @@ apprepository:
     automountServiceAccountToken: true
     annotations: {}
 
-## @section Kubeops parameters
-
-## Kubeops parameters
-##
-kubeops:
-  ## @param kubeops.enabled Specifies whether this component should be installed.
-  ## In a future release we will be setting this to default to false.
-  ##
-  enabled: true
-  ## Bitnami Kubeops image
-  ## ref: https://hub.docker.com/r/bitnami/kubeops/tags/
-  ## @param kubeops.image.registry Kubeops image registry
-  ## @param kubeops.image.repository Kubeops image repository
-  ## @param kubeops.image.tag Kubeops image tag (immutable tags are recommended)
-  ## @param kubeops.image.pullPolicy Kubeops image pull policy
-  ## @param kubeops.image.pullSecrets Kubeops image pull secrets
-  ##
-  image:
-    registry: docker.io
-    repository: bitnami/kubeapps-kubeops
-    tag: 2.4.5-scratch-r0
-    ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
-    ##
-    pullPolicy: IfNotPresent
-    ## Optionally specify an array of imagePullSecrets.
-    ## Secrets must be manually created in the namespace.
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-    ## e.g:
-    ## pullSecrets:
-    ##   - myRegistryKeySecretName
-    ##
-    pullSecrets: []
-  ## @param kubeops.namespaceHeaderName Additional header name for trusted namespaces
-  ## e.g:
-  ## namespaceHeaderName: X-Consumer-Groups
-  ##
-  namespaceHeaderName: ""
-  ## @param kubeops.namespaceHeaderPattern Additional header pattern for trusted namespaces
-  ## e.g:
-  ## namespaceHeaderPattern: namespace:^([\w-]+):\w+$
-  ##
-  namespaceHeaderPattern: ""
-  ## @param kubeops.qps Kubeops QPS (queries per second) rate
-  ##
-  qps: ""
-  ## @param kubeops.burst Kubeops burst rate
-  ##
-  burst: ""
-  ## @param kubeops.extraFlags Additional command line flags for Kubeops
-  ##
-  extraFlags: []
-  ## @param kubeops.replicaCount Number of Kubeops replicas to deploy
-  ##
-  replicaCount: 2
-  ## @param kubeops.updateStrategy.type Kubeops deployment strategy type.
-  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
-  ## e.g:
-  ## updateStrategy:
-  ##  type: RollingUpdate
-  ##  rollingUpdate:
-  ##    maxSurge: 25%
-  ##    maxUnavailable: 25%
-  ##
-  updateStrategy:
-    type: RollingUpdate
-  ## @param kubeops.terminationGracePeriodSeconds The grace time period for sig term
-  ## ref: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/#hook-handler-execution
-  ##
-  terminationGracePeriodSeconds: 300
-  ## @param kubeops.extraEnvVars Array with extra environment variables to add to the Kubeops container
-  ## e.g:
-  ## extraEnvVars:
-  ##   - name: FOO
-  ##     value: "bar"
-  ##
-  extraEnvVars: []
-  ## @param kubeops.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for the Kubeops container
-  ##
-  extraEnvVarsCM: ""
-  ## @param kubeops.extraEnvVarsSecret Name of existing Secret containing extra env vars for the Kubeops container
-  ##
-  extraEnvVarsSecret: ""
-  ## @param kubeops.containerPorts.http Kubeops HTTP container port
-  ##
-  containerPorts:
-    http: 8080
-  ## Kubeops containers' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
-  ## @param kubeops.resources.limits.cpu The CPU limits for the Kubeops container
-  ## @param kubeops.resources.limits.memory The memory limits for the Kubeops container
-  ## @param kubeops.resources.requests.cpu The requested CPU for the Kubeops container
-  ## @param kubeops.resources.requests.memory The requested memory for the Kubeops container
-  ##
-  resources:
-    limits:
-      cpu: 250m
-      memory: 256Mi
-    requests:
-      cpu: 25m
-      memory: 32Mi
-  ## Configure Pods Security Context
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param kubeops.podSecurityContext.enabled Enabled Kubeops pods' Security Context
-  ## @param kubeops.podSecurityContext.fsGroup Set Kubeops pod's Security Context fsGroup
-  ##
-  podSecurityContext:
-    enabled: true
-    fsGroup: 1001
-  ## Configure Container Security Context (only main container)
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param kubeops.containerSecurityContext.enabled Enabled Kubeops containers' Security Context
-  ## @param kubeops.containerSecurityContext.runAsUser Set Kubeops container's Security Context runAsUser
-  ## @param kubeops.containerSecurityContext.runAsNonRoot Set Kubeops container's Security Context runAsNonRoot
-  ##
-  containerSecurityContext:
-    enabled: true
-    runAsUser: 1001
-    runAsNonRoot: true
-  ## Configure extra options for Kubeops containers' liveness and readiness probes
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
-  ## @param kubeops.livenessProbe.enabled Enable livenessProbe
-  ## @param kubeops.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
-  ## @param kubeops.livenessProbe.periodSeconds Period seconds for livenessProbe
-  ## @param kubeops.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
-  ## @param kubeops.livenessProbe.failureThreshold Failure threshold for livenessProbe
-  ## @param kubeops.livenessProbe.successThreshold Success threshold for livenessProbe
-  ## Kubeops containers' liveness and readiness probes
-  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
-  ##
-  livenessProbe:
-    enabled: true
-    initialDelaySeconds: 60
-    periodSeconds: 10
-    timeoutSeconds: 5
-    failureThreshold: 6
-    successThreshold: 1
-  ## @param kubeops.readinessProbe.enabled Enable readinessProbe
-  ## @param kubeops.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
-  ## @param kubeops.readinessProbe.periodSeconds Period seconds for readinessProbe
-  ## @param kubeops.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
-  ## @param kubeops.readinessProbe.failureThreshold Failure threshold for readinessProbe
-  ## @param kubeops.readinessProbe.successThreshold Success threshold for readinessProbe
-  ##
-  readinessProbe:
-    enabled: true
-    initialDelaySeconds: 0
-    periodSeconds: 10
-    timeoutSeconds: 5
-    failureThreshold: 6
-    successThreshold: 1
-  ## @param kubeops.startupProbe.enabled Enable startupProbe
-  ## @param kubeops.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
-  ## @param kubeops.startupProbe.periodSeconds Period seconds for startupProbe
-  ## @param kubeops.startupProbe.timeoutSeconds Timeout seconds for startupProbe
-  ## @param kubeops.startupProbe.failureThreshold Failure threshold for startupProbe
-  ## @param kubeops.startupProbe.successThreshold Success threshold for startupProbe
-  ##
-  startupProbe:
-    enabled: false
-    initialDelaySeconds: 0
-    periodSeconds: 10
-    timeoutSeconds: 5
-    failureThreshold: 6
-    successThreshold: 1
-  ## @param kubeops.customLivenessProbe Custom livenessProbe that overrides the default one
-  ##
-  customLivenessProbe: {}
-  ## @param kubeops.customReadinessProbe Custom readinessProbe that overrides the default one
-  ##
-  customReadinessProbe: {}
-  ## @param kubeops.customStartupProbe Custom startupProbe that overrides the default one
-  ##
-  customStartupProbe: {}
-  ## @param kubeops.lifecycleHooks Custom lifecycle hooks for Kubeops containers
-  ##
-  lifecycleHooks: {}
-  ## @param kubeops.command Override default container command (useful when using custom images)
-  ##
-  command: []
-  ## @param kubeops.args Override default container args (useful when using custom images)
-  ##
-  args: []
-  ## @param kubeops.extraVolumes Optionally specify extra list of additional volumes for the Kubeops pod(s)
-  ##
-  extraVolumes: []
-  ## @param kubeops.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Kubeops container(s)
-  ##
-  extraVolumeMounts: []
-  ## @param kubeops.podLabels Extra labels for Kubeops pods
-  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
-  ##
-  podLabels: {}
-  ## @param kubeops.podAnnotations Annotations for Kubeops pods
-  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
-  ##
-  podAnnotations: {}
-  ## @param kubeops.podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ##
-  podAffinityPreset: ""
-  ## @param kubeops.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
-  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ##
-  podAntiAffinityPreset: soft
-  ## nodeAffinityPreset Node affinity preset
-  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-  ##
-  nodeAffinityPreset:
-    ## @param kubeops.nodeAffinityPreset.type Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
-    ##
-    type: ""
-    ## @param kubeops.nodeAffinityPreset.key Node label key to match. Ignored if `affinity` is set
-    ##
-    key: ""
-    ## @param kubeops.nodeAffinityPreset.values Node label values to match. Ignored if `affinity` is set
-    ## E.g.
-    ## values:
-    ##   - e2e-az1
-    ##   - e2e-az2
-    ##
-    values: []
-  ## @param kubeops.affinity Affinity for pod assignment
-  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-  ## NOTE: kubeops.podAffinityPreset, kubeops.podAntiAffinityPreset, and kubeops.nodeAffinityPreset will be ignored when it's set
-  ##
-  affinity: {}
-  ## @param kubeops.nodeSelector Node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
-  ##
-  nodeSelector: {}
-  ## @param kubeops.tolerations Tolerations for pod assignment
-  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-  ##
-  tolerations: []
-  ## @param kubeops.priorityClassName Priority class name for Kubeops pods
-  ##
-  priorityClassName: ""
-  ## @param kubeops.schedulerName Name of the k8s scheduler (other than default)
-  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
-  ##
-  schedulerName: ""
-  ## @param kubeops.topologySpreadConstraints Topology Spread Constraints for pod assignment
-  ## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
-  ## The value is evaluated as a template
-  ##
-  topologySpreadConstraints: []
-  ## @param kubeops.hostAliases Custom host aliases for Kubeops pods
-  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
-  ##
-  hostAliases: []
-  ## @param kubeops.sidecars Add additional sidecar containers to the Kubeops pod(s)
-  ## e.g:
-  ## sidecars:
-  ##   - name: your-image-name
-  ##     image: your-image
-  ##     imagePullPolicy: Always
-  ##     ports:
-  ##       - name: portname
-  ##         containerPort: 1234
-  ##
-  sidecars: []
-  ## @param kubeops.initContainers Add additional init containers to the Kubeops pod(s)
-  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
-  ## e.g:
-  ## initContainers:
-  ##  - name: your-image-name
-  ##    image: your-image
-  ##    imagePullPolicy: Always
-  ##    command: ['sh', '-c', 'echo "hello world"']
-  ##
-  initContainers: []
-  ## Kubeops service parameters
-  ##
-  service:
-    ## @param kubeops.service.ports.http Kubeops service HTTP port
-    ##
-    ports:
-      http: 8080
-    ## @param kubeops.service.annotations Additional custom annotations for Kubeops service
-    ##
-    annotations: {}
-  ## Kubeops Service Account
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
-  ## @param kubeops.serviceAccount.create Specifies whether a ServiceAccount should be created
-  ## @param kubeops.serviceAccount.name Name of the service account to use. If not set and create is true, a name is generated using the fullname template.
-  ## @param kubeops.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
-  ## @param kubeops.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
-  ##
-  serviceAccount:
-    create: true
-    name: ""
-    automountServiceAccountToken: true
-    annotations: {}
-
-## @section Assetsvc parameters
-
-## Assetsvc parameters
-## @deprecated
-assetsvc:
-  ## @param assetsvc.enabled Specifies whether this deprecated component should be installed.
-  ## As per Kubeapps v2.4.0 it is no longer used in the UI.
-  ## In future releases, this service will get entirely removed.
-  ##
-  enabled: false
-  ## Bitnami Kubeapps Assetsvc image
-  ## ref: https://hub.docker.com/r/bitnami/kubeapps-assetsvc/tags/
-  ## @param assetsvc.image.registry Kubeapps Assetsvc image registry
-  ## @param assetsvc.image.repository Kubeapps Assetsvc image repository
-  ## @param assetsvc.image.tag Kubeapps Assetsvc image tag (immutable tags are recommended)
-  ## @param assetsvc.image.pullPolicy Kubeapps Assetsvc image pull policy
-  ## @param assetsvc.image.pullSecrets Kubeapps Assetsvc image pull secrets
-  ##
-  image:
-    registry: docker.io
-    repository: bitnami/kubeapps-assetsvc
-    tag: 2.4.5-scratch-r0
-    ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
-    ##
-    pullPolicy: IfNotPresent
-    ## Optionally specify an array of imagePullSecrets.
-    ## Secrets must be manually created in the namespace.
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-    ## e.g:
-    ## pullSecrets:
-    ##   - myRegistryKeySecretName
-    ##
-    pullSecrets: []
-  ## @param assetsvc.extraFlags Additional command line flags for Assetsvc
-  ##
-  extraFlags: []
-  ## @param assetsvc.replicaCount Number of Assetsvc replicas to deploy
-  ##
-  replicaCount: 1
-  ## @param assetsvc.updateStrategy.type Assetsvc deployment strategy type.
-  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
-  ## e.g:
-  ## updateStrategy:
-  ##  type: RollingUpdate
-  ##  rollingUpdate:
-  ##    maxSurge: 25%
-  ##    maxUnavailable: 25%
-  ##
-  updateStrategy:
-    type: RollingUpdate
-  ## @param assetsvc.lifecycleHooks Custom lifecycle hooks for Assetsvc containers
-  ##
-  lifecycleHooks: {}
-  ## @param assetsvc.command Override default container command (useful when using custom images)
-  ##
-  command: []
-  ## @param assetsvc.args Override default container args (useful when using custom images)
-  ##
-  args: []
-  ## @param assetsvc.extraEnvVars Array with extra environment variables to add to the Assetsvc container
-  ## e.g:
-  ## extraEnvVars:
-  ##   - name: FOO
-  ##     value: "bar"
-  ##
-  extraEnvVars: []
-  ## @param assetsvc.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for the Assetsvc container
-  ##
-  extraEnvVarsCM: ""
-  ## @param assetsvc.extraEnvVarsSecret Name of existing Secret containing extra env vars for the Assetsvc container
-  ##
-  extraEnvVarsSecret: ""
-  ## @param assetsvc.extraVolumes Optionally specify extra list of additional volumes for the Assetsvc pod(s)
-  ##
-  extraVolumes: []
-  ## @param assetsvc.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Assetsvc container(s)
-  ##
-  extraVolumeMounts: []
-  ## @param assetsvc.containerPorts.http Assetsvc HTTP container port
-  ##
-  containerPorts:
-    http: 8080
-  ## Assetsvc containers' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
-  ## @param assetsvc.resources.limits.cpu The CPU limits for the Assetsvc container
-  ## @param assetsvc.resources.limits.memory The memory limits for the Assetsvc container
-  ## @param assetsvc.resources.requests.cpu The requested CPU for the Assetsvc container
-  ## @param assetsvc.resources.requests.memory The requested memory for the Assetsvc container
-  ##
-  resources:
-    limits:
-      cpu: 250m
-      memory: 128Mi
-    requests:
-      cpu: 25m
-      memory: 32Mi
-  ## Configure Pods Security Context
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param assetsvc.podSecurityContext.enabled Enabled Assetsvc pods' Security Context
-  ## @param assetsvc.podSecurityContext.fsGroup Set Assetsvc pod's Security Context fsGroup
-  ##
-  podSecurityContext:
-    enabled: true
-    fsGroup: 1001
-  ## Configure Container Security Context (only main container)
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param assetsvc.containerSecurityContext.enabled Enabled Assetsvc containers' Security Context
-  ## @param assetsvc.containerSecurityContext.runAsUser Set Assetsvc container's Security Context runAsUser
-  ## @param assetsvc.containerSecurityContext.runAsNonRoot Set Assetsvc container's Security Context runAsNonRoot
-  ##
-  containerSecurityContext:
-    enabled: true
-    runAsUser: 1001
-    runAsNonRoot: true
-  ## Configure extra options for Assetsvc containers' liveness and readiness probes
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
-  ## @param assetsvc.livenessProbe.enabled Enable livenessProbe
-  ## @param assetsvc.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
-  ## @param assetsvc.livenessProbe.periodSeconds Period seconds for livenessProbe
-  ## @param assetsvc.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
-  ## @param assetsvc.livenessProbe.failureThreshold Failure threshold for livenessProbe
-  ## @param assetsvc.livenessProbe.successThreshold Success threshold for livenessProbe
-  ## Assetsvc containers' liveness and readiness probes
-  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
-  ##
-  livenessProbe:
-    enabled: true
-    initialDelaySeconds: 60
-    periodSeconds: 10
-    timeoutSeconds: 5
-    failureThreshold: 6
-    successThreshold: 1
-  ## @param assetsvc.readinessProbe.enabled Enable readinessProbe
-  ## @param assetsvc.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
-  ## @param assetsvc.readinessProbe.periodSeconds Period seconds for readinessProbe
-  ## @param assetsvc.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
-  ## @param assetsvc.readinessProbe.failureThreshold Failure threshold for readinessProbe
-  ## @param assetsvc.readinessProbe.successThreshold Success threshold for readinessProbe
-  ##
-  readinessProbe:
-    enabled: true
-    initialDelaySeconds: 0
-    periodSeconds: 10
-    timeoutSeconds: 5
-    failureThreshold: 6
-    successThreshold: 1
-  ## @param assetsvc.startupProbe.enabled Enable startupProbe
-  ## @param assetsvc.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
-  ## @param assetsvc.startupProbe.periodSeconds Period seconds for startupProbe
-  ## @param assetsvc.startupProbe.timeoutSeconds Timeout seconds for startupProbe
-  ## @param assetsvc.startupProbe.failureThreshold Failure threshold for startupProbe
-  ## @param assetsvc.startupProbe.successThreshold Success threshold for startupProbe
-  ##
-  startupProbe:
-    enabled: false
-    initialDelaySeconds: 0
-    periodSeconds: 10
-    timeoutSeconds: 5
-    failureThreshold: 6
-    successThreshold: 1
-  ## @param assetsvc.customLivenessProbe Custom livenessProbe that overrides the default one
-  ##
-  customLivenessProbe: {}
-  ## @param assetsvc.customReadinessProbe Custom readinessProbe that overrides the default one
-  ##
-  customReadinessProbe: {}
-  ## @param assetsvc.customStartupProbe Custom startupProbe that overrides the default one
-  ##
-  customStartupProbe: {}
-  ## @param assetsvc.podLabels Extra labels for Assetsvc pods
-  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
-  ##
-  podLabels: {}
-  ## @param assetsvc.podAnnotations Annotations for Assetsvc pods
-  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
-  ##
-  podAnnotations: {}
-  ## @param assetsvc.podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ##
-  podAffinityPreset: ""
-  ## @param assetsvc.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
-  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ##
-  podAntiAffinityPreset: soft
-  ## nodeAffinityPreset Node affinity preset
-  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-  ##
-  nodeAffinityPreset:
-    ## @param assetsvc.nodeAffinityPreset.type Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
-    ##
-    type: ""
-    ## @param assetsvc.nodeAffinityPreset.key Node label key to match. Ignored if `affinity` is set
-    ##
-    key: ""
-    ## @param assetsvc.nodeAffinityPreset.values Node label values to match. Ignored if `affinity` is set
-    ## E.g.
-    ## values:
-    ##   - e2e-az1
-    ##   - e2e-az2
-    ##
-    values: []
-  ## @param assetsvc.affinity Affinity for pod assignment
-  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-  ## NOTE: assetsvc.podAffinityPreset, assetsvc.podAntiAffinityPreset, and assetsvc.nodeAffinityPreset will be ignored when it's set
-  ##
-  affinity: {}
-  ## @param assetsvc.nodeSelector Node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
-  ##
-  nodeSelector: {}
-  ## @param assetsvc.tolerations Tolerations for pod assignment
-  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-  ##
-  tolerations: []
-  ## @param assetsvc.priorityClassName Priority class name for Assetsvc pods
-  ##
-  priorityClassName: ""
-  ## @param assetsvc.schedulerName Name of the k8s scheduler (other than default)
-  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
-  ##
-  schedulerName: ""
-  ## @param assetsvc.topologySpreadConstraints Topology Spread Constraints for pod assignment
-  ## https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
-  ## The value is evaluated as a template
-  ##
-  topologySpreadConstraints: []
-  ## @param assetsvc.hostAliases Custom host aliases for Assetsvc pods
-  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
-  ##
-  hostAliases: []
-  ## @param assetsvc.sidecars Add additional sidecar containers to the Assetsvc pod(s)
-  ## e.g:
-  ## sidecars:
-  ##   - name: your-image-name
-  ##     image: your-image
-  ##     imagePullPolicy: Always
-  ##     ports:
-  ##       - name: portname
-  ##         containerPort: 1234
-  ##
-  sidecars: []
-  ## @param assetsvc.initContainers Add additional init containers to the Assetsvc pod(s)
-  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
-  ## e.g:
-  ## initContainers:
-  ##  - name: your-image-name
-  ##    image: your-image
-  ##    imagePullPolicy: Always
-  ##    command: ['sh', '-c', 'echo "hello world"']
-  ##
-  initContainers: []
-  ## Assetsvc service parameters
-  ##
-  service:
-    ## @param assetsvc.service.ports.http Assetsvc service HTTP port
-    ##
-    ports:
-      http: 8080
-    ## @param assetsvc.service.annotations Additional custom annotations for Assetsvc service
-    ##
-    annotations: {}
-
 ## @section Auth Proxy parameters
 
 ## Auth Proxy configuration for OIDC support
@@ -1676,13 +1135,15 @@ authProxy:
   ## @param authProxy.image.registry OAuth2 Proxy image registry
   ## @param authProxy.image.repository OAuth2 Proxy image repository
   ## @param authProxy.image.tag OAuth2 Proxy image tag (immutable tags are recommended)
+  ## @param authProxy.image.digest OAuth2 Proxy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param authProxy.image.pullPolicy OAuth2 Proxy image pull policy
   ## @param authProxy.image.pullSecrets OAuth2 Proxy image pull secrets
   ##
   image:
     registry: docker.io
     repository: bitnami/oauth2-proxy
-    tag: 7.2.1-debian-10-r144
+    tag: 7.4.0-debian-11-r43
+    digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1722,6 +1183,10 @@ authProxy:
   ## ref: https://oauth2-proxy.github.io/oauth2-proxy/docs/configuration/overview#generating-a-cookie-secret
   ##
   cookieSecret: ""
+  ## @param authProxy.existingOauth2Secret Name of an existing secret containing the OAuth client secrets, it should contain the keys clientID, clientSecret, and cookieSecret
+  ##  If set, the values `authProxy.provider`, `authProxy.clientID`, `authProxy.clientSecret` will be ignored
+  ##
+  existingOauth2Secret: ""
   ## @param authProxy.cookieRefresh Duration after which to refresh the cookie
   ##
   cookieRefresh: 2m
@@ -1808,13 +1273,15 @@ pinnipedProxy:
   ## @param pinnipedProxy.image.registry Pinniped Proxy image registry
   ## @param pinnipedProxy.image.repository Pinniped Proxy image repository
   ## @param pinnipedProxy.image.tag Pinniped Proxy image tag (immutable tags are recommended)
+  ## @param pinnipedProxy.image.digest Pinniped Proxy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param pinnipedProxy.image.pullPolicy Pinniped Proxy image pull policy
   ## @param pinnipedProxy.image.pullSecrets Pinniped Proxy image pull secrets
   ##
   image:
     registry: docker.io
     repository: bitnami/kubeapps-pinniped-proxy
-    tag: 2.4.5-debian-10-r20
+    tag: 2.6.3-debian-11-r8
+    digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1828,19 +1295,30 @@ pinnipedProxy:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-  ## @param pinnipedProxy.defaultPinnipedNamespace Specify the (default) namespace in which pinniped concierge is installed
+  ## @param pinnipedProxy.defaultPinnipedNamespace Namespace in which pinniped concierge is installed
   ##
   defaultPinnipedNamespace: pinniped-concierge
-  ## @param pinnipedProxy.defaultAuthenticatorType Specify the (default) authenticator type
+  ## @param pinnipedProxy.defaultAuthenticatorType Authenticator type
   ##
   defaultAuthenticatorType: JWTAuthenticator
-  ## @param pinnipedProxy.defaultAuthenticatorName Specify the (default) authenticator name
+  ## @param pinnipedProxy.defaultAuthenticatorName Authenticator name
   ##
   defaultAuthenticatorName: jwt-authenticator
-  ## @param pinnipedProxy.defaultPinnipedAPISuffix Specify the (default) API suffix
+  ## @param pinnipedProxy.defaultPinnipedAPISuffix API suffix
   ##
   defaultPinnipedAPISuffix: pinniped.dev
-  ## @param pinnipedProxy.lifecycleHooks for the Pinniped Proxy container(s) to automate configuration before or after startup
+  ## TLS settings for Pinniped Proxy
+  ## ref: https://kubeapps.dev/docs/latest/howto/oidc/using-an-oidc-provider-with-pinniped/#running-the-pinniped-proxy-service-over-tls
+  ##
+  tls:
+    ## @param pinnipedProxy.tls.existingSecret TLS secret with which to proxy requests
+    ##
+    existingSecret: ""
+    ## @param pinnipedProxy.tls.caCertificate TLS CA cert config map which clients of pinniped proxy should use with TLS requests
+    ## This config map must contain a ca.crt key with the CA cert content as the value.
+    ##
+    caCertificate: ""
+  ## @param pinnipedProxy.lifecycleHooks For the Pinniped Proxy container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
   ## @param pinnipedProxy.command Override default container command (useful when using custom images)
@@ -1905,10 +1383,6 @@ pinnipedProxy:
     annotations: {}
 ## @section Other Parameters
 
-## @param allowNamespaceDiscovery Allow users to discover available namespaces (only the ones they have access)
-## NOTE: When set to true, Kubeapps creates a ClusterRole to be able to list namespaces.
-##
-allowNamespaceDiscovery: true
 ## @param clusters [array] List of clusters that Kubeapps can target for deployments
 ## When populated with a single cluster (as it is by default), Kubeapps will not allow users to
 ## change the target cluster. When populated with multiple clusters, Kubeapps will present the clusters to
@@ -1943,59 +1417,52 @@ clusters:
   - name: default
     domain: cluster.local
 
-## @skip featureFlags Feature flags (used to switch on development features)
-##
-featureFlags:
-  ## @param featureFlags.operators Enable ingress record generation for Kubeapps
-  ##
-  operators: false
-
 ## RBAC configuration
 ##
 rbac:
   ## @param rbac.create Specifies whether RBAC resources should be created
   ##
   create: true
-## Image used for the tests
-## Bitnami NGINX image
-## ref: https://hub.docker.com/r/bitnami/nginx/tags/
-## @param testImage.registry NGINX image registry
-## @param testImage.repository NGINX image repository
-## @param testImage.tag NGINX image tag (immutable tags are recommended)
-## @param testImage.pullPolicy NGINX image pull policy
-## @param testImage.pullSecrets NGINX image pull secrets
+
+## @section Feature flags
 ##
-testImage:
-  registry: docker.io
-  repository: bitnami/nginx
-  tag: 1.21.6-debian-10-r112
-  ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+## Opt-in features intended for development and advanced use cases.
+## They might be removed in future releases without prior notice.
+featureFlags:
+  ## For a full list of possible ingress annotations, please see
+  apiOnly:
+    ## @param featureFlags.apiOnly.enabled Enable ingress for API operations only. Access to "/" will not be possible, so Dashboard will be unusable.
+    ##
+    enabled: false
+    grpc:
+      ## @param featureFlags.apiOnly.grpc.annotations [object] Specific annotations for the GRPC ingress in API-only mode
+      ## ref: https://github.com/kubernetes/ingress-nginx/blob/main/docs/user-guide/nginx-configuration/annotations.md
+      ##
+      annotations:
+        nginx.ingress.kubernetes.io/backend-protocol: GRPC
+  ## @param featureFlags.operators Enable support for Operators in Kubeapps
   ##
-  pullPolicy: IfNotPresent
-  ## Optionally specify an array of imagePullSecrets.
-  ## Secrets must be manually created in the namespace.
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-  ## e.g:
-  ## pullSecrets:
-  ##   - myRegistryKeySecretName
-  ##
-  pullSecrets: []
+  operators: false
+  schemaEditor:
+    ## @param featureFlags.schemaEditor.enabled Enable a visual editor for customizing the package schemas
+    ##
+    enabled: false
 
 ## @section Database Parameters
 
 ## PostgreSQL chart configuration
-## ref: https://github.com/bitnami/charts/blob/master/bitnami/postgresql/values.yaml
+## ref: https://github.com/bitnami/charts/blob/main/bitnami/postgresql/values.yaml
 ## @param postgresql.enabled Deploy a PostgreSQL server to satisfy the applications database requirements
+## @param postgresql.auth.username Username for PostgreSQL server
 ## @param postgresql.auth.postgresPassword Password for 'postgres' user
-## ref: https://github.com/bitnami/bitnami-docker-postgresql/blob/master/README.md#setting-the-root-password-on-first-run
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/postgresql#setting-the-root-password-on-first-run
 ## @param postgresql.auth.database Name for a custom database to create
 ## @param postgresql.auth.existingSecret Name of existing secret to use for PostgreSQL credentials
 ##
 postgresql:
   enabled: true
   auth:
+    username: "postgres"
     postgresPassword: ""
     database: assets
     existingSecret: ""
@@ -2004,16 +1471,19 @@ postgresql:
   primary:
     persistence:
       enabled: false
+  ## @param postgresql.architecture PostgreSQL architecture (`standalone` or `replication`)
+  ##
+  architecture: standalone
   ## @param postgresql.securityContext.enabled Enabled PostgreSQL replicas pods' Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ##
   securityContext:
     enabled: false
-  ## PostreSQL containers' resource requests and limits
+  ## PostgreSQL containers' resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
-  ## @param postgresql.resources.limits The resources limits for the PostreSQL container
-  ## @param postgresql.resources.requests.cpu The requested CPU for the PostreSQL container
-  ## @param postgresql.resources.requests.memory The requested memory for the PostreSQL container
+  ## @param postgresql.resources.limits The resources limits for the PostgreSQL container
+  ## @param postgresql.resources.requests.cpu The requested CPU for the PostgreSQL container
+  ## @param postgresql.resources.requests.memory The requested memory for the PostgreSQL container
   ##
   resources:
     limits: {}
@@ -2044,6 +1514,11 @@ kubeappsapis:
             patch: 3
           ## @param kubeappsapis.pluginConfig.core.packages.v1alpha1.timeoutSeconds Value to wait for Kubernetes commands to complete
           timeoutSeconds: 300
+    helm:
+      packages:
+        v1alpha1:
+          ## @param kubeappsapis.pluginConfig.helm.packages.v1alpha1.globalPackagingNamespace Custom global packaging namespace. Using this value will override the current "kubeapps release namespace + suffix" pattern and will create a new namespace if not exists.
+          globalPackagingNamespace: ""
     kappController:
       packages:
         v1alpha1:
@@ -2059,18 +1534,47 @@ kubeappsapis:
           ## @param kubeappsapis.pluginConfig.kappController.packages.v1alpha1.defaultAllowDowngrades Default policy for allowing applications to be downgraded to previous versions
           ## ref: https://carvel.dev/kapp-controller/docs/latest/package-consumer-concepts/#downgrading
           defaultAllowDowngrades: false
+          ## @param kubeappsapis.pluginConfig.kappController.packages.v1alpha1.globalPackagingNamespace Default global packaging namespace
+          ## ref: https://carvel.dev/kapp-controller/docs/latest/package-consumer-concepts/#namespacing
+          globalPackagingNamespace: kapp-controller-packaging-global
+    flux:
+      packages:
+        v1alpha1:
+          ## @param kubeappsapis.pluginConfig.flux.packages.v1alpha1.defaultUpgradePolicy Default upgrade policy generating version constraints
+          ## enum: [ "major", "minor", "patch", "none" ]
+          defaultUpgradePolicy: none
+          ## @param kubeappsapis.pluginConfig.flux.packages.v1alpha1.noCrossNamespaceRefs Enable this flag to disallow cross-namespace references, useful when running Flux on multi-tenant clusters
+          noCrossNamespaceRefs: false
+    resources:
+      packages:
+        v1alpha1:
+          ## Trusted namespaces parameters
+          ##
+          trustedNamespaces:
+            ## @param kubeappsapis.pluginConfig.resources.packages.v1alpha1.trustedNamespaces.headerName Optional header name for trusted namespaces
+            ## e.g:
+            ## headerName: X-Consumer-Groups
+            ##
+            headerName: ""
+            ## @param kubeappsapis.pluginConfig.resources.packages.v1alpha1.trustedNamespaces.headerPattern Optional header pattern for trusted namespaces
+            ## e.g:
+            ## headerPattern: namespace:^([\w-]+):\w+$
+            ##
+            headerPattern: ""
   ## Bitnami Kubeapps-APIs image
   ## ref: https://hub.docker.com/r/bitnami/kubeapps-apis/tags/
   ## @param kubeappsapis.image.registry Kubeapps-APIs image registry
   ## @param kubeappsapis.image.repository Kubeapps-APIs image repository
   ## @param kubeappsapis.image.tag Kubeapps-APIs image tag (immutable tags are recommended)
+  ## @param kubeappsapis.image.digest Kubeapps-APIs image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param kubeappsapis.image.pullPolicy Kubeapps-APIs image pull policy
   ## @param kubeappsapis.image.pullSecrets Kubeapps-APIs image pull secrets
   ##
   image:
     registry: docker.io
     repository: bitnami/kubeapps-apis
-    tag: 2.4.5-debian-10-r20
+    tag: 2.6.3-debian-11-r8
+    digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -2336,48 +1840,73 @@ kubeappsapis:
     automountServiceAccountToken: true
     annotations: {}
 
-## @section Redis&trade; chart configuration
-## ref: https://github.com/bitnami/charts/blob/master/bitnami/redis/values.yaml
+## @section Redis&reg; chart configuration
+## ref: https://github.com/bitnami/charts/blob/main/bitnami/redis/values.yaml
 ##
-## Redis will be enabled and installed if `packages.flux.enabled` is true.
+## Redis(R) will be enabled and installed if `packages.flux.enabled` is true.
 redis:
   ## @param redis.auth.enabled Enable password authentication
-  ## @param redis.auth.password Redis&trade; password
-  ## @param redis.auth.existingSecret The name of an existing secret with Redis&trade; credentials
+  ## @param redis.auth.password Redis&reg; password
+  ## @param redis.auth.existingSecret The name of an existing secret with Redis&reg; credentials
+  ##
   auth:
     enabled: true
     password: ""
     existingSecret: ""
+  ## @param redis.architecture Redis(R) architecture (`standalone` or `replication`)
+  ##
+  architecture: standalone
   master:
-    ## @param redis.master.extraFlags Array with additional command line flags for Redis&trade; master
+    ## @param redis.master.extraFlags Array with additional command line flags for Redis&reg; master
+    ##
     extraFlags:
-      ## The maxmemory configuration directive is used in order to configure Redis to use a specified
+      ## The maxmemory configuration directive is used in order to configure Redis(R) to use a specified
       ## amount of memory for the data set. Setting maxmemory to zero results into no memory limits
       ## see https://redis.io/topics/lru-cache for more details
+      ##
       - "--maxmemory 200mb"
-      ## The exact behavior Redis follows when the maxmemory limit is reached is configured using the
+      ## The exact behavior Redis(R) follows when the maxmemory limit is reached is configured using the
       ## maxmemory-policy configuration directive
       ## allkeys-lru: evict keys by trying to remove the less recently used (LRU) keys first, in order
       ## to make space for the new data added
+      ##
       - "--maxmemory-policy allkeys-lru"
       ## ref https://stackoverflow.com/questions/22815364/flushall-and-flushdb-commands-on-redis-return-unk-command
       ## Redis official Helm chart by default disables FLUSHDB and FLUSHALL commands
-    ## @param redis.master.disableCommands Array with commands to deactivate on Redis&trade
+      ##
+    ## @param redis.master.disableCommands Array with commands to deactivate on Redis&reg;
     disableCommands: []
+    ## Redis(R) Master persistence configuration
+    #
+    persistence:
+      ## @param redis.master.persistence.enabled Enable Redis&reg; master data persistence using PVC
+      ##
+      enabled: false
   replica:
-    ## @param redis.replica.replicaCount Number of Redis&trade; replicas to deploy
+    ## @param redis.replica.replicaCount Number of Redis&reg; replicas to deploy
+    ##
     replicaCount: 1
-    ## @param redis.replica.extraFlags Array with additional command line flags for Redis&trade; replicas
+    ## @param redis.replica.extraFlags Array with additional command line flags for Redis&reg; replicas
+    ##
     extraFlags:
-      ## The maxmemory configuration directive is used in order to configure Redis to use a specified
+      ## The maxmemory configuration directive is used in order to configure Redis(R) to use a specified
       ## amount of memory for the data set. Setting maxmemory to zero results into no memory limits
+      ##
       - "--maxmemory 200mb"
-      ## The exact behavior Redis follows when the maxmemory limit is reached is configured using the
+      ## The exact behavior Redis(R) follows when the maxmemory limit is reached is configured using the
       ## maxmemory-policy configuration directive
       ## allkeys-lru: evict keys by trying to remove the less recently used (LRU) keys first, in order
       ## to make space for the new data added
+      ##
       - "--maxmemory-policy allkeys-lru"
     ## ref https://stackoverflow.com/questions/22815364/flushall-and-flushdb-commands-on-redis-return-unk-command
-    ## Redis official Helm chart by default disables FLUSHDB and FLUSHALL commands
-    ## @param redis.replica.disableCommands Array with commands to deactivate on Redis&trade
+    ## Redis(R) official Helm chart by default disables FLUSHDB and FLUSHALL commands
+    ## @param redis.replica.disableCommands Array with commands to deactivate on Redis&reg;
+    ##
     disableCommands: []
+    ## Redis(R) Replica persistence configuration
+    ##
+    persistence:
+      ## @param redis.replica.persistence.enabled Enable Redis&reg; replica data persistence using PVC
+      ##
+      enabled: false

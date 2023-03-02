@@ -61,6 +61,7 @@ diagnosticMode:
 ## @param image.registry Discourse image registry
 ## @param image.repository Discourse image repository
 ## @param image.tag Discourse image tag
+## @param image.digest Discourse image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy Discourse image pull policy
 ## @param image.pullSecrets Discourse image pull secrets
 ## @param image.debug Enable image debug mode
@@ -68,7 +69,8 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/discourse
-  tag: 2.8.3-debian-10-r31
+  tag: 3.0.1-debian-11-r8
+  digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -86,7 +88,7 @@ image:
   ##
   debug: false
 ## Authentication parameters
-## ref: https://github.com/bitnami/bitnami-docker-discourse#user-and-site-configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/discourse#user-and-site-configuration
 ##
 auth:
   ## @param auth.email Discourse admin user email
@@ -196,7 +198,7 @@ tolerations: []
 ## @param topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
 ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
 ##
-topologySpreadConstraints: {}
+topologySpreadConstraints: []
 ## @param priorityClassName Priority Class Name
 ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
 ##
@@ -296,7 +298,7 @@ discourse:
   ##
   readinessProbe:
     enabled: true
-    initialDelaySeconds: 30
+    initialDelaySeconds: 180
     periodSeconds: 10
     timeoutSeconds: 5
     failureThreshold: 6
@@ -507,6 +509,12 @@ service:
   ## ref: https://kubernetes.io/docs/user-guide/services/
   ##
   sessionAffinity: None
+  ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
+  ## sessionAffinityConfig:
+  ##   clientIP:
+  ##     timeoutSeconds: 300
+  ##
+  sessionAffinityConfig: {}
   ## @param service.clusterIP Discourse service Cluster IP
   ## e.g.:
   ## clusterIP: None
@@ -631,7 +639,7 @@ ingress:
   ## - host: example.local
   ##     http:
   ##       path: /
-  ##       backend: 
+  ##       backend:
   ##         service:
   ##           name: example-svc
   ##           port:
@@ -651,13 +659,15 @@ volumePermissions:
   ## @param volumePermissions.image.registry Init container volume-permissions image registry
   ## @param volumePermissions.image.repository Init container volume-permissions image repository
   ## @param volumePermissions.image.tag Init container volume-permissions image tag (immutable tags are recommended)
+  ## @param volumePermissions.image.digest Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
   ## @param volumePermissions.image.pullSecrets Init container volume-permissions image pull secrets
   ##
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r312
+    tag: 11-debian-11-r90
+    digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -782,7 +792,7 @@ networkPolicy:
 ## @section Discourse database parameters
 
 ## PostgreSQL chart configuration
-## ref: https://github.com/bitnami/charts/blob/master/bitnami/postgresql/values.yaml
+## ref: https://github.com/bitnami/charts/blob/main/bitnami/postgresql/values.yaml
 ## @param postgresql.enabled Switch to enable or disable the PostgreSQL helm chart
 ## @param postgresql.auth.enablePostgresUser Assign a password to the "postgres" admin user. Otherwise, remote access will be blocked for this user
 ## @param postgresql.auth.postgresPassword Password for the "postgres" admin user
@@ -829,21 +839,21 @@ externalDatabase:
   existingSecretPasswordKey: "password"
   existingSecretPostgresPasswordKey: "postgres-password"
 
-## @section Redis&trade; parameters
+## @section Redis&reg; parameters
 
-## Redis&trade; chart configuration
-## ref: https://github.com/bitnami/charts/blob/master/bitnami/redis/values.yaml
-## @param redis.enabled Switch to enable or disable the Redis&trade; helm
+## Redis&reg; chart configuration
+## ref: https://github.com/bitnami/charts/blob/main/bitnami/redis/values.yaml
+## @param redis.enabled Switch to enable or disable the Redis&reg; helm
 ## @param redis.auth.enabled Enable password authentication
-## @param redis.auth.password Redis&trade; password
-## @param redis.auth.existingSecret The name of an existing secret with Redis&trade; credentials
-## @param redis.architecture Redis&trade; architecture. Allowed values: `standalone` or `replication`
+## @param redis.auth.password Redis&reg; password
+## @param redis.auth.existingSecret The name of an existing secret with Redis&reg; credentials
+## @param redis.architecture Redis&reg; architecture. Allowed values: `standalone` or `replication`
 ##
 redis:
   enabled: true
   auth:
     enabled: true
-    ## Redis&trade; password (both master and slave). Defaults to a random 10-character alphanumeric string if not set and auth.enabled is true.
+    ## Redis&reg; password (both master and slave). Defaults to a random 10-character alphanumeric string if not set and auth.enabled is true.
     ## It should always be set using the password value or in the existingSecret to avoid issues
     ## with Discourse.
     ## The password value is ignored if existingSecret is set
@@ -851,21 +861,17 @@ redis:
     existingSecret: ""
   architecture: standalone
 
-## External Redis&trade; configuration
+## External Redis&reg; configuration
 ## All of these values are only used when redis.enabled is set to false
-## @param externalRedis.host Redis&trade; host
-## @param externalRedis.port Redis&trade; port number
-## @param externalRedis.username Redis&trade; username
-## @param externalRedis.password Redis&trade; password
+## @param externalRedis.host Redis&reg; host
+## @param externalRedis.port Redis&reg; port number
+## @param externalRedis.password Redis&reg; password
 ## @param externalRedis.existingSecret Name of an existing secret resource containing the Redis&trade credentials
 ## @param externalRedis.existingSecretPasswordKey Name of an existing secret key containing the Redis&trade credentials
 ##
 externalRedis:
   host: localhost
   port: 6379
-  ## Most Redis&trade; implementations do not require a username
-  ## to authenticate and it should be enough with the password
-  username: ""
   password: ""
   existingSecret: ""
   existingSecretPasswordKey: "redis-password"

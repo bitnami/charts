@@ -11,7 +11,7 @@ Return the proper ES image name
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "elasticsearch.imagePullSecrets" -}}
-{{ include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.metrics.image .Values.curator.image .Values.sysctlImage .Values.volumePermissions.image) "global" .Values.global) }}
+{{ include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.metrics.image .Values.sysctlImage .Values.volumePermissions.image) "global" .Values.global) }}
 {{- end -}}
 
 {{/*
@@ -19,13 +19,6 @@ Return the proper ES exporter image name
 */}}
 {{- define "elasticsearch.metrics.image" -}}
 {{ include "common.images.image" (dict "imageRoot" .Values.metrics.image "global" .Values.global) }}
-{{- end -}}
-
-{{/*
-Return the proper ES curator image name
-*/}}
-{{- define "elasticsearch.curator.image" -}}
-{{ include "common.images.image" (dict "imageRoot" .Values.curator.image "global" .Values.global) }}
 {{- end -}}
 
 {{/*
@@ -87,6 +80,18 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{/*
+Create a default master service name.
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+*/}}
+{{- define "elasticsearch.master.servicename" -}}
+{{- if .Values.master.servicenameOverride -}}
+{{- .Values.master.servicenameOverride | trunc 63 | trimSuffix "-" -}}
+{{- else -}}
+{{- printf "%s-hl" (include "elasticsearch.master.fullname" .) | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Create a default fully qualified coordinating name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
@@ -96,6 +101,18 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- .Values.coordinating.fullnameOverride | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
 {{- printf "%s-%s" (include "common.names.fullname" .) $name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create a default coordinating service name.
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+*/}}
+{{- define "elasticsearch.coordinating.servicename" -}}
+{{- if .Values.coordinating.servicenameOverride -}}
+{{- .Values.coordinating.servicenameOverride | trunc 63 | trimSuffix "-" -}}
+{{- else -}}
+{{- printf "%s-hl" (include "elasticsearch.coordinating.fullname" .) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 {{- end -}}
 
@@ -113,6 +130,18 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{/*
+Create a default data service name.
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+*/}}
+{{- define "elasticsearch.data.servicename" -}}
+{{- if .Values.data.servicenameOverride -}}
+{{- .Values.data.servicenameOverride | trunc 63 | trimSuffix "-" -}}
+{{- else -}}
+{{- printf "%s-hl" (include "elasticsearch.data.fullname" .) | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Create a default fully qualified ingest name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
@@ -126,6 +155,18 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{/*
+Create a default ingest service name.
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+*/}}
+{{- define "elasticsearch.ingest.servicename" -}}
+{{- if .Values.ingest.servicenameOverride -}}
+{{- .Values.ingest.servicenameOverride | trunc 63 | trimSuffix "-" -}}
+{{- else -}}
+{{- printf "%s-hl" (include "elasticsearch.ingest.fullname" .) | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Create a default fully qualified metrics name.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
@@ -133,20 +174,6 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- $name := default "metrics" .Values.metrics.nameOverride -}}
 {{- if .Values.metrics.fullnameOverride -}}
 {{- .Values.metrics.fullnameOverride | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- printf "%s-%s" (include "common.names.fullname" .) $name | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Create a default fully qualified app name.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-If release name contains chart name it will be used as a full name.
-*/}}
-{{- define "elasticsearch.curator.fullname" -}}
-{{- $name := default "curator" .Values.metrics.nameOverride -}}
-{{- if .Values.curator.fullnameOverride -}}
-{{- .Values.curator.fullnameOverride | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
 {{- printf "%s-%s" (include "common.names.fullname" .) $name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
@@ -183,7 +210,7 @@ Returns true if at least one data-only node replica has been configured.
 Returns true if at least one ingest-only node replica has been configured.
 */}}
 {{- define "elasticsearch.ingest.enabled" -}}
-{{- if or .Values.ingest.autoscaling.enabled (gt (int .Values.ingest.replicaCount) 0) -}}
+{{- if and .Values.ingest.enabled (or .Values.ingest.autoscaling.enabled (gt (int .Values.ingest.replicaCount) 0)) -}}
     {{- true -}}
 {{- end -}}
 {{- end -}}
@@ -195,21 +222,24 @@ Return the hostname of every ElasticSearch seed node
 {{- $clusterDomain := .Values.clusterDomain }}
 {{- $releaseNamespace := include "common.names.namespace" . }}
 {{- if (include "elasticsearch.master.enabled" .) -}}
-{{- $masterFullname := (printf "%s-hl" (include "elasticsearch.master.fullname" .) | trunc 63 | trimSuffix "-") }}
+{{- $masterFullname := include "elasticsearch.master.servicename" .}}
 {{- $masterFullname }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }},
 {{- end -}}
 {{- if (include "elasticsearch.coordinating.enabled" .) -}}
-{{- $coordinatingFullname := (printf "%s-hl" (include "elasticsearch.coordinating.fullname" .) | trunc 63 | trimSuffix "-") }}
+{{- $coordinatingFullname := include "elasticsearch.coordinating.servicename" .}}
 {{- $coordinatingFullname }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }},
 {{- end -}}
 {{- if (include "elasticsearch.data.enabled" .) -}}
-{{- $dataFullname := (printf "%s-hl" (include "elasticsearch.data.fullname" .) | trunc 63 | trimSuffix "-") }}
+{{- $dataFullname := include "elasticsearch.data.servicename" .}}
 {{- $dataFullname }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }},
 {{- end -}}
 {{- if (include "elasticsearch.ingest.enabled" .) -}}
-{{- $ingestFullname := (printf "%s-hl" (include "elasticsearch.ingest.fullname" .) | trunc 63 | trimSuffix "-") }}
+{{- $ingestFullname := include "elasticsearch.ingest.servicename" .}}
 {{- $ingestFullname }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }},
 {{- end -}}
+{{- range .Values.extraHosts }}
+{{- . }},
+{{- end }}
 {{- end -}}
 
 {{/*
@@ -274,17 +304,6 @@ Get the initialization scripts Secret name.
     {{ default (include "elasticsearch.ingest.fullname" .) .Values.ingest.serviceAccount.name }}
 {{- else -}}
     {{ default "default" .Values.ingest.serviceAccount.name }}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Create the name of the service account to use
-*/}}
-{{- define "elasticsearch.curator.serviceAccountName" -}}
-{{- if .Values.curator.serviceAccount.create -}}
-    {{ default (include "elasticsearch.curator.fullname" .) .Values.curator.serviceAccount.name }}
-{{- else -}}
-    {{ default "default" .Values.curator.serviceAccount.name }}
 {{- end -}}
 {{- end -}}
 

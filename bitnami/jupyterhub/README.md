@@ -7,12 +7,12 @@ JupyterHub brings the power of notebooks to groups of users. It gives users acce
 [Overview of JupyterHub](https://jupyter.org/hub)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/jupyterhub
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/jupyterhub
 ```
 
 ## Introduction
@@ -21,7 +21,7 @@ Bitnami charts for Helm are carefully engineered, actively maintained and are th
 
 This chart bootstraps a [JupyterHub](https://github.com/jupyterhub/jupyterhub) Deployment in a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 [Learn more about the default configuration of the chart](https://docs.bitnami.com/kubernetes/infrastructure/jupyterhub/get-started/understand-default-configuration/).
 
@@ -36,8 +36,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/jupyterhub
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/jupyterhub
 ```
 
 These commands deploy JupyterHub on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -49,7 +49,7 @@ These commands deploy JupyterHub on the Kubernetes cluster in the default config
 To uninstall/delete the `my-release` helm release:
 
 ```console
-$ helm uninstall my-release
+helm uninstall my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -63,7 +63,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
-
 
 ### Common parameters
 
@@ -80,82 +79,81 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.command` | Command to override all containers in the the deployment(s)/daemonset(s)                | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the the deployment(s)/daemonset(s)                   | `["infinity"]`  |
 
-
 ### Hub deployment parameters
 
-| Name                                        | Description                                                                                                              | Value                  |
-| ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ---------------------- |
-| `hub.image.registry`                        | Hub image registry                                                                                                       | `docker.io`            |
-| `hub.image.repository`                      | Hub image repository                                                                                                     | `bitnami/jupyterhub`   |
-| `hub.image.tag`                             | Hub image tag (immutable tags are recommended)                                                                           | `1.5.0-debian-10-r149` |
-| `hub.image.pullPolicy`                      | Hub image pull policy                                                                                                    | `IfNotPresent`         |
-| `hub.image.pullSecrets`                     | Hub image pull secrets                                                                                                   | `[]`                   |
-| `hub.baseUrl`                               | Hub base URL                                                                                                             | `/`                    |
-| `hub.adminUser`                             | Hub Dummy authenticator admin user                                                                                       | `user`                 |
-| `hub.password`                              | Hub Dummy authenticator password                                                                                         | `""`                   |
-| `hub.configuration`                         | Hub configuration file (to be used by jupyterhub_config.py)                                                              | `""`                   |
-| `hub.existingConfigmap`                     | Configmap with Hub init scripts (replaces the scripts in templates/hub/configmap.yml)                                    | `""`                   |
-| `hub.existingSecret`                        | Secret with hub configuration (replaces the hub.configuration value) and proxy token                                     | `""`                   |
-| `hub.command`                               | Override Hub default command                                                                                             | `[]`                   |
-| `hub.args`                                  | Override Hub default args                                                                                                | `[]`                   |
-| `hub.extraEnvVars`                          | Add extra environment variables to the Hub container                                                                     | `[]`                   |
-| `hub.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars                                                                     | `""`                   |
-| `hub.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars                                                                        | `""`                   |
-| `hub.containerPorts.http`                   | Hub container port                                                                                                       | `8081`                 |
-| `hub.startupProbe.enabled`                  | Enable startupProbe on Hub containers                                                                                    | `true`                 |
-| `hub.startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                                   | `10`                   |
-| `hub.startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                                          | `10`                   |
-| `hub.startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                                         | `3`                    |
-| `hub.startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                                       | `30`                   |
-| `hub.startupProbe.successThreshold`         | Success threshold for startupProbe                                                                                       | `1`                    |
-| `hub.livenessProbe.enabled`                 | Enable livenessProbe on Hub containers                                                                                   | `true`                 |
-| `hub.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                                  | `10`                   |
-| `hub.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                                         | `10`                   |
-| `hub.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                                        | `3`                    |
-| `hub.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                                      | `30`                   |
-| `hub.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                                      | `1`                    |
-| `hub.readinessProbe.enabled`                | Enable readinessProbe on Hub containers                                                                                  | `true`                 |
-| `hub.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                                 | `10`                   |
-| `hub.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                                        | `10`                   |
-| `hub.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                                       | `3`                    |
-| `hub.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                                     | `30`                   |
-| `hub.readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                                     | `1`                    |
-| `hub.customStartupProbe`                    | Override default startup probe                                                                                           | `{}`                   |
-| `hub.customLivenessProbe`                   | Override default liveness probe                                                                                          | `{}`                   |
-| `hub.customReadinessProbe`                  | Override default readiness probe                                                                                         | `{}`                   |
-| `hub.resources.limits`                      | The resources limits for the Hub containers                                                                              | `{}`                   |
-| `hub.resources.requests`                    | The requested resources for the Hub containers                                                                           | `{}`                   |
-| `hub.containerSecurityContext.enabled`      | Enabled Hub containers' Security Context                                                                                 | `true`                 |
-| `hub.containerSecurityContext.runAsUser`    | Set Hub container's Security Context runAsUser                                                                           | `1000`                 |
-| `hub.containerSecurityContext.runAsNonRoot` | Set Hub container's Security Context runAsNonRoot                                                                        | `true`                 |
-| `hub.podSecurityContext.enabled`            | Enabled Hub pods' Security Context                                                                                       | `true`                 |
-| `hub.podSecurityContext.fsGroup`            | Set Hub pod's Security Context fsGroup                                                                                   | `1001`                 |
-| `hub.lifecycleHooks`                        | LifecycleHooks for the Hub container to automate configuration before or after startup                                   | `{}`                   |
-| `hub.hostAliases`                           | Add deployment host aliases                                                                                              | `[]`                   |
-| `hub.podLabels`                             | Add extra labels to the Hub pods                                                                                         | `{}`                   |
-| `hub.podAnnotations`                        | Add extra annotations to the Hub pods                                                                                    | `{}`                   |
-| `hub.podAffinityPreset`                     | Pod affinity preset. Ignored if `hub.affinity` is set. Allowed values: `soft` or `hard`                                  | `""`                   |
-| `hub.podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `hub.affinity` is set. Allowed values: `soft` or `hard`                             | `soft`                 |
-| `hub.nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `hub.affinity` is set. Allowed values: `soft` or `hard`                            | `""`                   |
-| `hub.nodeAffinityPreset.key`                | Node label key to match. Ignored if `hub.affinity` is set                                                                | `""`                   |
-| `hub.nodeAffinityPreset.values`             | Node label values to match. Ignored if `hub.affinity` is set                                                             | `[]`                   |
-| `hub.affinity`                              | Affinity for pod assignment.                                                                                             | `{}`                   |
-| `hub.nodeSelector`                          | Node labels for pod assignment.                                                                                          | `{}`                   |
-| `hub.tolerations`                           | Tolerations for pod assignment.                                                                                          | `[]`                   |
-| `hub.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `{}`                   |
-| `hub.priorityClassName`                     | Priority Class Name                                                                                                      | `""`                   |
-| `hub.schedulerName`                         | Use an alternate scheduler, e.g. "stork".                                                                                | `""`                   |
-| `hub.terminationGracePeriodSeconds`         | Seconds Hub pod needs to terminate gracefully                                                                            | `""`                   |
-| `hub.updateStrategy.type`                   | Update strategy - only really applicable for deployments with RWO PVs attached                                           | `RollingUpdate`        |
-| `hub.updateStrategy.rollingUpdate`          | Hub deployment rolling update configuration parameters                                                                   | `{}`                   |
-| `hub.extraVolumes`                          | Optionally specify extra list of additional volumes for Hub pods                                                         | `[]`                   |
-| `hub.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for Hub container(s)                                            | `[]`                   |
-| `hub.initContainers`                        | Add additional init containers to the Hub pods                                                                           | `[]`                   |
-| `hub.sidecars`                              | Add additional sidecar containers to the Hub pod                                                                         | `[]`                   |
-| `hub.pdb.create`                            | Deploy Hub PodDisruptionBudget                                                                                           | `false`                |
-| `hub.pdb.minAvailable`                      | Set minimum available hub instances                                                                                      | `""`                   |
-| `hub.pdb.maxUnavailable`                    | Set maximum available hub instances                                                                                      | `""`                   |
-
+| Name                                        | Description                                                                                                              | Value                 |
+| ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | --------------------- |
+| `hub.image.registry`                        | Hub image registry                                                                                                       | `docker.io`           |
+| `hub.image.repository`                      | Hub image repository                                                                                                     | `bitnami/jupyterhub`  |
+| `hub.image.tag`                             | Hub image tag (immutable tags are recommended)                                                                           | `3.1.1-debian-11-r11` |
+| `hub.image.digest`                          | Hub image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                      | `""`                  |
+| `hub.image.pullPolicy`                      | Hub image pull policy                                                                                                    | `IfNotPresent`        |
+| `hub.image.pullSecrets`                     | Hub image pull secrets                                                                                                   | `[]`                  |
+| `hub.baseUrl`                               | Hub base URL                                                                                                             | `/`                   |
+| `hub.adminUser`                             | Hub Dummy authenticator admin user                                                                                       | `user`                |
+| `hub.password`                              | Hub Dummy authenticator password                                                                                         | `""`                  |
+| `hub.configuration`                         | Hub configuration file (to be used by jupyterhub_config.py)                                                              | `""`                  |
+| `hub.existingConfigmap`                     | Configmap with Hub init scripts (replaces the scripts in templates/hub/configmap.yml)                                    | `""`                  |
+| `hub.existingSecret`                        | Secret with hub configuration (replaces the hub.configuration value) and proxy token                                     | `""`                  |
+| `hub.command`                               | Override Hub default command                                                                                             | `[]`                  |
+| `hub.args`                                  | Override Hub default args                                                                                                | `[]`                  |
+| `hub.extraEnvVars`                          | Add extra environment variables to the Hub container                                                                     | `[]`                  |
+| `hub.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars                                                                     | `""`                  |
+| `hub.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars                                                                        | `""`                  |
+| `hub.containerPorts.http`                   | Hub container port                                                                                                       | `8081`                |
+| `hub.startupProbe.enabled`                  | Enable startupProbe on Hub containers                                                                                    | `true`                |
+| `hub.startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                                   | `10`                  |
+| `hub.startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                                          | `10`                  |
+| `hub.startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                                         | `3`                   |
+| `hub.startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                                       | `30`                  |
+| `hub.startupProbe.successThreshold`         | Success threshold for startupProbe                                                                                       | `1`                   |
+| `hub.livenessProbe.enabled`                 | Enable livenessProbe on Hub containers                                                                                   | `true`                |
+| `hub.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                                  | `10`                  |
+| `hub.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                                         | `10`                  |
+| `hub.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                                        | `3`                   |
+| `hub.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                                      | `30`                  |
+| `hub.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                                      | `1`                   |
+| `hub.readinessProbe.enabled`                | Enable readinessProbe on Hub containers                                                                                  | `true`                |
+| `hub.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                                 | `10`                  |
+| `hub.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                                        | `10`                  |
+| `hub.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                                       | `3`                   |
+| `hub.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                                     | `30`                  |
+| `hub.readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                                     | `1`                   |
+| `hub.customStartupProbe`                    | Override default startup probe                                                                                           | `{}`                  |
+| `hub.customLivenessProbe`                   | Override default liveness probe                                                                                          | `{}`                  |
+| `hub.customReadinessProbe`                  | Override default readiness probe                                                                                         | `{}`                  |
+| `hub.resources.limits`                      | The resources limits for the Hub containers                                                                              | `{}`                  |
+| `hub.resources.requests`                    | The requested resources for the Hub containers                                                                           | `{}`                  |
+| `hub.containerSecurityContext.enabled`      | Enabled Hub containers' Security Context                                                                                 | `true`                |
+| `hub.containerSecurityContext.runAsUser`    | Set Hub container's Security Context runAsUser                                                                           | `1000`                |
+| `hub.containerSecurityContext.runAsNonRoot` | Set Hub container's Security Context runAsNonRoot                                                                        | `true`                |
+| `hub.podSecurityContext.enabled`            | Enabled Hub pods' Security Context                                                                                       | `true`                |
+| `hub.podSecurityContext.fsGroup`            | Set Hub pod's Security Context fsGroup                                                                                   | `1001`                |
+| `hub.lifecycleHooks`                        | LifecycleHooks for the Hub container to automate configuration before or after startup                                   | `{}`                  |
+| `hub.hostAliases`                           | Add deployment host aliases                                                                                              | `[]`                  |
+| `hub.podLabels`                             | Add extra labels to the Hub pods                                                                                         | `{}`                  |
+| `hub.podAnnotations`                        | Add extra annotations to the Hub pods                                                                                    | `{}`                  |
+| `hub.podAffinityPreset`                     | Pod affinity preset. Ignored if `hub.affinity` is set. Allowed values: `soft` or `hard`                                  | `""`                  |
+| `hub.podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `hub.affinity` is set. Allowed values: `soft` or `hard`                             | `soft`                |
+| `hub.nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `hub.affinity` is set. Allowed values: `soft` or `hard`                            | `""`                  |
+| `hub.nodeAffinityPreset.key`                | Node label key to match. Ignored if `hub.affinity` is set                                                                | `""`                  |
+| `hub.nodeAffinityPreset.values`             | Node label values to match. Ignored if `hub.affinity` is set                                                             | `[]`                  |
+| `hub.affinity`                              | Affinity for pod assignment.                                                                                             | `{}`                  |
+| `hub.nodeSelector`                          | Node labels for pod assignment.                                                                                          | `{}`                  |
+| `hub.tolerations`                           | Tolerations for pod assignment.                                                                                          | `[]`                  |
+| `hub.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`                  |
+| `hub.priorityClassName`                     | Priority Class Name                                                                                                      | `""`                  |
+| `hub.schedulerName`                         | Use an alternate scheduler, e.g. "stork".                                                                                | `""`                  |
+| `hub.terminationGracePeriodSeconds`         | Seconds Hub pod needs to terminate gracefully                                                                            | `""`                  |
+| `hub.updateStrategy.type`                   | Update strategy - only really applicable for deployments with RWO PVs attached                                           | `RollingUpdate`       |
+| `hub.updateStrategy.rollingUpdate`          | Hub deployment rolling update configuration parameters                                                                   | `{}`                  |
+| `hub.extraVolumes`                          | Optionally specify extra list of additional volumes for Hub pods                                                         | `[]`                  |
+| `hub.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for Hub container(s)                                            | `[]`                  |
+| `hub.initContainers`                        | Add additional init containers to the Hub pods                                                                           | `[]`                  |
+| `hub.sidecars`                              | Add additional sidecar containers to the Hub pod                                                                         | `[]`                  |
+| `hub.pdb.create`                            | Deploy Hub PodDisruptionBudget                                                                                           | `false`               |
+| `hub.pdb.minAvailable`                      | Set minimum available hub instances                                                                                      | `""`                  |
+| `hub.pdb.maxUnavailable`                    | Set maximum available hub instances                                                                                      | `""`                  |
 
 ### Hub RBAC parameters
 
@@ -167,7 +165,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `hub.serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                   | `{}`   |
 | `hub.rbac.create`                                 | Specifies whether RBAC resources should be created                     | `true` |
 | `hub.rbac.rules`                                  | Custom RBAC rules to set                                               | `[]`   |
-
 
 ### Hub Traffic Exposure Parameters
 
@@ -181,13 +178,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `hub.service.ports.http`                  | Hub service HTTP port                                            | `8081`      |
 | `hub.service.nodePorts.http`              | NodePort for the HTTP endpoint                                   | `""`        |
 | `hub.service.sessionAffinity`             | Control where client requests go, to the same pod or round-robin | `None`      |
+| `hub.service.sessionAffinityConfig`       | Additional settings for the sessionAffinity                      | `{}`        |
 | `hub.service.clusterIP`                   | Hub service Cluster IP                                           | `""`        |
 | `hub.service.loadBalancerIP`              | Hub service Load Balancer IP                                     | `""`        |
 | `hub.service.loadBalancerSourceRanges`    | Hub service Load Balancer sources                                | `[]`        |
 | `hub.service.externalTrafficPolicy`       | Hub service external traffic policy                              | `Cluster`   |
 | `hub.service.annotations`                 | Additional custom annotations for Hub service                    | `{}`        |
 | `hub.service.extraPorts`                  | Extra port to expose on Hub service                              | `[]`        |
-
 
 ### Hub Metrics parameters
 
@@ -206,14 +203,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `hub.metrics.serviceMonitor.honorLabels`       | Specify honorLabels parameter to add the scrape endpoint                                    | `false`        |
 | `hub.metrics.serviceMonitor.jobLabel`          | The name of the label on the target service to use as the job name in prometheus.           | `""`           |
 
-
 ### Proxy deployment parameters
 
 | Name                                          | Description                                                                                                              | Value                             |
 | --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | --------------------------------- |
 | `proxy.image.registry`                        | Proxy image registry                                                                                                     | `docker.io`                       |
 | `proxy.image.repository`                      | Proxy image repository                                                                                                   | `bitnami/configurable-http-proxy` |
-| `proxy.image.tag`                             | Proxy image tag (immutable tags are recommended)                                                                         | `4.5.1-debian-10-r58`             |
+| `proxy.image.tag`                             | Proxy image tag (immutable tags are recommended)                                                                         | `4.5.4-debian-11-r29`             |
+| `proxy.image.digest`                          | Proxy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                    | `""`                              |
 | `proxy.image.pullPolicy`                      | Proxy image pull policy                                                                                                  | `IfNotPresent`                    |
 | `proxy.image.pullSecrets`                     | Proxy image pull secrets                                                                                                 | `[]`                              |
 | `proxy.image.debug`                           | Activate verbose output                                                                                                  | `false`                           |
@@ -266,7 +263,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `proxy.affinity`                              | Affinity for pod assignment. Evaluated as a template.                                                                    | `{}`                              |
 | `proxy.nodeSelector`                          | Node labels for pod assignment. Evaluated as a template.                                                                 | `{}`                              |
 | `proxy.tolerations`                           | Tolerations for pod assignment. Evaluated as a template.                                                                 | `[]`                              |
-| `proxy.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `{}`                              |
+| `proxy.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`                              |
 | `proxy.priorityClassName`                     | Priority Class Name                                                                                                      | `""`                              |
 | `proxy.schedulerName`                         | Use an alternate scheduler, e.g. "stork".                                                                                | `""`                              |
 | `proxy.terminationGracePeriodSeconds`         | Seconds Proxy pod needs to terminate gracefully                                                                          | `""`                              |
@@ -280,7 +277,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `proxy.pdb.minAvailable`                      | Set minimum available proxy instances                                                                                    | `""`                              |
 | `proxy.pdb.maxUnavailable`                    | Set maximum available proxy instances                                                                                    | `""`                              |
 
-
 ### Proxy Traffic Exposure Parameters
 
 | Name                                             | Description                                                                                                                      | Value                    |
@@ -293,6 +289,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `proxy.service.api.ports.http`                   | API service HTTP port                                                                                                            | `8001`                   |
 | `proxy.service.api.nodePorts.http`               | NodePort for the HTTP endpoint                                                                                                   | `""`                     |
 | `proxy.service.api.sessionAffinity`              | Control where client requests go, to the same pod or round-robin                                                                 | `None`                   |
+| `proxy.service.api.sessionAffinityConfig`        | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
 | `proxy.service.api.clusterIP`                    | Hub service Cluster IP                                                                                                           | `""`                     |
 | `proxy.service.api.loadBalancerIP`               | Hub service Load Balancer IP                                                                                                     | `""`                     |
 | `proxy.service.api.loadBalancerSourceRanges`     | Hub service Load Balancer sources                                                                                                | `[]`                     |
@@ -303,6 +300,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `proxy.service.metrics.ports.http`               | Metrics service port                                                                                                             | `8002`                   |
 | `proxy.service.metrics.nodePorts.http`           | NodePort for the HTTP endpoint                                                                                                   | `""`                     |
 | `proxy.service.metrics.sessionAffinity`          | Control where client requests go, to the same pod or round-robin                                                                 | `None`                   |
+| `proxy.service.metrics.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
 | `proxy.service.metrics.clusterIP`                | Hub service Cluster IP                                                                                                           | `""`                     |
 | `proxy.service.metrics.loadBalancerIP`           | Hub service Load Balancer IP                                                                                                     | `""`                     |
 | `proxy.service.metrics.loadBalancerSourceRanges` | Hub service Load Balancer sources                                                                                                | `[]`                     |
@@ -313,6 +311,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `proxy.service.public.ports.http`                | Public service HTTP port                                                                                                         | `80`                     |
 | `proxy.service.public.nodePorts.http`            | NodePort for the HTTP endpoint                                                                                                   | `""`                     |
 | `proxy.service.public.sessionAffinity`           | Control where client requests go, to the same pod or round-robin                                                                 | `None`                   |
+| `proxy.service.public.sessionAffinityConfig`     | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
 | `proxy.service.public.clusterIP`                 | Hub service Cluster IP                                                                                                           | `""`                     |
 | `proxy.service.public.loadBalancerIP`            | Hub service Load Balancer IP                                                                                                     | `""`                     |
 | `proxy.service.public.loadBalancerSourceRanges`  | Hub service Load Balancer sources                                                                                                | `[]`                     |
@@ -334,7 +333,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `proxy.ingress.secrets`                          | Custom TLS certificates as secrets                                                                                               | `[]`                     |
 | `proxy.ingress.extraRules`                       | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
-
 ### Proxy Metrics parameters
 
 | Name                                             | Description                                                                                 | Value      |
@@ -350,7 +348,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `proxy.metrics.serviceMonitor.metricRelabelings` | MetricRelabelConfigs to apply to samples before ingestion                                   | `[]`       |
 | `proxy.metrics.serviceMonitor.honorLabels`       | Specify honorLabels parameter to add the scrape endpoint                                    | `false`    |
 | `proxy.metrics.serviceMonitor.jobLabel`          | The name of the label on the target service to use as the job name in prometheus.           | `""`       |
-
 
 ### Image puller deployment parameters
 
@@ -384,7 +381,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `imagePuller.affinity`                              | Affinity for pod assignment. Evaluated as a template.                                                                    | `{}`            |
 | `imagePuller.nodeSelector`                          | Node labels for pod assignment. Evaluated as a template.                                                                 | `{}`            |
 | `imagePuller.tolerations`                           | Tolerations for pod assignment. Evaluated as a template.                                                                 | `[]`            |
-| `imagePuller.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `{}`            |
+| `imagePuller.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`            |
 | `imagePuller.priorityClassName`                     | Priority Class Name                                                                                                      | `""`            |
 | `imagePuller.schedulerName`                         | Use an alternate scheduler, e.g. "stork".                                                                                | `""`            |
 | `imagePuller.terminationGracePeriodSeconds`         | Seconds ImagePuller pod needs to terminate gracefully                                                                    | `""`            |
@@ -395,37 +392,37 @@ The command removes all the Kubernetes components associated with the chart and 
 | `imagePuller.initContainers`                        | Add additional init containers to the ImagePuller pods                                                                   | `[]`            |
 | `imagePuller.sidecars`                              | Add additional sidecar containers to the ImagePuller pod                                                                 | `[]`            |
 
-
 ### Singleuser deployment parameters
 
-| Name                                            | Description                                                                                         | Value                                |
-| ----------------------------------------------- | --------------------------------------------------------------------------------------------------- | ------------------------------------ |
-| `singleuser.image.registry`                     | Single User image registry                                                                          | `docker.io`                          |
-| `singleuser.image.repository`                   | Single User image repository                                                                        | `bitnami/jupyter-base-notebook`      |
-| `singleuser.image.tag`                          | Single User image tag (immutabe tags are recommended)                                               | `1.5.0-debian-10-r154`               |
-| `singleuser.image.pullPolicy`                   | Single User image pull policy                                                                       | `IfNotPresent`                       |
-| `singleuser.image.pullSecrets`                  | Single User image pull secrets                                                                      | `[]`                                 |
-| `singleuser.notebookDir`                        | Notebook directory (it will be the same as the PVC volume mount)                                    | `/opt/bitnami/jupyterhub-singleuser` |
-| `singleuser.command`                            | Override Single User default command                                                                | `[]`                                 |
-| `singleuser.extraEnvVars`                       | Add extra environment variables to the Single User container                                        | `[]`                                 |
-| `singleuser.containerPort`                      | Single User container port                                                                          | `8888`                               |
-| `singleuser.resources.limits`                   | The resources limits for the Singleuser containers                                                  | `{}`                                 |
-| `singleuser.resources.requests`                 | The requested resources for the Singleuser containers                                               | `{}`                                 |
-| `singleuser.containerSecurityContext.enabled`   | Enabled Single User containers' Security Context                                                    | `true`                               |
-| `singleuser.containerSecurityContext.runAsUser` | Set Single User container's Security Context runAsUser                                              | `1001`                               |
-| `singleuser.podSecurityContext.enabled`         | Enabled Single User pods' Security Context                                                          | `true`                               |
-| `singleuser.podSecurityContext.fsGroup`         | Set Single User pod's Security Context fsGroup                                                      | `1001`                               |
-| `singleuser.podLabels`                          | Extra labels for Single User pods                                                                   | `{}`                                 |
-| `singleuser.podAnnotations`                     | Annotations for Single User pods                                                                    | `{}`                                 |
-| `singleuser.nodeSelector`                       | Node labels for pod assignment. Evaluated as a template.                                            | `{}`                                 |
-| `singleuser.tolerations`                        | Tolerations for pod assignment. Evaluated as a template.                                            | `[]`                                 |
-| `singleuser.priorityClassName`                  | Single User pod priority class name                                                                 | `""`                                 |
-| `singleuser.lifecycleHooks`                     | Add lifecycle hooks to the Single User deployment to automate configuration before or after startup | `{}`                                 |
-| `singleuser.extraVolumes`                       | Optionally specify extra list of additional volumes for Single User pods                            | `[]`                                 |
-| `singleuser.extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for Single User container(s)               | `[]`                                 |
-| `singleuser.initContainers`                     | Add additional init containers to the Single User pods                                              | `[]`                                 |
-| `singleuser.sidecars`                           | Add additional sidecar containers to the Single User pod                                            | `[]`                                 |
-
+| Name                                            | Description                                                                                                 | Value                                |
+| ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------- | ------------------------------------ |
+| `singleuser.image.registry`                     | Single User image registry                                                                                  | `docker.io`                          |
+| `singleuser.image.repository`                   | Single User image repository                                                                                | `bitnami/jupyter-base-notebook`      |
+| `singleuser.image.tag`                          | Single User image tag (immutabe tags are recommended)                                                       | `3.1.1-debian-11-r12`                |
+| `singleuser.image.digest`                       | Single User image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                                 |
+| `singleuser.image.pullPolicy`                   | Single User image pull policy                                                                               | `IfNotPresent`                       |
+| `singleuser.image.pullSecrets`                  | Single User image pull secrets                                                                              | `[]`                                 |
+| `singleuser.notebookDir`                        | Notebook directory (it will be the same as the PVC volume mount)                                            | `/opt/bitnami/jupyterhub-singleuser` |
+| `singleuser.allowPrivilegeEscalation`           | Controls whether a process can gain more privileges than its parent process                                 | `false`                              |
+| `singleuser.command`                            | Override Single User default command                                                                        | `[]`                                 |
+| `singleuser.extraEnvVars`                       | Extra environment variables that should be set for the user pods                                            | `[]`                                 |
+| `singleuser.containerPort`                      | Single User container port                                                                                  | `8888`                               |
+| `singleuser.resources.limits`                   | The resources limits for the Singleuser containers                                                          | `{}`                                 |
+| `singleuser.resources.requests`                 | The requested resources for the Singleuser containers                                                       | `{}`                                 |
+| `singleuser.containerSecurityContext.enabled`   | Enabled Single User containers' Security Context                                                            | `true`                               |
+| `singleuser.containerSecurityContext.runAsUser` | Set Single User container's Security Context runAsUser                                                      | `1001`                               |
+| `singleuser.podSecurityContext.enabled`         | Enabled Single User pods' Security Context                                                                  | `true`                               |
+| `singleuser.podSecurityContext.fsGroup`         | Set Single User pod's Security Context fsGroup                                                              | `1001`                               |
+| `singleuser.podLabels`                          | Extra labels for Single User pods                                                                           | `{}`                                 |
+| `singleuser.podAnnotations`                     | Annotations for Single User pods                                                                            | `{}`                                 |
+| `singleuser.nodeSelector`                       | Node labels for pod assignment. Evaluated as a template.                                                    | `{}`                                 |
+| `singleuser.tolerations`                        | Tolerations for pod assignment. Evaluated as a template.                                                    | `[]`                                 |
+| `singleuser.priorityClassName`                  | Single User pod priority class name                                                                         | `""`                                 |
+| `singleuser.lifecycleHooks`                     | Add lifecycle hooks to the Single User deployment to automate configuration before or after startup         | `{}`                                 |
+| `singleuser.extraVolumes`                       | Optionally specify extra list of additional volumes for Single User pods                                    | `[]`                                 |
+| `singleuser.extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for Single User container(s)                       | `[]`                                 |
+| `singleuser.initContainers`                     | Add additional init containers to the Single User pods                                                      | `[]`                                 |
+| `singleuser.sidecars`                           | Add additional sidecar containers to the Single User pod                                                    | `[]`                                 |
 
 ### Single User RBAC parameters
 
@@ -436,7 +433,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `singleuser.serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created | `true` |
 | `singleuser.serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                   | `{}`   |
 
-
 ### Single User Persistence parameters
 
 | Name                                  | Description                                                | Value               |
@@ -445,7 +441,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `singleuser.persistence.storageClass` | Persistent Volumes storage class                           | `""`                |
 | `singleuser.persistence.accessModes`  | Persistent Volumes access modes                            | `["ReadWriteOnce"]` |
 | `singleuser.persistence.size`         | Persistent Volumes size                                    | `10Gi`              |
-
 
 ### Traffic exposure parameters
 
@@ -457,17 +452,16 @@ The command removes all the Kubernetes components associated with the chart and 
 | `singleuser.networkPolicy.extraIngress`             | Add extra ingress rules to the NetworkPolicy             | `""`    |
 | `singleuser.networkPolicy.extraEgress`              | Add extra egress rules to the NetworkPolicy              | `""`    |
 
-
 ### Auxiliary image parameters
 
-| Name                         | Description                                         | Value                   |
-| ---------------------------- | --------------------------------------------------- | ----------------------- |
-| `auxiliaryImage.registry`    | Auxiliary image registry                            | `docker.io`             |
-| `auxiliaryImage.repository`  | Auxiliary image repository                          | `bitnami/bitnami-shell` |
-| `auxiliaryImage.tag`         | Auxiliary image tag (immutabe tags are recommended) | `10-debian-10-r403`     |
-| `auxiliaryImage.pullPolicy`  | Auxiliary image pull policy                         | `IfNotPresent`          |
-| `auxiliaryImage.pullSecrets` | Auxiliary image pull secrets                        | `[]`                    |
-
+| Name                         | Description                                                                                               | Value                   |
+| ---------------------------- | --------------------------------------------------------------------------------------------------------- | ----------------------- |
+| `auxiliaryImage.registry`    | Auxiliary image registry                                                                                  | `docker.io`             |
+| `auxiliaryImage.repository`  | Auxiliary image repository                                                                                | `bitnami/bitnami-shell` |
+| `auxiliaryImage.tag`         | Auxiliary image tag (immutabe tags are recommended)                                                       | `11-debian-11-r90`      |
+| `auxiliaryImage.digest`      | Auxiliary image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
+| `auxiliaryImage.pullPolicy`  | Auxiliary image pull policy                                                                               | `IfNotPresent`          |
+| `auxiliaryImage.pullSecrets` | Auxiliary image pull secrets                                                                              | `[]`                    |
 
 ### JupyterHub database parameters
 
@@ -488,21 +482,20 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.existingSecret`            | Name of an existing secret resource containing the database credentials | `""`                 |
 | `externalDatabase.existingSecretPasswordKey` | Name of an existing secret key containing the database credentials      | `""`                 |
 
-
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release \
+helm install my-release \
   --set proxy.livenessProbe.successThreshold=5 \
-    bitnami/jupyterhub
+    my-repo/jupyterhub
 ```
 
 The above command sets the `proxy.livenessProbe.successThreshold` to `5`.
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
-```bash
-$ helm install my-release -f values.yaml bitnami/jupyterhub
+```console
+helm install my-release -f values.yaml my-repo/jupyterhub
 ```
 
 ## Configuration and installation details
@@ -540,7 +533,7 @@ Refer to the chart documentation for more information on, and examples of, confi
 
 ### Configure Ingress
 
-This chart provides support for Ingress resources for the JupyterHub proxy component. If an Ingress controller, such as [nginx-ingress](https://kubeapps.com/charts/stable/nginx-ingress) or [traefik](https://kubeapps.com/charts/stable/traefik), that Ingress controller can be used to serve WordPress.
+This chart provides support for Ingress resources for the JupyterHub proxy component. If an Ingress controller, such as nginx-ingress or traefik, that Ingress controller can be used to serve WordPress.
 
 To enable Ingress integration, set `proxy.ingress.enabled` to `true`. The `proxy.ingress.hostname` property can be used to set the host name. The `proxy.ingress.tls` parameter can be used to add the TLS configuration for this host. It is also possible to have more than one host, with a separate TLS configuration for each host.
 
@@ -550,10 +543,10 @@ Learn more about [configuring and using Ingress in the chart documentation](http
 
 This chart facilitates the creation of TLS secrets for use with the Ingress controller (although this is not mandatory). There are four common use cases:
 
-* Helm generates/manages certificate secrets based on the parameters.
-* User generates/manages certificates separately.
-* Helm creates self-signed certificates and generates/manages certificate secrets.
-* An additional tool (like [cert-manager](https://github.com/jetstack/cert-manager/)) manages the secrets for the application.
+- Helm generates/manages certificate secrets based on the parameters.
+- User generates/manages certificates separately.
+- Helm creates self-signed certificates and generates/manages certificate secrets.
+- An additional tool (like [cert-manager](https://github.com/jetstack/cert-manager/)) manages the secrets for the application.
 
 Refer to the [chart documentation for more information on working with TLS](https://docs.bitnami.com/kubernetes/infrastructure/jupyterhub/administration/enable-tls-ingress/).
 
@@ -571,17 +564,23 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 3.0.0
+
+This major updates the PostgreSQL subchart to its newest major, 12.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#to-1200) you can find more information about the changes introduced in that version.
+
+### To any previous version
+
 Refer to the [chart documentation for more information about how to upgrade from previous releases](https://docs.bitnami.com/kubernetes/infrastructure/jupyterhub/administration/upgrade/).
 
 ## License
 
-Copyright &copy; 2022 Bitnami
+Copyright &copy; 2023 Bitnami
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

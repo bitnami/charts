@@ -184,35 +184,35 @@ spec:
           resources: {{- toYaml .Values.server.resources | nindent 12 }}
           {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.server.livenessProbe.enabled }}
+          {{- if .Values.server.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.server.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.server.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.server.livenessProbe "enabled") "context" $) | nindent 12 }}
             exec:
               command:
                 - python3
                 - -c
                 - import os; os.environ["DMLC_PS_ROOT_URI"] = "127.0.0.1"; os.environ["DMLC_ROLE"] = "worker"; import mxnet; print(mxnet.__version__)
-          {{- else if .Values.server.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.server.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.server.readinessProbe.enabled }}
+          {{- if .Values.server.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.server.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.server.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.server.readinessProbe "enabled") "context" $) | nindent 12 }}
             exec:
               command:
                 - python3
                 - -c
                 - import os; os.environ["DMLC_PS_ROOT_URI"] = "127.0.0.1"; os.environ["DMLC_ROLE"] = "worker"; import mxnet; print(mxnet.__version__)
-          {{- else if .Values.server.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.server.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.server.startupProbe.enabled }}
+          {{- if .Values.server.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.server.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.server.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.server.startupProbe "enabled") "context" $) | nindent 12 }}
             exec:
               command:
                 - python3
                 - -c
                 - import os; os.environ["DMLC_PS_ROOT_URI"] = "127.0.0.1"; os.environ["DMLC_ROLE"] = "worker"; import mxnet; print(mxnet.__version__)
-          {{- else if .Values.server.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.server.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           volumeMounts:

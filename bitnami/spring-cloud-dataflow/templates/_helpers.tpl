@@ -276,7 +276,7 @@ Return the RabbitMQ Port
 */}}
 {{- define "scdf.rabbitmq.port" -}}
 {{- if .Values.rabbitmq.enabled }}
-    {{- printf "%d" (.Values.rabbitmq.service.port | int ) -}}
+    {{- printf "%d" (.Values.rabbitmq.service.ports.amqp | int ) -}}
 {{- else -}}
     {{- printf "%d" (.Values.externalRabbitmq.port | int ) -}}
 {{- end -}}
@@ -315,17 +315,6 @@ Return the RabbitMQ host
 {{- else -}}
     {{- printf "%s" .Values.externalRabbitmq.vhost -}}
 {{- end -}}
-{{- end -}}
-
-{{/*
-Return the Hibernate dialect
-*/}}
-{{- define "scdf.database.hibernate.dialect" -}}
-  {{- if .Values.mariadb.enabled -}}
-    {{- printf "org.hibernate.dialect.MariaDB102Dialect" -}}
-  {{- else -}}
-    {{- .Values.externalDatabase.hibernateDialect -}}
-  {{- end -}}
 {{- end -}}
 
 {{/*

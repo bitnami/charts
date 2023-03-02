@@ -114,7 +114,7 @@ Get the vhosts config map name.
 {{- if .Values.vhostsConfigMap -}}
     {{- printf "%s" (tpl .Values.vhostsConfigMap $) -}}
 {{- else -}}
-    {{- printf "%s-vhosts" (include "common.names.fullname" . ) -}}
+    {{- printf "%s-vhosts" (include "common.names.fullname" . ) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 {{- end -}}
 
@@ -125,6 +125,6 @@ Get the httpd.conf config map name.
 {{- if .Values.httpdConfConfigMap -}}
     {{- printf "%s" (tpl .Values.httpdConfConfigMap $) -}}
 {{- else -}}
-    {{- printf "%s-httpd-conf" (include "common.names.fullname" . ) -}}
+    {{- printf "%s-httpd-conf" (include "common.names.fullname" . ) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 {{- end -}}

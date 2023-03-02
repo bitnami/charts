@@ -14,4 +14,4 @@ metadata:
   {{- end }}
 data:
   loki.yaml: |-
-    {{- include "common.tplvalues.render" (dict "value" .Values.loki.configuration "context" $) | nindent 4 }}
+    {{- mergeOverwrite (include "common.tplvalues.render" (dict "value" .Values.loki.configuration "context" $) | fromYaml) .Values.loki.overrideConfiguration | toYaml | nindent 4  }}

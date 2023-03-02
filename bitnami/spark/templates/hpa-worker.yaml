@@ -14,7 +14,7 @@ metadata:
   {{- end }}
 spec:
   scaleTargetRef:
-    apiVersion: apps/v1
+    apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
     kind: statefulset
     name: {{ printf "%s-worker" (include "common.names.fullname" .) }}
   minReplicas: {{ .Values.worker.autoscaling.minReplicas }}

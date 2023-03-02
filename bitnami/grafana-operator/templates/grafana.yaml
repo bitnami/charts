@@ -2,8 +2,8 @@
 apiVersion: integreatly.org/v1alpha1
 kind: Grafana
 metadata:
-  name: {{ include "common.names.fullname" . }}-grafana
-  namespace: {{ .Release.Namespace | quote }}
+  name: {{ printf "%s-grafana" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -36,6 +36,9 @@ spec:
         - {{ . | quote }}
       {{- end }}
     size: {{ .Values.grafana.persistence.size }}
+    {{- if .Values.grafana.persistence.existingVolume }}
+    volumeName: {{ .Values.grafana.persistence.existingVolume }}
+    {{- end }}
     {{- if .Values.grafana.persistence.storageClass }}
     class: {{ .Values.grafana.persistence.storageClass }}
     {{- end }}

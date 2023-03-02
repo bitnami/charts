@@ -1,5 +1,6 @@
 annotations:
   category: %%CHOOSE_ONE_FROM_CHART_CATEGORIES_FILE%%
+  licenses: Apache-2.0
 apiVersion: v2
 appVersion: %%UPSTREAM_PROJECT_VERSION%%
 dependencies:
@@ -11,9 +12,8 @@ dependencies:
     repository: https://charts.bitnami.com/bitnami
     tags:
       - bitnami-common
-    version: 1.x.x
+    version: 2.x.x
 description: %%DESCRIPTION%%
-engine: gotpl
 home: %%UPSTREAM_PROJECT_URL%%
 icon: https://bitnami.com/assets/stacks/%%IMAGE_NAME%%/img/%%IMAGE_NAME%%-stack-220x234.png
 keywords:
@@ -21,11 +21,11 @@ keywords:
   - %%UPSTREAM_PROJECT_KEYWORD%%
   - ...
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: %%CHART_NAME%%
 sources:
-  - https://github.com/bitnami/bitnami-docker-%%IMAGE_NAME%%
+  - https://github.com/bitnami/containers/tree/main/bitnami/%%IMAGE_NAME%%
   - %%UPSTREAM_PROJECT_SOURCE_CODE_URL%%
   - ...
 version: 0.1.0

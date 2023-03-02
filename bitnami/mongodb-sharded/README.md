@@ -7,23 +7,23 @@ MongoDB(R) is an open source NoSQL database that uses JSON for data storage. Mon
 [Overview of MongoDB&reg; Sharded](http://www.mongodb.org)
 
 Disclaimer: The respective trademarks mentioned in the offering are owned by the respective companies. We do not provide a commercial license for any of these products. This listing has an open-source license. MongoDB(R) is run and maintained by MongoDB, which is a completely separate project from Bitnami.
-                           
+
 ## TL;DR
 
-```bash
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/mongodb-sharded
+```console
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/mongodb-sharded
 ```
 
 ## Introduction
 
-This chart bootstraps a [MongoDB(&reg;) Sharded](https://github.com/bitnami/bitnami-docker-mongodb-sharded) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [MongoDB(&reg;) Sharded](https://github.com/bitnami/containers/tree/main/bitnami/mongodb-sharded) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Classified as a NoSQL database, MongoDB&reg; eschews the traditional table-based relational database structure in favor of JSON-like documents with dynamic schemas, making the integration of data in certain types of applications easier and faster.
 
 This chart uses the [sharding method](https://docs.mongodb.com/manual/sharding/) for distributing data across multiple machines. This is meant for deployments with very large data sets and high throughput operations.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This chart has been tested to work with NGINX Ingress, cert-manager, fluentd and Prometheus on top of the [BKPR](https://kubeprod.io/).
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -36,8 +36,9 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 To install the chart with the release name `my-release`:
 
-```bash
-$ helm install my-release bitnami/mongodb-sharded
+```console
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/mongodb-sharded
 ```
 
 The command deploys MongoDB&reg; on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -48,8 +49,8 @@ The command deploys MongoDB&reg; on the Kubernetes cluster in the default config
 
 To uninstall/delete the `my-release` deployment:
 
-```bash
-$ helm delete my-release
+```console
+helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -63,7 +64,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global storage class for dynamic provisioning   | `""`  |
-
 
 ### Common parameters
 
@@ -81,14 +81,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]`  |
 
-
 ### MongoDB(&reg;) Sharded parameters
 
 | Name                                                 | Description                                                                                                                                               | Value                     |
 | ---------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
 | `image.registry`                                     | MongoDB(&reg;) Sharded image registry                                                                                                                     | `docker.io`               |
 | `image.repository`                                   | MongoDB(&reg;) Sharded Image name                                                                                                                         | `bitnami/mongodb-sharded` |
-| `image.tag`                                          | MongoDB(&reg;) Sharded image tag (immutable tags are recommended)                                                                                         | `5.0.8-debian-10-r5`      |
+| `image.tag`                                          | MongoDB(&reg;) Sharded image tag (immutable tags are recommended)                                                                                         | `6.0.4-debian-11-r14`     |
+| `image.digest`                                       | MongoDB(&reg;) Sharded image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                    | `""`                      |
 | `image.pullPolicy`                                   | MongoDB(&reg;) Sharded image pull policy                                                                                                                  | `IfNotPresent`            |
 | `image.pullSecrets`                                  | Specify docker-registry secret names as an array                                                                                                          | `[]`                      |
 | `image.debug`                                        | Specify if debug logs should be enabled                                                                                                                   | `false`                   |
@@ -125,7 +125,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                          | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                   |
 | `volumePermissions.image.registry`                   | Init container volume-permissions image registry                                                                                                          | `docker.io`               |
 | `volumePermissions.image.repository`                 | Init container volume-permissions image name                                                                                                              | `bitnami/bitnami-shell`   |
-| `volumePermissions.image.tag`                        | Init container volume-permissions image tag                                                                                                               | `10-debian-10-r410`       |
+| `volumePermissions.image.tag`                        | Init container volume-permissions image tag                                                                                                               | `11-debian-11-r91`        |
+| `volumePermissions.image.digest`                     | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                         | `""`                      |
 | `volumePermissions.image.pullPolicy`                 | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`            |
 | `volumePermissions.image.pullSecrets`                | Init container volume-permissions image pull secrets                                                                                                      | `[]`                      |
 | `volumePermissions.resources`                        | Init container resource requests/limit                                                                                                                    | `{}`                      |
@@ -143,7 +144,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.sessionAffinity`                            | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                                                      | `None`                    |
 | `service.sessionAffinityConfig`                      | Additional settings for the sessionAffinity                                                                                                               | `{}`                      |
 
-
 ### Config Server parameters
 
 | Name                                                        | Description                                                                                                                           | Value                                                  |
@@ -152,7 +152,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `configsvr.resources`                                       | Configure pod resources                                                                                                               | `{}`                                                   |
 | `configsvr.hostAliases`                                     | Deployment pod host aliases                                                                                                           | `[]`                                                   |
 | `configsvr.mongodbExtraFlags`                               | MongoDB&reg; additional command line flags                                                                                            | `[]`                                                   |
-| `configsvr.topologySpreadConstraints`                       | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template              | `{}`                                                   |
+| `configsvr.topologySpreadConstraints`                       | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template              | `[]`                                                   |
 | `configsvr.priorityClassName`                               | Pod priority class name                                                                                                               | `""`                                                   |
 | `configsvr.podAffinityPreset`                               | Config Server Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                     | `""`                                                   |
 | `configsvr.podAntiAffinityPreset`                           | Config Server Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                | `soft`                                                 |
@@ -181,7 +181,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `configsvr.pdb.maxUnavailable`                              | Maximum number of unavailable config pods allowed (`0` to disable)                                                                    | `1`                                                    |
 | `configsvr.persistence.enabled`                             | Use a PVC to persist data                                                                                                             | `true`                                                 |
 | `configsvr.persistence.mountPath`                           | Path to mount the volume at                                                                                                           | `/bitnami/mongodb`                                     |
-| `configsvr.persistence.subPath`                             | Subdirectory of the volume to mount at                                                                                                | `""`                                                   |
+| `configsvr.persistence.subPath`                             | Subdirectory of the volume to mount at (evaluated as a template)                                                                      | `""`                                                   |
 | `configsvr.persistence.storageClass`                        | Storage class of backing PVC                                                                                                          | `""`                                                   |
 | `configsvr.persistence.accessModes`                         | Use volume as ReadOnly or ReadWrite                                                                                                   | `["ReadWriteOnce"]`                                    |
 | `configsvr.persistence.size`                                | PersistentVolumeClaim size                                                                                                            | `8Gi`                                                  |
@@ -227,7 +227,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `configsvr.customReadinessProbe`                            | Custom readinessProbe that overrides the default one                                                                                  | `{}`                                                   |
 | `configsvr.customStartupProbe`                              | Custom startupProbe that overrides the default one                                                                                    | `{}`                                                   |
 
-
 ### Mongos parameters
 
 | Name                                                     | Description                                                                                                                  | Value           |
@@ -236,7 +235,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `mongos.resources`                                       | Configure pod resources                                                                                                      | `{}`            |
 | `mongos.hostAliases`                                     | Deployment pod host aliases                                                                                                  | `[]`            |
 | `mongos.mongodbExtraFlags`                               | MongoDB&reg; additional command line flags                                                                                   | `[]`            |
-| `mongos.topologySpreadConstraints`                       | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template     | `{}`            |
+| `mongos.topologySpreadConstraints`                       | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template     | `[]`            |
 | `mongos.priorityClassName`                               | Pod priority class name                                                                                                      | `""`            |
 | `mongos.podAffinityPreset`                               | Mongos Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                   | `""`            |
 | `mongos.podAntiAffinityPreset`                           | Mongos Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                              | `soft`          |
@@ -313,7 +312,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `mongos.customReadinessProbe`                            | Custom readinessProbe that overrides the default one                                                                         | `{}`            |
 | `mongos.customStartupProbe`                              | Custom startupProbe that overrides the default one                                                                           | `{}`            |
 
-
 ### Shard configuration: Data node parameters
 
 | Name                                                                | Description                                                                                                              | Value                                                  |
@@ -321,7 +319,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `shardsvr.dataNode.replicaCount`                                    | Number of nodes in each shard replica set (the first node will be primary)                                               | `1`                                                    |
 | `shardsvr.dataNode.resources`                                       | Configure pod resources                                                                                                  | `{}`                                                   |
 | `shardsvr.dataNode.mongodbExtraFlags`                               | MongoDB&reg; additional command line flags                                                                               | `[]`                                                   |
-| `shardsvr.dataNode.topologySpreadConstraints`                       | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `{}`                                                   |
+| `shardsvr.dataNode.topologySpreadConstraints`                       | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`                                                   |
 | `shardsvr.dataNode.priorityClassName`                               | Pod priority class name                                                                                                  | `""`                                                   |
 | `shardsvr.dataNode.podAffinityPreset`                               | Data nodes Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                           | `""`                                                   |
 | `shardsvr.dataNode.podAntiAffinityPreset`                           | Data nodes Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                      | `soft`                                                 |
@@ -385,20 +383,18 @@ The command removes all the Kubernetes components associated with the chart and 
 | `shardsvr.dataNode.customReadinessProbe`                            | Custom readinessProbe that overrides the default one                                                                     | `{}`                                                   |
 | `shardsvr.dataNode.customStartupProbe`                              | Custom startupProbe that overrides the default one                                                                       | `{}`                                                   |
 
-
 ### Shard configuration: Persistence parameters
 
 | Name                                  | Description                                                                                                                           | Value               |
 | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
 | `shardsvr.persistence.enabled`        | Use a PVC to persist data                                                                                                             | `true`              |
 | `shardsvr.persistence.mountPath`      | The path the volume will be mounted at, useful when using different MongoDB&reg; images.                                              | `/bitnami/mongodb`  |
-| `shardsvr.persistence.subPath`        | Subdirectory of the volume to mount at                                                                                                | `""`                |
+| `shardsvr.persistence.subPath`        | Subdirectory of the volume to mount at (evaluated as a template)                                                                      | `""`                |
 | `shardsvr.persistence.storageClass`   | Storage class of backing PVC                                                                                                          | `""`                |
 | `shardsvr.persistence.accessModes`    | Use volume as ReadOnly or ReadWrite                                                                                                   | `["ReadWriteOnce"]` |
 | `shardsvr.persistence.size`           | PersistentVolumeClaim size                                                                                                            | `8Gi`               |
 | `shardsvr.persistence.annotations`    | Additional volume annotations                                                                                                         | `{}`                |
 | `shardsvr.persistence.resourcePolicy` | Setting it to "keep" to avoid removing PVCs during a helm delete operation. Leaving it empty will delete PVCs after the chart deleted | `""`                |
-
 
 ### Shard configuration: Arbiter parameters
 
@@ -408,7 +404,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `shardsvr.arbiter.hostAliases`                                     | Deployment pod host aliases                                                                                              | `[]`            |
 | `shardsvr.arbiter.resources`                                       | Configure pod resources                                                                                                  | `{}`            |
 | `shardsvr.arbiter.mongodbExtraFlags`                               | MongoDB&reg; additional command line flags                                                                               | `[]`            |
-| `shardsvr.arbiter.topologySpreadConstraints`                       | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `{}`            |
+| `shardsvr.arbiter.topologySpreadConstraints`                       | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`            |
 | `shardsvr.arbiter.priorityClassName`                               | Pod priority class name                                                                                                  | `""`            |
 | `shardsvr.arbiter.podAffinityPreset`                               | Arbiter's Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                            | `""`            |
 | `shardsvr.arbiter.podAntiAffinityPreset`                           | Arbiter's Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                       | `soft`          |
@@ -468,68 +464,67 @@ The command removes all the Kubernetes components associated with the chart and 
 | `shardsvr.arbiter.customReadinessProbe`                            | Custom readinessProbe that overrides the default one                                                                     | `{}`            |
 | `shardsvr.arbiter.customStartupProbe`                              | Custom startupProbe that overrides the default one                                                                       | `{}`            |
 
-
 ### Metrics parameters
 
-| Name                                                      | Description                                                                        | Value                      |
-| --------------------------------------------------------- | ---------------------------------------------------------------------------------- | -------------------------- |
-| `metrics.enabled`                                         | Start a side-car prometheus exporter                                               | `false`                    |
-| `metrics.image.registry`                                  | MongoDB&reg; exporter image registry                                               | `docker.io`                |
-| `metrics.image.repository`                                | MongoDB&reg; exporter image name                                                   | `bitnami/mongodb-exporter` |
-| `metrics.image.tag`                                       | MongoDB&reg; exporter image tag                                                    | `0.32.0-debian-10-r3`      |
-| `metrics.image.pullPolicy`                                | MongoDB&reg; exporter image pull policy                                            | `Always`                   |
-| `metrics.image.pullSecrets`                               | MongoDB&reg; exporter image pull secrets                                           | `[]`                       |
-| `metrics.useTLS`                                          | Whether to connect to MongoDB&reg; with TLS                                        | `false`                    |
-| `metrics.extraArgs`                                       | String with extra arguments to the metrics exporter                                | `""`                       |
-| `metrics.resources`                                       | Metrics exporter resource requests and limits                                      | `{}`                       |
-| `metrics.containerSecurityContext.enabled`                | Enabled containers' Security Context                                               | `true`                     |
-| `metrics.containerSecurityContext.runAsUser`              | Set containers' Security Context runAsUser                                         | `1001`                     |
-| `metrics.containerSecurityContext.runAsNonRoot`           | Set containers' Security Context runAsNonRoot                                      | `true`                     |
-| `metrics.containerSecurityContext.readOnlyRootFilesystem` | Set containers' Security Context runAsNonRoot                                      | `false`                    |
-| `metrics.livenessProbe.enabled`                           | Enable livenessProbe                                                               | `false`                    |
-| `metrics.livenessProbe.initialDelaySeconds`               | Initial delay seconds for livenessProbe                                            | `15`                       |
-| `metrics.livenessProbe.periodSeconds`                     | Period seconds for livenessProbe                                                   | `5`                        |
-| `metrics.livenessProbe.timeoutSeconds`                    | Timeout seconds for livenessProbe                                                  | `5`                        |
-| `metrics.livenessProbe.failureThreshold`                  | Failure threshold for livenessProbe                                                | `3`                        |
-| `metrics.livenessProbe.successThreshold`                  | Success threshold for livenessProbe                                                | `1`                        |
-| `metrics.readinessProbe.enabled`                          | Enable readinessProbe                                                              | `false`                    |
-| `metrics.readinessProbe.initialDelaySeconds`              | Initial delay seconds for readinessProbe                                           | `5`                        |
-| `metrics.readinessProbe.periodSeconds`                    | Period seconds for readinessProbe                                                  | `5`                        |
-| `metrics.readinessProbe.timeoutSeconds`                   | Timeout seconds for readinessProbe                                                 | `1`                        |
-| `metrics.readinessProbe.failureThreshold`                 | Failure threshold for readinessProbe                                               | `3`                        |
-| `metrics.readinessProbe.successThreshold`                 | Success threshold for readinessProbe                                               | `1`                        |
-| `metrics.startupProbe.enabled`                            | Enable startupProbe                                                                | `false`                    |
-| `metrics.startupProbe.initialDelaySeconds`                | Initial delay seconds for startupProbe                                             | `0`                        |
-| `metrics.startupProbe.periodSeconds`                      | Period seconds for startupProbe                                                    | `5`                        |
-| `metrics.startupProbe.timeoutSeconds`                     | Timeout seconds for startupProbe                                                   | `2`                        |
-| `metrics.startupProbe.failureThreshold`                   | Failure threshold for startupProbe                                                 | `15`                       |
-| `metrics.startupProbe.successThreshold`                   | Success threshold for startupProbe                                                 | `1`                        |
-| `metrics.customLivenessProbe`                             | Custom livenessProbe that overrides the default one                                | `{}`                       |
-| `metrics.customReadinessProbe`                            | Custom readinessProbe that overrides the default one                               | `{}`                       |
-| `metrics.customStartupProbe`                              | Custom startupProbe that overrides the default one                                 | `{}`                       |
-| `metrics.containerPorts.metrics`                          | Port of the Prometheus metrics container                                           | `9216`                     |
-| `metrics.podAnnotations`                                  | Metrics exporter pod Annotation                                                    | `{}`                       |
-| `metrics.podMonitor.enabled`                              | Create PodMonitor Resource for scraping metrics using PrometheusOperator           | `false`                    |
-| `metrics.podMonitor.namespace`                            | Namespace where podmonitor resource should be created                              | `monitoring`               |
-| `metrics.podMonitor.interval`                             | Specify the interval at which metrics should be scraped                            | `30s`                      |
-| `metrics.podMonitor.scrapeTimeout`                        | Specify the timeout after which the scrape is ended                                | `""`                       |
-| `metrics.podMonitor.additionalLabels`                     | Additional labels that can be used so PodMonitors will be discovered by Prometheus | `{}`                       |
-
+| Name                                                      | Description                                                                                                           | Value                      |
+| --------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | -------------------------- |
+| `metrics.enabled`                                         | Start a side-car prometheus exporter                                                                                  | `false`                    |
+| `metrics.image.registry`                                  | MongoDB&reg; exporter image registry                                                                                  | `docker.io`                |
+| `metrics.image.repository`                                | MongoDB&reg; exporter image name                                                                                      | `bitnami/mongodb-exporter` |
+| `metrics.image.tag`                                       | MongoDB&reg; exporter image tag                                                                                       | `0.37.0-debian-11-r5`      |
+| `metrics.image.digest`                                    | MongoDB&reg; exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
+| `metrics.image.pullPolicy`                                | MongoDB&reg; exporter image pull policy                                                                               | `Always`                   |
+| `metrics.image.pullSecrets`                               | MongoDB&reg; exporter image pull secrets                                                                              | `[]`                       |
+| `metrics.useTLS`                                          | Whether to connect to MongoDB&reg; with TLS                                                                           | `false`                    |
+| `metrics.extraArgs`                                       | String with extra arguments to the metrics exporter                                                                   | `""`                       |
+| `metrics.resources`                                       | Metrics exporter resource requests and limits                                                                         | `{}`                       |
+| `metrics.containerSecurityContext.enabled`                | Enabled containers' Security Context                                                                                  | `true`                     |
+| `metrics.containerSecurityContext.runAsUser`              | Set containers' Security Context runAsUser                                                                            | `1001`                     |
+| `metrics.containerSecurityContext.runAsNonRoot`           | Set containers' Security Context runAsNonRoot                                                                         | `true`                     |
+| `metrics.containerSecurityContext.readOnlyRootFilesystem` | Set containers' Security Context runAsNonRoot                                                                         | `false`                    |
+| `metrics.livenessProbe.enabled`                           | Enable livenessProbe                                                                                                  | `false`                    |
+| `metrics.livenessProbe.initialDelaySeconds`               | Initial delay seconds for livenessProbe                                                                               | `15`                       |
+| `metrics.livenessProbe.periodSeconds`                     | Period seconds for livenessProbe                                                                                      | `5`                        |
+| `metrics.livenessProbe.timeoutSeconds`                    | Timeout seconds for livenessProbe                                                                                     | `5`                        |
+| `metrics.livenessProbe.failureThreshold`                  | Failure threshold for livenessProbe                                                                                   | `3`                        |
+| `metrics.livenessProbe.successThreshold`                  | Success threshold for livenessProbe                                                                                   | `1`                        |
+| `metrics.readinessProbe.enabled`                          | Enable readinessProbe                                                                                                 | `false`                    |
+| `metrics.readinessProbe.initialDelaySeconds`              | Initial delay seconds for readinessProbe                                                                              | `5`                        |
+| `metrics.readinessProbe.periodSeconds`                    | Period seconds for readinessProbe                                                                                     | `5`                        |
+| `metrics.readinessProbe.timeoutSeconds`                   | Timeout seconds for readinessProbe                                                                                    | `1`                        |
+| `metrics.readinessProbe.failureThreshold`                 | Failure threshold for readinessProbe                                                                                  | `3`                        |
+| `metrics.readinessProbe.successThreshold`                 | Success threshold for readinessProbe                                                                                  | `1`                        |
+| `metrics.startupProbe.enabled`                            | Enable startupProbe                                                                                                   | `false`                    |
+| `metrics.startupProbe.initialDelaySeconds`                | Initial delay seconds for startupProbe                                                                                | `0`                        |
+| `metrics.startupProbe.periodSeconds`                      | Period seconds for startupProbe                                                                                       | `5`                        |
+| `metrics.startupProbe.timeoutSeconds`                     | Timeout seconds for startupProbe                                                                                      | `2`                        |
+| `metrics.startupProbe.failureThreshold`                   | Failure threshold for startupProbe                                                                                    | `15`                       |
+| `metrics.startupProbe.successThreshold`                   | Success threshold for startupProbe                                                                                    | `1`                        |
+| `metrics.customLivenessProbe`                             | Custom livenessProbe that overrides the default one                                                                   | `{}`                       |
+| `metrics.customReadinessProbe`                            | Custom readinessProbe that overrides the default one                                                                  | `{}`                       |
+| `metrics.customStartupProbe`                              | Custom startupProbe that overrides the default one                                                                    | `{}`                       |
+| `metrics.containerPorts.metrics`                          | Port of the Prometheus metrics container                                                                              | `9216`                     |
+| `metrics.podAnnotations`                                  | Metrics exporter pod Annotation                                                                                       | `{}`                       |
+| `metrics.podMonitor.enabled`                              | Create PodMonitor Resource for scraping metrics using PrometheusOperator                                              | `false`                    |
+| `metrics.podMonitor.namespace`                            | Namespace where podmonitor resource should be created                                                                 | `monitoring`               |
+| `metrics.podMonitor.interval`                             | Specify the interval at which metrics should be scraped                                                               | `30s`                      |
+| `metrics.podMonitor.scrapeTimeout`                        | Specify the timeout after which the scrape is ended                                                                   | `""`                       |
+| `metrics.podMonitor.additionalLabels`                     | Additional labels that can be used so PodMonitors will be discovered by Prometheus                                    | `{}`                       |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
-```bash
-$ helm install my-release \
+```console
+helm install my-release \
   --set shards=4,configsvr.replicaCount=3,shardsvr.dataNode.replicaCount=2 \
-    bitnami/mongodb-sharded
+    my-repo/mongodb-sharded
 ```
 
 The above command sets the number of shards to 4, the number of replicas for the config servers to 3 and number of replicas for data nodes to 2.
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
-```bash
-$ helm install my-release -f values.yaml bitnami/mongodb-sharded
+```console
+helm install my-release -f values.yaml my-repo/mongodb-sharded
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -555,7 +550,7 @@ This chart deploys a sharded cluster by default. Some characteristics of this ch
 
 ### Initialize a fresh instance
 
-The [Bitnami MongoDB&reg;](https://github.com/bitnami/bitnami-docker-mongodb-sharded) image allows you to use your custom scripts to initialize a fresh instance. You can create a custom config map and give it via `initScriptsCM`(check options for more details).
+The [Bitnami MongoDB&reg;](https://github.com/bitnami/containers/tree/main/bitnami/mongodb-sharded) image allows you to use your custom scripts to initialize a fresh instance. You can create a custom config map and give it via `initScriptsCM`(check options for more details).
 
 The allowed extensions are `.sh`, and `.js`.
 
@@ -603,7 +598,7 @@ It is possible to not deploy any shards or a config server. For example, it is p
 
 ## Persistence
 
-The [Bitnami MongoDB&reg;](https://github.com/bitnami/bitnami-docker-mongodb-sharded) image stores the MongoDB&reg; data and configurations at the `/bitnami/mongodb` path of the container.
+The [Bitnami MongoDB&reg;](https://github.com/bitnami/containers/tree/main/bitnami/mongodb-sharded) image stores the MongoDB&reg; data and configurations at the `/bitnami/mongodb` path of the container.
 
 The chart mounts a [Persistent Volume](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) at this location. The volume is created using dynamic volume provisioning.
 
@@ -624,7 +619,7 @@ The Bitnami Kibana chart supports mounting extra volumes (either PVCs, secrets o
 
 This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
 
 ## Troubleshooting
 
@@ -634,8 +629,8 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 If authentication is enabled, it's necessary to set the `auth.rootPassword` and `auth.replicaSetKey` when upgrading for readiness/liveness probes to work properly. When you install this chart for the first time, some notes will be displayed providing the credentials you must use. Please note down the password, and run the command below to upgrade your chart:
 
-```bash
-$ helm upgrade my-release bitnami/mongodb-sharded --set auth.rootPassword=[PASSWORD] (--set auth.replicaSetKey=[auth.replicaSetKey])
+```console
+helm upgrade my-release my-repo/mongodb-sharded --set auth.rootPassword=[PASSWORD] (--set auth.replicaSetKey=[auth.replicaSetKey])
 ```
 
 > Note: you need to substitute the placeholders [PASSWORD] and [auth.replicaSetKey] with the values obtained in the installation notes.
@@ -664,32 +659,32 @@ Affected values:
 ### To 4.0.0
 
 In this version, the mongodb-exporter bundled as part of this Helm chart was updated to a new version which, even it is not a major change, can contain breaking changes (from `0.11.X` to `0.30.X`).
-Please visit the release notes from the upstream project at https://github.com/percona/mongodb_exporter/releases
+Please visit the release notes from the upstream project at <https://github.com/percona/mongodb_exporter/releases>
 
 ### To 3.1.0
 
-This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
+This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/main/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
 
 ### To 3.0.0
 
 [On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
 
-**What changes were introduced in this major version?**
+#### What changes were introduced in this major version?
 
 - Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
 - The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
 
-**Considerations when upgrading to this version**
+#### Considerations when upgrading to this version
 
 - If you want to upgrade to this version from a previous one installed with Helm v3, you shouldn't face any issues
 - If you want to upgrade to this version using Helm v2, this scenario is not supported as this version doesn't support Helm v2 anymore
 - If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3
 
-**Useful links**
+#### Useful links
 
-- https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
-- https://helm.sh/docs/topics/v2_v3_migration/
-- https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
+- <https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/>
+- <https://helm.sh/docs/topics/v2_v3_migration/>
+- <https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/>
 
 ### To 2.0.0
 
@@ -699,13 +694,13 @@ MongoDB&reg; container images were updated to `4.4.x` and it can affect compatib
 
 ## License
 
-Copyright &copy; 2022 Bitnami
+Copyright &copy; 2023 Bitnami
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

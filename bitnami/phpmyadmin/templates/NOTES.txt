@@ -45,13 +45,13 @@ For testing purposes, phpMyAdmin has been configured to point to a test MariaDB
 instance. Please login using the following credentials:
 
   Username: root
-  Password : $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "phpmyadmin.mariadb.fullname" . }} -o jsonpath="{.data.mariadb-root-password}" | base64 --decode)
+  Password : $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "phpmyadmin.mariadb.fullname" . }} -o jsonpath="{.data.mariadb-root-password}" | base64 -d)
 
 {{- else }}
 phpMyAdmin has not been configure to point to a specific database. Please provide the db host,
 username and password at log in or upgrade the release with a specific database:
 
-$ helm upgrade {{ .Release.Name }} bitnami/phpmyadmin --set db.host=mydb
+$ helm upgrade {{ .Release.Name }} my-repo/phpmyadmin --set db.host=mydb
 
 {{- end }}
 

@@ -62,6 +62,7 @@ diagnosticMode:
 ## @param image.registry InfluxDB&trade; image registry
 ## @param image.repository InfluxDB&trade; image repository
 ## @param image.tag InfluxDB&trade; image tag (immutable tags are recommended)
+## @param image.digest InfluxDB&trade; image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy InfluxDB&trade; image pull policy
 ## @param image.pullSecrets Specify docker-registry secret names as an array
 ## @param image.debug Specify if debug logs should be enabled
@@ -69,7 +70,8 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/influxdb
-  tag: 2.2.0-debian-10-r40
+  tag: 2.6.1-debian-11-r21
+  digest: ""
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
   ##
@@ -614,7 +616,7 @@ ingress:
   ## - host: example.local
   ##     http:
   ##       path: /
-  ##       backend: 
+  ##       backend:
   ##         service:
   ##           name: example-svc
   ##           port:
@@ -715,7 +717,7 @@ metrics:
     ##
     metricRelabelings: []
     ## @param metrics.serviceMonitor.selector Prometheus instance selector labels
-    ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
+    ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
     ## e.g:
     ## selector:
     ##   prometheus: my-prometheus
@@ -767,14 +769,19 @@ persistence:
 
 ## Pod Service Account
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+## @param serviceAccount.create Specifies whether a ServiceAccount should be created
+## @param serviceAccount.name Name of the service account to use. If not set and create is true, a name is generated using the fullname template.
+## @param serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+## @param serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
 ##
 serviceAccount:
-  ## @param serviceAccount.enabled Enable service account (Note: Service Account will only be automatically created if `serviceAccount.name` is not set)
+  ## DEPRECATED: serviceAccount.enabled - Use serviceAccount.create instead
   ##
-  enabled: false
-  ## @param serviceAccount.name Name of an already existing service account. Setting this value disables the automatic service account creation
-  ##
+  #enabled: false
+  create: true
   name: ""
+  automountServiceAccountToken: true
+  annotations: {}
 
 ## Pod Security Policy
 ## ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/
@@ -803,13 +810,15 @@ volumePermissions:
   ## @param volumePermissions.image.registry Init container volume-permissions image registry
   ## @param volumePermissions.image.repository Init container volume-permissions image name
   ## @param volumePermissions.image.tag Init container volume-permissions image tag
+  ## @param volumePermissions.image.digest Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
   ## @param volumePermissions.image.pullSecrets Specify docker-registry secret names as an array
   ##
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r430
+    tag: 11-debian-11-r90
+    digest: ""
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
@@ -932,13 +941,15 @@ backup:
       ## @param backup.uploadProviders.google.image.registry Google Cloud SDK image registry
       ## @param backup.uploadProviders.google.image.repository Google Cloud SDK image name
       ## @param backup.uploadProviders.google.image.tag Google Cloud SDK image tag
+      ## @param backup.uploadProviders.google.image.digest Google Cloud SDK image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
       ## @param backup.uploadProviders.google.image.pullPolicy Google Cloud SDK image pull policy
       ## @param backup.uploadProviders.google.image.pullSecrets Specify docker-registry secret names as an array
       ##
       image:
         registry: docker.io
         repository: bitnami/google-cloud-sdk
-        tag: 0.386.0-debian-10-r1
+        tag: 0.419.0-debian-11-r1
+        digest: ""
         ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
         ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
         ##
@@ -969,13 +980,15 @@ backup:
       ## @param backup.uploadProviders.azure.image.registry Azure CLI image registry
       ## @param backup.uploadProviders.azure.image.repository Azure CLI image repository
       ## @param backup.uploadProviders.azure.image.tag Azure CLI image tag (immutable tags are recommended)
+      ## @param backup.uploadProviders.azure.image.digest Azure CLI image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
       ## @param backup.uploadProviders.azure.image.pullPolicy Azure CLI image pull policy
       ## @param backup.uploadProviders.azure.image.pullSecrets Specify docker-registry secret names as an array
       ##
       image:
         registry: docker.io
         repository: bitnami/azure-cli
-        tag: 2.36.0-debian-10-r22
+        tag: 2.45.0-debian-11-r6
+        digest: ""
         ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
         ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
         ##
@@ -1006,13 +1019,15 @@ backup:
       ## @param backup.uploadProviders.aws.image.registry AWS CLI image registry
       ## @param backup.uploadProviders.aws.image.repository AWS CLI image repository
       ## @param backup.uploadProviders.aws.image.tag AWS CLI image tag (immutable tags are recommended)
+      ## @param backup.uploadProviders.aws.image.digest AWS CLI image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
       ## @param backup.uploadProviders.aws.image.pullPolicy AWS CLI image pull policy
       ## @param backup.uploadProviders.aws.image.pullSecrets Specify docker-registry secret names as an array
       ##
       image:
         registry: docker.io
         repository: bitnami/aws-cli
-        tag: 2.4.7-debian-10-r4
+        tag: 2.10.3-debian-11-r0
+        digest: ""
         ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
         ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
         ##

@@ -170,7 +170,7 @@ Return the Postgresql secret name
         {{- default (include "discourse.postgresql.fullname" .) (tpl .Values.postgresql.auth.existingSecret $) -}}
     {{- end -}}
 {{- else -}}
-    {{- default (printf "%s-database" .Release.Name) (tpl .Values.externalDatabase.existingSecret $) -}}
+    {{- default (printf "%s-database" (include "common.names.fullname" .)) (tpl .Values.externalDatabase.existingSecret $) -}}
 {{- end -}}
 {{- end -}}
 
@@ -205,21 +205,21 @@ Return the Postgresql postgres password secret key
 {{- end -}}
 
 {{/*
-Return the Redis&trade; hostname
+Return the Redis&reg; hostname
 */}}
 {{- define "discourse.redis.host" -}}
 {{- ternary (printf "%s-master" (include "discourse.redis.fullname" .)) .Values.externalRedis.host .Values.redis.enabled | quote -}}
 {{- end -}}
 
 {{/*
-Return the Redis&trade; port
+Return the Redis&reg; port
 */}}
 {{- define "discourse.redis.port" -}}
 {{- ternary "6379" .Values.externalRedis.port .Values.redis.enabled | quote -}}
 {{- end -}}
 
 {{/*
-Return the Redis&trade; secret name
+Return the Redis&reg; secret name
 */}}
 {{- define "discourse.redis.secretName" -}}
 {{- if .Values.redis.enabled }}
@@ -236,7 +236,7 @@ Return the Redis&trade; secret name
 {{- end -}}
 
 {{/*
-Return the Redis&trade; secret key
+Return the Redis&reg; secret key
 */}}
 {{- define "discourse.redis.secretPasswordKey" -}}
 {{- if .Values.redis.enabled -}}
@@ -251,7 +251,7 @@ Return the Redis&trade; secret key
 {{- end -}}
 
 {{/*
-Return whether Redis&trade; uses password authentication or not
+Return whether Redis&reg; uses password authentication or not
 */}}
 {{- define "discourse.redis.auth.enabled" -}}
 {{- if or (and .Values.redis.enabled .Values.redis.auth.enabled) (and (not .Values.redis.enabled) (or .Values.externalRedis.password .Values.externalRedis.existingSecret)) }}

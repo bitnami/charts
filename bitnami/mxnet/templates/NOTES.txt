@@ -45,7 +45,7 @@ This chart allows three different methods to load your files:
 2. Putting your files in a `files` folder in the root of the Chart.
 3. Cloning a Git repository with the `cloneFilesFromGit` option.
 
-Examples for the different methods can be found in the README (see https://github.com/bitnami/charts/blob/master/bitnami/mxnet/README.md).
+Examples for the different methods can be found in the README (see https://github.com/bitnami/charts/blob/main/bitnami/mxnet/README.md).
 {{- end }}
 
 {{- include "mxnet.validateValues" . }}

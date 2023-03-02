@@ -7,12 +7,12 @@ Grafana Operator is a Kubernetes operator that enables the installation and mana
 [Overview of Grafana Operator](https://github.com/integr8ly/grafana-operator)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/grafana-operator
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/grafana-operator
 ```
 
 ## Introduction
@@ -21,7 +21,7 @@ Bitnami charts for Helm are carefully engineered, actively maintained and are th
 
 This chart bootstraps a [Grafana Operator](https://github.com/integr8ly/grafana-operator/blob/master/documentation/deploy_grafana.md) Deployment [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -33,8 +33,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/grafana-operator
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/grafana-operator
 ```
 
 These commands deploy grafana-operator on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -46,7 +46,7 @@ These commands deploy grafana-operator on the Kubernetes cluster in the default 
 To uninstall/delete the `my-release` helm release:
 
 ```console
-$ helm uninstall my-release
+helm uninstall my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -72,17 +72,18 @@ For more information, refer to the [documentation on the differences between the
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 
-
 ### Common parameters
 
-| Name                | Description                                                                                               | Value |
-| ------------------- | --------------------------------------------------------------------------------------------------------- | ----- |
-| `nameOverride`      | String to partially override common.names.fullname template with a string (will prepend the release name) | `""`  |
-| `fullnameOverride`  | String to fully override common.names.fullname template with a string                                     | `""`  |
-| `extraDeploy`       | Array of extra objects to deploy with the release                                                         | `[]`  |
-| `commonLabels`      | Common Labels which are applied to every resource deployed                                                | `{}`  |
-| `commonAnnotations` | Common Annotations which are applied to every ressource deployed                                          | `{}`  |
-
+| Name                | Description                                                                                               | Value           |
+| ------------------- | --------------------------------------------------------------------------------------------------------- | --------------- |
+| `kubeVersion`       | Force target Kubernetes version (using Helm capabilities if not set)                                      | `""`            |
+| `nameOverride`      | String to partially override common.names.fullname template with a string (will prepend the release name) | `""`            |
+| `fullnameOverride`  | String to fully override common.names.fullname template with a string                                     | `""`            |
+| `namespaceOverride` | String to fully override common.names.namespace                                                           | `""`            |
+| `extraDeploy`       | Array of extra objects to deploy with the release                                                         | `[]`            |
+| `commonLabels`      | Common Labels which are applied to every resource deployed                                                | `{}`            |
+| `commonAnnotations` | Common Annotations which are applied to every ressource deployed                                          | `{}`            |
+| `clusterDomain`     | Kubernetes cluster domain name                                                                            | `cluster.local` |
 
 ### Grafana Operator parameters
 
@@ -97,16 +98,19 @@ For more information, refer to the [documentation on the differences between the
 | `operator.customLivenessProbe`                               | Override default liveness probe                                                                                                           | `{}`                       |
 | `operator.customReadinessProbe`                              | Override default readiness probe                                                                                                          | `{}`                       |
 | `operator.customStartupProbe`                                | Override default startup probe                                                                                                            | `{}`                       |
-| `operator.extraVolumes`                                      | Optionally specify extra list of additional volumes for etcd pods                                                                         | `[]`                       |
-| `operator.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for etcd container(s)                                                            | `[]`                       |
-| `operator.initContainers`                                    | Add additional init containers to the etcd pods                                                                                           | `[]`                       |
-| `operator.sidecars`                                          | Add additional sidecar containers to the etcd pods                                                                                        | `[]`                       |
+| `operator.extraVolumes`                                      | Optionally specify extra list of additional volumes for Grafana Operator pods                                                             | `[]`                       |
+| `operator.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for Grafana Operator container(s)                                                | `[]`                       |
+| `operator.initContainers`                                    | Add additional init containers to the Grafana Operator pods                                                                               | `[]`                       |
+| `operator.sidecars`                                          | Add additional sidecar containers to the Grafana Operator pods                                                                            | `[]`                       |
 | `operator.watchNamespace`                                    | Override the namespace to watch                                                                                                           | `""`                       |
 | `operator.topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment                                                                                            | `[]`                       |
+| `operator.priorityClassName`                                 | %%MAIN_CONTAINER_NAME%% pods' priorityClassName                                                                                           | `""`                       |
+| `operator.terminationGracePeriodSeconds`                     | In seconds, time the given to the %%MAIN_CONTAINER_NAME%% pod needs to terminate gracefully                                               | `""`                       |
 | `operator.updateStrategy.type`                               | Set up update strategy for Grafana Operator installation.                                                                                 | `Recreate`                 |
 | `operator.image.registry`                                    | Grafana Operator image registry                                                                                                           | `docker.io`                |
 | `operator.image.repository`                                  | Grafana Operator image name                                                                                                               | `bitnami/grafana-operator` |
-| `operator.image.tag`                                         | Grafana Operator image tag                                                                                                                | `4.3.0-debian-10-r0`       |
+| `operator.image.tag`                                         | Grafana Operator image tag                                                                                                                | `4.9.0-debian-11-r6`       |
+| `operator.image.digest`                                      | Grafana Operator image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                          | `""`                       |
 | `operator.image.pullPolicy`                                  | Grafana Operator image pull policy                                                                                                        | `IfNotPresent`             |
 | `operator.image.pullSecrets`                                 | Grafana Operator image pull secrets                                                                                                       | `[]`                       |
 | `operator.leaderElect`                                       | Enables or disables the operator leader Election.                                                                                         | `true`                     |
@@ -157,8 +161,12 @@ For more information, refer to the [documentation on the differences between the
 | `operator.prometheus.serviceMonitor.namespace`               | Namespace for the ServiceMonitor Resource (defaults to the Release Namespace)                                                             | `""`                       |
 | `operator.prometheus.serviceMonitor.jobLabel`                | Specify the jobLabel to use for the prometheus-operator                                                                                   | `app.kubernetes.io/name`   |
 | `operator.prometheus.serviceMonitor.interval`                | Scrape interval. If not set, the Prometheus default scrape interval is used                                                               | `""`                       |
+| `operator.prometheus.serviceMonitor.scrapeTimeout`           | Timeout after which the scrape is ended                                                                                                   | `""`                       |
 | `operator.prometheus.serviceMonitor.metricRelabelings`       | Specify additional relabeling of metrics                                                                                                  | `[]`                       |
 | `operator.prometheus.serviceMonitor.relabelings`             | Specify general relabeling                                                                                                                | `[]`                       |
+| `operator.prometheus.serviceMonitor.selector`                | ServiceMonitor selector labels                                                                                                            | `{}`                       |
+| `operator.prometheus.serviceMonitor.labels`                  | Extra labels for the ServiceMonitor                                                                                                       | `{}`                       |
+| `operator.prometheus.serviceMonitor.honorLabels`             | honorLabels chooses the metric's labels on collisions with target labels                                                                  | `false`                    |
 | `operator.livenessProbe.enabled`                             | Enable livenessProbe                                                                                                                      | `true`                     |
 | `operator.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                                   | `10`                       |
 | `operator.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                                          | `10`                       |
@@ -178,7 +186,6 @@ For more information, refer to the [documentation on the differences between the
 | `operator.startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                                                        | `3`                        |
 | `operator.startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                                                        | `1`                        |
 
-
 ### Grafana parameters
 
 | Name                                                        | Description                                                                                                | Value                    |
@@ -186,7 +193,8 @@ For more information, refer to the [documentation on the differences between the
 | `grafana.enabled`                                           | Enabled the deployment of the Grafana CRD object into the cluster                                          | `true`                   |
 | `grafana.image.registry`                                    | Grafana image registry                                                                                     | `docker.io`              |
 | `grafana.image.repository`                                  | Grafana image name                                                                                         | `bitnami/grafana`        |
-| `grafana.image.tag`                                         | Grafana image tag                                                                                          | `8.5.0-debian-10-r5`     |
+| `grafana.image.tag`                                         | Grafana image tag                                                                                          | `9.3.6-debian-11-r10`    |
+| `grafana.image.digest`                                      | Grafana image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag    | `""`                     |
 | `grafana.image.pullSecrets`                                 | Grafana image pull secrets                                                                                 | `[]`                     |
 | `grafana.pluginsInitContainerImage.registry`                | Grafana Plugins image registry                                                                             | `""`                     |
 | `grafana.pluginsInitContainerImage.repository`              | Grafana Plugins image name                                                                                 | `""`                     |
@@ -235,6 +243,7 @@ For more information, refer to the [documentation on the differences between the
 | `grafana.ingress.tlsSecret`                                 | The name for the secret to use for the tls termination                                                     | `grafana.local-tls`      |
 | `grafana.persistence.enabled`                               | Enable persistent storage for the grafana deployment                                                       | `false`                  |
 | `grafana.persistence.storageClass`                          | Define the storageClass for the persistent storage if not defined default is used                          | `""`                     |
+| `grafana.persistence.existingVolume`                        | Define the existingVolume for the persistent storage provisioned outside this chart                        | `""`                     |
 | `grafana.persistence.accessModes`                           | Define the accessModes for the persistent storage                                                          | `["ReadWriteOnce"]`      |
 | `grafana.persistence.annotations`                           | Add annotations to the persistent volume                                                                   | `{}`                     |
 | `grafana.persistence.size`                                  | Define the size of the PersistentVolumeClaim to request for                                                | `10Gi`                   |
@@ -261,21 +270,20 @@ For more information, refer to the [documentation on the differences between the
 | `grafana.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the grafana container(s)                      | `[]`                     |
 | `grafana.sidecars`                                          | Add additional sidecar containers to the grafana pod(s)                                                    | `[]`                     |
 
-
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release \
+helm install my-release \
   --set livenessProbe.successThreshold=5 \
-    bitnami/grafana-operator
+    my-repo/grafana-operator
 ```
 
 The above command sets the `livenessProbe.successThreshold` to `5`.
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
-```bash
-$ helm install my-release -f values.yaml bitnami/grafana-operator
+```console
+helm install my-release -f values.yaml my-repo/grafana-operator
 ```
 
 ## Configuration and installation details
@@ -304,8 +312,8 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
-```bash
-$ helm upgrade my-release bitnami/grafana-operator
+```console
+helm upgrade my-release my-repo/grafana-operator
 ```
 
 ### To 2.0.0
@@ -355,13 +363,13 @@ See [PR#7114](https://github.com/bitnami/charts/pull/7114) for more info about t
 
 ## License
 
-Copyright &copy; 2022 Bitnami
+Copyright &copy; 2023 Bitnami
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

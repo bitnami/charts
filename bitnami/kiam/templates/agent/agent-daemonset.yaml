@@ -159,7 +159,9 @@ spec:
           resources: {{- toYaml .Values.agent.resources | nindent 12 }}
           {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.agent.startupProbe.enabled }}
+          {{- if .Values.agent.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.agent.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.agent.startupProbe.enabled }}
           startupProbe:
             tcpSocket:
               port: {{ .Values.agent.containerPort }}
@@ -168,10 +170,10 @@ spec:
             timeoutSeconds: {{ .Values.agent.startupProbe.timeoutSeconds }}
             successThreshold: {{ .Values.agent.startupProbe.successThreshold }}
             failureThreshold: {{ .Values.agent.startupProbe.failureThreshold }}
-          {{- else if .Values.agent.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.agent.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.agent.livenessProbe.enabled }}
+          {{- if .Values.agent.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.agent.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.agent.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
               {{- if .Values.agent.enableDeepProbe }}
@@ -185,10 +187,10 @@ spec:
             timeoutSeconds: {{ .Values.agent.livenessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.agent.livenessProbe.successThreshold }}
             failureThreshold: {{ .Values.agent.livenessProbe.failureThreshold }}
-          {{- else if .Values.agent.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.agent.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.agent.readinessProbe.enabled }}
+          {{- if .Values.agent.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.agent.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.agent.readinessProbe.enabled }}
           readinessProbe:
             httpGet:
               {{- if .Values.agent.enableDeepProbe }}
@@ -202,8 +204,6 @@ spec:
             timeoutSeconds: {{ .Values.agent.readinessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.agent.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.agent.readinessProbe.failureThreshold }}
-          {{- else if .Values.agent.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.agent.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           volumeMounts:

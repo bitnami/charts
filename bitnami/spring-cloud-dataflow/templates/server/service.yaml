@@ -24,7 +24,7 @@ spec:
   loadBalancerIP: {{ .Values.server.service.loadBalancerIP }}
   {{- end }}
   {{- if and (eq .Values.server.service.type "LoadBalancer") .Values.server.service.loadBalancerSourceRanges }}
-  loadBalancerSourceRanges: {{- toYaml .Values.server.service.loadBalancerSourceRanges | nindent 4 }}
+  loadBalancerSourceRanges: {{- include "common.tplvalues.render" (dict "value" .Values.server.service.loadBalancerSourceRanges "context" $) | nindent 4 }}
   {{- end }}
   {{- if or (eq .Values.server.service.type "LoadBalancer") (eq .Values.server.service.type "NodePort") }}
   externalTrafficPolicy: {{ .Values.server.service.externalTrafficPolicy | quote }}

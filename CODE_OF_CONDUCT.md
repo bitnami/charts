@@ -12,6 +12,6 @@ If you are subjected to or witness unacceptable behavior, or have any other conc
 
 If you have suggestions to improve this Code of Conduct, please submit an issue or PR.
 
-**Attribution**
+## Attribution
 
-This Code of Conduct is adapted from the Angular project available at this page: https://github.com/angular/code-of-conduct/blob/master/CODE_OF_CONDUCT.md
+This Code of Conduct is adapted from the Angular project available at this page: <https://github.com/angular/code-of-conduct/blob/master/CODE_OF_CONDUCT.md>

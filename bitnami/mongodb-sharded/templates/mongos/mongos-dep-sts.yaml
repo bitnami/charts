@@ -72,7 +72,7 @@ spec:
       priorityClassName: {{ .Values.mongos.priorityClassName | quote }}
       {{- end }}
       {{- if .Values.mongos.topologySpreadConstraints }}
-      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.mongos.topologySpreadConstraints "context" .) | nindent 8 }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.mongos.topologySpreadConstraints "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.mongos.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.mongos.podSecurityContext "enabled" | toYaml | nindent 8 }}
@@ -186,7 +186,7 @@ spec:
                 name: {{ include "common.tplvalues.render" ( dict "value" .Values.mongos.extraEnvVarsCM "context" $ ) }}
             {{- end }}
             {{- if .Values.mongos.extraEnvVarsSecret }}
-            - configMapRef:
+            - secretRef:
                 name: {{ include "common.tplvalues.render" ( dict "value" .Values.mongos.extraEnvVarsSecret "context" $ ) }}
             {{- end }}
           {{- end }}
@@ -203,32 +203,32 @@ spec:
           {{- if .Values.mongos.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.mongos.args "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.mongos.livenessProbe.enabled }}
+          {{- if .Values.mongos.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.mongos.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.mongos.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.mongos.livenessProbe "enabled") "context" $) | nindent 12 }}
             exec:
               command:
                 - /bin/sh 
                 - -c 
                 - mongosh --port $MONGODB_PORT_NUMBER --eval "db.adminCommand('ping')"
-          {{- else if .Value.mongos.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.mongos.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.mongos.readinessProbe.enabled }}
+          {{- if .Values.mongos.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.mongos.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.mongos.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.mongos.readinessProbe "enabled") "context" $) | nindent 12 }}
             exec:
               command:
                 - /bin/sh 
                 - -c 
                 - mongosh --port $MONGODB_PORT_NUMBER --eval "db.adminCommand('ping')"
-          {{- else if .Value.mongos.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.mongos.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.mongos.startupProbe.enabled }}
+          {{- if .Values.mongos.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.mongos.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.mongos.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.mongos.startupProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
               port: mongodb 
-          {{- else if .Values.mongos.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.mongos.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           {{- if .Values.mongos.lifecycleHooks }}
@@ -284,7 +284,7 @@ spec:
               {{- if .Values.auth.usePasswordFile }}
               export MONGODB_ROOT_PASSWORD="$(cat "${MONGODB_ROOT_PASSWORD_FILE}")"
               {{- end }}
-              /bin/mongodb_exporter --web.listen-address ":{{ .Values.metrics.containerPorts.metrics }}" --mongodb.uri mongodb://$(echo $MONGODB_ROOT_USER):$(echo $MONGODB_ROOT_PASSWORD | sed -r "s/@/%40/g;s/:/%3A/g")@localhost:{{ .Values.common.containerPorts.mongodb }}/admin{{ ternary "?ssl=true" "" $.Values.metrics.useTLS }} {{ .Values.metrics.extraArgs }}
+              /bin/mongodb_exporter --collect-all --compatible-mode --web.listen-address ":{{ .Values.metrics.containerPorts.metrics }}" --mongodb.uri mongodb://$(echo $MONGODB_ROOT_USER):$(echo $MONGODB_ROOT_PASSWORD | sed -r "s/@/%40/g;s/:/%3A/g")@localhost:{{ .Values.common.containerPorts.mongodb }}/admin{{ ternary "?ssl=true" "" $.Values.metrics.useTLS }} {{ .Values.metrics.extraArgs }}
           {{- end }}
           {{- if .Values.auth.usePasswordFile }}
           volumeMounts:
@@ -295,28 +295,28 @@ spec:
             - name: metrics
               containerPort: {{ .Values.metrics.containerPorts.metrics }}
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.metrics.livenessProbe.enabled }}
+          {{- if .Values.metrics.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.metrics.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metrics.livenessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /metrics
               port: metrics
-          {{- else if .Values.metrics.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.metrics.readinessProbe.enabled }}
+          {{- if .Values.metrics.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.metrics.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metrics.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /metrics
               port: metrics
-          {{- else if .Values.metrics.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.metrics.startupProbe.enabled }}
+          {{- if .Values.metrics.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.metrics.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metrics.startupProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
               port: metrics
-          {{- else if .Values.metrics.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}

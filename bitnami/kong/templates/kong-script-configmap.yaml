@@ -24,7 +24,7 @@ data:
     . /opt/bitnami/scripts/libkong.sh
 
     # Load Kong environment variables
-    eval "$(kong_env)"
+    . /opt/bitnami/scripts/kong-env.sh
 
     is_kong_running
 

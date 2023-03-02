@@ -8,7 +8,7 @@ APP VERSION: {{ .Chart.AppVersion }}
 {{- $ghostSecretName := (include "common.names.fullname" .) -}}
 {{- $databaseSecretName := include "ghost.databaseSecretName" . -}}
 
-{{- if or .Values.mariadb.enabled .Values.externalDatabase.host -}}
+{{- if or .Values.mysql.enabled .Values.externalDatabase.host -}}
 
 {{- if empty (include "ghost.host" .) -}}
 ###############################################################################
@@ -34,22 +34,22 @@ host. To configure Ghost with the URL of your service:
   {{- end }}
 
   {{ include "common.utils.secret.getvalue" (dict "secret" $ghostSecretName "field" $ghostPasswordKey "context" $) }}
-  {{ include "common.utils.secret.getvalue" (dict "secret" $databaseSecretName "field" "mariadb-root-password" "context" $) }}
-  {{ include "common.utils.secret.getvalue" (dict "secret" $databaseSecretName "field" "mariadb-password" "context" $) }}
+  {{ include "common.utils.secret.getvalue" (dict "secret" $databaseSecretName "field" "mysql-root-password" "context" $) }}
+  {{ include "common.utils.secret.getvalue" (dict "secret" $databaseSecretName "field" "mysql-password" "context" $) }}
 
 2. Complete your Ghost deployment by running:
 
-{{- if .Values.mariadb.enabled }}
+{{- if .Values.mysql.enabled }}
 
-  helm upgrade --namespace {{ .Release.Namespace }} {{ .Release.Name }} bitnami/{{ .Chart.Name }} \
-    --set service.type={{ .Values.service.type }},ghostHost=$APP_HOST,ghostPassword=$GHOST_PASSWORD,mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD,mariadb.auth.password=$MARIADB_PASSWORD{{- if .Values.global }}{{- if .Values.global.imagePullSecrets }},global.imagePullSecrets={{ .Values.global.imagePullSecrets }}{{- end }}{{- end }}
+  helm upgrade --namespace {{ .Release.Namespace }} {{ .Release.Name }} my-repo/{{ .Chart.Name }} \
+    --set service.type={{ .Values.service.type }},ghostHost=$APP_HOST,ghostPassword=$GHOST_PASSWORD,mysql.auth.rootPassword=$MYSQL_ROOT_PASSWORD,mysql.auth.password=$MYSQL_PASSWORD{{- if .Values.global }}{{- if .Values.global.imagePullSecrets }},global.imagePullSecrets={{ .Values.global.imagePullSecrets }}{{- end }}{{- end }}
 
 {{- else }}
 
   ## PLEASE UPDATE THE EXTERNAL DATABASE CONNECTION PARAMETERS IN THE FOLLOWING COMMAND AS NEEDED ##
 
-  helm upgrade --namespace {{ .Release.Namespace }} {{ .Release.Name }} bitnami/{{ .Chart.Name }} \
-    --set service.type={{ .Values.service.type }},ghostHost=$APP_HOST,ghostPassword=$APP_PASSWORD,{{- if contains "NodePort" .Values.service.type }}service.nodePort=$APP_PORT,{{- end }}mariadb.enabled=false{{- if not (empty .Values.externalDatabase.host) }},externalDatabase.host={{ .Values.externalDatabase.host }}{{- end }}{{- if not (empty .Values.externalDatabase.user) }},externalDatabase.user={{ .Values.externalDatabase.user }}{{- end }}{{- if not (empty .Values.externalDatabase.password) }},externalDatabase.password={{ .Values.externalDatabase.password }}{{- end }}{{- if not (empty .Values.externalDatabase.database) }},externalDatabase.database={{ .Values.externalDatabase.database }}{{- end }}
+  helm upgrade --namespace {{ .Release.Namespace }} {{ .Release.Name }} my-repo/{{ .Chart.Name }} \
+    --set service.type={{ .Values.service.type }},ghostHost=$APP_HOST,ghostPassword=$APP_PASSWORD,{{- if contains "NodePort" .Values.service.type }}service.nodePort=$APP_PORT,{{- end }}mysql.enabled=false{{- if not (empty .Values.externalDatabase.host) }},externalDatabase.host={{ .Values.externalDatabase.host }}{{- end }}{{- if not (empty .Values.externalDatabase.user) }},externalDatabase.user={{ .Values.externalDatabase.user }}{{- end }}{{- if not (empty .Values.externalDatabase.password) }},externalDatabase.password={{ .Values.externalDatabase.password }}{{- end }}{{- if not (empty .Values.externalDatabase.database) }},externalDatabase.database={{ .Values.externalDatabase.database }}{{- end }}
 
 {{- end }}
 
@@ -92,7 +92,7 @@ host. To configure Ghost with the URL of your service:
 2. Get your Ghost login credentials by running:
 
   echo Email:    {{ .Values.ghostEmail }}
-  echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} -o jsonpath="{.data.{{- $ghostPasswordKey -}}}" | base64 --decode)
+  echo Password: $(kubectl get secret --namespace {{ .Release.Namespace }} {{ template "common.names.fullname" . }} -o jsonpath="{.data.{{- $ghostPasswordKey -}}}" | base64 -d)
 
 {{- end }}
 
@@ -128,8 +128,8 @@ host. To configure Ghost to use and external database host:
 
   ## PLEASE UPDATE THE EXTERNAL DATABASE CONNECTION PARAMETERS IN THE FOLLOWING COMMAND AS NEEDED ##
 
-  helm upgrade --namespace {{ .Release.Namespace }} {{ .Release.Name }} bitnami/{{ .Chart.Name }} \
-    --set ghostPassword=$APP_PASSWORD,ghostHost=$APP_HOST,service.type={{ .Values.service.type }},mariadb.enabled=false{{- if not (empty .Values.externalDatabase.user) }},externalDatabase.user={{ .Values.externalDatabase.user }}{{- end }}{{- if not (empty .Values.externalDatabase.password) }},externalDatabase.password={{ .Values.externalDatabase.password }}{{- end }}{{- if not (empty .Values.externalDatabase.database) }},externalDatabase.database={{ .Values.externalDatabase.database }}{{- end }},externalDatabase.host=YOUR_EXTERNAL_DATABASE_HOST
+  helm upgrade --namespace {{ .Release.Namespace }} {{ .Release.Name }} my-repo/{{ .Chart.Name }} \
+    --set ghostPassword=$APP_PASSWORD,ghostHost=$APP_HOST,service.type={{ .Values.service.type }},mysql.enabled=false{{- if not (empty .Values.externalDatabase.user) }},externalDatabase.user={{ .Values.externalDatabase.user }}{{- end }}{{- if not (empty .Values.externalDatabase.password) }},externalDatabase.password={{ .Values.externalDatabase.password }}{{- end }}{{- if not (empty .Values.externalDatabase.database) }},externalDatabase.database={{ .Values.externalDatabase.database }}{{- end }},externalDatabase.host=YOUR_EXTERNAL_DATABASE_HOST
 {{- end }}
 
 {{ include "common.warnings.rollingTag" .Values.image }}
@@ -142,8 +142,8 @@ host. To configure Ghost to use and external database host:
   {{- $requiredGhostPasswordError := include "common.validations.values.single.empty" $requiredGhostPassword -}}
   {{- $passwordValidationErrors =  append $passwordValidationErrors $requiredGhostPasswordError -}}
 {{- end -}}
-{{- if .Values.mariadb.enabled }}
-    {{- $mariadbPasswordValidationErrors := include "common.validations.values.mariadb.passwords" (dict "secret" $databaseSecretName "subchart" true "context" $) -}}
-    {{- $passwordValidationErrors = append $passwordValidationErrors $mariadbPasswordValidationErrors -}}
+{{- if .Values.mysql.enabled }}
+    {{- $mysqlPasswordValidationErrors := include "common.validations.values.mysql.passwords" (dict "secret" $databaseSecretName "subchart" true "context" $) -}}
+    {{- $passwordValidationErrors = append $passwordValidationErrors $mysqlPasswordValidationErrors -}}
 {{- end }}
 {{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" $passwordValidationErrors "context" $) -}}

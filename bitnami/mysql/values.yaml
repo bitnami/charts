@@ -2,6 +2,7 @@
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
 ## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+##
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
@@ -17,6 +18,7 @@ global:
   storageClass: ""
 
 ## @section Common parameters
+##
 
 ## @param kubeVersion Force target Kubernetes version (using Helm capabilities if not set)
 ##
@@ -43,6 +45,12 @@ commonLabels: {}
 ##
 extraDeploy: []
 
+## @param serviceBindings.enabled Create secret for service binding (Experimental)
+## Ref: https://servicebinding.io/service-provider/
+##
+serviceBindings:
+  enabled: false
+
 ## Enable diagnostic mode in the deployment
 ##
 diagnosticMode:
@@ -59,12 +67,14 @@ diagnosticMode:
     - infinity
 
 ## @section MySQL common parameters
+##
 
 ## Bitnami MySQL image
 ## ref: https://hub.docker.com/r/bitnami/mysql/tags/
 ## @param image.registry MySQL image registry
 ## @param image.repository MySQL image repository
 ## @param image.tag MySQL image tag (immutable tags are recommended)
+## @param image.digest MySQL image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy MySQL image pull policy
 ## @param image.pullSecrets Specify docker-registry secret names as an array
 ## @param image.debug Specify if debug logs should be enabled
@@ -72,7 +82,8 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mysql
-  tag: 8.0.29-debian-10-r22
+  tag: 8.0.32-debian-11-r11
+  digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -96,22 +107,26 @@ architecture: standalone
 ##
 auth:
   ## @param auth.rootPassword Password for the `root` user. Ignored if existing secret is provided
-  ## ref: https://github.com/bitnami/bitnami-docker-mysql#setting-the-root-password-on-first-run
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mysql#setting-the-root-password-on-first-run
   ##
   rootPassword: ""
-  ## @param auth.database Name for a custom database to create
-  ## ref: https://github.com/bitnami/bitnami-docker-mysql/blob/master/README.md#creating-a-database-on-first-run
+  ## @param auth.createDatabase Whether to create the .Values.auth.database or not
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mysql#creating-a-database-on-first-run
   ##
-  database: my_database
+  createDatabase: true
+  ## @param auth.database Name for a custom database to create
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mysql#creating-a-database-on-first-run
+  ##
+  database: "my_database"
   ## @param auth.username Name for a custom user to create
-  ## ref: https://github.com/bitnami/bitnami-docker-mysql/blob/master/README.md#creating-a-database-user-on-first-run
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mysql#creating-a-database-user-on-first-run
   ##
   username: ""
   ## @param auth.password Password for the new user. Ignored if existing secret is provided
   ##
   password: ""
   ## @param auth.replicationUser MySQL replication user
-  ## ref: https://github.com/bitnami/bitnami-docker-mysql#setting-up-a-replication-cluster
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mysql#setting-up-a-replication-cluster
   ##
   replicationUser: replicator
   ## @param auth.replicationPassword MySQL replication user password. Ignored if existing secret is provided
@@ -146,8 +161,12 @@ initdbScripts: {}
 initdbScriptsConfigMap: ""
 
 ## @section MySQL Primary parameters
+##
 
 primary:
+  ## @param primary.name Name of the primary database (eg primary, master, leader, ...)
+  ##
+  name: primary
   ## @param primary.command Override default container command on MySQL Primary container(s) (useful when using custom images)
   ##
   command: []
@@ -176,7 +195,7 @@ primary:
     datadir=/bitnami/mysql/data
     tmpdir=/opt/bitnami/mysql/tmp
     max_allowed_packet=16M
-    bind-address=0.0.0.0
+    bind-address=*
     pid-file=/opt/bitnami/mysql/tmp/mysqld.pid
     log-error=/opt/bitnami/mysql/logs/mysqld.log
     character-set-server=UTF8
@@ -251,6 +270,9 @@ primary:
   ## @param primary.priorityClassName MySQL primary pods' priorityClassName
   ##
   priorityClassName: ""
+  ## @param primary.runtimeClassName MySQL primary pods' runtimeClassName
+  ##
+  runtimeClassName: ""
   ## @param primary.schedulerName Name of the k8s scheduler (other than default)
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
@@ -300,11 +322,13 @@ primary:
     ## limits:
     ##    cpu: 250m
     ##    memory: 256Mi
+    ##
     limits: {}
     ## Examples:
     ## requests:
     ##    cpu: 250m
     ##    memory: 256Mi
+    ##
     requests: {}
   ## Configure extra options for liveness probe
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
@@ -393,6 +417,9 @@ primary:
     ## NOTE: When it's set the rest of persistence parameters are ignored
     ##
     existingClaim: ""
+    ## @param primary.persistence.subPath The name of a volume's sub path to mount for persistence
+    ##
+    subPath: ""
     ## @param primary.persistence.storageClass MySQL primary persistent volume storage Class
     ## If defined, storageClassName: <storageClass>
     ## If set to "-", storageClassName: "", which disables dynamic provisioning
@@ -482,6 +509,13 @@ primary:
     ##     timeoutSeconds: 300
     ##
     sessionAffinityConfig: {}
+    ## Headless service properties
+    ##
+    headless:
+      ## @param primary.service.headless.annotations Additional custom annotations for headless MySQL primary service.
+      ##
+      annotations: {}
+
   ## MySQL primary Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
   ##
@@ -500,8 +534,12 @@ primary:
   podLabels: {}
 
 ## @section MySQL Secondary parameters
+##
 
 secondary:
+  ## @param secondary.name Name of the secondary database (eg secondary, slave, ...)
+  ##
+  name: secondary
   ## @param secondary.replicaCount Number of MySQL secondary replicas
   ##
   replicaCount: 1
@@ -527,12 +565,13 @@ secondary:
     skip-name-resolve
     explicit_defaults_for_timestamp
     basedir=/opt/bitnami/mysql
+    plugin_dir=/opt/bitnami/mysql/lib/plugin
     port=3306
     socket=/opt/bitnami/mysql/tmp/mysql.sock
     datadir=/bitnami/mysql/data
     tmpdir=/opt/bitnami/mysql/tmp
     max_allowed_packet=16M
-    bind-address=0.0.0.0
+    bind-address=*
     pid-file=/opt/bitnami/mysql/tmp/mysqld.pid
     log-error=/opt/bitnami/mysql/logs/mysqld.log
     character-set-server=UTF8
@@ -545,6 +584,7 @@ secondary:
     port=3306
     socket=/opt/bitnami/mysql/tmp/mysql.sock
     default-character-set=UTF8
+    plugin_dir=/opt/bitnami/mysql/lib/plugin
 
     [manager]
     port=3306
@@ -607,6 +647,9 @@ secondary:
   ## @param secondary.priorityClassName MySQL secondary pods' priorityClassName
   ##
   priorityClassName: ""
+  ## @param secondary.runtimeClassName MySQL secondary pods' runtimeClassName
+  ##
+  runtimeClassName: ""
   ## @param secondary.schedulerName Name of the k8s scheduler (other than default)
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
@@ -656,11 +699,13 @@ secondary:
     ## limits:
     ##    cpu: 250m
     ##    memory: 256Mi
+    ##
     limits: {}
     ## Examples:
     ## requests:
     ##    cpu: 250m
     ##    memory: 256Mi
+    ##
     requests: {}
   ## Configure extra options for liveness probe
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
@@ -745,6 +790,13 @@ secondary:
     ## @param secondary.persistence.enabled Enable persistence on MySQL secondary replicas using a `PersistentVolumeClaim`
     ##
     enabled: true
+    ## @param secondary.persistence.existingClaim Name of an existing `PersistentVolumeClaim` for MySQL secondary replicas
+    ## NOTE: When it's set the rest of persistence parameters are ignored
+    ##
+    existingClaim: ""
+    ## @param secondary.persistence.subPath The name of a volume's sub path to mount for persistence
+    ##
+    subPath: ""
     ## @param secondary.persistence.storageClass MySQL secondary persistent volume storage Class
     ## If defined, storageClassName: <storageClass>
     ## If set to "-", storageClassName: "", which disables dynamic provisioning
@@ -834,6 +886,13 @@ secondary:
     ##     timeoutSeconds: 300
     ##
     sessionAffinityConfig: {}
+    ## Headless service properties
+    ##
+    headless:
+      ## @param secondary.service.headless.annotations Additional custom annotations for headless MySQL secondary service.
+      ##
+      annotations: {}
+
   ## MySQL secondary Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb/
   ##
@@ -852,6 +911,7 @@ secondary:
   podLabels: {}
 
 ## @section RBAC parameters
+##
 
 ## MySQL pods ServiceAccount
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
@@ -892,6 +952,7 @@ rbac:
   rules: []
 
 ## @section Network Policy
+##
 
 ## MySQL Nework Policy configuration
 ##
@@ -922,6 +983,7 @@ networkPolicy:
   explicitNamespacesSelector: {}
 
 ## @section Volume Permissions parameters
+##
 
 ## Init containers parameters:
 ## volumePermissions: Change the owner and group of the persistent volume mountpoint to runAsUser:fsGroup values from the securityContext section.
@@ -933,13 +995,15 @@ volumePermissions:
   ## @param volumePermissions.image.registry Init container volume-permissions image registry
   ## @param volumePermissions.image.repository Init container volume-permissions image repository
   ## @param volumePermissions.image.tag Init container volume-permissions image tag (immutable tags are recommended)
+  ## @param volumePermissions.image.digest Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
   ## @param volumePermissions.image.pullSecrets Specify docker-registry secret names as an array
   ##
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r430
+    tag: 11-debian-11-r90
+    digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -954,6 +1018,7 @@ volumePermissions:
   resources: {}
 
 ## @section Metrics parameters
+##
 
 ## Mysqld Prometheus exporter parameters
 ##
@@ -964,13 +1029,15 @@ metrics:
   ## @param metrics.image.registry Exporter image registry
   ## @param metrics.image.repository Exporter image repository
   ## @param metrics.image.tag Exporter image tag (immutable tags are recommended)
+  ## @param metrics.image.digest Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param metrics.image.pullPolicy Exporter image pull policy
   ## @param metrics.image.pullSecrets Specify docker-registry secret names as an array
   ##
   image:
     registry: docker.io
     repository: bitnami/mysqld-exporter
-    tag: 0.14.0-debian-10-r74
+    tag: 0.14.0-debian-11-r93
+    digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1049,11 +1116,13 @@ metrics:
     ## limits:
     ##    cpu: 100m
     ##    memory: 256Mi
+    ##
     limits: {}
     ## Examples:
     ## requests:
     ##    cpu: 100m
     ##    memory: 256Mi
+    ##
     requests: {}
   ## Mysqld Prometheus exporter liveness probe
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
@@ -1117,7 +1186,7 @@ metrics:
     ##
     metricRelabelings: []
     ## @param metrics.serviceMonitor.selector ServiceMonitor selector labels
-    ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
+    ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
     ##
     ## selector:
     ##   prometheus: my-prometheus
@@ -1133,3 +1202,28 @@ metrics:
     ## @param metrics.serviceMonitor.annotations ServiceMonitor annotations
     ##
     annotations: {}
+
+  ## Prometheus Operator prometheusRule configuration
+  ##
+  prometheusRule:
+    ## @param metrics.prometheusRule.enabled Creates a Prometheus Operator prometheusRule (also requires `metrics.enabled` to be `true` and `metrics.prometheusRule.rules`)
+    ##
+    enabled: false
+    ## @param metrics.prometheusRule.namespace Namespace for the prometheusRule Resource (defaults to the Release Namespace)
+    ##
+    namespace: ""
+    ## @param metrics.prometheusRule.additionalLabels Additional labels that can be used so prometheusRule will be discovered by Prometheus
+    ##
+    additionalLabels: {}
+    ## @param metrics.prometheusRule.rules Prometheus Rule definitions
+    ##  - alert: Mysql-Down
+    ##    expr: absent(up{job="mysql"} == 1)
+    ##    for: 5m
+    ##    labels:
+    ##      severity: warning
+    ##      service: mariadb
+    ##    annotations:
+    ##      message: 'MariaDB instance {{`{{`}} $labels.instance {{`}}`}}  is down'
+    ##      summary: MariaDB instance is down
+    ##
+    rules: []

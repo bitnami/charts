@@ -1,8 +1,8 @@
 {{- if .Values.disasterRecovery.enabled -}}
-apiVersion: batch/v1beta1
+apiVersion: {{ include "common.capabilities.cronjob.apiVersion" . }}
 kind: CronJob
 metadata:
-  name: {{ printf "%s-snapshotter" (include "common.names.fullname" .) }}
+  name: {{ printf "%s-snapshotter" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
@@ -63,8 +63,8 @@ spec:
               securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 16 }}
               {{- end }}
               {{- if .Values.diagnosticMode.enabled }}
-              command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
-              args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+              command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 16 }}
+              args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 16 }}
               {{- else }}
               command:
                 - /opt/bitnami/scripts/etcd/snapshot.sh
@@ -80,7 +80,7 @@ spec:
                   value: {{ include "common.names.fullname" . | quote }}
                 {{- $releaseNamespace := .Release.Namespace }}
                 {{- $etcdFullname := include "common.names.fullname" . }}
-                {{- $etcdHeadlessServiceName := printf "%s-%s" $etcdFullname "headless" }}
+                {{- $etcdHeadlessServiceName := (printf "%s-%s" $etcdFullname "headless" | trunc 63 | trimSuffix "-") }}
                 {{- $clusterDomain := .Values.clusterDomain }}
                 - name: ETCD_CLUSTER_DOMAIN
                   value: {{ printf "%s.%s.svc.%s" $etcdHeadlessServiceName $releaseNamespace $clusterDomain | quote }}

@@ -219,7 +219,7 @@ ingress:
   ## - host: example.local
   ##     http:
   ##       path: /
-  ##       backend: 
+  ##       backend:
   ##         service:
   ##           name: example-svc
   ##           port:
@@ -235,13 +235,15 @@ ingress:
 ## @param image.registry OAuth2 Proxy image registry
 ## @param image.repository OAuth2 Proxy image repository
 ## @param image.tag OAuth2 Proxy image tag (immutable tags are recommended)
+## @param image.digest OAuth2 Proxy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy OAuth2 Proxy image pull policy
 ## @param image.pullSecrets OAuth2 Proxy image pull secrets
 ##
 image:
   registry: docker.io
   repository: bitnami/oauth2-proxy
-  tag: 7.2.1-debian-10-r144
+  tag: 7.4.0-debian-11-r44
+  digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -344,12 +346,29 @@ configuration:
     ##
     content: ""
 
+  ## @param configuration.oidcIssuerUrl OpenID Connect issuer URL
+  oidcIssuerUrl: ""
+
+  ## @param configuration.redirectUrl OAuth Redirect URL
+  redirectUrl: ""
+
+  ## @param configuration.whiteList Allowed domains for redirection after authentication. Prefix domain with a . or a *. to allow subdomains
+  whiteList: ""
+
 ## @section OAuth2 Proxy deployment parameters
 ##
 
 ## @param containerPort OAuth2 Proxy port number
 ##
 containerPort: 4180
+
+## @param extraContainerPorts Array of additional container ports for the OAuth2 Proxy container
+## e.g:
+## extraContainerPorts:
+##   - name: metrics
+##     containerPort: 9100
+##
+extraContainerPorts: []
 
 ## @param replicaCount Number of OAuth2 Proxy replicas to deploy
 ##
@@ -433,7 +452,7 @@ resources:
 pdb:
   create: false
   minAvailable: 1
-  maxUnavailable: 1
+  maxUnavailable: ""
 
 ## Configure Pods Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
@@ -571,6 +590,24 @@ sidecars: []
 ##    command: ['sh', '-c', 'echo "hello world"']
 ##
 initContainers: []
+## @param dnsPolicy Pod DNS policy. Valid values are 'ClusterFirstWithHostNet', 'ClusterFirst', 'Default' or 'None'.
+## ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pod-s-dns-policy
+##
+dnsPolicy: ""
+## @param dnsConfig Pod DNS configuration.
+## ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pod-dns-config
+## e.g:
+## dnsConfig:
+##   nameservers:
+##   - 8.8.8.8
+##   - 8.8.4.4
+##   options:
+##   - name: ndots
+##     value: "2"
+##   searches:
+##   - example.com
+##
+dnsConfig: {}
 
 ## ServiceAccount configuration
 ##
@@ -589,66 +626,66 @@ serviceAccount:
   ##
   annotations: {}
 
-## @section External Redis&trade; parameters
+## @section External Redis&reg; parameters
 ##
 externalRedis:
-  ## @param externalRedis.host External Redis&trade; server host
+  ## @param externalRedis.host External Redis&reg; server host
   ##
   host: ""
-  ## @param externalRedis.password External Redis&trade; user password
+  ## @param externalRedis.password External Redis&reg; user password
   ##
   password: ""
-  ## @param externalRedis.port External Redis&trade; server port
+  ## @param externalRedis.port External Redis&reg; server port
   ##
   port: 6379
-  ## @param externalRedis.existingSecret The name of an existing secret with Redis&trade; credentials
+  ## @param externalRedis.existingSecret The name of an existing secret with Redis&reg; credentials
   ## NOTE: Must contain key `redis-password`
   ## NOTE: When it's set, the `externalRedis.password` parameter is ignored
   ##
   existingSecret: ""
 
-## @section Redis&trade; sub-chart parameters
+## @section Redis&reg; sub-chart parameters
 ##
 redis:
-  ## @param redis.enabled Deploy Redis&trade; sub-chart
+  ## @param redis.enabled Deploy Redis&reg; sub-chart
   ##
   enabled: true
-  ## @param redis.architecture Redis&trade; architecture
+  ## @param redis.architecture Redis&reg; architecture
   ##
   architecture: "standalone"
   master:
-    ## @param redis.master.service.port Redis&trade; (without Sentinel) service port
+    ## @param redis.master.service.port Redis&reg; (without Sentinel) service port
     ##
     service:
       port: 6379
   replica:
-    ## @param redis.replica.replicaCount Number of Redis&trade; replicas
+    ## @param redis.replica.replicaCount Number of Redis&reg; replicas
     ##
     replicaCount: 3
   auth:
-    ## @param redis.auth.enabled Enable Redis&trade; authentication
+    ## @param redis.auth.enabled Enable Redis&reg; authentication
     ##
     enabled: true
-    ## @param redis.auth.existingSecret Secret with Redis&trade; credentials
+    ## @param redis.auth.existingSecret Secret with Redis&reg; credentials
     ##
     existingSecret: ""
-    ## @param redis.auth.existingSecretPasswordKey Key inside the existing secret with Redis&trade; credentials
+    ## @param redis.auth.existingSecretPasswordKey Key inside the existing secret with Redis&reg; credentials
     ##
     existingSecretPasswordKey: ""
     ## @param redis.auth.sentinel Enable authentication in the Sentinel nodes
     ##
     sentinel: true
   sentinel:
-    ## @param redis.sentinel.enabled Enable Redis&trade; sentinel in the deployment
+    ## @param redis.sentinel.enabled Enable Redis&reg; sentinel in the deployment
     ##
     enabled: false
-    ## @param redis.sentinel.masterSet Name of the Redis&trade; Sentinel master set
+    ## @param redis.sentinel.masterSet Name of the Redis&reg; Sentinel master set
     ##
     masterSet: mymaster
     service:
-      ## @param redis.sentinel.service.port Redis&trade; (with Sentinel) service port
+      ## @param redis.sentinel.service.port Redis&reg; (with Sentinel) service port
       ##
       port: 6379
-      ## @param redis.sentinel.service.sentinelPort Redis&trade; (with Sentinel) sentinel service port
+      ## @param redis.sentinel.service.sentinelPort Redis&reg; (with Sentinel) sentinel service port
       ##
       sentinelPort: 26379

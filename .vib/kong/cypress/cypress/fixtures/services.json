@@ -1,0 +1,7 @@
+{
+  "newService": {
+    "name": "cypress-service",
+    "upstreamURL": "https://bitnami.com",
+    "upstreamContent": "Loved by Developers"
+  }
+}

@@ -12,6 +12,7 @@ metadata:
     {{- if .Values.metrics.serviceMonitor.labels }}
     {{- include "common.tplvalues.render" (dict "value" .Values.metrics.serviceMonitor.labels "context" $) | nindent 4 }}
     {{- end }}
+  {{- if or .Values.commonAnnotations .Values.metrics.serviceMonitor.annotations }}
   annotations:
     {{- if .Values.commonAnnotations }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
@@ -19,6 +20,7 @@ metadata:
     {{- if .Values.metrics.serviceMonitor.annotations }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.serviceMonitor.annotations "context" $ ) | nindent 4 }}
     {{- end }}
+  {{- end }}
 spec:
   {{- if .Values.metrics.serviceMonitor.jobLabel }}
   jobLabel: {{ .Values.metrics.serviceMonitor.jobLabel }}

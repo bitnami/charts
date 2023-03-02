@@ -16,6 +16,7 @@ metadata:
   namespace: {{ $.Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" $ | nindent 4 }}
     app.kubernetes.io/component: storegateway
+    shard: {{ $index | quote }}
     {{- if and $.Values.metrics.enabled $.Values.metrics.serviceMonitor.enabled }}
     prometheus-operator/monitor: 'true'
     {{- end }}

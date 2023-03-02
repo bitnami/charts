@@ -55,6 +55,14 @@ rules:
     verbs:
       - update
   - apiGroups:
+      - networking.k8s.io
+    resources:
+      - ingressclasses
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
       - ""
     resources:
       - configmaps
@@ -72,14 +80,6 @@ rules:
   - apiGroups:
       - ""
     resources:
-      - endpoints
-    verbs:
-      - create
-      - get
-      - update
-  - apiGroups:
-      - ""
-    resources:
       - events
     verbs:
       - create
@@ -94,4 +94,27 @@ rules:
     verbs: ['use']
     resourceNames: [{{ template "common.names.fullname" . }}]
   {{- end }}
+  - apiGroups:
+      - discovery.k8s.io
+    resources:
+      - endpointslices
+    verbs:
+      - list
+      - watch
+      - get
+  - apiGroups:
+      - coordination.k8s.io
+    resources:
+      - leases
+    verbs:
+      - create
+  - apiGroups:
+      - coordination.k8s.io
+    resources:
+      - leases
+    resourceNames:
+      - {{ .Values.electionID }}
+    verbs:
+      - get
+      - update
 {{- end -}}

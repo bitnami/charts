@@ -1,0 +1,27 @@
+name: '[Support] Review based card movements'
+on:
+  pull_request_target:
+    types:
+      - review_requested
+      - synchronize
+permissions:
+  repository-projects: write
+concurrency:
+  group: card-movement-${{ github.event.number }}
+jobs:
+  handler:
+    runs-on: ubuntu-latest
+    # This job will ignore:
+    # * Events triggered by bitnami-bot (README commits for example).
+    # * Events triggered over automated PRs (They are managed in comments.yml workflow).
+    # * PRs with 'bitnami' label.
+    if: |
+      github.actor != 'bitnami-bot' && github.event.pull_request.user.login != 'bitnami-bot' &&
+      (!contains(github.event.pull_request.labels.*.name, 'bitnami')) && (!contains(github.event.pull_request.labels.*.name, 'triage'))
+    steps:
+      - name: Move into In Progress
+        uses: peter-evans/create-or-update-project-card@v2
+        with:
+          project-name: Support
+          column-name: In progress
+          issue-number: ${{ github.event.number }}

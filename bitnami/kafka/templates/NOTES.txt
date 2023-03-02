@@ -30,7 +30,7 @@ In order to replicate the container startup scripts execute this command:
 {{- $externalClientProtocol := include "kafka.listenerType" (dict "protocol" (include "kafka.externalClientProtocol" . )) -}}
 {{- $saslMechanisms := .Values.auth.sasl.mechanisms -}}
 {{- $tlsEndpointIdentificationAlgorithm := default "" .Values.auth.tls.endpointIdentificationAlgorithm -}}
-{{- $tlsPasswordSecret := printf "$(kubectl get secret %s --namespace %s -o jsonpath='{.data.password}' | base64 --decode | cut -d , -f 1)" .Values.auth.tls.existingSecret $releaseNamespace -}}
+{{- $tlsPasswordSecret := printf "$(kubectl get secret %s --namespace %s -o jsonpath='{.data.password}' | base64 -d | cut -d , -f 1)" .Values.auth.tls.existingSecret $releaseNamespace -}}
 {{- $tlsPassword :=  ternary .Values.auth.tls.password $tlsPasswordSecret (eq .Values.auth.tls.existingSecret "") -}}
 {{- $servicePort := int .Values.service.ports.client -}}
 
@@ -74,7 +74,7 @@ org.apache.kafka.common.security.scram.ScramLoginModule required
 org.apache.kafka.common.security.plain.PlainLoginModule required
 {{- end }}
 username="{{ index .Values.auth.sasl.jaas.clientUsers 0 }}"
-password="$(kubectl get secret {{ $fullname }}-jaas --namespace {{ $releaseNamespace }} -o jsonpath='{.data.client-passwords}' | base64 --decode | cut -d , -f 1)";
+password="$(kubectl get secret {{ $fullname }}-jaas --namespace {{ $releaseNamespace }} -o jsonpath='{.data.client-passwords}' | base64 -d | cut -d , -f 1)";
 };
 
     - client.properties:
@@ -164,13 +164,17 @@ To create a pod that you can use as a Kafka client run the following commands:
 
     PRODUCER:
         kafka-console-producer.sh \
-            {{ if or (include "kafka.client.saslAuthentication" .) (include "kafka.client.tlsEncryption" .) }}--producer.config /tmp/client.properties \{{ end }}
+            {{- if or (include "kafka.client.saslAuthentication" .) (include "kafka.client.tlsEncryption" .) }}
+            --producer.config /tmp/client.properties \
+            {{- end }}
             --broker-list {{ join "," $brokerList }} \
             --topic test
 
     CONSUMER:
         kafka-console-consumer.sh \
-            {{ if or (include "kafka.client.saslAuthentication" .) (include "kafka.client.tlsEncryption" .) }}--consumer.config /tmp/client.properties \{{ end }}
+            {{- if or (include "kafka.client.saslAuthentication" .) (include "kafka.client.tlsEncryption" .) }}
+            --consumer.config /tmp/client.properties \
+            {{- end }}
             --bootstrap-server {{ $fullname }}.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ .Values.service.ports.client }} \
             --topic test \
             --from-beginning
@@ -213,6 +217,12 @@ To connect to your Kafka server from outside the cluster, follow the instruction
 
     Kafka Brokers port: {{ .Values.externalAccess.service.ports.external }}
 
+{{- else if eq "ClusterIP" .Values.externalAccess.service.type }}
+
+    Kafka brokers domain: Use your provided hostname to reach Kafka brokers, {{ .Values.externalAccess.service.domain }}
+
+    Kafka brokers port: You will have a different port for each Kafka broker starting at {{ .Values.externalAccess.service.ports.external }}
+
 {{- end }}
 
 {{- if not (eq $clientProtocol $externalClientProtocol) }}
@@ -229,7 +239,7 @@ org.apache.kafka.common.security.scram.ScramLoginModule required
 org.apache.kafka.common.security.plain.PlainLoginModule required
 {{- end }}
 username="{{ index .Values.auth.sasl.jaas.clientUsers 0 }}"
-password="$(kubectl get secret {{ $fullname }}-jaas --namespace {{ $releaseNamespace }} -o jsonpath='{.data.client-passwords}' | base64 --decode | cut -d , -f 1)";
+password="$(kubectl get secret {{ $fullname }}-jaas --namespace {{ $releaseNamespace }} -o jsonpath='{.data.client-passwords}' | base64 -d | cut -d , -f 1)";
 };
 
     - client.properties:

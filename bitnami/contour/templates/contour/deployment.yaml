@@ -2,8 +2,8 @@
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: {{ include "common.names.fullname" . }}-contour
-  namespace: {{ .Release.Namespace }}
+  name: {{ printf "%s-contour" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: contour
     {{- if .Values.commonLabels }}
@@ -64,9 +64,17 @@ spec:
       {{- if .Values.contour.tolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.contour.tolerations "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.contour.schedulerName }}
+      schedulerName: {{ .Values.contour.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.contour.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.contour.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.contour.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.contour.terminationGracePeriodSeconds }}
+      {{- end }}
       {{- if .Values.contour.initContainers }}
-      initContainers:
-        {{- include "common.tplvalues.render" ( dict "value" .Values.contour.initContainers "context" $ ) | nindent 6 }}
+      initContainers: {{- include "common.tplvalues.render" ( dict "value" .Values.contour.initContainers "context" $ ) | nindent 6 }}
       {{- end }}
       containers:
         - name: contour
@@ -95,6 +103,13 @@ spec:
             - --contour-cert-file=/certs/tls.crt
             - --contour-key-file=/certs/tls.key
             - --config-path=/config/contour.yaml
+            {{- if .Values.contour.ingressStatusAddress }}
+            - --ingress-status-address={{ .Values.contour.ingressStatusAddress }}
+            {{- else }}
+            - --envoy-service-namespace={{ default .Release.Namespace .Values.contour.envoyServiceNamespace }}
+            - --envoy-service-name={{ default (printf "%s-envoy" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-") .Values.contour.envoyServiceName }}
+            {{- end }}
+            - --leader-election-resource-name={{ include "common.names.namespace" . }}
             {{- if .Values.contour.debug }}
             - --debug
             {{- end }}
@@ -122,7 +137,9 @@ spec:
           {{- if .Values.contour.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.contour.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.contour.livenessProbe.enabled }}
+          {{- if .Values.contour.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.contour.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.contour.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
               path: /healthz
@@ -132,10 +149,10 @@ spec:
             timeoutSeconds: {{ .Values.contour.livenessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.contour.livenessProbe.successThreshold }}
             failureThreshold: {{ .Values.contour.livenessProbe.failureThreshold }}
-          {{- else if .Values.contour.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.contour.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.contour.readinessProbe.enabled }}
+          {{- if .Values.contour.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.contour.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.contour.readinessProbe.enabled }}
           readinessProbe:
             httpGet:
               path: /healthz
@@ -145,10 +162,10 @@ spec:
             timeoutSeconds: {{ .Values.contour.readinessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.contour.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.contour.readinessProbe.failureThreshold }}
-          {{- else if .Values.contour.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.contour.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.contour.startupProbe.enabled }}
+          {{- if .Values.contour.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.contour.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.contour.startupProbe.enabled }}
           startupProbe:
             httpGet:
               path: /healthz
@@ -158,8 +175,6 @@ spec:
             timeoutSeconds: {{ .Values.contour.startupProbe.timeoutSeconds }}
             successThreshold: {{ .Values.contour.startupProbe.successThreshold }}
             failureThreshold: {{ .Values.contour.startupProbe.failureThreshold }}
-          {{- else if .Values.contour.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.contour.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           resources: {{ toYaml .Values.contour.resources | nindent 12 }}

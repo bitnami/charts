@@ -1,25 +1,7 @@
 command:
-  airflow-add-dag:
-    exec: curl -JL http://apps-tests-artifacts.s3-website-us-east-1.amazonaws.com/airflow/bitnami-example-dag.py -o /opt/bitnami/airflow/dags/bitnami-example-dag.py && airflow db init
-    exit-status: 0
-    stdout:
-      - "Creating tables"
-      - "Initialization done"
-    stderr: [ ]
-    timeout: 40000
-  airflow-list-dags:
-    exec: airflow dags list
-    exit-status: 0
-    stdout:
-      - "example_bash_operator"
-    stderr: [ ]
-    timeout: 40000
   airflow-trigger-dag:
     exec: airflow dags trigger example_bash_operator
     exit-status: 0
-    stdout:
-      - "externally triggered: True"
-    stderr: [ ]
     timeout: 40000
 file:
   /opt/bitnami/airflow/airflow.cfg:

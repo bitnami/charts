@@ -34,7 +34,7 @@ Return the proper name for master related resources
 {{- define "pytorch.master.name" -}}
 {{- $architecture := coalesce .Values.mode .Values.architecture }}
 {{- if eq .Values.architecture "distributed" }}
-{{- printf "%s-master" (include "common.names.fullname" .) }}
+{{- printf "%s-master" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
 {{- else }}
 {{- include "common.names.fullname" . }}
 {{- end -}}

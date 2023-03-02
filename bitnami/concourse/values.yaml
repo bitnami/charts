@@ -61,13 +61,15 @@ diagnosticMode:
 ## @param image.registry image registry
 ## @param image.repository image repository
 ## @param image.tag image tag (immutable tags are recommended)
+## @param image.digest image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy image pull policy
 ## @param image.pullSecrets image pull secrets
 ##
 image:
   registry: docker.io
   repository: bitnami/concourse
-  tag: 7.7.1-debian-10-r49
+  tag: 7.9.1-debian-11-r7
+  digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -508,7 +510,7 @@ web:
   ## @param web.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
   ##
-  topologySpreadConstraints: {}
+  topologySpreadConstraints: []
   ## @param web.priorityClassName Priority Class to use for each pod (Concourse web)
   ##
   priorityClassName: ""
@@ -603,6 +605,10 @@ worker:
   ## @param worker.enabled Enable Concourse worker nodes
   ##
   enabled: true
+  ## @param worker.runtime Set CONCURSE_RUNTIME in worker nodes. Please note the default runtime (guardian) only supports cgroupsv1.
+  ## ref: https://concourse-ci.org/concourse-worker.html#configuring-runtimes
+  ## ref: https://github.com/concourse/docs/pull/444
+  runtime: containerd
   ## @param worker.logLevel Minimum level of logs to see. Possible options: debug, info, error
   ##
   logLevel: debug
@@ -800,7 +806,7 @@ worker:
   ## @param worker.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
   ##
-  topologySpreadConstraints: {}
+  topologySpreadConstraints: []
   ## @param worker.priorityClassName Priority Class to use for each pod (Concourse worker)
   ##
   priorityClassName: ""
@@ -994,6 +1000,12 @@ service:
     ## ref: https://kubernetes.io/docs/user-guide/services/
     ##
     sessionAffinity: None
+    ## @param service.web.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
     ## @param service.web.clusterIP Concourse web service Cluster IP
     ## e.g.:
     ## clusterIP: None
@@ -1041,6 +1053,12 @@ service:
     ## ref: https://kubernetes.io/docs/user-guide/services/
     ##
     sessionAffinity: None
+    ## @param service.workerGateway.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
     ## @param service.workerGateway.clusterIP Concourse worker gateway service Cluster IP
     ## e.g.:
     ## clusterIP: None
@@ -1164,7 +1182,7 @@ ingress:
   ## - host: concourse.local
   ##     http:
   ##       path: /
-  ##       backend: 
+  ##       backend:
   ##         service:
   ##           name: concourse-svc
   ##           port:
@@ -1184,13 +1202,15 @@ volumePermissions:
   ## @param volumePermissions.image.registry Init container volume-permissions image registry
   ## @param volumePermissions.image.repository Init container volume-permissions image repository
   ## @param volumePermissions.image.tag Init container volume-permissions image tag (immutable tags are recommended)
+  ## @param volumePermissions.image.digest Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
   ## @param volumePermissions.image.pullSecrets Init container volume-permissions image pull secrets
   ##
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r430
+    tag: 11-debian-11-r90
+    digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1219,7 +1239,7 @@ volumePermissions:
 ## @section Concourse database parameters
 
 ## PostgreSQL chart configuration
-## ref: https://github.com/bitnami/charts/blob/master/bitnami/postgresql/values.yaml
+## ref: https://github.com/bitnami/charts/blob/main/bitnami/postgresql/values.yaml
 ## @param postgresql.enabled Switch to enable or disable the PostgreSQL helm chart
 ## @param postgresql.auth.enablePostgresUser Assign a password to the "postgres" admin user. Otherwise, remote access will be blocked for this user
 ## @param postgresql.auth.username Name for a custom user to create

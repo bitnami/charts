@@ -1,0 +1,11 @@
+server:
+  masterKey: "M4ster#K3y"
+dashboard:
+  podSecurityContext:
+    fsGroup: 1002
+  containerSecurityContext:
+    runAsUser: 1002
+  username: parseUser
+  password: "ComplicatedPassword123!4"
+serviceAccount:
+  automountServiceAccountToken: true

@@ -17,7 +17,7 @@ metadata:
     {{- include "common.tplvalues.render" ( dict "value" .Values.compactor.ingress.annotations "context" $ ) | nindent 4 }}
     {{- end }}
 spec:
-  {{- if and .Values.bucketweb.ingress.ingressClassName (include "common.ingress.supportsIngressClassname" .) }}
+  {{- if and .Values.compactor.ingress.ingressClassName (include "common.ingress.supportsIngressClassname" .) }}
   ingressClassName: {{ .Values.compactor.ingress.ingressClassName | quote }}
   {{- end }}
   rules:

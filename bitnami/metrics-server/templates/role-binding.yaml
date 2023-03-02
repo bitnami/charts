@@ -2,7 +2,7 @@
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: RoleBinding
 metadata:
-  name: {{ printf "%s-auth-reader" (include "common.names.fullname" .) }}
+  name: {{ printf "%s-auth-reader" (include "common.names.fullname.namespace" .) }}
   namespace: kube-system
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
@@ -17,6 +17,6 @@ roleRef:
   name: extension-apiserver-authentication-reader
 subjects:
   - kind: ServiceAccount
-    name: {{ template "common.names.fullname" . }}
+    name: {{ template "metrics-server.serviceAccountName" . }}
     namespace: {{ include "common.names.namespace" . | quote }}
 {{- end -}}

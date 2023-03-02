@@ -7,19 +7,19 @@ Parse is a platform that enables users to add a scalable and powerful backend to
 [Overview of Parse Server](http://parseplatform.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/parse
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/parse
 ```
 
 ## Introduction
 
-This chart bootstraps a [Parse](https://github.com/bitnami/bitnami-docker-parse) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Parse](https://github.com/bitnami/containers/tree/main/bitnami/parse) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This chart has been tested to work with NGINX Ingress, cert-manager, fluentd and Prometheus on top of the [BKPR](https://kubeprod.io/).
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -33,7 +33,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm install my-release bitnami/parse
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/parse
 ```
 
 The command deploys Parse on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -45,7 +46,7 @@ The command deploys Parse on the Kubernetes cluster in the default configuration
 To uninstall/delete the `my-release` deployment:
 
 ```console
-$ helm delete my-release
+helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -59,7 +60,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
-
 
 ### Common Parameters
 
@@ -76,14 +76,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.command` | Command to override all containers in the deployment                                         | `["sleep"]`    |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                            | `["infinity"]` |
 
-
 ### Parse server parameters
 
 | Name                                                     | Description                                                                                                              | Value                |
 | -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | -------------------- |
 | `server.image.registry`                                  | Parse image registry                                                                                                     | `docker.io`          |
 | `server.image.repository`                                | Parse image repository                                                                                                   | `bitnami/parse`      |
-| `server.image.tag`                                       | Parse image tag (immutable tags are recommended)                                                                         | `5.2.1-debian-10-r4` |
+| `server.image.tag`                                       | Parse image tag (immutable tags are recommended)                                                                         | `6.0.0-debian-11-r5` |
+| `server.image.digest`                                    | Parse image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                    | `""`                 |
 | `server.image.pullPolicy`                                | Image pull policy                                                                                                        | `IfNotPresent`       |
 | `server.image.pullSecrets`                               | Specify docker-registry secret names as an array                                                                         | `[]`                 |
 | `server.image.debug`                                     | Enable image debug mode                                                                                                  | `false`              |
@@ -107,8 +107,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.extraEnvVarsSecret`                              | Name of a Secret containing extra environment variables                                                                  | `""`                 |
 | `server.extraVolumes`                                    | Optionally specify extra list of additional volumes for the Parse pod(s)                                                 | `[]`                 |
 | `server.extraVolumeMounts`                               | Optionally specify extra list of additional volumeMounts for the Parse container(s)                                      | `[]`                 |
-| `server.sidecars`                                        | Add additional sidecar containers to the Parse pod(s)                                                                    | `{}`                 |
-| `server.initContainers`                                  | Add additional init containers to the Parse pod(s)                                                                       | `{}`                 |
+| `server.sidecars`                                        | Add additional sidecar containers to the Parse pod(s)                                                                    | `[]`                 |
+| `server.initContainers`                                  | Add additional init containers to the Parse pod(s)                                                                       | `[]`                 |
 | `server.enableCloudCode`                                 | Enable Parse Cloud Code                                                                                                  | `false`              |
 | `server.cloudCodeScripts`                                | Cloud Code scripts                                                                                                       | `{}`                 |
 | `server.existingCloudCodeScriptsCM`                      | ConfigMap with Cloud Code scripts (Note: Overrides `cloudCodeScripts`).                                                  | `""`                 |
@@ -144,7 +144,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.tolerations`                                     | Parse server tolerations for pod assignment                                                                              | `[]`                 |
 | `server.updateStrategy.type`                             | Parse statefulset strategy type                                                                                          | `RollingUpdate`      |
 | `server.priorityClassName`                               | Parse pods' priorityClassName                                                                                            | `""`                 |
-| `server.topologySpreadConstraints`                       | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `{}`                 |
+| `server.topologySpreadConstraints`                       | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`                 |
 | `server.schedulerName`                                   | Name of the k8s scheduler (other than default) for Parse pods                                                            | `""`                 |
 | `server.terminationGracePeriodSeconds`                   | Seconds Redmine pod needs to terminate gracefully                                                                        | `""`                 |
 | `server.lifecycleHooks`                                  | for the Parse container(s) to automate configuration before or after startup                                             | `{}`                 |
@@ -160,7 +160,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.service.sessionAffinity`                         | Control where client requests go, to the same pod or round-robin                                                         | `None`               |
 | `server.service.sessionAffinityConfig`                   | Additional settings for the sessionAffinity                                                                              | `{}`                 |
 
-
 ### Dashboard Parameters
 
 | Name                                                        | Description                                                                                                              | Value                     |
@@ -168,8 +167,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dashboard.enabled`                                         | Enable parse dashboard                                                                                                   | `true`                    |
 | `dashboard.image.registry`                                  | Dashboard image registry                                                                                                 | `docker.io`               |
 | `dashboard.image.repository`                                | Dashboard image repository                                                                                               | `bitnami/parse-dashboard` |
-| `dashboard.image.tag`                                       | Dashboard image tag (immutable tags are recommended)                                                                     | `3.3.0-debian-10-r118`    |
-| `dashboard.image.pullPolicy`                                | Image pull policy                                                                                                        | `IfNotPresent`            |
+| `dashboard.image.tag`                                       | Dashboard image tag (immutable tags are recommended)                                                                     | `5.0.0-debian-11-r37`     |
+| `dashboard.image.digest`                                    | Dashboard image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                | `""`                      |
+| `dashboard.image.pullPolicy`                                | image pull policy                                                                                                        | `IfNotPresent`            |
 | `dashboard.image.pullSecrets`                               | Specify docker-registry secret names as an array                                                                         | `[]`                      |
 | `dashboard.image.debug`                                     | Enable Parse Dashboard image debug mode                                                                                  | `false`                   |
 | `dashboard.replicaCount`                                    | Number of Parse Dashboard replicas to deploy                                                                             | `1`                       |
@@ -220,7 +220,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dashboard.tolerations`                                     | Parse dashboard tolerations for pod assignment                                                                           | `[]`                      |
 | `dashboard.updateStrategy.type`                             | Parse statefulset strategy type                                                                                          | `RollingUpdate`           |
 | `dashboard.priorityClassName`                               | Parse pods' priorityClassName                                                                                            | `""`                      |
-| `dashboard.topologySpreadConstraints`                       | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `{}`                      |
+| `dashboard.topologySpreadConstraints`                       | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`                      |
 | `dashboard.schedulerName`                                   | Name of the k8s scheduler (other than default) for Parse pods                                                            | `""`                      |
 | `dashboard.terminationGracePeriodSeconds`                   | Seconds Redmine pod needs to terminate gracefully                                                                        | `""`                      |
 | `dashboard.lifecycleHooks`                                  | for the Parse container(s) to automate configuration before or after startup                                             | `{}`                      |
@@ -230,8 +230,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dashboard.extraEnvVarsSecret`                              | Name of a Secret containing extra environment variables                                                                  | `""`                      |
 | `dashboard.extraVolumes`                                    | Optionally specify extra list of additional volumes for the Parse pod(s)                                                 | `[]`                      |
 | `dashboard.extraVolumeMounts`                               | Optionally specify extra list of additional volumeMounts for the Parse container(s)                                      | `[]`                      |
-| `dashboard.sidecars`                                        | Add additional sidecar containers to the Parse pod(s)                                                                    | `{}`                      |
-| `dashboard.initContainers`                                  | Add additional init containers to the Parse pod(s)                                                                       | `{}`                      |
+| `dashboard.sidecars`                                        | Add additional sidecar containers to the Parse pod(s)                                                                    | `[]`                      |
+| `dashboard.initContainers`                                  | Add additional init containers to the Parse pod(s)                                                                       | `[]`                      |
 | `dashboard.service.type`                                    | Kubernetes Service type                                                                                                  | `LoadBalancer`            |
 | `dashboard.service.ports.http`                              | Service HTTP port (Dashboard)                                                                                            | `80`                      |
 | `dashboard.service.nodePorts.http`                          | Kubernetes HTTP node port                                                                                                | `""`                      |
@@ -243,7 +243,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dashboard.service.extraPorts`                              | Extra ports to expose in Service (normally used with the `sidecars` value)                                               | `[]`                      |
 | `dashboard.service.sessionAffinity`                         | Control where client requests go, to the same pod or round-robin                                                         | `None`                    |
 | `dashboard.service.sessionAffinityConfig`                   | Additional settings for the sessionAffinity                                                                              | `{}`                      |
-
 
 ### Traffic Exposure Parameters
 
@@ -268,7 +267,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.secrets`              | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
 | `ingress.extraRules`           | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
-
 ### Persistence Parameters
 
 | Name                        | Description                                                            | Value               |
@@ -282,7 +280,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.dataSource`    | Custom PVC data source                                                 | `{}`                |
 | `persistence.annotations`   | Persistent Volume Claim annotations                                    | `{}`                |
 
-
 ### Volume Permissions parameters
 
 | Name                                          | Description                                                                                                                                               | Value                   |
@@ -290,7 +287,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                   | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
 | `volumePermissions.image.registry`            | Init container volume-permissions image registry                                                                                                          | `docker.io`             |
 | `volumePermissions.image.repository`          | Init container volume-permissions image name                                                                                                              | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Init container volume-permissions image tag                                                                                                               | `10-debian-10-r415`     |
+| `volumePermissions.image.tag`                 | Init container volume-permissions image tag                                                                                                               | `11-debian-11-r90`      |
+| `volumePermissions.image.digest`              | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                         | `""`                    |
 | `volumePermissions.image.pullPolicy`          | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`         | Init container volume-permissions image pull secrets                                                                                                      | `[]`                    |
 | `volumePermissions.resources`                 | The resources for the container                                                                                                                           | `{}`                    |
@@ -298,7 +296,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.name`                         | The name of the ServiceAccount to use.                                                                                                                    | `""`                    |
 | `serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template)                                                                                          | `{}`                    |
 | `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                                                            | `true`                  |
-
 
 ### MongoDB&reg; Parameters
 
@@ -315,9 +312,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `mongodb.persistence.accessMode`   | PVC Access Mode for MongoDB&reg; volume     | `ReadWriteOnce` |
 | `mongodb.persistence.size`         | PVC Storage Request for MongoDB&reg; volume | `8Gi`           |
 
-
-The above parameters map to the env variables defined in [bitnami/parse](https://github.com/bitnami/bitnami-docker-parse). For more information please refer to the [bitnami/parse](https://github.com/bitnami/bitnami-docker-parse) image documentation.
-
 > **Note**:
 >
 > For the Parse application function correctly, you should specify the `parseHost` parameter to specify the FQDN (recommended) or the public IP address of the Parse service.
@@ -326,7 +320,7 @@ The above parameters map to the env variables defined in [bitnami/parse](https:/
 >
 > To reserve a public IP address on GKE:
 >
-> ```bash
+> ```console
 > $ gcloud compute addresses create parse-public-ip
 > ```
 >
@@ -335,9 +329,9 @@ The above parameters map to the env variables defined in [bitnami/parse](https:/
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release \
+helm install my-release \
   --set dashboard.username=admin,dashboard.password=password \
-    bitnami/parse
+    my-repo/parse
 ```
 
 The above command sets the Parse administrator account username and password to `admin` and `password` respectively.
@@ -347,7 +341,7 @@ The above command sets the Parse administrator account username and password to 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml bitnami/parse
+helm install my-release -f values.yaml my-repo/parse
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -362,7 +356,7 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 ### Deploy your Cloud functions with Parse Cloud Code
 
-The [Bitnami Parse](https://github.com/bitnami/bitnami-docker-parse) image allows you to deploy your Cloud functions with Parse Cloud Code (a feature which allows running a piece of code in your Parse Server instead of the user's mobile devices). In order to add your custom scripts, they must be located inside the chart folder `files/cloud` so they can be consumed as a ConfigMap.
+The [Bitnami Parse](https://github.com/bitnami/containers/tree/main/bitnami/parse) image allows you to deploy your Cloud functions with Parse Cloud Code (a feature which allows running a piece of code in your Parse Server instead of the user's mobile devices). In order to add your custom scripts, they must be located inside the chart folder `files/cloud` so they can be consumed as a ConfigMap.
 
 Alternatively, you can specify custom scripts using the `cloudCodeScripts` parameter as dict.
 
@@ -370,7 +364,7 @@ In addition to these options, you can also set an external ConfigMap with all th
 
 ## Persistence
 
-The [Bitnami Parse](https://github.com/bitnami/bitnami-docker-parse) image stores the Parse data and configurations at the `/bitnami/parse` path of the container.
+The [Bitnami Parse](https://github.com/bitnami/containers/tree/main/bitnami/parse) image stores the Parse data and configurations at the `/bitnami/parse` path of the container.
 
 Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
 See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
@@ -424,13 +418,17 @@ extraDeploy: |-
 
 This chart allows you to set your custom affinity using the `XXX.affinity` paremeter(s). Find more infomation about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
 
 ## Troubleshooting
 
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 19.0.0
+
+This major updates the MongoDB&reg; subchart to its newest major, [13.0.0](https://github.com/bitnami/charts/tree/main/bitnami/mongodb#to-1300). No major issues are expected during the upgrade.
 
 ### To 18.0.0
 
@@ -450,17 +448,17 @@ Affected values:
 
 Also MongoDB&reg; subchart container images were updated to 5.0.x and it can affect compatibility with older versions of MongoDB&reg;.
 
-- https://github.com/bitnami/charts/tree/master/bitnami/mongodb#to-1200
+- <https://github.com/bitnami/charts/tree/main/bitnami/mongodb#to-1200>
 
 ### To 16.0.0
 
 In this version, the mongodb-exporter bundled as part of the bitnami/mongodb dependency was updated to a new version which, even it is not a major change, can contain breaking changes (from `0.11.X` to `0.30.X`).
 
-Please visit the release notes from the upstream project at https://github.com/percona/mongodb_exporter/releases
+Please visit the release notes from the upstream project at <https://github.com/percona/mongodb_exporter/releases>
 
 ### To 15.0.0
 
-The [Bitnami Parse](https://github.com/bitnami/bitnami-docker-parse) and [Bitnami Parse Dashboard](https://github.com/bitnami/bitnami-docker-parse-dashboard) images were refactored and now the source code is published in GitHub in the [`rootfs`](https://github.com/bitnami/bitnami-docker-parse/tree/master/4/debian-10/rootfs) folder of the container images.
+The [Bitnami Parse](https://github.com/bitnami/containers/tree/main/bitnami/parse) and [Bitnami Parse Dashboard](https://github.com/bitnami/containers/tree/main/bitnami/parse-dashboard) images were refactored and now the source code is published in GitHub in the `rootfs` folder of the container images.
 
 Compatibility is not guaranteed due to the amount of involved changes, however no breaking changes are expected.
 
@@ -472,37 +470,36 @@ This version standardizes the way of defining Ingress rules. When configuring a 
 
 [On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
 
-**What changes were introduced in this major version?**
+#### What changes were introduced in this major version?
 
 - Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
 - Move dependency information from the *requirements.yaml* to the *Chart.yaml*
 - After running `helm dependency update`, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock*
 - The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
 
-**Considerations when upgrading to this version**
+#### Considerations when upgrading to this version
 
 - If you want to upgrade to this version from a previous one installed with Helm v3, you shouldn't face any issues
 - If you want to upgrade to this version using Helm v2, this scenario is not supported as this version doesn't support Helm v2 anymore
 - If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3
 
-**Useful links**
+#### Useful links
 
-- https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
-- https://helm.sh/docs/topics/v2_v3_migration/
-- https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
-
+- <https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/>
+- <https://helm.sh/docs/topics/v2_v3_migration/>
+- <https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/>
 
 ### To 12.0.0
 
 MongoDB&reg; subchart container images were updated to 4.4.x and it can affect compatibility with older versions of MongoDB&reg;.
 
-- https://github.com/bitnami/charts/tree/master/bitnami/mongodb#to-900
+- <https://github.com/bitnami/charts/tree/main/bitnami/mongodb#to-900>
 
 ### To 11.0.0
 
 Backwards compatibility is not guaranteed since breaking changes were included in MongoDB&reg; subchart. More information in the link below:
 
-- https://github.com/bitnami/charts/tree/master/bitnami/mongodb#to-800
+- <https://github.com/bitnami/charts/tree/main/bitnami/mongodb#to-800>
 
 ### To 10.0.0
 
@@ -515,14 +512,14 @@ Backwards compatibility is not guaranteed. The following notables changes were i
 
 Parse & Parse Dashboard containers were moved to a non-root approach. There shouldn't be any issue when upgrading since the corresponding `securityContext` is enabled by default. Both container images and chart can be upgraded by running the command below:
 
-```
-$ helm upgrade my-release bitnami/parse
+```console
+helm upgrade my-release my-repo/parse
 ```
 
 If you use a previous container image (previous to **3.1.2-r14** for Parse or **1.2.0-r69** for Parse Dashboard), disable the `securityContext` by running the command below:
 
-```
-$ helm upgrade my-release bitnami/parse --set server.securityContext.enabled=false,dashboard.securityContext.enabled=false,server.image.tag=XXX,dashboard.image.tag=YYY
+```console
+helm upgrade my-release my-repo/parse --set server.securityContext.enabled=false,dashboard.securityContext.enabled=false,server.image.tag=XXX,dashboard.image.tag=YYY
 ```
 
 ### To 3.0.0
@@ -531,20 +528,20 @@ Backwards compatibility is not guaranteed unless you modify the labels used on t
 Use the workaround below to upgrade from versions previous to 3.0.0. The following example assumes that the release name is parse:
 
 ```console
-$ kubectl patch deployment parse-parse-dashboard --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
-$ kubectl patch deployment parse-parse-server --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
-$ kubectl patch deployment parse-mongodb --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
+kubectl patch deployment parse-parse-dashboard --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
+kubectl patch deployment parse-parse-server --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
+kubectl patch deployment parse-mongodb --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
 ```
 
 ## License
 
-Copyright &copy; 2022 Bitnami
+Copyright &copy; 2023 Bitnami
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

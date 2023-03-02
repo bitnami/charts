@@ -7,19 +7,19 @@ Memcached is an high-performance, distributed memory object caching system, gene
 [Overview of Memcached](http://memcached.org)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/memcached
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/memcached
 ```
 
 ## Introduction
 
-This chart bootstraps a [Memcached](https://github.com/bitnami/bitnami-docker-memcached) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Memcached](https://github.com/bitnami/containers/tree/main/bitnami/memcached) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -31,8 +31,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/memcached
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/memcached
 ```
 
 These commands deploy Memcached on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -44,7 +44,7 @@ These commands deploy Memcached on the Kubernetes cluster in the default configu
 To uninstall/delete the `my-release` deployment:
 
 ```console
-$ helm delete my-release
+helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -58,7 +58,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
-
 
 ### Common parameters
 
@@ -75,27 +74,27 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.command` | Command to override all containers in the deployment/statefulset                             | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the deployment/statefulset                                | `["infinity"]`  |
 
-
 ### Memcached parameters
 
-| Name                 | Description                                                              | Value                 |
-| -------------------- | ------------------------------------------------------------------------ | --------------------- |
-| `image.registry`     | Memcached image registry                                                 | `docker.io`           |
-| `image.repository`   | Memcached image repository                                               | `bitnami/memcached`   |
-| `image.tag`          | Memcached image tag (immutable tags are recommended)                     | `1.6.13-debian-10-r0` |
-| `image.pullPolicy`   | Memcached image pull policy                                              | `IfNotPresent`        |
-| `image.pullSecrets`  | Specify docker-registry secret names as an array                         | `[]`                  |
-| `image.debug`        | Specify if debug values should be set                                    | `false`               |
-| `architecture`       | Memcached architecture. Allowed values: standalone or high-availability  | `standalone`          |
-| `auth.enabled`       | Enable Memcached authentication                                          | `false`               |
-| `auth.username`      | Memcached admin user                                                     | `""`                  |
-| `auth.password`      | Memcached admin password                                                 | `""`                  |
-| `command`            | Override default container command (useful when using custom images)     | `[]`                  |
-| `args`               | Override default container args (useful when using custom images)        | `[]`                  |
-| `extraEnvVars`       | Array with extra environment variables to add to Memcached nodes         | `[]`                  |
-| `extraEnvVarsCM`     | Name of existing ConfigMap containing extra env vars for Memcached nodes | `""`                  |
-| `extraEnvVarsSecret` | Name of existing Secret containing extra env vars for Memcached nodes    | `""`                  |
-
+| Name                          | Description                                                                                               | Value                  |
+| ----------------------------- | --------------------------------------------------------------------------------------------------------- | ---------------------- |
+| `image.registry`              | Memcached image registry                                                                                  | `docker.io`            |
+| `image.repository`            | Memcached image repository                                                                                | `bitnami/memcached`    |
+| `image.tag`                   | Memcached image tag (immutable tags are recommended)                                                      | `1.6.18-debian-11-r17` |
+| `image.digest`                | Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
+| `image.pullPolicy`            | Memcached image pull policy                                                                               | `IfNotPresent`         |
+| `image.pullSecrets`           | Specify docker-registry secret names as an array                                                          | `[]`                   |
+| `image.debug`                 | Specify if debug values should be set                                                                     | `false`                |
+| `architecture`                | Memcached architecture. Allowed values: standalone or high-availability                                   | `standalone`           |
+| `auth.enabled`                | Enable Memcached authentication                                                                           | `false`                |
+| `auth.username`               | Memcached admin user                                                                                      | `""`                   |
+| `auth.password`               | Memcached admin password                                                                                  | `""`                   |
+| `auth.existingPasswordSecret` | Existing secret with Memcached credentials (must contain a value for `memcached-password` key)            | `""`                   |
+| `command`                     | Override default container command (useful when using custom images)                                      | `[]`                   |
+| `args`                        | Override default container args (useful when using custom images)                                         | `[]`                   |
+| `extraEnvVars`                | Array with extra environment variables to add to Memcached nodes                                          | `[]`                   |
+| `extraEnvVarsCM`              | Name of existing ConfigMap containing extra env vars for Memcached nodes                                  | `""`                   |
+| `extraEnvVarsSecret`          | Name of existing Secret containing extra env vars for Memcached nodes                                     | `""`                   |
 
 ### Deployment/Statefulset parameters
 
@@ -144,10 +143,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | `affinity`                              | Affinity for pod assignment                                                                                                                                                                       | `{}`            |
 | `nodeSelector`                          | Node labels for pod assignment                                                                                                                                                                    | `{}`            |
 | `tolerations`                           | Tolerations for pod assignment                                                                                                                                                                    | `[]`            |
-| `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template                                                                          | `{}`            |
+| `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template                                                                          | `[]`            |
 | `podManagementPolicy`                   | StatefulSet controller supports relax its ordering guarantees while preserving its uniqueness and identity guarantees. There are two valid pod management policies: `OrderedReady` and `Parallel` | `Parallel`      |
 | `priorityClassName`                     | Name of the existing priority class to be used by Memcached pods, priority class needs to be created beforehand                                                                                   | `""`            |
 | `schedulerName`                         | Kubernetes pod scheduler registry                                                                                                                                                                 | `""`            |
+| `terminationGracePeriodSeconds`         | In seconds, time the given to the memcached pod needs to terminate gracefully                                                                                                                     | `""`            |
 | `updateStrategy.type`                   | Memcached statefulset strategy type                                                                                                                                                               | `RollingUpdate` |
 | `updateStrategy.rollingUpdate`          | Memcached statefulset rolling update configuration parameters                                                                                                                                     | `{}`            |
 | `extraVolumes`                          | Optionally specify extra list of additional volumes for the Memcached pod(s)                                                                                                                      | `[]`            |
@@ -163,7 +163,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `pdb.minAvailable`                      | Minimum available Memcached replicas                                                                                                                                                              | `""`            |
 | `pdb.maxUnavailable`                    | Maximum unavailable Memcached replicas                                                                                                                                                            | `1`             |
 
-
 ### Traffic Exposure parameters
 
 | Name                               | Description                                                                             | Value       |
@@ -172,13 +171,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.ports.memcached`          | Memcached service port                                                                  | `11211`     |
 | `service.nodePorts.memcached`      | Node port for Memcached                                                                 | `""`        |
 | `service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin                        | `None`      |
+| `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                             | `{}`        |
 | `service.clusterIP`                | Memcached service Cluster IP                                                            | `""`        |
 | `service.loadBalancerIP`           | Memcached service Load Balancer IP                                                      | `""`        |
 | `service.loadBalancerSourceRanges` | Memcached service Load Balancer sources                                                 | `[]`        |
 | `service.externalTrafficPolicy`    | Memcached service external traffic policy                                               | `Cluster`   |
 | `service.annotations`              | Additional custom annotations for Memcached service                                     | `{}`        |
 | `service.extraPorts`               | Extra ports to expose in the Memcached service (normally used with the `sidecar` value) | `[]`        |
-
 
 ### Other Parameters
 
@@ -189,86 +188,87 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created | `true`  |
 | `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                   | `{}`    |
 
-
 ### Persistence parameters
 
-| Name                        | Description                                                              | Value               |
-| --------------------------- | ------------------------------------------------------------------------ | ------------------- |
-| `persistence.enabled`       | Enable Memcached data persistence using PVC. If false, use emptyDir      | `false`             |
-| `persistence.existingClaim` | Name of an existing PVC to use (only when deploying a single replica)    | `""`                |
-| `persistence.storageClass`  | PVC Storage Class for Memcached data volume                              | `""`                |
-| `persistence.accessModes`   | PVC Access modes                                                         | `["ReadWriteOnce"]` |
-| `persistence.size`          | PVC Storage Request for Memcached data volume                            | `8Gi`               |
-| `persistence.annotations`   | Annotations for the PVC                                                  | `{}`                |
-| `persistence.selector`      | Selector to match an existing Persistent Volume for Memcached's data PVC | `{}`                |
-
+| Name                       | Description                                                              | Value               |
+| -------------------------- | ------------------------------------------------------------------------ | ------------------- |
+| `persistence.enabled`      | Enable Memcached data persistence using PVC. If false, use emptyDir      | `false`             |
+| `persistence.storageClass` | PVC Storage Class for Memcached data volume                              | `""`                |
+| `persistence.accessModes`  | PVC Access modes                                                         | `["ReadWriteOnce"]` |
+| `persistence.size`         | PVC Storage Request for Memcached data volume                            | `8Gi`               |
+| `persistence.annotations`  | Annotations for the PVC                                                  | `{}`                |
+| `persistence.selector`     | Selector to match an existing Persistent Volume for Memcached's data PVC | `{}`                |
 
 ### Volume Permissions parameters
 
-| Name                                                   | Description                                                                           | Value                        |
-| ------------------------------------------------------ | ------------------------------------------------------------------------------------- | ---------------------------- |
-| `volumePermissions.enabled`                            | Enable init container that changes the owner and group of the persistent volume       | `false`                      |
-| `volumePermissions.image.registry`                     | Init container volume-permissions image registry                                      | `docker.io`                  |
-| `volumePermissions.image.repository`                   | Init container volume-permissions image repository                                    | `bitnami/bitnami-shell`      |
-| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)          | `10-debian-10-r304`          |
-| `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                                   | `IfNotPresent`               |
-| `volumePermissions.image.pullSecrets`                  | Init container volume-permissions image pull secrets                                  | `[]`                         |
-| `volumePermissions.resources.limits`                   | Init container volume-permissions resource limits                                     | `{}`                         |
-| `volumePermissions.resources.requests`                 | Init container volume-permissions resource requests                                   | `{}`                         |
-| `volumePermissions.containerSecurityContext.runAsUser` | User ID for the init container                                                        | `0`                          |
-| `metrics.enabled`                                      | Start a side-car prometheus exporter                                                  | `false`                      |
-| `metrics.image.registry`                               | Memcached exporter image registry                                                     | `docker.io`                  |
-| `metrics.image.repository`                             | Memcached exporter image repository                                                   | `bitnami/memcached-exporter` |
-| `metrics.image.tag`                                    | Memcached exporter image tag (immutable tags are recommended)                         | `0.9.0-debian-10-r268`       |
-| `metrics.image.pullPolicy`                             | Image pull policy                                                                     | `IfNotPresent`               |
-| `metrics.image.pullSecrets`                            | Specify docker-registry secret names as an array                                      | `[]`                         |
-| `metrics.containerPorts.metrics`                       | Memcached Prometheus Exporter container port                                          | `9150`                       |
-| `metrics.resources.limits`                             | Init container volume-permissions resource limits                                     | `{}`                         |
-| `metrics.resources.requests`                           | Init container volume-permissions resource requests                                   | `{}`                         |
-| `metrics.livenessProbe.enabled`                        | Enable livenessProbe on Memcached Prometheus exporter containers                      | `true`                       |
-| `metrics.livenessProbe.initialDelaySeconds`            | Initial delay seconds for livenessProbe                                               | `15`                         |
-| `metrics.livenessProbe.periodSeconds`                  | Period seconds for livenessProbe                                                      | `10`                         |
-| `metrics.livenessProbe.timeoutSeconds`                 | Timeout seconds for livenessProbe                                                     | `5`                          |
-| `metrics.livenessProbe.failureThreshold`               | Failure threshold for livenessProbe                                                   | `3`                          |
-| `metrics.livenessProbe.successThreshold`               | Success threshold for livenessProbe                                                   | `1`                          |
-| `metrics.readinessProbe.enabled`                       | Enable readinessProbe on Memcached Prometheus exporter containers                     | `true`                       |
-| `metrics.readinessProbe.initialDelaySeconds`           | Initial delay seconds for readinessProbe                                              | `5`                          |
-| `metrics.readinessProbe.periodSeconds`                 | Period seconds for readinessProbe                                                     | `10`                         |
-| `metrics.readinessProbe.timeoutSeconds`                | Timeout seconds for readinessProbe                                                    | `3`                          |
-| `metrics.readinessProbe.failureThreshold`              | Failure threshold for readinessProbe                                                  | `3`                          |
-| `metrics.readinessProbe.successThreshold`              | Success threshold for readinessProbe                                                  | `1`                          |
-| `metrics.startupProbe.enabled`                         | Enable startupProbe on Memcached Prometheus exporter containers                       | `false`                      |
-| `metrics.startupProbe.initialDelaySeconds`             | Initial delay seconds for startupProbe                                                | `10`                         |
-| `metrics.startupProbe.periodSeconds`                   | Period seconds for startupProbe                                                       | `10`                         |
-| `metrics.startupProbe.timeoutSeconds`                  | Timeout seconds for startupProbe                                                      | `1`                          |
-| `metrics.startupProbe.failureThreshold`                | Failure threshold for startupProbe                                                    | `15`                         |
-| `metrics.startupProbe.successThreshold`                | Success threshold for startupProbe                                                    | `1`                          |
-| `metrics.customLivenessProbe`                          | Custom livenessProbe that overrides the default one                                   | `{}`                         |
-| `metrics.customReadinessProbe`                         | Custom readinessProbe that overrides the default one                                  | `{}`                         |
-| `metrics.customStartupProbe`                           | Custom startupProbe that overrides the default one                                    | `{}`                         |
-| `metrics.podAnnotations`                               | Memcached Prometheus exporter pod Annotation and Labels                               | `{}`                         |
-| `metrics.service.ports.metrics`                        | Prometheus metrics service port                                                       | `9150`                       |
-| `metrics.service.clusterIP`                            | Static clusterIP or None for headless services                                        | `""`                         |
-| `metrics.service.sessionAffinity`                      | Control where client requests go, to the same pod or round-robin                      | `None`                       |
-| `metrics.service.annotations`                          | Annotations for the Prometheus metrics service                                        | `{}`                         |
-| `metrics.serviceMonitor.enabled`                       | Create ServiceMonitor Resource for scraping metrics using Prometheus Operator         | `false`                      |
-| `metrics.serviceMonitor.namespace`                     | Namespace for the ServiceMonitor Resource (defaults to the Release Namespace)         | `""`                         |
-| `metrics.serviceMonitor.interval`                      | Interval at which metrics should be scraped.                                          | `""`                         |
-| `metrics.serviceMonitor.scrapeTimeout`                 | Timeout after which the scrape is ended                                               | `""`                         |
-| `metrics.serviceMonitor.additionalLabels`              | Additional labels that can be used so ServiceMonitor will be discovered by Prometheus | `{}`                         |
-| `metrics.serviceMonitor.selector`                      | Prometheus instance selector labels                                                   | `{}`                         |
-| `metrics.serviceMonitor.relabelings`                   | RelabelConfigs to apply to samples before scraping                                    | `[]`                         |
-| `metrics.serviceMonitor.metricRelabelings`             | MetricRelabelConfigs to apply to samples before ingestion                             | `[]`                         |
-| `metrics.serviceMonitor.honorLabels`                   | Specify honorLabels parameter to add the scrape endpoint                              | `false`                      |
-| `metrics.serviceMonitor.jobLabel`                      | The name of the label on the target service to use as the job name in prometheus.     | `""`                         |
+| Name                                                   | Description                                                                                                                       | Value                        |
+| ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------- | ---------------------------- |
+| `volumePermissions.enabled`                            | Enable init container that changes the owner and group of the persistent volume                                                   | `false`                      |
+| `volumePermissions.image.registry`                     | Init container volume-permissions image registry                                                                                  | `docker.io`                  |
+| `volumePermissions.image.repository`                   | Init container volume-permissions image repository                                                                                | `bitnami/bitnami-shell`      |
+| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r90`           |
+| `volumePermissions.image.digest`                       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                         |
+| `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`               |
+| `volumePermissions.image.pullSecrets`                  | Init container volume-permissions image pull secrets                                                                              | `[]`                         |
+| `volumePermissions.resources.limits`                   | Init container volume-permissions resource limits                                                                                 | `{}`                         |
+| `volumePermissions.resources.requests`                 | Init container volume-permissions resource requests                                                                               | `{}`                         |
+| `volumePermissions.containerSecurityContext.runAsUser` | User ID for the init container                                                                                                    | `0`                          |
+| `metrics.enabled`                                      | Start a side-car prometheus exporter                                                                                              | `false`                      |
+| `metrics.image.registry`                               | Memcached exporter image registry                                                                                                 | `docker.io`                  |
+| `metrics.image.repository`                             | Memcached exporter image repository                                                                                               | `bitnami/memcached-exporter` |
+| `metrics.image.tag`                                    | Memcached exporter image tag (immutable tags are recommended)                                                                     | `0.11.1-debian-11-r3`        |
+| `metrics.image.digest`                                 | Memcached exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                | `""`                         |
+| `metrics.image.pullPolicy`                             | Image pull policy                                                                                                                 | `IfNotPresent`               |
+| `metrics.image.pullSecrets`                            | Specify docker-registry secret names as an array                                                                                  | `[]`                         |
+| `metrics.containerPorts.metrics`                       | Memcached Prometheus Exporter container port                                                                                      | `9150`                       |
+| `metrics.resources.limits`                             | Init container volume-permissions resource limits                                                                                 | `{}`                         |
+| `metrics.resources.requests`                           | Init container volume-permissions resource requests                                                                               | `{}`                         |
+| `metrics.containerSecurityContext.enabled`             | Enabled Metrics containers' Security Context                                                                                      | `true`                       |
+| `metrics.containerSecurityContext.runAsUser`           | Set Metrics containers' Security Context runAsUser                                                                                | `1001`                       |
+| `metrics.containerSecurityContext.runAsNonRoot`        | Set Metrics containers' Security Context runAsNonRoot                                                                             | `true`                       |
+| `metrics.livenessProbe.enabled`                        | Enable livenessProbe on Memcached Prometheus exporter containers                                                                  | `true`                       |
+| `metrics.livenessProbe.initialDelaySeconds`            | Initial delay seconds for livenessProbe                                                                                           | `15`                         |
+| `metrics.livenessProbe.periodSeconds`                  | Period seconds for livenessProbe                                                                                                  | `10`                         |
+| `metrics.livenessProbe.timeoutSeconds`                 | Timeout seconds for livenessProbe                                                                                                 | `5`                          |
+| `metrics.livenessProbe.failureThreshold`               | Failure threshold for livenessProbe                                                                                               | `3`                          |
+| `metrics.livenessProbe.successThreshold`               | Success threshold for livenessProbe                                                                                               | `1`                          |
+| `metrics.readinessProbe.enabled`                       | Enable readinessProbe on Memcached Prometheus exporter containers                                                                 | `true`                       |
+| `metrics.readinessProbe.initialDelaySeconds`           | Initial delay seconds for readinessProbe                                                                                          | `5`                          |
+| `metrics.readinessProbe.periodSeconds`                 | Period seconds for readinessProbe                                                                                                 | `10`                         |
+| `metrics.readinessProbe.timeoutSeconds`                | Timeout seconds for readinessProbe                                                                                                | `3`                          |
+| `metrics.readinessProbe.failureThreshold`              | Failure threshold for readinessProbe                                                                                              | `3`                          |
+| `metrics.readinessProbe.successThreshold`              | Success threshold for readinessProbe                                                                                              | `1`                          |
+| `metrics.startupProbe.enabled`                         | Enable startupProbe on Memcached Prometheus exporter containers                                                                   | `false`                      |
+| `metrics.startupProbe.initialDelaySeconds`             | Initial delay seconds for startupProbe                                                                                            | `10`                         |
+| `metrics.startupProbe.periodSeconds`                   | Period seconds for startupProbe                                                                                                   | `10`                         |
+| `metrics.startupProbe.timeoutSeconds`                  | Timeout seconds for startupProbe                                                                                                  | `1`                          |
+| `metrics.startupProbe.failureThreshold`                | Failure threshold for startupProbe                                                                                                | `15`                         |
+| `metrics.startupProbe.successThreshold`                | Success threshold for startupProbe                                                                                                | `1`                          |
+| `metrics.customLivenessProbe`                          | Custom livenessProbe that overrides the default one                                                                               | `{}`                         |
+| `metrics.customReadinessProbe`                         | Custom readinessProbe that overrides the default one                                                                              | `{}`                         |
+| `metrics.customStartupProbe`                           | Custom startupProbe that overrides the default one                                                                                | `{}`                         |
+| `metrics.podAnnotations`                               | Memcached Prometheus exporter pod Annotation and Labels                                                                           | `{}`                         |
+| `metrics.service.ports.metrics`                        | Prometheus metrics service port                                                                                                   | `9150`                       |
+| `metrics.service.clusterIP`                            | Static clusterIP or None for headless services                                                                                    | `""`                         |
+| `metrics.service.sessionAffinity`                      | Control where client requests go, to the same pod or round-robin                                                                  | `None`                       |
+| `metrics.service.annotations`                          | Annotations for the Prometheus metrics service                                                                                    | `{}`                         |
+| `metrics.serviceMonitor.enabled`                       | Create ServiceMonitor Resource for scraping metrics using Prometheus Operator                                                     | `false`                      |
+| `metrics.serviceMonitor.namespace`                     | Namespace for the ServiceMonitor Resource (defaults to the Release Namespace)                                                     | `""`                         |
+| `metrics.serviceMonitor.interval`                      | Interval at which metrics should be scraped.                                                                                      | `""`                         |
+| `metrics.serviceMonitor.scrapeTimeout`                 | Timeout after which the scrape is ended                                                                                           | `""`                         |
+| `metrics.serviceMonitor.labels`                        | Additional labels that can be used so ServiceMonitor will be discovered by Prometheus                                             | `{}`                         |
+| `metrics.serviceMonitor.selector`                      | Prometheus instance selector labels                                                                                               | `{}`                         |
+| `metrics.serviceMonitor.relabelings`                   | RelabelConfigs to apply to samples before scraping                                                                                | `[]`                         |
+| `metrics.serviceMonitor.metricRelabelings`             | MetricRelabelConfigs to apply to samples before ingestion                                                                         | `[]`                         |
+| `metrics.serviceMonitor.honorLabels`                   | Specify honorLabels parameter to add the scrape endpoint                                                                          | `false`                      |
+| `metrics.serviceMonitor.jobLabel`                      | The name of the label on the target service to use as the job name in prometheus.                                                 | `""`                         |
 
-
-The above parameters map to the environment variables defined in the [bitnami/memcached](https://github.com/bitnami/bitnami-docker-memcached) container image. For more information please refer to the [bitnami/memcached](https://github.com/bitnami/bitnami-docker-memcached) container image documentation.
+The above parameters map to the environment variables defined in the [bitnami/memcached](https://github.com/bitnami/containers/tree/main/bitnami/memcached) container image. For more information please refer to the [bitnami/memcached](https://github.com/bitnami/containers/tree/main/bitnami/memcached) container image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release --set auth.username=user,auth.password=password bitnami/memcached
+helm install my-release --set auth.username=user,auth.password=password my-repo/memcached
 ```
 
 The above command sets the Memcached admin account username and password to `user` and `password` respectively.
@@ -278,7 +278,7 @@ The above command sets the Memcached admin account username and password to `use
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml bitnami/memcached
+helm install my-release -f values.yaml my-repo/memcached
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -301,11 +301,11 @@ Refer to the chart documentation for more information on, and examples of, confi
 
 This chart allows you to set your custom affinity using the `affinity` parameter(s). Find more information about Pod affinity in the [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-As an alternative, you can use the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+As an alternative, you can use the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
 ## Persistence
 
-When using `architecture: "high-availability"` the [Bitnami Memcached](https://github.com/bitnami/bitnami-docker-memcached) image stores the cache-state at the `/cache-state` path of the container if enabled.
+When using `architecture: "high-availability"` the [Bitnami Memcached](https://github.com/bitnami/containers/tree/main/bitnami/memcached) image stores the cache-state at the `/cache-state` path of the container if enabled.
 
 Persistent Volume Claims (PVCs) are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
 
@@ -319,7 +319,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
-### To 5.0.0
+### To 6.0.0
 
 This major release renames several values in this chart and adds missing features, in order to be inline with the rest of assets in the Bitnami charts repository.
 
@@ -335,7 +335,7 @@ Some affected values are:
 
 ### To 5.3.0
 
-This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
+This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/main/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
 
 ### To 5.0.0
 
@@ -349,8 +349,8 @@ Backwards compatibility is not guaranteed unless you modify the labels used on t
 Use the workaround below to upgrade from versions previous to 4.0.0. The following example assumes that the release name is memcached:
 
 ```console
-$ kubectl delete deployment  memcached --cascade=false
-$ helm upgrade memcached bitnami/memcached
+kubectl delete deployment  memcached --cascade=false
+helm upgrade memcached my-repo/memcached
 ```
 
 ### To 3.0.0
@@ -363,18 +363,18 @@ Backwards compatibility is not guaranteed unless you modify the labels used on t
 Use the workaround below to upgrade from versions previous to 1.0.0. The following example assumes that the release name is memcached:
 
 ```console
-$ kubectl patch deployment memcached --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
+kubectl patch deployment memcached --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
 ```
 
 ## License
 
-Copyright &copy; 2022 Bitnami
+Copyright &copy; 2023 Bitnami
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

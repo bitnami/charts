@@ -1,0 +1,8 @@
+containerPorts:
+  http: 7980
+serviceAccount:
+  create: true
+  automountServiceAccountToken: true
+podSecurityContext:
+  fsGroup: 1002
+  runAsUser: 1002

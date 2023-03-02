@@ -15,7 +15,7 @@ metadata:
 spec:
   replicas: {{ .Values.metrics.replicaCount }}
   {{- if .Values.metrics.updateStrategy }}
-  strategy: {{- toYaml .Values.metrics.updateStrategy | nindent 4 }}
+  strategy: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.updateStrategy "context" $) | nindent 4 }}
   {{- end }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
@@ -102,7 +102,7 @@ spec:
           volumeMounts: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.metrics.resources }}
-          resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.resources "context" $) | nindent 12 }}
           {{- end }}
       {{- if .Values.metrics.sidecars }}
         {{- include "common.tplvalues.render" (dict "value" .Values.metrics.sidecars "context" $) | trim | nindent 8 }}

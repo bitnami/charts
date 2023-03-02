@@ -32,9 +32,13 @@ spec:
   {{- if not (empty $root.Values.externalAccess.hidden.service.loadBalancerIPs) }}
   loadBalancerIP: {{ index $root.Values.externalAccess.hidden.service.loadBalancerIPs $i }}
   {{- end }}
+  {{- if $root.Values.externalAccess.hidden.service.loadBalancerClass }}
+  loadBalancerClass: {{ $root.Values.externalAccess.hidden.service.loadBalancerClass }}
+  {{- end }}
   {{- if $root.Values.externalAccess.hidden.service.loadBalancerSourceRanges }}
   loadBalancerSourceRanges: {{- toYaml $root.Values.externalAccess.hidden.service.loadBalancerSourceRanges | nindent 4 }}
   {{- end }}
+  allocateLoadBalancerNodePorts: {{ $root.Values.externalAccess.hidden.service.allocateLoadBalancerNodePorts }}
   {{- end }}
   {{- if (or (eq $root.Values.externalAccess.hidden.service.type "LoadBalancer") (eq $root.Values.externalAccess.hidden.service.type "NodePort")) }}
   externalTrafficPolicy: {{ $root.Values.externalAccess.hidden.service.externalTrafficPolicy | quote }}

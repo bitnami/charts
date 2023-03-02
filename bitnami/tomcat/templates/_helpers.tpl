@@ -11,7 +11,7 @@ Return the proper Tomcat image name
 Return the Tomcat ports map
 */}}
 {{- define "tomcat.ports" -}}
-- port: {{ .Values.containerPort }}
+- port: {{ .Values.containerPorts.http }}
   protocol: TCP
 {{- range .Values.containerExtraPorts }}
 - port: {{ include "common.tplvalues.render" (dict "value" .containerPort "context" $) }}
@@ -63,7 +63,7 @@ Return the proper CATALINA_OPTS value
 {{- define "tomcat.catalinaOpts" -}}
 {{- if .Values.metrics.jmx.enabled -}}
 {{- default "" (cat .Values.catalinaOpts .Values.metrics.jmx.catalinaOpts) | trim  -}}
-{{- else -}} 
+{{- else -}}
 {{- default "" .Values.catalinaOpts  | trim -}}
 {{- end -}}
 {{- end -}}

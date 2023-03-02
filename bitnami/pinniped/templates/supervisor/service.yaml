@@ -1,0 +1,62 @@
+{{- if .Values.supervisor.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "pinniped.supervisor.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/part-of: pinniped
+    app.kubernetes.io/component: supervisor
+    {{- if .Values.supervisor.service.public.labels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.supervisor.service.public.labels "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if or .Values.supervisor.service.public.annotations .Values.commonAnnotations }}
+  annotations:
+    {{- if .Values.supervisor.service.public.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.supervisor.service.public.annotations "context" $) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+spec:
+  {{- with .Values.supervisor.service.public }}
+  type: {{ .type }}
+  {{- if and .clusterIP (eq .type "ClusterIP") }}
+  clusterIP: {{ .clusterIP }}
+  {{- end }}
+  {{- if .sessionAffinity }}
+  sessionAffinity: {{ .sessionAffinity }}
+  {{- end }}
+  {{- if .sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if or (eq .type "LoadBalancer") (eq .type "NodePort") }}
+  externalTrafficPolicy: {{ .externalTrafficPolicy | quote }}
+  {{- end }}
+  {{- if and (eq .type "LoadBalancer") (not (empty .loadBalancerSourceRanges)) }}
+  loadBalancerSourceRanges: {{ .loadBalancerSourceRanges }}
+  {{- end }}
+  {{- if and (eq .type "LoadBalancer") (not (empty .loadBalancerIP)) }}
+  loadBalancerIP: {{ .loadBalancerIP }}
+  {{- end }}
+  ports:
+    - name: https
+      port: {{ .ports.https }}
+      protocol: TCP
+      targetPort: https
+      {{- if and (or (eq .type "NodePort") (eq .type "LoadBalancer")) (not (empty .nodePorts.https)) }}
+      nodePort: {{ .nodePorts.https }}
+      {{- else if eq .type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    {{- if .extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
+    app.kubernetes.io/component: supervisor
+{{- end }}

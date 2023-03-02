@@ -1,8 +1,0 @@
-{
-  "newSetting": {
-    "appTitle": "VMWare",
-    "database": "Mysql",
-    "environment": "production",
-    "versionControl": "Git"
-  }
-}

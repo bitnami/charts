@@ -26,8 +26,8 @@ spec:
       {{- include "common.tplvalues.render" (dict "value" .Values.metrics.serviceMonitor.selector "context" $) | nindent 6 }}
       {{- end }}
   endpoints:
-    - port: tcp-metrics
-      path: "/metrics"
+    - port: "tcp-metrics"
+      path: {{ default .Values.metrics.serviceMonitor.path (index .Values.metrics.service.annotations "prometheus.io/path") | quote}}
       {{- if .Values.metrics.serviceMonitor.interval }}
       interval: {{ .Values.metrics.serviceMonitor.interval }}
       {{- end }}

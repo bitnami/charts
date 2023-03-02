@@ -1,0 +1,70 @@
+{
+  "phases": {
+    "package": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/gitea"
+        }
+      },
+      "actions": [
+        {
+          "action_id": "helm-package"
+        },
+        {
+          "action_id": "helm-lint"
+        }
+      ]
+    },
+    "verify": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/gitea"
+        },
+        "runtime_parameters": "YWRtaW5FbWFpbDogInZpYi11c2VyQGV4YW1wbGUuY29tIgpzZXJ2aWNlOgogIHR5cGU6IExvYWRCYWxhbmNlcgogIHBvcnRzOgogICAgaHR0cDogODAKICAgIHNzaDogMjUwMApjb250YWluZXJQb3J0czoKICBodHRwOiA4MTIzCiAgc3NoOiAyMzIxCmNvbnRhaW5lclNlY3VyaXR5Q29udGV4dDoKICBlbmFibGVkOiB0cnVlCiAgcnVuQXNVc2VyOiAxMDAyCnBvZFNlY3VyaXR5Q29udGV4dDoKICBlbmFibGVkOiB0cnVlCiAgZnNHcm91cDogMTAwMgphZG1pblBhc3N3b3JkOiAiYml0bmFtaSExMjM0IgoKcG9zdGdyZXNxbDoKICBlbmFibGVkOiB0cnVlCiAgYXV0aDoKICAgIHVzZXJuYW1lOiBibl92aWJfZ2l0ZWEKICAgIGRhdGFiYXNlOiBiaXRuYW1pX3ZpYl9naXRlYQogIHByaW1hcnk6CiAgICBzZXJ2aWNlOgogICAgICBwb3J0czoKICAgICAgICBwb3N0Z3Jlc3FsOiA5MzkzCg==",
+        "target_platform": {
+          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
+          "size": {
+            "name": "S4"
+          }
+        }
+      },
+      "actions": [
+        {
+          "action_id": "health-check",
+          "params": {
+            "endpoint": "lb-gitea-http",
+            "app_protocol": "HTTP"
+          }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "vars_file": "vars.yaml",
+            "resources": {
+              "path": "/.vib/gitea/goss"
+            },
+            "remote": {
+              "workload": "deploy-gitea"
+            }
+          }
+        },
+        {
+          "action_id": "cypress",
+          "params": {
+            "resources": {
+              "path": "/.vib/gitea/cypress"
+            },
+            "endpoint": "lb-gitea-http",
+            "app_protocol": "HTTP",
+            "env": {
+              "user": "vib-user@example.com",
+              "password": "bitnami!1234"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

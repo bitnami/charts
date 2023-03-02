@@ -1,0 +1,14 @@
+containerPorts:
+  http: 2369
+podSecurityContext:
+  fsGroup: 1002
+containerSecurityContext:
+  runAsUser: 1002
+mysql:
+  auth:
+    database: bitnami_test_ghost
+    username: bn_test_ghost
+    password: bitnami_test_password
+serviceAccount:
+  create: true
+  automountServiceAccountToken: true

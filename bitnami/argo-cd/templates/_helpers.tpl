@@ -34,10 +34,31 @@ Return the proper service name for Argo CD controller
 {{- end -}}
 
 {{/*
+Return the proper service name for Argo CD controller adding the working namespace
+*/}}
+{{- define "argocd.namespace.application-controller" -}}
+  {{- printf "%s-app-controller" (include "common.names.fullname.namespace" .) | trunc 63 | trimSuffix "-" }}
+{{- end -}}
+
+{{/*
+Return the proper service name for Argo CD applicationSet controller
+*/}}
+{{- define "argocd.applicationSet" -}}
+  {{- printf "%s-applicationset-controller" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+{{- end -}}
+
+{{/*
 Return the proper service name for Argo CD server
 */}}
 {{- define "argocd.server" -}}
   {{- printf "%s-server" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+{{- end -}}
+
+{{/*
+Return the proper service name for Argo CD server adding the working namespace
+*/}}
+{{- define "argocd.namespace.server" -}}
+  {{- printf "%s-server" (include "common.names.fullname.namespace" .) | trunc 63 | trimSuffix "-" }}
 {{- end -}}
 
 {{/*
@@ -97,6 +118,17 @@ Create the name of the service account to use for the Argo CD application contro
 {{- end -}}
 
 {{/*
+Create the name of the service account to use for the Argo CD applicationSet controller
+*/}}
+{{- define "argocd.applicationSet.serviceAccountName" -}}
+{{- if .Values.applicationSet.serviceAccount.create -}}
+    {{ default (printf "%s-applicationset-controller" (include "common.names.fullname" .)) .Values.applicationSet.serviceAccount.name | trunc 63 | trimSuffix "-" }}
+{{- else -}}
+    {{ default "default" .Values.applicationSet.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Create the name of the service account to use for the Argo CD repo server
 */}}
 {{- define "argocd.repo-server.serviceAccountName" -}}
@@ -123,7 +155,7 @@ Compile all warnings into a single message.
 */}}
 
 {{/*
-Return the Redis&trade; secret name
+Return the Redis&reg; secret name
 */}}
 {{- define "argocd.redis.secretName" -}}
 {{- if .Values.redis.enabled }}
@@ -140,7 +172,7 @@ Return the Redis&trade; secret name
 {{- end -}}
 
 {{/*
-Return the Redis&trade; secret key
+Return the Redis&reg; secret key
 */}}
 {{- define "argocd.redis.secretPasswordKey" -}}
 {{- if and .Values.redis.enabled .Values.redis.auth.existingSecret }}
@@ -153,7 +185,7 @@ Return the Redis&trade; secret key
 {{- end -}}
 
 {{/*
-Return whether Redis&trade; uses password authentication or not
+Return whether Redis&reg; uses password authentication or not
 */}}
 {{- define "argocd.redis.auth.enabled" -}}
 {{- if or (and .Values.redis.enabled .Values.redis.auth.enabled) (and (not .Values.redis.enabled) (or .Values.externalRedis.password .Values.externalRedis.existingSecret)) }}
@@ -162,7 +194,7 @@ Return whether Redis&trade; uses password authentication or not
 {{- end -}}
 
 {{/*
-Return the Redis&trade; hostname
+Return the Redis&reg; hostname
 */}}
 {{- define "argocd.redisHost" -}}
 {{- if .Values.redis.enabled }}
@@ -173,7 +205,7 @@ Return the Redis&trade; hostname
 {{- end -}}
 
 {{/*
-Return the Redis&trade; port
+Return the Redis&reg; port
 */}}
 {{- define "argocd.redisPort" -}}
 {{- if .Values.redis.enabled }}

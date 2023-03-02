@@ -1,7 +1,8 @@
 annotations:
   category: Infrastructure
+  licenses: Apache-2.0
 apiVersion: v2
-appVersion: 1.4.1
+appVersion: 2.0.0
 dependencies:
   - condition: memcached.enabled
     name: memcached
@@ -11,9 +12,8 @@ dependencies:
     repository: https://charts.bitnami.com/bitnami
     tags:
       - bitnami-common
-    version: 1.x.x
+    version: 2.x.x
 description: Grafana Tempo is a distributed tracing system that has out-of-the-box integration with Grafana. It is highly scalable and works with many popular tracing protocols.
-engine: gotpl
 home: https://github.com/grafana/tempo/
 icon: https://bitnami.com/assets/stacks/grafana-tempo/img/grafana-tempo-stack-220x234.png
 keywords:
@@ -22,10 +22,10 @@ keywords:
   - metrics
   - infrastructure
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: grafana-tempo
 sources:
-  - https://github.com/bitnami/bitnami-docker-grafana-tempo
+  - https://github.com/bitnami/containers/tree/main/bitnami/grafana-tempo
   - https://github.com/grafana/tempo/
-version: 1.1.8
+version: 2.0.2

@@ -153,7 +153,9 @@ spec:
             - name: http-server
               containerPort: {{ .Values.server.containerPorts.http }}
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if and .Values.server.livenessProbe.enabled }}
+          {{- if .Values.server.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.server.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.server.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.server.livenessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: {{ .Values.server.mountPath }}/users
@@ -161,10 +163,10 @@ spec:
               httpHeaders:
                 - name: X-Parse-Application-Id
                   value: {{ .Values.server.appId }}
-          {{- else if .Values.server.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.server.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if and .Values.server.readinessProbe.enabled }}
+          {{- if .Values.server.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.server.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.server.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.server.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: {{ .Values.server.mountPath }}/users
@@ -172,15 +174,13 @@ spec:
               httpHeaders:
                 - name: X-Parse-Application-Id
                   value: {{ .Values.server.appId }}
-          {{- else if .Values.server.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.server.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.server.startupProbe.enabled }}
+          {{- if .Values.server.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.server.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.server.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.server.startupProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
               port: http-server
-          {{- else if .Values.server.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.server.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           {{- if .Values.server.lifecycleHooks }}

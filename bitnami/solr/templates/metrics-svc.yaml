@@ -1,4 +1,4 @@
-{{- if and .Values.metrics.enabled (not .Values.auth.enabled) }}
+{{- if .Values.metrics.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -9,7 +9,7 @@ metadata:
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
-    {{- if .Values.metrics.service.Labels }}
+    {{- if .Values.metrics.service.labels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.service.labels "context" $ ) | nindent 4 }}
     {{- end }}
   {{- if or .Values.metrics.service.annotations .Values.commonAnnotations }}
@@ -24,7 +24,7 @@ metadata:
 spec:
   type: ClusterIP
   sessionAffinity: {{ .Values.metrics.service.sessionAffinity }}
-  {{- if and (eq .Values.metrics.service.type "ClusterIP") .Values.metrics.service.clusterIP }}
+  {{- if .Values.metrics.service.clusterIP }}
   clusterIP: {{ .Values.metrics.service.clusterIP }}
   {{- end }}
   ports:

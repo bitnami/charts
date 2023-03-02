@@ -1,5 +1,5 @@
 {{- if .Values.aggregator.enabled -}}
-apiVersion: apps/v1
+apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
   name: {{ include "common.names.fullname" . }}
@@ -133,7 +133,9 @@ spec:
               protocol: TCP
             {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.aggregator.startupProbe.enabled }}
+          {{- if .Values.aggregator.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.aggregator.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.aggregator.startupProbe.enabled }}
           startupProbe:
             httpGet:
               path: {{ .Values.aggregator.startupProbe.httpGet.path }}
@@ -143,10 +145,10 @@ spec:
             timeoutSeconds: {{ .Values.aggregator.startupProbe.timeoutSeconds }}
             successThreshold: {{ .Values.aggregator.startupProbe.successThreshold }}
             failureThreshold: {{ .Values.aggregator.startupProbe.failureThreshold }}
-          {{- else if .Values.aggregator.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.aggregator.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.aggregator.livenessProbe.enabled }}
+          {{- if .Values.aggregator.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.aggregator.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.aggregator.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
               path: {{ .Values.aggregator.livenessProbe.httpGet.path }}
@@ -156,10 +158,10 @@ spec:
             timeoutSeconds: {{ .Values.aggregator.livenessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.aggregator.livenessProbe.successThreshold }}
             failureThreshold: {{ .Values.aggregator.livenessProbe.failureThreshold }}
-          {{- else if .Values.aggregator.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.aggregator.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.aggregator.readinessProbe.enabled }}
+          {{- if .Values.aggregator.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.aggregator.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.aggregator.readinessProbe.enabled }}
           readinessProbe:
             httpGet:
               path: {{ .Values.aggregator.readinessProbe.httpGet.path }}
@@ -169,15 +171,13 @@ spec:
             timeoutSeconds: {{ .Values.aggregator.readinessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.aggregator.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.aggregator.readinessProbe.failureThreshold }}
-          {{- else if .Values.aggregator.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.aggregator.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           volumeMounts:
             - name: fluentd-config
               mountPath: /opt/bitnami/fluentd/conf
             {{- if .Values.aggregator.persistence.enabled }}
-            - name: {{ include "common.names.fullname" . }}-buffer
+            - name: {{ printf "%s-buffer" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
               mountPath: /opt/bitnami/fluentd/logs/buffers
             {{- else }}
             - name: buffer
@@ -187,6 +187,18 @@ spec:
             - name: fluentd-aggregator-certificates
               mountPath: /opt/bitnami/fluentd/certs/in_forward
               readOnly: true
+            {{- end }}
+            {{- if .Values.aggregator.initScripts }}
+            - name: custom-init-scripts
+              mountPath: /docker-entrypoint-initdb.d/init-scripts
+            {{- end }}
+            {{- if .Values.aggregator.initScriptsCM }}
+            - name: custom-init-scripts-cm
+              mountPath: /docker-entrypoint-initdb.d/init-scripts-cm
+            {{- end }}
+            {{- if .Values.aggregator.initScriptsSecret }}
+            - name: custom-init-scripts-secret
+              mountPath: /docker-entrypoint-initdb.d/init-scripts-secret
             {{- end }}
             {{- if .Values.aggregator.extraVolumeMounts }}
             {{- toYaml .Values.aggregator.extraVolumeMounts | nindent 12 }}
@@ -211,12 +223,28 @@ spec:
         - name: buffer
           emptyDir: {}
         {{- end }}
+        {{- if .Values.aggregator.initScripts }}
+        - name: custom-init-scripts
+          configMap:
+            name: {{ template "fluentd.aggregator.initScripts" . }}
+        {{- end }}
+        {{- if .Values.aggregator.initScriptsCM }}
+        - name: custom-init-scripts-cm
+          configMap:
+            name: {{ template ".Values.initScriptsCM" . }}
+        {{- end }}
+        {{- if .Values.aggregator.initScriptsSecret }}
+        - name: custom-init-scripts-secret
+          secret:
+            secretName: {{ template ".Values.initScriptsSecret" . }}
+            defaultMode: 0755
+        {{- end }}
 
   {{- if or .Values.aggregator.persistence.enabled .Values.aggregator.extraVolumeClaimTemplates }}
   volumeClaimTemplates:
     {{- if or .Values.aggregator.persistence.enabled }}
     - metadata:
-        name: {{ include "common.names.fullname" . }}-buffer
+        name: {{ printf "%s-buffer" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
         {{- if .Values.aggregator.persistence.annotations }}
         annotations: {{- include "common.tplvalues.render" (dict "value" .Values.aggregator.persistence.annotations "context" $) | nindent 10 }}
         {{- end }}

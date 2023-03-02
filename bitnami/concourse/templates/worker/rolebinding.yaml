@@ -3,7 +3,7 @@
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: RoleBinding
 metadata:
-  name: {{ include "concourse.worker.fullname" . }}
+  name: {{ include "concourse.worker.fullname.namespace" . }}
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: worker
@@ -16,7 +16,7 @@ metadata:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: {{ include "concourse.worker.fullname" . }}
+  name: {{ include "concourse.worker.fullname.namespace" . }}
 subjects:
   - kind: ServiceAccount
     name: {{ include "concourse.worker.serviceAccountName" . }}
@@ -28,7 +28,7 @@ subjects:
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: RoleBinding
 metadata:
-  name: {{ printf "%s-psp" (include "concourse.worker.fullname" .) }}
+  name: {{ printf "%s-psp" (include "concourse.worker.fullname.namespace" .) }}
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: worker
@@ -41,7 +41,7 @@ metadata:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: {{ printf "%s-psp" (include "concourse.worker.fullname" .) }}
+  name: {{ printf "%s-psp" (include "concourse.worker.fullname.namespace" .) }}
 subjects:
   - kind: ServiceAccount
     name: {{ include "concourse.worker.serviceAccountName" . }}

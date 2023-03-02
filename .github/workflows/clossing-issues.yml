@@ -1,0 +1,19 @@
+name: '[Support] Close Solved issues'
+on:
+  schedule:
+    # Hourly
+    - cron: '0 * * * *'
+permissions:
+  issues: write
+  pull-requests: write
+jobs:
+  stale:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/stale@v6.0.1
+        with:
+          any-of-labels: 'solved'
+          stale-issue-label: 'solved'
+          days-before-stale: 0
+          days-before-close: 0
+          repo-token: ${{ secrets.BITNAMI_BOT_TOKEN }}

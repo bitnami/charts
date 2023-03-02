@@ -1,7 +1,8 @@
 annotations:
   category: Forum
+  licenses: Apache-2.0
 apiVersion: v2
-appVersion: 3.3.7
+appVersion: 3.3.10
 dependencies:
   - condition: mariadb.enabled
     name: mariadb
@@ -9,10 +10,11 @@ dependencies:
     version: 11.x.x
   - name: common
     repository: https://charts.bitnami.com/bitnami
-    version: 1.x.x
+    tags:
+      - bitnami-common
+    version: 2.x.x
 description: phpBB is a popular bulletin board that features robust messaging capabilities such as flat message structure, subforums, topic split/merge/lock, user groups, full-text search, and attachments.
-engine: gotpl
-home: https://github.com/bitnami/charts/tree/master/bitnami/phpbb
+home: https://github.com/bitnami/charts/tree/main/bitnami/phpbb
 icon: https://bitnami.com/assets/stacks/phpbb/img/phpbb-stack-220x234.png
 keywords:
   - phpbb
@@ -20,10 +22,10 @@ keywords:
   - http
   - php
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: phpbb
 sources:
-  - https://github.com/bitnami/bitnami-docker-phpbb
+  - https://github.com/bitnami/containers/tree/main/bitnami/phpbb
   - https://www.phpbb.com/
-version: 12.2.3
+version: 12.3.13

@@ -52,21 +52,41 @@ Return ZooKeeper Namespace to use
 {{- end -}}
 
 {{/*
-Return the ZooKeeper authentication credentials secret
+Return the ZooKeeper client-server authentication credentials secret
 */}}
-{{- define "zookeeper.secretName" -}}
-{{- if .Values.auth.existingSecret -}}
-    {{- printf "%s" (tpl .Values.auth.existingSecret $) -}}
+{{- define "zookeeper.client.secretName" -}}
+{{- if .Values.auth.client.existingSecret -}}
+    {{- printf "%s" (tpl .Values.auth.client.existingSecret $) -}}
 {{- else -}}
-    {{- printf "%s-auth" (include "common.names.fullname" .) -}}
+    {{- printf "%s-client-auth" (include "common.names.fullname" .) -}}
 {{- end -}}
 {{- end -}}
 
 {{/*
-Return true if a ZooKeeper authentication credentials secret object should be created
+Return the ZooKeeper server-server authentication credentials secret
 */}}
-{{- define "zookeeper.createSecret" -}}
-{{- if and .Values.auth.enabled (empty .Values.auth.existingSecret) -}}
+{{- define "zookeeper.quorum.secretName" -}}
+{{- if .Values.auth.quorum.existingSecret -}}
+    {{- printf "%s" (tpl .Values.auth.quorum.existingSecret $) -}}
+{{- else -}}
+    {{- printf "%s-quorum-auth" (include "common.names.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return true if a ZooKeeper client-server authentication credentials secret object should be created
+*/}}
+{{- define "zookeeper.client.createSecret" -}}
+{{- if and .Values.auth.client.enabled (empty .Values.auth.client.existingSecret) -}}
+    {{- true -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return true if a ZooKeeper server-server authentication credentials secret object should be created
+*/}}
+{{- define "zookeeper.quorum.createSecret" -}}
+{{- if and .Values.auth.quorum.enabled (empty .Values.auth.quorum.existingSecret) -}}
     {{- true -}}
 {{- end -}}
 {{- end -}}
@@ -84,28 +104,6 @@ otherwise it generates a random value.
         {{- randAlphaNum $len -}}
     {{- end -}}
 {{- end }}
-
-{{/*
-Return ZooKeeper client password
-*/}}
-{{- define "zookeeper.client.password" -}}
-{{- if not (empty .Values.auth.clientPassword) -}}
-    {{- .Values.auth.clientPassword -}}
-{{- else -}}
-    {{- include "getValueFromSecret" (dict "Namespace" (include "zookeeper.namespace" .) "Name" (printf "%s-auth" (include "common.names.fullname" .)) "Length" 10 "Key" "client-password")  -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Return ZooKeeper server password
-*/}}
-{{- define "zookeeper.server.password" -}}
-{{- if not (empty .Values.auth.serverPasswords) -}}
-    {{- .Values.auth.serverPasswords -}}
-{{- else -}}
-    {{- include "getValueFromSecret" (dict "Namespace" (include "zookeeper.namespace" .) "Name" (printf "%s-auth" (include "common.names.fullname" .)) "Length" 10 "Key" "server-password")  -}}
-{{- end -}}
-{{- end -}}
 
 {{/*
 Return the ZooKeeper configuration ConfigMap name
@@ -304,7 +302,8 @@ Compile all warnings into a single message.
 */}}
 {{- define "zookeeper.validateValues" -}}
 {{- $messages := list -}}
-{{- $messages := append $messages (include "zookeeper.validateValues.auth" .) -}}
+{{- $messages := append $messages (include "zookeeper.validateValues.client.auth" .) -}}
+{{- $messages := append $messages (include "zookeeper.validateValues.quorum.auth" .) -}}
 {{- $messages := append $messages (include "zookeeper.validateValues.client.tls" .) -}}
 {{- $messages := append $messages (include "zookeeper.validateValues.quorum.tls" .) -}}
 {{- $messages := without $messages "" -}}
@@ -318,11 +317,22 @@ Compile all warnings into a single message.
 {{/*
 Validate values of ZooKeeper - Authentication enabled
 */}}
-{{- define "zookeeper.validateValues.auth" -}}
-{{- if and .Values.auth.enabled (or (not .Values.auth.clientUser) (not .Values.auth.serverUsers)) }}
-zookeeper: auth.enabled
-    In order to enable authentication, you need to provide the list
-    of users to be created and the user to use for clients access.
+{{- define "zookeeper.validateValues.client.auth" -}}
+{{- if and .Values.auth.client.enabled (not .Values.auth.client.existingSecret) (or (not .Values.auth.client.clientUser) (not .Values.auth.client.serverUsers)) }}
+zookeeper: auth.client.enabled
+    In order to enable client-server authentication, you need to provide the list
+    of users to be created and the user to use for clients authentication.
+{{- end -}}
+{{- end -}}
+
+{{/*
+Validate values of ZooKeeper - Authentication enabled
+*/}}
+{{- define "zookeeper.validateValues.quorum.auth" -}}
+{{- if and .Values.auth.quorum.enabled (not .Values.auth.quorum.existingSecret) (or (not .Values.auth.quorum.learnerUser) (not .Values.auth.quorum.serverUsers)) }}
+zookeeper: auth.quorum.enabled
+    In order to enable server-server authentication, you need to provide the list
+    of users to be created and the user to use for quorum authentication.
 {{- end -}}
 {{- end -}}
 

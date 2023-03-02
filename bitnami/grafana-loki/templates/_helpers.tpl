@@ -53,6 +53,12 @@ Return the proper Grafana Loki query-frontend fullname
 {{- define "grafana-loki.query-frontend.fullname" -}}
 {{- printf "%s-%s" (include "common.names.fullname" .) "query-frontend" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
+{{/*
+Return the proper Grafana Loki query-scheduler fullname
+*/}}
+{{- define "grafana-loki.query-scheduler.fullname" -}}
+{{- printf "%s-%s" (include "common.names.fullname" .) "query-scheduler" | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
 
 {{/*
 Return the proper Grafana Loki ruler fullname
@@ -159,7 +165,7 @@ Create the name of the service account to use
 */}}
 {{- define "grafana-loki.promtail.serviceAccountName" -}}
 {{- if .Values.promtail.serviceAccount.create -}}
-    {{ default (printf "%s" (include "common.names.fullname" .)) .Values.promtail.serviceAccount.name }}
+    {{ default (printf "%s" (include "grafana-loki.promtail.fullname" .)) .Values.promtail.serviceAccount.name }}
 {{- else -}}
     {{ default "default" .Values.promtail.serviceAccount.name }}
 {{- end -}}

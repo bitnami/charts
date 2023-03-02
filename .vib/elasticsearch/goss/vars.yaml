@@ -1,0 +1,2 @@
+containerPorts:
+  transport: 9300

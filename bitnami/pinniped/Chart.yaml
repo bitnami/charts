@@ -1,0 +1,25 @@
+annotations:
+  category: Infrastructure
+  licenses: Apache-2.0
+apiVersion: v2
+appVersion: 0.22.0
+dependencies:
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - bitnami-common
+    version: 2.x.x
+description: Pinniped is an identity service provider for Kubernetes. It supplies a consistent and unified login experience across all your clusters. Pinniped is securely integrated with enterprise IDP protocols.
+home: https://pinniped.dev/
+icon: https://bitnami.com/assets/stacks/pinniped/img/pinniped-stack-220x234.png
+keywords:
+  - identity
+  - infrastructure
+maintainers:
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
+name: pinniped
+sources:
+  - https://github.com/bitnami/containers/tree/main/bitnami/pinniped
+  - https://github.com/vmware-tanzu/pinniped/
+version: 1.0.7

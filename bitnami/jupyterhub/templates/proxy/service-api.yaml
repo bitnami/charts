@@ -17,20 +17,23 @@ metadata:
     {{- end }}
 spec:
   type: {{ .Values.proxy.service.api.type }}
-  sessionAffinity: {{ .Values.proxy.service.api.sessionAffinity }}
   {{- if and .Values.proxy.service.api.clusterIP (eq .Values.proxy.service.api.type "ClusterIP") }}
   clusterIP: {{ .Values.proxy.service.api.clusterIP }}
   {{- end }}
-  {{- if (or (eq .Values.proxy.service.api.type "LoadBalancer") (eq .Values.proxy.service.api.type "NodePort")) }}
+  {{- if or (eq .Values.proxy.service.api.type "LoadBalancer") (eq .Values.proxy.service.api.type "NodePort") }}
   externalTrafficPolicy: {{ .Values.proxy.service.api.externalTrafficPolicy | quote }}
   {{- end }}
-  {{- if (and (eq .Values.proxy.service.api.type "LoadBalancer") .Values.proxy.service.api.loadBalancerSourceRanges) }}
-  {{- with .Values.proxy.service.api.loadBalancerSourceRanges }}
-  loadBalancerSourceRanges: {{- toYaml . | nindent 4 }}
+  {{- if and (eq .Values.proxy.service.api.type "LoadBalancer") (not (empty .Values.proxy.service.api.loadBalancerSourceRanges)) }}
+  loadBalancerSourceRanges: {{ .Values.proxy.service.api.loadBalancerSourceRanges }}
   {{- end }}
-  {{- end }}
-  {{- if (and (eq .Values.proxy.service.api.type "LoadBalancer") (not (empty .Values.proxy.service.api.loadBalancerIP))) }}
+  {{- if and (eq .Values.proxy.service.api.type "LoadBalancer") (not (empty .Values.proxy.service.api.loadBalancerIP)) }}
   loadBalancerIP: {{ .Values.proxy.service.api.loadBalancerIP }}
+  {{- end }}
+  {{- if .Values.proxy.service.api.sessionAffinity }}
+  sessionAffinity: {{ .Values.proxy.service.api.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.proxy.service.api.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.proxy.service.api.sessionAffinityConfig "context" $) | nindent 4 }}
   {{- end }}
   ports:
     - name: http

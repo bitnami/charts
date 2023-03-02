@@ -109,28 +109,28 @@ spec:
           resources: {{- toYaml .Values.vulture.resources | nindent 12 }}
           {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.vulture.livenessProbe.enabled }}
+          {{- if .Values.vulture.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.vulture.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.vulture.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.vulture.livenessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /metrics
               port: {{ .Values.vulture.containerPorts.http }}
-          {{- else if .Values.vulture.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.vulture.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.vulture.readinessProbe.enabled }}
+          {{- if .Values.vulture.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.vulture.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.vulture.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.vulture.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /metrics
               port: {{ .Values.vulture.containerPorts.http }}
-          {{- else if .Values.vulture.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.vulture.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.vulture.startupProbe.enabled }}
+          {{- if .Values.vulture.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.vulture.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.vulture.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.vulture.startupProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
               port: http
-          {{- else if .Values.vulture.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.vulture.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           {{- if .Values.vulture.lifecycleHooks }}

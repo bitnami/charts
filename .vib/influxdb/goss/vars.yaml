@@ -1,0 +1,17 @@
+auth:
+  admin:
+    token: "4dm1nT0k3n"
+  user:
+    username: "testUser"
+    org: "testOrganization"
+    bucket: "testBucket"
+influxdb:
+  service:
+    ports:
+      http: 80
+  containerSecurityContext:
+    runAsUser: 1002
+  podSecurityContext:
+    fsGroup: 1002
+serviceAccount:
+  automountServiceAccountToken: true

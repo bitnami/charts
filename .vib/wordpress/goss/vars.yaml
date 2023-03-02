@@ -1,0 +1,12 @@
+wordpressEmail: test_user_email@email.com
+service:
+  ports:
+    https: 443
+podSecurityContext:
+  fsGroup: 1002
+containerSecurityContext:
+  runAsUser: 1002
+hostAliases:
+  - ip: 127.0.0.1
+    hostnames:
+      - status.localhost

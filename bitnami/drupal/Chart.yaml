@@ -1,7 +1,8 @@
 annotations:
   category: CMS
+  licenses: Apache-2.0
 apiVersion: v2
-appVersion: 9.3.13
+appVersion: 10.0.4
 dependencies:
   - condition: mariadb.enabled
     name: mariadb
@@ -11,10 +12,9 @@ dependencies:
     repository: https://charts.bitnami.com/bitnami
     tags:
       - bitnami-common
-    version: 1.x.x
+    version: 2.x.x
 description: Drupal is one of the most versatile open source content management systems in the world. It is pre-configured with the Ctools and Views modules, Drush and Let's Encrypt auto-configuration support.
-engine: gotpl
-home: https://github.com/bitnami/charts/tree/master/bitnami/drupal
+home: https://github.com/bitnami/charts/tree/main/bitnami/drupal
 icon: https://bitnami.com/assets/stacks/drupal/img/drupal-stack-220x234.png
 keywords:
   - drupal
@@ -25,10 +25,10 @@ keywords:
   - application
   - php
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: drupal
 sources:
-  - https://github.com/bitnami/bitnami-docker-drupal
+  - https://github.com/bitnami/containers/tree/main/bitnami/drupal
   - https://www.drupal.org/
-version: 12.2.1
+version: 13.0.8

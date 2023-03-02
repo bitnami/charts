@@ -7,12 +7,12 @@ Wavefront Storage Adapter is a Prometheus integration to transfer metrics from P
 [Overview of Wavefront Prometheus Adapter](https://github.com/wavefrontHQ/prometheus-storage-adapter)
 
 
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/wavefront-prometheus-storage-adapter
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/wavefront-prometheus-storage-adapter
 ```
 
 ## Introduction
@@ -23,7 +23,7 @@ Wavefront Prometheus Adapter  works as a "fork", such that data written to Prome
 
 This chart bootstraps a [Wavefront Storage Adapter for Prometheus](https://github.com/wavefrontHQ/prometheus-storage-adapter) Deployment in a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -35,8 +35,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/wavefront-prometheus-storage-adapter
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/wavefront-prometheus-storage-adapter
 ```
 
 These commands deploy wavefront-prometheus-storage-adapter on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -48,7 +48,7 @@ These commands deploy wavefront-prometheus-storage-adapter on the Kubernetes clu
 To uninstall/delete the `my-release` helm release:
 
 ```console
-$ helm uninstall my-release
+helm uninstall my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -62,7 +62,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
-
 
 ### Common parameters
 
@@ -79,16 +78,16 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]`  |
 
-
 ### Wavefront Prometheus Storage Adapter deployment parameters
 
 | Name                                    | Description                                                                                                              | Value                                          |
 | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------- |
 | `image.registry`                        | Adapter image registry                                                                                                   | `docker.io`                                    |
 | `image.repository`                      | Adapter image repository                                                                                                 | `bitnami/wavefront-prometheus-storage-adapter` |
-| `image.tag`                             | Adapter image tag (immutabe tags are recommended)                                                                        | `1.0.5-debian-10-r132`                         |
+| `image.tag`                             | Adapter image tag (immutable tags are recommended)                                                                       | `1.0.5-debian-11-r96`                          |
+| `image.digest`                          | Adapter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                  | `""`                                           |
 | `image.pullPolicy`                      | Adapter image pull policy                                                                                                | `IfNotPresent`                                 |
-| `image.pullSecrets`                     | Adapter image pull secrets                                                                                               | `[]`                                           |
+| `image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                         | `[]`                                           |
 | `image.debug`                           | Enable image debug mode                                                                                                  | `false`                                        |
 | `replicaCount`                          | Number of Adapter replicas to deploy                                                                                     | `1`                                            |
 | `startupProbe.enabled`                  | Enable startupProbe                                                                                                      | `true`                                         |
@@ -131,7 +130,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podAnnotations`                        | Annotations for Adapter pods                                                                                             | `{}`                                           |
 | `priorityClassName`                     | Adapter pod priority                                                                                                     | `""`                                           |
 | `schedulerName`                         | Use an alternate scheduler, e.g. "stork".                                                                                | `""`                                           |
-| `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `{}`                                           |
+| `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`                                           |
 | `terminationGracePeriodSeconds`         | Termination grace period in seconds                                                                                      | `""`                                           |
 | `lifecycleHooks`                        | Add lifecycle hooks to the Adapter deployment                                                                            | `{}`                                           |
 | `customStartupProbe`                    | Override default startup probe                                                                                           | `{}`                                           |
@@ -151,7 +150,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `adapterPrefix`                         | Adapter `prefix` parameter                                                                                               | `""`                                           |
 | `adapterTags`                           | Adapter `tags` parameter                                                                                                 | `""`                                           |
 
-
 ### Traffic Exposure Parameters
 
 | Name                               | Description                                                      | Value       |
@@ -168,7 +166,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.nodePorts.http`           | NodePort for the HTTP endpoint                                   | `""`        |
 | `service.externalTrafficPolicy`    | External traffic policy for the service                          | `Cluster`   |
 
-
 ### Wavefront sub-chart parameters
 
 | Name                              | Description                                                                               | Value                                |
@@ -182,21 +179,20 @@ The command removes all the Kubernetes components associated with the chart and 
 | `wavefront.proxy.port`            | Deployed Wavefront Proxy port (required if externalProxyHost is not set)                  | `2878`                               |
 | `wavefront.serviceAccount.create` | Create Wavefront serivce account (not necessary as the Adapter only uses wavefront-proxy) | `false`                              |
 
-
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release \
+helm install my-release \
   --set livenessProbe.successThreshold=5 \
-    bitnami/wavefront-prometheus-storage-adapter
+    my-repo/wavefront-prometheus-storage-adapter
 ```
 
 The above command sets the `livenessProbe.successThreshold` to `5`.
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
-```bash
-$ helm install my-release -f values.yaml bitnami/wavefront-prometheus-storage-adapter
+```console
+helm install my-release -f values.yaml my-repo/wavefront-prometheus-storage-adapter
 ```
 
 ## Configuration and installation details
@@ -230,23 +226,27 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
-```bash
-$ helm upgrade my-release bitnami/wavefront-prometheus-storage-adapter
+```console
+helm upgrade my-release my-repo/wavefront-prometheus-storage-adapter
 ```
+
+### To 2.0.0
+
+This major updates the Wavefront subchart to its newest major release, 4.0.0, which contains a new major version for kube-state-metrics. For more information on this subchart's major version, please refer to the [Wavefront upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/wavefront#to-400).
 
 ### To 1.0.0
 
-This major updates the Wavefront subchart to its newest major release, 3.0.0, which contains a new major version for kube-state-metrics. For more information on this subchart's major version, please refer to the [Wavefront upgrade notes](https://github.com/bitnami/charts/tree/master/bitnami/wavefront#to-300).
+This major updates the Wavefront subchart to its newest major release, 3.0.0, which contains a new major version for kube-state-metrics. For more information on this subchart's major version, please refer to the [Wavefront upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/wavefront#to-300).
 
 ## License
 
-Copyright &copy; 2022 Bitnami
+Copyright &copy; 2023 Bitnami
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

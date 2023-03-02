@@ -58,18 +58,20 @@ server:
   ## @param server.image.registry server image registry
   ## @param server.image.repository server image repository
   ## @param server.image.tag server image tag (immutable tags are recommended)
+  ## @param server.image.digest server image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param server.image.pullPolicy server image pull policy
   ## @param server.image.pullSecrets server image pull secrets
   ##
   image:
     registry: docker.io
     repository: bitnami/argo-workflow-cli
-    tag: 3.3.5-scratch-r1
+    tag: 3.4.5-scratch-r4
+    digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
-    pullPolicy: Always
+    pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -190,12 +192,12 @@ server:
     ## SSO configuration when SSO is specified as a server auth mode.
     ## All the values are required. SSO is activated by adding --auth-mode=sso to the server command line.
     ## @param server.auth.sso.enabled Enable SSO configuration for the server auth mode
-    ## @param server.auth.sso.issuer Root URL for the OIDC identity provider
-    ## @param server.auth.sso.clientId.name Name of the secret containing the OIDC client ID
-    ## @param server.auth.sso.clientId.key Key in the secret to obtain the OIDC client ID
-    ## @param server.auth.sso.clientSecret.name Name of the secret containing the OIDC client secret
-    ## @param server.auth.sso.clientSecret.key Key in the secret to obtain the OIDC client secret
-    ## @param server.auth.sso.redirectUrl The OIDC redirect URL. Should be in the form <argo-root-url>/oauth2/callback.
+    ## @param server.auth.sso.config.issuer Root URL for the OIDC identity provider
+    ## @param server.auth.sso.config.clientId.name Name of the secret containing the OIDC client ID
+    ## @param server.auth.sso.config.clientId.key Key in the secret to obtain the OIDC client ID
+    ## @param server.auth.sso.config.clientSecret.name Name of the secret containing the OIDC client secret
+    ## @param server.auth.sso.config.clientSecret.key Key in the secret to obtain the OIDC client secret
+    ## @param server.auth.sso.config.redirectUrl The OIDC redirect URL. Should be in the form <argo-root-url>/oauth2/callback.
     ## @param server.auth.sso.rbac.enabled Create RBAC resources for SSO
     ## @param server.auth.sso.rbac.secretWhitelist Restricts the secrets that the server can read
     ## @param server.auth.sso.scopes Scopes requested from the SSO ID provider
@@ -206,20 +208,21 @@ server:
       ## E.g.
       ## issuer: "https://accounts.google.com"
       ##
-      issuer: ""
-      ## Name of a secret and a key in it to retrieve the app OIDC client ID from.
-      ##
-      clientId:
-        name: ""
-        key: ""
-      ## Name of a secret and a key in it to retrieve the app OIDC client secret from.
-      ##
-      clientSecret:
-        name: ""
-        key: ""
-      ## The OIDC redirect URL. Should be in the form <argo-root-url>/oauth2/callback.
-      ##
-      redirectUrl: ""
+      config:
+        issuer: ""
+        ## Name of a secret and a key in it to retrieve the app OIDC client ID from.
+        ##
+        clientId:
+          name: ""
+          key: ""
+        ## Name of a secret and a key in it to retrieve the app OIDC client secret from.
+        ##
+        clientSecret:
+          name: ""
+          key: ""
+        ## The OIDC redirect URL. Should be in the form <argo-root-url>/oauth2/callback.
+        ##
+        redirectUrl: ""
       ## Create RBAC resources for SSO
       ##
       rbac:
@@ -272,19 +275,18 @@ server:
   containerPorts:
     web: 2746
 
-  ## ServiceAccount configuration
+  ## Server Service Account
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+  ## @param server.serviceAccount.create Specifies whether a ServiceAccount should be created
+  ## @param server.serviceAccount.name Name of the service account to use. If not set and create is true, a name is generated using the fullname template.
+  ## @param server.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+  ## @param server.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
   ##
   serviceAccount:
-    ## @param server.serviceAccount.create Specifies whether a ServiceAccount should be created
-    ##
     create: true
-    ## @param server.serviceAccount.name The name of the ServiceAccount to use.
-    ## If not set and create is true, a name is generated using the common.names.fullname template
-    ##
     name: ""
-    ## @param server.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
-    ##
     automountServiceAccountToken: true
+    annotations: {}
 
   ## @param server.command Override default container command (useful when using custom images)
   ##
@@ -398,7 +400,7 @@ server:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  sidecars: {}
+  sidecars: []
   ## @param server.initContainers Add additional init containers to the server pod(s)
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
@@ -408,7 +410,7 @@ server:
   ##    imagePullPolicy: Always
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
-  initContainers: {}
+  initContainers: []
 
   ## Server service parameters
   ##
@@ -465,13 +467,15 @@ controller:
   ## @param controller.image.registry controller image registry
   ## @param controller.image.repository controller image repository
   ## @param controller.image.tag controller image tag (immutable tags are recommended)
+  ## @param controller.image.digest controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param controller.image.pullPolicy controller image pull policy
   ## @param controller.image.pullSecrets controller image pull secrets
   ##
   image:
     registry: docker.io
     repository: bitnami/argo-workflow-controller
-    tag: 3.3.5-scratch-r0
+    tag: 3.4.5-scratch-r3
+    digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -596,6 +600,12 @@ controller:
   ##
   extraArgs: ""
 
+  ##
+  ## @param controller.persistence.archive.enabled Save completed workflows to an SQL database.
+  persistence:
+    archive:  
+      enabled: false
+
   ## Controller configmap configuration content. Requires controller.existingConfigmap to be empty.
   ## @param controller.config [object] Controller configmap configuration content
   ##
@@ -607,12 +617,6 @@ controller:
     instanceID: {{ .Values.controller.instanceID.explicitID }}
     {{- end }}
     {{- end }}
-    ## Ref: https://argoproj.github.io/argo-workflows/workflow-executors/
-    ##
-    containerRuntimeExecutor: {{ .Values.controller.containerRuntimeExecutor }}
-    ## Uncomment to create containerRuntimeExecutors
-    ## Ref: https://argoproj.github.io/argo-workflows/workflow-executors/
-    ## containerRuntimeExecutors: {}
     ## How many workflows can be running at the same time
     ##
     parallelism:
@@ -629,11 +633,6 @@ controller:
       {{- end }}
       {{- if .Values.executor.podSecurityContext }}
       securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.executor.containerSecurityContext "context" $) | nindent 4 }}
-        {{- if not (eq .Values.controller.containerRuntimeExecutor "docker") }}
-        ## Docker executor requires to run executor as root
-        ##
-        runAsNonRoot: true
-        {{- end }}
       {{- end }}
     {{- end }}
     ## Uncomment to enable Artofact repository with the provided configuration
@@ -642,10 +641,10 @@ controller:
     ##  configuration: {}
     ##
     {{- if .Values.controller.metrics.enabled }}
-    metricsConfig: {{- include "common.tplvalues.render" (dict "value" .Values.controller.metrics "context" $) | nindent 4 }}
+    metricsConfig: {{- include "common.tplvalues.render" (dict "value" .Values.controller.metrics "context" $) | nindent 2 }}
     {{- end }}
     {{- if .Values.controller.telemetry.enabled }}
-    telemetryConfig: {{- include "common.tplvalues.render" (dict "value" .Values.controller.telemetry "context" $) | nindent 4 }}
+    telemetryConfig: {{- include "common.tplvalues.render" (dict "value" .Values.controller.telemetry "context" $) | nindent 2 }}
     {{- end }}
     {{- if (include "argo-workflows.controller.persistence.enabled" .) }}
     persistence:
@@ -653,10 +652,10 @@ controller:
         maxIdleConns: 100
         maxOpenConns: 0
       nodeStatusOffLoad: false
-      archive: false
-      {{- if or .Values.postgresql.enabled (eq .Values.externalDatabase.type "postgresql") }}
+      archive: {{ include "common.tplvalues.render" (dict "value" .Values.controller.persistence.archive.enabled "context" $) }}
+      {{- if or .Values.postgresql.enabled (and .Values.externalDatabase.enabled (eq .Values.externalDatabase.type "postgresql")) }}
       postgresql:
-      {{- else if or .Values.mysql.enabled (eq .Values.externalDatabase.type "mysql") }}
+      {{- else if or .Values.mysql.enabled (and .Values.externalDatabase.enabled (eq .Values.externalDatabase.type "mysql")) }}
       mysql:
       {{- end }}
         host: {{ include "argo-workflows.controller.database.host" . }}
@@ -672,12 +671,11 @@ controller:
           name: {{ include "argo-workflows.controller.database.password.secret" . }}
           key: {{ include "argo-workflows.controller.database.password.secret.key" . }}
     {{- end }}
-    ## Uncomment to set workflowDefaults
-    ## Ref: https://argoproj.github.io/argo-workflows/default-workflow-specs/#setting-default-workflow-values
-    ## workflowDefaults: {}
-    ##
+    {{- if .Values.controller.workflowDefaults }}
+    workflowDefaults: {{- include "common.tplvalues.render" (dict "value" .Values.controller.workflowDefaults "context" $) | nindent 2 }}
+    {{- end }}
     {{- if and .Values.server.auth.enabled .Values.server.auth.sso.enabled }}
-    sso: {{- include "common.tplvalues.render" (dict "value" .Values.server.auth.sso "context" $) | nindent 4 }}
+    sso: {{- include "common.tplvalues.render" (dict "value" .Values.server.auth.sso.config "context" $) | nindent 2 }}
     {{- end }}
     ## Uncomment to set workflowRestrictions
     ## Ref: https://argoproj.github.io/argo-workflows/workflow-restrictions/
@@ -699,14 +697,7 @@ controller:
     useReleaseName: false
     explicitID: ""
 
-  ## Default container runtime that the executor will use.
-  ## Set as `k8sapi` because `docker` requires privileged access. Also, `k8sapi` allows to runAsNonRoot
-  ## Ref: https://argoproj.github.io/argo-workflows/workflow-executors/
-  ## @param controller.containerRuntimeExecutor Specifies the container runtime for the executor
-  ##
-  containerRuntimeExecutor: k8sapi
-
-  ## @param controller.clusterWorkflowTemplates.enabled Whether to create a ClusterRole and Cluster Role Binding to access ClusterWokflowTemplates resources
+   ## @param controller.clusterWorkflowTemplates.enabled Whether to create a ClusterRole and Cluster Role Binding to access ClusterWokflowTemplates resources
   ##
   clusterWorkflowTemplates:
     enabled: true
@@ -739,6 +730,11 @@ controller:
   ##
   workflowNamespaces:
     - default
+  ## Default Workflow Values
+  ## Ref: https://argoproj.github.io/argo-workflows/default-workflow-specs/#setting-default-workflow-values
+  ## @param controller.workflowDefaults Default Workflow Values
+  ##
+  workflowDefaults: {}
   ## Logging level for the controller
   ## @param controller.logging.level Level for the controller logging
   ## @param controller.logging.globalLevel Global logging level for the controller
@@ -756,18 +752,18 @@ controller:
     enabled: false
     minAvailable: 1
     maxUnavailable: 1
-  ## Service Account configuration
+  ## Controller Service Account
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
   ## @param controller.serviceAccount.create Specifies whether a ServiceAccount should be created
-  ## @param controller.serviceAccount.name Name for the service account
+  ## @param controller.serviceAccount.name Name of the service account to use. If not set and create is true, a name is generated using the fullname template.
+  ## @param controller.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+  ## @param controller.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
   ##
   serviceAccount:
     create: true
-    ## If not set and create is true, a name is generated using the common.names.fullname template
-    ##
     name: ""
-    ## @param controller.serviceAccount.automountServiceAccountToken Automount service account token for the controller service account
-    ##
     automountServiceAccountToken: true
+    annotations: {}
 
   ## @param controller.command Override default container command (useful when using custom images)
   ##
@@ -881,7 +877,7 @@ controller:
   ##       - name: portname
   ##         containerPort: 1234
   ##
-  sidecars: {}
+  sidecars: []
   ## @param controller.initContainers Add additional init containers to the controller pod(s)
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
   ## e.g:
@@ -891,7 +887,7 @@ controller:
   ##    imagePullPolicy: Always
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
-  initContainers: {}
+  initContainers: []
 
   ## Controller service parameters
   ##
@@ -950,18 +946,20 @@ executor:
   ## @param executor.image.registry executor image registry
   ## @param executor.image.repository executor image repository
   ## @param executor.image.tag executor image tag (immutable tags are recommended)
+  ## @param executor.image.digest executor image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param executor.image.pullPolicy executor image pull policy
   ## @param executor.image.pullSecrets executor image pull secrets
   ##
   image:
     registry: docker.io
     repository: bitnami/argo-workflow-exec
-    tag: 3.3.5-debian-10-r13
+    tag: 3.4.5-debian-11-r8
+    digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
     ##
-    pullPolicy: Always
+    pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -1103,7 +1101,7 @@ ingress:
   ## - host: server.local
   ##     http:
   ##       path: /
-  ##       backend: 
+  ##       backend:
   ##         service:
   ##           name: server-svc
   ##           port:
@@ -1119,11 +1117,13 @@ workflows:
   ## @param workflows.serviceAccount.create Whether to create a service account to run workflows
   ## @param workflows.serviceAccount.name Service account name to run workflows
   ## @param workflows.serviceAccount.automountServiceAccountToken Automount service account token for the workflows service account
+  ## @param workflows.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
   ##
   serviceAccount:
     create: false
     name: ""
     automountServiceAccountToken: true
+    annotations: {}
   ## Create RBAC resources to run workflows.
   ## A Role and Role Bindding are created per namespace in controller.workflowNamespaces
   ## @param workflows.rbac.create Whether to create RBAC resource to run workflows
@@ -1186,7 +1186,7 @@ mysql:
 ##
 externalDatabase:
   enabled: false
-  ## Either "postgres" or  "mysql"
+  ## Either "postgresql" or  "mysql"
   ##
   type: ""
   host: localhost

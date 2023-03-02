@@ -1,0 +1,16 @@
+file:
+  /bitnami/odoo:
+    exists: true
+    filetype: directory
+    mode: "0775"
+    owner: odoo
+    group: root
+  /opt/bitnami/odoo/conf/odoo.conf:
+    exists: true
+    filetype: file
+    mode: "0644"
+    owner: root
+    group: root
+    contains:
+     - db_user = {{ .Vars.postgresql.auth.username }}
+     - http_port = {{ .Vars.containerPorts.http }}

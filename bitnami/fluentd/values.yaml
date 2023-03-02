@@ -69,7 +69,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/fluentd
-  tag: 1.14.6-debian-10-r48
+  tag: 1.15.3-debian-11-r40
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -138,6 +138,12 @@ forwarder:
     capabilities:
       drop:
         - ALL
+  ## @param forwarder.hostNetwork Enable use of host network
+  ##
+  hostNetwork: false
+  ## @param forwarder.dnsPolicy Pod-specific DNS policy
+  ##
+  dnsPolicy: ""
   ## @param forwarder.terminationGracePeriodSeconds Duration in seconds the pod needs to terminate gracefully
   ## https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/
   ##
@@ -185,9 +191,11 @@ forwarder:
         </parse>
       </source>
       # enrich with kubernetes metadata
+      {{- if or .Values.forwarder.serviceAccount.create .Values.forwarder.serviceAccount.name }}
       <filter kubernetes.**>
         @type kubernetes_metadata
       </filter>
+      {{- end }}
     fluentd-output.conf: |
       # Throw the healthcheck to the standard output instead of forwarding it
       <match fluentd.healthcheck>
@@ -263,7 +271,7 @@ forwarder:
   ##
   extraArgs: ""
   ## @param forwarder.extraEnvVars Extra environment variables to pass to the container
-  ## extraEnv:
+  ## extraEnvVars:
   ##   - name: MY_ENV_VAR
   ##     value: my_value
   ##
@@ -606,6 +614,24 @@ forwarder:
   ##     mountPath: /run/log/journal/
   ##
   extraVolumeMounts: []
+  ## @param forwarder.initScripts Dictionary of init scripts. Evaluated as a template.
+  ## Specify dictionary of scripts to be run at first boot
+  ## Alternatively, you can put your scripts under the files/docker-entrypoint-initdb.d directory
+  ## For example:
+  ## initScripts:
+  ##   my_init_script.sh: |
+  ##      #!/bin/sh
+  ##      echo "Do something."
+  ##
+  initScripts: {}
+  ## @param forwarder.initScriptsCM ConfigMap with the init scripts. Evaluated as a template.
+  ## Note: This will override initScripts
+  ##
+  initScriptsCM: ""
+  ## @param forwarder.initScriptsSecret Secret containing `/docker-entrypoint-initdb.d` scripts to be executed at initialization time that contain sensitive data. Evaluated as a template.
+  ##
+  initScriptsSecret: ""
+##
 ## Aggregator parameters
 ##
 aggregator:
@@ -747,7 +773,7 @@ aggregator:
   ##
   extraArgs: ""
   ## @param aggregator.extraEnvVars Extra environment variables to pass to the container
-  ## extraEnv:
+  ## extraEnvVars:
   ##   - name: MY_ENV_VAR
   ##     value: my_value
   ##
@@ -860,7 +886,7 @@ aggregator:
     ##
     annotations: {}
     ## @param aggregator.ingress.tls Enable TLS configuration for the hostname defined at ingress.hostname parameter
-    ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.aggregator.ingress.hostname }}
+    ## TLS certificates will be retrieved from a TLS secret with name: {{- printf "%s-tls" .Values.aggregator.ingress.hostname | trunc 63 | trimSuffix "-" }}
     ## You can use the ingress.secrets parameter to create this TLS secret or rely on cert-manager to create it
     ##
     tls: false
@@ -915,7 +941,7 @@ aggregator:
     ## - host: example.local
     ##     http:
     ##       path: /
-    ##       backend: 
+    ##       backend:
     ##         service:
     ##           name: example-svc
     ##           port:
@@ -1209,7 +1235,23 @@ aggregator:
   ## @param aggregator.extraVolumeClaimTemplates Optionally specify extra list of additional volume claim templates for the Fluentd Aggregator pods in StatefulSet
   ##
   extraVolumeClaimTemplates: []
-
+  ## @param aggregator.initScripts Dictionary of init scripts. Evaluated as a template.
+  ## Specify dictionary of scripts to be run at first boot
+  ## Alternatively, you can put your scripts under the files/docker-entrypoint-initdb.d directory
+  ## For example:
+  ## initScripts:
+  ##   my_init_script.sh: |
+  ##      #!/bin/sh
+  ##      echo "Do something."
+  ##
+  initScripts: {}
+  ## @param aggregator.initScriptsCM ConfigMap with the init scripts. Evaluated as a template.
+  ## Note: This will override initScripts
+  ##
+  initScriptsCM: ""
+  ## @param aggregator.initScriptsSecret Secret containing `/docker-entrypoint-initdb.d` scripts to be executed at initialization time that contain sensitive data. Evaluated as a template.
+  ##
+  initScriptsSecret: ""
 ## Prometheus Exporter / Metrics
 ##
 metrics:
@@ -1246,6 +1288,7 @@ metrics:
     ##
     externalTrafficPolicy: Cluster
     ## @param metrics.service.annotations [object] Annotations for the Prometheus Exporter service service
+    ## If port or path annotation is provided the values will be used to in the prometheus ServiceMonitor CRD.
     ##
     annotations:
       prometheus.io/scrape: "true"
@@ -1295,7 +1338,7 @@ metrics:
     ##
     metricRelabelings: []
     ## @param metrics.serviceMonitor.selector Prometheus instance selector labels
-    ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
+    ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
     ## e.g:
     ## selector:
     ##   prometheus: my-prometheus
@@ -1310,6 +1353,9 @@ metrics:
     ## @param metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
     ##
     honorLabels: false
+    ## @param metrics.serviceMonitor.path path defines the path that promethues will use to pull metrics from the container
+    ##
+    path: "/metrics"
 ## Enable internal SSL/TLS encryption
 ##
 tls:

@@ -8,14 +8,14 @@ metadata:
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
-  name: {{ template "rmqco.clusterOperator.fullname" . }}
+  name: {{ template "common.names.fullname.namespace" . }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: {{ template "rmqco.clusterOperator.fullname" . }}
+  name: {{ template "common.names.fullname.namespace" . }}
 subjects:
   - kind: ServiceAccount
     name: {{ template "rmqco.clusterOperator.serviceAccountName" . }}

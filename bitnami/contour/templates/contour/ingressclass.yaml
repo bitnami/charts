@@ -13,6 +13,6 @@ metadata:
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: contour
 spec:
-  controller: {{ printf "projectcontour.io/%s/%s-contour" .Release.Namespace (include "common.names.fullname" .) }}
+  controller: {{ printf "projectcontour.io/%s/%s-contour" (include "common.names.namespace" .) (include "common.names.fullname" .) }}
 {{- end }}
 {{- end }}

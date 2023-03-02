@@ -121,14 +121,26 @@ spec:
               value: {{ ternary "true" "false" .Values.jobservice.image.debug | quote }}
             - name: CORE_SECRET
               valueFrom:
+                {{- if .Values.core.existingSecret }}
+                secretKeyRef:
+                  name: {{ .Values.core.existingSecret }}
+                  key: secret
+                {{- else }}
                 secretKeyRef:
                   name: {{ include "harbor.core" . }}
                   key: secret
+                {{- end }}
             - name: JOBSERVICE_SECRET
               valueFrom:
+                {{- if .Values.jobservice.existingSecret }}
+                secretKeyRef:
+                  name: {{ .Values.jobservice.existingSecret }}
+                  key: secret
+                {{- else }}
                 secretKeyRef:
                   name: {{ include "harbor.jobservice" . }}
                   key: secret
+                {{- end }}
             {{- if .Values.internalTLS.enabled }}
             - name: INTERNAL_TLS_ENABLED
               value: "true"
@@ -163,30 +175,30 @@ spec:
               name: metrics
             {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.jobservice.startupProbe.enabled }}
+          {{- if .Values.jobservice.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.jobservice.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.jobservice.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.jobservice.startupProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
               port: {{ ternary "https" "http" .Values.internalTLS.enabled }}
-          {{- else if .Values.jobservice.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.jobservice.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.jobservice.livenessProbe.enabled }}
+          {{- if .Values.jobservice.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.jobservice.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.jobservice.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.jobservice.livenessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /api/v1/stats
               port: {{ ternary "https" "http" .Values.internalTLS.enabled }}
               scheme: {{ ternary "https" "http" .Values.internalTLS.enabled | upper }}
-          {{- else if .Values.jobservice.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.jobservice.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.jobservice.readinessProbe.enabled }}
+          {{- if .Values.jobservice.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.jobservice.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.jobservice.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.jobservice.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /api/v1/stats
               port: {{ ternary "https" "http" .Values.internalTLS.enabled }}
               scheme: {{ ternary "https" "http" .Values.internalTLS.enabled | upper }}
-          {{- else if .Values.jobservice.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.jobservice.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           {{- if .Values.jobservice.lifecycleHooks }}
@@ -202,6 +214,9 @@ spec:
             - name: job-logs
               mountPath: /var/log/jobs
               subPath: {{ .Values.persistence.persistentVolumeClaim.jobservice.subPath }}
+            - name: jobservice-scandata
+              mountPath: /var/scandata_exports
+              subPath: {{ .Values.persistence.persistentVolumeClaim.jobservice.scanData.subPath }}
             {{- if .Values.internalTLS.enabled }}
             - name: internal-tls-certs
               mountPath: /etc/harbor/ssl/jobservice
@@ -223,6 +238,13 @@ spec:
           {{- if and .Values.persistence.enabled (eq .Values.jobservice.jobLogger "file") }}
           persistentVolumeClaim:
             claimName: {{ .Values.persistence.persistentVolumeClaim.jobservice.existingClaim | default (include "harbor.jobservice" .) }}
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
+        - name: jobservice-scandata
+          {{- if and .Values.persistence.enabled }}
+          persistentVolumeClaim:
+            claimName: {{ .Values.persistence.persistentVolumeClaim.jobservice.scanData.existingClaim | default (include "harbor.jobserviceScanData" .) }}
           {{- else }}
           emptyDir: {}
           {{- end }}

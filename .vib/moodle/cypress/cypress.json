@@ -1,0 +1,8 @@
+{
+  "baseUrl": "http://localhost",
+  "chromeWebSecurity": false,
+  "env": {
+    "username": "test_user",
+    "password": "ComplicatedPassword123!4"
+  }
+}

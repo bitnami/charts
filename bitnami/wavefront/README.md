@@ -7,12 +7,12 @@ Wavefront is a high-performance streaming analytics platform for monitoring and 
 [Overview of Wavefront](https://github.com/wavefrontHQ/wavefront-collector-for-kubernetes)
 
 
-                           
+
 ## TL;DR
 
 ```console
-$ kubectl create namespace wavefront
-$ helm install my-release bitnami/wavefront --namespace wavefront \
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/wavefront --namespace wavefront --create-namespace \
     --set clusterName=<K8s-CLUSTER-NAME> \
     --set wavefront.url=https://<YOUR_CLUSTER>.wavefront.com \
     --set wavefront.token=<YOUR_API_TOKEN>
@@ -24,7 +24,7 @@ This chart will deploy the Wavefront Collector for Kubernetes and Wavefront Prox
 
 You can learn more about the Wavefront and Kubernetes integration [in the official documentation](https://docs.wavefront.com/wavefront_kubernetes.html)
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This chart has been tested to work with NGINX Ingress, cert-manager, fluentd and Prometheus on top of the [BKPR](https://kubeprod.io/).
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -34,11 +34,11 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 ## Installing the Chart
 
-To install the chart with the release name `my-release` (if not already done, create a `wavefront` namespace):
+To install the chart with the release name `my-release`:
 
 ```console
-$ kubectl create namespace wavefront
-$ helm install my-release bitnami/wavefront --namespace wavefront \
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/wavefront --namespace wavefront --create-namespace\
     --set clusterName=<K8s-CLUSTER-NAME> \
     --set wavefront.url=https://<YOUR_CLUSTER>.wavefront.com \
     --set wavefront.token=<YOUR_API_TOKEN>
@@ -54,8 +54,8 @@ The **required** parameters are `clusterName`, `wavefront.url` and `wavefront.to
 
 To uninstall/delete the `my-release` deployment:
 
-```bash
-$ helm delete my-release
+```console
+helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release. If you want to also remove the namespace please execute `kubectl delete namespace wavefront`.
@@ -70,7 +70,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
 | Name                     | Description                                                                                                     | Value          |
@@ -84,7 +83,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                         | `false`        |
 | `diagnosticMode.command` | Command to override all containers in the the deployment(s)/statefulset(s)                                      | `["sleep"]`    |
 | `diagnosticMode.args`    | Args to override all containers in the the deployment(s)/statefulset(s)                                         | `["infinity"]` |
-
 
 ### Wavefront Common parameters
 
@@ -104,16 +102,16 @@ The command removes all the Kubernetes components associated with the chart and 
 | `projectPacific.enabled`                      | Enable and create role binding for Tanzu Kubernetes cluster                                                                                 | `false`                              |
 | `tkgi.enabled`                                | Properties for TKGI environments. If enabled, a role binding to handle pod security policy will be installed within the TKGI cluster        | `false`                              |
 
-
 ### Collector parameters
 
 | Name                                                        | Description                                                                                                             | Value                                    |
 | ----------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- | ---------------------------------------- |
 | `collector.enabled`                                         | Setup and enable the Wavefront collector to gather metrics                                                              | `true`                                   |
-| `collector.image.registry`                                  | Wavefront collector Image registry                                                                                      | `docker.io`                              |
-| `collector.image.repository`                                | Wavefront collector Image repository                                                                                    | `bitnami/wavefront-kubernetes-collector` |
-| `collector.image.tag`                                       | Wavefront collector Image tag (immutable tags are recommended)                                                          | `1.10.0-scratch-r8`                      |
-| `collector.image.pullPolicy`                                | Image pull policy                                                                                                       | `IfNotPresent`                           |
+| `collector.image.registry`                                  | Wavefront collector image registry                                                                                      | `docker.io`                              |
+| `collector.image.repository`                                | Wavefront collector image repository                                                                                    | `bitnami/wavefront-kubernetes-collector` |
+| `collector.image.tag`                                       | Wavefront collector image tag (immutable tags are recommended)                                                          | `1.13.0-scratch-r8`                      |
+| `collector.image.digest`                                    | Wavefront collector image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag     | `""`                                     |
+| `collector.image.pullPolicy`                                | image pull policy                                                                                                       | `IfNotPresent`                           |
 | `collector.image.pullSecrets`                               | Specify docker-registry secret names as an array                                                                        | `[]`                                     |
 | `collector.hostAliases`                                     | Deployment pod host aliases                                                                                             | `[]`                                     |
 | `collector.useDaemonset`                                    | Use Wavefront collector in Daemonset mode                                                                               | `true`                                   |
@@ -138,7 +136,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `collector.discovery.annotationPrefix`                      | When specified, this replaces `prometheus.io` as the prefix for annotations used to auto-discover Prometheus endpoints  | `""`                                     |
 | `collector.discovery.enableRuntimeConfigs`                  | Whether to enable runtime discovery configurations                                                                      | `true`                                   |
 | `collector.discovery.config`                                | Configuration for rules based auto-discovery                                                                            | `[]`                                     |
-| `collector.controlplane.enabled`                            | Enable metrics for control plane dashboard (default false)                                                              | `false`                                  |
+| `collector.controlplane.enabled`                            | Enable metrics for control plane dashboard                                                                              | `true`                                   |
+| `collector.controlplane.collection.interval`                | The collection interval for the control plane                                                                           | `120s`                                   |
 | `collector.existingConfigmap`                               | Name of existing ConfigMap with collector configuration                                                                 | `""`                                     |
 | `collector.command`                                         | Override default container command (useful when using custom images)                                                    | `[]`                                     |
 | `collector.args`                                            | Override default container args (useful when using custom images)                                                       | `[]`                                     |
@@ -177,7 +176,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `collector.initContainers`                                  | Add init containers to the Wavefront proxy pods                                                                         | `[]`                                     |
 | `collector.sidecars`                                        | Add sidecars to the Wavefront proxy pods                                                                                | `[]`                                     |
 
-
 ### Proxy parameters
 
 | Name                                                    | Description                                                                                                                             | Value                     |
@@ -185,7 +183,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `proxy.enabled`                                         | Setup and enable Wavefront proxy to send metrics through                                                                                | `true`                    |
 | `proxy.image.registry`                                  | Wavefront proxy image registry                                                                                                          | `docker.io`               |
 | `proxy.image.repository`                                | Wavefront proxy image repository                                                                                                        | `bitnami/wavefront-proxy` |
-| `proxy.image.tag`                                       | Wavefront proxy image tag (immutable tags are recommended)                                                                              | `11.0.0-debian-10-r11`    |
+| `proxy.image.tag`                                       | Wavefront proxy image tag (immutable tags are recommended)                                                                              | `11.4.0-debian-11-r62`    |
+| `proxy.image.digest`                                    | Wavefront proxy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                         | `""`                      |
 | `proxy.image.pullPolicy`                                | Wavefront proxy image pull policy                                                                                                       | `IfNotPresent`            |
 | `proxy.image.pullSecrets`                               | Specify docker-registry secret names as an array                                                                                        | `[]`                      |
 | `proxy.hostAliases`                                     | Deployment pod host aliases                                                                                                             | `[]`                      |
@@ -263,28 +262,26 @@ The command removes all the Kubernetes components associated with the chart and 
 | `proxy.existingConfigmap`                               | Name of existing ConfigMap with Proxy preprocessor configuration                                                                        | `""`                      |
 | `proxy.preprocessor`                                    | Preprocessor rules is a powerful way to apply filtering or to enhance metrics as they flow                                              | `{}`                      |
 
-
 ### Kube State Metrics parameters
 
 | Name                         | Description                                                                                                                      | Value   |
 | ---------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------- |
 | `kube-state-metrics.enabled` | If enabled the kube-state-metrics chart will be installed as a subchart and the collector will be configured to capture metrics. | `false` |
 
-
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
-```bash
-$ helm install my-release \
+```console
+helm install my-release \
   --set proxy.replicaCount=3 \
-    bitnami/wavefront
+    my-repo/wavefront
 ```
 
 The above command sets 3 proxy replicas.
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
-```bash
-$ helm install my-release -f values.yaml bitnami/wavefront
+```console
+helm install my-release -f values.yaml my-repo/wavefront
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -329,7 +326,7 @@ Alternatively, use a ConfigMap or a Secret with the environment variables. To do
 
 This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
 
 ## Troubleshooting
 
@@ -337,9 +334,13 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 4.0.0
+
+This major updates the kube-state-metrics subchart to it newest major, 3.0.0, which renames several of its values. For more information on this subchart's major, please refer to [kube-state-metrics upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/kube-state-metrics#to-300).
+
 ### To 3.0.0
 
-This major updates the kube-state-metrics subchart to it newest major, 2.0.0, which contains name changes to a few of its values. For more information on this subchart's major, please refer to [kube-state-metrics upgrade notes](https://github.com/bitnami/charts/tree/master/bitnami/kube-state-metrics#to-200).
+This major updates the kube-state-metrics subchart to it newest major, 2.0.0, which contains name changes to a few of its values. For more information on this subchart's major, please refer to [kube-state-metrics upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/kube-state-metrics#to-200).
 
 ### To 2.0.0
 
@@ -353,13 +354,13 @@ The wavefront-collector container has been moved to scratch. From now on the con
 
 ## License
 
-Copyright &copy; 2022 Bitnami
+Copyright &copy; 2023 Bitnami
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

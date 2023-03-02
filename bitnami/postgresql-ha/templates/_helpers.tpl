@@ -48,6 +48,18 @@ Fully qualified app name for LDAP
 {{- end -}}
 {{- end -}}
 
+
+{{/*
+ Create the name of the service account to use
+ */}}
+{{- define "postgresql-ha.serviceAccountName" -}}
+{{- if .Values.serviceAccount.create -}}
+    {{ default (include "common.names.fullname" .) .Values.serviceAccount.name }}
+{{- else -}}
+    {{ default "default" .Values.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
 {{/*
 Return the proper PostgreSQL image name
 */}}
@@ -128,6 +140,13 @@ Return true if PostgreSQL postgres user password has been provided
 {{- if .Values.global -}}
     {{- if .Values.global.postgresql -}}
         {{- if .Values.global.postgresql.postgresPassword -}}
+            {{- true -}}
+        {{- end -}}
+        {{- if .Values.postgresql.postgresPassword -}}
+            {{- true -}}
+        {{- end -}}
+    {{- else -}}
+        {{- if .Values.postgresql.postgresPassword -}}
             {{- true -}}
         {{- end -}}
     {{- end -}}
@@ -527,15 +546,15 @@ postgresql-ha: Nodes hostnames
 
 {{/* Validate values of PostgreSQL HA - must provide mandatory LDAP parameters when LDAP is enabled */}}
 {{- define "postgresql-ha.validateValues.ldap" -}}
-{{- if and .Values.ldap.enabled (or (empty .Values.ldap.uri) (empty .Values.ldap.base) (empty .Values.ldap.binddn) (and (empty .Values.ldap.bindpw) (empty .Values.ldap.existingSecret))) -}}
+{{- if and .Values.ldap.enabled (or (empty .Values.ldap.uri) (and (empty .Values.ldap.basedn) (empty .Values.ldap.base)) (empty .Values.ldap.binddn) (and (empty .Values.ldap.bindpw) (empty .Values.ldap.existingSecret))) -}}
 postgresql-ha: LDAP
     Invalid LDAP configuration. When enabling LDAP support, the parameters "ldap.uri",
-    "ldap.base", "ldap.binddn", and "ldap.bindpw" are mandatory. Please provide them:
+    "ldap.basedn", "ldap.binddn", and "ldap.bindpw" are mandatory. Please provide them:
 
-    $ helm install {{ .Release.Name }} bitnami/postgresql-ha \
+    $ helm install {{ .Release.Name }} my-repo/postgresql-ha \
       --set ldap.enabled=true \
       --set ldap.uri="ldap://my_ldap_server" \
-      --set ldap.base="dc=example\,dc=org" \
+      --set ldap.basedn="dc=example\,dc=org" \
       --set ldap.binddn="cn=admin\,dc=example\,dc=org" \
       --set ldap.bindpw="admin"
 {{- end -}}
@@ -557,7 +576,7 @@ postgresql-ha: LDAP & pg_hba.conf
 postgresql-ha: Upgrade repmgr extension
     There must be only one replica when upgrading repmgr extension:
 
-    $ helm upgrade {{ .Release.Name }} bitnami/postgresql-ha \
+    $ helm upgrade {{ .Release.Name }} my-repo/postgresql-ha \
       --set postgresql.replicaCount=1 \
       --set postgresql.upgradeRepmgrExtension=true
 {{- end -}}
@@ -694,11 +713,3 @@ Return the path to the cert key file.
 {{- define "postgresql-ha.postgresql.tlsCertKey" -}}
 {{- required "Certificate Key filename is required when TLS in enabled" .Values.postgresql.tls.certKeyFilename | printf "/opt/bitnami/postgresql/certs/%s" -}}
 {{- end -}}
-
-{{/*
-Return the path to the CA cert file.
-*/}}
-{{- define "postgresql-ha.postgresql.tlsCACert" -}}
-{{- printf "/opt/bitnami/postgresql/certs/%s" .Values.postgresql.tls.certCAFilename -}}
-{{- end -}}
-

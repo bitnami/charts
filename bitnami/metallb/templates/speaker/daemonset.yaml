@@ -1,7 +1,7 @@
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
-  name: {{ printf "%s-speaker" (include "common.names.fullname" .) }}
+  name: {{ printf "%s-speaker" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: speaker
@@ -82,7 +82,6 @@ spec:
           {{- else }}
           args:
             - --port={{ .Values.speaker.containerPorts.metrics }}
-            - --config={{ include "metallb.configMapName" . }}
           {{- end }}
           {{- if .Values.speaker.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.speaker.lifecycleHooks "context" $) | nindent 12 }}
@@ -127,28 +126,28 @@ spec:
             - name: metrics
               containerPort: {{ .Values.speaker.containerPorts.metrics }}
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.speaker.livenessProbe.enabled }}
+          {{- if .Values.speaker.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.speaker.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.speaker.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.speaker.livenessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /metrics
               port: metrics
-          {{- else if .Values.speaker.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.speaker.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.speaker.readinessProbe.enabled }}
+          {{- if .Values.speaker.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.speaker.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.speaker.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.speaker.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /metrics
               port: metrics
-          {{- else if .Values.speaker.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.speaker.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.speaker.startupProbe.enabled }}
+          {{- if .Values.speaker.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.speaker.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.speaker.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.speaker.startupProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
               port: metrics
-          {{- else if .Values.speaker.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.speaker.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           {{- if .Values.speaker.resources }}

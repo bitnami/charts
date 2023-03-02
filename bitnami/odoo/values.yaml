@@ -61,6 +61,7 @@ diagnosticMode:
 ## @param image.registry Odoo image registry
 ## @param image.repository Odoo image repository
 ## @param image.tag Odoo image tag (immutable tags are recommended)
+## @param image.digest Odoo image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy Odoo image pull policy
 ## @param image.pullSecrets Odoo image pull secrets
 ## @param image.debug Enable image debug mode
@@ -68,7 +69,8 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/odoo
-  tag: 15.0.20220510-debian-10-r7
+  tag: 16.0.20221115-debian-11-r34
+  digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -88,27 +90,27 @@ image:
 
 ## @section Odoo Configuration parameters
 ## Odoo settings based on environment variables
-## ref: https://github.com/bitnami/bitnami-docker-odoo#environment-variables
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/odoo#environment-variables
 ##
 
 ## @param odooEmail Odoo user email
-## ref: https://github.com/bitnami/bitnami-docker-odoo#configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/odoo#configuration
 ##
 odooEmail: user@example.com
 ## @param odooPassword Odoo user password
 ## Defaults to a random 10-character alphanumeric string if not set
-## ref: https://github.com/bitnami/bitnami-docker-odoo#configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/odoo#configuration
 ##
 odooPassword: ""
 ## @param odooSkipInstall Skip Odoo installation wizard
 ##
 odooSkipInstall: false
 ## @param loadDemoData Whether to load demo data for all modules during initialization
-## ref: https://github.com/bitnami/bitnami-docker-odoo#configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/odoo#configuration
 ##
 loadDemoData: false
 ## @param customPostInitScripts Custom post-init.d user scripts
-## ref: https://github.com/bitnami/bitnami-docker-odoo/tree/master/14.0/debian-10/rootfs/post-init.d
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/odoo
 ## NOTE: supported formats are `.sh`, `.sql` or `.php`
 ## NOTE: scripts are exclusively executed during the 1st boot of the container
 ## e.g:
@@ -120,7 +122,7 @@ loadDemoData: false
 ##
 customPostInitScripts: {}
 ## SMTP mail delivery configuration
-## ref: https://github.com/bitnami/bitnami-docker-odoo/#smtp-configuration
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/odoo/#smtp-configuration
 ## @param smtpHost SMTP server host
 ## @param smtpPort SMTP server port
 ## @param smtpUser SMTP username
@@ -215,7 +217,7 @@ containerSecurityContext:
 ##
 livenessProbe:
   enabled: true
-  path: /
+  path: /web/health
   initialDelaySeconds: 600
   periodSeconds: 30
   timeoutSeconds: 5
@@ -231,7 +233,7 @@ livenessProbe:
 ##
 readinessProbe:
   enabled: true
-  path: /
+  path: /web/health
   initialDelaySeconds: 30
   periodSeconds: 10
   timeoutSeconds: 5
@@ -247,7 +249,7 @@ readinessProbe:
 ##
 startupProbe:
   enabled: false
-  path: /
+  path: /web/health
   initialDelaySeconds: 300
   periodSeconds: 10
   timeoutSeconds: 5
@@ -318,10 +320,7 @@ tolerations: []
 ## @param topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
 ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
 ##
-topologySpreadConstraints: {}
-## @param podManagementPolicy Pod management policy for the Odoo statefulset
-##
-podManagementPolicy: Parallel
+topologySpreadConstraints: []
 ## @param priorityClassName Odoo pods' Priority Class Name
 ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
 ##
@@ -354,6 +353,13 @@ extraVolumes: []
 ## @param extraVolumeMounts Optionally specify extra list of additional volumeMounts for Odoo container(s)
 ##
 extraVolumeMounts: []
+## @param extraContainerPorts Optionally specify extra list of additional ports for Odoo container(s)
+## e.g:
+## extraContainerPorts:
+##   - name: longpolling
+##     containerPort: 8072
+##
+extraContainerPorts: []
 ## @param sidecars Add additional sidecar containers to the Odoo pod
 ## e.g:
 ## sidecars:
@@ -399,6 +405,12 @@ service:
   ## ref: https://kubernetes.io/docs/user-guide/services/
   ##
   sessionAffinity: None
+  ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
+  ## sessionAffinityConfig:
+  ##   clientIP:
+  ##     timeoutSeconds: 300
+  ##
+  sessionAffinityConfig: {}
   ## @param service.clusterIP Odoo service Cluster IP
   ## e.g.:
   ## clusterIP: None
@@ -461,7 +473,7 @@ ingress:
   ##
   annotations: {}
   ## @param ingress.tls Enable TLS configuration for the host defined at `ingress.hostname` parameter
-  ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.ingress.hostname }}`
+  ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.ingress.hostname | trunc 63 | trimSuffix "-" }}`
   ## You can:
   ##   - Use the `ingress.secrets` parameter to create this TLS secret
   ##   - Rely on cert-manager to create it by setting the corresponding annotations
@@ -523,7 +535,7 @@ ingress:
   ## - host: example.local
   ##     http:
   ##       path: /
-  ##       backend: 
+  ##       backend:
   ##         service:
   ##           name: example-svc
   ##           port:
@@ -646,7 +658,7 @@ autoscaling:
 ## @section Database Parameters
 
 ## PostgreSQL chart configuration
-## ref: https://github.com/bitnami/charts/blob/master/bitnami/postgresql/values.yaml
+## ref: https://github.com/bitnami/charts/blob/main/bitnami/postgresql/values.yaml
 ## @param postgresql.enabled Switch to enable or disable the PostgreSQL helm chart
 ## @param postgresql.auth.username Name for a custom user to create
 ## @param postgresql.auth.password Password for the custom user to create

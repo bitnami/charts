@@ -1,5 +1,5 @@
 {{/*
-Return the proper SonarQube image name
+Return the proper SonarQube(TM) image name
 */}}
 {{- define "sonarqube.image" -}}
 {{ include "common.images.image" (dict "imageRoot" .Values.image "global" .Values.global) }}
@@ -17,6 +17,20 @@ Return the proper sysctl image name
 */}}
 {{- define "sonarqube.sysctl.image" -}}
 {{ include "common.images.image" (dict "imageRoot" .Values.sysctl.image "global" .Values.global) }}
+{{- end -}}
+
+{{/*
+Return the proper install_plugins initContainer image name
+*/}}
+{{- define "sonarqube.plugins.image" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.plugins.image "global" .Values.global) }}
+{{- end -}}
+
+{{/*
+Return the proper caCerts initContainer image name
+*/}}
+{{- define "sonarqube.caCerts.image" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.caCerts.image "global" .Values.global) }}
 {{- end -}}
 
 {{/*
@@ -38,7 +52,7 @@ Create the name of the service account to use
 */}}
 {{- define "sonarqube.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create -}}
-    {{ default (printf "%s-foo" (include "common.names.fullname" .)) .Values.serviceAccount.name }}
+    {{ default (include "common.names.fullname" .) .Values.serviceAccount.name }}
 {{- else -}}
     {{ default "default" .Values.serviceAccount.name }}
 {{- end -}}
@@ -128,7 +142,7 @@ Return the Database Secret Name
 {{- end -}}
 
 {{/*
-Return true if a SonarQube authentication credentials secret object should be created
+Return true if a SonarQube(TM) authentication credentials secret object should be created
 */}}
 {{- define "sonarqube.createSecret" -}}
 {{- if or (not .Values.existingSecret) (and (not .Values.smtpExistingSecret) .Values.smtpPassword) }}
@@ -137,7 +151,7 @@ Return true if a SonarQube authentication credentials secret object should be cr
 {{- end -}}
 
 {{/*
-Return the SonarQube Secret Name
+Return the SonarQube(TM) Secret Name
 */}}
 {{- define "sonarqube.secretName" -}}
 {{- if .Values.existingSecret }}
@@ -183,7 +197,7 @@ Compile all warnings into a single message.
 {{- end -}}
 {{- end -}}
 
-{{/* Validate values of SonarQube - Database */}}
+{{/* Validate values of SonarQube(TM) - Database */}}
 {{- define "sonarqube.validateValues.database" -}}
 {{- if and (not .Values.postgresql.enabled) (or (empty .Values.externalDatabase.host) (empty .Values.externalDatabase.port) (empty .Values.externalDatabase.database)) -}}
 sonarqube: database
@@ -195,4 +209,30 @@ sonarqube: database
        externalDatabase.port=DB_SERVER_PORT
        externalDatabase.database=DB_NAME
 {{- end -}}
+{{- end -}}
+
+{{/*
+Set sonarqube.jvmOpts
+*/}}
+{{- define "sonarqube.jvmOpts" -}}
+    {{- if and .Values.caCerts.enabled .Values.metrics.jmx.enabled -}}
+        {{ printf "-Djavax.net.ssl.trustStore=/bitnami/sonarqube/certs/cacerts -Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.port=10443 -Dcom.sun.management.jmxremote.rmi.port=10444 %s" .Values.jvmCeOpts | trim | quote }}
+    {{- else if .Values.caCerts.enabled -}}
+        {{ printf "-Djavax.net.ssl.trustStore=/bitnami/sonarqube/certs/cacerts %s" .Values.jvmCeOpts | trim | quote }}
+    {{- else if .Values.metrics.jmx.enabled -}}
+        {{ printf "-Dcom.sun.management.jmxremote=true -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.port=10443 -Dcom.sun.management.jmxremote.rmi.port=10444 %s" .Values.jvmCeOpts | trim | quote }}
+    {{- else -}}
+        {{ printf "" }}
+    {{- end -}}
+{{- end -}}
+
+{{/*
+Set sonarqube.jvmCEOpts
+*/}}
+{{- define "sonarqube.jvmCEOpts" -}}
+    {{- if .Values.caCerts.enabled -}}
+        {{ printf "-Djavax.net.ssl.trustStore=/bitnami/sonarqube/certs/cacerts %s" .Values.jvmCeOpts | trim | quote }}
+    {{- else -}}
+        {{ printf "" }}
+    {{- end -}}
 {{- end -}}

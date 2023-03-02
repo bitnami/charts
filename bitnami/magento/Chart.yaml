@@ -1,7 +1,8 @@
 annotations:
   category: E-Commerce
+  licenses: Apache-2.0
 apiVersion: v2
-appVersion: 2.4.4
+appVersion: 2.4.5-p1
 dependencies:
   - condition: mariadb.enabled
     name: mariadb
@@ -12,15 +13,14 @@ dependencies:
   - condition: elasticsearch.enabled
     name: elasticsearch
     repository: https://charts.bitnami.com/bitnami
-    version: 18.x.x
+    version: 19.x.x
   - name: common
     repository: https://charts.bitnami.com/bitnami
     tags:
       - bitnami-common
-    version: 1.x.x
+    version: 2.x.x
 description: Magento is a powerful open source e-commerce platform. With easy customizations and rich features, it allows retailers to grow their online businesses in a cost-effective way.
-engine: gotpl
-home: https://github.com/bitnami/charts/tree/master/bitnami/magento
+home: https://github.com/bitnami/charts/tree/main/bitnami/magento
 icon: https://bitnami.com/assets/stacks/magento/img/magento-stack-220x234.png
 keywords:
   - magento
@@ -29,10 +29,10 @@ keywords:
   - web
   - php
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: magento
 sources:
-  - https://github.com/bitnami/bitnami-docker-magento
+  - https://github.com/bitnami/containers/tree/main/bitnami/magento
   - https://magento.com/
-version: 20.1.3
+version: 21.1.15

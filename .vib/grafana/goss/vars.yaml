@@ -1,0 +1,8 @@
+plugins: grafana-kubernetes-app
+podSecurityContext:
+  fsGroup: 1002
+containerSecurityContext:
+  runAsUser: 1002
+service:
+  ports:
+    grafana: 80

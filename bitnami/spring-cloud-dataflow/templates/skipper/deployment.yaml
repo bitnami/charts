@@ -18,7 +18,7 @@ spec:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: skipper
   {{- if .Values.skipper.updateStrategy }}
-  strategy: {{- toYaml .Values.skipper.updateStrategy | nindent 4 }}
+  strategy: {{- include "common.tplvalues.render" (dict "value" .Values.skipper.updateStrategy "context" $) | nindent 4 }}
   {{- end }}
   template:
     metadata:
@@ -60,7 +60,7 @@ spec:
       schedulerName: {{ .Values.skipper.schedulerName }}
       {{- end }}
       {{- if .Values.skipper.topologySpreadConstraints }}
-      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.skipper.topologySpreadConstraints "context" .) | nindent 8 }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.skipper.topologySpreadConstraints "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.skipper.priorityClassName }}
       priorityClassName: {{ .Values.skipper.priorityClassName | quote }}
@@ -77,7 +77,7 @@ spec:
           command:
             - /scripts/wait-for-backends.sh
           {{- if .Values.waitForBackends.resources }}
-          resources: {{- toYaml .Values.waitForBackends.resources | nindent 12 }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.waitForBackends.resources "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: scripts
@@ -151,7 +151,9 @@ spec:
               containerPort: {{ .Values.skipper.jdwp.port }}
               protocol: TCP
             {{- end }}
-          {{- if .Values.skipper.startupProbe.enabled }}
+          {{- if .Values.skipper.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.skipper.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.skipper.startupProbe.enabled }}
           startupProbe:
             httpGet:
               path: /actuator/health
@@ -161,10 +163,10 @@ spec:
             timeoutSeconds: {{ .Values.skipper.startupProbe.timeoutSeconds }}
             successThreshold: {{ .Values.skipper.startupProbe.successThreshold }}
             failureThreshold: {{ .Values.skipper.startupProbe.failureThreshold }}
-          {{- else if .Values.skipper.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.skipper.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.skipper.livenessProbe.enabled }}
+          {{- if .Values.skipper.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.skipper.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.skipper.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
               path: /actuator/health
@@ -174,10 +176,10 @@ spec:
             timeoutSeconds: {{ .Values.skipper.livenessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.skipper.livenessProbe.successThreshold }}
             failureThreshold: {{ .Values.skipper.livenessProbe.failureThreshold }}
-          {{- else if .Values.skipper.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.skipper.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.skipper.readinessProbe.enabled }}
+          {{- if .Values.skipper.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.skipper.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.skipper.readinessProbe.enabled }}
           readinessProbe:
             httpGet:
               path: /actuator/health
@@ -187,11 +189,9 @@ spec:
             timeoutSeconds: {{ .Values.skipper.readinessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.skipper.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.skipper.readinessProbe.failureThreshold }}
-          {{- else if .Values.skipper.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.skipper.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.skipper.resources }}
-          resources: {{- toYaml .Values.skipper.resources | nindent 12 }}
+          resources: {{- include "common.tplvalues.render" (dict "value" .Values.skipper.resources "context" $) | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: database
@@ -206,7 +206,7 @@ spec:
               readOnly: true
             {{- end }}
             {{- if .Values.skipper.extraVolumeMounts }}
-            {{- toYaml .Values.skipper.extraVolumeMounts | nindent 12 }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.skipper.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
         {{- if .Values.skipper.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.skipper.sidecars "context" $) | nindent 8 }}
@@ -233,6 +233,6 @@ spec:
             defaultMode: 0755
         {{- end }}
         {{- if .Values.skipper.extraVolumes }}
-          {{- toYaml .Values.skipper.extraVolumes | nindent 8 }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.skipper.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
 {{- end }}

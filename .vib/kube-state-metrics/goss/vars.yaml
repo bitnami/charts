@@ -1,0 +1,10 @@
+serviceAccount:
+  automountServiceAccountToken: true
+podSecurityContext:
+  fsGroup: 1002
+containerSecurityContext:
+  runAsUser: 1002
+service:
+  ports:
+    http: 80
+replicaCount: 2

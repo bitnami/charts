@@ -4,15 +4,15 @@
 
 Grafana Loki is a horizontally scalable, highly available, and multi-tenant log aggregation system. It provides real-time long tailing and full persistence to object storage.
 
-[Overview of Grafana Loki](https://github.com/grafana/loki)
+[Overview of Grafana Loki](https://grafana.com/oss/loki/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 
 ## TL;DR
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/grafana-loki
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/grafana-loki
 ```
 
 ## Introduction
@@ -21,7 +21,7 @@ Bitnami charts for Helm are carefully engineered, actively maintained and are th
 
 This chart bootstraps a [Grafana Loki](https://github.com/grafana/loki) Deployment in a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 [Learn more about the default configuration of the chart](https://docs.bitnami.com/kubernetes/infrastructure/grafana-loki/get-started/).
 
@@ -36,7 +36,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release bitnami/grafana-loki
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/grafana-loki
 ```
 
 The command deploys grafana-loki on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -63,7 +64,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
 | Name                     | Description                                                                             | Value           |
@@ -79,31 +79,31 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.command` | Command to override all containers in the deployments/statefulsets                      | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the deployments/statefulsets                         | `["infinity"]`  |
 
-
 ### Common Grafana Loki Parameters
 
-| Name                                  | Description                                                    | Value                   |
-| ------------------------------------- | -------------------------------------------------------------- | ----------------------- |
-| `loki.image.registry`                 | Grafana Loki image registry                                    | `docker.io`             |
-| `loki.image.repository`               | Grafana Loki image repository                                  | `bitnami/grafana-loki`  |
-| `loki.image.tag`                      | Grafana Loki image tag (immutable tags are recommended)        | `2.5.0-debian-10-r3`    |
-| `loki.image.pullPolicy`               | Grafana Loki image pull policy                                 | `IfNotPresent`          |
-| `loki.image.pullSecrets`              | Grafana Loki image pull secrets                                | `[]`                    |
-| `loki.configuration`                  | Loki components configuration                                  | `""`                    |
-| `loki.existingConfigmap`              | Name of a ConfigMap with the Loki configuration                | `""`                    |
-| `loki.dataDir`                        | path to the Loki data directory                                | `/bitnami/grafana-loki` |
-| `loki.containerPorts.http`            | Loki components web container port                             | `3100`                  |
-| `loki.containerPorts.grpc`            | Loki components GRPC container port                            | `9095`                  |
-| `loki.containerPorts.gossipRing`      | Loki components Gossip Ring container port                     | `7946`                  |
-| `loki.gossipRing.service.ports.http`  | Gossip Ring HTTP headless service port                         | `7946`                  |
-| `loki.gossipRing.service.annotations` | Additional custom annotations for Gossip Ring headless service | `{}`                    |
-
+| Name                                  | Description                                                                                                  | Value                   |
+| ------------------------------------- | ------------------------------------------------------------------------------------------------------------ | ----------------------- |
+| `loki.image.registry`                 | Grafana Loki image registry                                                                                  | `docker.io`             |
+| `loki.image.repository`               | Grafana Loki image repository                                                                                | `bitnami/grafana-loki`  |
+| `loki.image.tag`                      | Grafana Loki image tag (immutable tags are recommended)                                                      | `2.7.4-debian-11-r1`    |
+| `loki.image.digest`                   | Grafana Loki image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
+| `loki.image.pullPolicy`               | Grafana Loki image pull policy                                                                               | `IfNotPresent`          |
+| `loki.image.pullSecrets`              | Grafana Loki image pull secrets                                                                              | `[]`                    |
+| `loki.configuration`                  | Loki components configuration                                                                                | `""`                    |
+| `loki.overrideConfiguration`          | Loki components configuration override. Values defined here takes precedence over loki.configuration         | `{}`                    |
+| `loki.existingConfigmap`              | Name of a ConfigMap with the Loki configuration                                                              | `""`                    |
+| `loki.dataDir`                        | path to the Loki data directory                                                                              | `/bitnami/grafana-loki` |
+| `loki.containerPorts.http`            | Loki components web container port                                                                           | `3100`                  |
+| `loki.containerPorts.grpc`            | Loki components GRPC container port                                                                          | `9095`                  |
+| `loki.containerPorts.gossipRing`      | Loki components Gossip Ring container port                                                                   | `7946`                  |
+| `loki.gossipRing.service.ports.http`  | Gossip Ring HTTP headless service port                                                                       | `7946`                  |
+| `loki.gossipRing.service.annotations` | Additional custom annotations for Gossip Ring headless service                                               | `{}`                    |
 
 ### Compactor Deployment Parameters
 
 | Name                                              | Description                                                                                         | Value               |
 | ------------------------------------------------- | --------------------------------------------------------------------------------------------------- | ------------------- |
-| `compactor.enabled`                               | Enable Compactor deployment                                                                         | `false`             |
+| `compactor.enabled`                               | Enable Compactor deployment                                                                         | `true`              |
 | `compactor.extraEnvVars`                          | Array with extra environment variables to add to compactor nodes                                    | `[]`                |
 | `compactor.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars for compactor nodes                            | `""`                |
 | `compactor.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for compactor nodes                               | `""`                |
@@ -150,7 +150,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `compactor.affinity`                              | Affinity for Compactor pods assignment                                                              | `{}`                |
 | `compactor.nodeSelector`                          | Node labels for Compactor pods assignment                                                           | `{}`                |
 | `compactor.tolerations`                           | Tolerations for Compactor pods assignment                                                           | `[]`                |
-| `compactor.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains     | `{}`                |
+| `compactor.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains     | `[]`                |
 | `compactor.priorityClassName`                     | Compactor pods' priorityClassName                                                                   | `""`                |
 | `compactor.schedulerName`                         | Kubernetes pod scheduler registry                                                                   | `""`                |
 | `compactor.updateStrategy.type`                   | Compactor statefulset strategy type                                                                 | `RollingUpdate`     |
@@ -168,7 +168,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `compactor.persistence.selector`                  | Selector to match an existing Persistent Volume for Compactor's data PVC                            | `{}`                |
 | `compactor.persistence.dataSource`                | PVC data source                                                                                     | `{}`                |
 
-
 ### Compactor Traffic Exposure Parameters
 
 | Name                                         | Description                                                      | Value       |
@@ -185,80 +184,79 @@ The command removes all the Kubernetes components associated with the chart and 
 | `compactor.service.annotations`              | Additional custom annotations for Compactor service              | `{}`        |
 | `compactor.service.extraPorts`               | Extra ports to expose in the Compactor service                   | `[]`        |
 
-
 ### Gateway Deployment Parameters
 
-| Name                                            | Description                                                                                       | Value                   |
-| ----------------------------------------------- | ------------------------------------------------------------------------------------------------- | ----------------------- |
-| `gateway.enabled`                               | Enable Gateway deployment                                                                         | `true`                  |
-| `gateway.image.registry`                        | Nginx image registry                                                                              | `docker.io`             |
-| `gateway.image.repository`                      | Nginx image repository                                                                            | `bitnami/nginx`         |
-| `gateway.image.tag`                             | Nginx image tag (immutable tags are recommended)                                                  | `1.21.6-debian-10-r105` |
-| `gateway.image.pullPolicy`                      | Nginx image pull policy                                                                           | `IfNotPresent`          |
-| `gateway.image.pullSecrets`                     | Nginx image pull secrets                                                                          | `[]`                    |
-| `gateway.image.debug`                           | Enable debugging in the initialization process                                                    | `false`                 |
-| `gateway.extraEnvVars`                          | Array with extra environment variables to add to gateway nodes                                    | `[]`                    |
-| `gateway.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars for gateway nodes                            | `""`                    |
-| `gateway.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for gateway nodes                               | `""`                    |
-| `gateway.command`                               | Override default container command (useful when using custom images)                              | `[]`                    |
-| `gateway.args`                                  | Override default container args (useful when using custom images)                                 | `[]`                    |
-| `gateway.verboseLogging`                        | Show the gateway access_log                                                                       | `false`                 |
-| `gateway.replicaCount`                          | Number of Gateway replicas to deploy                                                              | `1`                     |
-| `gateway.auth.enabled`                          | Enable basic auth                                                                                 | `false`                 |
-| `gateway.auth.username`                         | Basic auth username                                                                               | `user`                  |
-| `gateway.auth.password`                         | Basic auth password                                                                               | `""`                    |
-| `gateway.auth.existingSecret`                   | Name of a secret containing the Basic auth password                                               | `""`                    |
-| `gateway.livenessProbe.enabled`                 | Enable livenessProbe on Gateway nodes                                                             | `true`                  |
-| `gateway.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                           | `10`                    |
-| `gateway.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                  | `10`                    |
-| `gateway.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                 | `1`                     |
-| `gateway.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                               | `3`                     |
-| `gateway.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                               | `1`                     |
-| `gateway.readinessProbe.enabled`                | Enable readinessProbe on Gateway nodes                                                            | `true`                  |
-| `gateway.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                          | `10`                    |
-| `gateway.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                 | `10`                    |
-| `gateway.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                | `1`                     |
-| `gateway.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                              | `3`                     |
-| `gateway.readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                              | `1`                     |
-| `gateway.startupProbe.enabled`                  | Enable startupProbe on Gateway containers                                                         | `false`                 |
-| `gateway.startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                            | `10`                    |
-| `gateway.startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                   | `10`                    |
-| `gateway.startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                  | `1`                     |
-| `gateway.startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                | `15`                    |
-| `gateway.startupProbe.successThreshold`         | Success threshold for startupProbe                                                                | `1`                     |
-| `gateway.customLivenessProbe`                   | Custom livenessProbe that overrides the default one                                               | `{}`                    |
-| `gateway.customReadinessProbe`                  | Custom readinessProbe that overrides the default one                                              | `{}`                    |
-| `gateway.customStartupProbe`                    | Custom startupProbe that overrides the default one                                                | `{}`                    |
-| `gateway.containerPorts.http`                   | Gateway HTTP port                                                                                 | `8080`                  |
-| `gateway.resources.limits`                      | The resources limits for the gateway containers                                                   | `{}`                    |
-| `gateway.resources.requests`                    | The requested resources for the gateway containers                                                | `{}`                    |
-| `gateway.podSecurityContext.enabled`            | Enabled Gateway pods' Security Context                                                            | `true`                  |
-| `gateway.podSecurityContext.fsGroup`            | Set Gateway pod's Security Context fsGroup                                                        | `1001`                  |
-| `gateway.containerSecurityContext.enabled`      | Enabled Gateway containers' Security Context                                                      | `true`                  |
-| `gateway.containerSecurityContext.runAsUser`    | Set Gateway containers' Security Context runAsUser                                                | `1001`                  |
-| `gateway.containerSecurityContext.runAsNonRoot` | Set Gateway containers' Security Context runAsNonRoot                                             | `true`                  |
-| `gateway.lifecycleHooks`                        | for the gateway container(s) to automate configuration before or after startup                    | `{}`                    |
-| `gateway.hostAliases`                           | gateway pods host aliases                                                                         | `[]`                    |
-| `gateway.podLabels`                             | Extra labels for gateway pods                                                                     | `{}`                    |
-| `gateway.podAnnotations`                        | Annotations for gateway pods                                                                      | `{}`                    |
-| `gateway.podAffinityPreset`                     | Pod affinity preset. Ignored if `gateway.affinity` is set. Allowed values: `soft` or `hard`       | `""`                    |
-| `gateway.podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `gateway.affinity` is set. Allowed values: `soft` or `hard`  | `soft`                  |
-| `gateway.nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `gateway.affinity` is set. Allowed values: `soft` or `hard` | `""`                    |
-| `gateway.nodeAffinityPreset.key`                | Node label key to match. Ignored if `gateway.affinity` is set                                     | `""`                    |
-| `gateway.nodeAffinityPreset.values`             | Node label values to match. Ignored if `gateway.affinity` is set                                  | `[]`                    |
-| `gateway.affinity`                              | Affinity for Gateway pods assignment                                                              | `{}`                    |
-| `gateway.nodeSelector`                          | Node labels for Gateway pods assignment                                                           | `{}`                    |
-| `gateway.tolerations`                           | Tolerations for Gateway pods assignment                                                           | `[]`                    |
-| `gateway.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains   | `{}`                    |
-| `gateway.priorityClassName`                     | Gateway pods' priorityClassName                                                                   | `""`                    |
-| `gateway.schedulerName`                         | Kubernetes pod scheduler registry                                                                 | `""`                    |
-| `gateway.updateStrategy.type`                   | Gateway statefulset strategy type                                                                 | `RollingUpdate`         |
-| `gateway.updateStrategy.rollingUpdate`          | Gateway statefulset rolling update configuration parameters                                       | `{}`                    |
-| `gateway.extraVolumes`                          | Optionally specify extra list of additional volumes for the Gateway pod(s)                        | `[]`                    |
-| `gateway.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the Gateway container(s)             | `[]`                    |
-| `gateway.sidecars`                              | Add additional sidecar containers to the Gateway pod(s)                                           | `[]`                    |
-| `gateway.initContainers`                        | Add additional init containers to the Gateway pod(s)                                              | `[]`                    |
-
+| Name                                            | Description                                                                                           | Value                  |
+| ----------------------------------------------- | ----------------------------------------------------------------------------------------------------- | ---------------------- |
+| `gateway.enabled`                               | Enable Gateway deployment                                                                             | `true`                 |
+| `gateway.image.registry`                        | Nginx image registry                                                                                  | `docker.io`            |
+| `gateway.image.repository`                      | Nginx image repository                                                                                | `bitnami/nginx`        |
+| `gateway.image.tag`                             | Nginx image tag (immutable tags are recommended)                                                      | `1.23.3-debian-11-r30` |
+| `gateway.image.digest`                          | Nginx image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
+| `gateway.image.pullPolicy`                      | Nginx image pull policy                                                                               | `IfNotPresent`         |
+| `gateway.image.pullSecrets`                     | Nginx image pull secrets                                                                              | `[]`                   |
+| `gateway.image.debug`                           | Enable debugging in the initialization process                                                        | `false`                |
+| `gateway.extraEnvVars`                          | Array with extra environment variables to add to gateway nodes                                        | `[]`                   |
+| `gateway.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars for gateway nodes                                | `""`                   |
+| `gateway.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for gateway nodes                                   | `""`                   |
+| `gateway.command`                               | Override default container command (useful when using custom images)                                  | `[]`                   |
+| `gateway.args`                                  | Override default container args (useful when using custom images)                                     | `[]`                   |
+| `gateway.verboseLogging`                        | Show the gateway access_log                                                                           | `false`                |
+| `gateway.replicaCount`                          | Number of Gateway replicas to deploy                                                                  | `1`                    |
+| `gateway.auth.enabled`                          | Enable basic auth                                                                                     | `false`                |
+| `gateway.auth.username`                         | Basic auth username                                                                                   | `user`                 |
+| `gateway.auth.password`                         | Basic auth password                                                                                   | `""`                   |
+| `gateway.auth.existingSecret`                   | Name of a secret containing the Basic auth password                                                   | `""`                   |
+| `gateway.livenessProbe.enabled`                 | Enable livenessProbe on Gateway nodes                                                                 | `true`                 |
+| `gateway.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                               | `10`                   |
+| `gateway.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                      | `10`                   |
+| `gateway.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                     | `1`                    |
+| `gateway.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                   | `3`                    |
+| `gateway.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                   | `1`                    |
+| `gateway.readinessProbe.enabled`                | Enable readinessProbe on Gateway nodes                                                                | `true`                 |
+| `gateway.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                              | `10`                   |
+| `gateway.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                     | `10`                   |
+| `gateway.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                    | `1`                    |
+| `gateway.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                  | `3`                    |
+| `gateway.readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                  | `1`                    |
+| `gateway.startupProbe.enabled`                  | Enable startupProbe on Gateway containers                                                             | `false`                |
+| `gateway.startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                | `10`                   |
+| `gateway.startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                       | `10`                   |
+| `gateway.startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                      | `1`                    |
+| `gateway.startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                    | `15`                   |
+| `gateway.startupProbe.successThreshold`         | Success threshold for startupProbe                                                                    | `1`                    |
+| `gateway.customLivenessProbe`                   | Custom livenessProbe that overrides the default one                                                   | `{}`                   |
+| `gateway.customReadinessProbe`                  | Custom readinessProbe that overrides the default one                                                  | `{}`                   |
+| `gateway.customStartupProbe`                    | Custom startupProbe that overrides the default one                                                    | `{}`                   |
+| `gateway.containerPorts.http`                   | Gateway HTTP port                                                                                     | `8080`                 |
+| `gateway.resources.limits`                      | The resources limits for the gateway containers                                                       | `{}`                   |
+| `gateway.resources.requests`                    | The requested resources for the gateway containers                                                    | `{}`                   |
+| `gateway.podSecurityContext.enabled`            | Enabled Gateway pods' Security Context                                                                | `true`                 |
+| `gateway.podSecurityContext.fsGroup`            | Set Gateway pod's Security Context fsGroup                                                            | `1001`                 |
+| `gateway.containerSecurityContext.enabled`      | Enabled Gateway containers' Security Context                                                          | `true`                 |
+| `gateway.containerSecurityContext.runAsUser`    | Set Gateway containers' Security Context runAsUser                                                    | `1001`                 |
+| `gateway.containerSecurityContext.runAsNonRoot` | Set Gateway containers' Security Context runAsNonRoot                                                 | `true`                 |
+| `gateway.lifecycleHooks`                        | for the gateway container(s) to automate configuration before or after startup                        | `{}`                   |
+| `gateway.hostAliases`                           | gateway pods host aliases                                                                             | `[]`                   |
+| `gateway.podLabels`                             | Extra labels for gateway pods                                                                         | `{}`                   |
+| `gateway.podAnnotations`                        | Annotations for gateway pods                                                                          | `{}`                   |
+| `gateway.podAffinityPreset`                     | Pod affinity preset. Ignored if `gateway.affinity` is set. Allowed values: `soft` or `hard`           | `""`                   |
+| `gateway.podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `gateway.affinity` is set. Allowed values: `soft` or `hard`      | `soft`                 |
+| `gateway.nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `gateway.affinity` is set. Allowed values: `soft` or `hard`     | `""`                   |
+| `gateway.nodeAffinityPreset.key`                | Node label key to match. Ignored if `gateway.affinity` is set                                         | `""`                   |
+| `gateway.nodeAffinityPreset.values`             | Node label values to match. Ignored if `gateway.affinity` is set                                      | `[]`                   |
+| `gateway.affinity`                              | Affinity for Gateway pods assignment                                                                  | `{}`                   |
+| `gateway.nodeSelector`                          | Node labels for Gateway pods assignment                                                               | `{}`                   |
+| `gateway.tolerations`                           | Tolerations for Gateway pods assignment                                                               | `[]`                   |
+| `gateway.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains       | `[]`                   |
+| `gateway.priorityClassName`                     | Gateway pods' priorityClassName                                                                       | `""`                   |
+| `gateway.schedulerName`                         | Kubernetes pod scheduler registry                                                                     | `""`                   |
+| `gateway.updateStrategy.type`                   | Gateway statefulset strategy type                                                                     | `RollingUpdate`        |
+| `gateway.updateStrategy.rollingUpdate`          | Gateway statefulset rolling update configuration parameters                                           | `{}`                   |
+| `gateway.extraVolumes`                          | Optionally specify extra list of additional volumes for the Gateway pod(s)                            | `[]`                   |
+| `gateway.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the Gateway container(s)                 | `[]`                   |
+| `gateway.sidecars`                              | Add additional sidecar containers to the Gateway pod(s)                                               | `[]`                   |
+| `gateway.initContainers`                        | Add additional init containers to the Gateway pod(s)                                                  | `[]`                   |
 
 ### Gateway Traffic Exposure Parameters
 
@@ -288,7 +286,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `gateway.ingress.extraPaths`               | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                     |
 | `gateway.ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
 | `gateway.ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                     |
-
 
 ### index-gateway Deployment Parameters
 
@@ -342,7 +339,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `indexGateway.affinity`                              | Affinity for index-gateway pods assignment                                                             | `{}`            |
 | `indexGateway.nodeSelector`                          | Node labels for index-gateway pods assignment                                                          | `{}`            |
 | `indexGateway.tolerations`                           | Tolerations for index-gateway pods assignment                                                          | `[]`            |
-| `indexGateway.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains        | `{}`            |
+| `indexGateway.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains        | `[]`            |
 | `indexGateway.priorityClassName`                     | index-gateway pods' priorityClassName                                                                  | `""`            |
 | `indexGateway.schedulerName`                         | Kubernetes pod scheduler registry                                                                      | `""`            |
 | `indexGateway.updateStrategy.type`                   | index-gateway statefulset strategy type                                                                | `RollingUpdate` |
@@ -351,7 +348,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `indexGateway.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the index-gateway container(s)            | `[]`            |
 | `indexGateway.sidecars`                              | Add additional sidecar containers to the index-gateway pod(s)                                          | `[]`            |
 | `indexGateway.initContainers`                        | Add additional init containers to the index-gateway pod(s)                                             | `[]`            |
-
 
 ### index-gateway Traffic Exposure Parameters
 
@@ -370,7 +366,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `indexGateway.service.externalTrafficPolicy`    | index-gateway service external traffic policy                    | `Cluster`   |
 | `indexGateway.service.annotations`              | Additional custom annotations for index-gateway service          | `{}`        |
 | `indexGateway.service.extraPorts`               | Extra ports to expose in the index-gateway service               | `[]`        |
-
 
 ### Distributor Deployment Parameters
 
@@ -422,7 +417,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `distributor.affinity`                              | Affinity for Distributor pods assignment                                                              | `{}`            |
 | `distributor.nodeSelector`                          | Node labels for Distributor pods assignment                                                           | `{}`            |
 | `distributor.tolerations`                           | Tolerations for Distributor pods assignment                                                           | `[]`            |
-| `distributor.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains       | `{}`            |
+| `distributor.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains       | `[]`            |
 | `distributor.priorityClassName`                     | Distributor pods' priorityClassName                                                                   | `""`            |
 | `distributor.schedulerName`                         | Kubernetes pod scheduler registry                                                                     | `""`            |
 | `distributor.updateStrategy.type`                   | Distributor statefulset strategy type                                                                 | `RollingUpdate` |
@@ -431,7 +426,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `distributor.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the Distributor container(s)             | `[]`            |
 | `distributor.sidecars`                              | Add additional sidecar containers to the Distributor pod(s)                                           | `[]`            |
 | `distributor.initContainers`                        | Add additional init containers to the Distributor pod(s)                                              | `[]`            |
-
 
 ### Distributor Traffic Exposure Parameters
 
@@ -450,7 +444,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `distributor.service.externalTrafficPolicy`    | Distributor service external traffic policy                      | `Cluster`   |
 | `distributor.service.annotations`              | Additional custom annotations for Distributor service            | `{}`        |
 | `distributor.service.extraPorts`               | Extra ports to expose in the Distributor service                 | `[]`        |
-
 
 ### Ingester Deployment Parameters
 
@@ -502,7 +495,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingester.affinity`                              | Affinity for ingester pods assignment                                                              | `{}`            |
 | `ingester.nodeSelector`                          | Node labels for Ingester pods assignment                                                           | `{}`            |
 | `ingester.tolerations`                           | Tolerations for Ingester pods assignment                                                           | `[]`            |
-| `ingester.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains    | `{}`            |
+| `ingester.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains    | `[]`            |
 | `ingester.podManagementPolicy`                   | podManagementPolicy to manage scaling operation                                                    | `""`            |
 | `ingester.priorityClassName`                     | Ingester pods' priorityClassName                                                                   | `""`            |
 | `ingester.schedulerName`                         | Kubernetes pod scheduler registry                                                                  | `""`            |
@@ -512,7 +505,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingester.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the ingester container(s)             | `[]`            |
 | `ingester.sidecars`                              | Add additional sidecar containers to the Ingester pod(s)                                           | `[]`            |
 | `ingester.initContainers`                        | Add additional init containers to the Ingester pod(s)                                              | `[]`            |
-
 
 ### Ingester Persistence Parameters
 
@@ -525,7 +517,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingester.persistence.size`         | PVC Storage Request for Memcached data volume                           | `8Gi`               |
 | `ingester.persistence.annotations`  | Additional PVC annotations                                              | `{}`                |
 | `ingester.persistence.selector`     | Selector to match an existing Persistent Volume for Ingester's data PVC | `{}`                |
-
 
 ### Ingester Traffic Exposure Parameters
 
@@ -544,7 +535,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingester.service.externalTrafficPolicy`    | Ingester service external traffic policy                         | `Cluster`   |
 | `ingester.service.annotations`              | Additional custom annotations for Ingester service               | `{}`        |
 | `ingester.service.extraPorts`               | Extra ports to expose in the Ingester service                    | `[]`        |
-
 
 ### Querier Deployment Parameters
 
@@ -597,7 +587,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `querier.affinity`                              | Affinity for Querier pods assignment                                                              | `{}`            |
 | `querier.nodeSelector`                          | Node labels for Querier pods assignment                                                           | `{}`            |
 | `querier.tolerations`                           | Tolerations for Querier pods assignment                                                           | `[]`            |
-| `querier.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains   | `{}`            |
+| `querier.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains   | `[]`            |
 | `querier.priorityClassName`                     | Querier pods' priorityClassName                                                                   | `""`            |
 | `querier.schedulerName`                         | Kubernetes pod scheduler registry                                                                 | `""`            |
 | `querier.updateStrategy.type`                   | Querier statefulset strategy type                                                                 | `RollingUpdate` |
@@ -606,7 +596,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `querier.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the querier container(s)             | `[]`            |
 | `querier.sidecars`                              | Add additional sidecar containers to the Querier pod(s)                                           | `[]`            |
 | `querier.initContainers`                        | Add additional init containers to the Querier pod(s)                                              | `[]`            |
-
 
 ### Querier Persistence Parameters
 
@@ -619,7 +608,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `querier.persistence.size`         | PVC Storage Request for Memcached data volume                          | `8Gi`               |
 | `querier.persistence.annotations`  | Additional PVC annotations                                             | `{}`                |
 | `querier.persistence.selector`     | Selector to match an existing Persistent Volume for Querier's data PVC | `{}`                |
-
 
 ### Querier Traffic Exposure Parameters
 
@@ -638,7 +626,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `querier.service.externalTrafficPolicy`    | Querier service external traffic policy                          | `Cluster`   |
 | `querier.service.annotations`              | Additional custom annotations for Querier service                | `{}`        |
 | `querier.service.extraPorts`               | Extra ports to expose in the Querier service                     | `[]`        |
-
 
 ### Query Frontend Deployment Parameters
 
@@ -690,7 +677,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryFrontend.affinity`                              | Affinity for queryFrontend pods assignment                                                              | `{}`            |
 | `queryFrontend.nodeSelector`                          | Node labels for queryFrontend pods assignment                                                           | `{}`            |
 | `queryFrontend.tolerations`                           | Tolerations for queryFrontend pods assignment                                                           | `[]`            |
-| `queryFrontend.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains         | `{}`            |
+| `queryFrontend.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains         | `[]`            |
 | `queryFrontend.priorityClassName`                     | queryFrontend pods' priorityClassName                                                                   | `""`            |
 | `queryFrontend.schedulerName`                         | Kubernetes pod scheduler registry                                                                       | `""`            |
 | `queryFrontend.updateStrategy.type`                   | queryFrontend statefulset strategy type                                                                 | `RollingUpdate` |
@@ -699,7 +686,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryFrontend.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the queryFrontend container(s)             | `[]`            |
 | `queryFrontend.sidecars`                              | Add additional sidecar containers to the queryFrontend pod(s)                                           | `[]`            |
 | `queryFrontend.initContainers`                        | Add additional init containers to the queryFrontend pod(s)                                              | `[]`            |
-
 
 ### Query Frontend Traffic Exposure Parameters
 
@@ -719,6 +705,84 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryFrontend.service.annotations`              | Additional custom annotations for queryFrontend service          | `{}`        |
 | `queryFrontend.service.extraPorts`               | Extra ports to expose in the queryFrontend service               | `[]`        |
 
+### Query Scheduler Deployment Parameters
+
+| Name                                                   | Description                                                                                              | Value           |
+| ------------------------------------------------------ | -------------------------------------------------------------------------------------------------------- | --------------- |
+| `queryScheduler.extraEnvVars`                          | Array with extra environment variables to add to queryScheduler nodes                                    | `[]`            |
+| `queryScheduler.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars for queryScheduler nodes                            | `""`            |
+| `queryScheduler.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for queryScheduler nodes                               | `""`            |
+| `queryScheduler.command`                               | Override default container command (useful when using custom images)                                     | `[]`            |
+| `queryScheduler.args`                                  | Override default container args (useful when using custom images)                                        | `[]`            |
+| `queryScheduler.replicaCount`                          | Number of queryScheduler replicas to deploy                                                              | `1`             |
+| `queryScheduler.livenessProbe.enabled`                 | Enable livenessProbe on queryScheduler nodes                                                             | `true`          |
+| `queryScheduler.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                  | `10`            |
+| `queryScheduler.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                         | `10`            |
+| `queryScheduler.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                        | `1`             |
+| `queryScheduler.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                      | `3`             |
+| `queryScheduler.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                      | `1`             |
+| `queryScheduler.minReadySeconds`                       | Minimum time to wait before performing readiness check                                                   | `10`            |
+| `queryScheduler.readinessProbe.enabled`                | Enable readinessProbe on queryScheduler nodes                                                            | `true`          |
+| `queryScheduler.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                 | `10`            |
+| `queryScheduler.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                        | `10`            |
+| `queryScheduler.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                       | `1`             |
+| `queryScheduler.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                     | `3`             |
+| `queryScheduler.readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                     | `1`             |
+| `queryScheduler.startupProbe.enabled`                  | Enable startupProbe on queryScheduler containers                                                         | `false`         |
+| `queryScheduler.startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                   | `30`            |
+| `queryScheduler.startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                          | `10`            |
+| `queryScheduler.startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                         | `1`             |
+| `queryScheduler.startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                       | `15`            |
+| `queryScheduler.startupProbe.successThreshold`         | Success threshold for startupProbe                                                                       | `1`             |
+| `queryScheduler.customLivenessProbe`                   | Custom livenessProbe that overrides the default one                                                      | `{}`            |
+| `queryScheduler.customReadinessProbe`                  | Custom readinessProbe that overrides the default one                                                     | `{}`            |
+| `queryScheduler.customStartupProbe`                    | Custom startupProbe that overrides the default one                                                       | `{}`            |
+| `queryScheduler.resources.limits`                      | The resources limits for the queryScheduler containers                                                   | `{}`            |
+| `queryScheduler.resources.requests`                    | The requested resources for the queryScheduler containers                                                | `{}`            |
+| `queryScheduler.podSecurityContext.enabled`            | Enabled queryScheduler pods' Security Context                                                            | `true`          |
+| `queryScheduler.podSecurityContext.fsGroup`            | Set queryScheduler pod's Security Context fsGroup                                                        | `1001`          |
+| `queryScheduler.containerSecurityContext.enabled`      | Enabled queryScheduler containers' Security Context                                                      | `true`          |
+| `queryScheduler.containerSecurityContext.runAsUser`    | Set queryScheduler containers' Security Context runAsUser                                                | `1001`          |
+| `queryScheduler.containerSecurityContext.runAsNonRoot` | Set queryScheduler containers' Security Context runAsNonRoot                                             | `true`          |
+| `queryScheduler.lifecycleHooks`                        | for the queryScheduler container(s) to automate configuration before or after startup                    | `{}`            |
+| `queryScheduler.hostAliases`                           | queryScheduler pods host aliases                                                                         | `[]`            |
+| `queryScheduler.podLabels`                             | Extra labels for queryScheduler pods                                                                     | `{}`            |
+| `queryScheduler.podAnnotations`                        | Annotations for queryScheduler pods                                                                      | `{}`            |
+| `queryScheduler.podAffinityPreset`                     | Pod affinity preset. Ignored if `queryScheduler.affinity` is set. Allowed values: `soft` or `hard`       | `""`            |
+| `queryScheduler.podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `queryScheduler.affinity` is set. Allowed values: `soft` or `hard`  | `soft`          |
+| `queryScheduler.nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `queryScheduler.affinity` is set. Allowed values: `soft` or `hard` | `""`            |
+| `queryScheduler.nodeAffinityPreset.key`                | Node label key to match. Ignored if `queryScheduler.affinity` is set                                     | `""`            |
+| `queryScheduler.nodeAffinityPreset.values`             | Node label values to match. Ignored if `queryScheduler.affinity` is set                                  | `[]`            |
+| `queryScheduler.affinity`                              | Affinity for queryScheduler pods assignment                                                              | `{}`            |
+| `queryScheduler.nodeSelector`                          | Node labels for queryScheduler pods assignment                                                           | `{}`            |
+| `queryScheduler.tolerations`                           | Tolerations for queryScheduler pods assignment                                                           | `[]`            |
+| `queryScheduler.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains          | `[]`            |
+| `queryScheduler.priorityClassName`                     | queryScheduler pods' priorityClassName                                                                   | `""`            |
+| `queryScheduler.schedulerName`                         | Kubernetes pod scheduler registry                                                                        | `""`            |
+| `queryScheduler.updateStrategy.type`                   | queryScheduler statefulset strategy type                                                                 | `RollingUpdate` |
+| `queryScheduler.updateStrategy.rollingUpdate`          | queryScheduler statefulset rolling update configuration parameters                                       | `{}`            |
+| `queryScheduler.extraVolumes`                          | Optionally specify extra list of additional volumes for the queryScheduler pod(s)                        | `[]`            |
+| `queryScheduler.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the queryScheduler container(s)             | `[]`            |
+| `queryScheduler.sidecars`                              | Add additional sidecar containers to the queryScheduler pod(s)                                           | `[]`            |
+| `queryScheduler.initContainers`                        | Add additional init containers to the queryScheduler pod(s)                                              | `[]`            |
+
+### Query Scheduler Traffic Exposure Parameters
+
+| Name                                              | Description                                                      | Value       |
+| ------------------------------------------------- | ---------------------------------------------------------------- | ----------- |
+| `queryScheduler.service.type`                     | queryScheduler service type                                      | `ClusterIP` |
+| `queryScheduler.service.ports.http`               | queryScheduler HTTP service port                                 | `3100`      |
+| `queryScheduler.service.ports.grpc`               | queryScheduler GRPC service port                                 | `9095`      |
+| `queryScheduler.service.nodePorts.http`           | Node port for HTTP                                               | `""`        |
+| `queryScheduler.service.nodePorts.grpc`           | Node port for GRPC                                               | `""`        |
+| `queryScheduler.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                      | `{}`        |
+| `queryScheduler.service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin | `None`      |
+| `queryScheduler.service.clusterIP`                | queryScheduler service Cluster IP                                | `""`        |
+| `queryScheduler.service.loadBalancerIP`           | queryScheduler service Load Balancer IP                          | `""`        |
+| `queryScheduler.service.loadBalancerSourceRanges` | queryScheduler service Load Balancer sources                     | `[]`        |
+| `queryScheduler.service.externalTrafficPolicy`    | queryScheduler service external traffic policy                   | `Cluster`   |
+| `queryScheduler.service.annotations`              | Additional custom annotations for queryScheduler service         | `{}`        |
+| `queryScheduler.service.extraPorts`               | Extra ports to expose in the queryScheduler service              | `[]`        |
 
 ### Ruler Deployment Parameters
 
@@ -772,7 +836,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ruler.affinity`                              | Affinity for ruler pods assignment                                                              | `{}`            |
 | `ruler.nodeSelector`                          | Node labels for Ruler pods assignment                                                           | `{}`            |
 | `ruler.tolerations`                           | Tolerations for Ruler pods assignment                                                           | `[]`            |
-| `ruler.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains | `{}`            |
+| `ruler.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains | `[]`            |
 | `ruler.priorityClassName`                     | Ruler pods' priorityClassName                                                                   | `""`            |
 | `ruler.schedulerName`                         | Kubernetes pod scheduler registry                                                               | `""`            |
 | `ruler.updateStrategy.type`                   | Ruler statefulset strategy type                                                                 | `RollingUpdate` |
@@ -781,7 +845,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ruler.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the ruler container(s)             | `[]`            |
 | `ruler.sidecars`                              | Add additional sidecar containers to the Ruler pod(s)                                           | `[]`            |
 | `ruler.initContainers`                        | Add additional init containers to the Ruler pod(s)                                              | `[]`            |
-
 
 ### Ruler Persistence Parameters
 
@@ -794,7 +857,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ruler.persistence.size`         | PVC Storage Request for Memcached data volume                        | `8Gi`               |
 | `ruler.persistence.annotations`  | Additional PVC annotations                                           | `{}`                |
 | `ruler.persistence.selector`     | Selector to match an existing Persistent Volume for Ruler's data PVC | `{}`                |
-
 
 ### Ruler Traffic Exposure Parameters
 
@@ -813,7 +875,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ruler.service.externalTrafficPolicy`    | Ruler service external traffic policy                            | `Cluster`   |
 | `ruler.service.annotations`              | Additional custom annotations for Ruler service                  | `{}`        |
 | `ruler.service.extraPorts`               | Extra ports to expose in the Ruler service                       | `[]`        |
-
 
 ### table-manager Deployment Parameters
 
@@ -866,7 +927,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `tableManager.affinity`                              | Affinity for table-manager pods assignment                                                             | `{}`            |
 | `tableManager.nodeSelector`                          | Node labels for table-manager pods assignment                                                          | `{}`            |
 | `tableManager.tolerations`                           | Tolerations for table-manager pods assignment                                                          | `[]`            |
-| `tableManager.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains        | `{}`            |
+| `tableManager.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains        | `[]`            |
 | `tableManager.priorityClassName`                     | table-manager pods' priorityClassName                                                                  | `""`            |
 | `tableManager.schedulerName`                         | Kubernetes pod scheduler registry                                                                      | `""`            |
 | `tableManager.updateStrategy.type`                   | table-manager statefulset strategy type                                                                | `RollingUpdate` |
@@ -875,7 +936,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `tableManager.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the table-manager container(s)            | `[]`            |
 | `tableManager.sidecars`                              | Add additional sidecar containers to the table-manager pod(s)                                          | `[]`            |
 | `tableManager.initContainers`                        | Add additional init containers to the table-manager pod(s)                                             | `[]`            |
-
 
 ### table-manager Traffic Exposure Parameters
 
@@ -895,75 +955,75 @@ The command removes all the Kubernetes components associated with the chart and 
 | `tableManager.service.annotations`              | Additional custom annotations for table-manager service          | `{}`        |
 | `tableManager.service.extraPorts`               | Extra ports to expose in the table-manager service               | `[]`        |
 
-
 ### Promtail Deployment Parameters
 
-| Name                                             | Description                                                                                        | Value                |
-| ------------------------------------------------ | -------------------------------------------------------------------------------------------------- | -------------------- |
-| `promtail.image.registry`                        | Grafana Promtail image registry                                                                    | `docker.io`          |
-| `promtail.image.repository`                      | Grafana Promtail image repository                                                                  | `bitnami/promtail`   |
-| `promtail.image.tag`                             | Grafana Promtail image tag (immutable tags are recommended)                                        | `2.5.0-debian-10-r3` |
-| `promtail.image.pullPolicy`                      | Grafana Promtail image pull policy                                                                 | `IfNotPresent`       |
-| `promtail.image.pullSecrets`                     | Grafana Promtail image pull secrets                                                                | `[]`                 |
-| `promtail.extraEnvVars`                          | Array with extra environment variables to add to promtail nodes                                    | `[]`                 |
-| `promtail.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars for promtail nodes                            | `""`                 |
-| `promtail.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for promtail nodes                               | `""`                 |
-| `promtail.command`                               | Override default container command (useful when using custom images)                               | `[]`                 |
-| `promtail.args`                                  | Override default container args (useful when using custom images)                                  | `[]`                 |
-| `promtail.containerPorts.http`                   | Promtail HTTP port                                                                                 | `8080`               |
-| `promtail.livenessProbe.enabled`                 | Enable livenessProbe on Promtail nodes                                                             | `true`               |
-| `promtail.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                            | `10`                 |
-| `promtail.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                   | `10`                 |
-| `promtail.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                  | `1`                  |
-| `promtail.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                | `3`                  |
-| `promtail.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                | `1`                  |
-| `promtail.readinessProbe.enabled`                | Enable readinessProbe on Promtail nodes                                                            | `true`               |
-| `promtail.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                           | `10`                 |
-| `promtail.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                  | `10`                 |
-| `promtail.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                 | `1`                  |
-| `promtail.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                               | `3`                  |
-| `promtail.readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                               | `1`                  |
-| `promtail.startupProbe.enabled`                  | Enable startupProbe on Promtail containers                                                         | `false`              |
-| `promtail.startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                             | `30`                 |
-| `promtail.startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                    | `10`                 |
-| `promtail.startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                   | `1`                  |
-| `promtail.startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                 | `15`                 |
-| `promtail.startupProbe.successThreshold`         | Success threshold for startupProbe                                                                 | `1`                  |
-| `promtail.customLivenessProbe`                   | Custom livenessProbe that overrides the default one                                                | `{}`                 |
-| `promtail.customReadinessProbe`                  | Custom readinessProbe that overrides the default one                                               | `{}`                 |
-| `promtail.customStartupProbe`                    | Custom startupProbe that overrides the default one                                                 | `{}`                 |
-| `promtail.lifecycleHooks`                        | for the promtail container(s) to automate configuration before or after startup                    | `{}`                 |
-| `promtail.resources.limits`                      | The resources limits for the Promtail containers                                                   | `{}`                 |
-| `promtail.resources.requests`                    | The requested resources for the Promtail containers                                                | `{}`                 |
-| `promtail.podSecurityContext.enabled`            | Enabled Promtail pods' Security Context                                                            | `true`               |
-| `promtail.podSecurityContext.fsGroup`            | Set Promtail pod's Security Context fsGroup                                                        | `0`                  |
-| `promtail.containerSecurityContext.enabled`      | Enabled Promtail containers' Security Context                                                      | `true`               |
-| `promtail.containerSecurityContext.runAsUser`    | Set Promtail containers' Security Context runAsUser                                                | `0`                  |
-| `promtail.containerSecurityContext.runAsNonRoot` | Set Promtail containers' Security Context runAsNonRoot                                             | `false`              |
-| `promtail.hostAliases`                           | promtail pods host aliases                                                                         | `[]`                 |
-| `promtail.podLabels`                             | Extra labels for promtail pods                                                                     | `{}`                 |
-| `promtail.podAnnotations`                        | Annotations for promtail pods                                                                      | `{}`                 |
-| `promtail.podAffinityPreset`                     | Pod affinity preset. Ignored if `promtail.affinity` is set. Allowed values: `soft` or `hard`       | `""`                 |
-| `promtail.podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `promtail.affinity` is set. Allowed values: `soft` or `hard`  | `soft`               |
-| `promtail.nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `promtail.affinity` is set. Allowed values: `soft` or `hard` | `""`                 |
-| `promtail.nodeAffinityPreset.key`                | Node label key to match. Ignored if `promtail.affinity` is set                                     | `""`                 |
-| `promtail.nodeAffinityPreset.values`             | Node label values to match. Ignored if `promtail.affinity` is set                                  | `[]`                 |
-| `promtail.affinity`                              | Affinity for promtail pods assignment                                                              | `{}`                 |
-| `promtail.nodeSelector`                          | Node labels for Promtail pods assignment                                                           | `{}`                 |
-| `promtail.tolerations`                           | Tolerations for Promtail pods assignment                                                           | `[]`                 |
-| `promtail.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains    | `{}`                 |
-| `promtail.priorityClassName`                     | Promtail pods' priorityClassName                                                                   | `""`                 |
-| `promtail.schedulerName`                         | Kubernetes pod scheduler registry                                                                  | `""`                 |
-| `promtail.updateStrategy.type`                   | Promtail statefulset strategy type                                                                 | `RollingUpdate`      |
-| `promtail.updateStrategy.rollingUpdate`          | Promtail statefulset rolling update configuration parameters                                       | `{}`                 |
-| `promtail.extraVolumes`                          | Optionally specify extra list of additional volumes for the Promtail pod(s)                        | `[]`                 |
-| `promtail.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the promtail container(s)             | `[]`                 |
-| `promtail.sidecars`                              | Add additional sidecar containers to the Promtail pod(s)                                           | `[]`                 |
-| `promtail.initContainers`                        | Add additional init containers to the Promtail pod(s)                                              | `[]`                 |
-| `promtail.configuration`                         | Promtail configuration                                                                             | `""`                 |
-| `promtail.existingSecret`                        | Name of a Secret that contains the Promtail configuration                                          | `""`                 |
-| `promtail.logLevel`                              | Promtail logging level                                                                             | `info`               |
-
+| Name                                             | Description                                                                                                      | Value                |
+| ------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------- | -------------------- |
+| `promtail.enabled`                               | Deploy promtail                                                                                                  | `true`               |
+| `promtail.image.registry`                        | Grafana Promtail image registry                                                                                  | `docker.io`          |
+| `promtail.image.repository`                      | Grafana Promtail image repository                                                                                | `bitnami/promtail`   |
+| `promtail.image.tag`                             | Grafana Promtail image tag (immutable tags are recommended)                                                      | `2.7.4-debian-11-r0` |
+| `promtail.image.digest`                          | Grafana Promtail image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                 |
+| `promtail.image.pullPolicy`                      | Grafana Promtail image pull policy                                                                               | `IfNotPresent`       |
+| `promtail.image.pullSecrets`                     | Grafana Promtail image pull secrets                                                                              | `[]`                 |
+| `promtail.extraEnvVars`                          | Array with extra environment variables to add to promtail nodes                                                  | `[]`                 |
+| `promtail.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars for promtail nodes                                          | `""`                 |
+| `promtail.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for promtail nodes                                             | `""`                 |
+| `promtail.command`                               | Override default container command (useful when using custom images)                                             | `[]`                 |
+| `promtail.args`                                  | Override default container args (useful when using custom images)                                                | `[]`                 |
+| `promtail.containerPorts.http`                   | Promtail HTTP port                                                                                               | `8080`               |
+| `promtail.livenessProbe.enabled`                 | Enable livenessProbe on Promtail nodes                                                                           | `true`               |
+| `promtail.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                          | `10`                 |
+| `promtail.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                                 | `10`                 |
+| `promtail.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                                | `1`                  |
+| `promtail.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                              | `3`                  |
+| `promtail.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                              | `1`                  |
+| `promtail.readinessProbe.enabled`                | Enable readinessProbe on Promtail nodes                                                                          | `true`               |
+| `promtail.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                         | `10`                 |
+| `promtail.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                                | `10`                 |
+| `promtail.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                               | `1`                  |
+| `promtail.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                             | `3`                  |
+| `promtail.readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                             | `1`                  |
+| `promtail.startupProbe.enabled`                  | Enable startupProbe on Promtail containers                                                                       | `false`              |
+| `promtail.startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                           | `30`                 |
+| `promtail.startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                                  | `10`                 |
+| `promtail.startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                                 | `1`                  |
+| `promtail.startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                               | `15`                 |
+| `promtail.startupProbe.successThreshold`         | Success threshold for startupProbe                                                                               | `1`                  |
+| `promtail.customLivenessProbe`                   | Custom livenessProbe that overrides the default one                                                              | `{}`                 |
+| `promtail.customReadinessProbe`                  | Custom readinessProbe that overrides the default one                                                             | `{}`                 |
+| `promtail.customStartupProbe`                    | Custom startupProbe that overrides the default one                                                               | `{}`                 |
+| `promtail.lifecycleHooks`                        | for the promtail container(s) to automate configuration before or after startup                                  | `{}`                 |
+| `promtail.resources.limits`                      | The resources limits for the Promtail containers                                                                 | `{}`                 |
+| `promtail.resources.requests`                    | The requested resources for the Promtail containers                                                              | `{}`                 |
+| `promtail.podSecurityContext.enabled`            | Enabled Promtail pods' Security Context                                                                          | `true`               |
+| `promtail.podSecurityContext.fsGroup`            | Set Promtail pod's Security Context fsGroup                                                                      | `0`                  |
+| `promtail.containerSecurityContext.enabled`      | Enabled Promtail containers' Security Context                                                                    | `true`               |
+| `promtail.containerSecurityContext.runAsUser`    | Set Promtail containers' Security Context runAsUser                                                              | `0`                  |
+| `promtail.containerSecurityContext.runAsNonRoot` | Set Promtail containers' Security Context runAsNonRoot                                                           | `false`              |
+| `promtail.hostAliases`                           | promtail pods host aliases                                                                                       | `[]`                 |
+| `promtail.podLabels`                             | Extra labels for promtail pods                                                                                   | `{}`                 |
+| `promtail.podAnnotations`                        | Annotations for promtail pods                                                                                    | `{}`                 |
+| `promtail.podAffinityPreset`                     | Pod affinity preset. Ignored if `promtail.affinity` is set. Allowed values: `soft` or `hard`                     | `""`                 |
+| `promtail.podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `promtail.affinity` is set. Allowed values: `soft` or `hard`                | `soft`               |
+| `promtail.nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `promtail.affinity` is set. Allowed values: `soft` or `hard`               | `""`                 |
+| `promtail.nodeAffinityPreset.key`                | Node label key to match. Ignored if `promtail.affinity` is set                                                   | `""`                 |
+| `promtail.nodeAffinityPreset.values`             | Node label values to match. Ignored if `promtail.affinity` is set                                                | `[]`                 |
+| `promtail.affinity`                              | Affinity for promtail pods assignment                                                                            | `{}`                 |
+| `promtail.nodeSelector`                          | Node labels for Promtail pods assignment                                                                         | `{}`                 |
+| `promtail.tolerations`                           | Tolerations for Promtail pods assignment                                                                         | `[]`                 |
+| `promtail.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains                  | `[]`                 |
+| `promtail.priorityClassName`                     | Promtail pods' priorityClassName                                                                                 | `""`                 |
+| `promtail.schedulerName`                         | Kubernetes pod scheduler registry                                                                                | `""`                 |
+| `promtail.updateStrategy.type`                   | Promtail statefulset strategy type                                                                               | `RollingUpdate`      |
+| `promtail.updateStrategy.rollingUpdate`          | Promtail statefulset rolling update configuration parameters                                                     | `{}`                 |
+| `promtail.extraVolumes`                          | Optionally specify extra list of additional volumes for the Promtail pod(s)                                      | `[]`                 |
+| `promtail.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the promtail container(s)                           | `[]`                 |
+| `promtail.sidecars`                              | Add additional sidecar containers to the Promtail pod(s)                                                         | `[]`                 |
+| `promtail.initContainers`                        | Add additional init containers to the Promtail pod(s)                                                            | `[]`                 |
+| `promtail.configuration`                         | Promtail configuration                                                                                           | `""`                 |
+| `promtail.existingSecret`                        | Name of a Secret that contains the Promtail configuration                                                        | `""`                 |
+| `promtail.logLevel`                              | Promtail logging level                                                                                           | `info`               |
 
 ### Promtail Traffic Exposure Parameters
 
@@ -986,21 +1046,20 @@ The command removes all the Kubernetes components associated with the chart and 
 | `promtail.serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the promtail.serviceAccount.created | `true`      |
 | `promtail.serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                            | `{}`        |
 
-
 ### Init Container Parameters
 
-| Name                                                   | Description                                                                                     | Value                   |
-| ------------------------------------------------------ | ----------------------------------------------------------------------------------------------- | ----------------------- |
-| `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
-| `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                    | `docker.io`             |
-| `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `10-debian-10-r429`     |
-| `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
-| `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                | `[]`                    |
-| `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                    |
-| `volumePermissions.resources.requests`                 | The requested resources for the init container                                                  | `{}`                    |
-| `volumePermissions.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                 | `0`                     |
-
+| Name                                                   | Description                                                                                                   | Value                   |
+| ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------- | ----------------------- |
+| `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`               | `false`                 |
+| `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                                  | `docker.io`             |
+| `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                                | `bitnami/bitnami-shell` |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r91`      |
+| `volumePermissions.image.digest`                       | Bitnami Shell image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
+| `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                               | `IfNotPresent`          |
+| `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                              | `[]`                    |
+| `volumePermissions.resources.limits`                   | The resources limits for the init container                                                                   | `{}`                    |
+| `volumePermissions.resources.requests`                 | The requested resources for the init container                                                                | `{}`                    |
+| `volumePermissions.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                               | `0`                     |
 
 ### Other Parameters
 
@@ -1010,7 +1069,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.name`                         | The name of the ServiceAccount to use                                  | `""`    |
 | `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created | `true`  |
 | `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                   | `{}`    |
-
 
 ### Metrics Parameters
 
@@ -1028,7 +1086,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.serviceMonitor.honorLabels`       | Specify honorLabels parameter to add the scrape endpoint                              | `false` |
 | `metrics.serviceMonitor.jobLabel`          | The name of the label on the target service to use as the job name in prometheus.     | `""`    |
 
-
 ### External Memcached (Chunks) Parameters
 
 | Name                           | Description                                   | Value   |
@@ -1036,16 +1093,18 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalMemcachedChunks.host` | Host of a running external memcached instance | `""`    |
 | `externalMemcachedChunks.port` | Port of a running external memcached instance | `11211` |
 
-
 ### Memcached Sub-chart Parameters (Chunks)
 
-| Name                                      | Description                | Value               |
-| ----------------------------------------- | -------------------------- | ------------------- |
-| `memcachedchunks.enabled`                 | Deploy memcached sub-chart | `true`              |
-| `memcachedchunks.nameOverride`            | override the subchart name | `""`                |
-| `memcachedchunks.architecture`            | Memcached architecture     | `high-availability` |
-| `memcachedchunks.service.ports.memcached` | Memcached service port     | `11211`             |
-
+| Name                                      | Description                                                                                               | Value                  |
+| ----------------------------------------- | --------------------------------------------------------------------------------------------------------- | ---------------------- |
+| `memcachedchunks.enabled`                 | Deploy memcached sub-chart                                                                                | `true`                 |
+| `memcachedchunks.image.registry`          | Memcached image registry                                                                                  | `docker.io`            |
+| `memcachedchunks.image.repository`        | Memcached image repository                                                                                | `bitnami/memcached`    |
+| `memcachedchunks.image.tag`               | Memcached image tag (immutable tags are recommended)                                                      | `1.6.18-debian-11-r17` |
+| `memcachedchunks.image.digest`            | Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
+| `memcachedchunks.nameOverride`            | override the subchart name                                                                                | `""`                   |
+| `memcachedchunks.architecture`            | Memcached architecture                                                                                    | `high-availability`    |
+| `memcachedchunks.service.ports.memcached` | Memcached service port                                                                                    | `11211`                |
 
 ### External Memcached (Frontend) Parameters
 
@@ -1054,16 +1113,18 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalMemcachedFrontend.host` | Host of a running external memcached instance | `""`    |
 | `externalMemcachedFrontend.port` | Port of a running external memcached instance | `11211` |
 
-
 ### Memcached Sub-chart Parameters (Frontend)
 
-| Name                                        | Description                | Value               |
-| ------------------------------------------- | -------------------------- | ------------------- |
-| `memcachedfrontend.enabled`                 | Deploy memcached sub-chart | `true`              |
-| `memcachedfrontend.architecture`            | Memcached architecture     | `high-availability` |
-| `memcachedfrontend.nameOverride`            | override the subchart name | `""`                |
-| `memcachedfrontend.service.ports.memcached` | Memcached service port     | `11211`             |
-
+| Name                                        | Description                                                                                               | Value                  |
+| ------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ---------------------- |
+| `memcachedfrontend.enabled`                 | Deploy memcached sub-chart                                                                                | `true`                 |
+| `memcachedfrontend.image.registry`          | Memcached image registry                                                                                  | `docker.io`            |
+| `memcachedfrontend.image.repository`        | Memcached image repository                                                                                | `bitnami/memcached`    |
+| `memcachedfrontend.image.tag`               | Memcached image tag (immutable tags are recommended)                                                      | `1.6.18-debian-11-r17` |
+| `memcachedfrontend.image.digest`            | Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
+| `memcachedfrontend.architecture`            | Memcached architecture                                                                                    | `high-availability`    |
+| `memcachedfrontend.nameOverride`            | override the subchart name                                                                                | `""`                   |
+| `memcachedfrontend.service.ports.memcached` | Memcached service port                                                                                    | `11211`                |
 
 ### External Memcached (Index-Queries) Parameters
 
@@ -1072,16 +1133,18 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalMemcachedIndexQueries.host` | Host of a running external memcached instance | `""`    |
 | `externalMemcachedIndexQueries.port` | Port of a running external memcached instance | `11211` |
 
-
 ### Memcached Sub-chart Parameters (Index-Queries)
 
-| Name                                            | Description                | Value               |
-| ----------------------------------------------- | -------------------------- | ------------------- |
-| `memcachedindexqueries.enabled`                 | Deploy memcached sub-chart | `true`              |
-| `memcachedindexqueries.architecture`            | Memcached architecture     | `high-availability` |
-| `memcachedindexqueries.nameOverride`            | override the subchart name | `""`                |
-| `memcachedindexqueries.service.ports.memcached` | Memcached service port     | `11211`             |
-
+| Name                                            | Description                                                                                               | Value                  |
+| ----------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ---------------------- |
+| `memcachedindexqueries.enabled`                 | Deploy memcached sub-chart                                                                                | `true`                 |
+| `memcachedindexqueries.image.registry`          | Memcached image registry                                                                                  | `docker.io`            |
+| `memcachedindexqueries.image.repository`        | Memcached image repository                                                                                | `bitnami/memcached`    |
+| `memcachedindexqueries.image.tag`               | Memcached image tag (immutable tags are recommended)                                                      | `1.6.18-debian-11-r17` |
+| `memcachedindexqueries.image.digest`            | Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
+| `memcachedindexqueries.architecture`            | Memcached architecture                                                                                    | `high-availability`    |
+| `memcachedindexqueries.nameOverride`            | override the subchart name                                                                                | `""`                   |
+| `memcachedindexqueries.service.ports.memcached` | Memcached service port                                                                                    | `11211`                |
 
 ### External Memcached (IndexWrites) Parameters
 
@@ -1090,27 +1153,27 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalMemcachedIndexWrites.host` | Host of a running external memcached instance | `""`    |
 | `externalMemcachedIndexWrites.port` | Port of a running external memcached instance | `11211` |
 
-
 ### Memcached Sub-chart Parameters (Index-Writes)
 
-| Name                                           | Description                | Value               |
-| ---------------------------------------------- | -------------------------- | ------------------- |
-| `memcachedindexwrites.enabled`                 | Deploy memcached sub-chart | `false`             |
-| `memcachedindexwrites.architecture`            | Memcached architecture     | `high-availability` |
-| `memcachedindexwrites.nameOverride`            | override the subchart name | `""`                |
-| `memcachedindexwrites.service.ports.memcached` | Memcached service port     | `11211`             |
+| Name                                           | Description                                                                                               | Value                  |
+| ---------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ---------------------- |
+| `memcachedindexwrites.enabled`                 | Deploy memcached sub-chart                                                                                | `false`                |
+| `memcachedindexwrites.image.registry`          | Memcached image registry                                                                                  | `docker.io`            |
+| `memcachedindexwrites.image.repository`        | Memcached image repository                                                                                | `bitnami/memcached`    |
+| `memcachedindexwrites.image.tag`               | Memcached image tag (immutable tags are recommended)                                                      | `1.6.18-debian-11-r17` |
+| `memcachedindexwrites.image.digest`            | Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
+| `memcachedindexwrites.architecture`            | Memcached architecture                                                                                    | `high-availability`    |
+| `memcachedindexwrites.nameOverride`            | override the subchart name                                                                                | `""`                   |
+| `memcachedindexwrites.service.ports.memcached` | Memcached service port                                                                                    | `11211`                |
 
-
-See https://github.com/bitnami-labs/readme-generator-for-helm to create the table
-
-The above parameters map to the env variables defined in [bitnami/grafana-loki](https://github.com/bitnami/bitnami-docker-grafana-loki). For more information please refer to the [bitnami/grafana-loki](https://github.com/bitnami/bitnami-docker-grafana-loki) image documentation.
+The above parameters map to the env variables defined in [bitnami/grafana-loki](https://github.com/bitnami/containers/tree/main/bitnami/grafana-loki). For more information please refer to the [bitnami/grafana-loki](https://github.com/bitnami/containers/tree/main/bitnami/grafana-loki) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
 helm install my-release \
   --set loki.traces.jaeger.grpc=true \
-  bitnami/grafana-loki
+  my-repo/grafana-loki
 ```
 
 The above command enables the Jaeger GRPC traces.
@@ -1118,7 +1181,7 @@ The above command enables the Jaeger GRPC traces.
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml bitnami/grafana-loki
+helm install my-release -f values.yaml my-repo/grafana-loki
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -1130,13 +1193,20 @@ helm install my-release -f values.yaml bitnami/grafana-loki
 It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
 ### Loki configuration
 
 The loki configuration file `loki.yaml` is shared across the different components: `distributor`, `compactor`, `ingester`, `querier` and `queryFrontend`. This is set in the `loki.configuration` value. Check the official [Loki Grafana documentation](https://grafana.com/docs/loki/latest/configuration/) for the list of possible configurations.
 
 ## Persistence
 
-The [Bitnami grafana-loki](https://github.com/bitnami/bitnami-docker-grafana-loki) image stores the grafana-loki `ingester` data at the `/bitnami` path of the container. Persistent Volume Claims are used to keep the data across deployments.
+### Limitation
+
+This chart does not function fully when using local filesystem as a persistence store. When using a local filesystem as a persistence store, querying will not be possible (or limited to the ingesters' in-memory caches). For a fully functional deployment of this helm chart, an object storage backend is required.
+
+### Data
+
+The [Bitnami grafana-loki](https://github.com/bitnami/containers/tree/main/bitnami/grafana-loki) image stores the grafana-loki `ingester` data at the `/bitnami` path of the container. Persistent Volume Claims are used to keep the data across deployments.
 
 ### Additional environment variables
 
@@ -1184,7 +1254,7 @@ If additional containers are needed in the same pod as grafana-loki (such as add
 
 This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters inside each of the subsections: `distributor`, `compactor`, `ingester`, `querier`, `queryFrontend` and `vulture`.
+As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters inside each of the subsections: `distributor`, `compactor`, `ingester`, `querier`, `queryFrontend` and `vulture`.
 
 ### External cache support
 
@@ -1215,13 +1285,13 @@ Additionally updates the Memcached subchart to its newest major `6.x.x`, which c
 
 ## License
 
-Copyright &copy; 2022 Bitnami
+Copyright &copy; 2023 Bitnami
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

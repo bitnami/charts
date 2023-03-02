@@ -1,0 +1,17 @@
+hostAliases:
+  - ip: "127.0.0.1"
+    hostnames:
+      - "status.localhost"
+prestashopCookieCheckIP: "no"
+containerPorts:
+  http: 8081
+  https: 8444
+podSecurityContext:
+  fsGroup: 1002
+containerSecurityContext:
+  runAsUser: 1002
+mariadb:
+  auth:
+    database: bitnami_test_prestashop
+    username: bn_test_prestashop
+    password: bitnami_test_prestashop

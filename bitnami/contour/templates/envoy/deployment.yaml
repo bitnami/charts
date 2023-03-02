@@ -1,9 +1,9 @@
 {{- if and .Values.envoy.enabled (eq .Values.envoy.kind "deployment") }}
-apiVersion: apps/v1
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ printf "%s-envoy" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
-  namespace: {{ .Release.Namespace }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: envoy
     {{- if .Values.commonLabels }}
@@ -34,6 +34,9 @@ spec:
         {{- if .Values.commonLabels }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
         {{- end }}
+        {{- if .Values.envoy.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.envoy.podLabels "context" $) | nindent 8 }}
+        {{- end }}
     spec:
       {{- include "common.images.pullSecrets" ( dict "images" (list .Values.contour.image .Values.envoy.image) "global" .Values.global) | nindent 6 }}
       {{- if .Values.envoy.hostAliases }}
@@ -49,6 +52,12 @@ spec:
       {{- end }}
       {{- if .Values.envoy.priorityClassName }}
       priorityClassName: {{ .Values.envoy.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.envoy.schedulerName }}
+      schedulerName: {{ .Values.envoy.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.envoy.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.topologySpreadConstraints "context" .) | nindent 8 }}
       {{- end }}
       {{- if .Values.envoy.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.nodeSelector "context" $) | nindent 8 }}
@@ -98,7 +107,9 @@ spec:
                   - contour
                   - envoy
                   - shutdown
-          {{- if .Values.contour.livenessProbe.enabled }}
+          {{- if .Values.envoy.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.contour.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
               path: /healthz
@@ -201,10 +212,10 @@ spec:
             timeoutSeconds: {{ .Values.envoy.readinessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.envoy.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.envoy.readinessProbe.failureThreshold }}
-          {{- else if .Values.envoy.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.envoy.livenessProbe.enabled }}
+          {{- if .Values.envoy.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.envoy.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
               path: /ready
@@ -214,10 +225,10 @@ spec:
             timeoutSeconds: {{ .Values.envoy.livenessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.envoy.livenessProbe.successThreshold }}
             failureThreshold: {{ .Values.envoy.livenessProbe.failureThreshold }}
-          {{- else if .Values.envoy.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.envoy.startupProbe.enabled }}
+          {{- if .Values.envoy.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.envoy.startupProbe.enabled }}
           startupProbe:
             httpGet:
               path: /ready
@@ -227,8 +238,6 @@ spec:
             timeoutSeconds: {{ .Values.envoy.startupProbe.timeoutSeconds }}
             successThreshold: {{ .Values.envoy.startupProbe.successThreshold }}
             failureThreshold: {{ .Values.envoy.startupProbe.failureThreshold }}
-          {{- else if .Values.envoy.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           resources: {{- toYaml .Values.envoy.resources | nindent 12 }}
           volumeMounts:

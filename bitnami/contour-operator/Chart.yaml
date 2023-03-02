@@ -1,15 +1,15 @@
 annotations:
   category: Infrastructure
+  licenses: Apache-2.0
 apiVersion: v2
-appVersion: 1.20.1
+appVersion: 1.24.0
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
     tags:
       - bitnami-common
-    version: 1.x.x
+    version: 2.x.x
 description: The Contour Operator extends the Kubernetes API to create, configure and manage instances of Contour on behalf of users.
-engine: gotpl
 home: https://github.com/projectcontour/contour-operator
 icon: https://bitnami.com/assets/stacks/contour-operator/img/contour-operator-stack-220x234.png
 keywords:
@@ -19,10 +19,10 @@ keywords:
   - envoy
 kubeVersion: '>= 1.21.0-0'
 maintainers:
-  - email: containers@bitnami.com
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: contour-operator
 sources:
   - https://github.com/projectcontour/contour-operator
-  - https://github.com/bitnami/bitnami-docker-contour-operator
-version: 1.1.6
+  - https://github.com/bitnami/containers/tree/main/bitnami/contour-operator
+version: 4.0.1

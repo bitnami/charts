@@ -2,7 +2,7 @@
 apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
 kind: Ingress
 metadata:
-  name: {{ printf "%s-%s" (include "common.names.fullname" .) "management" }}
+  name: {{ printf "%s-management" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
@@ -59,7 +59,7 @@ spec:
         {{- range .Values.mgmtIngress.extraHosts }}
         - {{ .name | quote }}
         {{- end }}
-      secretName: {{ printf "%s-tls" .Values.mgmtIngress.hostname }}
+      secretName: {{ printf "%s-tls" .Values.mgmtIngress.hostname | trunc 63 | trimSuffix "-" }}
     {{- end }}
     {{- if .Values.mgmtIngress.extraTls }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.mgmtIngress.extraTls "context" $ ) | nindent 4 }}

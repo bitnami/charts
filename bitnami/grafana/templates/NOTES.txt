@@ -7,11 +7,7 @@ APP VERSION: {{ .Chart.AppVersion }}
 1. Get the application URL by running these commands:
 
 {{- if .Values.ingress.enabled }}
-{{- range $host := .Values.ingress.hosts }}
-  {{- range .paths }}
-  http{{ if $.Values.ingress.tls }}s{{ end }}://{{ $host.name }}{{ . }}
-  {{- end }}
-{{- end }}
+    {{ ternary "https" "http" .Values.ingress.tls }}://{{ .Values.ingress.hostname }}{{ .Values.ingress.path }}
 {{- else if contains "NodePort" .Values.service.type }}
     export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "common.names.fullname" . }})
     export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
@@ -29,9 +25,10 @@ APP VERSION: {{ .Chart.AppVersion }}
 2. Get the admin credentials:
 
     echo "User: {{ .Values.admin.user }}"
-    echo "Password: $(kubectl get secret {{ include "grafana.adminSecretName" . }} --namespace {{ .Release.Namespace }} -o jsonpath="{.data.{{ include "grafana.adminSecretPasswordKey" . }}}" | base64 --decode)"
+    echo "Password: $(kubectl get secret {{ include "grafana.adminSecretName" . }} --namespace {{ .Release.Namespace }} -o jsonpath="{.data.{{ include "grafana.adminSecretPasswordKey" . }}}" | base64 -d)"
 
 {{- include "common.warnings.rollingTag" .Values.image }}
 {{- include "common.warnings.rollingTag" .Values.imageRenderer.image }}
 {{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
 {{ include "grafana.validateValues" . }}
+{{ include "grafana.validateValues.database" . }}

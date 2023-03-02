@@ -20,6 +20,18 @@ rules:
   - apiGroups: ["apiextensions.k8s.io"]
     resources: ["customresourcedefinitions"]
     verbs: ["get", "list"]
+  # Temp hack to avoid
+  # Failed to read secret for repo due to: rpc error: code = PermissionDenied desc = Forbidden
+  # to get the secret 'helm-podinfo' due to 'secrets "helm-podinfo" is forbidden:
+  # User "system:serviceaccount:kubeapps:kubeapps-internal-kubeappsapis" cannot get resource
+  # "secrets" in API group "" in the namespace "default"'
+  # see discussion in https://github.com/vmware-tanzu/kubeapps/pull/4932#issuecomment-1161243049
+  - apiGroups:
+    - ""
+    resources:
+    - secrets
+    verbs:
+    - get
 ---
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRoleBinding

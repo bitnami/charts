@@ -1,13 +1,14 @@
 annotations:
   category: Analytics
+  licenses: Apache-2.0
 apiVersion: v2
-appVersion: 4.4.1
+appVersion: 4.9.0
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
     tags:
       - bitnami-common
-    version: 1.x.x
+    version: 2.x.x
 description: Grafana Operator is a Kubernetes operator that enables the installation and management of Grafana instances, dashboards and plugins.
 home: https://github.com/grafana-operator/grafana-operator
 icon: https://bitnami.com/assets/stacks/grafana/img/grafana-stack-220x234.png
@@ -16,12 +17,10 @@ keywords:
   - operator
   - monitoring
 maintainers:
-  - name: cellebyte
-    url: cellebyte@gmail.com
-  - email: containers@bitnami.com
-    name: Bitnami
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: grafana-operator
 sources:
   - https://github.com/grafana-operator/grafana-operator
-  - https://github.com/bitnami/bitnami-docker-grafana-operator
-version: 2.5.7
+  - https://github.com/bitnami/containers/tree/main/bitnami/grafana-operator
+version: 2.7.22

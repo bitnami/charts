@@ -1,0 +1,54 @@
+CHART NAME: {{ .Chart.Name  }}
+CHART VERSION: {{ .Chart.Version  }}
+APP VERSION: {{ .Chart.AppVersion  }}
+
+** Please be patient while the chart is being deployed **
+
+The following components have been deployed
+{{- if .Values.concierge.enabled }}
+  - concierge
+{{- end }}
+{{- if .Values.supervisor.enabled }}
+  - supervisor
+{{- end }}
+
+{{- if .Values.concierge.enabled }}
+
+Get the list of pods by executing:
+
+    kubectl get pods --namespace {{ include "common.names.namespace" . }} -l app.kubernetes.io/instance={{ .Release.Name }} -l app.kubernetes.io/component=concierge
+
+Follow the official documentation to configure an authenticator in Concierge: https://pinniped.dev/docs/howto/configure-concierge-jwt/
+{{- end }}
+
+{{- if .Values.supervisor.enabled }}
+{{- if .Values.supervisor.ingress.enabled }}
+
+1. Get the Pinniped Supervisor URL and associate the gateway hostname to your cluster external IP:
+
+   export CLUSTER_IP=$(minikube ip) # On Minikube. Use: `kubectl cluster-info` on others K8s clusters
+   echo "Supervisor URL: http{{ if .Values.supervisor.ingress.tls }}s{{ end }}://{{ .Values.supervisor.ingress.hostname }}/"
+   echo "$CLUSTER_IP  {{ .Values.supervisor.ingress.hostname }}" | sudo tee -a /etc/hosts
+{{- else }}
+
+1. Get the Pinniped Supervisor URL by running these commands:
+
+{{- if contains "NodePort" .Values.supervisor.service.public.type }}
+    export NODE_PORT=$(kubectl get --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "pinniped.supervisor.fullname" . }})
+    export NODE_IP=$(kubectl get nodes --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.items[0].status.addresses[0].address}")
+    echo http://$NODE_IP:$NODE_PORT
+{{- else if contains "LoadBalancer" .Values.supervisor.service.public.type }}
+     NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+           You can watch the status of by running 'kubectl get --namespace {{ include "common.names.namespace" . }} svc -w {{ template "common.names.fullname" . }}
+    export SERVICE_IP=$(kubectl get svc --namespace {{ include "common.names.namespace" . }} {{ template "common.names.fullname" . }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+    echo http://$SERVICE_IP:{{ .Values.supervisor.service.public.ports.https }}
+{{- else if contains "ClusterIP" .Values.supervisor.service.public.type }}
+    echo "The Supervisor is available at http://127.0.0.1:{{ .Values.supervisor.service.public.ports.https }}"
+    kubectl port-forward svc/{{ template "pinniped.supervisor.fullname" . }} {{ .Values.supervisor.service.public.ports.https }}:{{ .Values.supervisor.service.public.ports.https }} &
+{{- end }}
+{{- end }}
+
+Follow the official instructions to configure an OIDC provider: https://pinniped.dev/docs/howto/configure-supervisor/
+{{- end }}
+{{- include "common.warnings.rollingTag" .Values.image }}
+{{- include "pinniped.validateValues" . }}

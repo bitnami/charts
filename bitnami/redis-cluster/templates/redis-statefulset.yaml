@@ -172,7 +172,7 @@ spec:
             - name: REDIS_TLS_ENABLED
               value: {{ ternary "yes" "no" .Values.tls.enabled | quote }}
             {{- if .Values.tls.enabled }}
-            - name: REDIS_TLS_PORT
+            - name: REDIS_TLS_PORT_NUMBER
               value: {{ .Values.redis.containerPorts.redis | quote }}
             - name:  REDIS_TLS_AUTH_CLIENTS
               value: {{ ternary "yes" "no" .Values.tls.authClients | quote }}
@@ -187,7 +187,7 @@ spec:
               value: {{ template "redis-cluster.tlsDHParams" . }}
             {{- end }}
             {{- else }}
-            - name: REDIS_PORT
+            - name: REDIS_PORT_NUMBER
               value: {{ .Values.redis.containerPorts.redis | quote }}
             {{- end }}
             {{- if .Values.redis.extraEnvVars }}
@@ -210,7 +210,9 @@ spec:
             - name: tcp-redis-bus
               containerPort: {{ .Values.redis.containerPorts.bus }}
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.redis.livenessProbe.enabled }}
+          {{- if .Values.redis.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.redis.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.redis.livenessProbe.enabled }}
           livenessProbe:
             initialDelaySeconds: {{ .Values.redis.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.redis.livenessProbe.periodSeconds }}
@@ -223,10 +225,10 @@ spec:
                 - sh
                 - -c
                 - /scripts/ping_liveness_local.sh {{ .Values.redis.livenessProbe.timeoutSeconds }}
-          {{- else if .Values.redis.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.redis.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.redis.readinessProbe.enabled }}
+          {{- if .Values.redis.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.redis.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.redis.readinessProbe.enabled }}
           readinessProbe:
             initialDelaySeconds: {{ .Values.redis.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.redis.readinessProbe.periodSeconds }}
@@ -239,10 +241,10 @@ spec:
                 - sh
                 - -c
                 - /scripts/ping_readiness_local.sh {{ .Values.redis.readinessProbe.timeoutSeconds }}
-          {{- else if .Values.redis.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.redis.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.redis.startupProbe.enabled }}
+          {{- if .Values.redis.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.redis.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.redis.startupProbe.enabled }}
           startupProbe:
             tcpSocket:
               port: tcp-redis
@@ -251,8 +253,6 @@ spec:
             timeoutSeconds: {{ .Values.redis.startupProbe.timeoutSeconds }}
             successThreshold: {{ .Values.redis.startupProbe.successThreshold }}
             failureThreshold: {{ .Values.redis.startupProbe.failureThreshold }}
-          {{- else if .Values.redis.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.redis.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- if .Values.redis.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.redis.lifecycleHooks "context" $) | nindent 12 }}
@@ -289,6 +289,9 @@ spec:
         - name: metrics
           image: {{ template "redis-cluster.metrics.image" . }}
           imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
+          {{- if .Values.metrics.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.metrics.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
@@ -379,9 +382,9 @@ spec:
           {{- end }}
           command:
           {{- toYaml .Values.sysctlImage.command | nindent 12 }}
-          securityContext:
-            privileged: true
-            runAsUser: 0
+          {{- if .Values.sysctlImage.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.sysctlImage.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
         {{- end }}
         {{- if .Values.redis.initContainers }}
         {{- toYaml .Values.redis.initContainers | nindent 8 }}
@@ -419,6 +422,11 @@ spec:
             secretName: {{ include "redis-cluster.tlsSecretName" . }}
             defaultMode: 256
         {{- end }}
+        {{- if not .Values.persistence.enabled }}
+        - name: redis-data
+          emptyDir: {}
+        {{- end }}
+  {{- if .Values.persistence.enabled }}
   volumeClaimTemplates:
     - metadata:
         name: redis-data
@@ -446,4 +454,5 @@ spec:
           {{- toYaml .Values.persistence.matchExpressions | nindent 12 }}
         {{- end -}}
         {{- end }}
+  {{- end }}
 {{- end }}

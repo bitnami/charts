@@ -36,6 +36,22 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{/*
+Create a default fully qualified web node(s) name adding the installation's namespace.
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+*/}}
+{{- define "concourse.web.fullname.namespace" -}}
+{{- printf "%s-web" (include "common.names.fullname.namespace" .) | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
+Create a default fully qualified worker node(s) name adding the installation's namespace.
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+*/}}
+{{- define "concourse.worker.fullname.namespace" -}}
+{{- printf "%s-worker" (include "common.names.fullname.namespace" .) | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
 Create the name of the service account to use (worker)
 */}}
 {{- define "concourse.worker.serviceAccountName" -}}
@@ -255,7 +271,7 @@ concourse: enabled
 {{- printf "Must set secrets.conjurAccount to integrate Conjur. Please set the parameter (--set secrets.conjurAccount=\"xxxx\")." -}}
 {{- end -}}
 {{- if (empty .Values.secrets.conjurAuthnLogin) -}}
-{{- printf "Must set secrets.conjurAuthnLogin to integrate Conjur. Please set the parameter (--set secrets.conjurAuthnLogin=\"xxxx\")." -}}    
+{{- printf "Must set secrets.conjurAuthnLogin to integrate Conjur. Please set the parameter (--set secrets.conjurAuthnLogin=\"xxxx\")." -}}
 {{- end -}}
 {{- if and (empty .Values.secrets.conjurAuthnTokenFile) (empty .Values.secrets.conjurAuthnApiKey) -}}
 {{- printf "Must set either secrets.conjurAuthnApiKey or secrets.conjurAuthnTokenFile to integrate Conjur. Please set the parameter (--set secrets.conjurAuthnLogin=\"xxxx\" or --set secrets.conjurAuthnTokenFile=\"xxxx\")" -}}

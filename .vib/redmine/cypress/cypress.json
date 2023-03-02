@@ -2,9 +2,8 @@
   "baseUrl": "http://localhost",
   "pageLoadTimeout": 240000,
   "defaultCommandTimeout": 80000,
-
   "env": {
-    "username": "user",
+    "username": "bitnamiTest",
     "password": "ComplicatedPassword123!4"
   }
 }

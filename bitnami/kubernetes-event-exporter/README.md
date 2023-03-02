@@ -4,20 +4,22 @@
 
 Kubernetes Event Exporter makes it easy to export Kubernetes events to other tools, thereby enabling better event observability, custom alerts and aggregation.
 
-[Overview of Kubernetes Event Exporter](https://github.com/opsgenie/kubernetes-event-exporter)
+[Overview of Kubernetes Event Exporter](https://github.com/resmoio/kubernetes-event-exporter)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/kubernetes-event-exporter
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/kubernetes-event-exporter
 ```
 
 ## Introduction
 
-This chart bootstraps a [Kubernetes Event Exporter](https://github.com/opsgenie/kubernetes-event-exporter) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Kubernetes Event Exporter](https://github.com/resmoio/kubernetes-event-exporter) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -29,11 +31,11 @@ This chart bootstraps a [Kubernetes Event Exporter](https://github.com/opsgenie/
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/kubernetes-event-exporter
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/kubernetes-event-exporter
 ```
 
-These commands deploy Kubernetes Event Exporter on the Kubernetes cluster in the default configuration. The [Parameters](##parameters) section lists the parameters that can be configured during installation.
+These commands deploy Kubernetes Event Exporter on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
 > **Tip**: List all releases using `helm list` or `helm ls --all-namespaces`
 
@@ -42,7 +44,7 @@ These commands deploy Kubernetes Event Exporter on the Kubernetes cluster in the
 To uninstall/delete the `my-release` deployment:
 
 ```console
-$ helm delete my-release
+helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -55,7 +57,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------- | ----------------------------------------------- | ----- |
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-
 
 ### Common parameters
 
@@ -71,64 +72,86 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                                        | `["infinity"]` |
 | `extraDeploy`            | Array of extra objects to deploy with the release (evaluated as a template)                              | `[]`           |
 
-
 ### Kubernetes Event Exporter parameters
 
-| Name                                              | Description                                                                                                         | Value                               |
-| ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ----------------------------------- |
-| `replicaCount`                                    | Desired number of pod replicas                                                                                      | `1`                                 |
-| `image.registry`                                  | Container image registry                                                                                            | `docker.io`                         |
-| `image.repository`                                | Container image name                                                                                                | `bitnami/kubernetes-event-exporter` |
-| `image.tag`                                       | Container image tag                                                                                                 | `0.11.0-debian-10-r59`              |
-| `image.pullPolicy`                                | Container image pull policy                                                                                         | `IfNotPresent`                      |
-| `image.pullSecrets`                               | Specify docker-registry secret names as an array                                                                    | `[]`                                |
-| `hostAliases`                                     | Add deployment host aliases                                                                                         | `[]`                                |
-| `config.logLevel`                                 | Verbosity of the logs (options: `fatal`, `error`, `warn`, `info` or `debug`)                                        | `debug`                             |
-| `config.logFormat`                                | How the logs are formatted. Allowed values: `pretty` or `json`                                                      | `pretty`                            |
-| `config.receivers`                                | Array containing event receivers                                                                                    | `[]`                                |
-| `config.route.routes`                             | Array containing event route configuration                                                                          | `[]`                                |
-| `rbac.create`                                     | Create the RBAC roles for API accessibility                                                                         | `true`                              |
-| `serviceAccount.create`                           | Specifies whether a ServiceAccount should be created                                                                | `true`                              |
-| `serviceAccount.name`                             | Name of the service account to use. If not set and create is true, a name is generated using the fullname template. | `""`                                |
-| `serviceAccount.automountServiceAccountToken`     | Automount service account token for the server service account                                                      | `true`                              |
-| `serviceAccount.annotations`                      | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                          | `{}`                                |
-| `podAnnotations`                                  | Pod annotations                                                                                                     | `{}`                                |
-| `podLabels`                                       | Pod labels                                                                                                          | `{}`                                |
-| `podSecurityContext.enabled`                      | Enable security context                                                                                             | `true`                              |
-| `podSecurityContext.fsGroup`                      | Group ID for the container                                                                                          | `1001`                              |
-| `containerSecurityContext.enabled`                | Enable container security context                                                                                   | `true`                              |
-| `containerSecurityContext.capabilities.add`       | Add capabilities for the securityContext                                                                            | `[]`                                |
-| `containerSecurityContext.capabilities.drop`      | Drop capabilities for the securityContext                                                                           | `[]`                                |
-| `containerSecurityContext.readOnlyRootFilesystem` | Allows the pod to mount the RootFS as ReadOnly only                                                                 | `true`                              |
-| `containerSecurityContext.runAsNonRoot`           | If the pod should run as a non root container.                                                                      | `true`                              |
-| `containerSecurityContext.runAsUser`              | Define the uid with which the pod will run                                                                          | `1001`                              |
-| `command`                                         | Override default container command (useful when using custom images)                                                | `[]`                                |
-| `args`                                            | Override default container args (useful when using custom images)                                                   | `[]`                                |
-| `lifecycleHooks`                                  | Lifecycle for the container to automate configuration before or after startup                                       | `{}`                                |
-| `resources.limits`                                | Specify resource limits which the container is not allowed to succeed.                                              | `{}`                                |
-| `resources.requests`                              | Specify resource requests which the container needs to spawn.                                                       | `{}`                                |
-| `customStartupProbe`                              | Configure startup probe for Kubernetes event exporter pod                                                           | `{}`                                |
-| `customLivenessProbe`                             | Configure liveness probe for Kubernetes event exporter pod                                                          | `{}`                                |
-| `customReadinessProbe`                            | Configure readiness probe for Kubernetes event exporter pod                                                         | `{}`                                |
-| `nodeSelector`                                    | Node labels for pod assignment                                                                                      | `{}`                                |
-| `priorityClassName`                               | Set Priority Class Name to allow priority control over other pods                                                   | `""`                                |
-| `schedulerName`                                   | Name of the k8s scheduler (other than default)                                                                      | `""`                                |
-| `topologySpreadConstraints`                       | Topology Spread Constraints for pod assignment                                                                      | `[]`                                |
-| `tolerations`                                     | Tolerations for pod assignment                                                                                      | `[]`                                |
-| `podAffinityPreset`                               | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                 | `""`                                |
-| `podAntiAffinityPreset`                           | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                            | `soft`                              |
-| `nodeAffinityPreset.type`                         | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                           | `""`                                |
-| `nodeAffinityPreset.key`                          | Node label key to match. Ignored if `affinity` is set.                                                              | `""`                                |
-| `nodeAffinityPreset.values`                       | Node label values to match. Ignored if `affinity` is set.                                                           | `[]`                                |
-| `affinity`                                        | Affinity for pod assignment                                                                                         | `{}`                                |
-| `updateStrategy.type`                             | Deployment strategy type.                                                                                           | `RollingUpdate`                     |
-| `extraEnvVars`                                    | Array containing extra env vars to be added to all containers                                                       | `[]`                                |
-| `extraEnvVarsCM`                                  | ConfigMap containing extra env vars to be added to all containers                                                   | `""`                                |
-| `extraEnvVarsSecret`                              | Secret containing extra env vars to be added to all containers                                                      | `""`                                |
-| `extraVolumeMounts`                               | Array to add extra mounts (normally used with extraVolumes)                                                         | `[]`                                |
-| `extraVolumes`                                    | Array to add extra volumes                                                                                          | `[]`                                |
-| `initContainers`                                  | Attach additional init containers to pods                                                                           | `[]`                                |
-| `sidecars`                                        | Add additional sidecar containers to pods                                                                           | `[]`                                |
+| Name                                              | Description                                                                                                               | Value                               |
+| ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- | ----------------------------------- |
+| `replicaCount`                                    | Desired number of pod replicas                                                                                            | `1`                                 |
+| `containerPorts.http`                             | HTTP container port                                                                                                       | `2112`                              |
+| `extraContainerPorts`                             | Optionally specify extra list of additional port-mappings for the container                                               | `[]`                                |
+| `image.registry`                                  | Container image registry                                                                                                  | `docker.io`                         |
+| `image.repository`                                | Container image name                                                                                                      | `bitnami/kubernetes-event-exporter` |
+| `image.tag`                                       | Container image tag                                                                                                       | `1.1.0-debian-11-r26`               |
+| `image.digest`                                    | Container image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                 | `""`                                |
+| `image.pullPolicy`                                | Container image pull policy                                                                                               | `IfNotPresent`                      |
+| `image.pullSecrets`                               | Specify docker-registry secret names as an array                                                                          | `[]`                                |
+| `hostAliases`                                     | Add deployment host aliases                                                                                               | `[]`                                |
+| `config.logLevel`                                 | Verbosity of the logs (options: `fatal`, `error`, `warn`, `info` or `debug`)                                              | `debug`                             |
+| `config.logFormat`                                | How the logs are formatted. Allowed values: `pretty` or `json`                                                            | `pretty`                            |
+| `config.receivers`                                | Array containing event receivers                                                                                          | `[]`                                |
+| `config.route.routes`                             | Array containing event route configuration                                                                                | `[]`                                |
+| `rbac.create`                                     | Create the RBAC roles for API accessibility                                                                               | `true`                              |
+| `serviceAccount.create`                           | Specifies whether a ServiceAccount should be created                                                                      | `true`                              |
+| `serviceAccount.name`                             | Name of the service account to use. If not set and create is true, a name is generated using the fullname template.       | `""`                                |
+| `serviceAccount.automountServiceAccountToken`     | Automount service account token for the server service account                                                            | `true`                              |
+| `serviceAccount.annotations`                      | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                                | `{}`                                |
+| `podAnnotations`                                  | Pod annotations                                                                                                           | `{}`                                |
+| `podLabels`                                       | Pod labels                                                                                                                | `{}`                                |
+| `podSecurityContext.enabled`                      | Enable security context                                                                                                   | `true`                              |
+| `podSecurityContext.fsGroup`                      | Group ID for the container                                                                                                | `1001`                              |
+| `containerSecurityContext.enabled`                | Enable container security context                                                                                         | `true`                              |
+| `containerSecurityContext.capabilities.add`       | Add capabilities for the securityContext                                                                                  | `[]`                                |
+| `containerSecurityContext.capabilities.drop`      | Drop capabilities for the securityContext                                                                                 | `[]`                                |
+| `containerSecurityContext.readOnlyRootFilesystem` | Allows the pod to mount the RootFS as ReadOnly only                                                                       | `true`                              |
+| `containerSecurityContext.runAsNonRoot`           | If the pod should run as a non root container.                                                                            | `true`                              |
+| `containerSecurityContext.runAsUser`              | Define the uid with which the pod will run                                                                                | `1001`                              |
+| `command`                                         | Override default container command (useful when using custom images)                                                      | `[]`                                |
+| `args`                                            | Override default container args (useful when using custom images)                                                         | `[]`                                |
+| `lifecycleHooks`                                  | Lifecycle for the container to automate configuration before or after startup                                             | `{}`                                |
+| `resources.limits`                                | Specify resource limits which the container is not allowed to succeed.                                                    | `{}`                                |
+| `resources.requests`                              | Specify resource requests which the container needs to spawn.                                                             | `{}`                                |
+| `customStartupProbe`                              | Configure startup probe for Kubernetes event exporter pod                                                                 | `{}`                                |
+| `customLivenessProbe`                             | Configure liveness probe for Kubernetes event exporter pod                                                                | `{}`                                |
+| `customReadinessProbe`                            | Configure readiness probe for Kubernetes event exporter pod                                                               | `{}`                                |
+| `nodeSelector`                                    | Node labels for pod assignment                                                                                            | `{}`                                |
+| `priorityClassName`                               | Set Priority Class Name to allow priority control over other pods                                                         | `""`                                |
+| `schedulerName`                                   | Name of the k8s scheduler (other than default)                                                                            | `""`                                |
+| `topologySpreadConstraints`                       | Topology Spread Constraints for pod assignment                                                                            | `[]`                                |
+| `tolerations`                                     | Tolerations for pod assignment                                                                                            | `[]`                                |
+| `podAffinityPreset`                               | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                       | `""`                                |
+| `podAntiAffinityPreset`                           | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                  | `soft`                              |
+| `nodeAffinityPreset.type`                         | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                 | `""`                                |
+| `nodeAffinityPreset.key`                          | Node label key to match. Ignored if `affinity` is set.                                                                    | `""`                                |
+| `nodeAffinityPreset.values`                       | Node label values to match. Ignored if `affinity` is set.                                                                 | `[]`                                |
+| `affinity`                                        | Affinity for pod assignment                                                                                               | `{}`                                |
+| `updateStrategy.type`                             | Deployment strategy type.                                                                                                 | `RollingUpdate`                     |
+| `extraEnvVars`                                    | Array containing extra env vars to be added to all containers                                                             | `[]`                                |
+| `extraEnvVarsCM`                                  | ConfigMap containing extra env vars to be added to all containers                                                         | `""`                                |
+| `extraEnvVarsSecret`                              | Secret containing extra env vars to be added to all containers                                                            | `""`                                |
+| `extraVolumeMounts`                               | Array to add extra mounts (normally used with extraVolumes)                                                               | `[]`                                |
+| `extraVolumes`                                    | Array to add extra volumes                                                                                                | `[]`                                |
+| `initContainers`                                  | Attach additional init containers to pods                                                                                 | `[]`                                |
+| `sidecars`                                        | Add additional sidecar containers to pods                                                                                 | `[]`                                |
+| `metrics.enabled`                                 | Enable exposing  statistics                                                                                               | `false`                             |
+| `metrics.service.ports.http`                      | Metrics service HTTP port                                                                                                 | `2112`                              |
+| `metrics.service.annotations`                     | Annotations for enabling prometheus to access the metrics endpoints                                                       | `{}`                                |
+| `metrics.serviceMonitor.enabled`                  | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator                                              | `false`                             |
+| `metrics.serviceMonitor.port`                     | Metrics service HTTP port                                                                                                 | `http`                              |
+| `metrics.serviceMonitor.endpoints`                | The endpoint configuration of the ServiceMonitor. Path is mandatory. Interval, timeout and labellings can be overwritten. | `[]`                                |
+| `metrics.serviceMonitor.path`                     | Metrics service HTTP path. Deprecated: Use @param metrics.serviceMonitor.endpoints instead                                | `""`                                |
+| `metrics.serviceMonitor.namespace`                | Namespace which Prometheus is running in                                                                                  | `""`                                |
+| `metrics.serviceMonitor.interval`                 | Interval at which metrics should be scraped                                                                               | `30s`                               |
+| `metrics.serviceMonitor.scrapeTimeout`            | Specify the timeout after which the scrape is ended                                                                       | `""`                                |
+| `metrics.serviceMonitor.labels`                   | Additional labels that can be used so ServiceMonitor will be discovered by Prometheus                                     | `{}`                                |
+| `metrics.serviceMonitor.selector`                 | Prometheus instance selector labels                                                                                       | `{}`                                |
+| `metrics.serviceMonitor.relabelings`              | RelabelConfigs to apply to samples before scraping                                                                        | `[]`                                |
+| `metrics.serviceMonitor.metricRelabelings`        | MetricRelabelConfigs to apply to samples before ingestion                                                                 | `[]`                                |
+| `metrics.serviceMonitor.honorLabels`              | honorLabels chooses the metric's labels on collisions with target labels                                                  | `false`                             |
+| `metrics.serviceMonitor.jobLabel`                 | The name of the label on the target service to use as the job name in prometheus.                                         | `""`                                |
+| `metrics.prometheusRule.enabled`                  | Create PrometheusRule Resource for scraping metrics using PrometheusOperator                                              | `false`                             |
+| `metrics.prometheusRule.namespace`                | Namespace which Prometheus is running in                                                                                  | `""`                                |
+| `metrics.prometheusRule.labels`                   | Additional labels that can be used so PrometheusRule will be discovered by Prometheus                                     | `{}`                                |
+| `metrics.prometheusRule.groups`                   | Groups, containing the alert rules.                                                                                       | `[]`                                |
 
 
 ## Configuration and installation details
@@ -147,7 +170,7 @@ To modify the application version used in this chart, specify a different versio
 
 This chart allows you to set custom Pod affinity using the `affinity` parameter. Find more information about Pod's affinity in the [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
 
 ## Troubleshooting
 
@@ -155,13 +178,13 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## License
 
-Copyright &copy; 2022 Bitnami
+Copyright &copy; 2023 Bitnami
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

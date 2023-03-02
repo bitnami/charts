@@ -2,14 +2,14 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "common.names.fullname" . }}-envoy
-  namespace: {{ .Release.Namespace }}
+  name: {{ default (printf "%s-envoy" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-") .Values.envoy.service.name }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: envoy
     {{- if .Values.envoy.service.labels }}
     {{- include "common.tplvalues.render" (dict "value" .Values.envoy.service.labels "context" $) | nindent 4 }}
     {{- end }}
-      {{- if .Values.commonLabels }}
+    {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
   annotations:
@@ -36,6 +36,12 @@ spec:
   {{- if not (empty .Values.envoy.service.clusterIP) }}
   clusterIP: {{ .Values.envoy.service.clusterIP | quote }}
   {{- end }}
+  {{- if .Values.envoy.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.envoy.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.envoy.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.service.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
   {{- if .Values.envoy.service.externalIPs }}
   externalIPs: {{- toYaml .Values.envoy.service.externalIPs | nindent 4 }}
   {{- end }}
@@ -47,6 +53,9 @@ spec:
   {{- end }}
   {{- if .Values.envoy.service.ipFamilyPolicy }}
   ipFamilyPolicy: {{ .Values.envoy.service.ipFamilyPolicy }}
+  {{- end }}
+  {{- if and .Values.envoy.service.loadBalancerClass (eq .Values.envoy.service.type "LoadBalancer") }}
+  loadBalancerClass: {{ .Values.envoy.service.loadBalancerClass }}
   {{- end }}
   ports:
     - name: http
@@ -68,7 +77,7 @@ spec:
       nodePort: null
       {{- end }}
     {{- if .Values.envoy.service.extraPorts }}
-      {{- include "common.tplvalues.render" (dict "value" .Values.envoy.service.extraPorts "context" $) | nindent 4 }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.envoy.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: envoy
@@ -78,7 +87,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "common.names.fullname" . }}-envoy-metrics
+  name: {{ printf "%s-envoy-metrics" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: envoy
 spec:

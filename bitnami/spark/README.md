@@ -7,21 +7,21 @@ Apache Spark is a high-performance engine for large-scale computing tasks, such 
 [Overview of Apache Spark](https://spark.apache.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/spark
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/spark
 ```
 
 ## Introduction
 
-This chart bootstraps an [Apache Spark](https://github.com/bitnami/bitnami-docker-spark) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps an [Apache Spark](https://github.com/bitnami/containers/tree/main/bitnami/spark) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Apache Spark includes APIs for Java, Python, Scala and R.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -33,8 +33,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/spark
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/spark
 ```
 
 These commands deploy Apache Spark on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -46,7 +46,7 @@ These commands deploy Apache Spark on the Kubernetes cluster in the default conf
 To uninstall/delete the `my-release` statefulset:
 
 ```console
-$ helm delete my-release
+helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release. Use the option `--purge` to delete all persistent volumes too.
@@ -61,36 +61,37 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
-| Name                     | Description                                                                                  | Value           |
-| ------------------------ | -------------------------------------------------------------------------------------------- | --------------- |
-| `kubeVersion`            | Force target Kubernetes version (using Helm capabilities if not set)                         | `""`            |
-| `nameOverride`           | String to partially override common.names.fullname template (will maintain the release name) | `""`            |
-| `fullnameOverride`       | String to fully override common.names.fullname template                                      | `""`            |
-| `namespaceOverride`      | String to fully override common.names.namespace                                              | `""`            |
-| `commonLabels`           | Labels to add to all deployed objects                                                        | `{}`            |
-| `commonAnnotations`      | Annotations to add to all deployed objects                                                   | `{}`            |
-| `clusterDomain`          | Kubernetes cluster domain name                                                               | `cluster.local` |
-| `extraDeploy`            | Array of extra objects to deploy with the release                                            | `[]`            |
-| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)      | `false`         |
-| `diagnosticMode.command` | Command to override all containers in the deployment                                         | `["sleep"]`     |
-| `diagnosticMode.args`    | Args to override all containers in the deployment                                            | `["infinity"]`  |
-
+| Name                     | Description                                                                                                                                         | Value           |
+| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
+| `kubeVersion`            | Force target Kubernetes version (using Helm capabilities if not set)                                                                                | `""`            |
+| `nameOverride`           | String to partially override common.names.fullname template (will maintain the release name)                                                        | `""`            |
+| `fullnameOverride`       | String to fully override common.names.fullname template                                                                                             | `""`            |
+| `namespaceOverride`      | String to fully override common.names.namespace                                                                                                     | `""`            |
+| `commonLabels`           | Labels to add to all deployed objects                                                                                                               | `{}`            |
+| `commonAnnotations`      | Annotations to add to all deployed objects                                                                                                          | `{}`            |
+| `clusterDomain`          | Kubernetes cluster domain name                                                                                                                      | `cluster.local` |
+| `extraDeploy`            | Array of extra objects to deploy with the release                                                                                                   | `[]`            |
+| `initScripts`            | Dictionary of init scripts. Evaluated as a template.                                                                                                | `{}`            |
+| `initScriptsCM`          | ConfigMap with the init scripts. Evaluated as a template.                                                                                           | `""`            |
+| `initScriptsSecret`      | Secret containing `/docker-entrypoint-initdb.d` scripts to be executed at initialization time that contain sensitive data. Evaluated as a template. | `""`            |
+| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                                                             | `false`         |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                                                                                | `["sleep"]`     |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                                                                                   | `["infinity"]`  |
 
 ### Spark parameters
 
-| Name                | Description                                      | Value                 |
-| ------------------- | ------------------------------------------------ | --------------------- |
-| `image.registry`    | Spark image registry                             | `docker.io`           |
-| `image.repository`  | Spark image repository                           | `bitnami/spark`       |
-| `image.tag`         | Spark image tag (immutable tags are recommended) | `3.2.1-debian-10-r85` |
-| `image.pullPolicy`  | Spark image pull policy                          | `IfNotPresent`        |
-| `image.pullSecrets` | Specify docker-registry secret names as an array | `[]`                  |
-| `image.debug`       | Enable image debug mode                          | `false`               |
-| `hostNetwork`       | Enable HOST Network                              | `false`               |
-
+| Name                | Description                                                                                           | Value                |
+| ------------------- | ----------------------------------------------------------------------------------------------------- | -------------------- |
+| `image.registry`    | Spark image registry                                                                                  | `docker.io`          |
+| `image.repository`  | Spark image repository                                                                                | `bitnami/spark`      |
+| `image.tag`         | Spark image tag (immutable tags are recommended)                                                      | `3.3.2-debian-11-r3` |
+| `image.digest`      | Spark image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                 |
+| `image.pullPolicy`  | Spark image pull policy                                                                               | `IfNotPresent`       |
+| `image.pullSecrets` | Specify docker-registry secret names as an array                                                      | `[]`                 |
+| `image.debug`       | Enable image debug mode                                                                               | `false`              |
+| `hostNetwork`       | Enable HOST Network                                                                                   | `false`              |
 
 ### Spark master parameters
 
@@ -130,7 +131,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `master.tolerations`                                     | Spark master tolerations for pod assignment                                                                              | `[]`            |
 | `master.updateStrategy.type`                             | Master statefulset strategy type.                                                                                        | `RollingUpdate` |
 | `master.priorityClassName`                               | master pods' priorityClassName                                                                                           | `""`            |
-| `master.topologySpreadConstraints`                       | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `{}`            |
+| `master.topologySpreadConstraints`                       | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`            |
 | `master.schedulerName`                                   | Name of the k8s scheduler (other than default) for master pods                                                           | `""`            |
 | `master.terminationGracePeriodSeconds`                   | Seconds Redmine pod needs to terminate gracefully                                                                        | `""`            |
 | `master.lifecycleHooks`                                  | for the master container(s) to automate configuration before or after startup                                            | `{}`            |
@@ -159,9 +160,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `master.customLivenessProbe`                             | Custom livenessProbe that overrides the default one                                                                      | `{}`            |
 | `master.customReadinessProbe`                            | Custom readinessProbe that overrides the default one                                                                     | `{}`            |
 | `master.customStartupProbe`                              | Custom startupProbe that overrides the default one                                                                       | `{}`            |
-| `master.sidecars`                                        | Add additional sidecar containers to the master pod(s)                                                                   | `{}`            |
+| `master.sidecars`                                        | Add additional sidecar containers to the master pod(s)                                                                   | `[]`            |
 | `master.initContainers`                                  | Add initContainers to the master pods.                                                                                   | `[]`            |
-
 
 ### Spark worker parameters
 
@@ -207,7 +207,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `worker.updateStrategy.type`                             | Worker statefulset strategy type.                                                                                        | `RollingUpdate` |
 | `worker.podManagementPolicy`                             | Statefulset Pod Management Policy Type                                                                                   | `OrderedReady`  |
 | `worker.priorityClassName`                               | worker pods' priorityClassName                                                                                           | `""`            |
-| `worker.topologySpreadConstraints`                       | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `{}`            |
+| `worker.topologySpreadConstraints`                       | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`            |
 | `worker.schedulerName`                                   | Name of the k8s scheduler (other than default) for worker pods                                                           | `""`            |
 | `worker.terminationGracePeriodSeconds`                   | Seconds Redmine pod needs to terminate gracefully                                                                        | `""`            |
 | `worker.lifecycleHooks`                                  | for the worker container(s) to automate configuration before or after startup                                            | `{}`            |
@@ -236,14 +236,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `worker.customLivenessProbe`                             | Custom livenessProbe that overrides the default one                                                                      | `{}`            |
 | `worker.customReadinessProbe`                            | Custom readinessProbe that overrides the default one                                                                     | `{}`            |
 | `worker.customStartupProbe`                              | Custom startupProbe that overrides the default one                                                                       | `{}`            |
-| `worker.sidecars`                                        | Add additional sidecar containers to the worker pod(s)                                                                   | `{}`            |
+| `worker.sidecars`                                        | Add additional sidecar containers to the worker pod(s)                                                                   | `[]`            |
 | `worker.initContainers`                                  | Add initContainers to the worker pods.                                                                                   | `[]`            |
 | `worker.autoscaling.enabled`                             | Enable replica autoscaling depending on CPU                                                                              | `false`         |
 | `worker.autoscaling.minReplicas`                         | Minimum number of worker replicas                                                                                        | `""`            |
 | `worker.autoscaling.maxReplicas`                         | Maximum number of worker replicas                                                                                        | `5`             |
 | `worker.autoscaling.targetCPU`                           | Target CPU utilization percentage                                                                                        | `50`            |
 | `worker.autoscaling.targetMemory`                        | Target Memory utilization percentage                                                                                     | `""`            |
-
 
 ### Security parameters
 
@@ -263,7 +262,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `security.ssl.truststorePassword`    | Truststore password.                                                          | `""`      |
 | `security.ssl.resources.limits`      | The resources limits for the container                                        | `{}`      |
 | `security.ssl.resources.requests`    | The requested resources for the container                                     | `{}`      |
-
 
 ### Traffic Exposure parameters
 
@@ -299,7 +297,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.secrets`                  | If you're providing your own certificates, please use this to add the certificates as secrets                                    | `[]`                     |
 | `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
-
 ### Other parameters
 
 | Name                                          | Description                                            | Value  |
@@ -308,7 +305,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.name`                         | The name of the ServiceAccount to use.                 | `""`   |
 | `serviceAccount.annotations`                  | Annotations for Spark Service Account                  | `{}`   |
 | `serviceAccount.automountServiceAccountToken` | Automount API credentials for a service account.       | `true` |
-
 
 ### Metrics parameters
 
@@ -328,12 +324,11 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.prometheusRule.additionalLabels`  | Additional labels that can be used so prometheusRules will be discovered by Prometheus                                                  | `{}`    |
 | `metrics.prometheusRule.rules`             | Custom Prometheus [rules](https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/)                                   | `[]`    |
 
-
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-$ helm install my-release \
-  --set master.webPort=8081 bitnami/spark
+helm install my-release \
+  --set master.webPort=8081 my-repo/spark
 ```
 
 The above command sets the spark master web port to `8081`.
@@ -341,7 +336,7 @@ The above command sets the spark master web port to `8081`.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml bitnami/spark
+helm install my-release -f values.yaml my-repo/spark
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -368,7 +363,7 @@ To submit an application to the Apache Spark cluster, use the `spark-submit` scr
 
 The command below illustrates the process of deploying one of the sample applications included with Apache Spark. Replace the `k8s-apiserver-host`, `k8s-apiserver-port`, `spark-master-svc`, and `spark-master-port` placeholders with the correct master host/IP address and port for your deployment.
 
-```bash
+```console
 $ ./bin/spark-submit \
     --class org.apache.spark.examples.SparkPi \
     --conf spark.kubernetes.container.image=bitnami/spark:3 \
@@ -380,7 +375,7 @@ $ ./bin/spark-submit \
 
 This command example assumes that you have downloaded a Spark binary distribution, which can be found at [Download Apache Spark](https://spark.apache.org/downloads.html).
 
-For a complete walkthrough of the process using a custom application, refer to the [detailed Apache Spark tutorial](https://docs.bitnami.com/tutorials/process-data-spark-kubernetes/) or Spark's guide to [Running Spark on Kubernetes](https://spark.apache.org/docs/latest/running-on-kubernetes.html).
+For a complete walkthrough of the process using a custom application, refer to Spark's guide to [Running Spark on Kubernetes](https://spark.apache.org/docs/latest/running-on-kubernetes.html).
 
 > Be aware that it is currently not possible to submit an application to a standalone cluster if RPC authentication is configured. [Learn more about the issue](https://issues.apache.org/jira/browse/SPARK-25078).
 
@@ -428,7 +423,7 @@ Refer to the [chart documentation for more details on configuring security and a
 
 This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod affinity in the [Kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-As an alternative, you can use the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
+As an alternative, you can use the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
 
 ## Troubleshooting
 
@@ -462,21 +457,21 @@ This version standardizes the way of defining Ingress rules. When configuring a 
 
 ### To 3.0.0
 
-- This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
+- This version introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/main/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
 
-- Spark container images are updated to use Hadoop `3.2.x`: [Notable Changes: 3.0.0-debian-10-r44](https://github.com/bitnami/bitnami-docker-spark#300-debian-10-r44)
+- Spark container images are updated to use Hadoop `3.2.x`: [Notable Changes: 3.0.0-debian-10-r44](https://github.com/bitnami/containers/tree/main/bitnami/spark#300-debian-10-r44)
 
 > Note: Backwards compatibility is not guaranteed due to the above mentioned changes. Please make sure your workloads are compatible with the new version of Hadoop before upgrading. Backups are always recommended before any upgrade operation.
 
 ## License
 
-Copyright &copy; 2022 Bitnami
+Copyright &copy; 2023 Bitnami
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

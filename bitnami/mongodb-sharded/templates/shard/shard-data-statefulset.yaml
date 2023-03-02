@@ -27,7 +27,7 @@ spec:
       labels: {{- include "common.labels.standard" $ | nindent 8 }}
         app.kubernetes.io/component: shardsvr
         {{- if $.Values.common.podLabels }}
-          {{- include "common.tplvalues.render" ( dict "value" .Values.common.podLabels "context" $ ) | nindent 8 }}
+          {{- include "common.tplvalues.render" ( dict "value" $.Values.common.podLabels "context" $ ) | nindent 8 }}
         {{- end }}
         {{- if $.Values.shardsvr.dataNode.podLabels }}
           {{- include "common.tplvalues.render" ( dict "value" $.Values.shardsvr.dataNode.podLabels "context" $ ) | nindent 8 }}
@@ -71,7 +71,7 @@ spec:
       priorityClassName: {{ $.Values.shardsvr.dataNode.priorityClassName | quote }}
       {{- end }}
       {{- if $.Values.shardsvr.dataNode.topologySpreadConstraints }}
-      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" $.Values.shardsvr.dataNode.topologySpreadConstraints "context" .) | nindent 8 }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" $.Values.shardsvr.dataNode.topologySpreadConstraints "context" $) | nindent 8 }}
       {{- end }}
       {{- if $.Values.shardsvr.dataNode.podSecurityContext.enabled }}
       securityContext: {{- omit $.Values.shardsvr.dataNode.podSecurityContext "enabled" | toYaml | nindent 8 }}
@@ -90,8 +90,8 @@ spec:
           args:
             - -ec
             - |
-              mkdir -p {{ $.Values.shardsvr.persistence.mountPath }}{{- if $.Values.shardsvr.persistence.subPath }}/{{ $.Values.shardsvr.persistence.subPath }}{{- end }}
-              chmod 700 {{ $.Values.shardsvr.persistence.mountPath }}
+              mkdir -p {{ $.Values.shardsvr.persistence.mountPath }}{{- if $.Values.shardsvr.persistence.subPath }}/{{ include "common.tplvalues.render" (dict "value" $.Values.shardsvr.persistence.subPath "context" $) }}{{- end }}
+              chown {{ $.Values.shardsvr.dataNode.containerSecurityContext.runAsUser }}:{{ $.Values.shardsvr.dataNode.podSecurityContext.fsGroup }} {{ $.Values.shardsvr.persistence.mountPath }}{{- if $.Values.shardsvr.persistence.subPath }}/{{ include "common.tplvalues.render" (dict "value" $.Values.shardsvr.persistence.subPath "context" $) }}{{- end }}
               find {{ $.Values.shardsvr.persistence.mountPath }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs -r chown -R {{ $.Values.shardsvr.dataNode.containerSecurityContext.runAsUser }}:{{ $.Values.shardsvr.dataNode.podSecurityContext.fsGroup }}
           securityContext:
             runAsUser: 0
@@ -100,7 +100,7 @@ spec:
             - name: datadir
               mountPath: {{ $.Values.shardsvr.persistence.mountPath }}
               {{- if $.Values.shardsvr.persistence.subPath }}
-              subPath: {{ $.Values.shardsvr.persistence.subPath }}
+              subPath: {{ include "common.tplvalues.render" (dict "value" $.Values.shardsvr.persistence.subPath "context" $) }}
               {{- end }}
         {{- end }}
         {{- with $.Values.shardsvr.dataNode.initContainers }}
@@ -201,19 +201,19 @@ spec:
           envFrom:
             {{- if $.Values.common.extraEnvVarsCM }}
             - configMapRef:
-                name: {{ include "mongodb-sharded.tplValue" ( dict "value" $.Values.common.extraEnvVarsCM "context" $ ) }}
+                name: {{ include "common.tplvalues.render" ( dict "value" $.Values.common.extraEnvVarsCM "context" $ ) }}
             {{- end }}
             {{- if $.Values.common.extraEnvVarsSecret }}
             - secretRef:
-                name: {{ include "mongodb-sharded.tplValue" ( dict "value" $.Values.common.extraEnvVarsSecret "context" $ ) }}
+                name: {{ include "common.tplvalues.render" ( dict "value" $.Values.common.extraEnvVarsSecret "context" $ ) }}
             {{- end }}
             {{- if $.Values.shardsvr.dataNode.extraEnvVarsCM }}
             - configMapRef:
-                name: {{ include "mongodb-sharded.tplValue" ( dict "value" $.Values.shardsvr.dataNode.extraEnvVarsCM "context" $ ) }}
+                name: {{ include "common.tplvalues.render" ( dict "value" $.Values.shardsvr.dataNode.extraEnvVarsCM "context" $ ) }}
             {{- end }}
             {{- if $.Values.shardsvr.dataNode.extraEnvVarsSecret }}
             - secretRef:
-                name: {{ include "mongodb-sharded.tplValue" ( dict "value" $.Values.shardsvr.dataNode.extraEnvVarsSecret "context" $ ) }}
+                name: {{ include "common.tplvalues.render" ( dict "value" $.Values.shardsvr.dataNode.extraEnvVarsSecret "context" $ ) }}
             {{- end }}
           {{- end }}
           {{- if $.Values.diagnosticMode.enabled }}
@@ -226,31 +226,31 @@ spec:
           {{- if $.Values.shardsvr.dataNode.args }}
           args: {{- include "common.tplvalues.render" (dict "value" $.Values.shardsvr.dataNode.args "context" $) | nindent 12 }}
           {{- end }}
-          {{- if $.Values.shardsvr.dataNode.livenessProbe.enabled }}
+          {{- if $.Values.shardsvr.dataNode.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" $.Values.shardsvr.dataNode.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if $.Values.shardsvr.dataNode.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit $.Values.shardsvr.dataNode.livenessProbe "enabled") "context" $) | nindent 12 }}
             exec:
               command:
                 - pgrep
                 - mongod
-          {{- else if $.Value.shardsvr.dataNode.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" $.Values.shardsvr.dataNode.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if $.Values.shardsvr.dataNode.readinessProbe.enabled }}
+          {{- if $.Values.shardsvr.dataNode.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" $.Values.shardsvr.dataNode.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if $.Values.shardsvr.dataNode.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit $.Values.shardsvr.dataNode.readinessProbe "enabled") "context" $) | nindent 12 }}
             exec:
               command:
                 - /bin/sh 
                 - -c 
                 - mongosh --port $MONGODB_PORT_NUMBER --eval "db.adminCommand('ping')"
-          {{- else if $.Value.shardsvr.dataNode.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" $.Values.shardsvr.dataNode.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if $.Values.shardsvr.dataNode.startupProbe.enabled }}
+          {{- if $.Values.shardsvr.dataNode.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" $.Values.shardsvr.dataNode.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if $.Values.shardsvr.dataNode.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit $.Values.shardsvr.dataNode.startupProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
               port: mongodb
-          {{- else if $.Values.shardsvr.dataNode.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" $.Values.shardsvr.dataNode.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           {{- if $.Values.shardsvr.dataNode.lifecycleHooks }}
@@ -262,7 +262,7 @@ spec:
             - name: datadir
               mountPath: {{ $.Values.shardsvr.persistence.mountPath }}
               {{- if $.Values.shardsvr.persistence.subPath }}
-              subPath: {{ $.Values.shardsvr.persistence.subPath }}
+              subPath: {{ include "common.tplvalues.render" (dict "value" $.Values.shardsvr.persistence.subPath "context" $) }}
               {{- end }}
             {{- if or $.Values.shardsvr.dataNode.config $.Values.shardsvr.dataNode.configCM }}
             - name: config
@@ -321,7 +321,7 @@ spec:
               {{- if $.Values.auth.usePasswordFile }}
               export MONGODB_ROOT_PASSWORD="$(cat "${MONGODB_ROOT_PASSWORD_FILE}")"
               {{- end }}
-              /bin/mongodb_exporter --web.listen-address ":{{ $.Values.metrics.containerPorts.metrics }}" --mongodb.uri mongodb://$(echo $MONGODB_ROOT_USER):$(echo $MONGODB_ROOT_PASSWORD | sed -r "s/@/%40/g;s/:/%3A/g")@localhost:{{ $.Values.common.containerPorts.mongodb }}/admin{{ ternary "?ssl=true" "" $.Values.metrics.useTLS }} {{ $.Values.metrics.extraArgs }}
+              /bin/mongodb_exporter --collect-all --compatible-mode --web.listen-address ":{{ $.Values.metrics.containerPorts.metrics }}" --mongodb.uri mongodb://$(echo $MONGODB_ROOT_USER):$(echo $MONGODB_ROOT_PASSWORD | sed -r "s/@/%40/g;s/:/%3A/g")@localhost:{{ $.Values.common.containerPorts.mongodb }}/admin{{ ternary "?ssl=true" "" $.Values.metrics.useTLS }} {{ $.Values.metrics.extraArgs }}
           {{- end }}
           {{- if $.Values.auth.usePasswordFile }}
           volumeMounts:
@@ -332,28 +332,28 @@ spec:
             - name: metrics
               containerPort: {{ $.Values.metrics.containerPorts.metrics }}
           {{- if not $.Values.diagnosticMode.enabled }}
-          {{- if $.Values.metrics.livenessProbe.enabled }}
+          {{- if $.Values.metrics.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" $.Values.metrics.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if $.Values.metrics.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit $.Values.metrics.livenessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /metrics
               port: metrics
-          {{- else if $.Values.metrics.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" $.Values.metrics.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if $.Values.metrics.readinessProbe.enabled }}
+          {{- if $.Values.metrics.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" $.Values.metrics.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if $.Values.metrics.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit $.Values.metrics.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /metrics
               port: metrics
-          {{- else if $.Values.metrics.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" $.Values.metrics.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if $.Values.metrics.startupProbe.enabled }}
+          {{- if $.Values.metrics.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" $.Values.metrics.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if $.Values.metrics.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit $.Values.metrics.startupProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
               port: metrics
-          {{- else if $.Values.metrics.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" $.Values.metrics.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           resources: {{ toYaml $.Values.metrics.resources | nindent 12 }}
@@ -401,7 +401,7 @@ spec:
     - metadata:
         name: datadir
         {{- if or $.Values.shardsvr.persistence.annotations $.Values.commonAnnotations $.Values.shardsvr.persistence.resourcePolicy }}
-        {{- if or .Values.commonAnnotations .Values.configsvr.persistence.annotations .Values.configsvr.persistence.resourcePolicy }}
+        {{- if or $.Values.commonAnnotations $.Values.shardsvr.persistence.annotations $.Values.shardsvr.persistence.resourcePolicy }}
         annotations:
           {{- if $.Values.commonAnnotations }}
           {{- include "common.tplvalues.render" ( dict "value" $.Values.commonAnnotations "context" $ ) | nindent 10 }}

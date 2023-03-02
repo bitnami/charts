@@ -17,20 +17,23 @@ metadata:
     {{- end }}
 spec:
   type: {{ .Values.hub.service.type }}
-  sessionAffinity: {{ .Values.hub.service.sessionAffinity }}
   {{- if and .Values.hub.service.clusterIP (eq .Values.hub.service.type "ClusterIP") }}
   clusterIP: {{ .Values.hub.service.clusterIP }}
   {{- end }}
-  {{- if (or (eq .Values.hub.service.type "LoadBalancer") (eq .Values.hub.service.type "NodePort")) }}
+  {{- if or (eq .Values.hub.service.type "LoadBalancer") (eq .Values.hub.service.type "NodePort") }}
   externalTrafficPolicy: {{ .Values.hub.service.externalTrafficPolicy | quote }}
   {{- end }}
-  {{- if (and (eq .Values.hub.service.type "LoadBalancer") .Values.hub.service.loadBalancerSourceRanges) }}
-  {{- with .Values.hub.service.loadBalancerSourceRanges }}
-  loadBalancerSourceRanges: {{- toYaml . | nindent 4 }}
+  {{- if and (eq .Values.hub.service.type "LoadBalancer") (not (empty .Values.hub.service.loadBalancerSourceRanges)) }}
+  loadBalancerSourceRanges: {{ .Values.hub.service.loadBalancerSourceRanges }}
   {{- end }}
-  {{- end }}
-  {{- if (and (eq .Values.hub.service.type "LoadBalancer") (not (empty .Values.hub.service.loadBalancerIP))) }}
+  {{- if and (eq .Values.hub.service.type "LoadBalancer") (not (empty .Values.hub.service.loadBalancerIP)) }}
   loadBalancerIP: {{ .Values.hub.service.loadBalancerIP }}
+  {{- end }}
+  {{- if .Values.hub.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.hub.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.hub.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.hub.service.sessionAffinityConfig "context" $) | nindent 4 }}
   {{- end }}
   ports:
     - name: http

@@ -1,0 +1,81 @@
+{
+  "phases": {
+    "package": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/jaeger"
+        }
+      },
+      "actions": [
+        {
+          "action_id": "helm-package"
+        },
+        {
+          "action_id": "helm-lint"
+        }
+      ]
+    },
+    "verify": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/jaeger"
+        },
+        "runtime_parameters": "cXVlcnk6CiAgc2VydmljZToKICAgIHR5cGU6IExvYWRCYWxhbmNlcgogICAgcG9ydHM6CiAgICAgIGFkbWluOiAxNjY4OAogICAgICBhcGk6IDgwCmNvbGxlY3RvcjoKICBzZXJ2aWNlOgogICAgcG9ydHM6CiAgICAgIGFkbWluOiAxNDI3MAphZ2VudDoKICBzZXJ2aWNlOgogICAgcG9ydHM6CiAgICAgIGFkbWluOiAxNDI3MgogIGNvbnRhaW5lclBvcnRzOgogICAgY29uZmlnOiA1Nzc5CiAgICBhZG1pbjogMTQyNzIKICBwb2RTZWN1cml0eUNvbnRleHQ6CiAgICBlbmFibGVkOiB0cnVlCiAgICBmc0dyb3VwOiAxMDAyCiAgY29udGFpbmVyU2VjdXJpdHlDb250ZXh0OgogICAgZW5hYmxlZDogdHJ1ZQogICAgcnVuQXNVc2VyOiAxMDAyCiAgc2VydmljZUFjY291bnQ6CiAgICBjcmVhdGU6IHRydWUKICAgIGF1dG9tb3VudFNlcnZpY2VBY2NvdW50VG9rZW46IHRydWUKICBzaWRlY2FyczoKICAgIC0gbmFtZTogaG90cm9kLWV4YW1wbGUKICAgICAgaW1hZ2U6IGphZWdlcnRyYWNpbmcvZXhhbXBsZS1ob3Ryb2Q6MS4zOQogICAgICBhcmdzOgogICAgICAgIC0gYWxsCiAgICAtIG5hbWU6IHRyYWNlLWdlbmVyYXRvcgogICAgICBpbWFnZTogYml0bmFtaS9iaXRuYW1pLXNoZWxsOjExLWRlYmlhbi0xMS1yNTcKICAgICAgY29tbWFuZDoKICAgICAgICAtIC9iaW4vYmFzaAogICAgICAgIC0gLWVjCiAgICAgICAgLSB8CiAgICAgICAgICAjIS9iaW4vYmFzaAogICAgICAgICAgd2hpbGUgdHJ1ZTsgZG8KICAgICAgICAgICAgIyBTYW1wbGUgdGFrZW4gZnJvbSBpbnNwZWN0aW5nIGhvdHJvZCBjb2RlCiAgICAgICAgICAgIGN1cmwgJ2h0dHA6Ly8xMjcuMC4wLjE6ODA4MC9kaXNwYXRjaD9jdXN0b21lcj0zOTImbm9uc2U9MC40NTgzODg4NDcxMDUwMTcyNicKICAgICAgICAgICAgc2xlZXAgNQogICAgICAgICAgZG9uZQpjYXNzYW5kcmE6CiAgZW5hYmxlZDogdHJ1ZQogIGtleXNwYWNlOiBiaXRuYW1pX3Rlc3RfamFlZ2VyCiAgZGJVc2VyOgogICAgdXNlcjogYm5fdGVzdF9qYWVnZXIKICAgIHBhc3N3b3JkOiBibl90ZXN0X2phZWdlcg==",
+        "target_platform": {
+          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
+          "size": {
+            "name": "M4"
+          }
+        }
+      },
+      "actions": [
+        {
+          "action_id": "health-check",
+          "params": {
+            "endpoint": "lb-jaeger-query-api",
+            "app_protocol": "HTTP"
+          }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/jaeger/goss"
+            },
+            "remote": {
+              "workload": "deploy-jaeger--agent"
+            },
+            "vars_file": "vars.yaml"
+          }
+        },
+        {
+          "action_id": "cypress",
+          "params": {
+            "resources": {
+              "path": "/.vib/jaeger/cypress"
+            },
+            "endpoint": "lb-jaeger-query-api",
+            "app_protocol": "HTTP"
+          }
+        }
+      ]
+    },
+    "publish": {
+      "actions": [
+        {
+          "action_id": "helm-publish",
+          "params": {
+            "repository": {
+              "kind": "S3",
+              "url": "{VIB_ENV_S3_URL}",
+              "username": "{VIB_ENV_S3_USERNAME}",
+              "password": "{VIB_ENV_S3_PASSWORD}"
+            }
+          }
+        }
+      ]
+    }
+  }
+}

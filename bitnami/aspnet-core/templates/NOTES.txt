@@ -6,7 +6,7 @@ APP VERSION: {{ .Chart.AppVersion }}
 
 ASP.NET Core can be accessed through the following DNS name from within your cluster:
 
-    {{ include "aspnet-core.fullname" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }} (port {{ .Values.service.port }})
+    {{ include "aspnet-core.fullname" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }} (port {{ .Values.service.ports.http }})
 
 To access ASP.NET Core from outside the cluster execute the following commands:
 

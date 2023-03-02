@@ -5,6 +5,12 @@ metadata:
   name: {{ template "external-dns.fullname" . }}
   namespace: {{ template "external-dns.namespace" . }}
   labels: {{ include "external-dns.labels" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
 rules:
   - apiGroups:
       - ""
@@ -59,11 +65,11 @@ rules:
     verbs:
       - patch
       - update
-  - apiGroups: 
+  - apiGroups:
       - projectcontour.io
     resources:
       - httpproxies
-    verbs: 
+    verbs:
       - get
       - watch
       - list

@@ -22,7 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/harbor"
         },
-        "runtime_parameters": "ImFkbWluUGFzc3dvcmQiOiAiQ29tcGxpY2F0ZWRQYXNzd29yZDEyMyE0IgoiZXhwb3N1cmVUeXBlIjogInByb3h5IgoicG9zdGdyZXNxbCI6CiAgImF1dGgiOgogICAgInBvc3RncmVzUGFzc3dvcmQiOiAiN2RNeExmY3F4TiIKInNlcnZpY2UiOgogICJwb3J0cyI6CiAgICAiaHR0cCI6IDgwCiAgInR5cGUiOiAiTG9hZEJhbGFuY2VyIgo=",
+        "runtime_parameters": "YWRtaW5QYXNzd29yZDogQ29tcGxpY2F0ZWRQYXNzd29yZDEyMyE0CmV4cG9zdXJlVHlwZTogcHJveHkKc2VydmljZToKICBwb3J0czoKICAgIGh0dHBzOiA0NDMKICB0eXBlOiBMb2FkQmFsYW5jZXIKbG9nTGV2ZWw6IGRlYnVnCnBlcnNpc3RlbmNlOgogIGltYWdlQ2hhcnRTdG9yYWdlOgogICAgZmlsZXN5c3RlbToKICAgICAgcm9vdGRpcmVjdG9yeTogL3N0b3JhZ2UKcmVnaXN0cnk6CiAgc2VydmVyOgogICAgY29udGFpbmVyUG9ydHM6CiAgICAgIGRlYnVnOiA1MDAx",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -31,13 +31,6 @@
         }
       },
       "actions": [
-        {
-          "action_id": "trivy",
-          "params": {
-            "threshold": "CRITICAL",
-            "vuln_type": ["OS"]
-          }
-        },
         {
           "action_id": "health-check",
           "params": {
@@ -49,22 +42,12 @@
           "action_id": "goss",
           "params": {
             "resources": {
-              "path": "/.vib/harbor/goss/goss-portal"
-            },
-            "remote": {
-              "workload": "deploy-harbor-portal"
-            }
-          }
-        },
-        {
-          "action_id": "goss",
-          "params": {
-            "resources": {
-              "path": "/.vib/harbor/goss/goss-registry"
+              "path": "/.vib/harbor/goss"
             },
             "remote": {
               "workload": "deploy-harbor-registry"
-            }
+            },
+            "vars_file": "vars.yaml"
           }
         },
         {

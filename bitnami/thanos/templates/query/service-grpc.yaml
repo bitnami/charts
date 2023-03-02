@@ -1,0 +1,54 @@
+{{- $query := (include "thanos.query.values" . | fromYaml) -}}
+{{- if $query.enabled -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "common.names.fullname" . }}-query-grpc
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: query
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  annotations:
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if $query.serviceGrpc.annotations }}
+    {{- include "common.tplvalues.render" (dict "value" $query.serviceGrpc.annotations "context" $) | nindent 4 }}
+    {{- end }}
+spec:
+  type: {{ $query.serviceGrpc.type }}
+  {{- if and $query.serviceGrpc.clusterIP (eq $query.serviceGrpc.type "ClusterIP") }}
+  clusterIP: {{ $query.serviceGrpc.clusterIP }}
+  {{- end }}
+  {{- if ne $query.serviceGrpc.type "ClusterIP" }}
+  externalTrafficPolicy: {{ $query.serviceGrpc.externalTrafficPolicy }}
+  {{- end }}
+  {{- if and $query.serviceGrpc.loadBalancerIP (eq $query.serviceGrpc.type "LoadBalancer") }}
+  loadBalancerIP: {{ $query.serviceGrpc.loadBalancerIP }}
+  {{- end }}
+  {{- if and (eq $query.serviceGrpc.type "LoadBalancer") $query.serviceGrpc.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges: {{- toYaml $query.serviceGrpc.loadBalancerSourceRanges | nindent 4 }}
+  {{- end }}
+  ports:
+    - port: {{ $query.serviceGrpc.ports.grpc }}
+      targetPort: grpc
+      protocol: TCP
+      name: grpc
+      {{- if and (or (eq $query.serviceGrpc.type "NodePort") (eq $query.serviceGrpc.type "LoadBalancer")) $query.serviceGrpc.nodePorts.grpc }}
+      nodePort: {{ $query.serviceGrpc.nodePorts.grpc }}
+      {{- else if eq $query.serviceGrpc.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    {{- if $query.serviceGrpc.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" $query.serviceGrpc.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  selector:
+    {{- if $query.serviceGrpc.labelSelectorsOverride }}
+    {{- include "common.tplvalues.render" (dict "value" $query.serviceGrpc.labelSelectorsOverride "context" $) | nindent 4 }}
+    {{- else }}
+    {{- include "common.labels.matchLabels" . | nindent 4 }}
+    app.kubernetes.io/component: query
+    {{- end }}
+{{- end }}

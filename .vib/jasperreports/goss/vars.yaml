@@ -1,0 +1,9 @@
+podSecurityContext:
+  fsGroup: 1002
+containerSecurityContext:
+  runAsUser: 1002
+mariadb:
+  auth:
+    database: bitnami_test_jasperreports
+    username: bn_test_jasperreports
+    password: bitnami_test_password

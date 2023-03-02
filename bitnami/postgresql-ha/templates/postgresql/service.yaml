@@ -9,14 +9,19 @@ metadata:
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
     {{- if .Values.service.serviceLabels }}
-    {{ toYaml .Values.service.serviceLabels | indent 4 }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.service.serviceLabels "context" $ ) | nindent 4 }}
     {{- end }}
+  {{- if or .Values.postgresql.serviceAnnotations .Values.service.annotations .Values.commonAnnotations }}
   annotations:
-  {{- if .Values.service.annotations }}
-  {{- include "common.tplvalues.render" (dict "value" .Values.service.annotations "context" $) | nindent 4 }}
-  {{- end }}
-  {{- if .Values.commonAnnotations }}
-  {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- if .Values.postgresql.serviceAnnotations }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.postgresql.serviceAnnotations "context" $) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.service.annotations }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.service.annotations "context" $) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
   {{- end }}
 spec:
   type: ClusterIP
@@ -30,3 +35,4 @@ spec:
     {{- end }}
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: postgresql
+    role: data

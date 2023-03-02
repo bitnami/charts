@@ -76,11 +76,15 @@ data:
     #!/bin/bash
 
     ID="${MY_POD_NAME#"{{ $fullname }}-"}"
-    if [[ -f "/bitnami/kafka/data/meta.properties" ]]; then
-        export KAFKA_CFG_BROKER_ID="$(grep "broker.id" /bitnami/kafka/data/meta.properties | awk -F '=' '{print $2}')"
+    if [[ -f "{{ .Values.logsDirs | splitList "," | first }}/meta.properties" ]]; then
+        export KAFKA_CFG_BROKER_ID="$(grep "broker.id" "{{ .Values.logsDirs | splitList "," | first }}/meta.properties" | awk -F '=' '{print $2}')"
     else
         export KAFKA_CFG_BROKER_ID="$((ID + {{ .Values.minBrokerId }}))"
     fi
+
+    {{- if eq .Values.brokerRackAssignment "aws-az" }}
+    export KAFKA_CFG_BROKER_RACK=$(curl "http://169.254.169.254/latest/meta-data/placement/availability-zone-id")
+    {{- end }}
 
     {{- if .Values.externalAccess.enabled }}
     # Configure external ip and port
@@ -106,6 +110,9 @@ data:
     {{- else }}
     export EXTERNAL_ACCESS_PORT=$(echo '{{ .Values.externalAccess.service.nodePorts }}' | tr -d '[]' | cut -d ' ' -f "$(($ID + 1))")
     {{- end }}
+    {{- else }}
+        export EXTERNAL_ACCESS_HOST={{ .Values.externalAccess.service.domain }}
+        export EXTERNAL_ACCESS_PORT="$((ID + {{ .Values.externalAccess.service.ports.external }}))"
     {{- end }}
 
     # Configure Kafka advertised listeners

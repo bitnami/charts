@@ -1,0 +1,6 @@
+operator:
+  serviceAccount:
+    automountServiceAccountToken: true
+  podSecurityContext:
+    runAsUser: 1002
+    fsGroup: 1002

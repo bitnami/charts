@@ -1,0 +1,8 @@
+podSecurityContext:
+  fsGroup: 1002
+containerSecurityContext:
+  runAsUser: 1002
+extraConfiguration:
+  csp_strict: false
+serviceAccount:
+  automountServiceAccountToken: true

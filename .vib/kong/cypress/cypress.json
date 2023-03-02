@@ -1,0 +1,9 @@
+{
+  "baseUrl": "http://{{ TARGET_IP }}",
+  "env": {
+    "apikey": "ComplicatedPassword123!4",
+    "ingressHost": "www.example.com",
+    "ingressPath": "/nginx",
+    "adminHttpPort": "443"
+  }
+}

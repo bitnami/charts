@@ -1,0 +1,10 @@
+rabbitmq:
+  replicaCount: 2
+  service:
+    ports:
+      amqp: 5672
+      manager: 15672
+msgTopologyOperator:
+  service:
+    ports:
+      webhook: 443

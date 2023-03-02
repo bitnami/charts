@@ -55,9 +55,12 @@ Usage:
 Allow the release namespace to be overridden for multi-namespace deployments in combined charts.
 */}}
 {{- define "common.names.namespace" -}}
-{{- if .Values.namespaceOverride -}}
-{{- .Values.namespaceOverride -}}
-{{- else -}}
-{{- .Release.Namespace -}}
+{{- default .Release.Namespace .Values.namespaceOverride | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
+
+{{/*
+Create a fully qualified app name adding the installation's namespace.
+*/}}
+{{- define "common.names.fullname.namespace" -}}
+{{- printf "%s-%s" (include "common.names.fullname" .) (include "common.names.namespace" .) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}

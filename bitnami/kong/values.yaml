@@ -57,12 +57,14 @@ diagnosticMode:
     - infinity
 
 ## @section Kong common parameters
+##
 
 ## Bitnami kong image version
 ## ref: https://hub.docker.com/r/bitnami/kong/tags/
 ## @param image.registry kong image registry
 ## @param image.repository kong image repository
 ## @param image.tag kong image tag (immutable tags are recommended)
+## @param image.digest kong image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy kong image pull policy
 ## @param image.pullSecrets Specify docker-registry secret names as an array
 ## @param image.debug Enable image debug mode
@@ -70,7 +72,8 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/kong
-  tag: 2.8.1-debian-10-r41
+  tag: 3.2.1-debian-11-r2
+  digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -87,11 +90,12 @@ image:
   ## Enable debug mode
   ##
   debug: false
-## @param database Select which database backend Kong will use. Can be 'postgresql' or 'cassandra'
+## @param database Select which database backend Kong will use. Can be 'postgresql', 'cassandra' or 'off'
 ##
 database: postgresql
 
 ## @section Kong deployment / daemonset parameters
+##
 
 ## @param useDaemonset Use a daemonset instead of a deployment. `replicaCount` will not take effect.
 ##
@@ -138,7 +142,7 @@ hostAliases: []
 ## @param topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
 ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
 ##
-topologySpreadConstraints: {}
+topologySpreadConstraints: []
 ## @param priorityClassName Priority Class Name
 ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
 ##
@@ -250,6 +254,7 @@ pdb:
   maxUnavailable: "50%"
 
 ## @section Kong Container Parameters
+##
 
 kong:
   ## @param kong.command Override default container command (useful when using custom images)
@@ -266,6 +271,17 @@ kong:
   ## Secret containing `/docker-entrypoint-initdb.d` scripts to be executed at initialization time (that contain sensitive data). Evaluated as a template.
   ##
   initScriptsSecret: ""
+
+  ## @param kong.declarativeConfig Declarative configuration to be loaded by Kong (evaluated as a template)
+  ## https://docs.konghq.com/gateway/latest/production/deployment-topologies/db-less-and-declarative-config/
+  ##
+  declarativeConfig: ""
+
+  ## @param kong.declarativeConfigCM Configmap with declarative configuration to be loaded by Kong (evaluated as a template)
+  ## https://docs.konghq.com/gateway/latest/production/deployment-topologies/db-less-and-declarative-config/
+  ##
+  declarativeConfigCM: ""
+
   ## @param kong.extraEnvVars Array containing extra env vars to configure Kong
   ## For example:
   ## extraEnvVars:
@@ -399,6 +415,12 @@ service:
   ## ref: https://kubernetes.io/docs/user-guide/services/
   ##
   sessionAffinity: None
+  ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
+  ## sessionAffinityConfig:
+  ##   clientIP:
+  ##     timeoutSeconds: 300
+  ##
+  sessionAffinityConfig: {}
   ## @param service.clusterIP Cluster internal IP of the service
   ## This is the internal IP address of the service and is usually assigned randomly.
   ## ref: https://kubernetes.io/docs/reference/kubernetes-api/service-resources/service-v1/#ServiceSpec
@@ -524,7 +546,7 @@ ingress:
   ## - host: example.local
   ##     http:
   ##       path: /
-  ##       backend: 
+  ##       backend:
   ##         service:
   ##           name: example-svc
   ##           port:
@@ -533,6 +555,7 @@ ingress:
   extraRules: []
 
 ## @section Kong Ingress Controller Container Parameters
+##
 
 ingressController:
   ## @param ingressController.enabled Enable/disable the Kong Ingress Controller
@@ -541,13 +564,15 @@ ingressController:
   ## @param ingressController.image.registry Kong Ingress Controller image registry
   ## @param ingressController.image.repository Kong Ingress Controller image name
   ## @param ingressController.image.tag Kong Ingress Controller image tag
+  ## @param ingressController.image.digest Kong Ingress Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param ingressController.image.pullPolicy Kong Ingress Controller image pull policy
   ## @param ingressController.image.pullSecrets Specify docker-registry secret names as an array
   ##
   image:
     registry: docker.io
     repository: bitnami/kong-ingress-controller
-    tag: 2.3.1-debian-10-r40
+    tag: 2.8.1-debian-11-r19
+    digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -686,6 +711,7 @@ ingressController:
     rules: []
 
 ## @section Kong Migration job Parameters
+##
 
 migration:
   ## In case you want to use a custom image for Kong migration, set this value
@@ -693,6 +719,7 @@ migration:
   ##   registry:
   ##   repository:
   ##   tag:
+  ##   digest: ""
   ##
   ## @param migration.command Override default container command (useful when using custom images)
   ##
@@ -746,7 +773,7 @@ migration:
 ##
 
 ## PostgreSQL chart configuration
-## ref: https://github.com/bitnami/charts/blob/master/bitnami/postgresql/values.yaml
+## ref: https://github.com/bitnami/charts/blob/main/bitnami/postgresql/values.yaml
 ## @param postgresql.enabled Switch to enable or disable the PostgreSQL helm chart
 ## @param postgresql.auth.postgresPassword Password for the "postgres" admin user
 ## @param postgresql.auth.username Name for a custom user to create
@@ -759,15 +786,17 @@ migration:
 postgresql:
   enabled: true
   ## Override PostgreSQL default image as 14.x is not supported
-  ## ref: https://github.com/bitnami/bitnami-docker-postgresql
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/postgresql
   ## @param postgresql.image.registry PostgreSQL image registry
   ## @param postgresql.image.repository PostgreSQL image repository
   ## @param postgresql.image.tag PostgreSQL image tag (immutable tags are recommended)
+  ## @param postgresql.image.digest PostgreSQL image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ##
   image:
     registry: docker.io
     repository: bitnami/postgresql
-    tag: 11.16.0-debian-10-r6
+    tag: 14.7.0-debian-11-r5
+    digest: ""
   auth:
     username: kong
     password: ""
@@ -799,7 +828,7 @@ postgresql:
 ##
 
 ## Cassandra chart configuration
-## ref: https://github.com/bitnami/charts/blob/master/bitnami/cassandra/values.yaml
+## ref: https://github.com/bitnami/charts/blob/main/bitnami/cassandra/values.yaml
 ## @param cassandra.enabled Switch to enable or disable the Cassandra helm chart
 ## @param cassandra.dbUser.user Cassandra admin user
 ## @param cassandra.dbUser.password Password for `cassandra.dbUser.user`. Randomly generated if empty
@@ -889,7 +918,7 @@ metrics:
     ##
     labels: {}
     ## @param metrics.serviceMonitor.selector Prometheus instance selector labels
-    ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
+    ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
     ##
     selector: {}
     ## @param metrics.serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping

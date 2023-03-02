@@ -1,0 +1,41 @@
+loki:
+  dataDir: "/bitnami/grafana-loki"
+  containerPorts:
+    http: 3101
+    gossipRing: 7946
+  gossipRing:
+    service:
+      ports:
+        http: 7946
+compactor:
+  service:
+    ports:
+      http: 3100
+distributor:
+  service:
+    ports:
+      http: 3100
+ingester:
+  service:
+    ports:
+      http: 3100
+querier:
+  podSecurityContext:
+    fsGroup: 1002
+  containerSecurityContext:
+    runAsUser: 1002
+  service:
+    ports:
+      http: 3100
+memcachedchunks:
+  service:
+    ports:
+      memcached: 11212
+memcachedfrontend:
+  service:
+    ports:
+      memcached: 11212
+memcachedindexqueries:
+  service:
+    ports:
+      memcached: 11212

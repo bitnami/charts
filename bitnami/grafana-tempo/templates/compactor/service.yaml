@@ -20,17 +20,22 @@ metadata:
   {{- end }}
 spec:
   type: {{ .Values.compactor.service.type }}
+  {{- if .Values.compactor.service.sessionAffinity }}
   sessionAffinity: {{ .Values.compactor.service.sessionAffinity }}
-  {{- if .Values.compactor.service.clusterIP }}
+  {{- end }}
+  {{- if .Values.compactor.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.compactor.service.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if and .Values.compactor.service.clusterIP (eq .Values.compactor.service.type "ClusterIP") }}
   clusterIP: {{ .Values.compactor.service.clusterIP }}
   {{- end }}
-  {{- if (or (eq .Values.compactor.service.type "LoadBalancer") (eq .Values.compactor.service.type "NodePort")) }}
+  {{- if or (eq .Values.compactor.service.type "LoadBalancer") (eq .Values.compactor.service.type "NodePort") }}
   externalTrafficPolicy: {{ .Values.compactor.service.externalTrafficPolicy | quote }}
   {{- end }}
-  {{ if eq .Values.compactor.service.type "LoadBalancer" }}
+  {{- if and (eq .Values.compactor.service.type "LoadBalancer") (not (empty .Values.compactor.service.loadBalancerSourceRanges)) }}
   loadBalancerSourceRanges: {{ .Values.compactor.service.loadBalancerSourceRanges }}
-  {{ end }}
-  {{- if (and (eq .Values.compactor.service.type "LoadBalancer") (not (empty .Values.compactor.service.loadBalancerIP))) }}
+  {{- end }}
+  {{- if and (eq .Values.compactor.service.type "LoadBalancer") (not (empty .Values.compactor.service.loadBalancerIP)) }}
   loadBalancerIP: {{ .Values.compactor.service.loadBalancerIP }}
   {{- end }}
   ports:

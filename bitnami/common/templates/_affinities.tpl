@@ -1,7 +1,7 @@
 {{/* vim: set filetype=mustache: */}}
 
 {{/*
-Return a soft nodeAffinity definition 
+Return a soft nodeAffinity definition
 {{ include "common.affinities.nodes.soft" (dict "key" "FOO" "values" (list "BAR" "BAZ")) -}}
 */}}
 {{- define "common.affinities.nodes.soft" -}}
@@ -46,8 +46,16 @@ Return a nodeAffinity definition
 {{- end -}}
 
 {{/*
+Return a topologyKey definition
+{{ include "common.affinities.topologyKey" (dict "topologyKey" "BAR") -}}
+*/}}
+{{- define "common.affinities.topologyKey" -}}
+{{ .topologyKey | default "kubernetes.io/hostname" -}}
+{{- end -}}
+
+{{/*
 Return a soft podAffinity/podAntiAffinity definition
-{{ include "common.affinities.pods.soft" (dict "component" "FOO" "extraMatchLabels" .Values.extraMatchLabels "context" $) -}}
+{{ include "common.affinities.pods.soft" (dict "component" "FOO" "extraMatchLabels" .Values.extraMatchLabels "topologyKey" "BAR" "context" $) -}}
 */}}
 {{- define "common.affinities.pods.soft" -}}
 {{- $component := default "" .component -}}
@@ -62,15 +70,13 @@ preferredDuringSchedulingIgnoredDuringExecution:
           {{- range $key, $value := $extraMatchLabels }}
           {{ $key }}: {{ $value | quote }}
           {{- end }}
-      namespaces:
-        - {{ .context.Release.Namespace | quote }}
-      topologyKey: kubernetes.io/hostname
+      topologyKey: {{ include "common.affinities.topologyKey" (dict "topologyKey" .topologyKey) }}
     weight: 1
 {{- end -}}
 
 {{/*
 Return a hard podAffinity/podAntiAffinity definition
-{{ include "common.affinities.pods.hard" (dict "component" "FOO" "extraMatchLabels" .Values.extraMatchLabels "context" $) -}}
+{{ include "common.affinities.pods.hard" (dict "component" "FOO" "extraMatchLabels" .Values.extraMatchLabels "topologyKey" "BAR" "context" $) -}}
 */}}
 {{- define "common.affinities.pods.hard" -}}
 {{- $component := default "" .component -}}
@@ -84,9 +90,7 @@ requiredDuringSchedulingIgnoredDuringExecution:
         {{- range $key, $value := $extraMatchLabels }}
         {{ $key }}: {{ $value | quote }}
         {{- end }}
-    namespaces:
-      - {{ .context.Release.Namespace | quote }}
-    topologyKey: kubernetes.io/hostname
+    topologyKey: {{ include "common.affinities.topologyKey" (dict "topologyKey" .topologyKey) }}
 {{- end -}}
 
 {{/*

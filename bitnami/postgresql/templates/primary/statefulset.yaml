@@ -12,6 +12,7 @@ metadata:
     {{- if .Values.primary.labels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.primary.labels "context" $ ) | nindent 4 }}
     {{- end }}
+  {{- if or .Values.commonAnnotations .Values.primary.annotations }}
   annotations:
     {{- if .Values.commonAnnotations }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
@@ -19,6 +20,7 @@ metadata:
     {{- if .Values.primary.annotations }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.primary.annotations "context" $ ) | nindent 4 }}
     {{- end }}
+  {{- end }}
 spec:
   replicas: 1
   serviceName: {{ include "postgresql.primary.svc.headless" . }}
@@ -39,6 +41,7 @@ spec:
         {{- if .Values.primary.podLabels }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.primary.podLabels "context" $ ) | nindent 8 }}
         {{- end }}
+      {{- if or (include "postgresql.primary.createConfigmap" .) (include "postgresql.primary.createExtendedConfigmap" .) .Values.primary.podAnnotations }}
       annotations:
         {{- if (include "postgresql.primary.createConfigmap" .) }}
         checksum/configuration: {{ include (print $.Template.BasePath "/primary/configmap.yaml") . | sha256sum }}
@@ -49,6 +52,7 @@ spec:
         {{- if .Values.primary.podAnnotations }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.primary.podAnnotations "context" $ ) | nindent 8 }}
         {{- end }}
+      {{- end }}
     spec:
       {{- if .Values.primary.extraPodSpec }}
       {{- include "common.tplvalues.render" (dict "value" .Values.primary.extraPodSpec "context" $) | nindent 6 }}
@@ -89,6 +93,7 @@ spec:
       {{- end }}
       hostNetwork: {{ .Values.primary.hostNetwork }}
       hostIPC: {{ .Values.primary.hostIPC }}
+      {{- if or (and .Values.tls.enabled (not .Values.volumePermissions.enabled)) (and .Values.volumePermissions.enabled (or .Values.primary.persistence.enabled .Values.shmVolume.enabled)) .Values.primary.initContainers }}
       initContainers:
         {{- if and .Values.tls.enabled (not .Values.volumePermissions.enabled) }}
         - name: copy-certs
@@ -177,6 +182,7 @@ spec:
         {{- if .Values.primary.initContainers }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.primary.initContainers "context" $ ) | nindent 8 }}
         {{- end }}
+      {{- end }}
       containers:
         - name: postgresql
           image: {{ include "postgresql.image" . }}
@@ -218,7 +224,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ include "postgresql.secretName" . }}
-                  key: postgres-password
+                  key: {{ include "postgresql.adminPasswordKey" . }}
             {{- end }}
             {{- end }}
           {{- end }}
@@ -230,7 +236,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ include "postgresql.secretName" . }}
-                  key: {{ ternary "password" "postgres-password" (and (not (empty $customUser)) (ne $customUser "postgres")) }}
+                  key: {{ include "postgresql.userPasswordKey" . }}
             {{- end }}
             {{- if (include "postgresql.database" .) }}
             - name: POSTGRES_DB
@@ -250,7 +256,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ include "postgresql.secretName" . }}
-                  key: replication-password
+                  key: {{ include "postgresql.replicationPasswordKey" . }}
             {{- end }}
             {{- if not (eq .Values.replication.synchronousCommit "off") }}
             - name: POSTGRES_SYNCHRONOUS_COMMIT_MODE
@@ -289,13 +295,17 @@ spec:
             - name: POSTGRESQL_ENABLE_LDAP
               value: {{ ternary "yes" "no" .Values.ldap.enabled | quote }}
             {{- if .Values.ldap.enabled }}
+            {{- if or .Values.ldap.url .Values.ldap.uri }}
+            - name: POSTGRESQL_LDAP_URL
+              value: {{ coalesce .Values.ldap.url .Values.ldap.uri }}
+            {{- else }}
             - name: POSTGRESQL_LDAP_SERVER
               value: {{ .Values.ldap.server }}
             - name: POSTGRESQL_LDAP_PORT
               value: {{ .Values.ldap.port | quote }}
             - name: POSTGRESQL_LDAP_SCHEME
               value: {{ .Values.ldap.scheme }}
-            {{- if .Values.ldap.tls }}
+            {{- if (include "postgresql.ldap.tls.enabled" .) }}
             - name: POSTGRESQL_LDAP_TLS
               value: "1"
             {{- end }}
@@ -304,10 +314,10 @@ spec:
             - name: POSTGRESQL_LDAP_SUFFIX
               value: {{ .Values.ldap.suffix | quote }}
             - name: POSTGRESQL_LDAP_BASE_DN
-              value: {{ .Values.ldap.baseDN }}
+              value: {{ coalesce .Values.ldap.baseDN .Values.ldap.basedn }}
             - name: POSTGRESQL_LDAP_BIND_DN
-              value: {{ .Values.ldap.bindDN }}
-            {{- if not (empty .Values.ldap.bind_password) }}
+              value: {{ coalesce .Values.ldap.bindDN .Values.ldap.binddn}}
+            {{- if or  (not (empty .Values.ldap.bind_password)) (not (empty .Values.ldap.bindpw)) }}
             - name: POSTGRESQL_LDAP_BIND_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -315,11 +325,10 @@ spec:
                   key: ldap-password
             {{- end }}
             - name: POSTGRESQL_LDAP_SEARCH_ATTR
-              value: {{ .Values.ldap.search_attr }}
+              value: {{ coalesce .Values.ldap.search_attr .Values.ldap.searchAttribute }}
             - name: POSTGRESQL_LDAP_SEARCH_FILTER
-              value: {{ .Values.ldap.search_filter }}
-            - name: POSTGRESQL_LDAP_URL
-              value: {{ .Values.ldap.url }}
+              value: {{ coalesce .Values.ldap.search_filter .Values.ldap.searchFilter }}
+            {{- end }}
             {{- end }}
             # TLS
             - name: POSTGRESQL_ENABLE_TLS
@@ -384,7 +393,9 @@ spec:
             - name: tcp-postgresql
               containerPort: {{ .Values.containerPorts.postgresql }}
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.primary.startupProbe.enabled }}
+          {{- if .Values.primary.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.primary.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.primary.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.primary.startupProbe "enabled") "context" $) | nindent 12 }}
             exec:
               command:
@@ -395,10 +406,10 @@ spec:
                 {{- else }}
                 - exec pg_isready -U {{ default "postgres" $customUser | quote }} {{- if and .Values.tls.enabled .Values.tls.certCAFilename }} -d "sslcert={{ include "postgresql.tlsCert" . }} sslkey={{ include "postgresql.tlsCertKey" . }}"{{- end }} -h 127.0.0.1 -p {{ .Values.containerPorts.postgresql }}
                 {{- end }}
-          {{- else if .Values.primary.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.primary.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.primary.livenessProbe.enabled }}
+          {{- if .Values.primary.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.primary.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.primary.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.primary.livenessProbe "enabled") "context" $) | nindent 12 }}
             exec:
               command:
@@ -409,10 +420,10 @@ spec:
                 {{- else }}
                 - exec pg_isready -U {{ default "postgres" $customUser | quote }} {{- if and .Values.tls.enabled .Values.tls.certCAFilename }} -d "sslcert={{ include "postgresql.tlsCert" . }} sslkey={{ include "postgresql.tlsCertKey" . }}"{{- end }} -h 127.0.0.1 -p {{ .Values.containerPorts.postgresql }}
                 {{- end }}
-          {{- else if .Values.primary.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.primary.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.primary.readinessProbe.enabled }}
+          {{- if .Values.primary.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.primary.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.primary.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.primary.readinessProbe "enabled") "context" $) | nindent 12 }}
             exec:
               command:
@@ -420,8 +431,6 @@ spec:
                 - -c
                 - -e
                 {{- include "postgresql.readinessProbeCommand" . | nindent 16 }}
-          {{- else if .Values.primary.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.primary.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           {{- if .Values.primary.resources }}
@@ -485,14 +494,8 @@ spec:
           {{- end }}
           env:
             {{- $database := required "In order to enable metrics you need to specify a database (.Values.auth.database or .Values.global.postgresql.auth.database)" (include "postgresql.database" .) }}
-            {{- $sslmode := ternary "require" "disable" .Values.tls.enabled }}
-            {{- if and .Values.tls.enabled .Values.tls.certCAFilename }}
-            - name: DATA_SOURCE_NAME
-              value: {{ printf "host=127.0.0.1 port=%d user=%s sslmode=%s sslcert=%s sslkey=%s" (int (include "postgresql.service.port" .)) (default "postgres" $customUser) $sslmode (include "postgresql.tlsCert" .) (include "postgresql.tlsCertKey" .) }}
-            {{- else }}
             - name: DATA_SOURCE_URI
-              value: {{ printf "127.0.0.1:%d/%s?sslmode=%s" (int (include "postgresql.service.port" .)) $database $sslmode }}
-            {{- end }}
+              value: {{ printf "127.0.0.1:%d/%s?sslmode=disable" (int (include "postgresql.service.port" .)) $database }}
             {{- if .Values.auth.usePasswordFiles }}
             - name: DATA_SOURCE_PASS_FILE
               value: {{ printf "/opt/bitnami/postgresql/secrets/%s" (ternary "password" "postgres-password" (and (not (empty $customUser)) (ne $customUser "postgres"))) }}
@@ -501,7 +504,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ include "postgresql.secretName" . }}
-                  key: {{ ternary "password" "postgres-password" (and (not (empty $customUser)) (ne $customUser "postgres")) }}
+                  key: {{ include "postgresql.userPasswordKey" . }}
             {{- end }}
             - name: DATA_SOURCE_USER
               value: {{ default "postgres" $customUser | quote }}
@@ -512,39 +515,34 @@ spec:
             - name: http-metrics
               containerPort: {{ .Values.metrics.containerPorts.metrics }}
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.metrics.startupProbe.enabled }}
+          {{- if .Values.metrics.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.metrics.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metrics.startupProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
               port: http-metrics
-          {{- else if .Values.metrics.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.metrics.livenessProbe.enabled }}
+          {{- if .Values.metrics.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.metrics.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metrics.livenessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /
               port: http-metrics
-          {{- else if .Values.metrics.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.metrics.readinessProbe.enabled }}
+          {{- if .Values.metrics.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.metrics.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.metrics.readinessProbe "enabled") "context" $) | nindent 12 }}
             httpGet:
               path: /
               port: http-metrics
-          {{- else if .Values.metrics.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           volumeMounts:
             {{- if .Values.auth.usePasswordFiles }}
             - name: postgresql-password
               mountPath: /opt/bitnami/postgresql/secrets/
-            {{- end }}
-            {{- if .Values.tls.enabled }}
-            - name: postgresql-certificates
-              mountPath: /opt/bitnami/postgresql/certs
-              readOnly: true
             {{- end }}
             {{- if .Values.metrics.customMetrics }}
             - name: custom-metrics
@@ -597,7 +595,7 @@ spec:
         {{- if and .Values.metrics.enabled .Values.metrics.customMetrics }}
         - name: custom-metrics
           configMap:
-            name: {{ printf "%s-metrics" (include "common.names.fullname" .) }}
+            name: {{ printf "%s-metrics" (include "postgresql.primary.fullname" .) }}
         {{- end }}
         {{- if .Values.shmVolume.enabled }}
         - name: dshm
@@ -619,7 +617,10 @@ spec:
     - metadata:
         name: data
         {{- if .Values.primary.persistence.annotations }}
-        annotations: {{- toYaml .Values.primary.persistence.annotations | nindent 10 }}
+        annotations: {{- include "common.tplvalues.render" (dict "value" .Values.primary.persistence.annotations "context" $) | nindent 10 }}
+        {{- end }}
+        {{- if .Values.primary.persistence.labels }}
+        labels: {{- include "common.tplvalues.render" (dict "value" .Values.primary.persistence.labels "context" $) | nindent 10 }}
         {{- end }}
       spec:
         accessModes:

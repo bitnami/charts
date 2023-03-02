@@ -2,8 +2,8 @@
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: {{ include "common.names.fullname" . }}-default-backend
-  namespace: {{ .Release.Namespace }}
+  name: {{ printf "%s-default-backend" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: default-backend
     {{- if .Values.commonLabels }}
@@ -66,10 +66,17 @@ spec:
       {{- end }}
       automountServiceAccountToken: false
       serviceAccountName: {{ include "envoy.envoyServiceAccountName" . }}
-      terminationGracePeriodSeconds: 60
+      {{- if .Values.defaultBackend.schedulerName }}
+      schedulerName: {{ .Values.defaultBackend.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.defaultBackend.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.defaultBackend.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.defaultBackend.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.defaultBackend.terminationGracePeriodSeconds }}
+      {{- end }}
       {{- if .Values.defaultBackend.initContainers }}
-      initContainers:
-        {{- include "common.tplvalues.render" ( dict "value" .Values.defaultBackend.initContainers "context" $ ) | nindent 6 }}
+      initContainers: {{- include "common.tplvalues.render" ( dict "value" .Values.defaultBackend.initContainers "context" $ ) | nindent 6 }}
       {{- end }}
       containers:
         - name: default-backend
@@ -110,7 +117,9 @@ spec:
                 name: {{ include "common.tplvalues.render" ( dict "value" .Values.defaultBackend.extraEnvVarsSecret "context" $ ) }}
             {{- end }}
           {{- end }}
-          {{- if .Values.defaultBackend.livenessProbe.enabled }}
+          {{- if .Values.defaultBackend.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.defaultBackend.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.defaultBackend.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
               path: /
@@ -121,10 +130,10 @@ spec:
             timeoutSeconds: {{ .Values.defaultBackend.livenessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.defaultBackend.livenessProbe.successThreshold }}
             failureThreshold: {{ .Values.defaultBackend.livenessProbe.failureThreshold }}
-          {{- else if .Values.defaultBackend.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.defaultBackend.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.defaultBackend.readinessProbe.enabled }}
+          {{- if .Values.defaultBackend.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.defaultBackend.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.defaultBackend.readinessProbe.enabled }}
           readinessProbe:
             httpGet:
               path: /
@@ -135,10 +144,10 @@ spec:
             timeoutSeconds: {{ .Values.defaultBackend.readinessProbe.timeoutSeconds }}
             successThreshold: {{ .Values.defaultBackend.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.defaultBackend.readinessProbe.failureThreshold }}
-          {{- else if .Values.defaultBackend.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.defaultBackend.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.defaultBackend.startupProbe.enabled }}
+          {{- if .Values.defaultBackend.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.defaultBackend.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.defaultBackend.startupProbe.enabled }}
           startupProbe:
             httpGet:
               path: /
@@ -149,8 +158,6 @@ spec:
             timeoutSeconds: {{ .Values.defaultBackend.startupProbe.timeoutSeconds }}
             successThreshold: {{ .Values.defaultBackend.startupProbe.successThreshold }}
             failureThreshold: {{ .Values.defaultBackend.startupProbe.failureThreshold }}
-          {{- else if .Values.defaultBackend.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.defaultBackend.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
           ports:
             - name: http

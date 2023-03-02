@@ -112,7 +112,7 @@ If you want to upgrade the installation you will need to re-set the database cre
   {{- $dbPasswordValidationErrors := include "common.validations.values.cassandra.passwords" (dict "secret" $dbSecretName "subchart" true "context" $) -}}
   {{- $passwordValidationErrors = append $passwordValidationErrors $dbPasswordValidationErrors -}}
 
-  kubectl get secret --namespace {{ .Release.Namespace }} {{ include "kong.cassandra.secretName" . }} -o jsonpath="{.data.cassandra-password}" | base64 --decode
+  kubectl get secret --namespace {{ .Release.Namespace }} {{ include "kong.cassandra.secretName" . }} -o jsonpath="{.data.cassandra-password}" | base64 -d
 {{- end }}
 
 {{- if .Values.service.exposeAdmin }}

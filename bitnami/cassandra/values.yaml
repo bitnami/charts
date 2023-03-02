@@ -65,6 +65,7 @@ diagnosticMode:
 ## @param image.registry Cassandra image registry
 ## @param image.repository Cassandra image repository
 ## @param image.tag Cassandra image tag (immutable tags are recommended)
+## @param image.digest Cassandra image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy image pull policy
 ## @param image.pullSecrets Cassandra image pull secrets
 ## @param image.debug Enable image debug mode
@@ -72,7 +73,8 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/cassandra
-  tag: 4.0.4-debian-10-r2
+  tag: 4.1.0-debian-11-r25
+  digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -377,6 +379,10 @@ lifecycleHooks: {}
 ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
 ##
 schedulerName: ""
+## @param terminationGracePeriodSeconds In seconds, time the given to the Cassandra pod needs to terminate gracefully
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+##
+terminationGracePeriodSeconds: ""
 ## @param extraVolumes Optionally specify extra list of additional volumes for cassandra container
 ##
 extraVolumes: []
@@ -418,6 +424,19 @@ containerPorts:
   tls: 7001
   jmx: 7199
   cql: 9042
+
+## Cassandra ports to be exposed as hostPort
+## If hostNetwork is false, only the ports specified here will be exposed (or not if set to an empty string)
+## @param hostPorts.intra Intra Port on the Host
+## @param hostPorts.tls TLS Port on the Host
+## @param hostPorts.jmx JMX Port on the Host
+## @param hostPorts.cql CQL Port on the Host
+##
+hostPorts:
+  intra: ""
+  tls: ""
+  jmx: ""
+  cql: ""
 
 ## @section RBAC parameters
 ##
@@ -491,6 +510,17 @@ service:
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
   ##
   annotations: {}
+  ## @param service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+  ## If "ClientIP", consecutive client requests will be directed to the same Pod
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+  ##
+  sessionAffinity: None
+  ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
+  ## sessionAffinityConfig:
+  ##   clientIP:
+  ##     timeoutSeconds: 300
+  ##
+  sessionAffinityConfig: {}
 ## Network policies
 ## Ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
 ##
@@ -500,8 +530,8 @@ networkPolicy:
   enabled: false
   ## @param networkPolicy.allowExternal Don't require client label for connections
   ## The Policy model to apply. When set to false, only pods with the correct
-  ## client label will have network access to the port Redis&trade; is listening
-  ## on. When true, Redis&trade; will accept connections from any source
+  ## client label will have network access to the port Redis&reg; is listening
+  ## on. When true, Redis&reg; will accept connections from any source
   ## (with the correct destination port).
   ##
   allowExternal: true
@@ -526,7 +556,7 @@ persistence:
   storageClass: ""
   ## @param persistence.commitStorageClass PVC Storage Class for Cassandra Commit Log volume
   ## Storage class to use with CASSANDRA_COMMITLOG_DIR to reduce the concurrence for writing data and commit logs
-  ## ref: https://github.com/bitnami/bitnami-docker-cassandra
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/cassandra
   ## If set to "-", commitStorageClass: "", which disables dynamic provisioning
   ## If undefined (the default) or set to null, no storageClassName spec is
   ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
@@ -543,15 +573,16 @@ persistence:
   ## @param persistence.size PVC Storage Request for Cassandra data volume
   ##
   size: 8Gi
-  ## @skip persistence.commitLogsize PVC Storage Request for Cassandra commit log volume
+  ## @param persistence.commitLogsize PVC Storage Request for Cassandra commit log volume. Unset by default
   ##
-  # commitLogsize: 2Gi
+  commitLogsize: 2Gi
   ## @param persistence.mountPath The path the data volume will be mounted at
   ##
   mountPath: /bitnami/cassandra
-  ## @skip persistence.commitLogMountPath The path the commit log volume will be mounted at
+  ## @param persistence.commitLogMountPath The path the commit log volume will be mounted at. Unset by default. Set it to '/bitnami/cassandra/commitlog' to enable a separate commit log volume
   ##
   # commitLogMountPath: /bitnami/cassandra/commitlog
+  commitLogMountPath: ""
 
 ## @section Volume Permissions parameters
 ##
@@ -563,16 +594,18 @@ volumePermissions:
   ## @param volumePermissions.enabled Enable init container that changes the owner and group of the persistent volume
   ##
   enabled: false
-  ## @param volumePermissions.image.registry Init container volume
-  ## @param volumePermissions.image.repository Init container volume
-  ## @param volumePermissions.image.tag Init container volume
-  ## @param volumePermissions.image.pullPolicy Init container volume
+  ## @param volumePermissions.image.registry Init container volume image registry
+  ## @param volumePermissions.image.repository Init container volume image repository
+  ## @param volumePermissions.image.tag Init container volume image tag (immutable tags are recommended)
+  ## @param volumePermissions.image.digest Init container volume image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## @param volumePermissions.image.pullPolicy Init container volume pull policy
   ## @param volumePermissions.image.pullSecrets Specify docker-registry secret names as an array
   ##
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 10-debian-10-r430
+    tag: 11-debian-11-r90
+    digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -632,6 +665,7 @@ metrics:
   ## @param metrics.image.registry Cassandra exporter image registry
   ## @param metrics.image.repository Cassandra exporter image name
   ## @param metrics.image.tag Cassandra exporter image tag
+  ## @param metrics.image.digest Cassandra exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param metrics.image.pullPolicy image pull policy
   ## @param metrics.image.pullSecrets Specify docker-registry secret names as an array
   ##
@@ -639,7 +673,8 @@ metrics:
     registry: docker.io
     pullPolicy: IfNotPresent
     repository: bitnami/cassandra-exporter
-    tag: 2.3.8-debian-10-r53
+    tag: 2.3.8-debian-11-r95
+    digest: ""
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
@@ -670,6 +705,21 @@ metrics:
     ##    memory: 128Mi
     ##
     requests: {}
+  ## @param metrics.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param metrics.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param metrics.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param metrics.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param metrics.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    initialDelaySeconds: 20
+    periodSeconds: 10
+    timeoutSeconds: 45
+    failureThreshold: 3
+    successThreshold: 1
+  ## @param metrics.extraVolumeMounts Optionally specify extra list of additional volumeMounts for cassandra-exporter container
+  ##
+  extraVolumeMounts: []
   ## @param metrics.podAnnotations [object] Metrics exporter pod Annotation and Labels
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
@@ -698,7 +748,7 @@ metrics:
     ##
     scrapeTimeout: ""
     ## @param metrics.serviceMonitor.selector Prometheus instance selector labels
-    ## ref: https://github.com/bitnami/charts/tree/master/bitnami/prometheus-operator#prometheus-configuration
+    ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
     ## e.g:
     ## selector:
     ##   prometheus: my-prometheus
@@ -708,16 +758,21 @@ metrics:
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
     ##
     metricRelabelings: []
+    ## @param metrics.serviceMonitor.relabelings RelabelConfigs to apply to samples before scraping
+    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#relabelconfig
+    ##
+    relabelings: []
     ## @param metrics.serviceMonitor.honorLabels Specify honorLabels parameter to add the scrape endpoint
     ##
     honorLabels: false
     ## @param metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
     ##
     jobLabel: ""
-    ## @param metrics.serviceMonitor.additionalLabels Used to pass Labels that are required by the installed Prometheus Operator
+    ## DEPRECATED - metrics.serviceMonitor.additionalLabels will be remove in a future release, please use metrics.serviceMonitor.labels instead.
+    ## @param metrics.serviceMonitor.labels Used to pass Labels that are required by the installed Prometheus Operator
     ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#prometheusspec
     ##
-    additionalLabels: {}
+    labels: {}
 
   ## Metrics container ports to open
   ## If hostNetwork true: the hostPort is set identical to the containerPort
@@ -727,6 +782,76 @@ metrics:
   containerPorts:
     http: 8080
     jmx: 5555
+
+  ## Metrics ports to be exposed as hostPort
+  ## If hostNetwork is false, only the ports specified here will be exposed (or not if set to an empty string)
+  ## @param metrics.hostPorts.http HTTP Port on the Host
+  ## @param metrics.hostPorts.jmx JMX Port on the Host
+  ##
+  hostPorts:
+    http: ""
+    jmx: ""
+
+  ## @param metrics.configuration [string] Configure Cassandra-exporter with a custom config.yml file
+  ## ref: https://github.com/criteo/cassandra_exporter/blob/master/config.yml
+  ##
+  configuration: |
+    host: localhost:{{ .Values.containerPorts.jmx }}
+    ssl: False
+    user:
+    password:
+    listenPort: {{ .Values.metrics.containerPorts.http }}
+    blacklist:
+      # To profile the duration of jmx call you can start the program with the following options
+      # > java -Dorg.slf4j.simpleLogger.defaultLogLevel=trace -jar cassandra_exporter.jar config.yml --oneshot
+      #
+      # To get intuition of what is done by cassandra when something is called you can look in cassandra
+      # https://github.com/apache/cassandra/tree/trunk/src/java/org/apache/cassandra/metrics
+      # Please avoid to scrape frequently those calls that are iterating over all sstables
+
+      # Unaccessible metrics (not enough privilege)
+      - java:lang:memorypool:.*usagethreshold.*
+
+      # Leaf attributes not interesting for us but that are presents in many path
+      - .*:999thpercentile
+      - .*:95thpercentile
+      - .*:fifteenminuterate
+      - .*:fiveminuterate
+      - .*:durationunit
+      - .*:rateunit
+      - .*:stddev
+      - .*:meanrate
+      - .*:mean
+      - .*:min
+
+      # Path present in many metrics but uninterresting
+      - .*:viewlockacquiretime:.*
+      - .*:viewreadtime:.*
+      - .*:cas[a-z]+latency:.*
+      - .*:colupdatetimedeltahistogram:.*
+
+      # Mostly for RPC, do not scrap them
+      - org:apache:cassandra:db:.*
+
+      # columnfamily is an alias for Table metrics
+      # https://github.com/apache/cassandra/blob/8b3a60b9a7dbefeecc06bace617279612ec7092d/src/java/org/apache/cassandra/metrics/TableMetrics.java#L162
+      - org:apache:cassandra:metrics:columnfamily:.*
+
+      # Should we export metrics for system keyspaces/tables ?
+      - org:apache:cassandra:metrics:[^:]+:system[^:]*:.*
+
+      # Don't scrap us
+      - com:criteo:nosql:cassandra:exporter:.*
+
+    maxScrapFrequencyInSec:
+      50:
+        - .*
+
+      # Refresh those metrics only every hour as it is costly for cassandra to retrieve them
+      3600:
+        - .*:snapshotssize:.*
+        - .*:estimated.*
+        - .*:totaldiskspaceused:.*
 
 ## @section TLS/SSL parameters
 ##

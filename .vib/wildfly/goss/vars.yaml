@@ -1,0 +1,5 @@
+wildflyUsername: "user"
+wildflyPassword: "ComplicatedPassword123!4"
+service:
+  ports:
+    mgmt: 9990

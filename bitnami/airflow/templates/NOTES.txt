@@ -61,7 +61,7 @@ host. To configure Airflow with the URL of your service:
     {{ include "common.utils.secret.getvalue" (dict "secret" $airflowSecretName "field" "airflow-password" "context" $) }}
     {{ include "common.utils.secret.getvalue" (dict "secret" $airflowSecretName "field" "airflow-fernet-key" "context" $) }}
     {{ include "common.utils.secret.getvalue" (dict "secret" $airflowSecretName "field" "airflow-secret-key" "context" $) }}
-    helm upgrade --namespace {{ $releaseNamespace }} {{ .Release.Name }} bitnami/{{ .Chart.Name }} \
+    helm upgrade --namespace {{ $releaseNamespace }} {{ .Release.Name }} my-repo/{{ .Chart.Name }} \
       --set service.type={{ .Values.service.type }} \
       --set web.baseUrl=http://$AIRFLOW_HOST:$AIRFLOW_PORT \
       --set auth.password=$AIRFLOW_PASSWORD \

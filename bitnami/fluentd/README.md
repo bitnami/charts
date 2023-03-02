@@ -7,19 +7,19 @@ Fluentd collects events from various data sources and writes them to files, RDBM
 [Overview of Fluentd](https://www.fluentd.org)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
-                           
+
 ## TL;DR
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/fluentd
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/fluentd
 ```
 
 ## Introduction
 
-This chart bootstraps a [Fluentd](https://github.com/bitnami/bitnami-docker-fluentd) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Fluentd](https://github.com/bitnami/containers/tree/main/bitnami/fluentd) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 ## Prerequisites
 
@@ -34,8 +34,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add bitnami https://charts.bitnami.com/bitnami
-$ helm install my-release bitnami/fluentd
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/fluentd
 ```
 
 These commands deploy Fluentd on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -47,7 +47,7 @@ These commands deploy Fluentd on the Kubernetes cluster in the default configura
 To uninstall/delete the `my-release` resources:
 
 ```console
-$ helm delete my-release
+helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release. Use the option `--purge` to delete all history too.
@@ -61,7 +61,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
-
 
 ### Common parameters
 
@@ -78,14 +77,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.command` | Command to override all containers in the deployment                                         | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                            | `["infinity"]`  |
 
-
 ### Fluentd parameters
 
 | Name                                                           | Description                                                                                                                                                        | Value                                                      |
 | -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------- |
 | `image.registry`                                               | Fluentd image registry                                                                                                                                             | `docker.io`                                                |
 | `image.repository`                                             | Fluentd image repository                                                                                                                                           | `bitnami/fluentd`                                          |
-| `image.tag`                                                    | Fluentd image tag (immutable tags are recommended)                                                                                                                 | `1.14.6-debian-10-r26`                                     |
+| `image.tag`                                                    | Fluentd image tag (immutable tags are recommended)                                                                                                                 | `1.15.3-debian-11-r40`                                     |
 | `image.pullPolicy`                                             | Fluentd image pull policy                                                                                                                                          | `IfNotPresent`                                             |
 | `image.pullSecrets`                                            | Fluentd image pull secrets                                                                                                                                         | `[]`                                                       |
 | `image.debug`                                                  | Enable image debug mode                                                                                                                                            | `false`                                                    |
@@ -105,6 +103,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `forwarder.containerSecurityContext.allowPrivilegeEscalation`  | Allow Privilege Escalation                                                                                                                                         | `false`                                                    |
 | `forwarder.containerSecurityContext.readOnlyRootFilesystem`    | Require the use of a read only root file system                                                                                                                    | `false`                                                    |
 | `forwarder.containerSecurityContext.capabilities.drop`         | Drop capabilities for the securityContext                                                                                                                          | `[]`                                                       |
+| `forwarder.hostNetwork`                                        | Enable use of host network                                                                                                                                         | `false`                                                    |
+| `forwarder.dnsPolicy`                                          | Pod-specific DNS policy                                                                                                                                            | `""`                                                       |
 | `forwarder.terminationGracePeriodSeconds`                      | Duration in seconds the pod needs to terminate gracefully                                                                                                          | `30`                                                       |
 | `forwarder.configFile`                                         | Name of the config file that will be used by Fluentd at launch under the `/opt/bitnami/fluentd/conf` directory                                                     | `fluentd.conf`                                             |
 | `forwarder.configMap`                                          | Name of the config map that contains the Fluentd configuration files                                                                                               | `""`                                                       |
@@ -181,6 +181,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `forwarder.sidecars`                                           | Add sidecars to forwarder pods                                                                                                                                     | `[]`                                                       |
 | `forwarder.extraVolumes`                                       | Extra volumes                                                                                                                                                      | `[]`                                                       |
 | `forwarder.extraVolumeMounts`                                  | Mount extra volume(s)                                                                                                                                              | `[]`                                                       |
+| `forwarder.initScripts`                                        | Dictionary of init scripts. Evaluated as a template.                                                                                                               | `{}`                                                       |
+| `forwarder.initScriptsCM`                                      | ConfigMap with the init scripts. Evaluated as a template.                                                                                                          | `""`                                                       |
+| `forwarder.initScriptsSecret`                                  | Secret containing `/docker-entrypoint-initdb.d` scripts to be executed at initialization time that contain sensitive data. Evaluated as a template.                | `""`                                                       |
 | `aggregator.enabled`                                           | Enable Fluentd aggregator statefulset                                                                                                                              | `true`                                                     |
 | `aggregator.image.registry`                                    | Fluentd aggregator image registry override                                                                                                                         | `""`                                                       |
 | `aggregator.image.repository`                                  | Fluentd aggregator image repository override                                                                                                                       | `""`                                                       |
@@ -295,6 +298,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `aggregator.extraVolumes`                                      | Extra volumes                                                                                                                                                      | `[]`                                                       |
 | `aggregator.extraVolumeMounts`                                 | Mount extra volume(s)                                                                                                                                              | `[]`                                                       |
 | `aggregator.extraVolumeClaimTemplates`                         | Optionally specify extra list of additional volume claim templates for the Fluentd Aggregator pods in StatefulSet                                                  | `[]`                                                       |
+| `aggregator.initScripts`                                       | Dictionary of init scripts. Evaluated as a template.                                                                                                               | `{}`                                                       |
+| `aggregator.initScriptsCM`                                     | ConfigMap with the init scripts. Evaluated as a template.                                                                                                          | `""`                                                       |
+| `aggregator.initScriptsSecret`                                 | Secret containing `/docker-entrypoint-initdb.d` scripts to be executed at initialization time that contain sensitive data. Evaluated as a template.                | `""`                                                       |
 | `metrics.enabled`                                              | Enable the export of Prometheus metrics                                                                                                                            | `false`                                                    |
 | `metrics.service.type`                                         | Prometheus metrics service type                                                                                                                                    | `ClusterIP`                                                |
 | `metrics.service.port`                                         | Prometheus metrics service port                                                                                                                                    | `24231`                                                    |
@@ -316,17 +322,15 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.serviceMonitor.labels`                                | ServiceMonitor extra labels                                                                                                                                        | `{}`                                                       |
 | `metrics.serviceMonitor.annotations`                           | ServiceMonitor annotations                                                                                                                                         | `{}`                                                       |
 | `metrics.serviceMonitor.honorLabels`                           | honorLabels chooses the metric's labels on collisions with target labels                                                                                           | `false`                                                    |
+| `metrics.serviceMonitor.path`                                  | path defines the path that promethues will use to pull metrics from the container                                                                                  | `/metrics`                                                 |
 | `tls.enabled`                                                  | Enable TLS/SSL encrytion for internal communications                                                                                                               | `false`                                                    |
 | `tls.autoGenerated`                                            | Generate automatically self-signed TLS certificates.                                                                                                               | `false`                                                    |
 | `tls.forwarder.existingSecret`                                 | Name of the existing secret containing the TLS certificates for the Fluentd forwarder                                                                              | `""`                                                       |
 | `tls.aggregator.existingSecret`                                | Name of the existing secret containing the TLS certificates for the Fluentd aggregator                                                                             | `""`                                                       |
 
-
-Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
-
 ```console
-$ helm install my-release \
-  --set aggregator.port=24444 bitnami/fluentd
+helm install my-release \
+  --set aggregator.port=24444 my-repo/fluentd
 ```
 
 The above command sets the aggregators to listen on port 24444.
@@ -334,7 +338,7 @@ The above command sets the aggregators to listen on port 24444.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml bitnami/fluentd
+helm install my-release -f values.yaml my-repo/fluentd
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -350,8 +354,6 @@ Bitnami will release a new chart updating its containers if a new version of the
 ### Forwarding the logs to another service
 
 By default, the aggregators in this chart will send the processed logs to the standard output. However, a common practice is to send them to another service, like Elasticsearch, instead. This can be achieved with this Helm Chart by mounting your own configuration files. For example:
-
-**configmap.yaml**
 
 ```yaml
 apiVersion: v1
@@ -434,6 +436,15 @@ aggregator.extraEnv[1].name=ELASTICSEARCH_PORT
 aggregator.extraEnv[1].value=your-port-here
 ```
 
+### Using custom init scripts
+
+For advanced operations, the Bitnami Fluentd charts allows using custom init scripts that will be mounted inside `/docker-entrypoint.init-db`. You can include the file directly in your `values.yaml`, depending on where you are going to initialize your scripts with `aggregator.initScripts` (or `forwarder.initScripts`), or use a ConfigMap or a Secret (in case of sensitive data) for mounting these extra scripts. In this case you use the `aggregator.initScriptsCM` and `aggregator.initScriptsSecret` values (the same for `forwarder`).
+
+```console
+initScriptsCM=special-scripts
+initScriptsSecret=special-scripts-sensitive
+```
+
 ### Forwarder Security Context & Policy
 
 By default, the **forwarder** `DaemonSet` from this chart **runs as the `root` user**, within the `root` group, assigning `root` file system permissions. This is different to the default behaviour of most Bitnami Helm charts where we [prefer to work with non-root containers](https://docs.bitnami.com/tutorials/work-with-non-root-containers/).
@@ -476,7 +487,7 @@ Mounting additional `hostPath`s is sometimes required to deal with `/var/lib` be
 
 This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/master/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
 
 ## Troubleshooting
 
@@ -496,7 +507,7 @@ Affected values:
 - `aggregator.securityContext` and `forwarder.securityContext` have been renamed as `aggregator.podSecurityContext` and `forwarder.podSecurityContext` respectively.
 - `rbac.*` and `serviceAccount.*` have been definitely removed. Deprecation warning will no longer show.
 
-Additionally also updates the Redis&trade; subchart to it newest major, 14.0.0, which contains similar changes.
+Additionally also updates the Redis&reg; subchart to it newest major, 14.0.0, which contains similar changes.
 
 ### To 4.0.0
 
@@ -506,28 +517,28 @@ The new `tls.*` settings will now configure SSL/TLS certificates for the out_for
 
 ### To 3.1.0
 
-This version also introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/master/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
+This version also introduces `bitnami/common`, a [library chart](https://helm.sh/docs/topics/library_charts/#helm) as a dependency. More documentation about this new utility could be found [here](https://github.com/bitnami/charts/tree/main/bitnami/common#bitnami-common-library-chart). Please, make sure that you have updated the chart dependencies before executing any upgrade.
 
 ### To 3.0.0
 
 [On November 13, 2020, Helm v2 support was formally finished](https://github.com/helm/charts#status-of-the-project), this major version is the result of the required changes applied to the Helm Chart to be able to incorporate the different features added in Helm v3 and to be consistent with the Helm project itself regarding the Helm v2 EOL.
 
-**What changes were introduced in this major version?**
+#### What changes were introduced in this major version?
 
 - Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
-- The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
+- The different fields present in the _Chart.yaml_ file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
 
-**Considerations when upgrading to this version**
+#### Considerations when upgrading to this version
 
 - If you want to upgrade to this version from a previous one installed with Helm v3, you shouldn't face any issues
 - If you want to upgrade to this version using Helm v2, this scenario is not supported as this version doesn't support Helm v2 anymore
 - If you installed the previous version with Helm v2 and wants to upgrade to this version with Helm v3, please refer to the [official Helm documentation](https://helm.sh/docs/topics/v2_v3_migration/#migration-use-cases) about migrating from Helm v2 to v3
 
-**Useful links**
+#### Useful links
 
-- https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/
-- https://helm.sh/docs/topics/v2_v3_migration/
-- https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/
+- <https://docs.bitnami.com/tutorials/resolve-helm2-helm3-post-migration-issues/>
+- <https://helm.sh/docs/topics/v2_v3_migration/>
+- <https://helm.sh/blog/migrate-from-helm-v2-to-helm-v3/>
 
 ### To 2.0.0
 
@@ -567,13 +578,13 @@ No issues are expected in the upgrade process. However, please ensure that you a
 
 ## License
 
-Copyright &copy; 2022 Bitnami
+Copyright &copy; 2023 Bitnami
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,

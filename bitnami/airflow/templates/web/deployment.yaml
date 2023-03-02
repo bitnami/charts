@@ -123,9 +123,9 @@ spec:
             - name: AIRFLOW_LDAP_URI
               value: {{ .Values.ldap.uri | quote }}
             - name: AIRFLOW_LDAP_SEARCH
-              value: {{ .Values.ldap.base | quote }}
+              value: {{ coalesce .Values.ldap.base .Values.ldap.basedn | quote }}
             - name: AIRFLOW_LDAP_UID_FIELD
-              value: {{ .Values.ldap.uidField | quote }}
+              value: {{ coalesce .Values.ldap.uidField .Values.ldap.searchAttribute | quote }}
             - name: AIRFLOW_LDAP_BIND_USER
               value: {{ .Values.ldap.binddn | quote }}
             - name: AIRFLOW_LDAP_BIND_PASSWORD
@@ -145,7 +145,7 @@ spec:
               value: {{ ternary "True" "False" .Values.ldap.tls.enabled | quote }}
             {{- if .Values.ldap.tls.enabled }}
             - name: AIRFLOW_LDAP_ALLOW_SELF_SIGNED
-              value: {{ .Values.ldap.tls.allowSelfSigned | quote }}
+              value: {{ ternary "True" "False" .Values.ldap.tls.allowSelfSigned | quote }}
             - name: AIRFLOW_LDAP_TLS_CA_CERTIFICATE
               value: {{ include "airflow.ldapCAFilename" . | quote }}
             {{- end }}
@@ -191,14 +191,16 @@ spec:
             - name: http
               containerPort: {{ .Values.web.containerPorts.http }}
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.web.startupProbe.enabled }}
+          {{- if .Values.web.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.web.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.web.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.web.startupProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
               port: http
-          {{- else if .Values.web.customStartupProbe }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.web.customStartupProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.web.livenessProbe.enabled }}
+          {{- if .Values.web.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.web.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.web.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.web.livenessProbe "enabled") "context" $) | nindent 12 }}
             {{- if include "airflow.baseUrl" . }}
             tcpSocket:
@@ -208,10 +210,10 @@ spec:
               path: /health
               port: http
             {{- end }}
-          {{- else if .Values.web.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.web.customLivenessProbe "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.web.readinessProbe.enabled }}
+          {{- if .Values.web.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.web.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.web.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.web.readinessProbe "enabled") "context" $) | nindent 12 }}
             {{- if include "airflow.baseUrl" . }}
             tcpSocket:
@@ -221,8 +223,6 @@ spec:
               path: /health
               port: http
             {{- end }}
-          {{- else if .Values.web.customReadinessProbe }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.web.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
           {{- if .Values.web.lifecycleHooks }}
@@ -252,7 +252,7 @@ spec:
             {{- end }}
             {{- if .Values.ldap.tls.enabled }}
             - name: airflow-ldap-ca-certificate
-              mountPath: /opt/bitnami/airflow/conf/certs/
+              mountPath: {{ .Values.ldap.tls.certificatesMountPath }}
               readOnly: true
             {{- end }}
             {{- if .Values.extraVolumeMounts }}
@@ -289,7 +289,7 @@ spec:
         {{- if .Values.ldap.tls.enabled }}
         - name: airflow-ldap-ca-certificate
           secret:
-            secretName: {{ required "A secret containing the LDAP CA certificate. It is required when SSL in enabled" .Values.ldap.tls.CAcertificateSecret }}
+            secretName: {{ required "A secret containing the LDAP CA certificate. It is required when SSL in enabled" (coalesce .Values.ldap.tls.CAcertificateSecret .Values.ldap.tls.certificatesSecret) }}
             defaultMode: 256
         {{- end }}
         {{- if .Values.extraVolumes }}
