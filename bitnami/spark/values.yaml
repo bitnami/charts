@@ -287,9 +287,9 @@ master:
   ## @param master.resources.requests The requested resources for the container
   ##
   ## NFS
-  ## nfs_server_ip: ""   # The IP of NFS Server
-  ## nfs_server_path: "" # The NFS server volume path
-  ## nfs_mount_path: ""  # The local path that will mount the NFS share volume
+  ## @param master.nfs_server_ip Optionally specify the IP of NFS Server
+  ## @param master.nfs_server_path: Optionally specify the NFS server volume path (required if nfs_server_ip is defined)
+  ## @param master.nfs_mount_path: Optionally specify the local path that will mount the NFS share volume (required if nfs_server_ip is defined)
 
   resources:
     ## Example:
@@ -574,9 +574,9 @@ worker:
   ##
 
   ## NFS
-  ## nfs_server_ip: ""   # The IP of NFS Server
-  ## nfs_server_path: "" # The NFS server volume path
-  ## nfs_mount_path: ""  # The local path that will mount the NFS share volume
+  ## @param master.nfs_server_ip Optionally specify the IP of NFS Server
+  ## @param master.nfs_server_path: Optionally specify the NFS server volume path (required if nfs_server_ip is defined)
+  ## @param master.nfs_mount_path: Optionally specify the local path that will mount the NFS share volume (required if nfs_server_ip is defined)
 
   resources:
     ## Example:
