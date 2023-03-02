@@ -35,6 +35,9 @@ commonLabels: {}
 ## @param commonAnnotations Annotations to add to all deployed objects
 ##
 commonAnnotations: {}
+## @param extraDeploy Array of extra objects to deploy with the release
+##
+extraDeploy: []
 ## Enable diagnostic mode in the deployment
 ##
 diagnosticMode:
@@ -206,7 +209,7 @@ jobmanager:
     web: 8081
     ## @param jobmanager.containerPorts.blob Port for blob server
     ##
-    blob: 6130
+    blob: 6124
   ## Apache Flink jobmanager.service parameters
   ##
   service:
@@ -224,7 +227,7 @@ jobmanager:
       web: 8081
       ## @param jobmanager.service.ports.blob Port for blob server
       ##
-      blob: 6130
+      blob: 6124
     ## Node ports to expose
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
     nodePorts:

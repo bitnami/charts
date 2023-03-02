@@ -69,7 +69,6 @@ spec:
           {{- if .Values.jobmanager.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.jobmanager.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
-          #command: ["/opt/bitnami/flink/bin/jobmanager.sh", "start-foreground"]
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
           {{- else if .Values.jobmanager.command }}
@@ -96,7 +95,13 @@ spec:
             - name: FLINK_CFG_JOBMANAGER_BIND__HOST
               value: 0.0.0.0
             - name: FLINK_CFG_JOBMANAGER_RPC_ADDRESS
-              value: flink-jobmanager
+              value: {{ include "flink.jobmanager.fullname" . }}
+            - name: FLINK_CFG_JOBMANAGER_RPC_ADDRESS
+              value: {{ include "flink.jobmanager.fullname" . }}
+            - name: FLINK_CFG_REST_BIND__ADDRESS
+              value: 0.0.0.0
+            - name: FLINK_CFG_REST_ADDRESS
+              value: {{ include "flink.jobmanager.fullname" . }}
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" .Values.image.debug | quote }}
             {{- if .Values.jobmanager.extraEnvVars }}

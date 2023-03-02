@@ -92,14 +92,12 @@ spec:
               value: taskmanager
             - name: FLINK_CFG_JOBMANAGER_RPC_ADDRESS
               value: flink-jobmanager
-            - name: FLINK_CFG_TASKMANAGER_RPC_ADDRESS
-              valueFrom:
-                fieldRef:
-                  fieldPath: status.podIP
+            - name: FLINK_CFG_TASKMANAGER_RPC_PORT
+              value: {{ .Values.taskmanager.service.ports.rpc | quote }}
+            - name: FLINK_CFG_TASKMANAGER_HOST
+              value: flink-taskmanager
             - name: FLINK_CFG_TASKMANAGER_BIND__HOST
-              valueFrom:
-                fieldRef:
-                  fieldPath: status.podIP
+              value: 0.0.0.0
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" .Values.image.debug | quote }}
             {{- if .Values.taskmanager.extraEnvVars }}
@@ -120,21 +118,21 @@ spec:
           {{- else if .Values.taskmanager.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.taskmanager.startupProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
-              port: data
+              port: rpc
           {{- end }}
           {{- if .Values.taskmanager.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.taskmanager.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.taskmanager.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.taskmanager.livenessProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
-              port: data
+              port: rpc
           {{- end }}
           {{- if .Values.taskmanager.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.taskmanager.customReadinessProbe "context" $) | nindent 12 }}
           {{- else if .Values.taskmanager.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.taskmanager.readinessProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
-              port: data
+              port: rpc
           {{- end }}
           {{- end }}
           {{- if .Values.taskmanager.resources }}
