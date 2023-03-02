@@ -5,6 +5,7 @@ metadata:
   name: {{ printf "%s-jmx-configuration" (include "common.names.fullname" .) }}
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: metrics
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
@@ -25,10 +26,6 @@ data:
         name: kafka_controller_$1_$2_$3
       - pattern: kafka.controller<type=(ControllerStats), name=(.+)><>(Count)
         name: kafka_controller_$1_$2_$3
-      - pattern: kafka.server<type=(ReplicaFetcherManager), name=(.+), clientId=(.+)><>(Value)
-        name: kafka_server_$1_$2_$4
-        labels:
-          client_id: "$3"
       - pattern : kafka.network<type=(Processor), name=(IdlePercent), networkProcessor=(.+)><>(Value)
         name: kafka_network_$1_$2_$4
         labels:
@@ -41,6 +38,14 @@ data:
         name: kafka_network_$1_$2_$3
       - pattern : kafka.network<type=(RequestChannel), name=(.+)><>(Count|Value)
         name: kafka_network_$1_$2_$3
+      - pattern: kafka.server<type=(.+), name=(.+), topic=(.+)><>(Count|OneMinuteRate)
+        name: kafka_server_$1_$2_$4
+        labels:
+          topic: $3
+      - pattern: kafka.server<type=(ReplicaFetcherManager), name=(.+), clientId=(.+)><>(Value)
+        name: kafka_server_$1_$2_$4
+        labels:
+          client_id: "$3"
       - pattern: kafka.server<type=(DelayedOperationPurgatory), name=(.+), delayedOperation=(.+)><>(Value)
         name: kafka_server_$1_$2_$3_$4
       - pattern: kafka.server<type=(.+), name=(.+)><>(Count|Value|OneMinuteRate)
@@ -57,4 +62,7 @@ data:
         labels:
           topic: $3
           partition: $4
+      {{- if .Values.metrics.jmx.extraRules }}
+      {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.jmx.extraRules "context" $ ) | nindent 6 }}
+      {{- end }}
 {{- end -}}
