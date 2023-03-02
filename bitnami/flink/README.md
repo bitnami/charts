@@ -17,6 +17,7 @@
 | `kubeVersion`            | Force target Kubernetes version (using Helm capabilities if not set)                    | `""`           |
 | `commonLabels`           | Labels to add to all deployed objects (sub-charts are not considered)                   | `{}`           |
 | `commonAnnotations`      | Annotations to add to all deployed objects                                              | `{}`           |
+| `extraDeploy`            | Array of extra objects to deploy with the release                                       | `[]`           |
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`        |
 | `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`    |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]` |
@@ -70,11 +71,11 @@
 | `jobmanager.extraVolumeMounts`                           | Optionally specify extra list of additional volumeMounts for flink container              | `[]`            |
 | `jobmanager.containerPorts.rpc`                          | Port for RPC                                                                              | `6123`          |
 | `jobmanager.containerPorts.web`                          | Port for web UI                                                                           | `8081`          |
-| `jobmanager.containerPorts.blob`                         | Port for blob server                                                                      | `6130`          |
+| `jobmanager.containerPorts.blob`                         | Port for blob server                                                                      | `6124`          |
 | `jobmanager.service.type`                                | Apache Flink service type                                                                 | `ClusterIP`     |
 | `jobmanager.service.ports.rpc`                           | Port for RPC                                                                              | `6123`          |
 | `jobmanager.service.ports.web`                           | Port for web UI                                                                           | `8081`          |
-| `jobmanager.service.ports.blob`                          | Port for blob server                                                                      | `6130`          |
+| `jobmanager.service.ports.blob`                          | Port for blob server                                                                      | `6124`          |
 | `jobmanager.service.nodePorts.rpc`                       | Node port for RPC                                                                         | `""`            |
 | `jobmanager.service.nodePorts.web`                       | Node port for web UI                                                                      | `""`            |
 | `jobmanager.service.nodePorts.blob`                      | Port for blob server                                                                      | `""`            |
