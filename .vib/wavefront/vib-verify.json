@@ -39,7 +39,9 @@
               "path": "/.vib/wavefront/goss"
             },
             "remote": {
-              "workload": "deploy-wavefront-proxy"
+              "pod": {
+                "workload": "deploy-wavefront-proxy"
+              }
             },
             "vars_file": "vars.yaml"
           }

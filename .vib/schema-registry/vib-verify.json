@@ -45,7 +45,9 @@
               "path": "/.vib/schema-registry/goss"
             },
             "remote": {
-              "workload": "sts-schema-registry"
+              "pod": {
+                "workload": "sts-schema-registry"
+              }
             },
             "vars_file": "vars.yaml"
           }

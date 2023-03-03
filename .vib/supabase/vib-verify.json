@@ -45,7 +45,9 @@
               "path": "/.vib/supabase/goss"
             },
             "remote": {
-              "workload": "deploy-supabase-kong"
+              "pod": {
+                "workload": "deploy-supabase-kong"
+              }
             },
             "vars_file": "vars.yaml"
           }

@@ -46,7 +46,9 @@
             },
             "vars_file": "vars.yaml",
             "remote": {
-              "workload": "deploy-prestashop"
+              "pod": {
+                "workload": "deploy-prestashop"
+              }
             }
           }
         },

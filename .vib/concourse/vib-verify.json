@@ -45,7 +45,9 @@
               "path": "/.vib/concourse/goss/web"
             },
             "remote": {
-              "workload": "deploy-concourse-web"
+              "pod": {
+                "workload": "deploy-concourse-web"
+              }
             },
             "vars_file": "vars.yaml"
           }
@@ -57,7 +59,9 @@
               "path": "/.vib/concourse/goss/worker"
             },
             "remote": {
-              "workload": "deploy-concourse-worker"
+              "pod": {
+                "workload": "deploy-concourse-worker"
+              }
             },
             "vars_file": "vars.yaml"
           }

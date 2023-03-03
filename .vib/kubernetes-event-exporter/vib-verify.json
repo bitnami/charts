@@ -38,7 +38,9 @@
               "path": "/.vib/kubernetes-event-exporter/goss"
             },
             "remote": {
-              "workload": "deploy-kubernetes-event-exporter"
+              "pod": {
+                "workload": "deploy-kubernetes-event-exporter"
+              }
             },
             "vars_file": "vars.yaml"
           }

@@ -45,7 +45,9 @@
               "path": "/.vib/nats/goss"
             },
             "remote": {
-              "workload": "sts-nats"
+              "pod": {
+                "workload": "sts-nats"
+              }
             },
             "vars_file": "vars.yaml"
           }

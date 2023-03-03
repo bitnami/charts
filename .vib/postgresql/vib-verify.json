@@ -45,7 +45,9 @@
             },
             "vars_file": "vars.yaml",
             "remote": {
-              "workload": "sts-postgresql-ptest"
+              "pod": {
+                "workload": "sts-postgresql-ptest"
+              }
             }
           }
         }

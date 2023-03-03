@@ -59,7 +59,9 @@
               "path": "/.vib/dokuwiki/goss"
             },
             "remote": {
-              "workload": "deploy-dokuwiki"
+              "pod": {
+                "workload": "deploy-dokuwiki"
+              }
             },
             "vars_file": "vars.yaml"
           }

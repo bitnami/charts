@@ -45,7 +45,9 @@
               "path": "/.vib/tensorflow-resnet/goss"
             },
             "remote": {
-              "workload": "deploy-tensorflow-resnet"
+              "pod": {
+                "workload": "deploy-tensorflow-resnet"
+              }
             },
             "vars_file": "vars.yaml"
           }

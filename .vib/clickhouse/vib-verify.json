@@ -46,7 +46,9 @@
             },
             "vars_file": "vars.yaml",
             "remote": {
-              "workload": "sts-clickhouse-shard0"
+              "pod": {
+                "workload": "sts-clickhouse-shard0"
+              }
             }
           }
         },

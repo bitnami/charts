@@ -45,7 +45,9 @@
               "path": "/.vib/spring-cloud-dataflow/goss"
             },
             "remote": {
-              "workload": "deploy-spring-cloud-dataflow-server"
+              "pod": {
+                "workload": "deploy-spring-cloud-dataflow-server"
+              }
             },
             "vars_file": "vars.yaml"
           }

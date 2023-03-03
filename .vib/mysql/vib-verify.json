@@ -44,7 +44,9 @@
               "path": "/.vib/mysql/goss"
             },
             "remote": {
-              "workload": "sts-mysql-primary"
+              "pod": {
+                "workload": "sts-mysql-primary"
+              }
             },
             "vars_file": "vars.yaml"
           }

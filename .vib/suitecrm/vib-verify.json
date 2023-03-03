@@ -45,7 +45,9 @@
               "path": "/.vib/suitecrm/goss"
             },
             "remote": {
-              "workload": "deploy-suitecrm"
+              "pod": {
+                "workload": "deploy-suitecrm"
+              }
             },
             "vars_file": "vars.yaml"
           }

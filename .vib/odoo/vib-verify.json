@@ -59,7 +59,9 @@
               "path": "/.vib/odoo/goss"
             },
             "remote": {
-              "workload": "deploy-odoo"
+              "pod": {
+                "workload": "deploy-odoo"
+              }
             },
             "vars_file": "vars.yaml"
           }

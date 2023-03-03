@@ -51,7 +51,9 @@
             },
             "vars_file": "vars.yaml",
             "remote": {
-              "workload": "deploy-metallb-controller"
+              "pod": {
+                "workload": "deploy-metallb-controller"
+              }
             }
           }
         }

@@ -45,7 +45,9 @@
               "path": "/.vib/jasperreports/goss"
             },
             "remote": {
-              "workload": "deploy-jasperreports"
+              "pod": {
+                "workload": "deploy-jasperreports"
+              }
             },
             "vars_file": "vars.yaml"
           }

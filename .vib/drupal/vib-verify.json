@@ -45,7 +45,9 @@
               "path": "/.vib/drupal/goss"
             },
             "remote": {
-              "workload": "deploy-drupal"
+              "pod": {
+                "workload": "deploy-drupal"
+              }
             },
             "vars_file": "vars.yaml"
           }
