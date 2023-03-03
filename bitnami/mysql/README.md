@@ -62,44 +62,45 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common parameters
 
-| Name                     | Description                                                                                               | Value           |
-| ------------------------ | --------------------------------------------------------------------------------------------------------- | --------------- |
-| `kubeVersion`            | Force target Kubernetes version (using Helm capabilities if not set)                                      | `""`            |
-| `nameOverride`           | String to partially override common.names.fullname template (will maintain the release name)              | `""`            |
-| `fullnameOverride`       | String to fully override common.names.fullname template                                                   | `""`            |
-| `namespaceOverride`      | String to fully override common.names.namespace                                                           | `""`            |
-| `clusterDomain`          | Cluster domain                                                                                            | `cluster.local` |
-| `commonAnnotations`      | Common annotations to add to all MySQL resources (sub-charts are not considered). Evaluated as a template | `{}`            |
-| `commonLabels`           | Common labels to add to all MySQL resources (sub-charts are not considered). Evaluated as a template      | `{}`            |
-| `extraDeploy`            | Array with extra yaml to deploy with the chart. Evaluated as a template                                   | `[]`            |
-| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                   | `false`         |
-| `diagnosticMode.command` | Command to override all containers in the deployment                                                      | `["sleep"]`     |
-| `diagnosticMode.args`    | Args to override all containers in the deployment                                                         | `["infinity"]`  |
+| Name                      | Description                                                                                               | Value           |
+| ------------------------- | --------------------------------------------------------------------------------------------------------- | --------------- |
+| `kubeVersion`             | Force target Kubernetes version (using Helm capabilities if not set)                                      | `""`            |
+| `nameOverride`            | String to partially override common.names.fullname template (will maintain the release name)              | `""`            |
+| `fullnameOverride`        | String to fully override common.names.fullname template                                                   | `""`            |
+| `namespaceOverride`       | String to fully override common.names.namespace                                                           | `""`            |
+| `clusterDomain`           | Cluster domain                                                                                            | `cluster.local` |
+| `commonAnnotations`       | Common annotations to add to all MySQL resources (sub-charts are not considered). Evaluated as a template | `{}`            |
+| `commonLabels`            | Common labels to add to all MySQL resources (sub-charts are not considered). Evaluated as a template      | `{}`            |
+| `extraDeploy`             | Array with extra yaml to deploy with the chart. Evaluated as a template                                   | `[]`            |
+| `serviceBindings.enabled` | Create secret for service binding (Experimental)                                                          | `false`         |
+| `diagnosticMode.enabled`  | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                   | `false`         |
+| `diagnosticMode.command`  | Command to override all containers in the deployment                                                      | `["sleep"]`     |
+| `diagnosticMode.args`     | Args to override all containers in the deployment                                                         | `["infinity"]`  |
 
 ### MySQL common parameters
 
-| Name                       | Description                                                                                                                                                                         | Value                 |
-| -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
-| `image.registry`           | MySQL image registry                                                                                                                                                                | `docker.io`           |
-| `image.repository`         | MySQL image repository                                                                                                                                                              | `bitnami/mysql`       |
-| `image.tag`                | MySQL image tag (immutable tags are recommended)                                                                                                                                    | `8.0.32-debian-11-r8` |
-| `image.digest`             | MySQL image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                               | `""`                  |
-| `image.pullPolicy`         | MySQL image pull policy                                                                                                                                                             | `IfNotPresent`        |
-| `image.pullSecrets`        | Specify docker-registry secret names as an array                                                                                                                                    | `[]`                  |
-| `image.debug`              | Specify if debug logs should be enabled                                                                                                                                             | `false`               |
-| `architecture`             | MySQL architecture (`standalone` or `replication`)                                                                                                                                  | `standalone`          |
-| `auth.rootPassword`        | Password for the `root` user. Ignored if existing secret is provided                                                                                                                | `""`                  |
-| `auth.createDatabase`      | Whether to create the .Values.auth.database or not                                                                                                                                  | `true`                |
-| `auth.database`            | Name for a custom database to create                                                                                                                                                | `my_database`         |
-| `auth.username`            | Name for a custom user to create                                                                                                                                                    | `""`                  |
-| `auth.password`            | Password for the new user. Ignored if existing secret is provided                                                                                                                   | `""`                  |
-| `auth.replicationUser`     | MySQL replication user                                                                                                                                                              | `replicator`          |
-| `auth.replicationPassword` | MySQL replication user password. Ignored if existing secret is provided                                                                                                             | `""`                  |
-| `auth.existingSecret`      | Use existing secret for password details. The secret has to contain the keys `mysql-root-password`, `mysql-replication-password` and `mysql-password`                               | `""`                  |
-| `auth.usePasswordFiles`    | Mount credentials as files instead of using an environment variable                                                                                                                 | `false`               |
-| `auth.customPasswordFiles` | Use custom password files when `auth.usePasswordFiles` is set to `true`. Define path for keys `root` and `user`, also define `replicator` if `architecture` is set to `replication` | `{}`                  |
-| `initdbScripts`            | Dictionary of initdb scripts                                                                                                                                                        | `{}`                  |
-| `initdbScriptsConfigMap`   | ConfigMap with the initdb scripts (Note: Overrides `initdbScripts`)                                                                                                                 | `""`                  |
+| Name                       | Description                                                                                                                                                                         | Value                  |
+| -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
+| `image.registry`           | MySQL image registry                                                                                                                                                                | `docker.io`            |
+| `image.repository`         | MySQL image repository                                                                                                                                                              | `bitnami/mysql`        |
+| `image.tag`                | MySQL image tag (immutable tags are recommended)                                                                                                                                    | `8.0.32-debian-11-r11` |
+| `image.digest`             | MySQL image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                               | `""`                   |
+| `image.pullPolicy`         | MySQL image pull policy                                                                                                                                                             | `IfNotPresent`         |
+| `image.pullSecrets`        | Specify docker-registry secret names as an array                                                                                                                                    | `[]`                   |
+| `image.debug`              | Specify if debug logs should be enabled                                                                                                                                             | `false`                |
+| `architecture`             | MySQL architecture (`standalone` or `replication`)                                                                                                                                  | `standalone`           |
+| `auth.rootPassword`        | Password for the `root` user. Ignored if existing secret is provided                                                                                                                | `""`                   |
+| `auth.createDatabase`      | Whether to create the .Values.auth.database or not                                                                                                                                  | `true`                 |
+| `auth.database`            | Name for a custom database to create                                                                                                                                                | `my_database`          |
+| `auth.username`            | Name for a custom user to create                                                                                                                                                    | `""`                   |
+| `auth.password`            | Password for the new user. Ignored if existing secret is provided                                                                                                                   | `""`                   |
+| `auth.replicationUser`     | MySQL replication user                                                                                                                                                              | `replicator`           |
+| `auth.replicationPassword` | MySQL replication user password. Ignored if existing secret is provided                                                                                                             | `""`                   |
+| `auth.existingSecret`      | Use existing secret for password details. The secret has to contain the keys `mysql-root-password`, `mysql-replication-password` and `mysql-password`                               | `""`                   |
+| `auth.usePasswordFiles`    | Mount credentials as files instead of using an environment variable                                                                                                                 | `false`                |
+| `auth.customPasswordFiles` | Use custom password files when `auth.usePasswordFiles` is set to `true`. Define path for keys `root` and `user`, also define `replicator` if `architecture` is set to `replication` | `{}`                   |
+| `initdbScripts`            | Dictionary of initdb scripts                                                                                                                                                        | `{}`                   |
+| `initdbScriptsConfigMap`   | ConfigMap with the initdb scripts (Note: Overrides `initdbScripts`)                                                                                                                 | `""`                   |
 
 ### MySQL Primary parameters
 
@@ -304,7 +305,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`           | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup`              | `false`                 |
 | `volumePermissions.image.registry`    | Init container volume-permissions image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`  | Init container volume-permissions image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`         | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r86`      |
+| `volumePermissions.image.tag`         | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r90`      |
 | `volumePermissions.image.digest`      | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`  | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets` | Specify docker-registry secret names as an array                                                                                  | `[]`                    |
@@ -317,7 +318,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                            | Start a side-car prometheus exporter                                                                                           | `false`                   |
 | `metrics.image.registry`                     | Exporter image registry                                                                                                        | `docker.io`               |
 | `metrics.image.repository`                   | Exporter image repository                                                                                                      | `bitnami/mysqld-exporter` |
-| `metrics.image.tag`                          | Exporter image tag (immutable tags are recommended)                                                                            | `0.14.0-debian-11-r90`    |
+| `metrics.image.tag`                          | Exporter image tag (immutable tags are recommended)                                                                            | `0.14.0-debian-11-r93`    |
 | `metrics.image.digest`                       | Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                       | `""`                      |
 | `metrics.image.pullPolicy`                   | Exporter image pull policy                                                                                                     | `IfNotPresent`            |
 | `metrics.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                               | `[]`                      |
@@ -355,6 +356,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.prometheusRule.namespace`           | Namespace for the prometheusRule Resource (defaults to the Release Namespace)                                                  | `""`                      |
 | `metrics.prometheusRule.additionalLabels`    | Additional labels that can be used so prometheusRule will be discovered by Prometheus                                          | `{}`                      |
 | `metrics.prometheusRule.rules`               | Prometheus Rule definitions                                                                                                    | `[]`                      |
+
 
 The above parameters map to the env variables defined in [bitnami/mysql](https://github.com/bitnami/containers/tree/main/bitnami/mysql). For more information please refer to the [bitnami/mysql](https://github.com/bitnami/containers/tree/main/bitnami/mysql) image documentation.
 

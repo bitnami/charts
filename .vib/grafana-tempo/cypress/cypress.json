@@ -5,6 +5,7 @@
     "distributorReplicaCount": "1",
     "ingesterReplicaCount": "1",
     "querierReplicaCount": "1",
+    "metricsReplicaCount": "1",
     "gossipRingPort": "7946"
   }
 }

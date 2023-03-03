@@ -23,7 +23,7 @@ This chart bootstraps an [Mastodon](https://www.mastodon.com/) Deployment in a [
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm charts in clusters.
 
-[Learn more about the default configuration of the chart](https://docs.bitnami.com/kubernetes/infrastructure/mastodon/get-started/).
+[Learn more about the default configuration of the chart](https://docs.bitnami.com/kubernetes/apps/mastodon/get-started/).
 
 ## Prerequisites
 
@@ -81,7 +81,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                                                                                   | `["infinity"]`       |
 | `image.registry`         | Mastodon image registry                                                                                                                             | `docker.io`          |
 | `image.repository`       | Mastodon image repository                                                                                                                           | `bitnami/mastodon`   |
-| `image.tag`              | Mastodon image tag (immutable tags are recommended)                                                                                                 | `4.1.0-debian-11-r0` |
+| `image.tag`              | Mastodon image tag (immutable tags are recommended)                                                                                                 | `4.1.0-debian-11-r3` |
 | `image.digest`           | Mastodon image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended) | `""`                 |
 | `image.pullPolicy`       | Mastodon image pull policy                                                                                                                          | `IfNotPresent`       |
 | `image.pullSecrets`      | Mastodon image pull secrets                                                                                                                         | `[]`                 |
@@ -89,23 +89,43 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Mastodon common parameters
 
-| Name                           | Description                                                                    | Value               |
-| ------------------------------ | ------------------------------------------------------------------------------ | ------------------- |
-| `adminUser`                    | Mastodon admin username                                                        | `user`              |
-| `adminEmail`                   | Mastodon admin email                                                           | `user@changeme.com` |
-| `adminPassword`                | Mastodon admin password                                                        | `""`                |
-| `defaultConfig`                | Default configuration for Mastodon in the form of environment variables        | `""`                |
-| `defaultSecretConfig`          | Default secret configuration for Mastodon in the form of environment variables | `""`                |
-| `extraConfig`                  | Extra configuration for Mastodon in the form of environment variables          | `{}`                |
-| `extraSecretConfig`            | Extra secret configuration for Mastodon in the form of environment variables   | `{}`                |
-| `existingConfigmap`            | The name of an existing ConfigMap with your default configuration for Mastodon | `""`                |
-| `existingSecret`               | The name of an existing Secret with your default configuration for Mastodon    | `""`                |
-| `extraConfigExistingConfigmap` | The name of an existing ConfigMap with your extra configuration for Mastodon   | `""`                |
-| `extraConfigExistingSecret`    | The name of an existing Secret with your extra configuration for Mastodon      | `""`                |
-| `enableSearches`               | Enable the search engine (uses Elasticsearch under the hood)                   | `true`              |
-| `enableS3`                     | Enable the S3 storage engine                                                   | `true`              |
-| `webDomain`                    | Web domain for Mastodon                                                        | `""`                |
-| `s3AliasHost`                  | S3 alias host for Mastodon (will use http://webDomain/bucket if not set)       | `""`                |
+| Name                             | Description                                                                                                                  | Value                                |
+| -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | ------------------------------------ |
+| `environment`                    | Mastodon Rails and Node environment. Should be one of 'production',                                                          | `production`                         |
+| `adminUser`                      | Mastodon admin username                                                                                                      | `user`                               |
+| `adminEmail`                     | Mastodon admin email                                                                                                         | `user@changeme.com`                  |
+| `adminPassword`                  | Mastodon admin password                                                                                                      | `""`                                 |
+| `defaultConfig`                  | Default configuration for Mastodon in the form of environment variables                                                      | `""`                                 |
+| `defaultSecretConfig`            | Default secret configuration for Mastodon in the form of environment variables                                               | `""`                                 |
+| `extraConfig`                    | Extra configuration for Mastodon in the form of environment variables                                                        | `{}`                                 |
+| `extraSecretConfig`              | Extra secret configuration for Mastodon in the form of environment variables                                                 | `{}`                                 |
+| `existingConfigmap`              | The name of an existing ConfigMap with your default configuration for Mastodon                                               | `""`                                 |
+| `existingSecret`                 | The name of an existing Secret with your default configuration for Mastodon                                                  | `""`                                 |
+| `extraConfigExistingConfigmap`   | The name of an existing ConfigMap with your extra configuration for Mastodon                                                 | `""`                                 |
+| `extraConfigExistingSecret`      | The name of an existing Secret with your extra configuration for Mastodon                                                    | `""`                                 |
+| `enableSearches`                 | Enable the search engine (uses Elasticsearch under the hood)                                                                 | `true`                               |
+| `enableS3`                       | Enable the S3 storage engine                                                                                                 | `true`                               |
+| `local_https`                    | Set this instance to advertise itself to the fediverse using HTTPS rather than HTTP URLs. This should almost always be true. | `true`                               |
+| `localDomain`                    | The domain name used by accounts on this instance. Unless you're using                                                       | `""`                                 |
+| `webDomain`                      | Optional alternate domain used when you want to host Mastodon at a                                                           | `""`                                 |
+| `defaultLocale`                  | Set the default locale for this instance                                                                                     | `en`                                 |
+| `s3AliasHost`                    | S3 alias host for Mastodon (will use http://webDomain/bucket if not set)                                                     | `""`                                 |
+| `smtp.server`                    | SMTP server                                                                                                                  | `""`                                 |
+| `smtp.port`                      | SMTP port                                                                                                                    | `587`                                |
+| `smtp.from_address`              | From address for sent emails                                                                                                 | `""`                                 |
+| `smtp.domain`                    | SMTP domain                                                                                                                  | `""`                                 |
+| `smtp.reply_to`                  | Reply-To value for sent emails                                                                                               | `""`                                 |
+| `smtp.delivery_method`           | SMTP delivery method                                                                                                         | `smtp`                               |
+| `smtp.ca_file`                   | SMTP CA file location                                                                                                        | `/etc/ssl/certs/ca-certificates.crt` |
+| `smtp.openssl_verify_mode`       | OpenSSL verify mode                                                                                                          | `none`                               |
+| `smtp.enable_starttls_auto`      | Automatically enable StartTLS                                                                                                | `true`                               |
+| `smtp.tls`                       | SMTP TLS                                                                                                                     | `false`                              |
+| `smtp.auth_method`               | SMTP auth method (set to "none" to disable SMTP auth)                                                                        | `plain`                              |
+| `smtp.login`                     | SMTP auth username                                                                                                           | `""`                                 |
+| `smtp.password`                  | SMTP auth password                                                                                                           | `""`                                 |
+| `smtp.existingSecret`            | Name of an existing secret resource containing the SMTP                                                                      | `""`                                 |
+| `smtp.existingSecretLoginKey`    | Name of the key for the SMTP login credential                                                                                | `""`                                 |
+| `smtp.existingSecretPasswordKey` | Name of the key for the SMTP password credential                                                                             | `""`                                 |
 
 ### Mastodon Web Parameters
 
@@ -385,7 +405,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `11-debian-11-r86`      |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `11-debian-11-r90`      |
 | `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                    |
@@ -598,11 +618,11 @@ To enable Ingress integration, set `apache.ingress.enabled` to `true`. The `apac
 
 ### TLS secrets
 
-The chart also facilitates the creation of TLS secrets for use with the Ingress controller, with different options for certificate management. [Learn more about TLS secrets](https://docs.bitnami.com/kubernetes/apps/mastodon/administration/enable-tls/).
+The chart also facilitates the creation of TLS secrets for use with the Ingress controller, with different options for certificate management. [Learn more about TLS secrets](https://docs.bitnami.com/kubernetes/apps/mastodon/administration/enable-tls-ingress/).
 
 ## Persistence
 
-The [Bitnami mastodon](https://github.com/bitnami/containers/tree/main/bitnami/mastodon) image stores the mastodon data and configurations at the `/bitnami` path of the container. Persistent Volume Claims are used to keep the data across deployments. [Learn more about persistence in the chart documentation](https://docs.bitnami.com/kubernetes/apps/mastodon/configuration/chart-persistence/).
+The [Bitnami mastodon](https://github.com/bitnami/containers/tree/main/bitnami/mastodon) image stores the mastodon data and configurations at the `/bitnami` path of the container. Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
 
 ### Additional environment variables
 

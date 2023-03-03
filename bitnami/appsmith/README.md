@@ -23,7 +23,7 @@ This chart bootstraps an [Appsmith](https://www.appsmith.com/) Deployment in a [
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
 
-[Learn more about the default configuration of the chart](https://docs.bitnami.com/kubernetes/infrastructure/appsmith/get-started/).
+[Learn more about the default configuration of the chart](https://docs.bitnami.com/kubernetes/apps/appsmith/get-started/).
 
 ## Prerequisites
 
@@ -82,13 +82,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                                                                                   | `["infinity"]`       |
 | `image.registry`         | Appsmith image registry                                                                                                                             | `docker.io`          |
 | `image.repository`       | Appsmith image repository                                                                                                                           | `bitnami/appsmith`   |
-| `image.tag`              | Appsmith image tag (immutable tags are recommended)                                                                                                 | `1.9.7-debian-11-r2` |
+| `image.tag`              | Appsmith image tag (immutable tags are recommended)                                                                                                 | `1.9.9-debian-11-r1` |
 | `image.digest`           | Appsmith image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended) | `""`                 |
 | `image.pullPolicy`       | Appsmith image pull policy                                                                                                                          | `IfNotPresent`       |
 | `image.pullSecrets`      | Appsmith image pull secrets                                                                                                                         | `[]`                 |
 | `image.debug`            | Enable Appsmith image debug mode                                                                                                                    | `false`              |
 
 ### Appsmith common paramters
+
 
 ### Appsmith Client Parameters
 
@@ -369,7 +370,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `11-debian-11-r82`      |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `11-debian-11-r92`      |
 | `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                    |
@@ -495,11 +496,11 @@ To enable Ingress integration, set `client.ingress.enabled` to `true`. The `clie
 
 ### TLS secrets
 
-The chart also facilitates the creation of TLS secrets for use with the Ingress controller, with different options for certificate management. [Learn more about TLS secrets](https://docs.bitnami.com/kubernetes/apps/appsmith/administration/enable-tls/).
+The chart also facilitates the creation of TLS secrets for use with the Ingress controller, with different options for certificate management. [Learn more about TLS secrets](https://docs.bitnami.com/kubernetes/apps/appsmith/administration/enable-tls-ingress/).
 
 ## Persistence
 
-The [Bitnami appsmith](https://github.com/bitnami/containers/tree/main/bitnami/appsmith) image stores the appsmith data and configurations at the `/bitnami` path of the container. Persistent Volume Claims are used to keep the data across deployments. [Learn more about persistence in the chart documentation](https://docs.bitnami.com/kubernetes/apps/appsmith/configuration/chart-persistence/).
+The [Bitnami appsmith](https://github.com/bitnami/containers/tree/main/bitnami/appsmith) image stores the appsmith data and configurations at the `/bitnami` path of the container. Persistent Volume Claims are used to keep the data across deployments. This is known to work in GCE, AWS, and minikube.
 
 ### Additional environment variables
 

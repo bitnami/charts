@@ -356,6 +356,9 @@ spec:
         - name: metrics
           image: {{ template "mariadb-galera.metrics.image" . }}
           imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
+          {{- if .Values.metrics.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.metrics.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
           env:
             - name: MARIADB_METRICS_EXTRA_FLAGS
               value: {{ default "" (join " " .Values.metrics.extraFlags) | quote }}

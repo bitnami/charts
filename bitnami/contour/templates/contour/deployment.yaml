@@ -113,6 +113,7 @@ spec:
             {{- if .Values.contour.debug }}
             - --debug
             {{- end }}
+            - --log-format={{ .Values.contour.logFormat }}
             - --kubernetes-debug={{ .Values.contour.kubernetesDebug }}
             {{- if (include "contour.isIngressClassNameDefined" .) }}
             - --ingress-class-name={{ include "contour.ingressClassName" . }}

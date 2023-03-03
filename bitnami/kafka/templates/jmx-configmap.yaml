@@ -26,22 +26,26 @@ data:
         name: kafka_controller_$1_$2_$3
       - pattern: kafka.controller<type=(ControllerStats), name=(.+)><>(Count)
         name: kafka_controller_$1_$2_$3
-      - pattern: kafka.server<type=(ReplicaFetcherManager), name=(.+), clientId=(.+)><>(Value)
-        name: kafka_server_$1_$2_$4
-        labels:
-          client_id: "$3"
       - pattern : kafka.network<type=(Processor), name=(IdlePercent), networkProcessor=(.+)><>(Value)
         name: kafka_network_$1_$2_$4
         labels:
           network_processor: $3
-      - pattern : kafka.network<type=(RequestMetrics), name=(RequestsPerSec), request=(.+)><>(Count)
+      - pattern : kafka.network<type=(RequestMetrics), name=(.+), request=(.+)><>(Count|Value)
         name: kafka_network_$1_$2_$4
         labels:
           request: $3
+      - pattern : kafka.network<type=(SocketServer), name=(.+)><>(Count|Value)
+        name: kafka_network_$1_$2_$3
+      - pattern : kafka.network<type=(RequestChannel), name=(.+)><>(Count|Value)
+        name: kafka_network_$1_$2_$3
       - pattern: kafka.server<type=(.+), name=(.+), topic=(.+)><>(Count|OneMinuteRate)
         name: kafka_server_$1_$2_$4
         labels:
           topic: $3
+      - pattern: kafka.server<type=(ReplicaFetcherManager), name=(.+), clientId=(.+)><>(Value)
+        name: kafka_server_$1_$2_$4
+        labels:
+          client_id: "$3"
       - pattern: kafka.server<type=(DelayedOperationPurgatory), name=(.+), delayedOperation=(.+)><>(Value)
         name: kafka_server_$1_$2_$3_$4
       - pattern: kafka.server<type=(.+), name=(.+)><>(Count|Value|OneMinuteRate)

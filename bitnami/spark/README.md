@@ -86,7 +86,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | ----------------------------------------------------------------------------------------------------- | -------------------- |
 | `image.registry`    | Spark image registry                                                                                  | `docker.io`          |
 | `image.repository`  | Spark image repository                                                                                | `bitnami/spark`      |
-| `image.tag`         | Spark image tag (immutable tags are recommended)                                                      | `3.3.2-debian-11-r0` |
+| `image.tag`         | Spark image tag (immutable tags are recommended)                                                      | `3.3.2-debian-11-r3` |
 | `image.digest`      | Spark image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                 |
 | `image.pullPolicy`  | Spark image pull policy                                                                               | `IfNotPresent`       |
 | `image.pullSecrets` | Specify docker-registry secret names as an array                                                      | `[]`                 |
@@ -375,7 +375,7 @@ $ ./bin/spark-submit \
 
 This command example assumes that you have downloaded a Spark binary distribution, which can be found at [Download Apache Spark](https://spark.apache.org/downloads.html).
 
-For a complete walkthrough of the process using a custom application, refer to the [detailed Apache Spark tutorial](https://docs.bitnami.com/tutorials/process-data-spark-kubernetes/) or Spark's guide to [Running Spark on Kubernetes](https://spark.apache.org/docs/latest/running-on-kubernetes.html).
+For a complete walkthrough of the process using a custom application, refer to Spark's guide to [Running Spark on Kubernetes](https://spark.apache.org/docs/latest/running-on-kubernetes.html).
 
 > Be aware that it is currently not possible to submit an application to a standalone cluster if RPC authentication is configured. [Learn more about the issue](https://issues.apache.org/jira/browse/SPARK-25078).
 

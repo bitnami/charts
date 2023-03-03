@@ -2,6 +2,7 @@
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
 ## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+##
 
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
@@ -17,6 +18,7 @@ global:
   storageClass: ""
 
 ## @section Common parameters
+##
 
 ## @param kubeVersion Override Kubernetes version
 ##
@@ -39,6 +41,11 @@ commonAnnotations: {}
 ## @param extraDeploy Array of extra objects to deploy with the release
 ##
 extraDeploy: []
+## @param serviceBindings.enabled Create secret for service binding (Experimental)
+## Ref: https://servicebinding.io/service-provider/
+##
+serviceBindings:
+  enabled: false
 ## Enable diagnostic mode in the statefulset
 ##
 diagnosticMode:
@@ -55,6 +62,7 @@ diagnosticMode:
     - infinity
 
 ## @section Kafka parameters
+##
 
 ## Bitnami Kafka image version
 ## ref: https://hub.docker.com/r/bitnami/kafka/tags/
@@ -69,7 +77,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/kafka
-  tag: 3.4.0-debian-11-r2
+  tag: 3.4.0-debian-11-r6
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -161,6 +169,7 @@ logRetentionHours: 168
 logSegmentBytes: _1073741824
 ## @param logsDirs A comma separated list of directories in which kafka's log data is kept
 ## ref: https://kafka.apache.org/documentation/#brokerconfigs_log.dirs
+##
 logsDirs: /bitnami/kafka/data
 ## @param maxMessageBytes The largest record batch size allowed by Kafka
 ##
@@ -420,6 +429,7 @@ extraEnvVarsCM: ""
 extraEnvVarsSecret: ""
 
 ## @section Statefulset parameters
+##
 
 ## @param replicaCount Number of Kafka nodes
 ##
@@ -665,6 +675,7 @@ pdb:
   maxUnavailable: 1
 
 ## @section Traffic Exposure parameters
+##
 
 ## Service parameters
 ##
@@ -726,6 +737,7 @@ service:
   headless:
     ## @param service.headless.publishNotReadyAddresses Indicates that any agent which deals with endpoints for this Service should disregard any indications of ready/not-ready
     ## ref: https://kubernetes.io/docs/reference/kubernetes-api/service-resources/service-v1/
+    ##
     publishNotReadyAddresses: false
     ## @param service.headless.annotations Annotations for the headless service.
     ##
@@ -762,7 +774,7 @@ externalAccess:
     image:
       registry: docker.io
       repository: bitnami/kubectl
-      tag: 1.25.6-debian-11-r10
+      tag: 1.25.6-debian-11-r14
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -843,6 +855,7 @@ externalAccess:
     domain: ""
     ## @param externalAccess.service.publishNotReadyAddresses Indicates that any agent which deals with endpoints for this Service should disregard any indications of ready/not-ready
     ## ref: https://kubernetes.io/docs/reference/kubernetes-api/service-resources/service-v1/
+    ##
     publishNotReadyAddresses: false
     ## @param externalAccess.service.labels Service labels for external access
     ##
@@ -898,9 +911,11 @@ networkPolicy:
     ##       - namespaceSelector:
     ##           matchLabels:
     ##             label: example
+    ##
     customRules: []
 
 ## @section Persistence parameters
+##
 
 ## Enable persistence using Persistent Volume Claims
 ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
@@ -1001,7 +1016,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r86
+    tag: 11-debian-11-r90
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1029,6 +1044,7 @@ volumePermissions:
     runAsUser: 0
 
 ## @section Other Parameters
+##
 
 ## ServiceAccount for Kafka
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
@@ -1059,6 +1075,7 @@ rbac:
   create: false
 
 ## @section Metrics parameters
+##
 
 ## Prometheus Exporters / Metrics
 ##
@@ -1081,7 +1098,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/kafka-exporter
-      tag: 1.6.0-debian-11-r61
+      tag: 1.6.0-debian-11-r65
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1317,7 +1334,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/jmx-exporter
-      tag: 0.17.2-debian-11-r49
+      tag: 0.17.2-debian-11-r53
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1417,6 +1434,7 @@ metrics:
     ##    name: kafka_server_socket_server_metrics_$3
     ##    labels:
     ##      listener: $1
+    ##
     extraRules: ""
   ## Prometheus Operator ServiceMonitor configuration
   ##
@@ -1470,6 +1488,7 @@ metrics:
     groups: []
 
 ## @section Kafka provisioning parameters
+##
 
 ## Kafka provisioning
 ##
@@ -1699,6 +1718,7 @@ provisioning:
   waitForKafka: true
 
 ## @section ZooKeeper chart parameters
+##
 
 ## ZooKeeper chart configuration
 ## https://github.com/bitnami/charts/blob/main/bitnami/zookeeper/values.yaml

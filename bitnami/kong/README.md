@@ -77,16 +77,16 @@ helm delete my-release
 
 ### Kong common parameters
 
-| Name                | Description                                                                                          | Value                 |
-| ------------------- | ---------------------------------------------------------------------------------------------------- | --------------------- |
-| `image.registry`    | kong image registry                                                                                  | `docker.io`           |
-| `image.repository`  | kong image repository                                                                                | `bitnami/kong`        |
-| `image.tag`         | kong image tag (immutable tags are recommended)                                                      | `3.1.1-debian-11-r31` |
-| `image.digest`      | kong image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
-| `image.pullPolicy`  | kong image pull policy                                                                               | `IfNotPresent`        |
-| `image.pullSecrets` | Specify docker-registry secret names as an array                                                     | `[]`                  |
-| `image.debug`       | Enable image debug mode                                                                              | `false`               |
-| `database`          | Select which database backend Kong will use. Can be 'postgresql', 'cassandra' or 'off'               | `postgresql`          |
+| Name                | Description                                                                                          | Value                |
+| ------------------- | ---------------------------------------------------------------------------------------------------- | -------------------- |
+| `image.registry`    | kong image registry                                                                                  | `docker.io`          |
+| `image.repository`  | kong image repository                                                                                | `bitnami/kong`       |
+| `image.tag`         | kong image tag (immutable tags are recommended)                                                      | `3.2.1-debian-11-r2` |
+| `image.digest`      | kong image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                 |
+| `image.pullPolicy`  | kong image pull policy                                                                               | `IfNotPresent`       |
+| `image.pullSecrets` | Specify docker-registry secret names as an array                                                     | `[]`                 |
+| `image.debug`       | Enable image debug mode                                                                              | `false`              |
+| `database`          | Select which database backend Kong will use. Can be 'postgresql', 'cassandra' or 'off'               | `postgresql`         |
 
 ### Kong deployment / daemonset parameters
 
@@ -215,7 +215,7 @@ helm delete my-release
 | `ingressController.enabled`                                     | Enable/disable the Kong Ingress Controller                                                                                                    | `true`                            |
 | `ingressController.image.registry`                              | Kong Ingress Controller image registry                                                                                                        | `docker.io`                       |
 | `ingressController.image.repository`                            | Kong Ingress Controller image name                                                                                                            | `bitnami/kong-ingress-controller` |
-| `ingressController.image.tag`                                   | Kong Ingress Controller image tag                                                                                                             | `2.8.1-debian-11-r14`             |
+| `ingressController.image.tag`                                   | Kong Ingress Controller image tag                                                                                                             | `2.8.1-debian-11-r19`             |
 | `ingressController.image.digest`                                | Kong Ingress Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                       | `""`                              |
 | `ingressController.image.pullPolicy`                            | Kong Ingress Controller image pull policy                                                                                                     | `IfNotPresent`                    |
 | `ingressController.image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                                              | `[]`                              |
@@ -290,7 +290,7 @@ helm delete my-release
 | `postgresql.architecture`                       | PostgreSQL architecture (`standalone` or `replication`)                                                    | `standalone`          |
 | `postgresql.image.registry`                     | PostgreSQL image registry                                                                                  | `docker.io`           |
 | `postgresql.image.repository`                   | PostgreSQL image repository                                                                                | `bitnami/postgresql`  |
-| `postgresql.image.tag`                          | PostgreSQL image tag (immutable tags are recommended)                                                      | `14.7.0-debian-11-r1` |
+| `postgresql.image.tag`                          | PostgreSQL image tag (immutable tags are recommended)                                                      | `14.7.0-debian-11-r5` |
 | `postgresql.image.digest`                       | PostgreSQL image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
 | `postgresql.external.host`                      | Database host                                                                                              | `""`                  |
 | `postgresql.external.port`                      | Database port number                                                                                       | `5432`                |
@@ -410,8 +410,8 @@ helm install my-release my-repo/kong \
 
 ### DB-less
 
-Kong 1.1 added the capability to run Kong without a database, using only in-memory storage for entities: we call this DB-less mode. When running Kong DB-less, the configuration of entities is done in a second configuration file, in YAML or JSON, using declarative configuration (ref. [Link](https://docs.konghq.com/gateway-oss/1.1.x/db-less-and-declarative-config/)).
-As is said in step 4 of [kong official docker installation](https://docs.konghq.com/install/docker#db-less-mode), just add the env variable "KONG_DATABASE=off".
+Kong 1.1 added the capability to run Kong without a database, using only in-memory storage for entities: we call this DB-less mode. When running Kong DB-less, the configuration of entities is done in a second configuration file, in YAML or JSON, using declarative configuration (ref. [Link](https://legacy-gateway--kongdocs.netlify.app/gateway-oss/1.1.x/db-less-and-declarative-config/)).
+As is said in step 4 of [kong official docker installation](https://docs.konghq.com/gateway/latest/production/deployment-topologies/db-less-and-declarative-config/#declarative-configuration), just add the env variable "KONG_DATABASE=off".
 
 #### How to enable it
 

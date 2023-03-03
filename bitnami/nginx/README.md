@@ -82,7 +82,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------- | ----------------------------------------------------------------------------------------------------- | ---------------------- |
 | `image.registry`     | NGINX image registry                                                                                  | `docker.io`            |
 | `image.repository`   | NGINX image repository                                                                                | `bitnami/nginx`        |
-| `image.tag`          | NGINX image tag (immutable tags are recommended)                                                      | `1.23.3-debian-11-r26` |
+| `image.tag`          | NGINX image tag (immutable tags are recommended)                                                      | `1.23.3-debian-11-r30` |
 | `image.digest`       | NGINX image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
 | `image.pullPolicy`   | NGINX image pull policy                                                                               | `IfNotPresent`         |
 | `image.pullSecrets`  | Specify docker-registry secret names as an array                                                      | `[]`                   |
@@ -175,7 +175,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cloneStaticSiteFromGit.enabled`           | Get the server static content from a Git repository                                                 | `false`               |
 | `cloneStaticSiteFromGit.image.registry`    | Git image registry                                                                                  | `docker.io`           |
 | `cloneStaticSiteFromGit.image.repository`  | Git image repository                                                                                | `bitnami/git`         |
-| `cloneStaticSiteFromGit.image.tag`         | Git image tag (immutable tags are recommended)                                                      | `2.39.2-debian-11-r1` |
+| `cloneStaticSiteFromGit.image.tag`         | Git image tag (immutable tags are recommended)                                                      | `2.39.2-debian-11-r5` |
 | `cloneStaticSiteFromGit.image.digest`      | Git image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
 | `cloneStaticSiteFromGit.image.pullPolicy`  | Git image pull policy                                                                               | `IfNotPresent`        |
 | `cloneStaticSiteFromGit.image.pullSecrets` | Specify docker-registry secret names as an array                                                    | `[]`                  |
@@ -246,7 +246,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.port`                             | NGINX Container Status Port scraped by Prometheus Exporter                                                                                | `""`                     |
 | `metrics.image.registry`                   | NGINX Prometheus exporter image registry                                                                                                  | `docker.io`              |
 | `metrics.image.repository`                 | NGINX Prometheus exporter image repository                                                                                                | `bitnami/nginx-exporter` |
-| `metrics.image.tag`                        | NGINX Prometheus exporter image tag (immutable tags are recommended)                                                                      | `0.11.0-debian-11-r52`   |
+| `metrics.image.tag`                        | NGINX Prometheus exporter image tag (immutable tags are recommended)                                                                      | `0.11.0-debian-11-r55`   |
 | `metrics.image.digest`                     | NGINX Prometheus exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                 | `""`                     |
 | `metrics.image.pullPolicy`                 | NGINX Prometheus exporter image pull policy                                                                                               | `IfNotPresent`           |
 | `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                                                                                          | `[]`                     |
@@ -399,7 +399,7 @@ This major release no longer uses the bitnami/nginx-ldap-auth-daemon container a
 
 [Bitnami's reference implementation](https://www.nginx.com/blog/nginx-plus-authenticate-users/).
 
-On 9 April 2022, security vulnerabilities in the [NGINX LDAP reference implementation](https://github.com/nginxinc/nginx-ldap-auth) were publicly shared. **Although the deprecation of this container from the Bitnami catalog was not related to this security issue, [here](https://docs.bitnami.com/general/security/security-2022-04-12/) you can find more information from the Bitnami security team.**
+On 9 April 2022, security vulnerabilities in the [NGINX LDAP reference implementation](https://github.com/nginxinc/nginx-ldap-auth) were publicly shared. **Although the deprecation of this container from the Bitnami catalog was not related to this security issue, [here](https://docs.bitnami.com/general/security/) you can find more information from the Bitnami security team.**
 
 ### To 8.0.0
 

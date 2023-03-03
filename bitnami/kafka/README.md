@@ -62,18 +62,19 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common parameters
 
-| Name                     | Description                                                                             | Value           |
-| ------------------------ | --------------------------------------------------------------------------------------- | --------------- |
-| `kubeVersion`            | Override Kubernetes version                                                             | `""`            |
-| `nameOverride`           | String to partially override common.names.fullname                                      | `""`            |
-| `fullnameOverride`       | String to fully override common.names.fullname                                          | `""`            |
-| `clusterDomain`          | Default Kubernetes cluster domain                                                       | `cluster.local` |
-| `commonLabels`           | Labels to add to all deployed objects                                                   | `{}`            |
-| `commonAnnotations`      | Annotations to add to all deployed objects                                              | `{}`            |
-| `extraDeploy`            | Array of extra objects to deploy with the release                                       | `[]`            |
-| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
-| `diagnosticMode.command` | Command to override all containers in the statefulset                                   | `["sleep"]`     |
-| `diagnosticMode.args`    | Args to override all containers in the statefulset                                      | `["infinity"]`  |
+| Name                      | Description                                                                             | Value           |
+| ------------------------- | --------------------------------------------------------------------------------------- | --------------- |
+| `kubeVersion`             | Override Kubernetes version                                                             | `""`            |
+| `nameOverride`            | String to partially override common.names.fullname                                      | `""`            |
+| `fullnameOverride`        | String to fully override common.names.fullname                                          | `""`            |
+| `clusterDomain`           | Default Kubernetes cluster domain                                                       | `cluster.local` |
+| `commonLabels`            | Labels to add to all deployed objects                                                   | `{}`            |
+| `commonAnnotations`       | Annotations to add to all deployed objects                                              | `{}`            |
+| `extraDeploy`             | Array of extra objects to deploy with the release                                       | `[]`            |
+| `serviceBindings.enabled` | Create secret for service binding (Experimental)                                        | `false`         |
+| `diagnosticMode.enabled`  | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
+| `diagnosticMode.command`  | Command to override all containers in the statefulset                                   | `["sleep"]`     |
+| `diagnosticMode.args`     | Args to override all containers in the statefulset                                      | `["infinity"]`  |
 
 ### Kafka parameters
 
@@ -81,7 +82,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------- |
 | `image.registry`                                  | Kafka image registry                                                                                                                                                                | `docker.io`                         |
 | `image.repository`                                | Kafka image repository                                                                                                                                                              | `bitnami/kafka`                     |
-| `image.tag`                                       | Kafka image tag (immutable tags are recommended)                                                                                                                                    | `3.4.0-debian-11-r2`                |
+| `image.tag`                                       | Kafka image tag (immutable tags are recommended)                                                                                                                                    | `3.4.0-debian-11-r6`                |
 | `image.digest`                                    | Kafka image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                               | `""`                                |
 | `image.pullPolicy`                                | Kafka image pull policy                                                                                                                                                             | `IfNotPresent`                      |
 | `image.pullSecrets`                               | Specify docker-registry secret names as an array                                                                                                                                    | `[]`                                |
@@ -252,7 +253,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalAccess.autoDiscovery.enabled`            | Enable using an init container to auto-detect external IPs/ports by querying the K8s API                                 | `false`                |
 | `externalAccess.autoDiscovery.image.registry`     | Init container auto-discovery image registry                                                                             | `docker.io`            |
 | `externalAccess.autoDiscovery.image.repository`   | Init container auto-discovery image repository                                                                           | `bitnami/kubectl`      |
-| `externalAccess.autoDiscovery.image.tag`          | Init container auto-discovery image tag (immutable tags are recommended)                                                 | `1.25.6-debian-11-r10` |
+| `externalAccess.autoDiscovery.image.tag`          | Init container auto-discovery image tag (immutable tags are recommended)                                                 | `1.25.6-debian-11-r14` |
 | `externalAccess.autoDiscovery.image.digest`       | Kubectl image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                  | `""`                   |
 | `externalAccess.autoDiscovery.image.pullPolicy`   | Init container auto-discovery image pull policy                                                                          | `IfNotPresent`         |
 | `externalAccess.autoDiscovery.image.pullSecrets`  | Init container auto-discovery image pull secrets                                                                         | `[]`                   |
@@ -307,7 +308,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner and group of the persistent volume                                                   | `false`                 |
 | `volumePermissions.image.registry`                     | Init container volume-permissions image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`                   | Init container volume-permissions image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r86`      |
+| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r90`      |
 | `volumePermissions.image.digest`                       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Init container volume-permissions image pull secrets                                                                              | `[]`                    |
@@ -332,7 +333,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.kafka.enabled`                                     | Whether or not to create a standalone Kafka exporter to expose Kafka metrics                                                     | `false`                                                                                 |
 | `metrics.kafka.image.registry`                              | Kafka exporter image registry                                                                                                    | `docker.io`                                                                             |
 | `metrics.kafka.image.repository`                            | Kafka exporter image repository                                                                                                  | `bitnami/kafka-exporter`                                                                |
-| `metrics.kafka.image.tag`                                   | Kafka exporter image tag (immutable tags are recommended)                                                                        | `1.6.0-debian-11-r61`                                                                   |
+| `metrics.kafka.image.tag`                                   | Kafka exporter image tag (immutable tags are recommended)                                                                        | `1.6.0-debian-11-r65`                                                                   |
 | `metrics.kafka.image.digest`                                | Kafka exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                   | `""`                                                                                    |
 | `metrics.kafka.image.pullPolicy`                            | Kafka exporter image pull policy                                                                                                 | `IfNotPresent`                                                                          |
 | `metrics.kafka.image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                                 | `[]`                                                                                    |
@@ -380,7 +381,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.jmx.enabled`                                       | Whether or not to expose JMX metrics to Prometheus                                                                               | `false`                                                                                 |
 | `metrics.jmx.image.registry`                                | JMX exporter image registry                                                                                                      | `docker.io`                                                                             |
 | `metrics.jmx.image.repository`                              | JMX exporter image repository                                                                                                    | `bitnami/jmx-exporter`                                                                  |
-| `metrics.jmx.image.tag`                                     | JMX exporter image tag (immutable tags are recommended)                                                                          | `0.17.2-debian-11-r49`                                                                  |
+| `metrics.jmx.image.tag`                                     | JMX exporter image tag (immutable tags are recommended)                                                                          | `0.17.2-debian-11-r53`                                                                  |
 | `metrics.jmx.image.digest`                                  | JMX exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                     | `""`                                                                                    |
 | `metrics.jmx.image.pullPolicy`                              | JMX exporter image pull policy                                                                                                   | `IfNotPresent`                                                                          |
 | `metrics.jmx.image.pullSecrets`                             | Specify docker-registry secret names as an array                                                                                 | `[]`                                                                                    |
@@ -481,6 +482,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `zookeeper.persistence.accessModes`     | Persistent Volume access modes                                                                                                                                          | `["ReadWriteOnce"]` |
 | `zookeeper.persistence.size`            | Persistent Volume size                                                                                                                                                  | `8Gi`               |
 | `externalZookeeper.servers`             | List of external zookeeper servers to use. Typically used in combination with 'zookeeperChrootPath'.                                                                    | `[]`                |
+
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

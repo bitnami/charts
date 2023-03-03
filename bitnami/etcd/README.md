@@ -81,7 +81,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------- | ----------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`                       | etcd image registry                                                                                         | `docker.io`           |
 | `image.repository`                     | etcd image name                                                                                             | `bitnami/etcd`        |
-| `image.tag`                            | etcd image tag                                                                                              | `3.5.7-debian-11-r10` |
+| `image.tag`                            | etcd image tag                                                                                              | `3.5.7-debian-11-r14` |
 | `image.digest`                         | etcd image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag        | `""`                  |
 | `image.pullPolicy`                     | etcd image pull policy                                                                                      | `IfNotPresent`        |
 | `image.pullSecrets`                    | etcd image pull secrets                                                                                     | `[]`                  |
@@ -229,7 +229,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup`              | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                                      | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                       | `11-debian-11-r86`      |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                       | `11-debian-11-r90`      |
 | `volumePermissions.image.digest`       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                  | `[]`                    |
@@ -449,7 +449,7 @@ This version changes the default `etcd` branch to `3.4` as suggested by [etcd de
 This version introduces several features and performance improvements:
 
 - The statefulset can now be scaled using `kubectl scale` command. Using `helm upgrade` to recalculate available endpoints is no longer needed.
-- The scripts used for bootstrapping, runtime reconfiguration, and disaster recovery have been refactored and moved to the etcd container (see [this PR](https://github.com/bitnami/bitnami-docker-etcd/pull/13)) with two purposes: removing technical debt & improving the stability.
+- The scripts used for bootstrapping, runtime reconfiguration, and disaster recovery have been refactored and moved to the etcd container with two purposes: removing technical debt & improving the stability.
 - Several parameters were reorganized to simplify the structure and follow the same standard used on other Bitnami charts:
   - `etcd.initialClusterState` is renamed to `initialClusterState`.
   - `statefulset.replicaCount` is renamed to `replicaCount`.
