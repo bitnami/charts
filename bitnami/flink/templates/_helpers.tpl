@@ -12,14 +12,14 @@ Return the proper flink image name
 Create the name of the jobmanager deployment
 */}}
 {{- define "flink.jobmanager.fullname" -}}
-    {{ printf "%s-jobmanager" (include "common.names.fullname" .) }}
+    {{ printf "%s-jobmanager" (include "common.names.fullname" .)  | trunc 63 | trimSuffix "-" }}
 {{- end -}}
 
 {{/*
 Create the name of the taskmanager deployment
 */}}
 {{- define "flink.taskmanager.fullname" -}}
-    {{ printf "%s-taskmanager" (include "common.names.fullname" .) }}
+    {{ printf "%s-taskmanager" (include "common.names.fullname" .)  | trunc 63 | trimSuffix "-" }}
 {{- end -}}
 
 {{/*
