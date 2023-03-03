@@ -261,6 +261,8 @@ This solution allows to easily deploy multiple Contour instances compared to the
 | `metrics.serviceMonitor.relabelings`       | Specify general relabeling                                                       | `[]`        |
 | `metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                              | `[]`        |
 
+See [readme-generator-for-helm](https://github.com/bitnami-labs/readme-generator-for-helm) to create the table.
+
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console

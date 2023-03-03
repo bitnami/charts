@@ -6,8 +6,6 @@ Harbor is an open source trusted cloud-native registry to store, sign, and scan 
 
 [Overview of Harbor](https://goharbor.io/)
 
-
-
 ## TL;DR
 
 ```console
@@ -1172,6 +1170,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `metrics.serviceMonitor.honorLabels`       | Specify honorLabels parameter to add the scrape endpoint                                          | `false`    |
 | `metrics.serviceMonitor.jobLabel`          | The name of the label on the target service to use as the job name in prometheus.                 | `""`       |
 
+Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
 helm install my-release \

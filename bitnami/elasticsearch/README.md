@@ -629,6 +629,8 @@ helm delete --purge my-release
 | `kibana.elasticsearch.hosts` | Array containing hostnames for the ES instances. Used to generate the URL | `[]`                                                    |
 | `kibana.elasticsearch.port`  | Port to connect Kibana and ES instance. Used to generate the URL          | `{{ include "elasticsearch.service.ports.restAPI" . }}` |
 
+Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
+
 ```console
 helm install my-release \
   --set name=my-elastic,client.service.port=8080 \

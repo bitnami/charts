@@ -6,8 +6,6 @@ WordPress is the world's most popular blogging and content management platform. 
 
 [Overview of WordPress](http://www.wordpress.org)
 
-
-
 ## TL;DR
 
 ```console
@@ -370,7 +368,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalCache.host`                       | External cache server host                                                        | `localhost`         |
 | `externalCache.port`                       | External cache server port                                                        | `11211`             |
 
-
+Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
 helm install my-release \

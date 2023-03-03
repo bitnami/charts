@@ -90,7 +90,6 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Appsmith common paramters
 
-
 ### Appsmith Client Parameters
 
 | Name                                                     | Description                                                                                                              | Value           |
@@ -431,6 +430,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `mongodb.auth.databases`         | MongoDB database creation                              | `[]`         |
 | `mongodb.containerPorts.mongodb` | MongoDB container port (used by the headless service)  | `27017`      |
 | `mongodb.arbiter.enabled`        | Enable Arbiter nodes in the ReplicaSet                 | `false`      |
+
+The above parameters map to the env variables defined in [bitnami/appsmith](https://github.com/bitnami/containers/tree/main/bitnami/appsmith). For more information please refer to the [bitnami/appsmith](https://github.com/bitnami/containers/tree/main/bitnami/appsmith) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

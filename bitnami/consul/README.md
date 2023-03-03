@@ -257,6 +257,8 @@ helm delete --purge my-release
 | `metrics.serviceMonitor.selector`               | ServiceMonitor selector labels                                                                                                       | `{}`                      |
 | `metrics.serviceMonitor.labels`                 | Used to pass Labels that are used by the Prometheus installed in your cluster to select Service Monitors to work with                | `{}`                      |
 
+Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
+
 ```console
 helm install my-release --set domain=consul-domain,gossipKey=secretkey my-repo/consul
 ```

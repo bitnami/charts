@@ -340,6 +340,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.googlePodMonitor.interval`             | Interval at which metrics should be scraped by Google Managed Prometheus                                                                                                     | `60s`                     |
 | `metrics.googlePodMonitor.endpoint`             | The endpoint for Google Managed Prometheus scraping the metrics                                                                                                              | `/metrics`                |
 
+Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
+
 ```console
 helm install my-release \
   --set provider=aws my-repo/external-dns
