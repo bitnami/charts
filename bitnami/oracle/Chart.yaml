@@ -1,0 +1,27 @@
+apiVersion: v2
+appVersion: 19.3.0
+dependencies:
+- name: common
+  repository: https://charts.bitnami.com/bitnami
+  tags:
+  - bitnami-common
+  version: 2.x.x
+description:
+  Oracle Database, aka Oracle RDBMS, or Oracle for short. is a relational database management system from Oracle Corporation. It is a product that has been a leader in the field of databases.
+  It can be said that Oracle database system is the world's popular relational database management system, the system is portable, easy to use, strong function, suitable for all kinds of large,
+  medium and small computer environments. It is an efficient, reliable, and adaptable database solution for high throughput.
+home: https://github.com/bitnami/charts/tree/master/bitnami/oracle
+icon: https://bitnami.com/assets/stacks/oracle/img/oracle-stack-220x234.png
+keywords:
+- oracle
+- keyvalue
+- database
+maintainers:
+- email: containers@bitnami.com
+  name: Bitnami
+- email: cedric@desaintmartin.fr
+  name: desaintmartin
+name: oracle
+sources:
+- https://github.com/bitnami/bitnami-docker-oracle
+version: 19.3.0

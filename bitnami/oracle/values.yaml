@@ -1,0 +1,804 @@
+# Default values for oracle.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+# Set this value to the registry secret used to login to docker or other private registries
+registrySecret: regsecret
+replicaCount: 1
+
+ingress:
+  enabled: false
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  path: /
+  hosts:
+    - chart-example.local
+  tls: []
+  #  - secretName: chart-example-tls
+  #    hosts:
+  #      - chart-example.local
+
+resources: {}
+  # We usually recommend not to specify default resources and to leave this as a conscious
+  # choice for the user. This also increases chances charts run on environments with little
+  # resources, such as Minikube. If you do want to specify resources, uncomment the following
+  # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  # limits:
+  #  cpu: 100m
+  #  memory: 128Mi
+  # requests:
+  #  cpu: 100m
+  #  memory: 128Mi
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}
+
+## @section Global parameters
+## Global Docker image parameters
+## Please, note that this will override the image parameters, including dependencies, configured to use the global value
+## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+##
+
+## @param global.imageRegistry Global Docker image registry
+## @param global.imagePullSecrets Global Docker registry secret names as an array
+## @param global.storageClass Global StorageClass for Persistent Volume(s)
+## @param global.oracle.password Global Oracle&trade; password (overrides `auth.password`)
+##
+
+deployMode: master
+externalNodePort:
+## @param sentinel.service.nodePorts.sentinel Node port for Sentinel
+
+global:
+  oracle:
+    password: "12345678"
+  app_name: "oracle"
+
+## @section Common parameters
+##
+
+## @param kubeVersion Override Kubernetes version
+##
+kubeVersion: ""
+## @param nameOverride String to partially override common.names.fullname
+##
+nameOverride: ""
+## @param fullnameOverride String to fully override common.names.fullname
+##
+fullnameOverride: "oracle"
+## @param commonLabels Labels to add to all deployed objects
+##
+commonLabels: {}
+## @param commonAnnotations Annotations to add to all deployed objects
+##
+commonAnnotations: {}
+
+## Bitnami Oracle&trade; image
+## ref: https://hub.docker.com/r/bitnami/oracle/tags/
+## @param image.registry Oracle&trade; image registry
+## @param image.repository Oracle&trade; image repository
+## @param image.tag Oracle&trade; image tag (immutable tags are recommended)
+## @param image.pullPolicy Oracle&trade; image pull policy
+## @param image.pullSecrets Oracle&trade; image pull secrets
+## @param image.debug Enable image debug mode
+##
+image:
+  # registry: docker.io
+  # repository: bitnami/oracle
+  # tag: 19c
+  registry: docker.io/12589
+  repository: oracle
+  tag: 19c
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ##
+  pullPolicy: IfNotPresent
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## e.g:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  pullSecrets: []
+  ## Enable debug mode
+  ##
+  debug: false
+
+## @section Oracle&trade; common configuration parameters
+## https://github.com/bitnami/bitnami-docker-oracle#configuration
+##
+
+## @param architecture Oracle&trade; architecture. Allowed values: `standalone` or `replication`
+##
+architecture: standalone
+## Oracle&trade; Authentication parameters
+## ref: https://github.com/bitnami/bitnami-docker-oracle#setting-the-server-password-on-first-run
+##
+auth:
+  ## @param auth.enabled Enable password authentication
+  ##
+  enabled: true
+  ## @param auth.password Oracle&trade; password
+  ## Defaults to a random 10-character alphanumeric string if not set
+  ##
+  password: "12345678"
+  ## @param auth.existingSecret The name of an existing secret with Oracle&trade; credentials
+  ## NOTE: When it's set, the previous `auth.password` parameter is ignored
+  ##
+  existingSecret: ""
+  ## @param auth.existingSecretPasswordKey Password key to be retrieved from existing secret
+  ## NOTE: ignored unless `auth.existingSecret` parameter is set
+  ##
+  existingSecretPasswordKey: ""
+  ## @param auth.usePasswordFiles Mount credentials as files instead of using an environment variable
+  ##
+  usePasswordFiles: false
+  customPasswordFiles: {}
+
+## @param existingConfigmap The name of an existing ConfigMap with your custom configuration for Oracle&trade; nodes
+##
+existingConfigmap: ""
+
+## @section Oracle&trade; master configuration parameters
+##
+
+master:
+  ## @param master.configuration Configuration for Oracle&trade; master nodes
+  ## ref: https://oracle.io/topics/config
+  ##
+  configuration: ""
+  ## @param master.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param master.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param master.preExecCmds Additional commands to run prior to starting Oracle&trade; master
+  ##
+  preExecCmds: []
+  ## @param master.extraFlags Array with additional command line flags for Oracle&trade; master
+  ## e.g:
+  ## extraFlags:
+  ##  - "--maxmemory-policy volatile-ttl"
+  ##  - "--repl-backlog-size 1024mb"
+  ##
+  extraFlags: []
+  ## @param master.extraEnvVars Array with extra environment variables to add to Oracle&trade; master nodes
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param master.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Oracle&trade; master nodes
+  ##
+  extraEnvVarsCM: ""
+  ## @param master.extraEnvVarsSecret Name of existing Secret containing extra env vars for Oracle&trade; master nodes
+  ##
+  extraEnvVarsSecret: ""
+  ## @param master.containerPorts.oracle Container port to open on Oracle&trade; master nodes
+  ##
+  dbPassword: '12345678'
+  containerEnvs:
+    # oracle configuration for system
+    dbSid: ORCL1
+    dbPdb: ORCL
+    dbChar: AL32UTF8
+    dbDomain: local
+    dbMemory: 0
+
+  ## Configure extra options for Oracle&trade; containers' liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param master.startupProbe.enabled Enable startupProbe on Oracle&trade; master nodes
+  ## @param master.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param master.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param master.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param master.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param master.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 20
+    periodSeconds: 5
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  ## @param master.livenessProbe.enabled Enable livenessProbe on Oracle&trade; master nodes
+  ## @param master.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param master.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param master.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param master.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param master.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 20
+    periodSeconds: 5
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  ## @param master.readinessProbe.enabled Enable readinessProbe on Oracle&trade; master nodes
+  ## @param master.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param master.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param master.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param master.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param master.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 20
+    periodSeconds: 5
+    timeoutSeconds: 1
+    successThreshold: 1
+    failureThreshold: 5
+  ## @param master.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## @param master.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param master.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## Oracle&trade; master resource requests and limits
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param master.resources.limits The resources limits for the Oracle&trade; master containers
+  ## @param master.resources.requests The requested resources for the Oracle&trade; master containers
+  ##
+  resources:
+    # We usually recommend not to specify default resources and to leave this as a conscious
+    # choice for the user. This also increases chances charts run on environments with little
+    # resources, such as Minikube. If you do want to specify resources, uncomment the following
+    # lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    # limits: {}
+    # #   cpu: 250m
+    # #   memory: 256Mi
+    # requests: {}
+    # #   cpu: 250m
+    # #   memory: 256Mi
+    resource:
+      limits:
+        memory: 4Gi
+        cpu: 1
+      requests:
+        memory: 128Mi
+        cpu: 100m
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param master.podSecurityContext.enabled Enabled Oracle&trade; master pods' Security Context
+  ## @param master.podSecurityContext.fsGroup Set Oracle&trade; master pod's Security Context fsGroup
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroup: 54321
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param master.containerSecurityContext.enabled Enabled Oracle&trade; master containers' Security Context
+  ## @param master.containerSecurityContext.runAsUser Set Oracle&trade; master containers' Security Context runAsUser
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 54321
+  ## @param master.kind Use either Deployment or StatefulSet (default)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/
+  ##
+  kind: StatefulSet
+  ## @param master.schedulerName Alternate scheduler for Oracle&trade; master pods
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param master.updateStrategy.type Oracle&trade; master statefulset strategy type
+  ## @skip master.updateStrategy.rollingUpdate
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy:
+    ## StrategyType
+    ## Can be set to RollingUpdate or OnDelete
+    ##
+    type: RollingUpdate
+    rollingUpdate: {}
+  ## @param master.priorityClassName Oracle&trade; master pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param master.hostAliases Oracle&trade; master pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param master.podLabels Extra labels for Oracle&trade; master pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param master.podAnnotations Annotations for Oracle&trade; master pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param master.shareProcessNamespace Share a single process namespace between all of the containers in Oracle&trade; master pods
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/share-process-namespace/
+  ##
+  shareProcessNamespace: false
+  ## @param master.podAffinityPreset Pod affinity preset. Ignored if `master.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param master.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `master.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: soft
+  ## Node master.affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param master.nodeAffinityPreset.type Node affinity preset type. Ignored if `master.affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param master.nodeAffinityPreset.key Node label key to match. Ignored if `master.affinity` is set
+    ##
+    key: ""
+    ## @param master.nodeAffinityPreset.values Node label values to match. Ignored if `master.affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param master.affinity Affinity for Oracle&trade; master pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `master.podAffinityPreset`, `master.podAntiAffinityPreset`, and `master.nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param master.nodeSelector Node labels for Oracle&trade; master pods assignment
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+  ## @param master.tolerations Tolerations for Oracle&trade; master pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param master.topologySpreadConstraints Spread Constraints for Oracle&trade; master pod assignment
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/
+  ## E.g.
+  ## topologySpreadConstraints:
+  ##   - maxSkew: 1
+  ##     topologyKey: node
+  ##     whenUnsatisfiable: DoNotSchedule
+  ##
+  topologySpreadConstraints: []
+  ## @param master.dnsPolicy DNS Policy for Oracle&trade; master pod
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/
+  ## E.g.
+  ## dnsPolicy: ClusterFirst
+  dnsPolicy: ""
+  ## @param master.dnsConfig DNS Configuration for Oracle&trade; master pod
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/
+  ## E.g.
+  ## dnsConfig:
+  ##   options:
+  ##   - name: ndots
+  ##     value: "4"
+  ##   - name: single-request-reopen
+  dnsConfig: {}
+  ## @param master.lifecycleHooks for the Oracle&trade; master container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param master.extraVolumes Optionally specify extra list of additional volumes for the Oracle&trade; master pod(s)
+  ##
+  extraVolumes: []
+  ## @param master.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Oracle&trade; master container(s)
+  ##
+  extraVolumeMounts: []
+  ## @param master.sidecars Add additional sidecar containers to the Oracle&trade; master pod(s)
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param master.initContainers Add additional init containers to the Oracle&trade; master pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
+  ## Persistence parameters
+  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+  ##
+  persistence:
+    ## @param master.persistence.enabled Enable persistence on Oracle&trade; master nodes using Persistent Volume Claims
+    ##
+    enabled: false
+    ## @param master.persistence.medium Provide a medium for `emptyDir` volumes.
+    ##
+    medium: ""
+    ## @param master.persistence.sizeLimit Set this to enable a size limit for `emptyDir` volumes.
+    ##
+    sizeLimit: ""
+    ## @param master.persistence.path The path the volume will be mounted at on Oracle&trade; master containers
+    ## NOTE: Useful when using different Oracle&trade; images
+    ##
+    path: /opt/oracle
+    ## @param master.persistence.subPath The subdirectory of the volume to mount on Oracle&trade; master containers
+    ## NOTE: Useful in dev environments
+    ##
+    subPath: ""
+    ## @param master.persistence.storageClass Persistent Volume storage class
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is set, choosing the default provisioner
+    ##
+    storageClass: "local-path"
+    ## @param master.persistence.accessModes Persistent Volume access modes
+    ##
+    accessModes:
+    - ReadWriteOnce
+    ## @param master.persistence.size Persistent Volume size
+    ##
+    size: 2Gi
+    ## @param master.persistence.annotations Additional custom annotations for the PVC
+    ##
+    annotations: {}
+    ## @param master.persistence.selector Additional labels to match for the PVC
+    ## e.g:
+    ## selector:
+    ##   matchLabels:
+    ##     app: my-app
+    ##
+    selector: {}
+    ## @param master.persistence.dataSource Custom PVC data source
+    ##
+    dataSource: {}
+    ## @param master.persistence.existingClaim Use a existing PVC which must be created manually before bound
+    ## NOTE: requires master.persistence.enabled: true
+    ##
+    existingClaim: ""
+  ## Oracle&trade; master service parameters
+  ##
+  service:
+    ## @param master.service.type Oracle&trade; master service type
+    ##
+    type: NodePort
+    ## @param master.service.ports.oracle Oracle&trade; master service port
+    ##
+    ports:
+      oracleContainerPort: 1521
+      oracleTargetPort: 1521
+      oracleNodePort: 31521
+      emOracleContainerPort: 5500
+      emOracleTargetPort: 5500
+      emOracleNodePort: 30550
+      metricsContainerPort: 9161
+      metricsTargetPort: 9161
+      metricsNodePort: 30916
+
+    ## @param master.service.externalTrafficPolicy Oracle&trade; master service external traffic policy
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param master.service.internalTrafficPolicy Oracle&trade; master service internal traffic policy (requires Kubernetes v1.22 or greater to be usable)
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service-traffic-policy/
+    ##
+    internalTrafficPolicy: Cluster
+    ## @param master.service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
+    ##
+    extraPorts: []
+    ## @param master.service.clusterIP Oracle&trade; master service Cluster IP
+    ##
+    clusterIP: ""
+    ## @param master.service.loadBalancerIP Oracle&trade; master service Load Balancer IP
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+    ##
+    loadBalancerIP: ""
+    ## @param master.service.loadBalancerSourceRanges Oracle&trade; master service Load Balancer sources
+    ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g.
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+  ## @param master.terminationGracePeriodSeconds Integer setting the termination grace period for the oracle-master pods
+  ##
+  terminationGracePeriodSeconds: 30
+
+## @section Other Parameters
+##
+
+## PodSecurityPolicy configuration
+## ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/
+##
+podSecurityPolicy:
+  ## @param podSecurityPolicy.create Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later
+  ##
+  create: false
+  ## @param podSecurityPolicy.enabled Enable PodSecurityPolicy's RBAC rules
+  ##
+  enabled: false
+## RBAC configuration
+##
+rbac:
+  ## @param rbac.create Specifies whether RBAC resources should be created
+  ##
+  create: true
+  ## @param rbac.rules Custom RBAC rules to set
+  ## e.g:
+  ## rules:
+  ##   - apiGroups:
+  ##       - ""
+  ##     resources:
+  ##       - pods
+  ##     verbs:
+  ##       - get
+  ##       - list
+  ##
+  rules:
+  - apiGroups:
+    - ""
+    resources:
+    - pods
+    - services
+    verbs:
+    - get
+    - list
+## ServiceAccount configuration
+##
+serviceAccount:
+  ## @param serviceAccount.create Specifies whether a ServiceAccount should be created
+  ##
+  create: true
+  ## @param serviceAccount.name The name of the ServiceAccount to use.
+  ## If not set and create is true, a name is generated using the common.names.fullname template
+  ##
+  name: ""
+  ## @param serviceAccount.automountServiceAccountToken Whether to auto mount the service account token
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/#use-the-default-service-account-to-access-the-api-server
+  ##
+  automountServiceAccountToken: true
+  ## @param serviceAccount.annotations Additional custom annotations for the ServiceAccount
+  ##
+  annotations: {}
+
+## @section Init Container Parameters
+##
+
+## 'volumePermissions' init container parameters
+## Changes the owner and group of the persistent volume mount point to runAsUser:fsGroup values
+##   based on the *podSecurityContext/*containerSecurityContext parameters
+##
+volumePermissions:
+  ## @param volumePermissions.enabled Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`
+  ##
+  enabled: false
+  ## Bitnami Shell image
+  ## ref: https://hub.docker.com/r/bitnami/bitnami-shell/tags/
+  ## @param volumePermissions.image.registry Bitnami Shell image registry
+  ## @param volumePermissions.image.repository Bitnami Shell image repository
+  ## @param volumePermissions.image.tag Bitnami Shell image tag (immutable tags are recommended)
+  ## @param volumePermissions.image.pullPolicy Bitnami Shell image pull policy
+  ## @param volumePermissions.image.pullSecrets Bitnami Shell image pull secrets
+  ##
+  image:
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+  ## Init container's resource requests and limits
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param volumePermissions.resources.limits The resources limits for the init container
+  ## @param volumePermissions.resources.requests The requested resources for the init container
+  ##
+  resources:
+    limits: {}
+    requests: {}
+  ## Init container Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param volumePermissions.containerSecurityContext.runAsUser Set init container's Security Context runAsUser
+  ## NOTE: when runAsUser is set to special value "auto", init container will try to chown the
+  ##   data folder to auto-determined user&group, using commands: `id -u`:`id -G | cut -d" " -f2`
+  ##   "auto" is especially useful for OpenShift which has scc with dynamic user ids (and 0 is not allowed)
+  ##
+  containerSecurityContext:
+    runAsUser: 0
+
+metrics:
+  ## @param metrics.enabled Start a sidecar prometheus exporter to expose Oracle&trade; metrics
+  ##
+  enabled: true
+  ## Bitnami Oracle&trade; Exporter image
+  ## ref: https://hub.docker.com/r/bitnami/oracle-exporter/tags/
+  ## @param metrics.image.registry Oracle&trade; Exporter image registry
+  ## @param metrics.image.repository Oracle&trade; Exporter image repository
+  ## @param metrics.image.tag Oracle&trade; Oracle&trade; Exporter image tag (immutable tags are recommended)
+  ## @param metrics.image.pullPolicy Oracle&trade; Exporter image pull policy
+  ## @param metrics.image.pullSecrets Oracle&trade; Exporter image pull secrets
+  ##
+  image:
+    registry: docker.io/12589
+    repository: oracle-exporter
+    tag: 19c
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+  ## @param metrics.command Override default metrics container init command (useful when using custom images)
+  ##
+  command: []
+  ## @param metrics.OracleTargetHost A way to specify an alternative Oracle&trade; hostname
+  ## Useful for certificate CN/SAN matching
+  ##
+  OracleTargetHost: "localhost"
+  ## @param metrics.extraArgs Extra arguments for Oracle&trade; exporter, for example:
+  ## e.g.:
+  ## extraArgs:
+  ##   check-keys: myKey,myOtherKey
+  ##
+  extraArgs: {}
+  ## @param metrics.extraEnvVars Array with extra environment variables to add to Oracle&trade; exporter
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param metrics.containerSecurityContext.enabled Enabled Oracle&trade; exporter containers' Security Context
+  ## @param metrics.containerSecurityContext.runAsUser Set Oracle&trade; exporter containers' Security Context runAsUser
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+  ## @param metrics.extraVolumes Optionally specify extra list of additional volumes for the Oracle&trade; metrics sidecar
+  ##
+  extraVolumes: []
+  ## @param metrics.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Oracle&trade; metrics sidecar
+  ##
+  extraVolumeMounts: []
+  ## Oracle&trade; exporter resource requests and limits
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param metrics.resources.limits The resources limits for the Oracle&trade; exporter container
+  ## @param metrics.resources.requests The requested resources for the Oracle&trade; exporter container
+  ##
+  resources:
+    limits:
+      memory: 256Mi
+      cpu: 250m
+    requests:
+      memory: 128Mi
+      cpu: 100m
+  ## @param metrics.podLabels Extra labels for Oracle&trade; exporter pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param metrics.podAnnotations [object] Annotations for Oracle&trade; exporter pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/port: "9161"
+  ## Oracle&trade; exporter service parameters
+  ##
+  service:
+    ## @param metrics.service.type Oracle&trade; exporter service type
+    ##
+    type: ClusterIP
+    ## @param metrics.service.port Oracle&trade; exporter service port
+    ##
+    port: 9161
+    ## @param metrics.service.externalTrafficPolicy Oracle&trade; exporter service external traffic policy
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param metrics.service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
+    ##
+    extraPorts: []
+    ## @param metrics.service.loadBalancerIP Oracle&trade; exporter service Load Balancer IP
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+    ##
+    loadBalancerIP: ""
+    ## @param metrics.service.loadBalancerSourceRanges Oracle&trade; exporter service Load Balancer sources
+    ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g.
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param metrics.service.annotations Additional custom annotations for Oracle&trade; exporter service
+    ##
+    annotations: {}
+  ## Prometheus Service Monitor
+  ## ref: https://github.com/coreos/prometheus-operator
+  ##      https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
+  ##
+  serviceMonitor:
+    ## @param metrics.serviceMonitor.enabled Create ServiceMonitor resource(s) for scraping metrics using PrometheusOperator
+    ##
+    enabled: true
+    ## @param metrics.serviceMonitor.namespace The namespace in which the ServiceMonitor will be created
+    ##
+    namespace: ""
+    ## @param metrics.serviceMonitor.interval The interval at which metrics should be scraped
+    ##
+    interval: 30s
+    ## @param metrics.serviceMonitor.scrapeTimeout The timeout after which the scrape is ended
+    ##
+    scrapeTimeout: ""
+    ## @param metrics.serviceMonitor.relabellings Metrics RelabelConfigs to apply to samples before scraping.
+    ##
+    relabellings: []
+    ## @param metrics.serviceMonitor.metricRelabelings Metrics RelabelConfigs to apply to samples before ingestion.
+    ##
+    metricRelabelings: []
+    ## @param metrics.serviceMonitor.honorLabels Specify honorLabels parameter to add the scrape endpoint
+    ##
+    honorLabels: false
+    ## @param metrics.serviceMonitor.additionalLabels Additional labels that can be used so ServiceMonitor resource(s) can be discovered by Prometheus
+    ##
+    additionalLabels:
+      release: prometheus
+  ## Custom PrometheusRule to be defined
+  ## ref: https://github.com/coreos/prometheus-operator#customresourcedefinitions
+  ##
+  prometheusRule:
+    ## @param metrics.prometheusRule.enabled Create a custom prometheusRule Resource for scraping metrics using PrometheusOperator
+    ##
+    enabled: false
+    ## @param metrics.prometheusRule.namespace The namespace in which the prometheusRule will be created
+    ##
+    namespace: ""
+    ## @param metrics.prometheusRule.additionalLabels Additional labels for the prometheusRule
+    ##
+    additionalLabels: {}
+    rules: []
+## @param extraDeploy [array] Array with extra yaml to deploy with the chart. Evaluated as a template
+##
+extraDeploy: []
+
+## Oracle Nework Policy configuration
+##
+networkPolicy:
+  ## @param networkPolicy.enabled Enable creation of NetworkPolicy resources
+  ##
+  enabled: false
+  ## @param networkPolicy.allowExternal The Policy model to apply.
+  ## When set to false, only pods with the correct
+  ## client label will have network access to the port MySQL is listening
+  ## on. When true, MySQL will accept connections from any source
+  ## (with the correct destination port).
+  ##
+  allowExternal: true
+  ## @param networkPolicy.explicitNamespacesSelector [object] A Kubernetes LabelSelector to explicitly select namespaces from which ingress traffic could be allowed to MySQL
+  ## If explicitNamespacesSelector is missing or set to {}, only client Pods that are in the networkPolicy's namespace
+  ## and that match other criteria, the ones that have the good label, can reach the DB.
+  ## But sometimes, we want the DB to be accessible to clients from other namespaces, in this case, we can use this
+  ## LabelSelector to select these namespaces, note that the networkPolicy's namespace should also be explicitly added.
+  ##
+  ## Example:
+  ## explicitNamespacesSelector:
+  ##   matchLabels:
+  ##     role: frontend
+  ##   matchExpressions:
+  ##    - {key: role, operator: In, values: [frontend]}
+  ##
+  explicitNamespacesSelector: {}
