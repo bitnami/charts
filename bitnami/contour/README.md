@@ -184,6 +184,7 @@ helm uninstall my-release
 | `contour.ingressClass.create`                                 | Whether to create or not the IngressClass resource                                                                                 | `true`                |
 | `contour.ingressClass.default`                                | Mark IngressClass resource as default for cluster                                                                                  | `true`                |
 | `contour.debug`                                               | Enable Contour debug log level                                                                                                     | `false`               |
+| `contour.logFormat`                                           | Set contour log-format. Default text, either text or json.                                                                         | `text`                |
 | `contour.kubernetesDebug`                                     | Contour kubernetes debug log level, Default 0, minimum 0, maximum 9.                                                               | `0`                   |
 | `contour.rootNamespaces`                                      | Restrict Contour to searching these namespaces for root ingress routes.                                                            | `""`                  |
 

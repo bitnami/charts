@@ -454,6 +454,10 @@ contour:
   ##
   debug: false
 
+  ## @param contour.logFormat Set contour log-format. Default text, either text or json.
+  ##
+  logFormat: text
+
   ## @param contour.kubernetesDebug Contour kubernetes debug log level, Default 0, minimum 0, maximum 9.
   ##
   kubernetesDebug: 0
