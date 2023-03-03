@@ -90,12 +90,13 @@ spec:
           env:
             - name: FLINK_MODE
               value: taskmanager
+            # Hosts and addresses are determined by the service full name, which maps to flink.*§.fullname
             - name: FLINK_CFG_JOBMANAGER_RPC_ADDRESS
-              value: flink-jobmanager
+              value: {{ include "flink.jobmanager.fullname" . }}
             - name: FLINK_CFG_TASKMANAGER_RPC_PORT
               value: {{ .Values.taskmanager.service.ports.rpc | quote }}
             - name: FLINK_CFG_TASKMANAGER_HOST
-              value: flink-taskmanager
+              value: {{ include "flink.taskmanager.fullname" . }}
             - name: FLINK_CFG_TASKMANAGER_BIND__HOST
               value: 0.0.0.0
             - name: BITNAMI_DEBUG
