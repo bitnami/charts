@@ -72,7 +72,7 @@ spec:
       {{- if .Values.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
-      {{- if .Values.serviceLinks.disabled }}
+      {{- if .Values.enableServiceLinks.disabled }}
       enableServiceLinks: false
       {{- end }}
       {{- if .Values.terminationGracePeriodSeconds }}
