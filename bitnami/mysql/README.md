@@ -73,6 +73,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `commonLabels`            | Common labels to add to all MySQL resources (sub-charts are not considered). Evaluated as a template      | `{}`            |
 | `extraDeploy`             | Array with extra yaml to deploy with the chart. Evaluated as a template                                   | `[]`            |
 | `serviceBindings.enabled` | Create secret for service binding (Experimental)                                                          | `false`         |
+| `mysqlx.port.enabled`     | boolean to enable x port                                                                                  | `false`         |
 | `diagnosticMode.enabled`  | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                   | `false`         |
 | `diagnosticMode.command`  | Command to override all containers in the deployment                                                      | `["sleep"]`     |
 | `diagnosticMode.args`     | Args to override all containers in the deployment                                                         | `["infinity"]`  |
@@ -101,7 +102,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `auth.customPasswordFiles` | Use custom password files when `auth.usePasswordFiles` is set to `true`. Define path for keys `root` and `user`, also define `replicator` if `architecture` is set to `replication` | `{}`                   |
 | `initdbScripts`            | Dictionary of initdb scripts                                                                                                                                                        | `{}`                   |
 | `initdbScriptsConfigMap`   | ConfigMap with the initdb scripts (Note: Overrides `initdbScripts`)                                                                                                                 | `""`                   |
-| `mysqlx.port.enabled`   | Boolean to toggle a port for mysqlx `33060` protocol. | false |
 
 ### MySQL Primary parameters
 
