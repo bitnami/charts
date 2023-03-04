@@ -51,6 +51,14 @@ extraDeploy: []
 serviceBindings:
   enabled: false
 
+## @param mysqlx.port.enabled boolean to enable x port
+# .. will expose the port 33060
+# .. Note the X Plugin needs installation
+# Ref: https://dev.mysql.com/doc/refman/8.0/en/x-plugin-checking-installation.html
+mysqlx:
+  port:
+    enabled: false
+
 ## Enable diagnostic mode in the deployment
 ##
 diagnosticMode:

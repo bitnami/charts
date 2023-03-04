@@ -61,6 +61,11 @@ To connect to your database:
 Note: Since NetworkPolicy is enabled, only pods with label {{ template "common.names.fullname" . }}-client=true" will be able to connect to MySQL.
 {{- end }}
 
+{{- if .Values.mysqlx.port.enabled }}
+Connection to the X protocol of MySQL can be done via 33060 on the following DNS name from within your cluster:
+{{ include "mysql.primary.fullname" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}
+{{- end }}
+
 {{- if .Values.metrics.enabled }}
 
 To access the MySQL Prometheus metrics from outside the cluster execute the following commands:

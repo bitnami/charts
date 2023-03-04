@@ -101,6 +101,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `auth.customPasswordFiles` | Use custom password files when `auth.usePasswordFiles` is set to `true`. Define path for keys `root` and `user`, also define `replicator` if `architecture` is set to `replication` | `{}`                   |
 | `initdbScripts`            | Dictionary of initdb scripts                                                                                                                                                        | `{}`                   |
 | `initdbScriptsConfigMap`   | ConfigMap with the initdb scripts (Note: Overrides `initdbScripts`)                                                                                                                 | `""`                   |
+| `mysqlx.port.enabled`   | Boolean to toggle a port for mysqlx `33060` protocol. | false |
 
 ### MySQL Primary parameters
 
