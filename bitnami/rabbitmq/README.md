@@ -263,6 +263,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.subPath`       | The subdirectory of the volume to mount to       | `""`                       |
 | `persistence.size`          | PVC Storage Request for RabbitMQ data volume     | `8Gi`                      |
 | `persistence.annotations`   | Persistence annotations. Evaluated as a template | `{}`                       |
+| `persistence.labels`        | Persistence labels. Evaluated as a template      | `{}`                       |
 
 ### Exposure parameters
 
