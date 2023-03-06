@@ -1557,7 +1557,7 @@ metrics:
   ##
   useTLS: false
   ## @param metrics.extraArgs String with extra arguments to the metrics exporter
-  ## ref: https://github.com/dcu/mongodb_exporter/blob/master/mongodb_exporter.go
+  ## ref: https://github.com/percona/mongodb_exporter/blob/main/main.go
   ##
   extraArgs: ""
   ## @param metrics.resources Metrics exporter resource requests and limits
