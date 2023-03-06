@@ -197,6 +197,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.accessModes`  | PVC Access modes                                                         | `["ReadWriteOnce"]` |
 | `persistence.size`         | PVC Storage Request for Memcached data volume                            | `8Gi`               |
 | `persistence.annotations`  | Annotations for the PVC                                                  | `{}`                |
+| `persistence.labels`       | Labels for the PVC                                                       | `{}`                |
 | `persistence.selector`     | Selector to match an existing Persistent Volume for Memcached's data PVC | `{}`                |
 
 ### Volume Permissions parameters
