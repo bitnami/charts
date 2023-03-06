@@ -279,12 +279,6 @@ jobmanager:
     ##     timeoutSeconds: 300
     ##
     sessionAffinityConfig: {}
-    ## @param jobmanager.service.metrics.annotations [object] Annotations for Prometheus metrics
-    metrics:
-      annotations:
-        prometheus.io/scrape: "true"
-        prometheus.io/port: "{{ .Values.jobmanager.service.ports.admin }}"
-        prometheus.io/path: "/metrics"
   ## Apache Flink Jobmanager serviceAccount parameters
   ##
   serviceAccount:
@@ -576,12 +570,6 @@ taskmanager:
     ##     timeoutSeconds: 300
     ##
     sessionAffinityConfig: {}
-    ## @param taskmanager.service.metrics.annotations [object] Annotations for Prometheus metrics
-    metrics:
-      annotations:
-        prometheus.io/scrape: "true"
-        prometheus.io/port: "{{ .Values.taskmanager.service.ports.admin }}"
-        prometheus.io/path: "/metrics"
   ## Apache Flink taskmanager serviceAccount parameters
   ##
   serviceAccount:
