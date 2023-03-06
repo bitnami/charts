@@ -4,7 +4,7 @@ on:
     branches:
       - main
     paths:
-      - 'bitnami/**/*.md'
+      - '**.md'
 permissions:
   contents: read
 jobs:
@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Install mardownlint
-        run: npm install -g markdownlint-cli@0.32.2
+        run: npm install -g markdownlint-cli@0.33.0
       - name: Checkout bitnami/charts
         uses: actions/checkout@v3
       - name: Execute markdownlint
