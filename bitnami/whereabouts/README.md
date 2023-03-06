@@ -61,7 +61,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
 | Name                     | Description                                                                                                     | Value          |
@@ -76,7 +75,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                         | `false`        |
 | `diagnosticMode.command` | Command to override all containers in the deployment                                                            | `["sleep"]`    |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                                               | `["infinity"]` |
-
 
 ### Whereabouts parameters
 
@@ -147,7 +145,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `podAnnotations`                        | Pod annotations                                                                                                       | `{}`                        |
 | `podLabels`                             | Add additional labels to the pod (evaluated as a template)                                                            | `{}`                        |
 
-
 ### Other Parameters
 
 | Name                                          | Description                                                            | Value  |
@@ -157,7 +154,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.name`                         | The name of the ServiceAccount to use.                                 | `""`   |
 | `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created | `true` |
 | `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                   | `{}`   |
-
 
 ### Volume Permissions parameters
 
