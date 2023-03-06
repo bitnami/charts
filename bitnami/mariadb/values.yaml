@@ -48,7 +48,57 @@ schedulerName: ""
 runtimeClassName: ""
 ## @param extraDeploy Array of extra objects to deploy with the release (evaluated as a template)
 ##
-extraDeploy: []
+extraDeploy:
+  - |
+    apiVersion: batch/v1
+    kind: Job
+    metadata:
+      name: {{ include "common.names.fullname" . }}-init
+      namespace: {{ .Release.Namespace }}
+    spec:
+      backoffLimit: 20
+      template:
+        spec:
+          restartPolicy: OnFailure
+          initContainers:
+            - name: download-custom-conf
+              image: bitnami/bitnami-shell:11-debian-11-r92
+              imagePullPolicy: "IfNotPresent"
+              command:
+                - /bin/bash
+              args:
+                - -ec
+                - |
+                  #!/bin/bash
+                  echo "Downloading dataset"
+                  curl -LOk https://www.mariadbtutorial.com/wp-content/uploads/2019/10/nation.zip
+                  unzip nation.zip
+                  cp nation.sql /bitnami/mariadb/dataset/nation.sql
+              volumeMounts:
+                - name: dataset
+                  mountPath: /bitnami/mariadb/dataset
+
+          containers:
+            - name: populate-database
+              image: {{ include "mariadb.image" . }}
+              command:
+                - /bin/bash
+                - -ec
+              args:
+                - #!/bin/bash
+                  mysql -h {{ template "mariadb.primary.fullname" . }} -u root -p${MYSQL_ROOT_PASSWORD} < /bitnami/mariadb/dataset/nation.sql
+              env:
+                - name: MYSQL_ROOT_PASSWORD
+                  valueFrom:
+                    secretKeyRef:
+                      name: {{ template "mariadb.secretName" . }}
+                      key: mysql-root-password
+              volumeMounts:
+                - name: dataset
+                  mountPath: /bitnami/mariadb/dataset
+          volumes:
+            - name: dataset
+              emptyDir: {}
 
 ## Enable diagnostic mode in the deployment
 ##
@@ -159,7 +209,31 @@ auth:
 ##      #!/bin/bash
 ##      echo "Do something."
 ##
-initdbScripts: {}
+initdbScripts:
+  00_create_schema.sql: |
+    CREATE DATABASE IF NOT EXISTS my_application;
+    CREATE TABLE IF NOT EXISTS my_application.clients (
+      id INT NOT NULL AUTO_INCREMENT,
+      name VARCHAR(255) NOT NULL,
+      address VARCHAR(255) NOT NULL,
+      PRIMARY KEY (id)
+    );
+    CREATE TABLE IF NOT EXISTS my_application.items (
+      id INT NOT NULL AUTO_INCREMENT,
+      name VARCHAR(255) NOT NULL,
+      stock INT NOT NULL,
+      PRIMARY KEY (id)
+    );
+
+  01_set_concurrent_insert.sh: |
+    #!/bin/bash
+
+    . /opt/bitnami/scripts/libmariadb.sh
+    . /opt/bitnami/scripts/mariadb-env.sh
+
+    # We use the functions in the Bitnami libmariadb.sh library to set the configuration
+    mysql_conf_set concurrent_insert 4
+
 ## @param initdbScriptsConfigMap ConfigMap with the initdb scripts (Note: Overrides `initdbScripts`)
 ##
 initdbScriptsConfigMap: ""
@@ -476,13 +550,33 @@ primary:
     selector: {}
   ## @param primary.extraVolumes Optionally specify extra list of additional volumes to the MariaDB Primary pod(s)
   ##
-  extraVolumes: []
+  extraVolumes:
+    - name: downloaded-conf
+      emptyDir: {}
   ## @param primary.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the MariaDB Primary container(s)
   ##
-  extraVolumeMounts: []
+  extraVolumeMounts:
+    - name: downloaded-conf
+      mountPath: /opt/bitnami/mariadb/conf
   ## @param primary.initContainers Add additional init containers for the MariaDB Primary pod(s)
   ##
-  initContainers: []
+  initContainers:
+    - name: download-custom-conf
+      image: bitnami/bitnami-shell:11-debian-11-r92
+      imagePullPolicy: "IfNotPresent"
+      command:
+        - /bin/bash
+      args:
+        - -ec
+        - |
+          #!/bin/bash
+          echo "Downloading custom configuration"
+          curl -Lk https://gist.githubusercontent.com/javsalgar/6f6efcafe9537d11d76b9acab79fb1be/raw/99494081bfefff114529000ec9f1f3dfeef36989/my.cnf > /opt/bitnami/mariadb/conf/my.cnf
+          chmod 644 /opt/bitnami/mariadb/conf/my.cnf
+      volumeMounts:
+        - name: downloaded-conf
+          mountPath: /opt/bitnami/mariadb/conf
+
   ## @param primary.sidecars Add additional sidecar containers for the MariaDB Primary pod(s)
   ##
   sidecars: []

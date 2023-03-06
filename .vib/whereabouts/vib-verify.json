@@ -1,0 +1,49 @@
+{
+  "phases": {
+    "package": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/whereabouts"
+        }
+      },
+      "actions": [
+        {
+          "action_id": "helm-package"
+        },
+        {
+          "action_id": "helm-lint"
+        }
+      ]
+    },
+    "verify": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/whereabouts"
+        },
+        "runtime_parameters": "Q05JTW91bnRQYXRoOiAvYml0bmFtaS93aGVyZWFib3V0cy9ob3N0CnNlcnZpY2VBY2NvdW50OgogIGF1dG9tb3VudFNlcnZpY2VBY2NvdW50VG9rZW46IHRydWUKY29udGFpbmVyU2VjdXJpdHlDb250ZXh0OgogIHJ1bkFzVXNlcjogMAo=",
+        "target_platform": {
+          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
+          "size": {
+            "name": "S4"
+          }
+        }
+      },
+      "actions": [
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/whereabouts/goss"
+            },
+            "remote": {
+              "workload": "deploy-whereabouts"
+            },
+            "vars_file": "vars.yaml"
+          }
+        }
+      ]
+    }
+  }
+}
