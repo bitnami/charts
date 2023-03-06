@@ -38,7 +38,9 @@
               "path": "/.vib/whereabouts/goss"
             },
             "remote": {
-              "workload": "ds-whereabouts"
+              "pod": {
+                "workload": "ds-whereabouts"
+              }
             },
             "vars_file": "vars.yaml"
           }
