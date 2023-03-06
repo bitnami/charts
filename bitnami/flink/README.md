@@ -87,7 +87,6 @@
 | `jobmanager.service.annotations`                         | Provide any additional annotations which may be required.                                 | `{}`            |
 | `jobmanager.service.sessionAffinity`                     | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                      | `None`          |
 | `jobmanager.service.sessionAffinityConfig`               | Additional settings for the sessionAffinity                                               | `{}`            |
-| `jobmanager.service.metrics.annotations`                 | Annotations for Prometheus metrics                                                        | `{}`            |
 | `jobmanager.serviceAccount.create`                       | Enables ServiceAccount                                                                    | `true`          |
 | `jobmanager.serviceAccount.name`                         | ServiceAccount name                                                                       | `""`            |
 | `jobmanager.serviceAccount.annotations`                  | Annotations to add to all deployed objects                                                | `{}`            |
@@ -166,7 +165,6 @@
 | `taskmanager.service.annotations`                         | Provide any additional annotations which may be required.                                 | `{}`            |
 | `taskmanager.service.sessionAffinity`                     | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                      | `None`          |
 | `taskmanager.service.sessionAffinityConfig`               | Additional settings for the sessionAffinity                                               | `{}`            |
-| `taskmanager.service.metrics.annotations`                 | Annotations for Prometheus metrics                                                        | `{}`            |
 | `taskmanager.serviceAccount.create`                       | Enables ServiceAccount                                                                    | `true`          |
 | `taskmanager.serviceAccount.name`                         | ServiceAccount name                                                                       | `""`            |
 | `taskmanager.serviceAccount.annotations`                  | Annotations to add to all deployed objects                                                | `{}`            |
