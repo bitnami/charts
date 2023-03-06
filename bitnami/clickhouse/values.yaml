@@ -890,6 +890,9 @@ persistence:
   ##   GKE, AWS & OpenStack)
   ##
   storageClass: ""
+  ## @param persistence.labels Persistent Volume Claim labels
+  ##
+  labels: {}
   ## @param persistence.annotations Persistent Volume Claim annotations
   ##
   annotations: {}

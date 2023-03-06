@@ -280,6 +280,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------- | ---------------------------------------------------------------------- | ------------------- |
 | `persistence.enabled`      | Enable persistence using Persistent Volume Claims                      | `true`              |
 | `persistence.storageClass` | Storage class of backing PVC                                           | `""`                |
+| `persistence.labels`       | Persistent Volume Claim labels                                         | `{}`                |
 | `persistence.annotations`  | Persistent Volume Claim annotations                                    | `{}`                |
 | `persistence.accessModes`  | Persistent Volume Access Modes                                         | `["ReadWriteOnce"]` |
 | `persistence.size`         | Size of data volume                                                    | `8Gi`               |
