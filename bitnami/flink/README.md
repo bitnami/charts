@@ -70,14 +70,14 @@
 | `jobmanager.resources.requests`                          | The requested resources for Apache Flink containers                                       | `{}`            |
 | `jobmanager.extraVolumeMounts`                           | Optionally specify extra list of additional volumeMounts for flink container              | `[]`            |
 | `jobmanager.containerPorts.rpc`                          | Port for RPC                                                                              | `6123`          |
-| `jobmanager.containerPorts.web`                          | Port for web UI                                                                           | `8081`          |
+| `jobmanager.containerPorts.httpDashboard`                | Port for http UI                                                                           | `8081`          |
 | `jobmanager.containerPorts.blob`                         | Port for blob server                                                                      | `6124`          |
 | `jobmanager.service.type`                                | Apache Flink service type                                                                 | `ClusterIP`     |
 | `jobmanager.service.ports.rpc`                           | Port for RPC                                                                              | `6123`          |
-| `jobmanager.service.ports.web`                           | Port for web UI                                                                           | `8081`          |
+| `jobmanager.service.ports.httpDashboard`                           | Port for http UI                                                                           | `8081`          |
 | `jobmanager.service.ports.blob`                          | Port for blob server                                                                      | `6124`          |
 | `jobmanager.service.nodePorts.rpc`                       | Node port for RPC                                                                         | `""`            |
-| `jobmanager.service.nodePorts.web`                       | Node port for web UI                                                                      | `""`            |
+| `jobmanager.service.nodePorts.httpDashboard`                       | Node port for http UI                                                                      | `""`            |
 | `jobmanager.service.nodePorts.blob`                      | Port for blob server                                                                      | `""`            |
 | `jobmanager.service.extraPorts`                          | Extra ports to expose in the service (normally used with the `sidecar` value)             | `[]`            |
 | `jobmanager.service.loadBalancerIP`                      | LoadBalancerIP if service type is `LoadBalancer`                                          | `""`            |

@@ -47,11 +47,11 @@ spec:
       {{- else if eq .Values.jobmanager.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
-    - name: web
-      port: {{ .Values.jobmanager.service.ports.web }}
-      targetPort: {{ .Values.jobmanager.containerPorts.web }}
-      {{- if and (or (eq .Values.jobmanager.service.type "NodePort") (eq .Values.jobmanager.service.type "LoadBalancer")) (not (empty .Values.jobmanager.service.nodePorts.web)) }}
-      nodePort: {{ .Values.jobmanager.service.nodePorts.web }}
+    - name: http-dashboard
+      port: {{ .Values.jobmanager.service.ports.httpDashboard }}
+      targetPort: {{ .Values.jobmanager.containerPorts.httpDashboard }}
+      {{- if and (or (eq .Values.jobmanager.service.type "NodePort") (eq .Values.jobmanager.service.type "LoadBalancer")) (not (empty .Values.jobmanager.service.nodePorts.httpDashboard)) }}
+      nodePort: {{ .Values.jobmanager.service.nodePorts.httpDashboard }}
       {{- else if eq .Values.jobmanager.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}

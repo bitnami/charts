@@ -204,9 +204,9 @@ jobmanager:
     ## @param jobmanager.containerPorts.rpc Port for RPC
     ##
     rpc: 6123
-    ## @param jobmanager.containerPorts.web Port for web UI
+    ## @param jobmanager.containerPorts.httpDashboard Port for http UI
     ##
-    web: 8081
+    httpDashboard: 8081
     ## @param jobmanager.containerPorts.blob Port for blob server
     ##
     blob: 6124
@@ -222,9 +222,9 @@ jobmanager:
       ## @param jobmanager.service.ports.rpc Port for RPC
       ##
       rpc: 6123
-      ## @param jobmanager.service.ports.web Port for web UI
+      ## @param jobmanager.service.ports.httpDashboard Port for httpDashboard UI
       ##
-      web: 8081
+      httpDashboard: 8081
       ## @param jobmanager.service.ports.blob Port for blob server
       ##
       blob: 6124
@@ -234,9 +234,9 @@ jobmanager:
       ## @param jobmanager.service.nodePorts.rpc Node port for RPC
       ##
       rpc: ""
-      ## @param jobmanager.service.nodePorts.web Node port for web UI
+      ## @param jobmanager.service.nodePorts.httpDashboard Node port for http UI
       ##
-      web: ""
+      httpDashboard: ""
       ## @param jobmanager.service.nodePorts.blob Port for blob server
       ##
       blob: ""
