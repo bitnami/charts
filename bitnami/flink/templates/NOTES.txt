@@ -23,7 +23,7 @@ In order to replicate the container startup scripts execute this command:
 
 {{- else }}
 
-1. Get the application URL by running these commands:
+1. Get the jobmanager URL by running these commands:
 
     {{- if contains "NodePort" .Values.jobmanager.service.type }}
         export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "common.names.fullname" . }})
