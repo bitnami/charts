@@ -218,6 +218,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.enabled`      | If true, use a Persistent Volume Claim. If false, use emptyDir. | `true`              |
 | `persistence.storageClass` | Persistent Volume Storage Class                                 | `""`                |
 | `persistence.annotations`  | Annotations for the PVC                                         | `{}`                |
+| `persistence.labels`       | Labels for the PVC                                              | `{}`                |
 | `persistence.accessModes`  | Persistent Volume Access Modes                                  | `["ReadWriteOnce"]` |
 | `persistence.size`         | PVC Storage Request for etcd data volume                        | `8Gi`               |
 | `persistence.selector`     | Selector to match an existing Persistent Volume                 | `{}`                |
