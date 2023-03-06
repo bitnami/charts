@@ -22,7 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/whereabouts"
         },
-        "runtime_parameters": "Q05JTW91bnRQYXRoOiAvYml0bmFtaS93aGVyZWFib3V0cy9ob3N0CnNlcnZpY2VBY2NvdW50OgogIGF1dG9tb3VudFNlcnZpY2VBY2NvdW50VG9rZW46IHRydWUKY29udGFpbmVyU2VjdXJpdHlDb250ZXh0OgogIHJ1bkFzVXNlcjogMAo=",
+        "runtime_parameters": "aG9zdENOSUJpbkRpcjogL2hvbWUva3ViZXJuZXRlcy9iaW4KQ05JTW91bnRQYXRoOiAvYml0bmFtaS93aGVyZWFib3V0cy9ob3N0CnNlcnZpY2VBY2NvdW50OgogIGF1dG9tb3VudFNlcnZpY2VBY2NvdW50VG9rZW46IHRydWUKY29udGFpbmVyU2VjdXJpdHlDb250ZXh0OgogIHJ1bkFzVXNlcjogMAo=",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
