@@ -4,7 +4,6 @@ import { random } from '../support/utils';
 
 const DATACENTER_NAME = Cypress.env('datacenterName');
 const REPLICA_COUNT = Cypress.env('replicaCount');
-const CONTAINER_PORT = Cypress.env('containerRpcPort');
 
 it('is able to display all of the nodes', () => {
   cy.visit(`/ui/${DATACENTER_NAME}/nodes`);
