@@ -38,7 +38,7 @@
               "path": "/.vib/whereabouts/goss"
             },
             "remote": {
-              "workload": "deploy-whereabouts"
+              "workload": "daemonset-whereabouts"
             },
             "vars_file": "vars.yaml"
           }
