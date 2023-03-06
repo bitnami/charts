@@ -17,7 +17,6 @@ metadata:
     {{- if .Values.commonAnnotations }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
     {{- end }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.jobmanager.service.metrics.annotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
   type: {{ .Values.jobmanager.service.type }}
