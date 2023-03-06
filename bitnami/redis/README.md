@@ -196,6 +196,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `master.persistence.accessModes`                     | Persistent Volume access modes                                                                        | `["ReadWriteOnce"]`      |
 | `master.persistence.size`                            | Persistent Volume size                                                                                | `8Gi`                    |
 | `master.persistence.annotations`                     | Additional custom annotations for the PVC                                                             | `{}`                     |
+| `master.persistence.labels`                          | Additional custom labels for the PVC                                                                  | `{}`                     |
 | `master.persistence.selector`                        | Additional labels to match for the PVC                                                                | `{}`                     |
 | `master.persistence.dataSource`                      | Custom PVC data source                                                                                | `{}`                     |
 | `master.persistence.existingClaim`                   | Use a existing PVC which must be created manually before bound                                        | `""`                     |
@@ -298,6 +299,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `replica.persistence.accessModes`                     | Persistent Volume access modes                                                                          | `["ReadWriteOnce"]`      |
 | `replica.persistence.size`                            | Persistent Volume size                                                                                  | `8Gi`                    |
 | `replica.persistence.annotations`                     | Additional custom annotations for the PVC                                                               | `{}`                     |
+| `replica.persistence.labels`                          | Additional custom labels for the PVC                                                                    | `{}`                     |
 | `replica.persistence.selector`                        | Additional labels to match for the PVC                                                                  | `{}`                     |
 | `replica.persistence.dataSource`                      | Custom PVC data source                                                                                  | `{}`                     |
 | `replica.persistence.existingClaim`                   | Use a existing PVC which must be created manually before bound                                          | `""`                     |
@@ -381,6 +383,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sentinel.persistence.accessModes`            | Persistent Volume access modes                                                                                                              | `["ReadWriteOnce"]`      |
 | `sentinel.persistence.size`                   | Persistent Volume size                                                                                                                      | `100Mi`                  |
 | `sentinel.persistence.annotations`            | Additional custom annotations for the PVC                                                                                                   | `{}`                     |
+| `sentinel.persistence.labels`                 | Additional custom labels for the PVC                                                                                                        | `{}`                     |
 | `sentinel.persistence.selector`               | Additional labels to match for the PVC                                                                                                      | `{}`                     |
 | `sentinel.persistence.dataSource`             | Custom PVC data source                                                                                                                      | `{}`                     |
 | `sentinel.persistence.medium`                 | Provide a medium for `emptyDir` volumes.                                                                                                    | `""`                     |
