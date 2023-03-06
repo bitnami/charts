@@ -202,7 +202,7 @@ aws:
     ## This ignores aws.credentials.secretKey, and aws.credentials.accessKey
     ##
     secretName: ""
-    ## AWS access key id stored in key-value secret. 
+    ## AWS access key id stored in key-value secret.
     ## If aws.credentials.accessKeyIDSecretRef and aws.credentials.secretAccessKeySecretRef defined aws.credentials.secretKey, aws.credentials.accessKey and aws.credentials.secretName are ignored
     ## @param aws.credentials.accessKeyIDSecretRef.name Define the name of the secret that stores aws_access_key_id.
     ## @param aws.credentials.accessKeyIDSecretRef.key Define the key of the secret that stores aws_access_key_id.
@@ -579,7 +579,7 @@ rfc2136:
   ## @param rfc2136.tsigAxfr When using the rfc2136 provider, enable AFXR to enable security (optional)
   ##
   tsigAxfr: true
-  ## @param rfc2136.minTTL When using the rfc2136 provider, specify minimal TTL (in duration format) for records[ns, us, ms, s, m, h], see more https://golang.org/pkg/time/#ParseDuration
+  ## @param rfc2136.minTTL When using the rfc2136 provider, specify minimal TTL (in duration format) for records[ns, us, ms, s, m, h], see more <https://golang.org/pkg/time/#ParseDuration>
   ##
   minTTL: "0s"
   ## @param rfc2136.rfc3645Enabled When using the rfc2136 provider, extend using RFC3645 to support secure updates over Kerberos with GSS-TSIG

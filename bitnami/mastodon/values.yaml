@@ -210,7 +210,7 @@ webDomain: ""
 ##
 defaultLocale: en
 
-## @param s3AliasHost S3 alias host for Mastodon (will use http://webDomain/bucket if not set)
+## @param s3AliasHost S3 alias host for Mastodon (will use 'http://webDomain/bucket' if not set)
 ##
 s3AliasHost: ""
 

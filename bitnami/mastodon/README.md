@@ -109,7 +109,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `localDomain`                    | The domain name used by accounts on this instance. Unless you're using                                                       | `""`                                 |
 | `webDomain`                      | Optional alternate domain used when you want to host Mastodon at a                                                           | `""`                                 |
 | `defaultLocale`                  | Set the default locale for this instance                                                                                     | `en`                                 |
-| `s3AliasHost`                    | S3 alias host for Mastodon (will use http://webDomain/bucket if not set)                                                     | `""`                                 |
+| `s3AliasHost`                    | S3 alias host for Mastodon (will use 'http://webDomain/bucket' if not set)                                                   | `""`                                 |
 | `smtp.server`                    | SMTP server                                                                                                                  | `""`                                 |
 | `smtp.port`                      | SMTP port                                                                                                                    | `587`                                |
 | `smtp.from_address`              | From address for sent emails                                                                                                 | `""`                                 |

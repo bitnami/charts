@@ -326,7 +326,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.prometheusRule.namespace`         | Namespace which Prometheus is running in                                          | `""`        |
 | `metrics.prometheusRule.rules`             | Rules to be prometheus in YAML format, check values for an example                | `[]`        |
 
-
+Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
 helm install my-release \
