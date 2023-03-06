@@ -172,6 +172,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `primary.persistence.existingClaim`                         | Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas                                          | `""`                |
 | `primary.persistence.subPath`                               | Subdirectory of the volume to mount at                                                                            | `""`                |
 | `primary.persistence.storageClass`                          | MariaDB primary persistent volume storage Class                                                                   | `""`                |
+| `primary.persistence.labels`                                | Labels for the PVC                                                                                                | `{}`                |
 | `primary.persistence.annotations`                           | MariaDB primary persistent volume claim annotations                                                               | `{}`                |
 | `primary.persistence.accessModes`                           | MariaDB primary persistent volume access Modes                                                                    | `["ReadWriteOnce"]` |
 | `primary.persistence.size`                                  | MariaDB primary persistent volume size                                                                            | `8Gi`               |
@@ -264,6 +265,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `secondary.persistence.enabled`                               | Enable persistence on MariaDB secondary replicas using a `PersistentVolumeClaim`                                      | `true`              |
 | `secondary.persistence.subPath`                               | Subdirectory of the volume to mount at                                                                                | `""`                |
 | `secondary.persistence.storageClass`                          | MariaDB secondary persistent volume storage Class                                                                     | `""`                |
+| `secondary.persistence.labels`                                | Labels for the PVC                                                                                                    | `{}`                |
 | `secondary.persistence.annotations`                           | MariaDB secondary persistent volume claim annotations                                                                 | `{}`                |
 | `secondary.persistence.accessModes`                           | MariaDB secondary persistent volume access Modes                                                                      | `["ReadWriteOnce"]` |
 | `secondary.persistence.size`                                  | MariaDB secondary persistent volume size                                                                              | `8Gi`               |
