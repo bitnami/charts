@@ -294,6 +294,7 @@ Refer to the [chart documentation for more information on each of these architec
 | `persistence.storageClass`                    | PVC Storage Class for MongoDB(&reg;) data volume                                                                                      | `""`                |
 | `persistence.accessModes`                     | PV Access Mode                                                                                                                        | `["ReadWriteOnce"]` |
 | `persistence.size`                            | PVC Storage Request for MongoDB(&reg;) data volume                                                                                    | `8Gi`               |
+| `persistence.labels`                          | Persistent Volume Claim Labels                                                                                                        | `{}`                |
 | `persistence.annotations`                     | PVC annotations                                                                                                                       | `{}`                |
 | `persistence.mountPath`                       | Path to mount the volume at                                                                                                           | `/bitnami/mongodb`  |
 | `persistence.subPath`                         | Subdirectory of the volume to mount at                                                                                                | `""`                |
