@@ -156,6 +156,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                   | `{}`   |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
+
 ```console
 helm install my-release \
   --set schedulerName=high-priority \
