@@ -4,7 +4,7 @@
 
 Whereabouts is a CNI plugin for Kubernetes clusters. It dynamically assigns IP addresses cluster-wide. Features both IPv4 and IPv6 addressing.
 
-[Overview of Whereabouts](https://github.com/k8snetworkplumbingwg/whereabouts/)
+[Overview of Whereabouts](https://github.com/k8snetworkplumbingwg/whereabouts)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 
