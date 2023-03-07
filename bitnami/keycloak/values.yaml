@@ -35,6 +35,10 @@ namespaceOverride: ""
 ## @param commonLabels Labels to add to all deployed objects
 ##
 commonLabels: {}
+## @param enableServiceLinks If set to false, disable Kubernetes service links in the pod spec
+## Ref: https://kubernetes.io/docs/tutorials/services/connect-applications-service/#accessing-the-service
+##
+enableServiceLinks: true
 ## @param commonAnnotations Annotations to add to all deployed objects
 ##
 commonAnnotations: {}

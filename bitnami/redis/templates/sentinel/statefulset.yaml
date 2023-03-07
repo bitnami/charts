@@ -753,6 +753,9 @@ spec:
         name: sentinel-data
         labels: {{- include "common.labels.matchLabels" . | nindent 10 }}
           app.kubernetes.io/component: node
+          {{- if .Values.sentinel.persistence.labels }}
+          {{- toYaml .Values.sentinel.persistence.labels | nindent 4 }}
+          {{- end }}
         {{- if .Values.sentinel.persistence.annotations }}
         annotations: {{- toYaml .Values.sentinel.persistence.annotations | nindent 10 }}
         {{- end }}

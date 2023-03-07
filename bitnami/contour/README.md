@@ -419,7 +419,9 @@ helm uninstall my-release
 | `rbac.rules`        | Custom RBAC rules to set                                                                                             | `[]`   |
 | `tlsExistingSecret` | Name of the existingSecret to be use in both contour and envoy. If it is not nil `contour.certgen` will be disabled. | `""`   |
 
+Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
+```console
 helm install my-release \
   --set envoy.readinessProbe.successThreshold=5 \
     my-repo/contour

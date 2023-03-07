@@ -153,7 +153,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.prometheusRule.labels`                   | Additional labels that can be used so PrometheusRule will be discovered by Prometheus                                     | `{}`                                |
 | `metrics.prometheusRule.groups`                   | Groups, containing the alert rules.                                                                                       | `[]`                                |
 
-
 ## Configuration and installation details
 
 ### [Rolling vs Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)

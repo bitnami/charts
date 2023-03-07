@@ -1,0 +1,5 @@
+CNIMountPath: /bitnami/whereabouts/host
+serviceAccount:
+  automountServiceAccountToken: true
+containerSecurityContext:
+  runAsUser: 0

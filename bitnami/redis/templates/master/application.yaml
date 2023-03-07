@@ -499,6 +499,9 @@ spec:
         name: redis-data
         labels: {{- include "common.labels.matchLabels" . | nindent 10 }}
           app.kubernetes.io/component: master
+          {{- if .Values.master.persistence.labels }}
+          {{- toYaml .Values.master.persistence.labels | nindent 4 }}
+          {{- end }}
         {{- if .Values.master.persistence.annotations }}
         annotations: {{- toYaml .Values.master.persistence.annotations | nindent 10 }}
         {{- end }}

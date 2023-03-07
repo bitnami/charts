@@ -6,8 +6,6 @@ Concourse is an automation system written in Go. It is most commonly used for CI
 
 [Overview of Concourse](https://concourse-ci.org/)
 
-
-
 ## TL;DR
 
 ```console
@@ -390,6 +388,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.database`                  | Concourse database name                                                 | `bitnami_concourse` |
 | `externalDatabase.existingSecret`            | Name of an existing secret resource containing the database credentials | `""`                |
 | `externalDatabase.existingSecretPasswordKey` | Name of an existing secret key containing the database credentials      | `""`                |
+
+See <https://github.com/bitnami-labs/readme-generator-for-helm> to create the table.
 
 The above parameters map to the env variables defined in [bitnami/concourse](https://github.com/bitnami/containers/tree/main/bitnami/concourse). For more information please refer to the [bitnami/concourse](https://github.com/bitnami/containers/tree/main/bitnami/concourse) image documentation.
 

@@ -483,6 +483,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalRedis.existingSecret`               | Name of an existing secret resource containing the Redis&trade credentials                             | `""`              |
 | `externalRedis.existingSecretPasswordKey`    | Name of an existing secret key containing the Redis&trade credentials                                  | `""`              |
 
+Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
+
 ```console
 helm install my-release \
                --set auth.username=my-user \

@@ -328,6 +328,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `tls.forwarder.existingSecret`                                 | Name of the existing secret containing the TLS certificates for the Fluentd forwarder                                                                              | `""`                                                       |
 | `tls.aggregator.existingSecret`                                | Name of the existing secret containing the TLS certificates for the Fluentd aggregator                                                                             | `""`                                                       |
 
+Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
+
 ```console
 helm install my-release \
   --set aggregator.port=24444 my-repo/fluentd

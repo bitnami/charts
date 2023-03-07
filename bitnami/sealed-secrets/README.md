@@ -6,8 +6,6 @@ Sealed Secrets are "one-way" encrypted K8s Secrets that can be created by anyone
 
 [Overview of Sealed Secrets](https://github.com/bitnami-labs/sealed-secrets)
 
-
-
 ## TL;DR
 
 ```console
@@ -210,7 +208,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.serviceMonitor.relabelings`       | Specify general relabeling                                                       | `[]`    |
 | `metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                              | `{}`    |
 
-
+Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
 helm install my-release \
