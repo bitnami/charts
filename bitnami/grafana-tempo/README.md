@@ -773,8 +773,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `memcached.auth.password`           | Memcached admin password        | `""`    |
 | `memcached.service.ports.memcached` | Memcached service port          | `11211` |
 
-
-
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console

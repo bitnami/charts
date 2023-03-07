@@ -554,7 +554,7 @@ Refer to the [chart documentation for more information on each of these architec
 | `metrics.prometheusRule.namespace`           | Namespace where prometheusRules resource should be created                                                            | `""`                       |
 | `metrics.prometheusRule.rules`               | Rules to be created, check values for an example                                                                      | `[]`                       |
 
-
+Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
 helm install my-release \

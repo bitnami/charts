@@ -290,7 +290,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.image.pullPolicy`                                  | Redis&reg; exporter image pull policy                                                                                              | `IfNotPresent`           |
 | `metrics.image.pullSecrets`                                 | Specify docker-registry secret names as an array                                                                                   | `[]`                     |
 | `metrics.resources`                                         | Metrics exporter resource requests and limits                                                                                      | `{}`                     |
-| `metrics.extraArgs`                                         | Extra arguments for the binary; possible values [here](https://github.com/oliver006/redis_exporter                                 | `{}`                     |
+| `metrics.extraArgs`                                         | Extra arguments for the binary; possible values [here](https://github.com/oliver006/redis_exporter)                                | `{}`                     |
 | `metrics.podAnnotations`                                    | Additional annotations for Metrics exporter pod                                                                                    | `{}`                     |
 | `metrics.podLabels`                                         | Additional labels for Metrics exporter pod                                                                                         | `{}`                     |
 | `metrics.containerSecurityContext.enabled`                  | Enable Metrics Containers' Security Context                                                                                        | `false`                  |
@@ -335,7 +335,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sysctlImage.resources.limits`                    | The resources limits for the container                                                                               | `{}`                    |
 | `sysctlImage.resources.requests`                  | The requested resources for the container                                                                            | `{}`                    |
 
-
+Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
 helm install my-release \

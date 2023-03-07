@@ -457,6 +457,7 @@ kubectl delete pvc -l release=my-release
 | `metrics.prometheusRule.labels`                 | Additional labels that can be used so PrometheusRule will be discovered by Prometheus                      | `{}`                        |
 | `metrics.prometheusRule.rules`                  | PrometheusRule definitions                                                                                 | `[]`                        |
 
+Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
 helm install my-release \

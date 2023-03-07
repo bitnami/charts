@@ -1712,7 +1712,7 @@ metrics:
     ## @param metrics.serviceMonitor.labels Additional labels that can be used so ServiceMonitor will be discovered by Prometheus
     ##
     labels: {}
-    ## @param metrics.serviceMonitor.selector [object] Defaults to what's used if you follow CoreOS Prometheus Install Instructions (https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus#tldr)
+    ## @param metrics.serviceMonitor.selector [object] Defaults to what's used if you follow CoreOS Prometheus Install Instructions (<https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus#tldr>)
     ## Prometheus Selector Label (https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus#prometheus-operator-parameters)
     ## Kube Prometheus Selector Label (https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus#exporters)
     ##
