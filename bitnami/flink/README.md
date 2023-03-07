@@ -1,3 +1,56 @@
+<!--- app-name: Apache Flink -->
+
+# Apache Flink packaged by Bitnami
+
+Apache Flink is an open-source, unified stream-processing and batch-processing framework developed by the Apache Software Foundation.
+
+[Overview of Apache Flink](https://flink.apache.org/)
+
+Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
+
+## TL;DR
+
+```console
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/flink
+```
+
+## Introduction
+
+This chart bootstraps a [flink](https://github.com/bitnami/containers/tree/main/bitnami/flink) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
+
+## Prerequisites
+
+- Kubernetes 1.19+
+- Helm 3.2.0+
+- PV provisioner support in the underlying infrastructure
+- ReadWriteMany volumes for deployment scaling
+
+## Installing the Chart
+
+To install the chart with the release name `my-release`:
+
+```console
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/flink
+```
+
+These commands deploy flink on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
+
+> **Tip**: List all releases using `helm list`
+
+## Uninstalling the Chart
+
+To uninstall/delete the `my-release` statefulset:
+
+```console
+helm delete my-release
+```
+
+The command removes all the Kubernetes components associated with the chart and deletes the release. Use the option `--purge` to delete all history too.
+
 ## Parameters
 
 ### Global parameters
@@ -193,3 +246,70 @@
 | `taskmanager.initContainers`                              | Add additional init containers to the flink pods                                          | `[]`            |
 | `taskmanager.sidecars`                                    | Add additional sidecar containers to the flink pods                                       | `[]`            |
 
+
+> **Tip**: You can use the default [values.yaml](values.yaml)
+
+## Configuration and installation details
+
+### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+### Persistence
+
+The [Bitnami flink](https://github.com/bitnami/containers/tree/main/bitnami/flink) image stores the trace onto an external database. Persistent Volume Claims are used to keep the data across deployments.
+
+### Additional environment variables
+
+In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` property inside each of the subsections: `collector`, `agent`, `query`.
+
+```yaml
+collector:
+  extraEnvVars:
+    - name: ENV_VAR_NAME
+      value: ENV_VAR_VALUE
+
+agent:
+  extraEnvVars:
+    - name: ENV_VAR_NAME
+      value: ENV_VAR_VALUE
+
+query:
+  extraEnvVars:
+    - name: ENV_VAR_NAME
+      value: ENV_VAR_VALUE
+```
+
+Alternatively, you can use a ConfigMap or a Secret with the environment variables. To do so, use the `extraEnvVarsCM` or the `extraEnvVarsSecret` values.
+
+### Sidecars
+
+If additional containers are needed in the same pod as flink (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter inside each of the subsections: `jobmanager`, `taskmanager` . If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter. [Learn more about configuring and using sidecar containers](https://docs.bitnami.com/kubernetes/infrastructure/flink/configuration/configure-sidecar-init-containers/).
+
+### Pod affinity
+
+This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters inside each of the subsections: `distributor`, `compactor`, `ingester`, `querier`, `queryFrontend` and `vulture`.
+
+## Troubleshooting
+
+Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+
+## License
+
+Copyright &copy; 2023 Bitnami
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+<http://www.apache.org/licenses/LICENSE-2.0>
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
