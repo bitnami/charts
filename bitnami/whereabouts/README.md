@@ -186,6 +186,8 @@ Once installed, the helm chart will modify configuration files in the host nodes
 
 Once the whereabouts configuration is installed, check the [upstream Kubernetes documentation](upstream documentation) on how to modify the network settings of the cluster.
 
+> **Important**: Double check that the host CNI binary and configuration directories are properly configured, or the deployment will fail. This is done using the `hostCNINetDir` and `hostCNIBinDir` values.
+
 ### Image
 
 The `image` parameter allows specifying which image will be pulled for the chart.

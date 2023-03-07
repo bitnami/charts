@@ -26,4 +26,6 @@ Watch the Whereabouts Daemonset status using the command:
 
 {{- end }}
 
+IMPORTANT: Please ensure that {{ .Values.hostCNIBinDir }} and {{ .Values.hostCNINetDir }} are where the CNI binary and configuration files are located in the Kubernetes nodes, otherwise the deployment will fail.
+
 {{ include "common.warnings.rollingTag" .Values.image }}
