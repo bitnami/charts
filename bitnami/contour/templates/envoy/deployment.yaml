@@ -109,16 +109,6 @@ spec:
                   - shutdown
           {{- if .Values.envoy.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.envoy.customReadinessProbe "context" $) | nindent 12 }}
-          {{- else if .Values.contour.livenessProbe.enabled }}
-          livenessProbe:
-            httpGet:
-              path: /healthz
-              port: 8090
-            initialDelaySeconds: {{ .Values.contour.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.contour.livenessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.contour.livenessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.contour.livenessProbe.successThreshold }}
-            failureThreshold: {{ .Values.contour.livenessProbe.failureThreshold }}
           {{- end }}
           name: shutdown-manager
           resources: {{- toYaml .Values.envoy.shutdownManager.resources | nindent 12 }}
