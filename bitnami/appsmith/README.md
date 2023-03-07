@@ -88,9 +88,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `image.pullSecrets`      | Appsmith image pull secrets                                                                                                                         | `[]`                 |
 | `image.debug`            | Enable Appsmith image debug mode                                                                                                                    | `false`              |
 
-### Appsmith common paramters
-
-
 ### Appsmith Client Parameters
 
 | Name                                                     | Description                                                                                                              | Value           |
