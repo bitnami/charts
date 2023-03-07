@@ -458,6 +458,9 @@ primary:
     ##   GKE, AWS & OpenStack)
     ##
     storageClass: ""
+    ## @param primary.persistence.labels Labels for the PVC
+    ##
+    labels: {}
     ## @param primary.persistence.annotations MariaDB primary persistent volume claim annotations
     ##
     annotations: {}
@@ -847,6 +850,9 @@ secondary:
     ##   GKE, AWS & OpenStack)
     ##
     storageClass: ""
+    ## @param secondary.persistence.labels Labels for the PVC
+    ##
+    labels: {}
     ## @param secondary.persistence.annotations MariaDB secondary persistent volume claim annotations
     ##
     annotations: {}
