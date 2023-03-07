@@ -29,7 +29,7 @@ var _ = Describe("NGINX Ingress Controller:", func() {
 
 	When("a testing ingress resource is created", func() {
 		var ingressName, ingressHost string
-		var hasIP bool
+		var hasIP, resolves bool
 
 		BeforeEach(func() {
 			nicSvc, err := coreclient.Services(*namespace).Get(ctx, "nginx-ingress-controller", metav1.GetOptions{})
@@ -38,7 +38,7 @@ var _ = Describe("NGINX Ingress Controller:", func() {
 			}
 
 			ingressName = "vib-ing-test"
-			ingressHost = nicSvc.Status.LoadBalancer.Ingress[0].IP + ".nip.io"
+			ingressHost = returnValidHost(nicSvc.Status.LoadBalancer.Ingress[0])
 			createIngressOrDie(ctx, netclient, ingressName, ingressHost)
 
 			// Once created, the controller has to assign an IP to the managed ingress
@@ -49,6 +49,14 @@ var _ = Describe("NGINX Ingress Controller:", func() {
 				panic(fmt.Sprintf("There was an error checking whether the testing ingress had an IP assigned: %q", err))
 			}
 			Expect(hasIP).To(BeTrue())
+
+			resolves, err = retry("resolvesToDeployment", 6, 20*time.Second, func() (bool, error) {
+				return resolvesToDeployment(ctx, "http://"+ingressHost)
+			})
+			if err != nil {
+				panic(fmt.Sprintf("There was an error resolving the ingress host: %q", err))
+			}
+			Expect(resolves).To(BeTrue())
 		})
 
 		AfterEach(func() {
