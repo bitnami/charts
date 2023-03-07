@@ -772,7 +772,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.existingSecret`             | Name of an existing secret resource containing the database credentials                                    | `""`                                                                                                                         |
 | `externalDatabase.existingSecretPasswordKey`  | Name of an existing secret key containing the database credentials                                         | `db-password`                                                                                                                |
 
-The above parameters map to the env variables defined in [bitnami/supabase](https://github.com/bitnami/containers/tree/main/bitnami/supabase). For more information please refer to the [bitnami/supabase](https://github.com/bitnami/containers/tree/main/bitnami/supabase) image documentation.
+The above parameters map to the env variables defined in [bitnami/supabase-studio](https://github.com/bitnami/containers/tree/main/bitnami/supabase-studio). For more information please refer to the [bitnami/supabase-studio](https://github.com/bitnami/containers/tree/main/bitnami/supabase-studio) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -819,15 +819,17 @@ externalDatabase.port=5432
 
 This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application.
 
-To enable Ingress integration, set `studio.ingress.enabled` to `true`. The `studio.ingress.hostname` property can be used to set the host name. The `studio.ingress.tls` parameter can be used to add the TLS configuration for this host. It is also possible to have more than one host, with a separate TLS configuration for each host. [Learn more about configuring and using Ingress](https://docs.bitnami.com/kubernetes/apps/supabase/configuration/configure-use-ingress/).
+To enable Ingress integration, set `studio.ingress.enabled` to `true`. The `studio.ingress.hostname` property can be used to set the host name. The `studio.ingress.tls` parameter can be used to add the TLS configuration for this host. It is also possible to have more than one host, with a separate TLS configuration for each host. [Learn more about configuring and using Ingress](https://docs.bitnami.com/kubernetes/infrastructure/supabase/configuration/configure-ingress/).
 
 ### TLS secrets
 
-The chart also facilitates the creation of TLS secrets for use with the Ingress controller, with different options for certificate management. [Learn more about TLS secrets](https://docs.bitnami.com/kubernetes/apps/supabase/administration/enable-tls/).
+The chart also facilitates the creation of TLS secrets for use with the Ingress controller, with different options for certificate management. [Learn more about TLS secrets](https://docs.bi/tnami.com/kubernetes/infrastructure/supabase/administration/enable-tls/).
 
 ## Persistence
 
-The [Bitnami supabase](https://github.com/bitnami/containers/tree/main/bitnami/supabase) image stores the supabase data and configurations at the `/bitnami` path of the container. Persistent Volume Claims are used to keep the data across deployments. [Learn more about persistence in the chart documentation](https://docs.bitnami.com/kubernetes/apps/supabase/configuration/chart-persistence/).
+The chart mounts a [Persistent Volume](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) volume at `/bitnami/supabase-storage`. The volume is created using dynamic volume provisioning, by default. An existing PersistentVolumeClaim can also be defined.
+
+If you encounter errors when working with persistent volumes, refer to our [troubleshooting guide for persistent volumes](https://docs.bitnami.com/kubernetes/faq/troubleshooting/troubleshooting-persistence-volumes/).
 
 ### Additional environment variables
 
@@ -844,7 +846,7 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 
 ### Sidecars
 
-If additional containers are needed in the same pod as supabase (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter inside the component specific sections. If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter. [Learn more about configuring and using sidecar containers](https://docs.bitnami.com/kubernetes/apps/supabase/administration/configure-use-sidecars/).
+If additional containers are needed in the same pod as supabase (such as additional metrics or logging exporters), they can be defined using the `sidecars` parameter inside the component specific sections. If these sidecars export extra ports, extra port definitions can be added using the `service.extraPorts` parameter. [Learn more about configuring and using sidecar containers](https://docs.bitnami.com/kubernetes/infrasctructure/supabase/administration/configure-use-sidecars/).
 
 ### Pod affinity
 
