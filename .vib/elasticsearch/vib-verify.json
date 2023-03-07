@@ -45,7 +45,9 @@
               "path": "/.vib/elasticsearch/goss"
             },
             "remote": {
-              "workload": "sts-elasticsearch-master"
+              "pod": {
+                "workload": "sts-elasticsearch-master"
+              }
             },
             "vars_file": "vars.yaml"
           }

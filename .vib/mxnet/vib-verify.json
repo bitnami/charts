@@ -38,7 +38,9 @@
               "path": "/.vib/mxnet/goss"
             },
             "remote": {
-              "workload": "deploy-mxnet"
+              "pod": {
+                "workload": "deploy-mxnet"
+              }
             },
             "vars_file": "vars.yaml"
           }

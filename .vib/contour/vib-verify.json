@@ -44,7 +44,9 @@
               "path": "/.vib/contour/goss"
             },
             "remote": {
-              "workload": "deploy-contour-contour"
+              "pod": {
+                "workload": "deploy-contour-contour"
+              }
             },
             "vars_file": "vars.yaml"
           }

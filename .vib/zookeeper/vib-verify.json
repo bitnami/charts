@@ -38,7 +38,9 @@
               "path": "/.vib/zookeeper/goss"
             },
             "remote": {
-              "workload": "sts-zookeeper"
+              "pod": {
+                "workload": "sts-zookeeper"
+              }
             },
             "vars_file": "vars.yaml"
           }

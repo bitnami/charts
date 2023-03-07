@@ -59,7 +59,9 @@
               "path": "/.vib/consul/goss"
             },
             "remote": {
-              "workload": "sts-consul"
+              "pod": {
+                "workload": "sts-consul"
+              }
             },
             "vars_file": "vars.yaml"
           }

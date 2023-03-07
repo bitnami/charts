@@ -44,7 +44,9 @@
               "path": "/.vib/postgresql-ha/goss/repmgr"
             },
             "remote": {
-              "workload": "sts-postgresql-ha-postgresql"
+              "pod": {
+                "workload": "sts-postgresql-ha-postgresql"
+              }
             },
             "vars_file": "vars.yaml"
           }
@@ -56,7 +58,9 @@
               "path": "/.vib/postgresql-ha/goss/pgpool"
             },
             "remote": {
-              "workload": "deploy-postgresql-ha-pgpool"
+              "pod": {
+                "workload": "deploy-postgresql-ha-pgpool"
+              }
             },
             "vars_file": "vars.yaml"
           }

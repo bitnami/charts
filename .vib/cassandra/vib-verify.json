@@ -45,7 +45,9 @@
             },
             "vars_file": "vars.yaml",
             "remote": {
-              "workload": "sts-cassandra"
+              "pod": {
+                "workload": "sts-cassandra"
+              }
             }
           }
         }

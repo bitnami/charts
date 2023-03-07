@@ -46,7 +46,9 @@
             },
             "vars_file": "vars.yaml",
             "remote": {
-              "workload": "sts-mariadb-galera"
+              "pod": {
+                "workload": "sts-mariadb-galera"
+              }
             }
           }
         }

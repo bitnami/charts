@@ -45,7 +45,9 @@
               "path": "/.vib/jaeger/goss"
             },
             "remote": {
-              "workload": "deploy-jaeger--agent"
+              "pod": {
+                "workload": "deploy-jaeger--agent"
+              }
             },
             "vars_file": "vars.yaml"
           }

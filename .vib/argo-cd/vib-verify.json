@@ -45,7 +45,9 @@
               "path": "/.vib/argo-cd/goss"
             },
             "remote": {
-              "workload": "deploy-argo-cd-server"
+              "pod": {
+                "workload": "deploy-argo-cd-server"
+              }
             },
             "vars_file": "vars.yaml"
           }

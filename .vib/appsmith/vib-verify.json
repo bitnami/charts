@@ -46,7 +46,9 @@
               "path": "/.vib/appsmith/goss"
             },
             "remote": {
-              "workload": "deploy-appsmith"
+              "pod": {
+                "workload": "deploy-appsmith"
+              }
             }
           }
         },

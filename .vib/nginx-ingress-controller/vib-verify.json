@@ -45,7 +45,9 @@
               "path": "/.vib/nginx-ingress-controller/goss"
             },
             "remote": {
-              "workload": "deploy-nginx-ingress-controller"
+              "pod": {
+                "workload": "deploy-nginx-ingress-controller"
+              }
             },
             "vars_file": "vars.yaml"
           }

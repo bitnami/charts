@@ -46,7 +46,9 @@
               "path": "/.vib/mastodon/goss"
             },
             "remote": {
-              "workload": "deploy-mastodon-web"
+              "pod": {
+                "workload": "deploy-mastodon-web"
+              }
             }
           }
         },

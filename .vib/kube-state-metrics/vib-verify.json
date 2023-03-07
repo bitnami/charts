@@ -46,7 +46,9 @@
             },
             "vars_file": "vars.yaml",
             "remote": {
-              "workload": "deploy-kube-state-metrics"
+              "pod": {
+                "workload": "deploy-kube-state-metrics"
+              }
             }
           }
         }

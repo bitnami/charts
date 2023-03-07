@@ -45,7 +45,9 @@
               "path": "/.vib/ejbca/goss"
             },
             "remote": {
-              "workload": "deploy-ejbca"
+              "pod": {
+                "workload": "deploy-ejbca"
+              }
             },
             "vars_file": "vars.yaml",
             "wait": {

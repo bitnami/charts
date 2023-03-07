@@ -45,7 +45,9 @@
               "path": "/.vib/solr/goss"
             },
             "remote": {
-              "workload": "sts-solr"
+              "pod": {
+                "workload": "sts-solr"
+              }
             },
             "vars_file": "vars.yaml"
           }

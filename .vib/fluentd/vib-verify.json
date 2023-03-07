@@ -46,7 +46,9 @@
               "path": "/.vib/fluentd/goss"
             },
             "remote": {
-              "workload": "ds-fluentd"
+              "pod": {
+                "workload": "ds-fluentd"
+              }
             }
           }
         }

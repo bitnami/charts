@@ -55,7 +55,9 @@
               "path": "/.vib/kube-prometheus/goss"
             },
             "remote": {
-              "workload": "deploy-kube-prometheus-operator"
+              "pod": {
+                "workload": "deploy-kube-prometheus-operator"
+              }
             },
             "vars_file": "vars.yaml"
           }

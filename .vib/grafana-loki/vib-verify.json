@@ -45,7 +45,9 @@
               "path": "/.vib/grafana-loki/goss/promtail"
             },
             "remote": {
-              "workload": "ds-grafana-loki-promtail"
+              "pod": {
+                "workload": "ds-grafana-loki-promtail"
+              }
             },
             "vars_file": "vars.yaml"
           }
@@ -57,7 +59,9 @@
               "path": "/.vib/grafana-loki/goss/querier"
             },
             "remote": {
-              "workload": "sts-grafana-loki-querier"
+              "pod": {
+                "workload": "sts-grafana-loki-querier"
+              }
             },
             "vars_file": "vars.yaml"
           }
