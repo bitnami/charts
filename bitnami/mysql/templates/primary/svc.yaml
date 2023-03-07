@@ -42,7 +42,7 @@ spec:
       targetPort: mysql
     {{- if .Values.mysqlx.port.enabled }}
     - name: mysqlx
-      port: 33060
+      port: {{ .Values.primary.service.ports.mysqlx }}
       targetPort: mysqlx
       protocol: TCP
     {{- end }}
