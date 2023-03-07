@@ -90,6 +90,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Appsmith common paramters
 
+
 ### Appsmith Client Parameters
 
 | Name                                                     | Description                                                                                                              | Value           |
