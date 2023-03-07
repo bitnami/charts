@@ -56,9 +56,7 @@
               "authn": {
                 "access_key_id": "{VIB_ENV_S3_ACCESS_KEY_ID}",
                 "secret_access_key": "{VIB_ENV_S3_SECRET_ACCESS_KEY}"
-              },
-              "username": "{VIB_ENV_S3_USERNAME}",
-              "password": "{VIB_ENV_S3_PASSWORD}"
+              }
             }
           }
         }
