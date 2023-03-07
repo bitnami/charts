@@ -176,7 +176,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `primary.sidecars`                              | Add additional sidecar containers for the MySQL Primary pod(s)                                                  | `[]`                |
 | `primary.service.type`                          | MySQL Primary K8s service type                                                                                  | `ClusterIP`         |
 | `primary.service.ports.mysql`                   | MySQL Primary K8s service port                                                                                  | `3306`              |
-| `primary.service.ports.mysqlx`                  | MySQL Primary K8s service port for mysqlx                                                                       | `33060`             |
 | `primary.service.nodePorts.mysql`               | MySQL Primary K8s service node port                                                                             | `""`                |
 | `primary.service.clusterIP`                     | MySQL Primary K8s service clusterIP IP                                                                          | `""`                |
 | `primary.service.loadBalancerIP`                | MySQL Primary loadBalancerIP if service type is `LoadBalancer`                                                  | `""`                |
