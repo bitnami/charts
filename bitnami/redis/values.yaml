@@ -446,6 +446,9 @@ master:
     ## @param master.persistence.annotations Additional custom annotations for the PVC
     ##
     annotations: {}
+    ## @param master.persistence.labels Additional custom labels for the PVC
+    ##
+    labels: {}
     ## @param master.persistence.selector Additional labels to match for the PVC
     ## e.g:
     ## selector:
@@ -860,6 +863,9 @@ replica:
     ## @param replica.persistence.annotations Additional custom annotations for the PVC
     ##
     annotations: {}
+    ## @param replica.persistence.labels Additional custom labels for the PVC
+    ##
+    labels: {}
     ## @param replica.persistence.selector Additional labels to match for the PVC
     ## e.g:
     ## selector:
@@ -1148,6 +1154,9 @@ sentinel:
     ## @param sentinel.persistence.annotations Additional custom annotations for the PVC
     ##
     annotations: {}
+    ## @param sentinel.persistence.labels Additional custom labels for the PVC
+    ##
+    labels: {}
     ## @param sentinel.persistence.selector Additional labels to match for the PVC
     ## e.g:
     ## selector:
