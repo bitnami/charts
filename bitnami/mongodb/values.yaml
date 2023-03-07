@@ -1003,6 +1003,9 @@ persistence:
   ## @param persistence.size PVC Storage Request for MongoDB(&reg;) data volume
   ##
   size: 8Gi
+  ## @param persistence.labels Persistent Volume Claim Labels
+  ##
+  labels: {}
   ## @param persistence.annotations PVC annotations
   ##
   annotations: {}
