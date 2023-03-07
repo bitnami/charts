@@ -241,6 +241,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.prometheusRule.labels`            | Labels that can be used so PrometheusRule will be discovered by Prometheus                                                                | `{}`                      |
 | `metrics.prometheusRule.rules`             | Prometheus Rule definitions                                                                                                               | `[]`                      |
 
+Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
+
 ```console
 helm install my-release \
   --set imagePullPolicy=Always \

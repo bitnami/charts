@@ -833,7 +833,7 @@ metrics:
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ##
   resources: {}
-  ## @param metrics.extraArgs Extra arguments for the binary; possible values [here](https://github.com/oliver006/redis_exporter
+  ## @param metrics.extraArgs Extra arguments for the binary; possible values [here](https://github.com/oliver006/redis_exporter)
   ## extraArgs:
   ##   check-keys: myKey,myOtherKey
   ##

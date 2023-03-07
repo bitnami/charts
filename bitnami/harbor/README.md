@@ -6,8 +6,6 @@ Harbor is an open source trusted cloud-native registry to store, sign, and scan 
 
 [Overview of Harbor](https://goharbor.io/)
 
-
-
 ## TL;DR
 
 ```console
@@ -598,7 +596,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 
 | Name                                                        | Description                                                                                                                                                                                                                                                               | Value                                                                               |
 | ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------- |
-| `registry.secret`                                           | Secret is used to secure the upload state from client and registry storage backend. See: https://github.com/docker/distribution/blob/master/docs/configuration.md                                                                                                         | `""`                                                                                |
+| `registry.secret`                                           | Secret is used to secure the upload state from client and registry storage backend. See: <https://github.com/docker/distribution/blob/master/docs/configuration.md>                                                                                                       | `""`                                                                                |
 | `registry.existingSecret`                                   | Existing secret for registry                                                                                                                                                                                                                                              | `""`                                                                                |
 | `registry.relativeurls`                                     | Make the registry return relative URLs in Location headers. The client is responsible for resolving the correct URL.                                                                                                                                                      | `false`                                                                             |
 | `registry.credentials.username`                             | The username for accessing the registry instance, which is hosted by htpasswd auth mode.  More details see [official docs](https://github.com/docker/distribution/blob/master/docs/configuration.md#htpasswd)                                                             | `harbor_registry_user`                                                              |
@@ -1172,6 +1170,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `metrics.serviceMonitor.honorLabels`       | Specify honorLabels parameter to add the scrape endpoint                                          | `false`    |
 | `metrics.serviceMonitor.jobLabel`          | The name of the label on the target service to use as the job name in prometheus.                 | `""`       |
 
+Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
 helm install my-release \

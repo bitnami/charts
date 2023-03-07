@@ -738,6 +738,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `redisWait.extraArgs`                     | Additional arguments for the redis-cli call, such as TLS                                              | `""`                 |
 | `redisWait.securityContext`               | Security context for init container                                                                   | `{}`                 |
 
+The above parameters map to the env variables defined in [bitnami/argo-cd](https://github.com/bitnami/containers/tree/main/bitnami/argo-cd). For more information please refer to the [bitnami/argo-cd](https://github.com/bitnami/containers/tree/main/bitnami/argo-cd) image documentation.
+
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console

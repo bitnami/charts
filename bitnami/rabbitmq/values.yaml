@@ -934,6 +934,11 @@ persistence:
   ##   example.io/disk-volume-type: SSD
   ##
   annotations: {}
+  ## @param persistence.labels Persistence labels. Evaluated as a template
+  ## Example:
+  ## labels:
+  ##   app: my-app
+  labels: {}
 
 ## @section Exposure parameters
 ##

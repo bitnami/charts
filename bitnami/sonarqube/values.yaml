@@ -159,10 +159,10 @@ ldap:
   ## @param ldap.bindPassword The password of the user to connect with. Leave this blank for anonymous access to the LDAP directory.
   ##
   bindPassword: ""
-  ## @param ldap.authentication Possible values: simple, CRAM-MD5, DIGEST-MD5, GSSAPI. See the tutorial on authentication mechanisms (http://java.sun.com/products/jndi/tutorial/ldap/security/auth.html)
+  ## @param ldap.authentication Possible values: simple, CRAM-MD5, DIGEST-MD5, GSSAPI. See the tutorial on authentication mechanisms (<http://java.sun.com/products/jndi/tutorial/ldap/security/auth.html>)
   ##
   authentication: simple
-  ## @param ldap.realm See Digest-MD5 Authentication, CRAM-MD5 Authentication (http://java.sun.com/products/jndi/tutorial/ldap/security/digest.html)
+  ## @param ldap.realm See Digest-MD5 Authentication, CRAM-MD5 Authentication (<http://java.sun.com/products/jndi/tutorial/ldap/security/digest.html>)
   ##
   realm: ""
   ## @param ldap.contextFactoryClass Context factory class.

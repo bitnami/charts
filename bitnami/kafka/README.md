@@ -121,6 +121,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `auth.clientProtocol`                             | Authentication protocol for communications with clients. Allowed protocols: `plaintext`, `tls`, `mtls`, `sasl` and `sasl_tls`                                                       | `plaintext`                         |
 | `auth.externalClientProtocol`                     | Authentication protocol for communications with external clients. Defaults to value of `auth.clientProtocol`. Allowed protocols: `plaintext`, `tls`, `mtls`, `sasl` and `sasl_tls`  | `""`                                |
 | `auth.interBrokerProtocol`                        | Authentication protocol for inter-broker communications. Allowed protocols: `plaintext`, `tls`, `mtls`, `sasl` and `sasl_tls`                                                       | `plaintext`                         |
+| `auth.controllerProtocol`                         | Controller protocol. It is used with Kraft mode only.                                                                                                                               | `plaintext`                         |
 | `auth.sasl.mechanisms`                            | SASL mechanisms when either `auth.interBrokerProtocol`, `auth.clientProtocol` or `auth.externalClientProtocol` are `sasl`. Allowed types: `plain`, `scram-sha-256`, `scram-sha-512` | `plain,scram-sha-256,scram-sha-512` |
 | `auth.sasl.interBrokerMechanism`                  | SASL mechanism for inter broker communication.                                                                                                                                      | `plain`                             |
 | `auth.sasl.jaas.clientUsers`                      | Kafka client user list                                                                                                                                                              | `["user"]`                          |
@@ -170,6 +171,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `containerPorts.client`                             | Kafka client container port                                                                                                                                                                   | `9092`          |
 | `containerPorts.internal`                           | Kafka inter-broker container port                                                                                                                                                             | `9093`          |
 | `containerPorts.external`                           | Kafka external container port                                                                                                                                                                 | `9094`          |
+| `containerPorts.controller`                         | Kafka Controller listener port. It is used if "kraft.enabled: true"                                                                                                                           | `9095`          |
 | `livenessProbe.enabled`                             | Enable livenessProbe on Kafka containers                                                                                                                                                      | `true`          |
 | `livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                                                                                       | `10`            |
 | `livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                                                                                              | `10`            |
@@ -466,11 +468,21 @@ The command removes all the Kubernetes components associated with the chart and 
 | `provisioning.initContainers`                              | Add additional Add init containers to the Kafka provisioning pod(s)                                                           | `[]`                  |
 | `provisioning.waitForKafka`                                | If true use an init container to wait until kafka is ready before starting provisioning                                       | `true`                |
 
+### Kraft chart parameters
+
+| Name                            | Description                                                                             | Value                    |
+| ------------------------------- | --------------------------------------------------------------------------------------- | ------------------------ |
+| `kraft.enabled`                 | Switch to enable or disable the Kraft mode for Kafka                                    | `false`                  |
+| `kraft.processRoles`            | Roles of your Kafka nodes. Nodes can have 'broker', 'controller' roles or both of them. | `broker,controller`      |
+| `kraft.controllerListenerNames` | Controller listener names                                                               | `CONTROLLER`             |
+| `kraft.clusterId`               | Kafka ClusterID. You must set it if your cluster contains more than one node.           | `kafka_cluster_id_test1` |
+| `kraft.controllerQuorumVoters`  | Quorum voters of Kafka Kraft cluster. Use it for nodes with 'broker' role only.         | `""`                     |
+
 ### ZooKeeper chart parameters
 
 | Name                                    | Description                                                                                                                                                             | Value               |
 | --------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
-| `zookeeper.enabled`                     | Switch to enable or disable the ZooKeeper helm chart                                                                                                                    | `true`              |
+| `zookeeper.enabled`                     | Switch to enable or disable the ZooKeeper helm chart. Must be false if you use Kraft mode.                                                                              | `true`              |
 | `zookeeper.replicaCount`                | Number of ZooKeeper nodes                                                                                                                                               | `1`                 |
 | `zookeeper.auth.client.enabled`         | Enable ZooKeeper auth                                                                                                                                                   | `false`             |
 | `zookeeper.auth.client.clientUser`      | User that will use ZooKeeper clients to auth                                                                                                                            | `""`                |
@@ -481,8 +493,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `zookeeper.persistence.storageClass`    | Persistent Volume storage class                                                                                                                                         | `""`                |
 | `zookeeper.persistence.accessModes`     | Persistent Volume access modes                                                                                                                                          | `["ReadWriteOnce"]` |
 | `zookeeper.persistence.size`            | Persistent Volume size                                                                                                                                                  | `8Gi`               |
-| `externalZookeeper.servers`             | List of external zookeeper servers to use. Typically used in combination with 'zookeeperChrootPath'.                                                                    | `[]`                |
-
+| `externalZookeeper.servers`             | List of external zookeeper servers to use. Typically used in combination with 'zookeeperChrootPath'. Must be empty if you use Kraft mode.                               | `[]`                |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

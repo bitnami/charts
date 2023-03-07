@@ -92,9 +92,6 @@ image:
   ##
   debug: false
 
-## @section Appsmith common paramters
-##
-
 ## @section Appsmith Client Parameters
 ##
 ##

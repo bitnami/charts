@@ -246,7 +246,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalKafka.auth.jaas.user`                   | User for SASL authentication                                                                                        | `user`                           |
 | `externalKafka.auth.jaas.password`               | Password for SASL authentication                                                                                    | `""`                             |
 
-
+Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
 helm install my-release \

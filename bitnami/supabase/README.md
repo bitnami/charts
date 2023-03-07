@@ -11,8 +11,8 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/supabase
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/supabase
 ```
 
 ## Introduction
@@ -36,8 +36,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-$ helm repo add my-repo https://charts.bitnami.com/bitnami
-$ helm install my-release my-repo/supabase
+helm repo add my-repo https://charts.bitnami.com/bitnami
+helm install my-release my-repo/supabase
 ```
 
 The command deploys Supabase on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -49,7 +49,7 @@ The command deploys Supabase on the Kubernetes cluster in the default configurat
 To uninstall/delete the `my-release` deployment:
 
 ```console
-$ helm delete my-release
+helm delete my-release
 ```
 
 The command removes all the Kubernetes components associated with the chart and deletes the release.
@@ -789,7 +789,7 @@ The above command sets the PostgreSQL `postgres` user password to `secretpasswor
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-$ helm install my-release -f values.yaml my-repo/supabase
+helm install my-release -f values.yaml my-repo/supabase
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -864,7 +864,7 @@ Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at
 
-    http://www.apache.org/licenses/LICENSE-2.0
+<http://www.apache.org/licenses/LICENSE-2.0>
 
 Unless required by applicable law or agreed to in writing, software
 distributed under the License is distributed on an "AS IS" BASIS,
