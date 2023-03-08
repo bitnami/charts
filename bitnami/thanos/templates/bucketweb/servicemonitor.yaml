@@ -33,6 +33,12 @@ spec:
       {{- if .Values.metrics.serviceMonitor.relabelings }}
       relabelings: {{ toYaml .Values.metrics.serviceMonitor.relabelings | nindent 8 }}
       {{- end }}
+      {{- if .Values.https.enabled }}
+      scheme: https
+      {{- end }}
+      {{- if .Values.metrics.serviceMonitor.extraParameters }}
+      {{- toYaml .Values.metrics.serviceMonitor.extraParameters | nindent 6 }}
+      {{- end }}
   namespaceSelector:
     matchNames:
       - {{ .Release.Namespace | quote }}
