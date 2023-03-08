@@ -582,6 +582,9 @@ persistence:
   ## @param persistence.annotations [object] Annotations for the PVC
   ##
   annotations: {}
+  ## @param persistence.labels [object] Labels for the PVC
+  ##
+  labels: {}
   ## @param persistence.accessModes Persistent Volume Access Modes
   ##
   accessModes:
