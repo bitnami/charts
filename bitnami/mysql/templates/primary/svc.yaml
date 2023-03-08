@@ -40,12 +40,6 @@ spec:
       port: {{ .Values.primary.service.ports.mysql }}
       protocol: TCP
       targetPort: mysql
-    {{- if .Values.mysqlx.port.enabled }}
-    - name: mysqlx
-      port: {{ .Values.primary.service.ports.mysqlx }}
-      targetPort: mysqlx
-      protocol: TCP
-    {{- end }}
       {{- if (and (or (eq .Values.primary.service.type "NodePort") (eq .Values.primary.service.type "LoadBalancer")) .Values.primary.service.nodePorts.mysql) }}
       nodePort: {{ .Values.primary.service.nodePorts.mysql }}
       {{- else if eq .Values.primary.service.type "ClusterIP" }}
