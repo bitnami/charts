@@ -186,9 +186,8 @@ spec:
           ports:
             - name: mysql
               containerPort: 3306
-            {{- if .Values.mysqlx.port.enabled }}
-            - name: mysqlx
-              port: 33060
+            {{- if .Values.primary.extraPorts }}
+              {{- include "common.tplvalues.render" (dict "value" .Values.primary.extraPorts "context" $) | nindent 10 }}
             {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.primary.customLivenessProbe }}

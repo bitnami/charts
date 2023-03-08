@@ -51,14 +51,6 @@ extraDeploy: []
 serviceBindings:
   enabled: false
 
-## @param mysqlx.port.enabled boolean to enable x port
-# .. will expose the port 33060
-# .. Note the X Plugin needs installation
-# Ref: https://dev.mysql.com/doc/refman/8.0/en/x-plugin-checking-installation.html
-mysqlx:
-  port:
-    enabled: false
-
 ## Enable diagnostic mode in the deployment
 ##
 diagnosticMode:
@@ -414,6 +406,9 @@ primary:
   ## @param primary.extraEnvVarsSecret Name of existing Secret containing extra env vars for MySQL primary containers
   ##
   extraEnvVarsSecret: ""
+  ## @param primary.extraPorts Extra ports to expose
+  ##
+  extraPorts: []
   ## Enable persistence using Persistent Volume Claims
   ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
@@ -791,6 +786,9 @@ secondary:
   ## @param secondary.extraEnvVarsSecret Name of existing Secret containing extra env vars for MySQL secondary containers
   ##
   extraEnvVarsSecret: ""
+  ## @param secondary.extraPorts Extra ports to expose
+  ##
+  extraPorts: []
   ## Enable persistence using Persistent Volume Claims
   ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
