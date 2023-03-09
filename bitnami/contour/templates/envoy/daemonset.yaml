@@ -106,17 +106,6 @@ spec:
                   - envoy
                   - shutdown
           {{- end }}
-          {{- if .Values.contour.livenessProbe.enabled }}
-          livenessProbe:
-            httpGet:
-              path: /healthz
-              port: 8090
-            initialDelaySeconds: {{ .Values.contour.livenessProbe.initialDelaySeconds }}
-            periodSeconds: {{ .Values.contour.livenessProbe.periodSeconds }}
-            timeoutSeconds: {{ .Values.contour.livenessProbe.timeoutSeconds }}
-            successThreshold: {{ .Values.contour.livenessProbe.successThreshold }}
-            failureThreshold: {{ .Values.contour.livenessProbe.failureThreshold }}
-          {{- end }}
           name: shutdown-manager
           resources: {{- toYaml .Values.envoy.shutdownManager.resources | nindent 12 }}
           volumeMounts:
