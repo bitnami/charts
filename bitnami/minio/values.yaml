@@ -865,7 +865,7 @@ networkPolicy:
   ##
   allowExternal: true
   ## @param networkPolicy.extraFromClauses Allows to add extra 'from' clauses to the NetworkPolicy
-  extraFromClauses: {}
+  extraFromClauses: []
   ## Example
   ## extraFromClauses:
   ## - podSelector:
