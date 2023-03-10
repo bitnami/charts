@@ -102,6 +102,7 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/wavefront/**'
       - 'bitnami/wavefront-hpa-adapter/**'
       - 'bitnami/wavefront-prometheus-storage-adapter/**'
+      - 'bitnami/whereabouts/**'
       - 'bitnami/wildfly/**'
       - 'bitnami/wordpress/**'
       - 'bitnami/wordpress-intel/**'

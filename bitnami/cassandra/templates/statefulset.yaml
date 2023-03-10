@@ -523,7 +523,8 @@ spec:
             secretName: {{ include "cassandra.tlsSecretName" . }}
             defaultMode: 256
         - name: certs-shared
-          emptyDir: {}
+          emptyDir:
+            sizeLimit: 500Mi
         {{- end }}
         {{- if .Values.existingConfiguration }}
         - name: configurations

@@ -186,6 +186,9 @@ spec:
           ports:
             - name: mysql
               containerPort: 3306
+            {{- if .Values.primary.extraPorts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.primary.extraPorts "context" $) | nindent 12 }}
+            {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.primary.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.primary.customLivenessProbe "context" $) | nindent 12 }}

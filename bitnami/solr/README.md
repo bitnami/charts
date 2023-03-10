@@ -182,6 +182,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.externalTrafficPolicy`    | Solr service external traffic policy                                                                                             | `Cluster`                |
 | `service.annotations`              | Additional custom annotations for Solr service                                                                                   | `{}`                     |
 | `service.extraPorts`               | Extra ports to expose in the Solr service (normally used with the `sidecar` value)                                               | `[]`                     |
+| `service.headless.annotations`     | Annotations for the headless service.                                                                                            | `{}`                     |
 | `ingress.enabled`                  | Enable ingress record generation for Apache Geode                                                                                | `false`                  |
 | `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
 | `ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |

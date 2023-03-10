@@ -668,6 +668,12 @@ service:
   ##     timeoutSeconds: 300
   ##
   sessionAffinityConfig: {}
+  ## Headless service properties
+  ##
+  headless:
+    ## @param service.headless.annotations Annotations for the headless service.
+    ##
+    annotations: {}
 
 ## External Access to ClickHouse  configuration
 ##
