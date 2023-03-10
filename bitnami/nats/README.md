@@ -191,6 +191,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.externalTrafficPolicy`    | NATS service external traffic policy                                                                                             | `Cluster`                |
 | `service.annotations`              | Additional custom annotations for NATS service                                                                                   | `{}`                     |
 | `service.extraPorts`               | Extra ports to expose in the NATS service (normally used with the `sidecar` value)                                               | `[]`                     |
+| `service.headless.annotations`     | Annotations for the headless service.                                                                                            | `{}`                     |
 | `ingress.enabled`                  | Set to true to enable ingress record generation                                                                                  | `false`                  |
 | `ingress.pathType`                 | Ingress Path type                                                                                                                | `ImplementationSpecific` |
 | `ingress.apiVersion`               | Override API Version (automatically detected if not set)                                                                         | `""`                     |
