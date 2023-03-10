@@ -811,6 +811,12 @@ service:
   ##     timeoutSeconds: 300
   ##
   sessionAffinityConfig: {}
+  ## Headless service properties
+  ##
+  headless:
+    ## @param service.headless.annotations Annotations for the headless service.
+    ##
+    annotations: {}
 ## Configure the ingress resource that allows you to access the
 ## Spark installation. Set up the URL
 ## ref: https://kubernetes.io/docs/user-guide/ingress/
