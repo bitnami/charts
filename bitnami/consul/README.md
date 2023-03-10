@@ -186,6 +186,7 @@ helm delete --purge my-release
 | `service.extraPorts`               | Extra ports to expose (normally used with the `sidecar` value)                                                                   | `[]`                     |
 | `service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                             | `None`                   |
 | `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
+| `service.headless.annotations`     | Annotations for the headless service.                                                                                            | `{}`                     |
 | `ingress.enabled`                  | Enable ingress resource for Management console                                                                                   | `false`                  |
 | `ingress.path`                     | Path for the default host                                                                                                        | `/`                      |
 | `ingress.apiVersion`               | Override API Version (automatically detected if not set)                                                                         | `""`                     |
