@@ -847,7 +847,12 @@ aggregator:
     ## @param aggregator.service.annotationsHeadless Provide any additional annotations which may be required on headless service
     ##
     annotationsHeadless: {}
-
+    ## Headless service properties
+    ##
+    headless:
+      ## @param aggregator.service.headless.annotations Annotations for the headless service.
+      ##
+      annotations: {}
   ## Configure the ingress resource that allows you to access the
   ## Fluentd aggregator. Set up the URL
   ## ref: https://kubernetes.io/docs/user-guide/ingress/
