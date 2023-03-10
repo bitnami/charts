@@ -25,7 +25,7 @@ var _ = Describe("Grafana Tempo", func() {
 	})
 
 	Context("through its API", func() {
-		var queryFrontendIp, serviceName string
+		var frontendHost, serviceName string
 		var hasIP bool
 		var err error
 
@@ -40,12 +40,12 @@ var _ = Describe("Grafana Tempo", func() {
 			}
 			Expect(hasIP).To(BeTrue())
 
-			queryFrontendSvc, err := c.Services(*namespace).Get(ctx, serviceName, metav1.GetOptions{})
+			frontendSvc, err := c.Services(*namespace).Get(ctx, serviceName, metav1.GetOptions{})
 			if err != nil {
 				panic(fmt.Sprintf("There was an error retrieving the Query Frontend service: %q", err))
 			}
 
-			queryFrontendIp = returnValidHost(queryFrontendSvc.Status.LoadBalancer.Ingress[0])
+			frontendHost = returnValidHost(frontendSvc.Status.LoadBalancer.Ingress[0])
 		})
 
 		It("allows to access registered tracing spans", func() {
@@ -60,7 +60,7 @@ var _ = Describe("Grafana Tempo", func() {
 			route = findFirstPattern(containerLogs, `route (\/\w+)`, 1)
 			Expect(route).NotTo(BeEmpty())
 
-			responseBody := getResponseBodyOrDie(ctx, fmt.Sprintf("http://%s:%s/api/traces/%s", queryFrontendIp, *apiPort, traceID))
+			responseBody := getResponseBodyOrDie(ctx, fmt.Sprintf("http://%s:%s/api/traces/%s", frontendHost, *apiPort, traceID))
 			Expect(containsString(responseBody, route)).To(BeTrue())
 		})
 	})
