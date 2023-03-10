@@ -64,12 +64,7 @@ spec:
       hostNetwork: {{ .Values.envoy.hostNetwork }}
       dnsPolicy: {{ .Values.envoy.dnsPolicy }}
       {{- if .Values.envoy.podSecurityContext.enabled }}
-      securityContext:
-        fsGroup: {{ .Values.envoy.podSecurityContext.fsGroup }}
-        {{- if .Values.envoy.podSecurityContext.sysctls }}
-        sysctls:
-          {{- toYaml .Values.envoy.podSecurityContext.sysctls | nindent 8 }}
-        {{- end }}
+      securityContext: {{- omit .Values.envoy.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       containers:
         {{- if .Values.envoy.shutdownManager.enabled }}
@@ -138,8 +133,7 @@ spec:
           image: {{ include "common.images.image" ( dict "imageRoot" .Values.envoy.image "global" .Values.global ) }}
           imagePullPolicy: {{ .Values.envoy.image.pullPolicy }}
           {{- if .Values.envoy.containerSecurityContext.enabled }}
-          securityContext:
-            runAsUser: {{ .Values.envoy.containerSecurityContext.runAsUser }}
+          securityContext: {{- omit .Values.envoy.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           env:
             - name: CONTOUR_NAMESPACE
