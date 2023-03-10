@@ -1,0 +1,68 @@
+{
+  "phases": {
+    "package": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/multus-cni"
+        }
+      },
+      "actions": [
+        {
+          "action_id": "helm-package"
+        },
+        {
+          "action_id": "helm-lint"
+        }
+      ]
+    },
+    "verify": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/multus-cni"
+        },
+        "runtime_parameters": "aG9zdENOSUJpbkRpcjogL2hvbWUva3ViZXJuZXRlcy9iaW4KQ05JTW91bnRQYXRoOiAvYml0bmFtaS93aGVyZWFib3V0cy9ob3N0CnNlcnZpY2VBY2NvdW50OgogIGNyZWF0ZTogdHJ1ZQogIGF1dG9tb3VudFNlcnZpY2VBY2NvdW50VG9rZW46IHRydWUKY29udGFpbmVyU2VjdXJpdHlDb250ZXh0OgogIGVuYWJsZWQ6IHRydWUKICBydW5Bc1VzZXI6IDAKcmJhYzoKICBjcmVhdGU6IHRydWUK",
+        "target_platform": {
+          "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
+          "size": {
+            "name": "S4"
+          }
+        }
+      },
+      "actions": [
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib/multus-cni/goss"
+            },
+            "remote": {
+              "pod": {
+                "workload": "ds-multus-cni"
+              }
+            },
+            "vars_file": "vars.yaml"
+          }
+        }
+      ]
+    },
+    "publish": {
+      "actions": [
+        {
+          "action_id": "helm-publish",
+          "params": {
+            "repository": {
+              "kind": "S3",
+              "url": "{VIB_ENV_S3_URL}",
+              "authn": {
+                "access_key_id": "{VIB_ENV_S3_ACCESS_KEY_ID}",
+                "secret_access_key": "{VIB_ENV_S3_SECRET_ACCESS_KEY}"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}
