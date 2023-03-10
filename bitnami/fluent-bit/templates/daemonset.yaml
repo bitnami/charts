@@ -32,7 +32,8 @@ spec:
         {{- end }}
     spec:
       {{- include "fluentBit.imagePullSecrets" . | nindent 6 }}
-      hostNetwork: true
+      hostNetwork: false
+      dnsPolicy: ClusterFirstWithHostNet
       serviceAccountName: {{ include "fluentBit.serviceAccountName" . }}
       {{- if .Values.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
