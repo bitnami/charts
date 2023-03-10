@@ -26,19 +26,17 @@ var _ = Describe("Grafana Tempo", func() {
 
 	Context("through its API", func() {
 		var frontendHost, serviceName string
-		var hasIP bool
-		var err error
 
 		BeforeEach(func() {
 			serviceName = "grafana-tempo-query-frontend"
 
-			hasIP, err = retry("isServiceReady", 6, 20*time.Second, func() (bool, error) {
+			isReady, err := retry("isServiceReady", 6, 20*time.Second, func() (bool, error) {
 				return isServiceReady(ctx, c, serviceName)
 			})
 			if err != nil {
 				panic(fmt.Sprintf("There was an error checking whether the testing service had an IP assigned: %q", err))
 			}
-			Expect(hasIP).To(BeTrue())
+			Expect(isReady).To(BeTrue())
 
 			frontendSvc, err := c.Services(*namespace).Get(ctx, serviceName, metav1.GetOptions{})
 			if err != nil {
