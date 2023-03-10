@@ -737,7 +737,7 @@ service:
   ## @param service.allocateLoadBalancerNodePorts Wheter to allocate node ports when service type is LoadBalancer
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#load-balancer-nodeport-allocation
   ##
-  allocateLoadBalancerNodePorts: true 
+  allocateLoadBalancerNodePorts: true
   ## @param service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
   ##
   extraPorts: []
@@ -759,6 +759,12 @@ service:
   ##     timeoutSeconds: 300
   ##
   sessionAffinityConfig: {}
+  ## Headless service properties
+  ##
+  headless:
+    ## @param service.headless.annotations Annotations for the headless service.
+    ##
+    annotations: {}
 ## External Access to MongoDB(&reg;) nodes configuration
 ##
 externalAccess:
@@ -855,7 +861,7 @@ externalAccess:
     ## @param externalAccess.service.allocateLoadBalancerNodePorts Wheter to allocate node ports when service type is LoadBalancer
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#load-balancer-nodeport-allocation
     ##
-    allocateLoadBalancerNodePorts: true 
+    allocateLoadBalancerNodePorts: true
     ## @param externalAccess.service.externalTrafficPolicy MongoDB(&reg;) service external traffic policy
     ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
@@ -930,7 +936,7 @@ externalAccess:
       ## @param externalAccess.hidden.service.allocateLoadBalancerNodePorts Wheter to allocate node ports when service type is LoadBalancer
       ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#load-balancer-nodeport-allocation
       ##
-      allocateLoadBalancerNodePorts: true 
+      allocateLoadBalancerNodePorts: true
       ## @param externalAccess.hidden.service.externalTrafficPolicy MongoDB(&reg;) service external traffic policy
       ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
       ##
@@ -1510,6 +1516,12 @@ arbiter:
     ## @param arbiter.service.annotations Provide any additional annotations that may be required
     ##
     annotations: {}
+    ## Headless service properties
+    ##
+    headless:
+      ## @param arbiter.service.headless.annotations Annotations for the headless service.
+      ##
+      annotations: {}
 
 ## @section Hidden Node parameters
 ##
@@ -1876,6 +1888,12 @@ hidden:
     ## @param hidden.service.annotations Provide any additional annotations that may be required
     ##
     annotations: {}
+    ## Headless service properties
+    ##
+    headless:
+      ## @param hidden.service.headless.annotations Annotations for the headless service.
+      ##
+      annotations: {}
 
 ## @section Metrics parameters
 ##
