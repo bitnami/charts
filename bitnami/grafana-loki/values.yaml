@@ -2388,6 +2388,12 @@ queryFrontend:
     ## @param queryFrontend.service.extraPorts Extra ports to expose in the queryFrontend service
     ##
     extraPorts: []
+    ## Headless service properties
+    ##
+    headless:
+      ## @param queryFrontend.service.headless.annotations Annotations for the headless service.
+      ##
+      annotations: {}
 ## @section Query Scheduler Deployment Parameters
 ##
 queryScheduler:
