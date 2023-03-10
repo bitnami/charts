@@ -645,6 +645,12 @@ alertmanager:
     ## @param alertmanager.service.extraPorts Extra ports to expose in the Alertmanager service
     ##
     extraPorts: []
+    ## Headless service properties
+    ##
+    headless:
+      ## @param alertmanager.service.headless.annotations Annotations for the headless service.
+      ##
+      annotations: {}
   ## Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
   ## @param alertmanager.pdb.create Enable/disable a Pod Disruption Budget creation
@@ -1270,6 +1276,12 @@ distributor:
     ## @param distributor.service.extraPorts Extra ports to expose in the Distributor service
     ##
     extraPorts: []
+    ## Headless service properties
+    ##
+    headless:
+      ## @param distributor.service.headless.annotations Annotations for the headless service.
+      ##
+      annotations: {}
   ## Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
   ## @param distributor.pdb.create Enable/disable a Pod Disruption Budget creation
@@ -2010,6 +2022,12 @@ ingester:
     ## @param ingester.service.extraPorts Extra ports to expose in the Ingester service
     ##
     extraPorts: []
+    ## Headless service properties
+    ##
+    headless:
+      ## @param ingester.service.headless.annotations Annotations for the headless service.
+      ##
+      annotations: {}
   ## Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
   ## @param ingester.pdb.create Enable/disable a Pod Disruption Budget creation
@@ -2297,6 +2315,12 @@ overridesExporter:
     ## @param overridesExporter.service.extraPorts Extra ports to expose in the Overrides Export service
     ##
     extraPorts: []
+    ## Headless service properties
+    ##
+    headless:
+      ## @param overridesExporter.service.headless.annotations Annotations for the headless service.
+      ##
+      annotations: {}
   ## Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
   ## @param overridesExporter.pdb.create Enable/disable a Pod Disruption Budget creation
@@ -2581,6 +2605,12 @@ querier:
     ## @param querier.service.extraPorts Extra ports to expose in the Querier service
     ##
     extraPorts: []
+    ## Headless service properties
+    ##
+    headless:
+      ## @param querier.service.headless.annotations Annotations for the headless service.
+      ##
+      annotations: {}
   ## Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
   ## @param querier.pdb.create Enable/disable a Pod Disruption Budget creation
@@ -2865,6 +2895,12 @@ queryFrontend:
     ## @param queryFrontend.service.extraPorts Extra ports to expose in the Query Frontend service
     ##
     extraPorts: []
+    ## Headless service properties
+    ##
+    headless:
+      ## @param queryFrontend.service.headless.annotations Annotations for the headless service.
+      ##
+      annotations: {}
   ## Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
   ## @param queryFrontend.pdb.create Enable/disable a Pod Disruption Budget creation
@@ -3152,6 +3188,12 @@ queryScheduler:
     ## @param queryScheduler.service.extraPorts Extra ports to expose in the Query Scheduler service
     ##
     extraPorts: []
+    ## Headless service properties
+    ##
+    headless:
+      ## @param queryScheduler.service.headless.annotations Annotations for the headless service.
+      ##
+      annotations: {}
   ## Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
   ## @param queryScheduler.pdb.create Enable/disable a Pod Disruption Budget creation
@@ -3480,6 +3522,12 @@ storeGateway:
     ## @param storeGateway.service.extraPorts Extra ports to expose in the Store Gateway service
     ##
     extraPorts: []
+    ## Headless service properties
+    ##
+    headless:
+      ## @param storeGateway.service.headless.annotations Annotations for the headless service.
+      ##
+      annotations: {}
   ## Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
   ## @param storeGateway.pdb.create Enable/disable a Pod Disruption Budget creation
