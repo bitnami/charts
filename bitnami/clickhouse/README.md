@@ -229,6 +229,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.extraPorts`                              | Extra ports to expose in ClickHouse service (normally used with the `sidecars` value)                                            | `[]`                     |
 | `service.sessionAffinity`                         | Control where client requests go, to the same pod or round-robin                                                                 | `None`                   |
 | `service.sessionAffinityConfig`                   | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
+| `service.headless.annotations`                    | Annotations for the headless service.                                                                                            | `{}`                     |
 | `externalAccess.enabled`                          | Enable Kubernetes external cluster access to ClickHouse                                                                          | `false`                  |
 | `externalAccess.service.type`                     | Kubernetes Service type for external access. It can be NodePort, LoadBalancer or ClusterIP                                       | `LoadBalancer`           |
 | `externalAccess.service.ports.http`               | ClickHouse service HTTP port                                                                                                     | `80`                     |
