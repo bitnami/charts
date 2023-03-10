@@ -562,6 +562,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `service.sessionAffinityConfig`                       | Additional settings for the sessionAffinity                                                   | `{}`         |
 | `service.annotations`                                 | Provide any additional annotations both for PostgreSQL and Pgpool services                    | `{}`         |
 | `service.serviceLabels`                               | Labels for PostgreSQL service                                                                 | `{}`         |
+| `service.headless.annotations`                        | Annotations for the headless service.                                                         | `{}`         |
 | `networkPolicy.enabled`                               | Enable NetworkPolicy                                                                          | `false`      |
 | `networkPolicy.allowExternal`                         | Don't require client label for connections                                                    | `true`       |
 | `networkPolicy.egressRules.denyConnectionsToExternal` | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53) | `false`      |
