@@ -22,7 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/multus-cni"
         },
-        "runtime_parameters": "aG9zdENOSUJpbkRpcjogL2hvbWUva3ViZXJuZXRlcy9iaW4KQ05JTW91bnRQYXRoOiAvYml0bmFtaS93aGVyZWFib3V0cy9ob3N0CnNlcnZpY2VBY2NvdW50OgogIGNyZWF0ZTogdHJ1ZQogIGF1dG9tb3VudFNlcnZpY2VBY2NvdW50VG9rZW46IHRydWUKY29udGFpbmVyU2VjdXJpdHlDb250ZXh0OgogIGVuYWJsZWQ6IHRydWUKICBydW5Bc1VzZXI6IDAKcmJhYzoKICBjcmVhdGU6IHRydWUK",
+        "runtime_parameters": "aG9zdENOSUJpbkRpcjogL2hvbWUva3ViZXJuZXRlcy9iaW4KQ05JTW91bnRQYXRoOiAvYml0bmFtaS9tdWx0dXMtY25pL2hvc3QKc2VydmljZUFjY291bnQ6CiAgY3JlYXRlOiB0cnVlCiAgYXV0b21vdW50U2VydmljZUFjY291bnRUb2tlbjogdHJ1ZQpjb250YWluZXJTZWN1cml0eUNvbnRleHQ6CiAgZW5hYmxlZDogdHJ1ZQogIHJ1bkFzVXNlcjogMApyYmFjOgogIGNyZWF0ZTogdHJ1ZQo=",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
