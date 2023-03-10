@@ -143,6 +143,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.extraPorts`                                 | Extra ports to expose (normally used with the `sidecar` value)                                                                                            | `[]`                      |
 | `service.sessionAffinity`                            | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                                                      | `None`                    |
 | `service.sessionAffinityConfig`                      | Additional settings for the sessionAffinity                                                                                                               | `{}`                      |
+| `service.headless.annotations`                       | Annotations for the headless service.                                                                                                                     | `{}`                      |
 
 ### Config Server parameters
 
