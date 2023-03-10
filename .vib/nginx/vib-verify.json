@@ -46,7 +46,9 @@
             },
             "vars_file": "vars.yaml",
             "remote": {
-              "workload": "deploy-nginx"
+              "pod": {
+                "workload": "deploy-nginx"
+              }
             }
           }
         },

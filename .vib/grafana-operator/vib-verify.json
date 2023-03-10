@@ -45,7 +45,9 @@
               "path": "/.vib/grafana-operator/goss"
             },
             "remote": {
-              "workload": "deploy-grafana-operator"
+              "pod": {
+                "workload": "deploy-grafana-operator"
+              }
             },
             "vars_file": "vars.yaml"
           }

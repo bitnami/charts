@@ -45,7 +45,9 @@
               "path": "/.vib/jupyterhub/goss"
             },
             "remote": {
-              "workload": "deploy-jupyterhub-hub"
+              "pod": {
+                "workload": "deploy-jupyterhub-hub"
+              }
             },
             "vars_file": "vars.yaml"
           }

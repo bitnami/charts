@@ -45,7 +45,9 @@
               "path": "/.vib/wildfly/goss"
             },
             "remote": {
-              "workload": "deploy-wildfly"
+              "pod": {
+                "workload": "deploy-wildfly"
+              }
             },
             "vars_file": "vars.yaml"
           }

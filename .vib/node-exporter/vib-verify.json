@@ -45,7 +45,9 @@
               "path": "/.vib/node-exporter/goss"
             },
             "remote": {
-              "workload": "ds-node-exporter"
+              "pod": {
+                "workload": "ds-node-exporter"
+              }
             },
             "vars_file": "vars.yaml"
           }

@@ -45,7 +45,9 @@
               "path": "/.vib/influxdb/goss"
             },
             "remote": {
-              "workload": "deploy-influxdb"
+              "pod": {
+                "workload": "deploy-influxdb"
+              }
             },
             "vars_file": "vars.yaml"
           }

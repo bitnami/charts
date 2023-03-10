@@ -45,7 +45,9 @@
               "path": "/.vib/memcached/goss"
             },
             "remote": {
-              "workload": "deploy-memcached"
+              "pod": {
+                "workload": "deploy-memcached"
+              }
             },
             "vars_file": "vars.yaml"
           }

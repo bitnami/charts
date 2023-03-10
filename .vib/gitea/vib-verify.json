@@ -46,7 +46,9 @@
               "path": "/.vib/gitea/goss"
             },
             "remote": {
-              "workload": "deploy-gitea"
+              "pod": {
+                "workload": "deploy-gitea"
+              }
             }
           }
         },

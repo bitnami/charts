@@ -44,7 +44,9 @@
               "path": "/.vib/haproxy/goss"
             },
             "remote": {
-              "workload": "deploy-haproxy"
+              "pod": {
+                "workload": "deploy-haproxy"
+              }
             },
             "vars_file": "vars.yaml"
           }

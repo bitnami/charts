@@ -124,6 +124,8 @@ rules:
     resourceNames:
       - {{ include "argo-workflows.controller.database.username.secret" . }}
       - {{ include "argo-workflows.controller.database.password.secret" . }}
+      {{/* for HTTP templates */}}
+      - argo-workflows-agent-ca-certificates
     verbs:
       - get
   {{- end }}

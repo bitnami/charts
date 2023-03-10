@@ -1,0 +1,55 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "supabase.rest.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/part-of: supabase
+    app.kubernetes.io/component: rest
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if or .Values.rest.service.annotations .Values.commonAnnotations }}
+  annotations:
+    {{- if .Values.rest.service.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.rest.service.annotations "context" $) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+spec:
+  type: {{ .Values.rest.service.type }}
+  {{- if and .Values.rest.service.clusterIP (eq .Values.rest.service.type "ClusterIP") }}
+  clusterIP: {{ .Values.rest.service.clusterIP }}
+  {{- end }}
+  {{- if .Values.rest.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.rest.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.rest.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.rest.service.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if or (eq .Values.rest.service.type "LoadBalancer") (eq .Values.rest.service.type "NodePort") }}
+  externalTrafficPolicy: {{ .Values.rest.service.externalTrafficPolicy | quote }}
+  {{- end }}
+  {{- if and (eq .Values.rest.service.type "LoadBalancer") (not (empty .Values.rest.service.loadBalancerSourceRanges)) }}
+  loadBalancerSourceRanges: {{ .Values.rest.service.loadBalancerSourceRanges }}
+  {{- end }}
+  {{- if and (eq .Values.rest.service.type "LoadBalancer") (not (empty .Values.rest.service.loadBalancerIP)) }}
+  loadBalancerIP: {{ .Values.rest.service.loadBalancerIP }}
+  {{- end }}
+  ports:
+    - name: http
+      port: {{ .Values.rest.service.ports.http }}
+      targetPort: http
+      protocol: TCP
+      {{- if and (or (eq .Values.rest.service.type "NodePort") (eq .Values.rest.service.type "LoadBalancer")) (not (empty .Values.rest.service.nodePorts.http)) }}
+      nodePort: {{ .Values.rest.service.nodePorts.http }}
+      {{- else if eq .Values.rest.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    {{- if .Values.rest.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.rest.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
+    app.kubernetes.io/component: rest

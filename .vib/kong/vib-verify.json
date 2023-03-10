@@ -44,7 +44,9 @@
               "path": "/.vib/kong/goss"
             },
             "remote": {
-              "workload": "deploy-kong"
+              "pod": {
+                "workload": "deploy-kong"
+              }
             },
             "vars_file": "vars.yaml"
           }

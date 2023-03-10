@@ -45,7 +45,9 @@
               "path": "/.vib/jenkins/goss"
             },
             "remote": {
-              "workload": "deploy-jenkins"
+              "pod": {
+                "workload": "deploy-jenkins"
+              }
             },
             "vars_file": "vars.yaml"
           }

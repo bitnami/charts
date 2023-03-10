@@ -1,9 +1,9 @@
-# https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.57.0/example/prometheus-operator-crd/monitoring.coreos.com_prometheusrules.yaml
+# https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.63.0/example/prometheus-operator-crd/monitoring.coreos.com_prometheusrules.yaml
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.8.0
+    controller-gen.kubebuilder.io/version: v0.11.1
   creationTimestamp: null
   name: prometheusrules.monitoring.coreos.com
 spec:
@@ -43,18 +43,25 @@ spec:
               groups:
                 description: Content of Prometheus rule file
                 items:
-                  description: 'RuleGroup is a list of sequentially evaluated recording
-                    and alerting rules. Note: PartialResponseStrategy is only used
-                    by ThanosRuler and will be ignored by Prometheus instances.  Valid
-                    values for this field are ''warn'' or ''abort''.  More info: https://github.com/thanos-io/thanos/blob/main/docs/components/rule.md#partial-response'
+                  description: RuleGroup is a list of sequentially evaluated recording
+                    and alerting rules.
                   properties:
                     interval:
+                      description: Interval determines how often rules in the group
+                        are evaluated.
+                      pattern: ^(0|(([0-9]+)y)?(([0-9]+)w)?(([0-9]+)d)?(([0-9]+)h)?(([0-9]+)m)?(([0-9]+)s)?(([0-9]+)ms)?)$
                       type: string
                     name:
+                      description: Name of the rule group.
+                      minLength: 1
                       type: string
                     partial_response_strategy:
+                      description: 'PartialResponseStrategy is only used by ThanosRuler
+                        and will be ignored by Prometheus instances. More info: https://github.com/thanos-io/thanos/blob/main/docs/components/rule.md#partial-response'
+                      pattern: ^(?i)(abort|warn)?$
                       type: string
                     rules:
+                      description: List of alerting and recording rules.
                       items:
                         description: 'Rule describes an alerting or recording rule
                           See Prometheus documentation: [alerting](https://www.prometheus.io/docs/prometheus/latest/configuration/alerting_rules/)
@@ -62,23 +69,35 @@ spec:
                           rule'
                         properties:
                           alert:
+                            description: Name of the alert. Must be a valid label
+                              value. Only one of `record` and `alert` must be set.
                             type: string
                           annotations:
                             additionalProperties:
                               type: string
+                            description: Annotations to add to each alert. Only valid
+                              for alerting rules.
                             type: object
                           expr:
                             anyOf:
                             - type: integer
                             - type: string
+                            description: PromQL expression to evaluate.
                             x-kubernetes-int-or-string: true
                           for:
+                            description: Alerts are considered firing once they have
+                              been returned for this long.
+                            pattern: ^(0|(([0-9]+)y)?(([0-9]+)w)?(([0-9]+)d)?(([0-9]+)h)?(([0-9]+)m)?(([0-9]+)s)?(([0-9]+)ms)?)$
                             type: string
                           labels:
                             additionalProperties:
                               type: string
+                            description: Labels to add or overwrite.
                             type: object
                           record:
+                            description: Name of the time series to output to. Must
+                              be a valid metric name. Only one of `record` and `alert`
+                              must be set.
                             type: string
                         required:
                         - expr
@@ -89,15 +108,12 @@ spec:
                   - rules
                   type: object
                 type: array
+                x-kubernetes-list-map-keys:
+                - name
+                x-kubernetes-list-type: map
             type: object
         required:
         - spec
         type: object
     served: true
     storage: true
-status:
-  acceptedNames:
-    kind: ""
-    plural: ""
-  conditions: []
-  storedVersions: []

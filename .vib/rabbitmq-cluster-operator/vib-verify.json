@@ -45,7 +45,9 @@
               "path": "/.vib/rabbitmq-cluster-operator/goss"
             },
             "remote": {
-              "workload": "sts-ve-testing-server"
+              "pod": {
+                "workload": "sts-ve-testing-server"
+              }
             },
             "vars_file": "vars.yaml"
           }

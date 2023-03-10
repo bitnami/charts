@@ -45,7 +45,9 @@
               "path": "/.vib/oauth2-proxy/goss"
             },
             "remote": {
-              "workload": "deploy-oauth2-proxy"
+              "pod": {
+                "workload": "deploy-oauth2-proxy"
+              }
             },
             "vars_file": "vars.yaml"
           }

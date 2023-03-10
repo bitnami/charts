@@ -81,7 +81,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------- | ----------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`                       | etcd image registry                                                                                         | `docker.io`           |
 | `image.repository`                     | etcd image name                                                                                             | `bitnami/etcd`        |
-| `image.tag`                            | etcd image tag                                                                                              | `3.5.7-debian-11-r10` |
+| `image.tag`                            | etcd image tag                                                                                              | `3.5.7-debian-11-r14` |
 | `image.digest`                         | etcd image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag        | `""`                  |
 | `image.pullPolicy`                     | etcd image pull policy                                                                                      | `IfNotPresent`        |
 | `image.pullSecrets`                    | etcd image pull secrets                                                                                     | `[]`                  |
@@ -218,6 +218,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.enabled`      | If true, use a Persistent Volume Claim. If false, use emptyDir. | `true`              |
 | `persistence.storageClass` | Persistent Volume Storage Class                                 | `""`                |
 | `persistence.annotations`  | Annotations for the PVC                                         | `{}`                |
+| `persistence.labels`       | Labels for the PVC                                              | `{}`                |
 | `persistence.accessModes`  | Persistent Volume Access Modes                                  | `["ReadWriteOnce"]` |
 | `persistence.size`         | PVC Storage Request for etcd data volume                        | `8Gi`               |
 | `persistence.selector`     | Selector to match an existing Persistent Volume                 | `{}`                |
@@ -229,7 +230,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup`              | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                                      | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                       | `11-debian-11-r86`      |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                       | `11-debian-11-r90`      |
 | `volumePermissions.image.digest`       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                  | `[]`                    |
@@ -303,6 +304,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `pdb.create`         | Enable/disable a Pod Disruption Budget creation                | `true` |
 | `pdb.minAvailable`   | Minimum number/percentage of pods that should remain scheduled | `51%`  |
 | `pdb.maxUnavailable` | Maximum number/percentage of pods that may be made unavailable | `""`   |
+
+Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
 helm install my-release \

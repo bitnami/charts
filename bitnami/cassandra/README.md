@@ -81,7 +81,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------------- | ---------------------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`              | Cassandra image registry                                                                                               | `docker.io`           |
 | `image.repository`            | Cassandra image repository                                                                                             | `bitnami/cassandra`   |
-| `image.tag`                   | Cassandra image tag (immutable tags are recommended)                                                                   | `4.1.0-debian-11-r21` |
+| `image.tag`                   | Cassandra image tag (immutable tags are recommended)                                                                   | `4.1.0-debian-11-r25` |
 | `image.digest`                | Cassandra image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag              | `""`                  |
 | `image.pullPolicy`            | image pull policy                                                                                                      | `IfNotPresent`        |
 | `image.pullSecrets`           | Cassandra image pull secrets                                                                                           | `[]`                  |
@@ -206,6 +206,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.annotations`              | Provide any additional annotations which may be required.                     | `{}`        |
 | `service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"          | `None`      |
 | `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                   | `{}`        |
+| `service.headless.annotations`     | Annotations for the headless service.                                         | `{}`        |
 | `networkPolicy.enabled`            | Specifies whether a NetworkPolicy should be created                           | `false`     |
 | `networkPolicy.allowExternal`      | Don't require client label for connections                                    | `true`      |
 
@@ -230,7 +231,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                   | Enable init container that changes the owner and group of the persistent volume                                       | `false`                 |
 | `volumePermissions.image.registry`            | Init container volume image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`          | Init container volume image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Init container volume image tag (immutable tags are recommended)                                                      | `11-debian-11-r85`      |
+| `volumePermissions.image.tag`                 | Init container volume image tag (immutable tags are recommended)                                                      | `11-debian-11-r90`      |
 | `volumePermissions.image.digest`              | Init container volume image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`          | Init container volume pull policy                                                                                     | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`         | Specify docker-registry secret names as an array                                                                      | `[]`                    |
@@ -245,7 +246,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                            | Start a side-car prometheus exporter                                                                               | `false`                      |
 | `metrics.image.registry`                     | Cassandra exporter image registry                                                                                  | `docker.io`                  |
 | `metrics.image.repository`                   | Cassandra exporter image name                                                                                      | `bitnami/cassandra-exporter` |
-| `metrics.image.tag`                          | Cassandra exporter image tag                                                                                       | `2.3.8-debian-11-r90`        |
+| `metrics.image.tag`                          | Cassandra exporter image tag                                                                                       | `2.3.8-debian-11-r95`        |
 | `metrics.image.digest`                       | Cassandra exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                         |
 | `metrics.image.pullPolicy`                   | image pull policy                                                                                                  | `IfNotPresent`               |
 | `metrics.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                   | `[]`                         |
@@ -289,6 +290,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `tls.resources.requests`      | The requested resources for the TLS init container                                            | `{}`    |
 | `tls.certificatesSecret`      | Secret with the TLS certificates.                                                             | `""`    |
 | `tls.tlsEncryptionSecretName` | Secret with the encryption of the TLS certificates                                            | `""`    |
+
+The above parameters map to the env variables defined in [bitnami/cassandra](https://github.com/bitnami/containers/tree/main/bitnami/cassandra). For more information please refer to the [bitnami/cassandra](https://github.com/bitnami/containers/tree/main/bitnami/cassandra) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

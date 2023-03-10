@@ -257,9 +257,13 @@ spec:
           {{- if .Values.commonAnnotations }}
           {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 10 }}
           {{- end }}
-        {{- if .Values.commonLabels }}
-        labels: {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 10 }}
-        {{- end }}
+        labels:
+          {{- if .Values.persistence.labels }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.persistence.labels "context" $) | nindent 10 }}
+          {{- end }}
+          {{- if .Values.commonLabels }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 10 }}
+          {{- end }}
       spec:
         accessModes:
         {{- range .Values.persistence.accessModes }}

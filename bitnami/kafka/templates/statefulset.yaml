@@ -4,6 +4,7 @@
 {{- $clusterDomain := .Values.clusterDomain }}
 {{- $interBrokerProtocol := include "kafka.listenerType" (dict "protocol" .Values.auth.interBrokerProtocol) -}}
 {{- $clientProtocol := include "kafka.listenerType" (dict "protocol" .Values.auth.clientProtocol) -}}
+{{- $controllerProtocol := include "kafka.listenerType" (dict "protocol" .Values.auth.controllerProtocol) -}}
 {{- $externalClientProtocol := include "kafka.listenerType" (dict "protocol" (include "kafka.externalClientProtocol" . )) -}}
 apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
@@ -187,9 +188,17 @@ spec:
               {{- if .Values.listenerSecurityProtocolMap }}
               value: {{ .Values.listenerSecurityProtocolMap | quote }}
               {{- else if .Values.externalAccess.enabled }}
+                {{- if .Values.kraft.enabled }}
+              value: "INTERNAL:{{ $interBrokerProtocol }},CLIENT:{{ $clientProtocol }},CONTROLLER:{{ $controllerProtocol }},EXTERNAL:{{ $externalClientProtocol }}"
+                {{- else }}
               value: "INTERNAL:{{ $interBrokerProtocol }},CLIENT:{{ $clientProtocol }},EXTERNAL:{{ $externalClientProtocol }}"
+                {{- end}}
               {{- else }}
+                {{- if .Values.kraft.enabled }}
+              value: "INTERNAL:{{ $interBrokerProtocol }},CLIENT:{{ $clientProtocol }},CONTROLLER:{{ $controllerProtocol }}"
+                {{- else }}
               value: "INTERNAL:{{ $interBrokerProtocol }},CLIENT:{{ $clientProtocol }}"
+                {{- end }}
               {{- end }}
             {{- if or ($clientProtocol | regexFind "SASL") ($externalClientProtocol | regexFind "SASL") ($interBrokerProtocol | regexFind "SASL") .Values.auth.sasl.jaas.zookeeperUser }}
             - name: KAFKA_CFG_SASL_ENABLED_MECHANISMS
@@ -201,9 +210,17 @@ spec:
               {{- if .Values.listeners }}
               value: {{ join "," .Values.listeners }}
               {{- else if .Values.externalAccess.enabled }}
+                {{- if .Values.kraft.enabled }}
+              value: "INTERNAL://:{{ .Values.containerPorts.internal }},CLIENT://:{{ .Values.containerPorts.client }},CONTROLLER://:{{ .Values.containerPorts.controller }},EXTERNAL://:{{ .Values.containerPorts.external }}"
+                {{- else }}
               value: "INTERNAL://:{{ .Values.containerPorts.internal }},CLIENT://:{{ .Values.containerPorts.client }},EXTERNAL://:{{ .Values.containerPorts.external }}"
+                {{- end }}
               {{- else }}
+                {{- if .Values.kraft.enabled }}
+              value: "INTERNAL://:{{ .Values.containerPorts.internal }},CLIENT://:{{ .Values.containerPorts.client }},CONTROLLER://:{{ .Values.containerPorts.controller }}"
+                {{- else }}
               value: "INTERNAL://:{{ .Values.containerPorts.internal }},CLIENT://:{{ .Values.containerPorts.client }}"
+                {{- end }}
               {{- end }}
             {{- if .Values.externalAccess.enabled }}
             {{- if .Values.externalAccess.autoDiscovery.enabled }}
@@ -354,6 +371,20 @@ spec:
               value: {{ .Values.allowEveryoneIfNoAclFound | quote }}
             - name: KAFKA_CFG_SUPER_USERS
               value: {{ .Values.superUsers | quote }}
+            {{- if .Values.kraft.enabled }}
+            - name: KAFKA_KRAFT_CLUSTER_ID
+              value: {{ .Values.kraft.clusterId | quote }}  
+            - name: KAFKA_CFG_PROCESS_ROLES
+              value: {{ .Values.kraft.processRoles | quote }}  
+            - name: KAFKA_CFG_CONTROLLER_LISTENER_NAMES
+              value: {{ .Values.kraft.controllerListenerNames | quote }}  
+            - name: KAFKA_ENABLE_KRAFT
+              value: "true"
+              {{- if .Values.kraft.controllerQuorumVoters }}
+            - name: KAFKA_CFG_CONTROLLER_QUORUM_VOTERS
+              value: {{ .Values.kraft.controllerQuorumVoters}}
+              {{- end }}
+            {{- end }}
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
@@ -376,6 +407,10 @@ spec:
             {{- if .Values.externalAccess.enabled }}
             - name: kafka-external
               containerPort: {{ .Values.containerPorts.external }}
+            {{- end }}
+            {{- if and .Values.kraft.enabled (contains "controller" .Values.kraft.processRoles) }}
+            - name: kafka-ctlr
+              containerPort: {{ .Values.containerPorts.controller }}
             {{- end }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.customLivenessProbe }}

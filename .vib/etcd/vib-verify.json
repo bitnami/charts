@@ -45,7 +45,9 @@
               "path": "/.vib/etcd/goss"
             },
             "remote": {
-              "workload": "sts-etcd"
+              "pod": {
+                "workload": "sts-etcd"
+              }
             },
             "vars_file": "vars.yaml"
           }

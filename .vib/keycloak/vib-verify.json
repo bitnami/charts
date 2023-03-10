@@ -45,7 +45,9 @@
               "path": "/.vib/keycloak/goss"
             },
             "remote": {
-              "workload": "sts-keycloak"
+              "pod": {
+                "workload": "sts-keycloak"
+              }
             },
             "vars_file": "vars.yaml"
           }

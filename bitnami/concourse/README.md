@@ -6,8 +6,6 @@ Concourse is an automation system written in Go. It is most commonly used for CI
 
 [Overview of Concourse](https://concourse-ci.org/)
 
-
-
 ## TL;DR
 
 ```console
@@ -84,7 +82,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- | -------------------- |
 | `image.registry`                | image registry                                                                                                                         | `docker.io`          |
 | `image.repository`              | image repository                                                                                                                       | `bitnami/concourse`  |
-| `image.tag`                     | image tag (immutable tags are recommended)                                                                                             | `7.9.1-debian-11-r3` |
+| `image.tag`                     | image tag (immutable tags are recommended)                                                                                             | `7.9.1-debian-11-r7` |
 | `image.digest`                  | image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                        | `""`                 |
 | `image.pullPolicy`              | image pull policy                                                                                                                      | `IfNotPresent`       |
 | `image.pullSecrets`             | image pull secrets                                                                                                                     | `[]`                 |
@@ -358,7 +356,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner and group of the persistent volume                                                   | `false`                 |
 | `volumePermissions.image.registry`                     | Init container volume-permissions image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`                   | Init container volume-permissions image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r85`      |
+| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r90`      |
 | `volumePermissions.image.digest`                       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Init container volume-permissions image pull secrets                                                                              | `[]`                    |
@@ -390,6 +388,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.database`                  | Concourse database name                                                 | `bitnami_concourse` |
 | `externalDatabase.existingSecret`            | Name of an existing secret resource containing the database credentials | `""`                |
 | `externalDatabase.existingSecretPasswordKey` | Name of an existing secret key containing the database credentials      | `""`                |
+
+See <https://github.com/bitnami-labs/readme-generator-for-helm> to create the table.
 
 The above parameters map to the env variables defined in [bitnami/concourse](https://github.com/bitnami/containers/tree/main/bitnami/concourse). For more information please refer to the [bitnami/concourse](https://github.com/bitnami/containers/tree/main/bitnami/concourse) image documentation.
 

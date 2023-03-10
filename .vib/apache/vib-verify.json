@@ -45,7 +45,9 @@
               "path": "/.vib/apache/goss"
             },
             "remote": {
-              "workload": "deploy-apache"
+              "pod": {
+                "workload": "deploy-apache"
+              }
             },
             "vars_file": "vars.yaml"
           }

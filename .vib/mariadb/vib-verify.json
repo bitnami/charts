@@ -46,7 +46,9 @@
             },
             "vars_file": "vars.yaml",
             "remote": {
-              "workload": "sts-mariadb-primary"
+              "pod": {
+                "workload": "sts-mariadb-primary"
+              }
             }
           }
         }

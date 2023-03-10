@@ -45,7 +45,9 @@
               "path": "/.vib/logstash/goss"
             },
             "remote": {
-              "workload": "sts-logstash"
+              "pod": {
+                "workload": "sts-logstash"
+              }
             },
             "vars_file": "vars.yaml"
           }

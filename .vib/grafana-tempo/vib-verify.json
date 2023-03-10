@@ -45,7 +45,9 @@
               "path": "/.vib/grafana-tempo/goss"
             },
             "remote": {
-              "workload": "deploy-grafana-tempo-compactor"
+              "pod": {
+                "workload": "deploy-grafana-tempo-compactor"
+              }
             },
             "vars_file": "vars.yaml"
           }

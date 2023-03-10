@@ -38,7 +38,9 @@
               "path": "/.vib/pytorch/goss"
             },
             "remote": {
-              "workload": "deploy-pytorch"
+              "pod": {
+                "workload": "deploy-pytorch"
+              }
             },
             "vars_file": "vars.yaml"
           }

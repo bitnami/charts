@@ -45,7 +45,9 @@
               "path": "/.vib/kubeapps/goss"
             },
             "remote": {
-              "workload": "deploy-kubeapps-internal-kubeappsapis"
+              "pod": {
+                "workload": "deploy-kubeapps-internal-kubeappsapis"
+              }
             },
             "vars_file": "vars.yaml"
           }

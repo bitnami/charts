@@ -45,7 +45,9 @@
               "path": "/.vib/phpbb/goss"
             },
             "remote": {
-              "workload": "deploy-phpbb"
+              "pod": {
+                "workload": "deploy-phpbb"
+              }
             }
           }
         },

@@ -45,7 +45,9 @@
               "path": "/.vib/spark/goss"
             },
             "remote": {
-              "workload": "sts-spark-worker"
+              "pod": {
+                "workload": "sts-spark-worker"
+              }
             },
             "vars_file": "vars.yaml"
           }

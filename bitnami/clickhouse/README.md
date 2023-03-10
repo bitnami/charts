@@ -91,7 +91,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`                                    | ClickHouse image registry                                                                                  | `docker.io`           |
 | `image.repository`                                  | ClickHouse image repository                                                                                | `bitnami/clickhouse`  |
-| `image.tag`                                         | ClickHouse image tag (immutable tags are recommended)                                                      | `23.1.3-debian-11-r3` |
+| `image.tag`                                         | ClickHouse image tag (immutable tags are recommended)                                                      | `23.2.3-debian-11-r0` |
 | `image.digest`                                      | ClickHouse image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
 | `image.pullPolicy`                                  | ClickHouse image pull policy                                                                               | `IfNotPresent`        |
 | `image.pullSecrets`                                 | ClickHouse image pull secrets                                                                              | `[]`                  |
@@ -229,6 +229,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.extraPorts`                              | Extra ports to expose in ClickHouse service (normally used with the `sidecars` value)                                            | `[]`                     |
 | `service.sessionAffinity`                         | Control where client requests go, to the same pod or round-robin                                                                 | `None`                   |
 | `service.sessionAffinityConfig`                   | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
+| `service.headless.annotations`                    | Annotations for the headless service.                                                                                            | `{}`                     |
 | `externalAccess.enabled`                          | Enable Kubernetes external cluster access to ClickHouse                                                                          | `false`                  |
 | `externalAccess.service.type`                     | Kubernetes Service type for external access. It can be NodePort, LoadBalancer or ClusterIP                                       | `LoadBalancer`           |
 | `externalAccess.service.ports.http`               | ClickHouse service HTTP port                                                                                                     | `80`                     |
@@ -280,6 +281,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------- | ---------------------------------------------------------------------- | ------------------- |
 | `persistence.enabled`      | Enable persistence using Persistent Volume Claims                      | `true`              |
 | `persistence.storageClass` | Storage class of backing PVC                                           | `""`                |
+| `persistence.labels`       | Persistent Volume Claim labels                                         | `{}`                |
 | `persistence.annotations`  | Persistent Volume Claim annotations                                    | `{}`                |
 | `persistence.accessModes`  | Persistent Volume Access Modes                                         | `["ReadWriteOnce"]` |
 | `persistence.size`         | Size of data volume                                                    | `8Gi`               |
@@ -293,7 +295,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `11-debian-11-r86`      |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `11-debian-11-r94`      |
 | `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                    |
@@ -336,6 +338,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `zookeeper.enabled`              | Deploy Zookeeper subchart     | `true` |
 | `zookeeper.replicaCount`         | Number of Zookeeper instances | `3`    |
 | `zookeeper.service.ports.client` | Zookeeper client port         | `2181` |
+
+See <https://github.com/bitnami-labs/readme-generator-for-helm> to create the table.
 
 The above parameters map to the env variables defined in [bitnami/clickhouse](https://github.com/bitnami/containers/tree/main/bitnami/clickhouse). For more information please refer to the [bitnami/clickhouse](https://github.com/bitnami/containers/tree/main/bitnami/clickhouse) image documentation.
 
@@ -387,7 +391,7 @@ externalZookeeper.port=3306
 
 ### TLS secrets
 
-The chart also facilitates the creation of TLS secrets for use with the Ingress controller, with different options for certificate management. [Learn more about TLS secrets](https://docs.bitnami.com/kubernetes/apps/clickhouse/administration/enable-tls-ingress/)).
+The chart also facilitates the creation of TLS secrets for use with the Ingress controller, with different options for certificate management. [Learn more about TLS secrets](https://docs.bitnami.com/kubernetes/infrastructure/clickhouse/administration/enable-tls-ingress/)).
 
 ## Persistence
 
