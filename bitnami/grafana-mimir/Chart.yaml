@@ -1,7 +1,6 @@
 annotations:
   category: Infrastructure
-  licenses: |
-    - Apache-2.0
+  licenses: "- Apache-2.0\n"
 apiVersion: v2
 appVersion: 2.6.0
 dependencies:
@@ -49,4 +48,4 @@ name: grafana-mimir
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/grafana-mimir
   - https://github.com/grafana/mimir
-version: 0.1.2
+version: 0.2.0
