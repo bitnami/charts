@@ -1,9 +1,6 @@
 dependencies:
 - name: common
   repository: https://charts.bitnami.com/bitnami
-  version: 2.2.3
-- name: cassandra
-  repository: https://charts.bitnami.com/bitnami
-  version: 10.0.3
-digest: sha256:48edf1c6024a09b0e7d6d32ccad8cf127f6e9e47cd624a0a314dc6a4982b0030
-generated: "2023-02-17T18:37:53.675978661Z"
+  version: 2.2.4
+digest: sha256:634d19e9b7f6e4c07d7c04a0161ab96b3f83335ebdd70b35b952319ef0a2586b
+generated: "2023-03-09T13:20:38.66665+01:00"

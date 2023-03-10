@@ -106,6 +106,9 @@ extraEnvVarsCM: ""
 ## @param extraEnvVarsSecret Name of existing Secret containing extra env vars
 ##
 extraEnvVarsSecret: ""
+## @param extraEnvVarsSecret Name of existing Secret containing extra env vars
+##
+existingConfigMap: ""
 ## @param replicaCount Number of Fluent Bit replicas
 ##
 replicaCount: 1
@@ -133,7 +136,7 @@ livenessProbe:
 ## @param startupProbe.successThreshold Success threshold for startupProbe
 ##
 startupProbe:
-  enabled: false
+  enabled: true
   initialDelaySeconds: 10
   periodSeconds: 10
   timeoutSeconds: 1
@@ -147,7 +150,7 @@ startupProbe:
 ## @param readinessProbe.successThreshold Success threshold for readinessProbe
 ##
 readinessProbe:
-  enabled: false
+  enabled: true
   initialDelaySeconds: 10
   periodSeconds: 10
   timeoutSeconds: 1
@@ -368,3 +371,78 @@ initContainers: []
 ## @param sidecars Add additional sidecar containers to the fluent-bit pods
 ##
 sidecars: []
+
+config:
+  flush: 1
+  logLevel: info
+  service: |
+    [SERVICE]
+        Daemon Off
+        Flush {{ .Values.config.flush }}
+        Log_Level {{ .Values.config.logLevel }}
+        Parsers_File parsers.conf
+        Parsers_File custom_parsers.conf
+        HTTP_Server On
+        HTTP_Listen 0.0.0.0
+        HTTP_Port {{ .Values.service.ports.httpPort }}
+        Health_Check On
+
+  ## https://docs.fluentbit.io/manual/pipeline/inputs
+  inputs: |
+    [INPUT]
+        Name tail
+        Path /var/log/containers/*.log
+        multiline.parser docker, cri
+        Tag kube.*
+        Mem_Buf_Limit 5MB
+        Skip_Long_Lines On
+
+    [INPUT]
+        Name systemd
+        Tag host.*
+        Systemd_Filter _SYSTEMD_UNIT=kubelet.service
+        Read_From_Tail On
+
+  ## https://docs.fluentbit.io/manual/pipeline/filters
+  filters: |
+    [FILTER]
+        Name kubernetes
+        Match kube.*
+        Merge_Log On
+        Keep_Log Off
+        K8S-Logging.Parser On
+        K8S-Logging.Exclude On
+
+  ## https://docs.fluentbit.io/manual/pipeline/outputs
+  outputs: |
+    [OUTPUT]
+        Name es
+        Match kube.*
+        Host elasticsearch-master
+        Logstash_Format On
+        Retry_Limit False
+
+    [OUTPUT]
+        Name es
+        Match host.*
+        Host elasticsearch-master
+        Logstash_Format On
+        Logstash_Prefix node
+        Retry_Limit False
+
+  ## https://docs.fluentbit.io/manual/administration/configuring-fluent-bit/classic-mode/upstream-servers
+  ## This configuration is deprecated, please use `extraFiles` instead.
+  upstream: {}
+
+  ## https://docs.fluentbit.io/manual/pipeline/parsers
+  customParsers: |
+    [PARSER]
+        Name docker_no_time
+        Format json
+        Time_Keep Off
+        Time_Key time
+        Time_Format %Y-%m-%dT%H:%M:%S.%L
+
+  # This allows adding more files with arbitary filenames to /fluent-bit/etc by providing key/value pairs.
+  # The key becomes the filename, the value becomes the file content.
+  extraFiles: {}

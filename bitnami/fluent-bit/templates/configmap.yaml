@@ -1,0 +1,30 @@
+{{- if (empty .Values.existingConfigMap) -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: fluentbit-config
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+data:
+  custom_parsers.conf: |
+    {{- (tpl .Values.config.customParsers $) | nindent 4 }}
+  fluent-bit.conf: |
+    {{- (tpl .Values.config.service $)  | nindent 4 }}
+    {{- (tpl .Values.config.inputs $)  | nindent 4 }}
+    {{- (tpl .Values.config.filters $)  | nindent 4 }}
+    {{- (tpl .Values.config.outputs $)  | nindent 4 }}
+  {{- range $key, $val := .Values.config.upstream }}
+  {{ $key }}: |
+    {{- (tpl $val $) | nindent 4 }}
+  {{- end }}
+  {{- range $key, $val := .Values.config.extraFiles }}
+  {{ $key }}: |
+    {{- (tpl $val $) | nindent 4 }}
+  {{- end }}
+{{- end -}}
