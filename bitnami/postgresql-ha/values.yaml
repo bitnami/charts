@@ -1903,7 +1903,12 @@ service:
   ## @param service.serviceLabels Labels for PostgreSQL service
   ##
   serviceLabels: {}
-
+  ## Headless service properties
+  ##
+  headless:
+    ## @param service.headless.annotations Annotations for the headless service.
+    ##
+    annotations: {}
 ## NetworkPolicy parameters
 ##
 networkPolicy:
