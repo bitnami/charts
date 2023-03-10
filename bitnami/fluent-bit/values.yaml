@@ -84,7 +84,9 @@ image:
   ## Enable debug mode
   ##
   debug: false
-
+## @param useDaemonset Use a daemonset instead of a deployment. `replicaCount` will not take effect.
+##
+useDaemonset: true
 ## @param command Command for running the container (set to default if not set). Use array form
 ##
 command: []
@@ -109,6 +111,10 @@ extraEnvVarsSecret: ""
 ## @param extraEnvVarsSecret Name of existing Secret containing extra env vars
 ##
 existingConfigMap: ""
+## @param hostAliases Deployment pod host aliases
+## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+##
+hostAliases: []
 ## @param replicaCount Number of Fluent Bit replicas
 ##
 replicaCount: 1
@@ -389,13 +395,13 @@ config:
 
   ## https://docs.fluentbit.io/manual/pipeline/inputs
   inputs: |
-    [INPUT]
-        Name tail
-        Path /var/log/containers/*.log
-        multiline.parser docker, cri
-        Tag kube.*
-        Mem_Buf_Limit 5MB
-        Skip_Long_Lines On
+    #[INPUT]
+    #    Name tail
+    #    Path /var/log/containers/*.log
+    #    multiline.parser docker, cri
+    #    Tag kube.*
+    #    Mem_Buf_Limit 5MB
+    #    Skip_Long_Lines On
 
     [INPUT]
         Name systemd
