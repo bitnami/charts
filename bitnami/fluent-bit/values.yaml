@@ -395,13 +395,13 @@ config:
 
   ## https://docs.fluentbit.io/manual/pipeline/inputs
   inputs: |
-    #[INPUT]
-    #    Name tail
-    #    Path /var/log/containers/*.log
-    #    multiline.parser docker, cri
-    #    Tag kube.*
-    #    Mem_Buf_Limit 5MB
-    #    Skip_Long_Lines On
+    [INPUT]
+        Name tail
+        Path /var/log/containers/*.log
+        multiline.parser docker, cri
+        Tag kube.*
+        Mem_Buf_Limit 5MB
+        Skip_Long_Lines On
 
     [INPUT]
         Name systemd
@@ -452,3 +452,11 @@ config:
   # This allows adding more files with arbitary filenames to /fluent-bit/etc by providing key/value pairs.
   # The key becomes the filename, the value becomes the file content.
   extraFiles: {}
+## Role Based Access
+## Ref: https://kubernetes.io/docs/admin/authorization/rbac/
+## @param rbac.create Create Role and RoleBinding
+## @param rbac.rules RBAC node access
+##
+rbac:
+  create: false
+  nodeAccess: false
