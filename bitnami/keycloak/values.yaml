@@ -510,10 +510,19 @@ service:
   ## @param service.extraPorts Extra port to expose on Keycloak service
   ##
   extraPorts: []
+  # DEPRECATED service.extraHeadlessPorts will be removed in a future release, please use service.headless.extraPorts instead
   ## @param service.extraHeadlessPorts Extra ports to expose on Keycloak headless service
   ##
   extraHeadlessPorts: []
-
+  ## Headless service properties
+  ##
+  headless:
+    ## @param service.headless.annotations Annotations for the headless service.
+    ##
+    annotations: {}
+    ## @param service.headless.extraPorts Extra ports to expose on Keycloak headless service
+    ##
+    extraPorts: []
 ## Keycloak ingress parameters
 ## ref: https://kubernetes.io/docs/user-guide/ingress/
 ##
@@ -980,7 +989,7 @@ keycloakConfigCli:
 postgresql:
   enabled: true
   auth:
-    postgresPassword: ""  
+    postgresPassword: ""
     username: bn_keycloak
     password: ""
     database: bitnami_keycloak
