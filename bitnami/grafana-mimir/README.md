@@ -191,6 +191,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `alertmanager.service.externalTrafficPolicy`    | Alertmanager service external traffic policy                                                                   | `Cluster`   |
 | `alertmanager.service.annotations`              | Additional custom annotations for Alertmanager service                                                         | `{}`        |
 | `alertmanager.service.extraPorts`               | Extra ports to expose in the Alertmanager service                                                              | `[]`        |
+| `alertmanager.service.headless.annotations`     | Annotations for the headless service.                                                                          | `{}`        |
 | `alertmanager.pdb.create`                       | Enable/disable a Pod Disruption Budget creation                                                                | `false`     |
 | `alertmanager.pdb.minAvailable`                 | Minimum number/percentage of pods that should remain scheduled                                                 | `1`         |
 | `alertmanager.pdb.maxUnavailable`               | Maximum number/percentage of pods that may be made unavailable                                                 | `""`        |
@@ -367,6 +368,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `distributor.service.externalTrafficPolicy`    | Distributor service external traffic policy                      | `Cluster`   |
 | `distributor.service.annotations`              | Additional custom annotations for Distributor service            | `{}`        |
 | `distributor.service.extraPorts`               | Extra ports to expose in the Distributor service                 | `[]`        |
+| `distributor.service.headless.annotations`     | Annotations for the headless service.                            | `{}`        |
 | `distributor.pdb.create`                       | Enable/disable a Pod Disruption Budget creation                  | `false`     |
 | `distributor.pdb.minAvailable`                 | Minimum number/percentage of pods that should remain scheduled   | `1`         |
 | `distributor.pdb.maxUnavailable`               | Maximum number/percentage of pods that may be made unavailable   | `""`        |
@@ -564,6 +566,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingester.service.externalTrafficPolicy`                  | Ingester service external traffic policy                                                                    | `Cluster`       |
 | `ingester.service.annotations`                            | Additional custom annotations for Ingester service                                                          | `{}`            |
 | `ingester.service.extraPorts`                             | Extra ports to expose in the Ingester service                                                               | `[]`            |
+| `ingester.service.headless.annotations`                   | Annotations for the headless service.                                                                       | `{}`            |
 | `ingester.pdb.create`                                     | Enable/disable a Pod Disruption Budget creation                                                             | `false`         |
 | `ingester.pdb.minAvailable`                               | Minimum number/percentage of pods that should remain scheduled                                              | `1`             |
 | `ingester.pdb.maxUnavailable`                             | Maximum number/percentage of pods that may be made unavailable                                              | `""`            |
@@ -643,6 +646,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `overridesExporter.service.externalTrafficPolicy`    | Overrides Exporter service external traffic policy               | `Cluster`   |
 | `overridesExporter.service.annotations`              | Additional custom annotations for Overrides Exporter service     | `{}`        |
 | `overridesExporter.service.extraPorts`               | Extra ports to expose in the Overrides Export service            | `[]`        |
+| `overridesExporter.service.headless.annotations`     | Annotations for the headless service.                            | `{}`        |
 | `overridesExporter.pdb.create`                       | Enable/disable a Pod Disruption Budget creation                  | `false`     |
 | `overridesExporter.pdb.minAvailable`                 | Minimum number/percentage of pods that should remain scheduled   | `1`         |
 | `overridesExporter.pdb.maxUnavailable`               | Maximum number/percentage of pods that may be made unavailable   | `""`        |
@@ -726,6 +730,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `querier.service.externalTrafficPolicy`    | Querier service external traffic policy                          | `Cluster`   |
 | `querier.service.annotations`              | Additional custom annotations for Querier service                | `{}`        |
 | `querier.service.extraPorts`               | Extra ports to expose in the Querier service                     | `[]`        |
+| `querier.service.headless.annotations`     | Annotations for the headless service.                            | `{}`        |
 | `querier.pdb.create`                       | Enable/disable a Pod Disruption Budget creation                  | `false`     |
 | `querier.pdb.minAvailable`                 | Minimum number/percentage of pods that should remain scheduled   | `1`         |
 | `querier.pdb.maxUnavailable`               | Maximum number/percentage of pods that may be made unavailable   | `""`        |
@@ -809,6 +814,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryFrontend.service.externalTrafficPolicy`          | Query Frontend service external traffic policy                                                           | `Cluster`       |
 | `queryFrontend.service.annotations`                    | Additional custom annotations for Query Frontend service                                                 | `{}`            |
 | `queryFrontend.service.extraPorts`                     | Extra ports to expose in the Query Frontend service                                                      | `[]`            |
+| `queryFrontend.service.headless.annotations`           | Annotations for the headless service.                                                                    | `{}`            |
 | `queryFrontend.pdb.create`                             | Enable/disable a Pod Disruption Budget creation                                                          | `false`         |
 | `queryFrontend.pdb.minAvailable`                       | Minimum number/percentage of pods that should remain scheduled                                           | `1`             |
 | `queryFrontend.pdb.maxUnavailable`                     | Maximum number/percentage of pods that may be made unavailable                                           | `""`            |
@@ -888,6 +894,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryScheduler.service.externalTrafficPolicy`    | Query Scheduler service external traffic policy                  | `Cluster`   |
 | `queryScheduler.service.annotations`              | Additional custom annotations for Query Scheduler service        | `{}`        |
 | `queryScheduler.service.extraPorts`               | Extra ports to expose in the Query Scheduler service             | `[]`        |
+| `queryScheduler.service.headless.annotations`     | Annotations for the headless service.                            | `{}`        |
 | `queryScheduler.pdb.create`                       | Enable/disable a Pod Disruption Budget creation                  | `false`     |
 | `queryScheduler.pdb.minAvailable`                 | Minimum number/percentage of pods that should remain scheduled   | `1`         |
 | `queryScheduler.pdb.maxUnavailable`               | Maximum number/percentage of pods that may be made unavailable   | `""`        |
@@ -980,6 +987,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `storeGateway.service.externalTrafficPolicy`    | Store Gateway service external traffic policy                    | `Cluster`   |
 | `storeGateway.service.annotations`              | Additional custom annotations for Store Gateway service          | `{}`        |
 | `storeGateway.service.extraPorts`               | Extra ports to expose in the Store Gateway service               | `[]`        |
+| `storeGateway.service.headless.annotations`     | Annotations for the headless service.                            | `{}`        |
 | `storeGateway.pdb.create`                       | Enable/disable a Pod Disruption Budget creation                  | `false`     |
 | `storeGateway.pdb.minAvailable`                 | Minimum number/percentage of pods that should remain scheduled   | `1`         |
 | `storeGateway.pdb.maxUnavailable`               | Maximum number/percentage of pods that may be made unavailable   | `""`        |
