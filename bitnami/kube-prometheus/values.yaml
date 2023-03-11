@@ -1751,13 +1751,13 @@ alertmanager:
       group_wait: 30s
       group_interval: 5m
       repeat_interval: 12h
-      receiver: 'null'
+      receiver: null
       routes:
         - match:
             alertname: Watchdog
-          receiver: 'null'
+          receiver: null
     receivers:
-      - name: 'null'
+      - name: null
   ## @param alertmanager.templateFiles Extra files to be added inside the `alertmanager-{{ template "kube-prometheus.alertmanager.fullname" . }}` secret.
   ##
   templateFiles: {}
