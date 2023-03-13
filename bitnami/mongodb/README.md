@@ -243,6 +243,7 @@ Refer to the [chart documentation for more information on each of these architec
 | `service.externalTrafficPolicy`                               | service external traffic policy (only for standalone architecture)                                                                              | `Local`                |
 | `service.sessionAffinity`                                     | Control where client requests go, to the same pod or round-robin                                                                                | `None`                 |
 | `service.sessionAffinityConfig`                               | Additional settings for the sessionAffinity                                                                                                     | `{}`                   |
+| `service.headless.annotations`                                | Annotations for the headless service.                                                                                                           | `{}`                   |
 | `externalAccess.enabled`                                      | Enable Kubernetes external cluster access to MongoDB(&reg;) nodes (only for replicaset architecture)                                            | `false`                |
 | `externalAccess.autoDiscovery.enabled`                        | Enable using an init container to auto-detect external IPs by querying the K8s API                                                              | `false`                |
 | `externalAccess.autoDiscovery.image.registry`                 | Init container auto-discovery image registry                                                                                                    | `docker.io`            |
@@ -406,6 +407,7 @@ Refer to the [chart documentation for more information on each of these architec
 | `arbiter.service.ports.mongodb`                 | MongoDB(&reg;) service port                                                                       | `27017`         |
 | `arbiter.service.extraPorts`                    | Extra ports to expose (normally used with the `sidecar` value)                                    | `[]`            |
 | `arbiter.service.annotations`                   | Provide any additional annotations that may be required                                           | `{}`            |
+| `arbiter.service.headless.annotations`          | Annotations for the headless service.                                                             | `{}`            |
 
 ### Hidden Node parameters
 
@@ -494,6 +496,7 @@ Refer to the [chart documentation for more information on each of these architec
 | `hidden.service.ports.mongodb`                       | MongoDB(&reg;) service port                                                                          | `27017`             |
 | `hidden.service.extraPorts`                          | Extra ports to expose (normally used with the `sidecar` value)                                       | `[]`                |
 | `hidden.service.annotations`                         | Provide any additional annotations that may be required                                              | `{}`                |
+| `hidden.service.headless.annotations`                | Annotations for the headless service.                                                                | `{}`                |
 
 ### Metrics parameters
 
