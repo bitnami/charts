@@ -1,5 +1,5 @@
 {{/*
-Return the proper Gitea image name
+Return the proper Multus CNI image name
 */}}
 {{- define "multus-cni.image" -}}
 {{- include "common.images.image" (dict "imageRoot" .Values.image "global" .Values.global) -}}

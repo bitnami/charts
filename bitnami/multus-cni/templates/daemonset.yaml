@@ -111,7 +111,6 @@ spec:
           args: {{- include "common.tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
           {{- else }}
           args:
-          args:
             - "-cni-version={{ .Values.CNIVersion }}"
             - "-cni-config-dir={{ .Values.CNIMountPath }}/etc/cni/net.d"
             - "-multus-autoconfig-dir={{ .Values.CNIMountPath }}/etc/cni/net.d"
