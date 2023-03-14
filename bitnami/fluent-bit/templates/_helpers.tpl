@@ -41,3 +41,14 @@ Return the proper Docker Image Registry Secret Names
 {{- define "fluentBit.imagePullSecrets" -}}
 {{- include "common.images.pullSecrets" (dict "images" (list .Values.image) "global" .Values.global) -}}
 {{- end -}}
+
+{{/*
+Return the k8s deploy kind
+*/}}
+{{- define "fluentBit.kind" -}}
+    {{- if .Values.useDaemonset -}}
+        {{ printf "%s" "DaemonSet" }}
+    {{- else -}}
+        {{ printf "%s" "Deployment" }}
+    {{- end -}}
+{{- end -}}

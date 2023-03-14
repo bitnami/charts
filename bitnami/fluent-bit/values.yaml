@@ -453,3 +453,37 @@ config:
 rbac:
   create: false
   nodeAccess: false
+
+
+autoscaling:
+  vpa:
+    enabled: false
+
+    annotations: {}
+    ## @param autoscaling.controlledResources List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory
+    ##
+    controlledResources: []
+    ## @param autoscaling.maxAllowed Max allowed resources for the pod
+    ##
+    maxAllowed: {}
+    ## @param autoscaling.minAllowed Min allowed resources for the pod
+    ## cpu: 200m
+    ## memory: 100Mi
+    minAllowed: {}
+    ## @param autoscaling.updatePolicy Autoscaling update policy
+    ##
+    ##
+    updatePolicy:
+      ## @param autoscaling.updatePolicy Autoscaling update policy Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod
+      ## Possible values are "Off", "Initial", "Recreate", and "Auto".
+      ##
+      updateMode: Auto
+
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 75
+  targetMemoryUtilizationPercentage: ""
+  customRules: []
+  behavior: {}
+
