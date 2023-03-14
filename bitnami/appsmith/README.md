@@ -67,26 +67,26 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common parameters
 
-| Name                     | Description                                                                                                                                         | Value                |
-| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------- |
-| `kubeVersion`            | Override Kubernetes version                                                                                                                         | `""`                 |
-| `nameOverride`           | String to partially override common.names.name                                                                                                      | `""`                 |
-| `fullnameOverride`       | String to fully override common.names.fullname                                                                                                      | `""`                 |
-| `namespaceOverride`      | String to fully override common.names.namespace                                                                                                     | `""`                 |
-| `commonLabels`           | Labels to add to all deployed objects                                                                                                               | `{}`                 |
-| `commonAnnotations`      | Annotations to add to all deployed objects                                                                                                          | `{}`                 |
-| `clusterDomain`          | Kubernetes cluster domain name                                                                                                                      | `cluster.local`      |
-| `extraDeploy`            | Array of extra objects to deploy with the release                                                                                                   | `[]`                 |
-| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                                                             | `false`              |
-| `diagnosticMode.command` | Command to override all containers in the deployment                                                                                                | `["sleep"]`          |
-| `diagnosticMode.args`    | Args to override all containers in the deployment                                                                                                   | `["infinity"]`       |
-| `image.registry`         | Appsmith image registry                                                                                                                             | `docker.io`          |
-| `image.repository`       | Appsmith image repository                                                                                                                           | `bitnami/appsmith`   |
-| `image.tag`              | Appsmith image tag (immutable tags are recommended)                                                                                                 | `1.9.9-debian-11-r1` |
-| `image.digest`           | Appsmith image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended) | `""`                 |
-| `image.pullPolicy`       | Appsmith image pull policy                                                                                                                          | `IfNotPresent`       |
-| `image.pullSecrets`      | Appsmith image pull secrets                                                                                                                         | `[]`                 |
-| `image.debug`            | Enable Appsmith image debug mode                                                                                                                    | `false`              |
+| Name                     | Description                                                                                                                                         | Value                 |
+| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
+| `kubeVersion`            | Override Kubernetes version                                                                                                                         | `""`                  |
+| `nameOverride`           | String to partially override common.names.name                                                                                                      | `""`                  |
+| `fullnameOverride`       | String to fully override common.names.fullname                                                                                                      | `""`                  |
+| `namespaceOverride`      | String to fully override common.names.namespace                                                                                                     | `""`                  |
+| `commonLabels`           | Labels to add to all deployed objects                                                                                                               | `{}`                  |
+| `commonAnnotations`      | Annotations to add to all deployed objects                                                                                                          | `{}`                  |
+| `clusterDomain`          | Kubernetes cluster domain name                                                                                                                      | `cluster.local`       |
+| `extraDeploy`            | Array of extra objects to deploy with the release                                                                                                   | `[]`                  |
+| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                                                             | `false`               |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                                                                                | `["sleep"]`           |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                                                                                   | `["infinity"]`        |
+| `image.registry`         | Appsmith image registry                                                                                                                             | `docker.io`           |
+| `image.repository`       | Appsmith image repository                                                                                                                           | `bitnami/appsmith`    |
+| `image.tag`              | Appsmith image tag (immutable tags are recommended)                                                                                                 | `1.9.12-debian-11-r0` |
+| `image.digest`           | Appsmith image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended) | `""`                  |
+| `image.pullPolicy`       | Appsmith image pull policy                                                                                                                          | `IfNotPresent`        |
+| `image.pullSecrets`      | Appsmith image pull secrets                                                                                                                         | `[]`                  |
+| `image.debug`            | Enable Appsmith image debug mode                                                                                                                    | `false`               |
 
 ### Appsmith Client Parameters
 
@@ -367,7 +367,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `11-debian-11-r92`      |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `11-debian-11-r96`      |
 | `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                    |
@@ -491,7 +491,7 @@ externalDatabase.port=3306
 
 This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application.
 
-To enable Ingress integration, set `client.ingress.enabled` to `true`. The `client.ingress.hostname` property can be used to set the host name. The `client.ingress.tls` parameter can be used to add the TLS configuration for this host. It is also possible to have more than one host, with a separate TLS configuration for each host. [Learn more about configuring and using Ingress](https://docs.bitnami.com/kubernetes/apps/appsmith/configuration/configure-use-ingress/).
+To enable Ingress integration, set `client.ingress.enabled` to `true`. The `client.ingress.hostname` property can be used to set the host name. The `client.ingress.tls` parameter can be used to add the TLS configuration for this host. It is also possible to have more than one host, with a separate TLS configuration for each host. [Learn more about configuring and using Ingress](https://docs.bitnami.com/kubernetes/apps/appsmith/configuration/configure-ingress/).
 
 ### TLS secrets
 

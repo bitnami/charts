@@ -280,7 +280,7 @@ Returns the secret name for the Kafka Provisioning client
 {{- end -}}
 
 {{/*
-Create the name of the service account to use for the Kafka Provisioning client 
+Create the name of the service account to use for the Kafka Provisioning client
 */}}
 {{- define "kafka.provisioning.serviceAccountName" -}}
 {{- if .Values.provisioning.serviceAccount.create -}}
@@ -372,6 +372,7 @@ Compile all warnings into a single message, and call fail.
 {{- $messages := list -}}
 {{- $messages := append $messages (include "kafka.validateValues.authProtocols" .) -}}
 {{- $messages := append $messages (include "kafka.validateValues.nodePortListLength" .) -}}
+{{- $messages := append $messages (include "kafka.validateValues.externalIPListLength" .) -}}
 {{- $messages := append $messages (include "kafka.validateValues.domainSpecified" .) -}}
 {{- $messages := append $messages (include "kafka.validateValues.externalAccessServiceType" .) -}}
 {{- $messages := append $messages (include "kafka.validateValues.externalAccessAutoDiscoveryRBAC" .) -}}
@@ -405,11 +406,27 @@ kafka: auth.clientProtocol auth.externalClientProtocol auth.interBrokerProtocol
 
 {{/* Validate values of Kafka - number of replicas must be the same as NodePort list */}}
 {{- define "kafka.validateValues.nodePortListLength" -}}
-{{- $replicaCount := int .Values.replicaCount }}
-{{- $nodePortListLength := len .Values.externalAccess.service.nodePorts }}
-{{- if and .Values.externalAccess.enabled (not .Values.externalAccess.autoDiscovery.enabled) (not (eq $replicaCount $nodePortListLength )) (eq .Values.externalAccess.service.type "NodePort") -}}
+{{- $replicaCount := int .Values.replicaCount -}}
+{{- $nodePortListLength := len .Values.externalAccess.service.nodePorts -}}
+{{- $nodePortListIsEmpty := empty .Values.externalAccess.service.nodePorts -}}
+{{- $nodePortListLengthEqualsReplicaCount := eq $nodePortListLength $replicaCount -}}
+{{- $externalIPListIsEmpty := empty .Values.externalAccess.service.externalIPs -}}
+{{- if and .Values.externalAccess.enabled (not .Values.externalAccess.autoDiscovery.enabled) (eq .Values.externalAccess.service.type "NodePort") (or (and (not $nodePortListIsEmpty) (not $nodePortListLengthEqualsReplicaCount)) (and $nodePortListIsEmpty $externalIPListIsEmpty)) -}}
 kafka: .Values.externalAccess.service.nodePorts
-    Number of replicas and nodePort array length must be the same. Currently: replicaCount = {{ $replicaCount }} and nodePorts = {{ $nodePortListLength }}
+    Number of replicas and nodePort array length must be the same. Currently: replicaCount = {{ $replicaCount }} and length nodePorts = {{ $nodePortListLength }} - {{ $externalIPListIsEmpty }}
+{{- end -}}
+{{- end -}}
+
+{{/* Validate values of Kafka - number of replicas must be the same as externalIPs list */}}
+{{- define "kafka.validateValues.externalIPListLength" -}}
+{{- $replicaCount := int .Values.replicaCount -}}
+{{- $externalIPListLength := len .Values.externalAccess.service.externalIPs -}}
+{{- $externalIPListIsEmpty := empty .Values.externalAccess.service.externalIPs -}}
+{{- $externalIPListEqualsReplicaCount := eq $externalIPListLength $replicaCount -}}
+{{- $nodePortListIsEmpty := empty .Values.externalAccess.service.nodePorts -}}
+{{- if and .Values.externalAccess.enabled (not .Values.externalAccess.autoDiscovery.enabled) (eq .Values.externalAccess.service.type "NodePort") (or (and (not $externalIPListIsEmpty) (not $externalIPListEqualsReplicaCount)) (and $externalIPListIsEmpty $nodePortListIsEmpty)) -}}
+kafka: .Values.externalAccess.service.externalIPs
+    Number of replicas and externalIPs array length must be the same. Currently: replicaCount = {{ $replicaCount }} and length externalIPs = {{ $externalIPListLength }}
 {{- end -}}
 {{- end -}}
 
@@ -532,7 +549,7 @@ kafka: Kraft mode
 {{- define "kafka.validateValues.controllerQuorumVotersDefinedIfKraft" -}}
 {{- if and .Values.kraft.enabled (not .Values.kraft.controllerQuorumVoters) (not (contains "controller" .Values.kraft.processRoles)) }}
 kafka: Kraft mode
-    .Values.kraft.controllerQuorumVoters must not be empty if .Values.kraft.enabled set to true and .Values.kraft.processRoles does not contain "controller". 
+    .Values.kraft.controllerQuorumVoters must not be empty if .Values.kraft.enabled set to true and .Values.kraft.processRoles does not contain "controller".
     If you deploy brokers without controllers you have to define external controllers with .Values.kraft.controllerQuorumVoters
 {{- end -}}
 {{- end -}}

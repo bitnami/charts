@@ -189,9 +189,9 @@ spec:
               value: {{ .Values.listenerSecurityProtocolMap | quote }}
               {{- else if .Values.externalAccess.enabled }}
                 {{- if .Values.kraft.enabled }}
-              value: "INTERNAL:{{ $interBrokerProtocol }},CLIENT:{{ $clientProtocol }},EXTERNAL:{{ $externalClientProtocol }}"
-                {{- else }}
               value: "INTERNAL:{{ $interBrokerProtocol }},CLIENT:{{ $clientProtocol }},CONTROLLER:{{ $controllerProtocol }},EXTERNAL:{{ $externalClientProtocol }}"
+                {{- else }}
+              value: "INTERNAL:{{ $interBrokerProtocol }},CLIENT:{{ $clientProtocol }},EXTERNAL:{{ $externalClientProtocol }}"
                 {{- end}}
               {{- else }}
                 {{- if .Values.kraft.enabled }}
