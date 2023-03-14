@@ -1,0 +1,16 @@
+master:
+  replicaCount: 1
+coordinating:
+  replicaCount: 1
+data:
+  replicaCount: 1
+ingest:
+  enabled: true
+  replicaCount: 1
+service:
+  type: LoadBalancer
+  ports:
+    restAPI: 80
+    transport: 9300
+sysctlImage:
+  enabled: true

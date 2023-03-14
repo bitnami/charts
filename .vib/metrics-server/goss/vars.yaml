@@ -1,7 +1,0 @@
-serviceAccount:
-  automountServiceAccountToken: true
-service:
-  ports:
-    https: 443
-containerSecurityContext:
-  runAsUser: 1002

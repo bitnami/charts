@@ -1,0 +1,15 @@
+installCRDs: true
+controller:
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1002
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1002
+  serviceAccount:
+    create: true
+    automountServiceAccountToken: true
+webhook:
+  httpsPort: 443
+rbac:
+  create: true

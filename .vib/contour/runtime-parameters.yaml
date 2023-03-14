@@ -1,0 +1,79 @@
+contour:
+  enabled: true
+  manageCRDs: true
+  serviceAccount:
+    create: true
+    automountServiceAccountToken: true
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1002
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1002
+  containerPorts:
+    xds: 8002
+  service:
+    ports:
+      xds: 8002
+    type: ClusterIP
+envoy:
+  enabled: true
+  containerPorts:
+    http: 8080
+    https: 8080
+  service:
+    type: LoadBalancer
+    externalTrafficPolicy: Local
+    ports:
+      http: 80
+      https: 444
+rbac:
+  create: true
+extraDeploy:
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    labels:
+      app: kuard
+    name: kuard
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app: kuard
+    template:
+      metadata:
+        labels:
+          app: kuard
+      spec:
+        containers:
+        - image: gcr.io/kuar-demo/kuard-amd64:1
+          name: kuard
+- apiVersion: v1
+  kind: Service
+  metadata:
+    labels:
+      app: kuard
+    name: kuard
+  spec:
+    ports:
+    - port: 80
+      protocol: TCP
+      targetPort: 8080
+    selector:
+      app: kuard
+    sessionAffinity: None
+    type: ClusterIP
+- apiVersion: networking.k8s.io/v1
+  kind: Ingress
+  metadata:
+    name: contour-vib-test
+    labels:
+      app: kuard
+  spec:
+    ingressClassName: contour
+    defaultBackend:
+      service:
+        name: kuard
+        port:
+          number: 80

@@ -1,0 +1,16 @@
+entrypoint:
+  workDir: /app
+mode: standalone
+cloneFilesFromGit:
+  enabled: true
+  repository: https://github.com/apache/incubator-mxnet.git
+  revision: v1.2.0
+persistence:
+  mountPath: /bitnami/mxnet
+standalone:
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1002
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1002

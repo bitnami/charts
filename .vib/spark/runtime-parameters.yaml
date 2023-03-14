@@ -1,0 +1,6 @@
+service:
+  type: LoadBalancer
+  ports:
+    http: 80
+worker:
+  replicaCount: 2

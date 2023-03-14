@@ -22,7 +22,6 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/redmine"
         },
-        "runtime_parameters": "cmVkbWluZVVzZXJuYW1lOiBiaXRuYW1pVGVzdApyZWRtaW5lUGFzc3dvcmQ6IENvbXBsaWNhdGVkUGFzc3dvcmQxMjMhNApzZXJ2aWNlOgogIHBvcnQ6IDgwCiAgdHlwZTogTG9hZEJhbGFuY2VyCmRhdGFiYXNlVHlwZTogbWFyaWFkYgptYXJpYWRiOgogIGVuYWJsZWQ6IHRydWUKICBhdXRoOgogICAgdXNlcm5hbWU6IGJuX3Rlc3RfcmVkbWluZQogICAgcGFzc3dvcmQ6IGJpdG5hbWlfdGVzdF9wYXNzd29yZA==",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_ALTERNATIVE_TARGET_PLATFORM}",
           "size": {
@@ -42,9 +41,10 @@
           "action_id": "goss",
           "params": {
             "resources": {
-              "path": "/.vib/redmine/goss"
+              "path": "/.vib"
             },
-            "vars_file": "vars.yaml",
+            "tests_file": "redmine/goss/goss.yaml",
+            "vars_file": "redmine/runtime-parameters.yaml",
             "remote": {
               "pod": {
                 "workload": "deploy-redmine"

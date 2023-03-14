@@ -22,7 +22,6 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/elasticsearch"
         },
-        "runtime_parameters": "bWFzdGVyOgogIHJlcGxpY2FDb3VudDogMQpjb29yZGluYXRpbmc6CiAgcmVwbGljYUNvdW50OiAxCmRhdGE6CiAgcmVwbGljYUNvdW50OiAxCmluZ2VzdDoKICBlbmFibGVkOiB0cnVlCiAgcmVwbGljYUNvdW50OiAxCnNlcnZpY2U6CiAgdHlwZTogTG9hZEJhbGFuY2VyCiAgcG9ydHM6CiAgICByZXN0QVBJOiA4MAogICAgdHJhbnNwb3J0OiA5MzAwCnN5c2N0bEltYWdlOgogIGVuYWJsZWQ6IHRydWU=",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_ALTERNATIVE_TARGET_PLATFORM}",
           "size": {
@@ -42,14 +41,15 @@
           "action_id": "goss",
           "params": {
             "resources": {
-              "path": "/.vib/elasticsearch/goss"
+              "path": "/.vib"
             },
+            "tests_file": "elasticsearch/goss/goss.yaml",
+            "vars_file": "elasticsearch/runtime-parameters.yaml",
             "remote": {
               "pod": {
                 "workload": "sts-elasticsearch-master"
               }
-            },
-            "vars_file": "vars.yaml"
+            }
           }
         },
         {

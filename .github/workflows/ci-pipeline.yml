@@ -122,6 +122,7 @@ jobs:
         with:
           pipeline: ${{ needs.get-chart.outputs.chart }}/vib-verify.json
           verification-mode: ${{ steps.get-asset-vib-config.outputs.verification_mode }}
+          runtime-parameters-file: ${{ needs.get-chart.outputs.chart }}/runtime-parameters.yaml
         env:
           # Target-Platform used by default
           VIB_ENV_TARGET_PLATFORM: ${{ secrets.VIB_ENV_TARGET_PLATFORM }}

@@ -22,7 +22,6 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/multus-cni"
         },
-        "runtime_parameters": "aG9zdENOSUJpbkRpcjogL2hvbWUva3ViZXJuZXRlcy9iaW4KQ05JTW91bnRQYXRoOiAvYml0bmFtaS9tdWx0dXMtY25pL2hvc3QKc2VydmljZUFjY291bnQ6CiAgY3JlYXRlOiB0cnVlCiAgYXV0b21vdW50U2VydmljZUFjY291bnRUb2tlbjogdHJ1ZQpjb250YWluZXJTZWN1cml0eUNvbnRleHQ6CiAgZW5hYmxlZDogdHJ1ZQogIHJ1bkFzVXNlcjogMApyYmFjOgogIGNyZWF0ZTogdHJ1ZQo=",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -35,14 +34,15 @@
           "action_id": "goss",
           "params": {
             "resources": {
-              "path": "/.vib/multus-cni/goss"
+              "path": "/.vib"
             },
+            "tests_file": "multus-cni/goss/goss.yaml",
+            "vars_file": "multus-cni/runtime-parameters.yaml",
             "remote": {
               "pod": {
                 "workload": "ds-multus-cni"
               }
-            },
-            "vars_file": "vars.yaml"
+            }
           }
         }
       ]
