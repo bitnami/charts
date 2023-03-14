@@ -39,7 +39,7 @@ spec:
   externalTrafficPolicy: {{ .Values.service.externalTrafficPolicy | quote }}
   {{- end }}
   ports:
-    - name: http-port
+    - name: http
       port: {{ .Values.service.ports.httpPort }}
       targetPort: {{ .Values.containerPorts.httpPort }}
       {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.httpPort)) }}
