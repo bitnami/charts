@@ -1,0 +1,31 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
+** Please be patient while the chart is being deployed **
+
+{{- if .Values.diagnosticMode.enabled }}
+
+The chart has been deployed in diagnostic mode. All probes have been disabled and the command has been overwritten with:
+
+  command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 4 }}
+  args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 4 }}
+
+Get the list of pods by executing:
+
+    kubectl get pods --namespace {{ .Release.Namespace }} -l app.kubernetes.io/instance={{ .Release.Name }}
+
+Access the pod you want to debug by executing
+
+    kubectl exec --namespace {{ .Release.Namespace }} -ti <NAME OF THE POD> -- bash
+{{- else }}
+
+Watch the Multus CNI Daemonset status using the command:
+
+    kubectl get daemonset -w --namespace {{ include "common.names.namespace" . }} -l app.kubernetes.io/name={{ include "common.names.name" . }},app.kubernetes.io/instance={{ .Release.Name }}
+
+{{- end }}
+
+IMPORTANT: Please ensure that {{ .Values.hostCNIBinDir }} and {{ .Values.hostCNINetDir }} are where the CNI binary and configuration files are located in the Kubernetes nodes, otherwise the deployment will fail.
+
+{{ include "common.warnings.rollingTag" .Values.image }}
