@@ -1,9 +1,9 @@
 dependencies:
 - name: mysql
   repository: https://charts.bitnami.com/bitnami
-  version: 9.5.1
+  version: 9.6.0
 - name: common
   repository: https://charts.bitnami.com/bitnami
-  version: 2.2.3
-digest: sha256:e1f13e56e6badd46b401ed042df38023934edf2a10415ddc71f0dde9803f971a
-generated: "2023-03-02T20:16:49.955003819Z"
+  version: 2.2.4
+digest: sha256:1aa6c4c13845a91093a89cf64c0b0218a9b77a2de62caf0896ae33f4c18900e0
+generated: "2023-03-10T20:15:51.051878029Z"

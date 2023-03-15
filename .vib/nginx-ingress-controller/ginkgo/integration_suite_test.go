@@ -12,6 +12,7 @@ import (
 	"testing"
 	"time"
 
+	v1 "k8s.io/api/core/v1"
 	netv1 "k8s.io/api/networking/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	netcv1 "k8s.io/client-go/kubernetes/typed/networking/v1"
@@ -130,6 +131,31 @@ func hasIPAssigned(ctx context.Context, c netcv1.NetworkingV1Interface, resource
 		return true, err
 	} else {
 		return false, err
+	}
+}
+
+func resolvesToDeployment(ctx context.Context, address string) (bool, error) {
+	var client http.Client
+	resp, err := client.Get(address)
+	if err != nil {
+		fmt.Printf("There was an error during the GET request: %q", err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode == http.StatusOK {
+		return true, err
+	} else {
+		return false, err
+	}
+}
+
+func returnValidHost(ingress v1.LoadBalancerIngress) string {
+	if ingress.IP != "" {
+		return ingress.IP + ".nip.io"
+	} else if ingress.Hostname != "" {
+		return ingress.Hostname
+	} else {
+		panic("No valid host found for the provided ingress")
 	}
 }
 

@@ -493,6 +493,12 @@ service:
   ##     timeoutSeconds: 300
   ##
   sessionAffinityConfig: {}
+  ## Headless service properties
+  ##
+  headless:
+    ## @param service.headless.annotations Annotations for the headless service.
+    ##
+    annotations: {}
 ## @param ingress.enabled                Enable ingress controller resource
 ## @param ingress.hostname               Default host for the ingress resource
 ## @param ingress.annotations            Ingress annotations

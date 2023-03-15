@@ -210,6 +210,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.annotations`              | Additional annotations for the etcd service                                        | `{}`        |
 | `service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"               | `None`      |
 | `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                        | `{}`        |
+| `service.headless.annotations`     | Annotations for the headless service.                                              | `{}`        |
 
 ### Persistence parameters
 

@@ -9,10 +9,10 @@ metadata:
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
-  {{- if or .Values.hidden.service.annotations .Values.commonAnnotations }}
+  {{- if or .Values.commonAnnotations .Values.hidden.service.headless.annotations }}
   annotations:
-    {{- if .Values.hidden.service.annotations }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.hidden.service.annotations "context" $) | nindent 4 }}
+    {{- if .Values.hidden.service.headless.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.hidden.service.headless.annotations "context" $ ) | nindent 4 }}
     {{- end }}
     {{- if .Values.commonAnnotations }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
