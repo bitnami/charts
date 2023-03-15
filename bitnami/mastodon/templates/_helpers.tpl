@@ -153,10 +153,14 @@ Return the S3 bucket
 Return the S3 protocol
 */}}
 {{- define "mastodon.s3.protocol" -}}
-    {{- if .Values.minio.enabled -}}
-        {{- ternary "https" "http" .Values.minio.tls.enabled  -}}
+    {{- if .Values.s3ForceHttps -}}
+        {{- print "https" -}}
     {{- else -}}
-        {{- print .Values.externalS3.protocol -}}
+    	{{- if .Values.minio.enabled -}}
+            {{- ternary "https" "http" .Values.minio.tls.enabled  -}}
+    	{{- else -}}
+            {{- print .Values.externalS3.protocol -}}
+       {{- end -}}
     {{- end -}}
 {{- end -}}
 
