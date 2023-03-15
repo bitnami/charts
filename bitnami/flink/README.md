@@ -83,7 +83,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `image.repository`  | Apache Flink image repository                                                                                | `bitnami/flink`       |
 | `image.tag`         | Apache Flink image tag (immutable tags are recommended)                                                      | `1.16.1-debian-11-r0` |
 | `image.digest`      | Apache Flink image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
-| `image.pullPolicy`  | image pull policy                                                                                            | `Never`               |
+| `image.pullPolicy`  | image pull policy                                                                                            | `IfNotPresent`        |
 | `image.pullSecrets` | Apache Flink image pull secrets                                                                              | `[]`                  |
 | `image.debug`       | Enable image debug mode                                                                                      | `false`               |
 
