@@ -47,7 +47,7 @@ spec:
       {{- else if eq .Values.jobmanager.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
-    - name: http-dashboard
+    - name: http
       port: {{ .Values.jobmanager.service.ports.http }}
       targetPort: {{ .Values.jobmanager.containerPorts.http }}
       {{- if and (or (eq .Values.jobmanager.service.type "NodePort") (eq .Values.jobmanager.service.type "LoadBalancer")) (not (empty .Values.jobmanager.service.nodePorts.http)) }}
