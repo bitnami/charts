@@ -1,6 +1,5 @@
 {{/* vim: set filetype=mustache: */}}
 
-
 {{/*
 Return the proper flink image name
 */}}

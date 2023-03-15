@@ -246,7 +246,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `taskmanager.initContainers`                              | Add additional init containers to the flink pods                                          | `[]`            |
 | `taskmanager.sidecars`                                    | Add additional sidecar containers to the flink pods                                       | `[]`            |
 
-
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
 ## Configuration and installation details
