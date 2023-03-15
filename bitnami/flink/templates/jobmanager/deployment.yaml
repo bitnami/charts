@@ -86,7 +86,7 @@ spec:
             - name: rpc
               containerPort: {{ .Values.jobmanager.containerPorts.rpc }}
             - name: http-dashboard
-              containerPort: {{ .Values.jobmanager.containerPorts.httpDashboard }}
+              containerPort: {{ .Values.jobmanager.containerPorts.http }}
             - name: blob
               containerPort: {{ .Values.jobmanager.containerPorts.blob }}
           env:
