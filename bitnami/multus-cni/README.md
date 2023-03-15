@@ -2,7 +2,7 @@
 
 # Multus CNI packaged by Bitnami
 
-Multus is a CNI plugin for Kubernetes clusters. Written in Go, features adding multiple network interfaces to pods. 
+Multus is a CNI plugin for Kubernetes clusters. Written in Go, features adding multiple network interfaces to pods.
 
 [Overview of Multus CNI](https://github.com/k8snetworkplumbingwg/multus-cni)
 
