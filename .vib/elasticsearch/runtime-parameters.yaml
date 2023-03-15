@@ -14,3 +14,5 @@ service:
     transport: 9300
 sysctlImage:
   enabled: true
+containerPorts:
+  transport: 9300

@@ -38,6 +38,20 @@
           }
         },
         {
+          "action_id": "cypress",
+          "params": {
+            "resources": {
+              "path": "/.vib/rabbitmq/cypress"
+            },
+            "endpoint": "lb-rabbitmq-http-stats",
+            "app_protocol": "HTTP",
+            "env": {
+              "username": "test_user",
+              "password": "ComplicatedPassword123!4"
+            }
+          }
+        },
+        {
           "action_id": "goss",
           "params": {
             "resources": {
@@ -50,20 +64,6 @@
                 "workload": "sts-rabbitmq"
               }
             }
-          }
-        },
-        {
-          "action_id": "goss",
-          "params": {
-            "resources": {
-              "path": "/.vib/rabbitmq/goss"
-            },
-            "remote": {
-              "pod": {
-                "workload": "sts-rabbitmq"
-              }
-            },
-            "vars_file": "vars.yaml"
           }
         }
       ]

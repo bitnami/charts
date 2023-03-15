@@ -14,7 +14,8 @@ podSecurityContext:
   enabled: true
   fsGroup: 1002
 adminPassword: bitnami!1234
-
+serviceAccount:
+  automountServiceAccountToken: true
 postgresql:
   enabled: true
   auth:

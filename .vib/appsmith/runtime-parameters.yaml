@@ -4,11 +4,12 @@ backend:
   service:
     ports:
       http: 8083
-
 rts:
   service:
     ports:
       http: 8085
+serviceAccount:
+  automountServiceAccountToken: true
 client:
   service:
     type: LoadBalancer
