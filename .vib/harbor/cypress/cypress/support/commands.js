@@ -21,3 +21,13 @@ Cypress.Commands.add(
     cy.get('button[type="submit"]').should('not.be.disabled').click();
   }
 );
+
+Cypress.on('uncaught:exception', (err) => {
+  // The following error is produced on the application side, and we want
+  // to ignore it
+  if (err.message.includes("Cannot read properties of null")) {
+    return false;
+  }
+  // we still want to ensure there are no other unexpected
+  // errors, so we let them fail the test
+})

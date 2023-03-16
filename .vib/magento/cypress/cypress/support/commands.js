@@ -1,7 +1,7 @@
 const COMMAND_DELAY = 2000;
 const BASE_URL = 'http://vmware-magento.my';
 
-for (const command of ['click', 'get']) {
+for (const command of ['click']) {
   Cypress.Commands.overwrite(command, (originalFn, ...args) => {
     const origVal = originalFn(...args);
 
@@ -11,6 +11,16 @@ for (const command of ['click', 'get']) {
       }, COMMAND_DELAY);
     });
   });
+}
+
+for (const query of ['get']) {
+  Cypress.Commands.overwriteQuery(query, function (originalFn, ...args) {
+    const innerFn = originalFn.apply(this, args.concat({timeout: COMMAND_DELAY}))
+
+    return (subject) => {
+      return innerFn(subject)
+    }
+  })
 }
 
 // Due to a bug when using "hosts" in Cypress, we cannot set a "baseUrl" in the
