@@ -194,6 +194,9 @@ enableS3: true
 ##
 s3ForceHttps: false
 
+## @param useSecureWebSocket Set Mastodon's STREAMING_API_BASE_URL to use secure websocket (wss:// instead of ws://)
+useSecureWebSocket: false
+
 ## @param local_https Set this instance to advertise itself to the fediverse using HTTPS rather than HTTP URLs. This should almost always be true.
 ##
 local_https: true

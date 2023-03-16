@@ -52,7 +52,11 @@ Return the proper Mastodon streaming fullname
 Return Mastodon streaming url
 */}}
 {{- define "mastodon.streaming.url" -}}
-{{- printf "ws://%s" (include "mastodon.web.domain" .) | trunc 63 | trimSuffix "-" -}}
+  {{- if .Values.useSecureWebSocket -}}
+    {{- printf "wss://%s" (include "mastodon.web.domain" .) | trunc 63 | trimSuffix "-" -}}
+  {{- else -}}
+    {{- printf "ws://%s" (include "mastodon.web.domain" .) | trunc 63 | trimSuffix "-" -}}
+  {{- end -}}  
 {{- end -}}
 
 {{/*
