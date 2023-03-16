@@ -94,7 +94,7 @@ spec:
             - name: FLINK_CFG_JOBMANAGER_RPC_ADDRESS
               value: {{ include "flink.jobmanager.fullname" . }}
             - name: FLINK_CFG_TASKMANAGER_RPC_PORT
-              value: {{ .Values.taskmanager.service.ports.rpc | quote }}
+              value: {{ .Values.taskmanager.containerPorts.rpc | quote }}
             - name: FLINK_CFG_TASKMANAGER_HOST
               value: {{ include "flink.taskmanager.fullname" . }}
             - name: FLINK_CFG_TASKMANAGER_BIND__HOST
