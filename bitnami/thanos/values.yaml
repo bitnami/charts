@@ -3973,6 +3973,12 @@ metrics:
     ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
     ##
     selector: {}
+    ## @param metrics.serviceMonitor.extraParameters Any extra parameter to be added to the endpoint configured in the ServiceMonitor
+    ## (e.g. tlsConfig for further customization of the HTTPS behavior)
+    ## Note that the 'scheme' is automatically set to 'https' when the 'https.enabled' flag is used in this chart.
+    ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#monitoring.coreos.com/v1.Endpoint
+    ##
+    extraParameters: {}
 
   ## PrometheusRule CRD configuration
   ##
