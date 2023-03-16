@@ -270,7 +270,7 @@ Sometimes it is of interest to run the tests locally, for example during develop
     $ helm install nginx bitnami/nginx -f <(echo "Y29udGFpbmVyUG9ydHM6CiAgaHR0cDogODA4MQogIGh0dHBzOiA4NDQ0CnBvZFNlY3VyaXR5Q29udGV4dDoKICBlbmFibGVkOiB0cnVlCiAgZnNHcm91cDogMTAwMgpjb250YWluZXJTZWN1cml0eUNvbnRleHQ6CiAgZW5hYmxlZDogdHJ1ZQogIHJ1bkFzVXNlcjogMTAwMgpzZXJ2aWNlOgogIHR5cGU6IExvYWRCYWxhbmNlcgogIHBvcnRzOgogICAgaHR0cDogODAKICAgIGh0dHBzOiA0NDQK" | base64 -d)
     ```
 
-2. Download and install [Cypress](https://www.cypress.io/). The version currently used is `9.5.4`
+2. Download and install [Cypress](https://www.cypress.io/). The version currently used is `12.8.1`
 3. Obtain the IP and port of the Service exposing the UI of the application and adapt `cypress.json` to these values
 
     ```bash
@@ -326,10 +326,11 @@ Sometimes it is of interest to run the tests locally, for example during develop
       (Run Starting)
 
       ┌─────────────────────────────────────────────────────────────────────────────────┐
-      │ Cypress:        9.5.4                                                           │
-      │ Browser:        Electron 94 (headless)                                          │
+      │ Cypress:        12.8.1                                                          │
+      │ Browser:        Electron 106 (headless)                                         │
       │ Node Version:   v16.13.2 (/usr/local/bin/node)                                  │
       │ Specs:          1 found (nginx_spec.js)                                         │
+      │ Searched:       cypress/e2e/**/*.cy.{js,jsx,ts,tsx}                             │
       └─────────────────────────────────────────────────────────────────────────────────┘
     ...
     ✔  All specs passed!                        371ms        1        1
