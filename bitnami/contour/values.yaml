@@ -466,6 +466,17 @@ contour:
   ##
   rootNamespaces: ""
 
+  ## Exposes configuration of Envoy's Overload Manager through Contour's bootstrapping process
+  ## When 95% of max heap size is reached for an Envoy, "shrink heap" operation is triggered.
+  ## When 98% of max heap size is reached for an Envoy, it no longer accepts requests.
+  ## https://projectcontour.io/docs/main/config/overload-manager/
+  ## @param contour.overloadManager.enabled Enable Overload Manager
+  ## @param contour.overloadManager.maxHeapBytes Overload Manager's maximum heap size in bytes
+  ##
+  overloadManager:
+    enabled: false
+    maxHeapBytes: "2147483648"
+
 ## @section Envoy parameters
 ##
 

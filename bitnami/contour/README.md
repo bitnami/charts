@@ -187,6 +187,8 @@ helm uninstall my-release
 | `contour.logFormat`                                           | Set contour log-format. Default text, either text or json.                                                                         | `text`                |
 | `contour.kubernetesDebug`                                     | Contour kubernetes debug log level, Default 0, minimum 0, maximum 9.                                                               | `0`                   |
 | `contour.rootNamespaces`                                      | Restrict Contour to searching these namespaces for root ingress routes.                                                            | `""`                  |
+| `contour.overloadManager.enabled`                             | Enable Overload Manager                                                                                                            | `false`               |
+| `contour.overloadManager.maxHeapBytes`                        | Overload Manager's maximum heap size in bytes                                                                                      | `2147483648`          |
 
 ### Envoy parameters
 
