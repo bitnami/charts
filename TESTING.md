@@ -271,7 +271,7 @@ Sometimes it is of interest to run the tests locally, for example during develop
     ```
 
 2. Download and install [Cypress](https://www.cypress.io/). The version currently used is `12.8.1`
-3. Obtain the IP and port of the Service exposing the UI of the application and adapt `cypress.json` to these values
+3. Obtain the IP and port of the Service exposing the UI of the application and adapt `cypress.config.js` to these values
 
     ```bash
     $ kubectl get svc
@@ -280,37 +280,47 @@ Sometimes it is of interest to run the tests locally, for example during develop
     nginx        LoadBalancer   10.99.41.53   1.1.1.1   80:31102/TCP,444:30230/TCP   65s
 
     $ cd .vib/nginx/cypress
-    $ cat cypress.json
+    $ cat cypress.config.js
     {
-      "baseUrl": "http://localhost"
+      module.exports = {
+        e2e: {
+          setupNodeEvents(on, config) {},
+          baseUrl: 'http://localhost',
+        },
+      }
     }
     # Edit the file to point to 1.1.1.1:80
-    $ nano cypress.json
-    $ cat cypress.json
+    $ nano cypress.config.js
+    $ cat cypress.config.js
     {
-      "baseUrl": "http://1.1.1.1:80"
+      module.exports = {
+        e2e: {
+          setupNodeEvents(on, config) {},
+          baseUrl: 'http://1.1.1.1:80',
+        },
+      }
     }
     ```
 
-    > NOTE: There are assets that require to have a host configured instead of a plain IP address to properly work. In this cases, you may find a `hosts` entry in the `cypress.json` file instead of the `baseUrl`. Proceed as follows:
+    > NOTE: There are assets that require to have a host configured instead of a plain IP address to properly work. In this cases, you may find a `hosts` entry in the `cypress.config.js` file instead of the `baseUrl`. Proceed as follows:
 
     ```bash
     $ cd .vib/prestashop/cypress
-    $ cat cypress.json
+    $ cat cypress.config.js
     {
       ...
-      "hosts": {
-        "vmware-prestashop.my": "{{ TARGET_IP }}"
+      hosts: {
+        'vmware-prestashop.my': '{{ TARGET_IP }}',
       },
       ...
     }
     # Replace the {{ TARGET_IP }} placeholder by the IP and port of the Service
-    $ nano cypress.json
-    $ cat cypress.json
+    $ nano cypress.config.js
+    $ cat cypress.config.js
     {
       ...
-      "hosts": {
-        "vmware-prestashop.my": "1.1.1.1:80"
+      hosts: {
+        'vmware-prestashop.my': '1.1.1.1:80',
       },
       ...
     }
@@ -352,12 +362,12 @@ Sometimes it is of interest to run the tests locally, for example during develop
 * [ ] No `describe()` blocks should be present
 * [ ] Aim to have an assertion after every command to avoid flakiness, taking advantage of Cypress retry-ability
 * [ ] Test description is a sentence with the following format: Expected result summary, starting with a verb, in third person, no dots at the end of the sentence (ex: `it('checks if admin can edit a site', ()`)
-* [ ] Respect the folder structure recommended by Cypress:
+* [ ] Respect the [folder structure recommended by Cypress](https://docs.cypress.io/guides/core-concepts/writing-and-organizing-tests#Folder-structure):
   * [fixtures](https://docs.cypress.io/guides/core-concepts/writing-and-organizing-tests#Fixture-Files) - for test data
-  * integration - test scenario
+  * [e2e](https://docs.cypress.io/guides/core-concepts/writing-and-organizing-tests#Spec-files) - test scenario
   * [plugins](https://docs.cypress.io/guides/tooling/plugins-guide) - plugin configuration, if applicable
-  * support - reusable behaviours and overrides
-  * [cypress.json](https://docs.cypress.io/guides/references/legacy-configuration#cypressjson) - configuration values you wish to store
+  * [support](https://docs.cypress.io/guides/core-concepts/writing-and-organizing-tests#Spec-files) - reusable behaviours and overrides to include before test files
+  * [cypress.config.js](https://docs.cypress.io/guides/references/configuration#Configuration-File) - configuration values you wish to store
 * [ ] DOM selectors should be resilient. See best practices [here](https://docs.cypress.io/guides/references/best-practices#Selecting-Elements)
 * [ ] Unnecessary waiting should be avoided
 * [ ] Apply the following code style:
