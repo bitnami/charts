@@ -160,6 +160,14 @@ Return the S3 protocol
     {{- end -}}
 {{- end -}}
 
+{{- define "mastodon.s3.protocol.setting" -}}
+    {{- if .Values.forceHttpsS3Protocol -}}
+        {{- print "https" -}}
+    {{- else -}}
+        {{- print (include "mastodon.s3.protocol" .) -}}
+    {{- end -}}
+{{- end -}}
+
 {{/*
 Return the S3 region
 */}}
