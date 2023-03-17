@@ -407,13 +407,17 @@ For annotations, please see [this document](https://github.com/kubernetes/ingres
 
 ## Upgrading
 
+### To 9.0.0
+
+This major updates the Kafka subchart to its newest major, 21.0.0. For more information on this subchart's major, please refer to [Kafka upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/kafka#to-2100).
+
 ### To 8.0.0
 
-This major updates the Kafka subchart to it newest major, 20.0.0. For more information on this subchart's major, please refer to [Kafka upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/kafka#to-2000).
+This major updates the Kafka subchart to its newest major, 20.0.0. For more information on this subchart's major, please refer to [Kafka upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/kafka#to-2000).
 
 ### To 6.0.0
 
-This major updates the Kafka subchart to it newest major, 19.0.0. For more information on this subchart's major, please refer to [Kafka upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/kafka#to-1900).
+This major updates the Kafka subchart to its newest major, 19.0.0. For more information on this subchart's major, please refer to [Kafka upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/kafka#to-1900).
 
 ### To 4.0.0
 
