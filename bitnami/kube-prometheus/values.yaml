@@ -1077,6 +1077,10 @@ prometheus:
   ##             summary: "Node overtemperature alarm (instance {{ $labels.instance }})"
   ##             description: "Physical node temperature alarm triggered\n  VALUE = {{ $value }}\n  LABELS: {{ $labels }}"
   ##
+  ## @param prometheus.additionalArgs Allows setting additional arguments for the Prometheus container
+  ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#monitoring.coreos.com/v1.Prometheus
+  ##
+  additionalArgs: []
   additionalPrometheusRules: []
   ## Note that the prometheus will fail to provision if the correct secret does not exist.
   ## @param prometheus.additionalScrapeConfigs.enabled Enable additional scrape configs
