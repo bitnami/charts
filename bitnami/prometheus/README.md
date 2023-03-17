@@ -6,7 +6,6 @@ Prometheus is an open source monitoring and alerting system. It enables sysadmin
 
 [Overview of Prometheus](https://prometheus.io/")
 
-
 ## TL;DR
 
 ```console
