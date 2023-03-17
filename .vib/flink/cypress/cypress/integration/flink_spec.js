@@ -15,9 +15,9 @@ describe.only('Apache Flink', () => {
 
   it('should show available task slots', () => {
     cy.visit('/')
-    cy.get('.field')
-      .contains('Total Task Slots')
-      .siblings('span')
-      .contains('6');
+    cy.get('.field').within(() => {
+      cy.contains('Total Task Slots');
+      cy.contains('6');
+    });
   })
 })
