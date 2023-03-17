@@ -1,13 +1,13 @@
 addr:
-  tcp://localhost:{{ .Vars.jobmanager.service.ports.rpc }}:
+  tcp://flink-jobmanager:{{ .Vars.jobmanager.service.ports.rpc }}:
     reachable: true
-  tcp://localhost:{{ .Vars.jobmanager.service.ports.http }}:
+  tcp://flink-jobmanager:{{ .Vars.jobmanager.service.ports.http }}:
     reachable: true
 http:
   http://flink-jobmanager:{{ .Vars.jobmanager.service.ports.http }}/:
     status: 200
     body:
-      - Server available
+      - Dashboard
 command:
   {{- $uid := .Vars.taskmanager.containerSecurityContext.runAsUser }}
   {{- $gid := .Vars.taskmanager.podSecurityContext.fsGroup }}
