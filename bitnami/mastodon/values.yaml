@@ -190,6 +190,10 @@ enableSearches: true
 ##
 enableS3: true
 
+## @param forceHttpsS3Protocol Force Mastodon's S3_PROTOCOL to be https (Useful when TLS is terminated using cert-manager/Ingress)
+##
+forceHttpsS3Protocol: false
+
 ## @param local_https Set this instance to advertise itself to the fediverse using HTTPS rather than HTTP URLs. This should almost always be true.
 ##
 local_https: true
