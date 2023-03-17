@@ -363,6 +363,11 @@ hostNetwork: false
 ## to keep resolving names inside the Kubernetes network
 ##
 dnsPolicy: ClusterFirst
+## @param dnsConfig is an object with optional parameters to pass to the DNS resolver
+## The dnsConfig field is optional and it can work with any dnsPolicy settings.
+## However, when a Pod's dnsPolicy is set to "None", the dnsConfig field has to be specified.
+##
+dnsConfig: {}
 ## @param terminationGracePeriodSeconds How many seconds to wait before terminating a pod
 ##
 terminationGracePeriodSeconds: 60
