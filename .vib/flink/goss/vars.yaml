@@ -2,13 +2,11 @@ jobmanager:
   service:
     ports:
       rpc: 6123
-      http: 80
+      http: 8081
 taskmanager:
   service:
     ports:
-      rpc: 14272
-  containerPorts:
-    rpc: 5779
+      rpc: 6122
   podSecurityContext:
     fsGroup: 1002
   containerSecurityContext:
