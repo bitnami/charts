@@ -90,7 +90,7 @@ helm uninstall my-release
 | `contour.enabled`                                             | Contour Deployment creation.                                                                                                       | `true`                |
 | `contour.image.registry`                                      | Contour image registry                                                                                                             | `docker.io`           |
 | `contour.image.repository`                                    | Contour image name                                                                                                                 | `bitnami/contour`     |
-| `contour.image.tag`                                           | Contour image tag                                                                                                                  | `1.24.2-debian-11-r0` |
+| `contour.image.tag`                                           | Contour image tag                                                                                                                  | `1.24.2-debian-11-r1` |
 | `contour.image.digest`                                        | Contour image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                            | `""`                  |
 | `contour.image.pullPolicy`                                    | Contour Image pull policy                                                                                                          | `IfNotPresent`        |
 | `contour.image.pullSecrets`                                   | Contour Image pull secrets                                                                                                         | `[]`                  |
@@ -312,7 +312,7 @@ helm uninstall my-release
 | `defaultBackend.enabled`                               | Enable a default backend based on NGINX                                                                         | `false`                  |
 | `defaultBackend.image.registry`                        | Default backend image registry                                                                                  | `docker.io`              |
 | `defaultBackend.image.repository`                      | Default backend image name                                                                                      | `bitnami/nginx`          |
-| `defaultBackend.image.tag`                             | Default backend image tag                                                                                       | `1.23.3-debian-11-r35`   |
+| `defaultBackend.image.tag`                             | Default backend image tag                                                                                       | `1.23.3-debian-11-r36`   |
 | `defaultBackend.image.digest`                          | Default backend image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                     |
 | `defaultBackend.image.pullPolicy`                      | Image pull policy                                                                                               | `IfNotPresent`           |
 | `defaultBackend.image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                | `[]`                     |
