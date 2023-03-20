@@ -45,7 +45,7 @@
               "path": "/.vib/flink/goss"
             },
             "remote": {
-              "workload": "deploy-flink-jobmanager"
+              "workload": "deploy-flink-taskmanager"
             },
             "vars_file": "vars.yaml"
           }
