@@ -3,13 +3,11 @@ addr:
     reachable: true
   tcp://flink-jobmanager:{{ .Vars.jobmanager.service.ports.http }}:
     reachable: true
-  timeout: 120000
 http:
   http://flink-jobmanager:{{ .Vars.jobmanager.service.ports.http }}/:
     status: 200
     body:
       - Dashboard
-  timeout: 120000
 command:
   {{- $uid := .Vars.taskmanager.containerSecurityContext.runAsUser }}
   {{- $gid := .Vars.taskmanager.podSecurityContext.fsGroup }}
