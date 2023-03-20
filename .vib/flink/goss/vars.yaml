@@ -1,7 +1,9 @@
 jobmanager:
+  containerPorts:
+    rpc: 6123
+    http: 8078
   service:
     ports:
-      rpc: 6123
       http: 80
 taskmanager:
   service:
