@@ -1,16 +1,13 @@
 addr:
   tcp://flink-jobmanager:{{ .Vars.jobmanager.service.ports.rpc }}:
     reachable: true
-    timeout: 120000
   tcp://flink-jobmanager:{{ .Vars.jobmanager.service.ports.http }}:
     reachable: true
-    timeout: 120000
 http:
   http://flink-jobmanager:{{ .Vars.jobmanager.service.ports.http }}/:
     status: 200
     body:
       - Dashboard
-  timeout: 120000
 command:
   {{- $uid := .Vars.taskmanager.containerSecurityContext.runAsUser }}
   {{- $gid := .Vars.taskmanager.podSecurityContext.fsGroup }}
@@ -19,4 +16,3 @@ command:
     # or the one randomly defined by openshift (larger values). Otherwise, the chart is still using the default value.
     exec: if [ $(id -u) -lt {{ $uid }} ] || [ $(id -G | awk '{print $2}') -lt {{ $gid }} ]; then exit 1; fi
     exit-status: 0
-  timeout: 120000
