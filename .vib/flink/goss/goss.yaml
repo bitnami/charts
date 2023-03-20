@@ -19,4 +19,4 @@ command:
     # or the one randomly defined by openshift (larger values). Otherwise, the chart is still using the default value.
     exec: if [ $(id -u) -lt {{ $uid }} ] || [ $(id -G | awk '{print $2}') -lt {{ $gid }} ]; then exit 1; fi
     exit-status: 0
-  timeout: 120000
+    timeout: 120000
