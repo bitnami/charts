@@ -315,49 +315,52 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Metrics parameters
 
-| Name                                         | Description                                                                                                                    | Value                     |
-| -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | ------------------------- |
-| `metrics.enabled`                            | Start a side-car prometheus exporter                                                                                           | `false`                   |
-| `metrics.image.registry`                     | Exporter image registry                                                                                                        | `docker.io`               |
-| `metrics.image.repository`                   | Exporter image repository                                                                                                      | `bitnami/mysqld-exporter` |
-| `metrics.image.tag`                          | Exporter image tag (immutable tags are recommended)                                                                            | `0.14.0-debian-11-r96`    |
-| `metrics.image.digest`                       | Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                       | `""`                      |
-| `metrics.image.pullPolicy`                   | Exporter image pull policy                                                                                                     | `IfNotPresent`            |
-| `metrics.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                               | `[]`                      |
-| `metrics.service.type`                       | Kubernetes service type for MySQL Prometheus Exporter                                                                          | `ClusterIP`               |
-| `metrics.service.port`                       | MySQL Prometheus Exporter service port                                                                                         | `9104`                    |
-| `metrics.service.annotations`                | Prometheus exporter service annotations                                                                                        | `{}`                      |
-| `metrics.extraArgs.primary`                  | Extra args to be passed to mysqld_exporter on Primary pods                                                                     | `[]`                      |
-| `metrics.extraArgs.secondary`                | Extra args to be passed to mysqld_exporter on Secondary pods                                                                   | `[]`                      |
-| `metrics.resources.limits`                   | The resources limits for MySQL prometheus exporter containers                                                                  | `{}`                      |
-| `metrics.resources.requests`                 | The requested resources for MySQL prometheus exporter containers                                                               | `{}`                      |
-| `metrics.livenessProbe.enabled`              | Enable livenessProbe                                                                                                           | `true`                    |
-| `metrics.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                                                        | `120`                     |
-| `metrics.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                                               | `10`                      |
-| `metrics.livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                                                              | `1`                       |
-| `metrics.livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                                                            | `3`                       |
-| `metrics.livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                                                            | `1`                       |
-| `metrics.readinessProbe.enabled`             | Enable readinessProbe                                                                                                          | `true`                    |
-| `metrics.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                                                       | `30`                      |
-| `metrics.readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                                                              | `10`                      |
-| `metrics.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                                             | `1`                       |
-| `metrics.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                                                           | `3`                       |
-| `metrics.readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                                                           | `1`                       |
-| `metrics.serviceMonitor.enabled`             | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator                                                   | `false`                   |
-| `metrics.serviceMonitor.namespace`           | Specify the namespace in which the serviceMonitor resource will be created                                                     | `""`                      |
-| `metrics.serviceMonitor.jobLabel`            | The name of the label on the target service to use as the job name in prometheus.                                              | `""`                      |
-| `metrics.serviceMonitor.interval`            | Specify the interval at which metrics should be scraped                                                                        | `30s`                     |
-| `metrics.serviceMonitor.scrapeTimeout`       | Specify the timeout after which the scrape is ended                                                                            | `""`                      |
-| `metrics.serviceMonitor.relabelings`         | RelabelConfigs to apply to samples before scraping                                                                             | `[]`                      |
-| `metrics.serviceMonitor.metricRelabelings`   | MetricRelabelConfigs to apply to samples before ingestion                                                                      | `[]`                      |
-| `metrics.serviceMonitor.selector`            | ServiceMonitor selector labels                                                                                                 | `{}`                      |
-| `metrics.serviceMonitor.honorLabels`         | Specify honorLabels parameter to add the scrape endpoint                                                                       | `false`                   |
-| `metrics.serviceMonitor.labels`              | Used to pass Labels that are used by the Prometheus installed in your cluster to select Service Monitors to work with          | `{}`                      |
-| `metrics.serviceMonitor.annotations`         | ServiceMonitor annotations                                                                                                     | `{}`                      |
-| `metrics.prometheusRule.enabled`             | Creates a Prometheus Operator prometheusRule (also requires `metrics.enabled` to be `true` and `metrics.prometheusRule.rules`) | `false`                   |
-| `metrics.prometheusRule.namespace`           | Namespace for the prometheusRule Resource (defaults to the Release Namespace)                                                  | `""`                      |
-| `metrics.prometheusRule.additionalLabels`    | Additional labels that can be used so prometheusRule will be discovered by Prometheus                                          | `{}`                      |
-| `metrics.prometheusRule.rules`               | Prometheus Rule definitions                                                                                                    | `[]`                      |
+| Name                                            | Description                                                                                                                    | Value                     |
+| ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | ------------------------- |
+| `metrics.enabled`                               | Start a side-car prometheus exporter                                                                                           | `false`                   |
+| `metrics.image.registry`                        | Exporter image registry                                                                                                        | `docker.io`               |
+| `metrics.image.repository`                      | Exporter image repository                                                                                                      | `bitnami/mysqld-exporter` |
+| `metrics.image.tag`                             | Exporter image tag (immutable tags are recommended)                                                                            | `0.14.0-debian-11-r96`    |
+| `metrics.image.digest`                          | Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                       | `""`                      |
+| `metrics.image.pullPolicy`                      | Exporter image pull policy                                                                                                     | `IfNotPresent`            |
+| `metrics.image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                               | `[]`                      |
+| `metrics.containerSecurityContext.enabled`      | MySQL metrics container securityContext                                                                                        | `true`                    |
+| `metrics.containerSecurityContext.runAsUser`    | User ID for the MySQL metrics container                                                                                        | `1001`                    |
+| `metrics.containerSecurityContext.runAsNonRoot` | Set MySQL metrics container's Security Context runAsNonRoot                                                                    | `true`                    |
+| `metrics.service.type`                          | Kubernetes service type for MySQL Prometheus Exporter                                                                          | `ClusterIP`               |
+| `metrics.service.port`                          | MySQL Prometheus Exporter service port                                                                                         | `9104`                    |
+| `metrics.service.annotations`                   | Prometheus exporter service annotations                                                                                        | `{}`                      |
+| `metrics.extraArgs.primary`                     | Extra args to be passed to mysqld_exporter on Primary pods                                                                     | `[]`                      |
+| `metrics.extraArgs.secondary`                   | Extra args to be passed to mysqld_exporter on Secondary pods                                                                   | `[]`                      |
+| `metrics.resources.limits`                      | The resources limits for MySQL prometheus exporter containers                                                                  | `{}`                      |
+| `metrics.resources.requests`                    | The requested resources for MySQL prometheus exporter containers                                                               | `{}`                      |
+| `metrics.livenessProbe.enabled`                 | Enable livenessProbe                                                                                                           | `true`                    |
+| `metrics.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                                        | `120`                     |
+| `metrics.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                                               | `10`                      |
+| `metrics.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                                              | `1`                       |
+| `metrics.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                                            | `3`                       |
+| `metrics.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                                            | `1`                       |
+| `metrics.readinessProbe.enabled`                | Enable readinessProbe                                                                                                          | `true`                    |
+| `metrics.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                                       | `30`                      |
+| `metrics.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                                              | `10`                      |
+| `metrics.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                                             | `1`                       |
+| `metrics.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                                           | `3`                       |
+| `metrics.readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                                           | `1`                       |
+| `metrics.serviceMonitor.enabled`                | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator                                                   | `false`                   |
+| `metrics.serviceMonitor.namespace`              | Specify the namespace in which the serviceMonitor resource will be created                                                     | `""`                      |
+| `metrics.serviceMonitor.jobLabel`               | The name of the label on the target service to use as the job name in prometheus.                                              | `""`                      |
+| `metrics.serviceMonitor.interval`               | Specify the interval at which metrics should be scraped                                                                        | `30s`                     |
+| `metrics.serviceMonitor.scrapeTimeout`          | Specify the timeout after which the scrape is ended                                                                            | `""`                      |
+| `metrics.serviceMonitor.relabelings`            | RelabelConfigs to apply to samples before scraping                                                                             | `[]`                      |
+| `metrics.serviceMonitor.metricRelabelings`      | MetricRelabelConfigs to apply to samples before ingestion                                                                      | `[]`                      |
+| `metrics.serviceMonitor.selector`               | ServiceMonitor selector labels                                                                                                 | `{}`                      |
+| `metrics.serviceMonitor.honorLabels`            | Specify honorLabels parameter to add the scrape endpoint                                                                       | `false`                   |
+| `metrics.serviceMonitor.labels`                 | Used to pass Labels that are used by the Prometheus installed in your cluster to select Service Monitors to work with          | `{}`                      |
+| `metrics.serviceMonitor.annotations`            | ServiceMonitor annotations                                                                                                     | `{}`                      |
+| `metrics.prometheusRule.enabled`                | Creates a Prometheus Operator prometheusRule (also requires `metrics.enabled` to be `true` and `metrics.prometheusRule.rules`) | `false`                   |
+| `metrics.prometheusRule.namespace`              | Namespace for the prometheusRule Resource (defaults to the Release Namespace)                                                  | `""`                      |
+| `metrics.prometheusRule.additionalLabels`       | Additional labels that can be used so prometheusRule will be discovered by Prometheus                                          | `{}`                      |
+| `metrics.prometheusRule.rules`                  | Prometheus Rule definitions                                                                                                    | `[]`                      |
 
 The above parameters map to the env variables defined in [bitnami/mysql](https://github.com/bitnami/containers/tree/main/bitnami/mysql). For more information please refer to the [bitnami/mysql](https://github.com/bitnami/containers/tree/main/bitnami/mysql) image documentation.
 

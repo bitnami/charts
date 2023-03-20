@@ -1055,9 +1055,9 @@ metrics:
     pullSecrets: []
   ## MySQL metrics container security context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param primary.containerSecurityContext.enabled MySQL metrics container securityContext
-  ## @param primary.containerSecurityContext.runAsUser User ID for the MySQL metrics container
-  ## @param primary.containerSecurityContext.runAsNonRoot Set MySQL metrics container's Security Context runAsNonRoot
+  ## @param metrics.containerSecurityContext.enabled MySQL metrics container securityContext
+  ## @param metrics.containerSecurityContext.runAsUser User ID for the MySQL metrics container
+  ## @param metrics.containerSecurityContext.runAsNonRoot Set MySQL metrics container's Security Context runAsNonRoot
   ##
   containerSecurityContext:
     enabled: true
