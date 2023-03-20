@@ -2,7 +2,7 @@ jobmanager:
   service:
     ports:
       rpc: 6123
-      http: 8081
+      http: 80
 taskmanager:
   service:
     ports:
