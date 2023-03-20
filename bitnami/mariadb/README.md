@@ -372,13 +372,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.ingressRules.primaryAccessOnlyFrom.enabled`             | Enable ingress rule that makes primary mariadb nodes only accessible from a particular origin.                                         | `false` |
 | `networkPolicy.ingressRules.primaryAccessOnlyFrom.namespaceSelector`   | Namespace selector label that is allowed to access the primary node. This label will be used to identified the allowed namespace(s).   | `{}`    |
 | `networkPolicy.ingressRules.primaryAccessOnlyFrom.podSelector`         | Pods selector label that is allowed to access the primary node. This label will be used to identified the allowed pod(s).              | `{}`    |
-| `networkPolicy.ingressRules.primaryAccessOnlyFrom.customRules`         | Custom network policy for the primary node.                                                                                            | `{}`    |
+| `networkPolicy.ingressRules.primaryAccessOnlyFrom.customRules`         | Custom network policy for the primary node.                                                                                            | `[]`    |
 | `networkPolicy.ingressRules.secondaryAccessOnlyFrom.enabled`           | Enable ingress rule that makes primary mariadb nodes only accessible from a particular origin.                                         | `false` |
 | `networkPolicy.ingressRules.secondaryAccessOnlyFrom.namespaceSelector` | Namespace selector label that is allowed to acces the secondary nodes. This label will be used to identified the allowed namespace(s). | `{}`    |
 | `networkPolicy.ingressRules.secondaryAccessOnlyFrom.podSelector`       | Pods selector label that is allowed to access the secondary nodes. This label will be used to identified the allowed pod(s).           | `{}`    |
-| `networkPolicy.ingressRules.secondaryAccessOnlyFrom.customRules`       | Custom network policy for the secondary nodes.                                                                                         | `{}`    |
+| `networkPolicy.ingressRules.secondaryAccessOnlyFrom.customRules`       | Custom network policy for the secondary nodes.                                                                                         | `[]`    |
 | `networkPolicy.egressRules.denyConnectionsToExternal`                  | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).                                         | `false` |
-| `networkPolicy.egressRules.customRules`                                | Custom network policy rule                                                                                                             | `{}`    |
+| `networkPolicy.egressRules.customRules`                                | Custom network policy rule                                                                                                             | `[]`    |
 
 The above parameters map to the env variables defined in [bitnami/mariadb](https://github.com/bitnami/containers/tree/main/bitnami/mariadb). For more information please refer to the [bitnami/mariadb](https://github.com/bitnami/containers/tree/main/bitnami/mariadb) image documentation.
 
