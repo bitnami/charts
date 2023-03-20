@@ -1,10 +1,10 @@
 addr:
-  tcp://localhost:{{ .Vars.jobmanager.service.ports.rpc }}:
+  tcp://flink-jobmanager:{{ .Vars.jobmanager.service.ports.rpc }}:
     reachable: true
-  tcp://localhost:{{ .Vars.jobmanager.service.ports.http }}:
+  tcp://flink-jobmanager:{{ .Vars.jobmanager.service.ports.http }}:
     reachable: true
 http:
-  http://localhost:{{ .Vars.jobmanager.service.ports.http }}/:
+  http://flink-jobmanager:{{ .Vars.jobmanager.service.ports.http }}/:
     status: 200
     body:
       - Dashboard
