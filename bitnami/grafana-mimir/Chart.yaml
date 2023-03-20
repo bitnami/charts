@@ -2,7 +2,7 @@ annotations:
   category: Infrastructure
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 2.7.0
+appVersion: 2.7.1
 dependencies:
   - condition: minio.enabled
     name: minio
@@ -48,4 +48,4 @@ name: grafana-mimir
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/grafana-mimir
   - https://github.com/grafana/mimir
-version: 0.2.1
+version: 0.2.2
