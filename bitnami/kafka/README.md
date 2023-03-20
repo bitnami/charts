@@ -473,11 +473,11 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                            | Description                                                                             | Value                    |
 | ------------------------------- | --------------------------------------------------------------------------------------- | ------------------------ |
-| `kraft.enabled`                 | Switch to enable or disable the Kraft mode for Kafka                                    | `false`                  |
-| `kraft.processRoles`            | Roles of your Kafka nodes. Nodes can have 'broker', 'controller' roles or both of them. | `broker,controller`      |
-| `kraft.controllerListenerNames` | Controller listener names                                                               | `CONTROLLER`             |
-| `kraft.clusterId`               | Kafka ClusterID. You must set it if your cluster contains more than one node.           | `kafka_cluster_id_test1` |
-| `kraft.controllerQuorumVoters`  | Quorum voters of Kafka Kraft cluster. Use it for nodes with 'broker' role only.         | `""`                     |
+| `kraft.enabled`                 | Switch to enable or disable the Kraft mode for Kafka                                                                            | `false`                  |
+| `kraft.processRoles`            | Roles of your Kafka nodes. Nodes can have 'broker', 'controller' roles or both of them.                                         | `broker,controller`      |
+| `kraft.controllerListenerNames` | Controller listener names                                                                                                       | `CONTROLLER`             |
+| `kraft.clusterId`               | Kafka ClusterID. You must set it if your cluster contains more than one node and it should match the regex `[a-zA-Z0-9_\-]{22}` | `kafka_cluster_id_test1` |
+| `kraft.controllerQuorumVoters`  | Quorum voters of Kafka Kraft cluster. Use it for nodes with 'broker' role only.                                                 | `""`                     |
 
 ### ZooKeeper chart parameters
 
@@ -863,6 +863,10 @@ You can enable this initContainer by setting `volumePermissions.enabled` to `tru
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 21.0.0
+
+This major updates Kafka to its newest version, 3.4.x. For more information, please refer to [kafka upgrade notes](https://kafka.apache.org/34/documentation.html#upgrade).
 
 ### To 20.0.0
 
