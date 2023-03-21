@@ -440,7 +440,7 @@ config:
   ## https://docs.fluentbit.io/manual/administration/configuring-fluent-bit/classic-mode/upstream-servers
   ##
   upstream: {}
-  ## @param config.customParsers Custom parsers
+  ## @param config.customParsers [string] Custom parsers
   ## https://docs.fluentbit.io/manual/pipeline/parsers
   ##
   customParsers: |

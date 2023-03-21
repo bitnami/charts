@@ -61,6 +61,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
+
 ### Common parameters
 
 | Name                     | Description                                                                             | Value          |
@@ -73,6 +74,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`        |
 | `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`    |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]` |
+
 
 ### Fluent Bit parameters
 
@@ -160,27 +162,23 @@ The command removes all the Kubernetes components associated with the chart and 
 | `initContainers`                              | Add additional init containers to the fluent-bit pods                                                      | `[]`                  |
 | `sidecars`                                    | Add additional sidecar containers to the fluent-bit pods                                                   | `[]`                  |
 
+
 ### Fluent Bit configuration
 
-| Name                   | Description                                                                                            | Value                                                                                                                        |
-| ---------------------- | ------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------- |
-| `config.flush`         | Interval to flush output (seconds)                                                                     | `1`                                                                                                                          |
-| `config.logLevel`      | Diagnostic level (error/warning/info/debug/trace)                                                      | `info`                                                                                                                       |
-| `config.service`       | Defines the global behaviour of the Fluent Bit engine.                                                 | `""`                                                                                                                         |
-| `config.inputs`        | Defines the source from where Fluent Bit can collect data                                              | `""`                                                                                                                         |
-| `config.filters`       | Set of plugins that can be used to filter, modify, or enrich log data that is processed by Fluent Bit. | `""`                                                                                                                         |
-| `config.outputs`       | Outputs to send the collected data to different destinations                                           | `""`                                                                                                                         |
-| `config.upstream`      | This configuration is deprecated, please use `extraFiles` instead.                                     | `{}`                                                                                                                         |
-| `config.customParsers` | Custom parsers                                                                                         | `[PARSER]
-    Name docker_no_time
-    Format json
-    Time_Keep Off
-    Time_Key time
-    Time_Format %Y-%m-%dT%H:%M:%S.%L
-` |
-| `config.extraFiles`    | Extra config files                                                                                     | `{}`                                                                                                                         |
-| `rbac.create`          | Create Role and RoleBinding                                                                            | `false`                                                                                                                      |
-| `rbac.nodeAccess`      | RBAC node access                                                                                       | `false`                                                                                                                      |
+| Name                   | Description                                                                                            | Value   |
+| ---------------------- | ------------------------------------------------------------------------------------------------------ | ------- |
+| `config.flush`         | Interval to flush output (seconds)                                                                     | `1`     |
+| `config.logLevel`      | Diagnostic level (error/warning/info/debug/trace)                                                      | `info`  |
+| `config.service`       | Defines the global behaviour of the Fluent Bit engine.                                                 | `""`    |
+| `config.inputs`        | Defines the source from where Fluent Bit can collect data                                              | `""`    |
+| `config.filters`       | Set of plugins that can be used to filter, modify, or enrich log data that is processed by Fluent Bit. | `""`    |
+| `config.outputs`       | Outputs to send the collected data to different destinations                                           | `""`    |
+| `config.upstream`      | This configuration is deprecated, please use `extraFiles` instead.                                     | `{}`    |
+| `config.customParsers` | Custom parsers                                                                                         | `""`    |
+| `config.extraFiles`    | Extra config files                                                                                     | `{}`    |
+| `rbac.create`          | Create Role and RoleBinding                                                                            | `false` |
+| `rbac.nodeAccess`      | RBAC node access                                                                                       | `false` |
+
 
 ### Autoscaling
 
@@ -191,6 +189,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `autoscaling.vpa.controlledResources` | VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory | `[]`    |
 | `autoscaling.vpa.maxAllowed`          | VPA Max allowed resources for the pod                                                          | `{}`    |
 | `autoscaling.vpa.minAllowed`          | VPA Min allowed resources for the pod                                                          | `{}`    |
+
 
 ### VPA update policy
 
