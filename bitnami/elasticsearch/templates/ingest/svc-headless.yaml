@@ -14,6 +14,7 @@ metadata:
   {{- end }}
 spec:
   type: ClusterIP
+  clusterIP: None
   publishNotReadyAddresses: true
   ports:
     - name: tcp-rest-api

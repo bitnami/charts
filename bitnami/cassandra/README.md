@@ -206,6 +206,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.annotations`              | Provide any additional annotations which may be required.                     | `{}`        |
 | `service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"          | `None`      |
 | `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                   | `{}`        |
+| `service.headless.annotations`     | Annotations for the headless service.                                         | `{}`        |
 | `networkPolicy.enabled`            | Specifies whether a NetworkPolicy should be created                           | `false`     |
 | `networkPolicy.allowExternal`      | Don't require client label for connections                                    | `true`      |
 
