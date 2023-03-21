@@ -1,0 +1,40 @@
+{{- if and .Values.sourceController.enabled .Values.sourceController.persistence.enabled (not .Values.sourceController.persistence.existingClaim) }}
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ template "flux.source-controller.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  annotations:
+    {{- if .Values.sourceController.persistence.resourcePolicy }}
+    helm.sh/resource-policy: {{ .Values.sourceController.persistence.resourcePolicy | quote }}
+    {{- end }}
+    {{- if .Values.sourceController.persistence.annotations }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.sourceController.persistence.annotations "context" $) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+spec:
+  accessModes:
+  {{- if not (empty .Values.sourceController.persistence.accessModes) }}
+  {{- range .Values.sourceController.persistence.accessModes }}
+    - {{ . | quote }}
+  {{- end }}
+  {{- else }}
+    - {{ .Values.sourceController.persistence.accessMode | quote }}
+  {{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.sourceController.persistence.size | quote }}
+  {{- if .Values.sourceController.persistence.selector }}
+  selector: {{- include "common.tplvalues.render" (dict "value" .Values.sourceController.persistence.selector "context" $) | nindent 4 }}
+  {{- end -}}
+  {{- if .Values.sourceController.persistence.dataSource }}
+  dataSource: {{- include "common.tplvalues.render" (dict "value" .Values.sourceController.persistence.dataSource "context" $) | nindent 4 }}
+  {{- end }}
+  {{- include "common.storage.class" (dict "persistence" .Values.sourceController.persistence "global" .Values.global) | nindent 2 }}
+{{- end }}
