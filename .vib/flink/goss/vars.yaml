@@ -5,6 +5,7 @@ jobmanager:
   service:
     ports:
       http: 80
+      blob: 9292
   podSecurityContext:
     fsGroup: 1002
   containerSecurityContext:
