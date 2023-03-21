@@ -25,7 +25,7 @@ Create the name of the deployment
 
 
 {{/*
-Create the name of the service account to use for the query
+Create the name of the service account to use
 */}}
 {{- define "fluentBit.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create -}}

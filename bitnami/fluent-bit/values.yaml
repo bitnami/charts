@@ -120,7 +120,7 @@ hostAliases: []
 replicaCount: 1
 ## Configure extra options for container's liveness, readiness and startup probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
-## @param livenessProbe.enabled Enable livenessProbe on Query nodes
+## @param livenessProbe.enabled Enable livenessProbe on nodes
 ## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
 ## @param livenessProbe.periodSeconds Period seconds for livenessProbe
 ## @param livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
@@ -134,7 +134,7 @@ livenessProbe:
   periodSeconds: 10
   successThreshold: 1
   timeoutSeconds: 1
-## @param startupProbe.enabled Enable startupProbe on Query containers
+## @param startupProbe.enabled Enable startupProbe on containers
 ## @param startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
 ## @param startupProbe.periodSeconds Period seconds for startupProbe
 ## @param startupProbe.timeoutSeconds Timeout seconds for startupProbe
@@ -206,7 +206,7 @@ containerPorts:
   ## @param containerPorts.http Port for HTTP port
   ##
   http: 2020
-## Fluent Bit query.service parameters
+## Fluent Bit service parameters
 ##
 service:
   ## @param service.type Fluent Bit service type
@@ -269,7 +269,7 @@ service:
       prometheus.io/scrape: "true"
       prometheus.io/port: "{{ .Values.service.ports.http }}"
       prometheus.io/path: "/metrics"
-## Fluent Bit Query serviceAccount parameters
+## Fluent Bit serviceAccount parameters
 ##
 serviceAccount:
   ## @param serviceAccount.create Enables ServiceAccount
@@ -361,8 +361,8 @@ topologySpreadConstraints: []
 ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
 ##
 schedulerName: ""
-## @param updateStrategy.type Fluent Bit query deployment strategy type
-## @param updateStrategy.rollingUpdate Fluent Bit query deployment rolling update configuration parameters
+## @param updateStrategy.type Fluent Bit deployment strategy type
+## @param updateStrategy.rollingUpdate Fluent Bit deployment rolling update configuration parameters
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
 ##
 updateStrategy:
