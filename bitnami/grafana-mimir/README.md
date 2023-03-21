@@ -85,7 +85,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
 | `mimir.image.registry`                 | Grafana Mimir image registry                                                                                                                             | `docker.io`              |
 | `mimir.image.repository`               | Grafana Mimir image repository                                                                                                                           | `bitnami/grafana-mimir`  |
-| `mimir.image.tag`                      | Grafana Mimir image tag (immutable tags are recommended)                                                                                                 | `2.6.0-debian-11-r8`     |
+| `mimir.image.tag`                      | Grafana Mimir image tag (immutable tags are recommended)                                                                                                 | `2.7.1-debian-11-r0`     |
 | `mimir.image.digest`                   | Grafana Mimir image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended) | `""`                     |
 | `mimir.image.pullPolicy`               | Grafana Mimir image pull policy                                                                                                                          | `IfNotPresent`           |
 | `mimir.image.pullSecrets`              | Grafana Mimir image pull secrets                                                                                                                         | `[]`                     |
@@ -191,6 +191,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `alertmanager.service.externalTrafficPolicy`    | Alertmanager service external traffic policy                                                                   | `Cluster`   |
 | `alertmanager.service.annotations`              | Additional custom annotations for Alertmanager service                                                         | `{}`        |
 | `alertmanager.service.extraPorts`               | Extra ports to expose in the Alertmanager service                                                              | `[]`        |
+| `alertmanager.service.headless.annotations`     | Annotations for the headless service.                                                                          | `{}`        |
 | `alertmanager.pdb.create`                       | Enable/disable a Pod Disruption Budget creation                                                                | `false`     |
 | `alertmanager.pdb.minAvailable`                 | Minimum number/percentage of pods that should remain scheduled                                                 | `1`         |
 | `alertmanager.pdb.maxUnavailable`               | Maximum number/percentage of pods that may be made unavailable                                                 | `""`        |
@@ -367,6 +368,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `distributor.service.externalTrafficPolicy`    | Distributor service external traffic policy                      | `Cluster`   |
 | `distributor.service.annotations`              | Additional custom annotations for Distributor service            | `{}`        |
 | `distributor.service.extraPorts`               | Extra ports to expose in the Distributor service                 | `[]`        |
+| `distributor.service.headless.annotations`     | Annotations for the headless service.                            | `{}`        |
 | `distributor.pdb.create`                       | Enable/disable a Pod Disruption Budget creation                  | `false`     |
 | `distributor.pdb.minAvailable`                 | Minimum number/percentage of pods that should remain scheduled   | `1`         |
 | `distributor.pdb.maxUnavailable`               | Maximum number/percentage of pods that may be made unavailable   | `""`        |
@@ -378,7 +380,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `gateway.enabled`                               | Enable Gateway deployment                                                                             | `true`                 |
 | `gateway.image.registry`                        | Nginx image registry                                                                                  | `docker.io`            |
 | `gateway.image.repository`                      | Nginx image repository                                                                                | `bitnami/nginx`        |
-| `gateway.image.tag`                             | Nginx image tag (immutable tags are recommended)                                                      | `1.23.3-debian-11-r30` |
+| `gateway.image.tag`                             | Nginx image tag (immutable tags are recommended)                                                      | `1.23.3-debian-11-r36` |
 | `gateway.image.digest`                          | Nginx image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
 | `gateway.image.pullPolicy`                      | Nginx image pull policy                                                                               | `IfNotPresent`         |
 | `gateway.image.pullSecrets`                     | Nginx image pull secrets                                                                              | `[]`                   |
@@ -564,6 +566,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingester.service.externalTrafficPolicy`                  | Ingester service external traffic policy                                                                    | `Cluster`       |
 | `ingester.service.annotations`                            | Additional custom annotations for Ingester service                                                          | `{}`            |
 | `ingester.service.extraPorts`                             | Extra ports to expose in the Ingester service                                                               | `[]`            |
+| `ingester.service.headless.annotations`                   | Annotations for the headless service.                                                                       | `{}`            |
 | `ingester.pdb.create`                                     | Enable/disable a Pod Disruption Budget creation                                                             | `false`         |
 | `ingester.pdb.minAvailable`                               | Minimum number/percentage of pods that should remain scheduled                                              | `1`             |
 | `ingester.pdb.maxUnavailable`                             | Maximum number/percentage of pods that may be made unavailable                                              | `""`            |
@@ -643,6 +646,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `overridesExporter.service.externalTrafficPolicy`    | Overrides Exporter service external traffic policy               | `Cluster`   |
 | `overridesExporter.service.annotations`              | Additional custom annotations for Overrides Exporter service     | `{}`        |
 | `overridesExporter.service.extraPorts`               | Extra ports to expose in the Overrides Export service            | `[]`        |
+| `overridesExporter.service.headless.annotations`     | Annotations for the headless service.                            | `{}`        |
 | `overridesExporter.pdb.create`                       | Enable/disable a Pod Disruption Budget creation                  | `false`     |
 | `overridesExporter.pdb.minAvailable`                 | Minimum number/percentage of pods that should remain scheduled   | `1`         |
 | `overridesExporter.pdb.maxUnavailable`               | Maximum number/percentage of pods that may be made unavailable   | `""`        |
@@ -726,6 +730,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `querier.service.externalTrafficPolicy`    | Querier service external traffic policy                          | `Cluster`   |
 | `querier.service.annotations`              | Additional custom annotations for Querier service                | `{}`        |
 | `querier.service.extraPorts`               | Extra ports to expose in the Querier service                     | `[]`        |
+| `querier.service.headless.annotations`     | Annotations for the headless service.                            | `{}`        |
 | `querier.pdb.create`                       | Enable/disable a Pod Disruption Budget creation                  | `false`     |
 | `querier.pdb.minAvailable`                 | Minimum number/percentage of pods that should remain scheduled   | `1`         |
 | `querier.pdb.maxUnavailable`               | Maximum number/percentage of pods that may be made unavailable   | `""`        |
@@ -809,6 +814,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryFrontend.service.externalTrafficPolicy`          | Query Frontend service external traffic policy                                                           | `Cluster`       |
 | `queryFrontend.service.annotations`                    | Additional custom annotations for Query Frontend service                                                 | `{}`            |
 | `queryFrontend.service.extraPorts`                     | Extra ports to expose in the Query Frontend service                                                      | `[]`            |
+| `queryFrontend.service.headless.annotations`           | Annotations for the headless service.                                                                    | `{}`            |
 | `queryFrontend.pdb.create`                             | Enable/disable a Pod Disruption Budget creation                                                          | `false`         |
 | `queryFrontend.pdb.minAvailable`                       | Minimum number/percentage of pods that should remain scheduled                                           | `1`             |
 | `queryFrontend.pdb.maxUnavailable`                     | Maximum number/percentage of pods that may be made unavailable                                           | `""`            |
@@ -888,6 +894,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryScheduler.service.externalTrafficPolicy`    | Query Scheduler service external traffic policy                  | `Cluster`   |
 | `queryScheduler.service.annotations`              | Additional custom annotations for Query Scheduler service        | `{}`        |
 | `queryScheduler.service.extraPorts`               | Extra ports to expose in the Query Scheduler service             | `[]`        |
+| `queryScheduler.service.headless.annotations`     | Annotations for the headless service.                            | `{}`        |
 | `queryScheduler.pdb.create`                       | Enable/disable a Pod Disruption Budget creation                  | `false`     |
 | `queryScheduler.pdb.minAvailable`                 | Minimum number/percentage of pods that should remain scheduled   | `1`         |
 | `queryScheduler.pdb.maxUnavailable`               | Maximum number/percentage of pods that may be made unavailable   | `""`        |
@@ -980,6 +987,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `storeGateway.service.externalTrafficPolicy`    | Store Gateway service external traffic policy                    | `Cluster`   |
 | `storeGateway.service.annotations`              | Additional custom annotations for Store Gateway service          | `{}`        |
 | `storeGateway.service.extraPorts`               | Extra ports to expose in the Store Gateway service               | `[]`        |
+| `storeGateway.service.headless.annotations`     | Annotations for the headless service.                            | `{}`        |
 | `storeGateway.pdb.create`                       | Enable/disable a Pod Disruption Budget creation                  | `false`     |
 | `storeGateway.pdb.minAvailable`                 | Minimum number/percentage of pods that should remain scheduled   | `1`         |
 | `storeGateway.pdb.maxUnavailable`               | Maximum number/percentage of pods that may be made unavailable   | `""`        |
@@ -1089,7 +1097,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `11-debian-11-r90`      |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `11-debian-11-r98`      |
 | `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                    |
@@ -1140,16 +1148,16 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Memcached Sub-chart Parameters (Chunks)
 
-| Name                                      | Description                                                                                               | Value                  |
-| ----------------------------------------- | --------------------------------------------------------------------------------------------------------- | ---------------------- |
-| `memcachedchunks.enabled`                 | Deploy memcached sub-chart                                                                                | `true`                 |
-| `memcachedchunks.image.registry`          | Memcached image registry                                                                                  | `docker.io`            |
-| `memcachedchunks.image.repository`        | Memcached image repository                                                                                | `bitnami/memcached`    |
-| `memcachedchunks.image.tag`               | Memcached image tag (immutable tags are recommended)                                                      | `1.6.18-debian-11-r17` |
-| `memcachedchunks.image.digest`            | Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
-| `memcachedchunks.nameOverride`            | override the subchart name                                                                                | `""`                   |
-| `memcachedchunks.architecture`            | Memcached architecture                                                                                    | `high-availability`    |
-| `memcachedchunks.service.ports.memcached` | Memcached service port                                                                                    | `11211`                |
+| Name                                      | Description                                                                                               | Value                 |
+| ----------------------------------------- | --------------------------------------------------------------------------------------------------------- | --------------------- |
+| `memcachedchunks.enabled`                 | Deploy memcached sub-chart                                                                                | `true`                |
+| `memcachedchunks.image.registry`          | Memcached image registry                                                                                  | `docker.io`           |
+| `memcachedchunks.image.repository`        | Memcached image repository                                                                                | `bitnami/memcached`   |
+| `memcachedchunks.image.tag`               | Memcached image tag (immutable tags are recommended)                                                      | `1.6.19-debian-11-r2` |
+| `memcachedchunks.image.digest`            | Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
+| `memcachedchunks.nameOverride`            | override the subchart name                                                                                | `""`                  |
+| `memcachedchunks.architecture`            | Memcached architecture                                                                                    | `high-availability`   |
+| `memcachedchunks.service.ports.memcached` | Memcached service port                                                                                    | `11211`               |
 
 ### External Memcached (Frontend) Parameters
 
@@ -1160,16 +1168,16 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Memcached Sub-chart Parameters (Frontend)
 
-| Name                                        | Description                                                                                               | Value                  |
-| ------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ---------------------- |
-| `memcachedfrontend.enabled`                 | Deploy memcached sub-chart                                                                                | `true`                 |
-| `memcachedfrontend.image.registry`          | Memcached image registry                                                                                  | `docker.io`            |
-| `memcachedfrontend.image.repository`        | Memcached image repository                                                                                | `bitnami/memcached`    |
-| `memcachedfrontend.image.tag`               | Memcached image tag (immutable tags are recommended)                                                      | `1.6.18-debian-11-r17` |
-| `memcachedfrontend.image.digest`            | Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
-| `memcachedfrontend.architecture`            | Memcached architecture                                                                                    | `high-availability`    |
-| `memcachedfrontend.nameOverride`            | override the subchart name                                                                                | `""`                   |
-| `memcachedfrontend.service.ports.memcached` | Memcached service port                                                                                    | `11211`                |
+| Name                                        | Description                                                                                               | Value                 |
+| ------------------------------------------- | --------------------------------------------------------------------------------------------------------- | --------------------- |
+| `memcachedfrontend.enabled`                 | Deploy memcached sub-chart                                                                                | `true`                |
+| `memcachedfrontend.image.registry`          | Memcached image registry                                                                                  | `docker.io`           |
+| `memcachedfrontend.image.repository`        | Memcached image repository                                                                                | `bitnami/memcached`   |
+| `memcachedfrontend.image.tag`               | Memcached image tag (immutable tags are recommended)                                                      | `1.6.19-debian-11-r2` |
+| `memcachedfrontend.image.digest`            | Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
+| `memcachedfrontend.architecture`            | Memcached architecture                                                                                    | `high-availability`   |
+| `memcachedfrontend.nameOverride`            | override the subchart name                                                                                | `""`                  |
+| `memcachedfrontend.service.ports.memcached` | Memcached service port                                                                                    | `11211`               |
 
 ### External Memcached (Index) Parameters
 
@@ -1180,16 +1188,16 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Memcached Sub-chart Parameters (Index)
 
-| Name                                     | Description                                                                                               | Value                  |
-| ---------------------------------------- | --------------------------------------------------------------------------------------------------------- | ---------------------- |
-| `memcachedindex.enabled`                 | Deploy memcached sub-chart                                                                                | `true`                 |
-| `memcachedindex.image.registry`          | Memcached image registry                                                                                  | `docker.io`            |
-| `memcachedindex.image.repository`        | Memcached image repository                                                                                | `bitnami/memcached`    |
-| `memcachedindex.image.tag`               | Memcached image tag (immutable tags are recommended)                                                      | `1.6.18-debian-11-r17` |
-| `memcachedindex.image.digest`            | Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
-| `memcachedindex.architecture`            | Memcached architecture                                                                                    | `high-availability`    |
-| `memcachedindex.nameOverride`            | override the subchart name                                                                                | `""`                   |
-| `memcachedindex.service.ports.memcached` | Memcached service port                                                                                    | `11211`                |
+| Name                                     | Description                                                                                               | Value                 |
+| ---------------------------------------- | --------------------------------------------------------------------------------------------------------- | --------------------- |
+| `memcachedindex.enabled`                 | Deploy memcached sub-chart                                                                                | `true`                |
+| `memcachedindex.image.registry`          | Memcached image registry                                                                                  | `docker.io`           |
+| `memcachedindex.image.repository`        | Memcached image repository                                                                                | `bitnami/memcached`   |
+| `memcachedindex.image.tag`               | Memcached image tag (immutable tags are recommended)                                                      | `1.6.19-debian-11-r2` |
+| `memcachedindex.image.digest`            | Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
+| `memcachedindex.architecture`            | Memcached architecture                                                                                    | `high-availability`   |
+| `memcachedindex.nameOverride`            | override the subchart name                                                                                | `""`                  |
+| `memcachedindex.service.ports.memcached` | Memcached service port                                                                                    | `11211`               |
 
 ### External Memcached (Metadata) Parameters
 
@@ -1200,16 +1208,16 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Memcached Sub-chart Parameters (Metadata)
 
-| Name                                        | Description                                                                                               | Value                  |
-| ------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ---------------------- |
-| `memcachedmetadata.enabled`                 | Deploy memcached sub-chart                                                                                | `true`                 |
-| `memcachedmetadata.image.registry`          | Memcached image registry                                                                                  | `docker.io`            |
-| `memcachedmetadata.image.repository`        | Memcached image repository                                                                                | `bitnami/memcached`    |
-| `memcachedmetadata.image.tag`               | Memcached image tag (immutable tags are recommended)                                                      | `1.6.18-debian-11-r17` |
-| `memcachedmetadata.image.digest`            | Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
-| `memcachedmetadata.architecture`            | Memcached architecture                                                                                    | `high-availability`    |
-| `memcachedmetadata.nameOverride`            | override the subchart name                                                                                | `""`                   |
-| `memcachedmetadata.service.ports.memcached` | Memcached service port                                                                                    | `11211`                |
+| Name                                        | Description                                                                                               | Value                 |
+| ------------------------------------------- | --------------------------------------------------------------------------------------------------------- | --------------------- |
+| `memcachedmetadata.enabled`                 | Deploy memcached sub-chart                                                                                | `true`                |
+| `memcachedmetadata.image.registry`          | Memcached image registry                                                                                  | `docker.io`           |
+| `memcachedmetadata.image.repository`        | Memcached image repository                                                                                | `bitnami/memcached`   |
+| `memcachedmetadata.image.tag`               | Memcached image tag (immutable tags are recommended)                                                      | `1.6.19-debian-11-r2` |
+| `memcachedmetadata.image.digest`            | Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
+| `memcachedmetadata.architecture`            | Memcached architecture                                                                                    | `high-availability`   |
+| `memcachedmetadata.nameOverride`            | override the subchart name                                                                                | `""`                  |
+| `memcachedmetadata.service.ports.memcached` | Memcached service port                                                                                    | `11211`               |
 
 See <https://github.com/bitnami-labs/readme-generator-for-helm> to create the table
 

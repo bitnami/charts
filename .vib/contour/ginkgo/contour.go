@@ -3,6 +3,7 @@ package integration
 import (
 	"context"
 	"fmt"
+	"time"
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
@@ -29,13 +30,23 @@ var _ = Describe("Contour:", func() {
 
 	Context("The testing ingress", func() {
 		var testingIngress *netv1.Ingress
+		var ingressHost string
+		var resolves bool
 		var err error
 
 		BeforeEach(func() {
 			testingIngress, err = netclient.Ingresses(*namespace).Get(ctx, *ingressName, metav1.GetOptions{})
+			ingressHost = returnValidHost(testingIngress.Status.LoadBalancer.Ingress[0])
 			if err != nil {
 				panic(fmt.Sprintf("There was an error retrieving the %q Ingress resource: %q", *ingressName, err))
 			}
+			resolves, err = retry("resolvesToDeployment", 6, 15*time.Second, func() (bool, error) {
+				return resolvesToDeployment(ctx, "http://"+ingressHost)
+			})
+			if err != nil {
+				panic(fmt.Sprintf("There was an error resolving the ingress host: %q", err))
+			}
+			Expect(resolves).To(BeTrue())
 		})
 
 		It("asigned IP is the same as the one used by the envoy service", func() {
@@ -43,13 +54,12 @@ var _ = Describe("Contour:", func() {
 			if err != nil {
 				panic(fmt.Sprintf("There was an error retrieving the envoy service: %q", err))
 			}
-
-			Expect(testingIngress.Status.LoadBalancer.Ingress[0].IP).To(Equal(envoySvc.Status.LoadBalancer.Ingress[0].IP))
+			Expect(ingressHost).To(Equal(returnValidHost(envoySvc.Status.LoadBalancer.Ingress[0])))
 		})
 		It("asigned IP resolves to the testing deployment", func() {
-			responseBody := getResponseBodyOrDie(ctx, "http://"+testingIngress.Status.LoadBalancer.Ingress[0].IP)
+			responseBody := getResponseBodyOrDie(ctx, "http://"+ingressHost)
 
-			Expect(containsString(responseBody, "kuard")).To(BeTrue())
+			Expect(containsString(responseBody, "It works")).To(BeTrue())
 		})
 	})
 })

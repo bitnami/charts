@@ -229,14 +229,16 @@ otherwise it generates a random value.
 Return Redis&reg; password
 */}}
 {{- define "redis.password" -}}
-{{- if not (empty .Values.global.redis.password) }}
-    {{- .Values.global.redis.password -}}
-{{- else if not (empty .Values.auth.password) -}}
-    {{- .Values.auth.password -}}
-{{- else -}}
-    {{- include "getValueFromSecret" (dict "Namespace" .Release.Namespace "Name" (include "common.names.fullname" .) "Length" 10 "Key" "redis-password")  -}}
+{{- if or .Values.auth.enabled .Values.global.redis.password }}
+    {{- if not (empty .Values.global.redis.password) }}
+        {{- .Values.global.redis.password -}}
+    {{- else if not (empty .Values.auth.password) -}}
+        {{- .Values.auth.password -}}
+    {{- else -}}
+        {{- include "getValueFromSecret" (dict "Namespace" .Release.Namespace "Name" (include "redis.secretName" .) "Length" 10 "Key" (include "redis.secretPasswordKey" .))  -}}
+    {{- end -}}
 {{- end -}}
-{{- end -}}
+{{- end }}
 
 {{/* Check if there are rolling tags in the images */}}
 {{- define "redis.checkRollingTags" -}}

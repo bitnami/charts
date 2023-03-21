@@ -2,7 +2,7 @@ annotations:
   category: ApplicationServer
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 10.1.5
+appVersion: 10.1.7
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami

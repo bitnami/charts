@@ -144,10 +144,6 @@ data:
           proxy_request_buffering off;
         }
         
-        location /devcenter-api-2.0 {
-          try_files $uri $uri/ /swagger-ui-index.html;
-        }
-
         location /api/ {
           proxy_pass {{ $scheme }}://core/api/;
           {{- if and .Values.internalTLS.enabled }}
