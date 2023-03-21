@@ -184,7 +184,7 @@ containerPorts:
   https: 8444
 ```
 
-> ℹ️ We used to inyect the parameters directly into the VIB pipelines under `phases.verify.context.runtime_parameters` and encoded as a base64 string. This approach was deprecated in favor of using a separate `.yaml` file under `.vib/ASSET/runtime-parameters.yaml`.
+> ℹ️ We used to inject the parameters directly into the VIB pipelines under `phases.verify.context.runtime_parameters` and encoded them as a base64 string. This approach was deprecated in favor of using a separate `.yaml` file under `.vib/ASSET/runtime-parameters.yaml`.
 
 1. Why was `moodleUsername` included?
 
@@ -194,7 +194,7 @@ containerPorts:
 
     Although the same reasoning would apply, there are no implicit checks in any of the tests that actively assert the email was changed.
 
-3. Does that mean that every property in `runtime-parameters` should have an associated test?
+3. Does that mean that every property in `runtime-parameters.yaml` should have an associated test?
 
     No, there is no need to have an specific test for each property, but the property **should have influence over the tests** to include it in the installation parameters. For instance, the property `service.type=LoadBalancer` does not have an associated test, but it is crucial for [Cypress](#cypress) to succeed.
 
