@@ -61,7 +61,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
-
 ### Common parameters
 
 | Name                     | Description                                                                             | Value          |
@@ -74,7 +73,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`        |
 | `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`    |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]` |
-
 
 ### Fluent Bit parameters
 
@@ -162,7 +160,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `initContainers`                              | Add additional init containers to the fluent-bit pods                                                      | `[]`                  |
 | `sidecars`                                    | Add additional sidecar containers to the fluent-bit pods                                                   | `[]`                  |
 
-
 ### Fluent Bit configuration
 
 | Name                   | Description                                                                                            | Value                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
@@ -218,7 +215,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `rbac.create`          | Create Role and RoleBinding                                                                            | `false`                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
 | `rbac.nodeAccess`      | RBAC node access                                                                                       | `false`                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
 
-
 ### Autoscaling
 
 | Name                                  | Description                                                                                    | Value   |
@@ -228,7 +224,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `autoscaling.vpa.controlledResources` | VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory | `[]`    |
 | `autoscaling.vpa.maxAllowed`          | VPA Max allowed resources for the pod                                                          | `{}`    |
 | `autoscaling.vpa.minAllowed`          | VPA Min allowed resources for the pod                                                          | `{}`    |
-
 
 ### VPA update policy
 
