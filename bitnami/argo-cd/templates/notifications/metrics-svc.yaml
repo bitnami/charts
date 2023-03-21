@@ -1,0 +1,54 @@
+{{- if and .Values.notifications.enabled .Values.notifications.metrics.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "argocd.notifications" . }}-metrics
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: metrics
+    app.kubernetes.io/part-of: notifications
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if or .Values.commonAnnotations .Values.notifications.metrics.service.annotations }}
+  annotations:
+  {{- if .Values.commonAnnotations }}
+  {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.notifications.metrics.service.annotations }}
+  {{- include "common.tplvalues.render" ( dict "value" .Values.notifications.metrics.service.annotations "context" $ ) | nindent 4 }}
+  {{- end }}
+  {{- end }}
+spec:
+  type: {{ .Values.notifications.metrics.service.type }}
+  {{- if and .Values.notifications.metrics.service.clusterIP (eq .Values.notifications.metrics.service.type "ClusterIP") }}
+  clusterIP: {{ .Values.notifications.metrics.service.clusterIP }}
+  {{- end }}
+  {{- if (or (eq .Values.notifications.metrics.service.type "LoadBalancer") (eq .Values.notifications.metrics.service.type "NodePort")) }}
+  externalTrafficPolicy: {{ .Values.notifications.metrics.service.externalTrafficPolicy | quote }}
+  {{- end }}
+  {{- if eq .Values.notifications.metrics.service.type "LoadBalancer" }}
+  loadBalancerSourceRanges: {{ .Values.notifications.metrics.service.loadBalancerSourceRanges }}
+  {{- end }}
+  {{- if (and (eq .Values.notifications.metrics.service.type "LoadBalancer") (not (empty .Values.notifications.metrics.service.loadBalancerIP))) }}
+  loadBalancerIP: {{ .Values.notifications.metrics.service.loadBalancerIP }}
+  {{- end }}
+  {{- if .Values.notifications.metrics.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.notifications.metrics.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.notifications.metrics.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.notifications.metrics.service.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
+  ports:
+    - name:  http-metrics
+      targetPort: metrics
+      port: {{ .Values.notifications.metrics.service.port }}
+      protocol: TCP
+      {{- if (and (or (eq .Values.notifications.service.type "NodePort") (eq .Values.notifications.service.type "LoadBalancer")) (not (empty .Values.notifications.metrics.service.nodePort))) }}
+      nodePort: {{ .Values.notifications.metrics.service.nodePort }}
+      {{- else if eq .Values.notifications.metrics.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
+    app.kubernetes.io/component: notifications
+{{- end }}

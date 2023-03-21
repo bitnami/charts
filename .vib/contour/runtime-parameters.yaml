@@ -27,6 +27,8 @@ envoy:
     ports:
       http: 80
       https: 444
+    annotations:
+      service.beta.kubernetes.io/aws-load-balancer-type: nlb
 rbac:
   create: true
 extraDeploy:
@@ -34,34 +36,34 @@ extraDeploy:
   kind: Deployment
   metadata:
     labels:
-      app: kuard
-    name: kuard
+      app: apache
+    name: apache
   spec:
     replicas: 1
     selector:
       matchLabels:
-        app: kuard
+        app: apache
     template:
       metadata:
         labels:
-          app: kuard
+          app: apache
       spec:
         containers:
-        - image: gcr.io/kuar-demo/kuard-amd64:1
-          name: kuard
+        - image: bitnami/apache
+          name: apache
 - apiVersion: v1
   kind: Service
   metadata:
     labels:
-      app: kuard
-    name: kuard
+      app: apache
+    name: apache
   spec:
     ports:
     - port: 80
       protocol: TCP
       targetPort: 8080
     selector:
-      app: kuard
+      app: apache
     sessionAffinity: None
     type: ClusterIP
 - apiVersion: networking.k8s.io/v1
@@ -69,11 +71,11 @@ extraDeploy:
   metadata:
     name: contour-vib-test
     labels:
-      app: kuard
+      app: apache
   spec:
     ingressClassName: contour
     defaultBackend:
       service:
-        name: kuard
+        name: apache
         port:
           number: 80
