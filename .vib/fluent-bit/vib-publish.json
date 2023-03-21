@@ -34,7 +34,7 @@
         {
           "action_id": "health-check",
           "params": {
-            "endpoint": "lb-fluent-bit-client",
+            "endpoint": "lb-fluent-bit-http",
             "app_protocol": "HTTP"
           }
         },
