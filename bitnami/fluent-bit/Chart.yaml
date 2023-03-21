@@ -1,8 +1,8 @@
 annotations:
-  category: Infrastructure
+  category: Analytics
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 1.42.0
+appVersion: 2.0.10
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -23,4 +23,4 @@ name: fluent-bit
 sources:
   - https://github.com/fluent/fluent-bit
   - https://fluentbit.io/
-version: 1.0.4
+version: 0.1.0

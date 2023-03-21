@@ -88,7 +88,7 @@ spec:
           {{- end }}
           ports:
             - name: http
-              containerPort: {{ .Values.containerPorts.httpPort }}
+              containerPort: {{ .Values.containerPorts.http }}
           env:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" .Values.image.debug | quote }}

@@ -203,9 +203,9 @@ extraVolumeMounts: []
 ## Container ports to expose
 ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
 containerPorts:
-  ## @param containerPorts.httpPort Port for HTTP port
+  ## @param containerPorts.http Port for HTTP port
   ##
-  httpPort: 2020
+  http: 2020
 ## Fluent Bit query.service parameters
 ##
 service:
@@ -215,15 +215,15 @@ service:
   ## Ports to expose
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ports:
-    ## @param service.ports.httpPort Port for HTTP port
+    ## @param service.ports.http Port for HTTP port
     ##
-    httpPort: 2020
+    http: 2020
   ## Node ports to expose
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   nodePorts:
-    ## @param service.nodePorts.httpPort Node port for HTTP port
+    ## @param service.nodePorts.http Node port for HTTP port
     ##
-    httpPort: ""
+    http: ""
   ## @param service.extraPorts Extra ports to expose in the service (normally used with the `sidecar` value)
   ##
   extraPorts: []
@@ -267,7 +267,7 @@ service:
   metrics:
     annotations:
       prometheus.io/scrape: "true"
-      prometheus.io/port: "{{ .Values.service.ports.httpPort }}"
+      prometheus.io/port: "{{ .Values.service.ports.http }}"
       prometheus.io/path: "/metrics"
 ## Fluent Bit Query serviceAccount parameters
 ##
@@ -383,31 +383,27 @@ config:
   logLevel: info
   service: |
     [SERVICE]
-        Daemon Off
-        Flush {{ .Values.config.flush }}
-        Log_Level {{ .Values.config.logLevel }}
-        Parsers_File parsers.conf
-        Parsers_File custom_parsers.conf
-        HTTP_Server On
-        HTTP_Listen 0.0.0.0
-        HTTP_Port {{ .Values.service.ports.httpPort }}
-        Health_Check On
+        HTTP_Server  On
+        HTTP_Listen  0.0.0.0
+        HTTP_Port {{ .Values.containerPorts.http }}
 
   ## https://docs.fluentbit.io/manual/pipeline/inputs
   inputs: |
     [INPUT]
-        Name tail
-        Path /var/log/containers/*.log
-        multiline.parser docker, cri
-        Tag kube.*
-        Mem_Buf_Limit 5MB
-        Skip_Long_Lines On
+        Name cpu
 
     [INPUT]
         Name systemd
         Tag host.*
         Systemd_Filter _SYSTEMD_UNIT=kubelet.service
         Read_From_Tail On
+    #[INPUT]
+    #    Name tail
+    #    Path /var/log/containers/*.log
+    #    multiline.parser docker, cri
+    #    Tag kube.*
+    #    Mem_Buf_Limit 5MB
+    #    Skip_Long_Lines On
 
   ## https://docs.fluentbit.io/manual/pipeline/filters
   filters: |
