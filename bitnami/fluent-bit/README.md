@@ -162,58 +162,25 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Fluent Bit configuration
 
-| Name                   | Description                                                                                            | Value                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
-| ---------------------- | ------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `config.flush`         | Interval to flush output (seconds)                                                                     | `1`                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
-| `config.logLevel`      | Diagnostic level (error/warning/info/debug/trace)                                                      | `info`                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
-| `config.service`       | Defines the global behaviour of the Fluent Bit engine.                                                 | `[SERVICE]
-    HTTP_Server  On
-    HTTP_Listen  0.0.0.0
-    HTTP_Port {{ .Values.containerPorts.http }}
-`                                                                                                                                                                                                                                                                                                                                                                   |
-| `config.inputs`        | Defines the source from where Fluent Bit can collect data                                              | `[INPUT]
-    Name cpu
-
-[INPUT]
-    Name systemd
-    Tag host.*
-    Systemd_Filter _SYSTEMD_UNIT=kubelet.service
-    Read_From_Tail On
-#[INPUT]
-#    Name tail
-#    Path /var/log/containers/*.log
-#    multiline.parser docker, cri
-#    Tag kube.*
-#    Mem_Buf_Limit 5MB
-#    Skip_Long_Lines On
-`                                                                                                                                                                        |
-| `config.filters`       | Set of plugins that can be used to filter, modify, or enrich log data that is processed by Fluent Bit. | `[FILTER]
-    Name                kubernetes
-    Match               kube.*
-    Kube_URL            https://kubernetes.default.svc:443
-    Kube_CA_File        /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
-    Kube_Token_File     /var/run/secrets/kubernetes.io/serviceaccount/token
-    Kube_Tag_Prefix     kube.var.log.containers.
-    Merge_Log           Off
-    Merge_Log_Key       log_processed
-    K8S-Logging.Parser  On
-    K8S-Logging.Exclude Off
-` |
-| `config.outputs`       | Outputs to send the collected data to different destinations                                           | `[OUTPUT]
-    Name  stdout
-    Match *
-`                                                                                                                                                                                                                                                                                                                                                                                                                                    |
-| `config.upstream`      | This configuration is deprecated, please use `extraFiles` instead.                                     | `{}`                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| Name                   | Description                                                                                            | Value                                                                                                                        |
+| ---------------------- | ------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------- |
+| `config.flush`         | Interval to flush output (seconds)                                                                     | `1`                                                                                                                          |
+| `config.logLevel`      | Diagnostic level (error/warning/info/debug/trace)                                                      | `info`                                                                                                                       |
+| `config.service`       | Defines the global behaviour of the Fluent Bit engine.                                                 | `""`                                                                                                                         |
+| `config.inputs`        | Defines the source from where Fluent Bit can collect data                                              | `""`                                                                                                                         |
+| `config.filters`       | Set of plugins that can be used to filter, modify, or enrich log data that is processed by Fluent Bit. | `""`                                                                                                                         |
+| `config.outputs`       | Outputs to send the collected data to different destinations                                           | `""`                                                                                                                         |
+| `config.upstream`      | This configuration is deprecated, please use `extraFiles` instead.                                     | `{}`                                                                                                                         |
 | `config.customParsers` | Custom parsers                                                                                         | `[PARSER]
     Name docker_no_time
     Format json
     Time_Keep Off
     Time_Key time
     Time_Format %Y-%m-%dT%H:%M:%S.%L
-`                                                                                                                                                                                                                                                                                                                                                |
-| `config.extraFiles`    | Extra config files                                                                                     | `{}`                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
-| `rbac.create`          | Create Role and RoleBinding                                                                            | `false`                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
-| `rbac.nodeAccess`      | RBAC node access                                                                                       | `false`                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+` |
+| `config.extraFiles`    | Extra config files                                                                                     | `{}`                                                                                                                         |
+| `rbac.create`          | Create Role and RoleBinding                                                                            | `false`                                                                                                                      |
+| `rbac.nodeAccess`      | RBAC node access                                                                                       | `false`                                                                                                                      |
 
 ### Autoscaling
 

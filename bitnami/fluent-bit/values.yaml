@@ -387,14 +387,14 @@ config:
   ## @param config.logLevel Diagnostic level (error/warning/info/debug/trace)
   ##
   logLevel: info
-  ## @param config.service Defines the global behaviour of the Fluent Bit engine.
+  ## @param config.service [string] Defines the global behaviour of the Fluent Bit engine.
   ##
   service: |
     [SERVICE]
         HTTP_Server  On
         HTTP_Listen  0.0.0.0
         HTTP_Port {{ .Values.containerPorts.http }}
-  ## @param config.inputs Defines the source from where Fluent Bit can collect data
+  ## @param config.inputs [string] Defines the source from where Fluent Bit can collect data
   ## https://docs.fluentbit.io/manual/pipeline/inputs
   ##
   inputs: |
@@ -414,7 +414,7 @@ config:
     #    Mem_Buf_Limit 5MB
     #    Skip_Long_Lines On
 
-  ## @param config.filters Set of plugins that can be used to filter, modify, or enrich log data that is processed by Fluent Bit.
+  ## @param config.filters [string] Set of plugins that can be used to filter, modify, or enrich log data that is processed by Fluent Bit.
   ## https://docs.fluentbit.io/manual/pipeline/filters
   ##
   filters: |
@@ -429,7 +429,7 @@ config:
         Merge_Log_Key       log_processed
         K8S-Logging.Parser  On
         K8S-Logging.Exclude Off
-  ## @param config.outputs Outputs to send the collected data to different destinations
+  ## @param config.outputs [string] Outputs to send the collected data to different destinations
   ## https://docs.fluentbit.io/manual/pipeline/outputs
   ##
   outputs: |
