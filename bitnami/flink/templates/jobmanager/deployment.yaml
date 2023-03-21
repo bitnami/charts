@@ -92,18 +92,20 @@ spec:
           env:
             - name: FLINK_MODE
               value: jobmanager
-            - name: FLINK_CFG_JOBMANAGER_BIND__HOST
-              value: 0.0.0.0
             - name: FLINK_CFG_JOBMANAGER_RPC_ADDRESS
               value: {{ include "flink.jobmanager.fullname" . | quote }}
             - name: FLINK_CFG_JOBMANAGER_RPC_PORT
+              value: {{ .Values.jobmanager.service.ports.rpc | quote }}
+            - name: FLINK_CFG_JOBMANAGER_RPC_BIND__PORT
               value: {{ .Values.jobmanager.containerPorts.rpc | quote }}
-            - name: FLINK_CFG_REST_BIND__ADDRESS
+            - name: FLINK_CFG_JOBMANAGER_BIND__HOST
               value: 0.0.0.0
             - name: FLINK_CFG_REST_ADDRESS
               value: {{ include "flink.jobmanager.fullname" . }}
             - name: FLINK_CFG_REST_PORT
               value: {{ .Values.jobmanager.containerPorts.http | quote }}
+            - name: FLINK_CFG_REST_BIND__ADDRESS
+              value: 0.0.0.0
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" .Values.image.debug | quote }}
             {{- if .Values.jobmanager.extraEnvVars }}

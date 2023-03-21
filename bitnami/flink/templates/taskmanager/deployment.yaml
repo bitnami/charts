@@ -93,6 +93,10 @@ spec:
             # Hosts and addresses are determined by the service full name, which maps to flink.*§.fullname
             - name: FLINK_CFG_JOBMANAGER_RPC_ADDRESS
               value: {{ include "flink.jobmanager.fullname" . }}
+            - name: FLINK_CFG_JOBMANAGER_RPC_PORT
+              value: {{ .Values.jobmanager.service.ports.rpc | quote }}
+            - name: FLINK_CFG_JOBMANAGER_BIND__HOST
+              value: 0.0.0.0
             - name: FLINK_CFG_TASKMANAGER_RPC_PORT
               value: {{ .Values.taskmanager.containerPorts.rpc | quote }}
             - name: FLINK_CFG_TASKMANAGER_HOST
