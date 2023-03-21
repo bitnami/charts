@@ -1052,12 +1052,19 @@ service:
   ##   service.beta.kubernetes.io/aws-load-balancer-internal: 0.0.0.0/0
   ##
   annotations: {}
+  ## DEPRECATED service.annotationsHeadless it will removed in a future release, please use service.headless.annotations instead
   ## @param service.annotationsHeadless Headless Service annotations. Evaluated as a template
   ## Example:
   ## annotations:
   ##   external-dns.alpha.kubernetes.io/internal-hostname: rabbitmq.example.com
   ##
   annotationsHeadless: {}
+  ## Headless service properties
+  ##
+  headless:
+    ## @param service.headless.annotations Annotations for the headless service.
+    ##
+    annotations: {}
   ## @param service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
   ## If "ClientIP", consecutive client requests will be directed to the same Pod
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
