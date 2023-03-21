@@ -1,4 +1,6 @@
+<!-- markdownlint-disable-next-line -->
 [![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/bitnami)](https://artifacthub.io/packages/search?repo=bitnami)
+<!-- markdownlint-disable-next-line -->
 [![CD Pipeline](https://github.com/bitnami/charts/actions/workflows/cd-pipeline.yml/badge.svg)](https://github.com/bitnami/charts/actions/workflows/cd-pipeline.yml)
 
 # The Bitnami Library for Kubernetes

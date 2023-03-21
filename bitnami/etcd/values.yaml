@@ -559,6 +559,12 @@ service:
   ##     timeoutSeconds: 300
   ##
   sessionAffinityConfig: {}
+  ## Headless service properties
+  ##
+  headless:
+    ## @param service.headless.annotations Annotations for the headless service.
+    ##
+    annotations: {}
 
 ## @section Persistence parameters
 ##
@@ -747,7 +753,7 @@ metrics:
     ## @param metrics.podMonitor.relabelings [array] Prometheus relabeling rules
     ##
     relabelings: []
-  
+
   ## Prometheus Operator PrometheusRule configuration
   ##
   prometheusRule:
