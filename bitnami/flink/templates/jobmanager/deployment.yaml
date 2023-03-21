@@ -87,7 +87,7 @@ spec:
               containerPort: {{ .Values.jobmanager.containerPorts.rpc }}
             - name: http
               containerPort: {{ .Values.jobmanager.containerPorts.http }}
-            - name: blob
+            - name: tcp-blob
               containerPort: {{ .Values.jobmanager.containerPorts.blob }}
           env:
             - name: FLINK_MODE
@@ -95,7 +95,7 @@ spec:
             - name: FLINK_CFG_JOBMANAGER_BIND__HOST
               value: 0.0.0.0
             - name: FLINK_CFG_JOBMANAGER_RPC_ADDRESS
-              value: {{ include "flink.jobmanager.fullname" . }}
+              value: {{ include "flink.jobmanager.fullname" . | quote }}
             - name: FLINK_CFG_JOBMANAGER_RPC_PORT
               value: {{ .Values.jobmanager.containerPorts.rpc | quote }}
             - name: FLINK_CFG_REST_BIND__ADDRESS
