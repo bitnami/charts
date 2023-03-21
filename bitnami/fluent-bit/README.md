@@ -61,6 +61,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
+
 ### Common parameters
 
 | Name                     | Description                                                                             | Value          |
@@ -74,94 +75,204 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`    |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]` |
 
+
 ### Fluent Bit parameters
 
-| Name                | Description                                                                                            | Value                 |
-| ------------------- | ------------------------------------------------------------------------------------------------------ | --------------------- |
-| `image.registry`    | Fluent Bit image registry                                                                                  | `docker.io`           |
-| `image.repository`  | Fluent Bit image repository                                                                                | `bitnami/fluent-bit`      |
-| `image.tag`         | Fluent Bit image tag (immutable tags are recommended)                                                      | `1.42.0-debian-11-r7` |
-| `image.digest`      | Fluent Bit image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
-| `image.pullPolicy`  | image pull policy                                                                                      | `IfNotPresent`        |
-| `image.pullSecrets` | Fluent Bit image pull secrets                                                                              | `[]`                  |
-| `image.debug`       | Enable image debug mode                                                                                | `false`               |
+| Name                                          | Description                                                                                                | Value                 |
+| --------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | --------------------- |
+| `image.registry`                              | Fluent Bit image registry                                                                                  | `docker.io`           |
+| `image.repository`                            | Fluent Bit image repository                                                                                | `bitnami/fluent-bit`  |
+| `image.tag`                                   | Fluent Bit image tag (immutable tags are recommended)                                                      | `2.0.9-debian-11-r11` |
+| `image.digest`                                | Fluent Bit image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
+| `image.pullPolicy`                            | image pull policy                                                                                          | `IfNotPresent`        |
+| `image.pullSecrets`                           | Fluent Bit image pull secrets                                                                              | `[]`                  |
+| `image.debug`                                 | Enable image debug mode                                                                                    | `false`               |
+| `useDaemonset`                                | Use a daemonset instead of a deployment. `replicaCount` will not take effect.                              | `false`               |
+| `command`                                     | Command for running the container (set to default if not set). Use array form                              | `[]`                  |
+| `args`                                        | Args for running the container (set to default if not set). Use array form                                 | `[]`                  |
+| `lifecycleHooks`                              | Override default etcd container hooks                                                                      | `{}`                  |
+| `extraEnvVars`                                | Extra environment variables to be set on fluent-bit container                                              | `[]`                  |
+| `extraEnvVarsCM`                              | Name of existing ConfigMap containing extra env vars                                                       | `""`                  |
+| `extraEnvVarsSecret`                          | Name of existing Secret containing extra env vars                                                          | `""`                  |
+| `existingConfigMap`                           | Name of an existing ConfigMap with the Fluent Bit config file                                              | `""`                  |
+| `hostAliases`                                 | Deployment pod host aliases                                                                                | `[]`                  |
+| `replicaCount`                                | Number of Fluent Bit replicas                                                                              | `1`                   |
+| `livenessProbe.enabled`                       | Enable livenessProbe on nodes                                                                              | `true`                |
+| `livenessProbe.initialDelaySeconds`           | Initial delay seconds for livenessProbe                                                                    | `10`                  |
+| `livenessProbe.periodSeconds`                 | Period seconds for livenessProbe                                                                           | `10`                  |
+| `livenessProbe.timeoutSeconds`                | Timeout seconds for livenessProbe                                                                          | `1`                   |
+| `livenessProbe.failureThreshold`              | Failure threshold for livenessProbe                                                                        | `3`                   |
+| `livenessProbe.successThreshold`              | Success threshold for livenessProbe                                                                        | `1`                   |
+| `startupProbe.enabled`                        | Enable startupProbe on containers                                                                          | `true`                |
+| `startupProbe.initialDelaySeconds`            | Initial delay seconds for startupProbe                                                                     | `10`                  |
+| `startupProbe.periodSeconds`                  | Period seconds for startupProbe                                                                            | `10`                  |
+| `startupProbe.timeoutSeconds`                 | Timeout seconds for startupProbe                                                                           | `1`                   |
+| `startupProbe.failureThreshold`               | Failure threshold for startupProbe                                                                         | `15`                  |
+| `startupProbe.successThreshold`               | Success threshold for startupProbe                                                                         | `1`                   |
+| `readinessProbe.enabled`                      | Enable readinessProbe                                                                                      | `true`                |
+| `readinessProbe.initialDelaySeconds`          | Initial delay seconds for readinessProbe                                                                   | `10`                  |
+| `readinessProbe.periodSeconds`                | Period seconds for readinessProbe                                                                          | `10`                  |
+| `readinessProbe.timeoutSeconds`               | Timeout seconds for readinessProbe                                                                         | `1`                   |
+| `readinessProbe.failureThreshold`             | Failure threshold for readinessProbe                                                                       | `15`                  |
+| `readinessProbe.successThreshold`             | Success threshold for readinessProbe                                                                       | `1`                   |
+| `customLivenessProbe`                         | Custom livenessProbe that overrides the default one                                                        | `{}`                  |
+| `customStartupProbe`                          | Override default startup probe                                                                             | `{}`                  |
+| `customReadinessProbe`                        | Override default readiness probe                                                                           | `{}`                  |
+| `resources.limits`                            | The resources limits for Fluent Bit containers                                                             | `{}`                  |
+| `resources.requests`                          | The requested resources for Fluent Bit containers                                                          | `{}`                  |
+| `extraVolumeMounts`                           | Optionally specify extra list of additional volumeMounts for fluent-bit container                          | `[]`                  |
+| `containerPorts.http`                         | Port for HTTP port                                                                                         | `2020`                |
+| `service.type`                                | Fluent Bit service type                                                                                    | `ClusterIP`           |
+| `service.ports.http`                          | Port for HTTP port                                                                                         | `2020`                |
+| `service.nodePorts.http`                      | Node port for HTTP port                                                                                    | `""`                  |
+| `service.extraPorts`                          | Extra ports to expose in the service (normally used with the `sidecar` value)                              | `[]`                  |
+| `service.loadBalancerIP`                      | LoadBalancerIP if service type is `LoadBalancer`                                                           | `""`                  |
+| `service.loadBalancerSourceRanges`            | Service Load Balancer sources                                                                              | `[]`                  |
+| `service.clusterIP`                           | Service Cluster IP                                                                                         | `""`                  |
+| `service.externalTrafficPolicy`               | Service external traffic policy                                                                            | `Cluster`             |
+| `service.annotations`                         | Provide any additional annotations which may be required.                                                  | `{}`                  |
+| `service.sessionAffinity`                     | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                       | `None`                |
+| `service.sessionAffinityConfig`               | Additional settings for the sessionAffinity                                                                | `{}`                  |
+| `service.metrics.annotations`                 | Annotations for Prometheus metrics                                                                         | `{}`                  |
+| `serviceAccount.create`                       | Enables ServiceAccount                                                                                     | `true`                |
+| `serviceAccount.name`                         | ServiceAccount name                                                                                        | `""`                  |
+| `serviceAccount.annotations`                  | Annotations to add to all deployed objects                                                                 | `{}`                  |
+| `serviceAccount.automountServiceAccountToken` | Automount API credentials for a service account.                                                           | `true`                |
+| `podSecurityContext.enabled`                  | Enabled Fluent Bit pods' Security Context                                                                  | `true`                |
+| `podSecurityContext.fsGroup`                  | Set Fluent Bit pod's Security Context fsGroup                                                              | `1001`                |
+| `containerSecurityContext.enabled`            | Enabled Fluent Bit containers' Security Context                                                            | `true`                |
+| `containerSecurityContext.runAsUser`          | Set Fluent Bit container's Security Context runAsUser                                                      | `1001`                |
+| `containerSecurityContext.runAsNonRoot`       | Force the container to be run as non root                                                                  | `true`                |
+| `podAnnotations`                              | Additional pod annotations                                                                                 | `{}`                  |
+| `podLabels`                                   | Additional pod labels                                                                                      | `{}`                  |
+| `podAffinityPreset`                           | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                        | `""`                  |
+| `podAntiAffinityPreset`                       | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                   | `soft`                |
+| `nodeAffinityPreset.type`                     | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                  | `""`                  |
+| `nodeAffinityPreset.key`                      | Node label key to match. Ignored if `affinity` is set                                                      | `""`                  |
+| `nodeAffinityPreset.values`                   | Node label values to match. Ignored if `affinity` is set                                                   | `[]`                  |
+| `priorityClassName`                           | Server priorityClassName                                                                                   | `""`                  |
+| `affinity`                                    | Affinity for pod assignment                                                                                | `{}`                  |
+| `nodeSelector`                                | Node labels for pod assignment                                                                             | `{}`                  |
+| `tolerations`                                 | Tolerations for pod assignment                                                                             | `[]`                  |
+| `topologySpreadConstraints`                   | Topology Spread Constraints for pod assignment                                                             | `[]`                  |
+| `schedulerName`                               | Alternative scheduler                                                                                      | `""`                  |
+| `updateStrategy.type`                         | Fluent Bit deployment strategy type                                                                        | `RollingUpdate`       |
+| `updateStrategy.rollingUpdate`                | Fluent Bit deployment rolling update configuration parameters                                              | `{}`                  |
+| `extraVolumes`                                | Optionally specify extra list of additional volumes for fluent-bit container                               | `[]`                  |
+| `initContainers`                              | Add additional init containers to the fluent-bit pods                                                      | `[]`                  |
+| `sidecars`                                    | Add additional sidecar containers to the fluent-bit pods                                                   | `[]`                  |
 
-### Deployment parameters
 
-| Name                                                | Description                                                                           | Value           |
-| --------------------------------------------------- | ------------------------------------------------------------------------------------- | --------------- |
-| `.command`                                     | Command for running the container (set to default if not set). Use array form         | `[]`            |
-| `.args`                                        | Args for running the container (set to default if not set). Use array form            | `[]`            |
-| `.lifecycleHooks`                              | Override default etcd container hooks                                                 | `{}`            |
-| `.extraEnvVars`                                | Extra environment variables to be set on fluent-bit container                             | `[]`            |
-| `.extraEnvVarsCM`                              | Name of existing ConfigMap containing extra env vars                                  | `""`            |
-| `.extraEnvVarsSecret`                          | Name of existing Secret containing extra env vars                                     | `""`            |
-| `.replicaCount`                                | Number of Fluent Bit replicas                                                             | `1`             |
-| `.livenessProbe.enabled`                       | Enable livenessProbe on nodes                                                      | `true`          |
-| `.livenessProbe.initialDelaySeconds`           | Initial delay seconds for livenessProbe                                               | `10`            |
-| `.livenessProbe.periodSeconds`                 | Period seconds for livenessProbe                                                      | `10`            |
-| `.livenessProbe.timeoutSeconds`                | Timeout seconds for livenessProbe                                                     | `1`             |
-| `.livenessProbe.failureThreshold`              | Failure threshold for livenessProbe                                                   | `3`             |
-| `.livenessProbe.successThreshold`              | Success threshold for livenessProbe                                                   | `1`             |
-| `.startupProbe.enabled`                        | Enable startupProbe on containers                                                  | `false`         |
-| `.startupProbe.initialDelaySeconds`            | Initial delay seconds for startupProbe                                                | `10`            |
-| `.startupProbe.periodSeconds`                  | Period seconds for startupProbe                                                       | `10`            |
-| `.startupProbe.timeoutSeconds`                 | Timeout seconds for startupProbe                                                      | `1`             |
-| `.startupProbe.failureThreshold`               | Failure threshold for startupProbe                                                    | `15`            |
-| `.startupProbe.successThreshold`               | Success threshold for startupProbe                                                    | `1`             |
-| `.readinessProbe.enabled`                      | Enable readinessProbe                                                                 | `false`         |
-| `.readinessProbe.initialDelaySeconds`          | Initial delay seconds for readinessProbe                                              | `10`            |
-| `.readinessProbe.periodSeconds`                | Period seconds for readinessProbe                                                     | `10`            |
-| `.readinessProbe.timeoutSeconds`               | Timeout seconds for readinessProbe                                                    | `1`             |
-| `.readinessProbe.failureThreshold`             | Failure threshold for readinessProbe                                                  | `15`            |
-| `.readinessProbe.successThreshold`             | Success threshold for readinessProbe                                                  | `1`             |
-| `.customLivenessProbe`                         | Custom livenessProbe that overrides the default one                                   | `{}`            |
-| `.customStartupProbe`                          | Override default startup probe                                                        | `{}`            |
-| `.customReadinessProbe`                        | Override default readiness probe                                                      | `{}`            |
-| `.resources.limits`                            | The resources limits for Fluent Bit containers                                            | `{}`            |
-| `.resources.requests`                          | The requested resources for Fluent Bit containers                                         | `{}`            |
-| `.extraVolumeMounts`                           | Optionally specify extra list of additional volumeMounts for fluent-bit container         | `[]`            |
-| `.containerPorts.api`                          | Port for API                                                                          | `16686`         || `.service.type`                                | Fluent Bit service type                                                                       | `ClusterIP`     |
-| `.service.ports.api`                           | Port for API                                                                          | `16686`         |
-| `.service.nodePorts.api`                       | Node port for API                                                                     | `""`            |
-| `.service.extraPorts`                          | Extra ports to expose in the service (normally used with the `sidecar` value)         | `[]`            |
-| `.service.loadBalancerIP`                      | LoadBalancerIP if service type is `LoadBalancer`                                      | `""`            |
-| `.service.loadBalancerSourceRanges`            | Service Load Balancer sources                                                         | `[]`            |
-| `.service.clusterIP`                           | Service Cluster IP                                                                    | `""`            |
-| `.service.externalTrafficPolicy`               | Service external traffic policy                                                       | `Cluster`       |
-| `.service.annotations`                         | Provide any additional annotations which may be required.                             | `{}`            |
-| `.service.sessionAffinity`                     | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                  | `None`          |
-| `.service.sessionAffinityConfig`               | Additional settings for the sessionAffinity                                           | `{}`            |
-| `.service.metrics.annotations`                 | Annotations for Prometheus metrics                                                    | `{}`            |
-| `.serviceAccount.create`                       | Enables ServiceAccount                                                                | `true`          |
-| `.serviceAccount.name`                         | ServiceAccount name                                                                   | `""`            |
-| `.serviceAccount.annotations`                  | Annotations to add to all deployed objects                                            | `{}`            |
-| `.serviceAccount.automountServiceAccountToken` | Automount API credentials for a service account.                                      | `true`          |
-| `.podSecurityContext.enabled`                  | Enabled Fluent Bit pods' Security Context                                                 | `true`          |
-| `.podSecurityContext.fsGroup`                  | Set Fluent Bit pod's Security Context fsGroup                                             | `1001`          |
-| `.containerSecurityContext.enabled`            | Enabled Fluent Bit containers' Security Context                                           | `true`          |
-| `.containerSecurityContext.runAsUser`          | Set Fluent Bit container's Security Context runAsUser                                     | `1001`          |
-| `.containerSecurityContext.runAsNonRoot`       | Force the container to be run as non root                                             | `true`          |
-| `.podAnnotations`                              | Additional pod annotations                                                            | `{}`            |
-| `.podLabels`                                   | Additional pod labels                                                                 | `{}`            |
-| `.podAffinityPreset`                           | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`   | `""`            |
-| `.podAntiAffinityPreset`                       | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `soft`          |
-| `.nodeAffinityPreset.type`                     | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`            |
-| `.nodeAffinityPreset.key`                      | Node label key to match. Ignored if `affinity` is set                                 | `""`            |
-| `.nodeAffinityPreset.values`                   | Node label values to match. Ignored if `affinity` is set                              | `[]`            |
-| `.priorityClassName`                           | Server priorityClassName                                                              | `""`            |
-| `.affinity`                                    | Affinity for pod assignment                                                           | `{}`            |
-| `.nodeSelector`                                | Node labels for pod assignment                                                        | `{}`            |
-| `.tolerations`                                 | Tolerations for pod assignment                                                        | `[]`            |
-| `.topologySpreadConstraints`                   | Topology Spread Constraints for pod assignment                                        | `[]`            |
-| `.schedulerName`                               | Alternative scheduler                                                                 | `""`            |
-| `.updateStrategy.type`                         | Fluent Bit deployment strategy type                                                  | `RollingUpdate` |
-| `.updateStrategy.rollingUpdate`                | Fluent Bit deployment rolling update configuration parameters                        | `{}`            |
-| `.extraVolumes`                                | Optionally specify extra list of additional volumes for fluent-bit container              | `[]`            |
-| `.initContainers`                              | Add additional init containers to the fluent-bit pods                                     | `[]`            |
-| `.sidecars`                                    | Add additional sidecar containers to the fluent-bit pods                                  | `[]`            |
+### Fluent Bit configuration
 
-> **Tip**: You can use the default [values.yaml](values.yaml)
+| Name                   | Description                                                                                            | Value                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| ---------------------- | ------------------------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `config.flush`         | Interval to flush output (seconds)                                                                     | `1`                                                                                                                                                                                                                                                                                                                                                                                                                                                                         |
+| `config.logLevel`      | Diagnostic level (error/warning/info/debug/trace)                                                      | `info`                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| `config.service`       | Defines the global behaviour of the Fluent Bit engine.                                                 | `[SERVICE]
+    HTTP_Server  On
+    HTTP_Listen  0.0.0.0
+    HTTP_Port {{ .Values.containerPorts.http }}
+`                                                                                                                                                                                                                                                                                                                                                                   |
+| `config.inputs`        | Defines the source from where Fluent Bit can collect data                                              | `[INPUT]
+    Name cpu
+
+[INPUT]
+    Name systemd
+    Tag host.*
+    Systemd_Filter _SYSTEMD_UNIT=kubelet.service
+    Read_From_Tail On
+#[INPUT]
+#    Name tail
+#    Path /var/log/containers/*.log
+#    multiline.parser docker, cri
+#    Tag kube.*
+#    Mem_Buf_Limit 5MB
+#    Skip_Long_Lines On
+`                                                                                                                                                                        |
+| `config.filters`       | Set of plugins that can be used to filter, modify, or enrich log data that is processed by Fluent Bit. | `[FILTER]
+    Name                kubernetes
+    Match               kube.*
+    Kube_URL            https://kubernetes.default.svc:443
+    Kube_CA_File        /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+    Kube_Token_File     /var/run/secrets/kubernetes.io/serviceaccount/token
+    Kube_Tag_Prefix     kube.var.log.containers.
+    Merge_Log           Off
+    Merge_Log_Key       log_processed
+    K8S-Logging.Parser  On
+    K8S-Logging.Exclude Off
+` |
+| `config.outputs`       | Outputs to send the collected data to different destinations                                           | `[OUTPUT]
+    Name  stdout
+    Match *
+`                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| `config.upstream`      | This configuration is deprecated, please use `extraFiles` instead.                                     | `{}`                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| `config.customParsers` | Custom parsers                                                                                         | `[PARSER]
+    Name docker_no_time
+    Format json
+    Time_Keep Off
+    Time_Key time
+    Time_Format %Y-%m-%dT%H:%M:%S.%L
+`                                                                                                                                                                                                                                                                                                                                                |
+| `config.extraFiles`    | Extra config files                                                                                     | `{}`                                                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| `rbac.create`          | Create Role and RoleBinding                                                                            | `false`                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| `rbac.nodeAccess`      | RBAC node access                                                                                       | `false`                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+
+
+### Autoscaling
+
+| Name                                  | Description                                                                                    | Value   |
+| ------------------------------------- | ---------------------------------------------------------------------------------------------- | ------- |
+| `autoscaling.vpa.enabled`             | Enable VPA                                                                                     | `false` |
+| `autoscaling.vpa.annotations`         | Annotations for VPA resource                                                                   | `{}`    |
+| `autoscaling.vpa.controlledResources` | VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory | `[]`    |
+| `autoscaling.vpa.maxAllowed`          | VPA Max allowed resources for the pod                                                          | `{}`    |
+| `autoscaling.vpa.minAllowed`          | VPA Min allowed resources for the pod                                                          | `{}`    |
+
+
+### VPA update policy
+
+| Name                                                | Description                                                                                                                                                            | Value                    |
+| --------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `autoscaling.vpa.updatePolicy.updateMode`           | Autoscaling update policy Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod | `Auto`                   |
+| `autoscaling.hpa.enabled`                           | Enable HPA                                                                                                                                                             | `false`                  |
+| `autoscaling.hpa.minReplicas`                       | Min replicas                                                                                                                                                           | `1`                      |
+| `autoscaling.hpa.maxReplicas`                       | Max replicas                                                                                                                                                           | `3`                      |
+| `autoscaling.hpa.targetCPUUtilizationPercentage`    | Target CPU utilization percentage                                                                                                                                      | `75`                     |
+| `autoscaling.hpa.targetMemoryUtilizationPercentage` | Target Memory utilization percentage                                                                                                                                   | `""`                     |
+| `autoscaling.hpa.customRules`                       | Custom rules                                                                                                                                                           | `[]`                     |
+| `autoscaling.hpa.behavior`                          | HPA Behavior                                                                                                                                                           | `{}`                     |
+| `ingress.enabled`                                   | Enable ingress controller resource for fluentBit Console                                                                                                               | `false`                  |
+| `ingress.apiVersion`                                | Force Ingress API version (automatically detected if not set)                                                                                                          | `""`                     |
+| `ingress.ingressClassName`                          | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                                                          | `""`                     |
+| `ingress.hostname`                                  | Default host for the ingress resource                                                                                                                                  | `fluent-bit.local`       |
+| `ingress.path`                                      | The Path to fluentBit&reg;. You may need to set this to '/*' in order to use this with ALB ingress controllers.                                                        | `/`                      |
+| `ingress.pathType`                                  | Ingress path type                                                                                                                                                      | `ImplementationSpecific` |
+| `ingress.servicePort`                               | Service port to be used                                                                                                                                                | `http`                   |
+| `ingress.annotations`                               | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.                                       | `{}`                     |
+| `ingress.tls`                                       | Enable TLS configuration for the hostname defined at `ingress.hostname` parameter                                                                                      | `false`                  |
+| `ingress.selfSigned`                                | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                                                           | `false`                  |
+| `ingress.extraHosts`                                | The list of additional hostnames to be covered with this ingress record.                                                                                               | `[]`                     |
+| `ingress.extraPaths`                                | Any additional paths that may need to be added to the ingress under the main host                                                                                      | `[]`                     |
+| `ingress.extraTls`                                  | The tls configuration for additional hostnames to be covered with this ingress record.                                                                                 | `[]`                     |
+| `ingress.secrets`                                   | If you're providing your own certificates, please use this to add the certificates as secrets                                                                          | `[]`                     |
+| `ingress.extraRules`                                | Additional rules to be covered with this ingress record                                                                                                                | `[]`                     |
+| `pdb.create`                                        | Deploy a PodDisruptionBudget object for Fluent Bit deployment                                                                                                          | `false`                  |
+| `pdb.minAvailable`                                  | Minimum available Fluent Bit replicas (expressed in percentage)                                                                                                        | `""`                     |
+| `pdb.maxUnavailable`                                | Maximum unavailable Fluent Bit replicas (expressed in percentage)                                                                                                      | `50%`                    |
+| `metrics.enabled`                                   | Enable the export of Prometheus metrics                                                                                                                                | `false`                  |
+| `metrics.serviceMonitor.enabled`                    | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)                                                                 | `false`                  |
+| `metrics.serviceMonitor.namespace`                  | Namespace in which Prometheus is running                                                                                                                               | `""`                     |
+| `metrics.serviceMonitor.annotations`                | Additional custom annotations for the ServiceMonitor                                                                                                                   | `{}`                     |
+| `metrics.serviceMonitor.labels`                     | Extra labels for the ServiceMonitor                                                                                                                                    | `{}`                     |
+| `metrics.serviceMonitor.jobLabel`                   | The name of the label on the target service to use as the job name in Prometheus                                                                                       | `""`                     |
+| `metrics.serviceMonitor.honorLabels`                | honorLabels chooses the metric's labels on collisions with target labels                                                                                               | `false`                  |
+| `metrics.serviceMonitor.interval`                   | Interval at which metrics should be scraped.                                                                                                                           | `""`                     |
+| `metrics.serviceMonitor.scrapeTimeout`              | Timeout after which the scrape is ended                                                                                                                                | `""`                     |
+| `metrics.serviceMonitor.metricRelabelings`          | Specify additional relabeling of metrics                                                                                                                               | `[]`                     |
+| `metrics.serviceMonitor.relabelings`                | Specify general relabeling                                                                                                                                             | `[]`                     |
+| `metrics.serviceMonitor.selector`                   | Prometheus instance selector labels                                                                                                                                    | `{}`                     |
+
 
 ## Configuration and installation details
 

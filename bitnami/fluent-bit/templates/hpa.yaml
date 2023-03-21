@@ -1,4 +1,4 @@
-{{- if and  (not .Values.useDaemonset)  .Values.autoscaling.enabled  }}
+{{- if and  (not .Values.useDaemonset)  .Values.autoscaling.hpa.enabled  }}
 apiVersion: autoscaling/v2beta2
 kind: HorizontalPodAutoscaler
 metadata:
@@ -12,34 +12,34 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  {{- if .Values.autoscaling.behavior }}
+  {{- if .Values.autoscaling.hpa.behavior }}
   behavior:
-    {{- toYaml .Values.autoscaling.behavior | nindent 4 }}
+    {{- toYaml .Values.autoscaling.hpa.behavior | nindent 4 }}
   {{- end }}
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
     name: {{ include "fluentBit.fullname" . }}
-  minReplicas: {{ .Values.autoscaling.minReplicas }}
-  maxReplicas: {{ .Values.autoscaling.maxReplicas }}
+  minReplicas: {{ .Values.autoscaling.hpa.minReplicas }}
+  maxReplicas: {{ .Values.autoscaling.hpa.maxReplicas }}
   metrics:
-  {{- if .Values.autoscaling.targetCPUUtilizationPercentage }}
+  {{- if .Values.autoscaling.hpa.targetCPUUtilizationPercentage }}
     - type: Resource
       resource:
         name: cpu
         target:
-          averageUtilization: {{ .Values.autoscaling.targetCPUUtilizationPercentage }}
+          averageUtilization: {{ .Values.autoscaling.hpa.targetCPUUtilizationPercentage }}
           type: Utilization
   {{- end }}
-  {{- if .Values.autoscaling.targetMemoryUtilizationPercentage }}
+  {{- if .Values.autoscaling.hpa.targetMemoryUtilizationPercentage }}
     - type: Resource
       resource:
         name: memory
         target:
-          averageUtilization: {{ .Values.autoscaling.targetMemoryUtilizationPercentage }}
+          averageUtilization: {{ .Values.autoscaling.hpa.targetMemoryUtilizationPercentage }}
           type: Utilization
   {{- end }}
-  {{- if .Values.autoscaling.customRules -}}
-    {{- toYaml .Values.autoscaling.customRules | nindent 4}}
+  {{- if .Values.autoscaling.hpa.customRules -}}
+    {{- toYaml .Values.autoscaling.hpa.customRules | nindent 4}}
   {{- end -}}
 {{- end }}

@@ -108,7 +108,7 @@ extraEnvVarsCM: ""
 ## @param extraEnvVarsSecret Name of existing Secret containing extra env vars
 ##
 extraEnvVarsSecret: ""
-## @param extraEnvVarsSecret Name of existing Secret containing extra env vars
+## @param existingConfigMap Name of an existing ConfigMap with the Fluent Bit config file
 ##
 existingConfigMap: ""
 ## @param hostAliases Deployment pod host aliases
@@ -378,16 +378,25 @@ initContainers: []
 ##
 sidecars: []
 
+## @section Fluent Bit configuration
+##
 config:
+  ## @param config.flush Interval to flush output (seconds)
+  ##
   flush: 1
+  ## @param config.logLevel Diagnostic level (error/warning/info/debug/trace)
+  ##
   logLevel: info
+  ## @param config.service Defines the global behaviour of the Fluent Bit engine.
+  ##
   service: |
     [SERVICE]
         HTTP_Server  On
         HTTP_Listen  0.0.0.0
         HTTP_Port {{ .Values.containerPorts.http }}
-
+  ## @param config.inputs Defines the source from where Fluent Bit can collect data
   ## https://docs.fluentbit.io/manual/pipeline/inputs
+  ##
   inputs: |
     [INPUT]
         Name cpu
@@ -405,7 +414,9 @@ config:
     #    Mem_Buf_Limit 5MB
     #    Skip_Long_Lines On
 
+  ## @param config.filters Set of plugins that can be used to filter, modify, or enrich log data that is processed by Fluent Bit.
   ## https://docs.fluentbit.io/manual/pipeline/filters
+  ##
   filters: |
     [FILTER]
         Name                kubernetes
@@ -418,18 +429,20 @@ config:
         Merge_Log_Key       log_processed
         K8S-Logging.Parser  On
         K8S-Logging.Exclude Off
-
+  ## @param config.outputs Outputs to send the collected data to different destinations
   ## https://docs.fluentbit.io/manual/pipeline/outputs
+  ##
   outputs: |
     [OUTPUT]
         Name  stdout
         Match *
-
+  ## @param config.upstream This configuration is deprecated, please use `extraFiles` instead.
   ## https://docs.fluentbit.io/manual/administration/configuring-fluent-bit/classic-mode/upstream-servers
-  ## This configuration is deprecated, please use `extraFiles` instead.
+  ##
   upstream: {}
-
+  ## @param config.customParsers Custom parsers
   ## https://docs.fluentbit.io/manual/pipeline/parsers
+  ##
   customParsers: |
     [PARSER]
         Name docker_no_time
@@ -437,51 +450,70 @@ config:
         Time_Keep Off
         Time_Key time
         Time_Format %Y-%m-%dT%H:%M:%S.%L
-
-  # This allows adding more files with arbitary filenames to /fluent-bit/etc by providing key/value pairs.
-  # The key becomes the filename, the value becomes the file content.
+  ## @param config.extraFiles Extra config files
+  ## This allows adding more files with arbitary filenames to /fluent-bit/etc by providing key/value pairs.
+  ## The key becomes the filename, the value becomes the file content.
+  ##
   extraFiles: {}
 ## Role Based Access
 ## Ref: https://kubernetes.io/docs/admin/authorization/rbac/
 ## @param rbac.create Create Role and RoleBinding
-## @param rbac.rules RBAC node access
+## @param rbac.nodeAccess RBAC node access
 ##
 rbac:
   create: false
   nodeAccess: false
 
-
+## @section Autoscaling
+##
 autoscaling:
   vpa:
+    ## @param autoscaling.vpa.enabled Enable VPA
+    ##
     enabled: false
-
+    ## @param autoscaling.vpa.annotations Annotations for VPA resource
+    ##
     annotations: {}
-    ## @param autoscaling.controlledResources List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory
+    ## @param autoscaling.vpa.controlledResources VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory
     ##
     controlledResources: []
-    ## @param autoscaling.maxAllowed Max allowed resources for the pod
-    ##
+    ## @param autoscaling.vpa.maxAllowed VPA Max allowed resources for the pod
+    ## cpu: 200m
+    ## memory: 100Mi
     maxAllowed: {}
-    ## @param autoscaling.minAllowed Min allowed resources for the pod
+    ## @param autoscaling.vpa.minAllowed VPA Min allowed resources for the pod
     ## cpu: 200m
     ## memory: 100Mi
     minAllowed: {}
-    ## @param autoscaling.updatePolicy Autoscaling update policy
-    ##
+    ## @section VPA update policy
     ##
     updatePolicy:
-      ## @param autoscaling.updatePolicy Autoscaling update policy Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod
+      ## @param autoscaling.vpa.updatePolicy.updateMode Autoscaling update policy Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod
       ## Possible values are "Off", "Initial", "Recreate", and "Auto".
       ##
       updateMode: Auto
-
-  enabled: false
-  minReplicas: 1
-  maxReplicas: 3
-  targetCPUUtilizationPercentage: 75
-  targetMemoryUtilizationPercentage: ""
-  customRules: []
-  behavior: {}
+  hpa:
+    ## @param autoscaling.hpa.enabled Enable HPA
+    ##
+    enabled: false
+    ## @param autoscaling.hpa.minReplicas Min replicas
+    ##
+    minReplicas: 1
+    ## @param autoscaling.hpa.maxReplicas Max replicas
+    ##
+    maxReplicas: 3
+    ## @param autoscaling.hpa.targetCPUUtilizationPercentage Target CPU utilization percentage
+    ##
+    targetCPUUtilizationPercentage: 75
+    ## @param autoscaling.hpa.targetMemoryUtilizationPercentage Target Memory utilization percentage
+    ##
+    targetMemoryUtilizationPercentage: ""
+    ## @param autoscaling.hpa.customRules Custom rules
+    ##
+    customRules: []
+    ## @param autoscaling.hpa.behavior HPA Behavior
+    ##
+    behavior: {}
 
 ## Configure the ingress resource that allows you to access the
 ## fluent-bit Console. Set up the URL
@@ -591,6 +623,7 @@ ingress:
   ##             name: http
   ##
   extraRules: []
+
 ## Fluent Bit Pod Disruption Budget
 ## ref: https://kubernetes.io/docs/concepts/workloads/pods/disruptions/
 ## @param pdb.create Deploy a PodDisruptionBudget object for Fluent Bit deployment
