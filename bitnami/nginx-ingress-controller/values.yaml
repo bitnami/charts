@@ -55,7 +55,7 @@ clusterDomain: cluster.local
 image:
   registry: docker.io
   repository: bitnami/nginx-ingress-controller
-  tag: 1.6.4-debian-11-r5
+  tag: 1.6.4-debian-11-r11
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -363,6 +363,11 @@ hostNetwork: false
 ## to keep resolving names inside the Kubernetes network
 ##
 dnsPolicy: ClusterFirst
+## @param dnsConfig is an object with optional parameters to pass to the DNS resolver
+## The dnsConfig field is optional and it can work with any dnsPolicy settings.
+## However, when a Pod's dnsPolicy is set to "None", the dnsConfig field has to be specified.
+##
+dnsConfig: {}
 ## @param terminationGracePeriodSeconds How many seconds to wait before terminating a pod
 ##
 terminationGracePeriodSeconds: 60
@@ -481,7 +486,7 @@ defaultBackend:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.22.1-debian-11-r44
+    tag: 1.22.1-debian-11-r50
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

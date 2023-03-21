@@ -54,7 +54,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/thanos
-  tag: 0.30.2-scratch-r6
+  tag: 0.30.2-scratch-r7
   digest: ""
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -3973,6 +3973,12 @@ metrics:
     ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
     ##
     selector: {}
+    ## @param metrics.serviceMonitor.extraParameters Any extra parameter to be added to the endpoint configured in the ServiceMonitor
+    ## (e.g. tlsConfig for further customization of the HTTPS behavior)
+    ## Note that the 'scheme' is automatically set to 'https' when the 'https.enabled' flag is used in this chart.
+    ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#monitoring.coreos.com/v1.Endpoint
+    ##
+    extraParameters: {}
 
   ## PrometheusRule CRD configuration
   ##
@@ -4085,7 +4091,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r96
+    tag: 11-debian-11-r98
     digest: ""
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
