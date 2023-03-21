@@ -83,7 +83,7 @@ data:
           }
           {{- if .Values.alertmanager.enabled }}
           # Alertmanager endpoints
-          location {{ .Values.mimir.httpPrefix.prometheus }} {
+          location {{ .Values.mimir.httpPrefix.alertmanager }} {
             proxy_pass      http://{{ template "grafana-mimir.alertmanager.fullname" . }}-headless.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}:{{ .Values.alertmanager.service.ports.http }}$request_uri;
           }
           location = /multitenant_alertmanager/status {
