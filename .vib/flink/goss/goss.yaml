@@ -1,19 +1,10 @@
 addr:
   tcp://localhost:{{ .Vars.jobmanager.containerPorts.rpc }}:
     reachable: true
-    timeout: 120000
-  tcp://localhost:{{ .Vars.jobmanager.containerPorts.http }}:
+  tcp://localhost:{{ .Vars.jobmanager.service.ports.blob }}:
     reachable: true
-    timeout: 120000
   tcp://flink-taskmanager:{{ .Vars.taskmanager.service.ports.rpc }}:
     reachable: true
-    timeout: 120000
-http:
-  http://flink-jobmanager:{{ .Vars.jobmanager.service.ports.http }}/:
-    status: 200
-    body:
-      - Dashboard
-    timeout: 120000
 command:
   {{- $uid := .Vars.jobmanager.containerSecurityContext.runAsUser }}
   {{- $gid := .Vars.jobmanager.podSecurityContext.fsGroup }}
