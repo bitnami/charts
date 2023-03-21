@@ -2,7 +2,7 @@ http:
   http://fluent-bit:{{ .Vars.service.ports.http }}/api/v1/health:
     status: 200
 file:
-  /bitnami/fluent-bit:
+  /opt/bitnami/fluent-bit:
     exists: true
     filetype: directory
     mode: "2775"
