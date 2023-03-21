@@ -239,7 +239,7 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 ### Persistence
 
-The [Bitnami fluent-bit](https://github.com/bitnami/containers/tree/main/bitnami/fluent-bit) image stores the trace onto an external database. Persistent Volume Claims are used to keep the data across deployments.
+The [Bitnami Fluent Bit](https://github.com/bitnami/containers/tree/main/bitnami/fluent-bit) image stores the trace onto an external database. Persistent Volume Claims are used to keep the data across deployments.
 
 ### Additional environment variables
 
@@ -253,7 +253,7 @@ If additional containers are needed in the same pod as fluent-bit (such as addit
 
 This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters inside each of the subsections: `distributor`, `compactor`, `ingester`, `querier`, `Frontend` and `vulture`.
+As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters inside the main section.
 
 ## Troubleshooting
 
