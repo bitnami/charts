@@ -45,6 +45,9 @@ spec:
   {{- if .Values.prometheus.image }}
   image: {{ template "kube-prometheus.prometheus.image" . }}
   {{- end }}
+  {{- if .Values.prometheus.additionalArgs }}
+  additionalArgs: {{- toYaml .Values.prometheus.additionalArgs | nindent 4 }}
+  {{- end -}}
   {{- if .Values.prometheus.externalLabels }}
   externalLabels: {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.externalLabels "context" $) | nindent 4 }}
   {{- end }}

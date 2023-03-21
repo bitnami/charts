@@ -24,4 +24,4 @@ name: whereabouts
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/whereabouts
   - https://github.com/k8snetworkplumbingwg/whereabouts/
-version: 0.1.3
+version: 0.1.4
