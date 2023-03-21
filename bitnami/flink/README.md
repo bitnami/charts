@@ -258,24 +258,18 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 ### Persistence
 
-The [Bitnami flink](https://github.com/bitnami/containers/tree/main/bitnami/flink) image stores the trace onto an external database. Persistent Volume Claims are used to keep the data across deployments.
+The [Bitnami Flink](https://github.com/bitnami/containers/tree/main/bitnami/flink) image stores the trace onto an external database. Persistent Volume Claims are used to keep the data across deployments.
 
 ### Additional environment variables
 
-In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` property inside each of the subsections: `collector`, `agent`, `query`.
+In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` property inside each of the subsections: `jobmanager`, `taskmanager`.
 
 ```yaml
-collector:
+jobmanager:
   extraEnvVars:
     - name: ENV_VAR_NAME
       value: ENV_VAR_VALUE
-
-agent:
-  extraEnvVars:
-    - name: ENV_VAR_NAME
-      value: ENV_VAR_VALUE
-
-query:
+taskmanager:
   extraEnvVars:
     - name: ENV_VAR_NAME
       value: ENV_VAR_VALUE
@@ -291,7 +285,7 @@ If additional containers are needed in the same pod as flink (such as additional
 
 This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
 
-As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters inside each of the subsections: `distributor`, `compactor`, `ingester`, `querier`, `queryFrontend` and `vulture`.
+As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters inside each of the subsections: `jobmanager`, `taskmanager`.
 
 ## Troubleshooting
 
