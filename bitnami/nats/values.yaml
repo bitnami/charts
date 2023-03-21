@@ -550,6 +550,12 @@ service:
   ## @param service.extraPorts Extra ports to expose in the NATS service (normally used with the `sidecar` value)
   ##
   extraPorts: []
+  ## Headless service properties
+  ##
+  headless:
+    ## @param service.headless.annotations Annotations for the headless service.
+    ##
+    annotations: {}
 ## NATS ingress parameters
 ## ref: https://kubernetes.io/docs/user-guide/ingress/
 ##
