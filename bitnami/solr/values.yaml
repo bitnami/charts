@@ -72,7 +72,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/solr
-  tag: 9.1.1-debian-11-r9
+  tag: 9.1.1-debian-11-r15
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -418,6 +418,12 @@ service:
   ## @param service.extraPorts Extra ports to expose in the Solr service (normally used with the `sidecar` value)
   ##
   extraPorts: []
+  ## Headless service properties
+  ##
+  headless:
+    ## @param service.headless.annotations Annotations for the headless service.
+    ##
+    annotations: {}
 ## Solr ingress parameters
 ## ref: https://kubernetes.io/docs/user-guide/ingress/
 ##
@@ -591,7 +597,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r90
+    tag: 11-debian-11-r98
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

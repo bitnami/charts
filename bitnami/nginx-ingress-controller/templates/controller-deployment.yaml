@@ -37,6 +37,9 @@ spec:
     spec:
       {{- include "nginx-ingress-controller.imagePullSecrets" . | nindent 6 }}
       dnsPolicy: {{ .Values.dnsPolicy }}
+      {{- if .Values.dnsConfig }}
+      dnsConfig: {{- include "common.tplvalues.render" (dict "value" .Values.dnsConfig "context" .) | nindent 8 }}
+      {{- end }}
       {{- if .Values.priorityClassName }}
       priorityClassName: {{ .Values.priorityClassName | quote }}
       {{- end }}

@@ -86,7 +86,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | ----------------------------------------------------------------------------------------------------- | -------------------- |
 | `image.registry`    | Spark image registry                                                                                  | `docker.io`          |
 | `image.repository`  | Spark image repository                                                                                | `bitnami/spark`      |
-| `image.tag`         | Spark image tag (immutable tags are recommended)                                                      | `3.3.2-debian-11-r3` |
+| `image.tag`         | Spark image tag (immutable tags are recommended)                                                      | `3.3.2-debian-11-r9` |
 | `image.digest`      | Spark image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                 |
 | `image.pullPolicy`  | Spark image pull policy                                                                               | `IfNotPresent`       |
 | `image.pullSecrets` | Specify docker-registry secret names as an array                                                      | `[]`                 |
@@ -282,6 +282,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.extraPorts`               | Extra ports to expose in Spark service (normally used with the `sidecars` value)                                                 | `[]`                     |
 | `service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin                                                                 | `None`                   |
 | `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
+| `service.headless.annotations`     | Annotations for the headless service.                                                                                            | `{}`                     |
 | `ingress.enabled`                  | Enable ingress controller resource                                                                                               | `false`                  |
 | `ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
 | `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
