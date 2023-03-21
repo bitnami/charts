@@ -203,6 +203,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.externalTrafficPolicy`    | Enable client source IP preservation                                                                                             | `Cluster`                |
 | `service.extraPorts`               | Extra ports to expose in the service (normally used with the `sidecar` value)                                                    | `[]`                     |
 | `service.annotations`              | Annotations for MinIO&reg; service                                                                                               | `{}`                     |
+| `service.headless.annotations`     | Annotations for the headless service.                                                                                            | `{}`                     |
 | `ingress.enabled`                  | Enable ingress controller resource for MinIO Console                                                                             | `false`                  |
 | `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
 | `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
