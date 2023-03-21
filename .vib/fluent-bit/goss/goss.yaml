@@ -5,7 +5,7 @@ file:
   /opt/bitnami/fluent-bit:
     exists: true
     filetype: directory
-    mode: "0775"
+    mode: "0755"
 command:
   {{- $uid := .Vars.containerSecurityContext.runAsUser }}
   {{- $gid := .Vars.podSecurityContext.fsGroup }}
