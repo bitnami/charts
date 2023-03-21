@@ -3,6 +3,7 @@ package integration
 import (
 	"context"
 	"fmt"
+	"time"
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
@@ -24,15 +25,25 @@ var _ = Describe("Grafana Tempo", func() {
 	})
 
 	Context("through its API", func() {
-		var queryFrontendIp string
+		var frontendHost, serviceName string
 
 		BeforeEach(func() {
-			queryFrontendSvc, err := c.Services(*namespace).Get(ctx, "grafana-tempo-query-frontend", metav1.GetOptions{})
+			serviceName = "grafana-tempo-query-frontend"
+
+			isReady, err := retry("isServiceReady", 6, 20*time.Second, func() (bool, error) {
+				return isServiceReady(ctx, c, serviceName)
+			})
+			if err != nil {
+				panic(fmt.Sprintf("There was an error checking whether the testing service had an IP assigned: %q", err))
+			}
+			Expect(isReady).To(BeTrue())
+
+			frontendSvc, err := c.Services(*namespace).Get(ctx, serviceName, metav1.GetOptions{})
 			if err != nil {
 				panic(fmt.Sprintf("There was an error retrieving the Query Frontend service: %q", err))
 			}
 
-			queryFrontendIp = queryFrontendSvc.Status.LoadBalancer.Ingress[0].IP
+			frontendHost = returnValidHost(frontendSvc.Status.LoadBalancer.Ingress[0])
 		})
 
 		It("allows to access registered tracing spans", func() {
@@ -47,7 +58,7 @@ var _ = Describe("Grafana Tempo", func() {
 			route = findFirstPattern(containerLogs, `route (\/\w+)`, 1)
 			Expect(route).NotTo(BeEmpty())
 
-			responseBody := getResponseBodyOrDie(ctx, fmt.Sprintf("http://%s:%s/api/traces/%s", queryFrontendIp, *apiPort, traceID))
+			responseBody := getResponseBodyOrDie(ctx, fmt.Sprintf("http://%s:%s/api/traces/%s", frontendHost, *apiPort, traceID))
 			Expect(containsString(responseBody, route)).To(BeTrue())
 		})
 	})

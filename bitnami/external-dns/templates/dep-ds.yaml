@@ -73,7 +73,7 @@ spec:
       {{- end }}
       containers:
         - name: external-dns
-          image: {{ include "external-dns.image" . | quote }}
+          image: {{ template "external-dns.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.command "context" $) | nindent 12 }}

@@ -117,7 +117,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mongodb
-  tag: 6.0.4-debian-11-r14
+  tag: 6.0.5-debian-11-r1
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -237,7 +237,7 @@ tls:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.23.3-debian-11-r30
+    tag: 1.23.3-debian-11-r37
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -737,7 +737,7 @@ service:
   ## @param service.allocateLoadBalancerNodePorts Wheter to allocate node ports when service type is LoadBalancer
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#load-balancer-nodeport-allocation
   ##
-  allocateLoadBalancerNodePorts: true 
+  allocateLoadBalancerNodePorts: true
   ## @param service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
   ##
   extraPorts: []
@@ -759,6 +759,12 @@ service:
   ##     timeoutSeconds: 300
   ##
   sessionAffinityConfig: {}
+  ## Headless service properties
+  ##
+  headless:
+    ## @param service.headless.annotations Annotations for the headless service.
+    ##
+    annotations: {}
 ## External Access to MongoDB(&reg;) nodes configuration
 ##
 externalAccess:
@@ -785,7 +791,7 @@ externalAccess:
     image:
       registry: docker.io
       repository: bitnami/kubectl
-      tag: 1.25.6-debian-11-r14
+      tag: 1.25.7-debian-11-r4
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -855,7 +861,7 @@ externalAccess:
     ## @param externalAccess.service.allocateLoadBalancerNodePorts Wheter to allocate node ports when service type is LoadBalancer
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#load-balancer-nodeport-allocation
     ##
-    allocateLoadBalancerNodePorts: true 
+    allocateLoadBalancerNodePorts: true
     ## @param externalAccess.service.externalTrafficPolicy MongoDB(&reg;) service external traffic policy
     ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
@@ -930,7 +936,7 @@ externalAccess:
       ## @param externalAccess.hidden.service.allocateLoadBalancerNodePorts Wheter to allocate node ports when service type is LoadBalancer
       ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#load-balancer-nodeport-allocation
       ##
-      allocateLoadBalancerNodePorts: true 
+      allocateLoadBalancerNodePorts: true
       ## @param externalAccess.hidden.service.externalTrafficPolicy MongoDB(&reg;) service external traffic policy
       ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
       ##
@@ -1149,7 +1155,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r91
+    tag: 11-debian-11-r98
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1510,6 +1516,12 @@ arbiter:
     ## @param arbiter.service.annotations Provide any additional annotations that may be required
     ##
     annotations: {}
+    ## Headless service properties
+    ##
+    headless:
+      ## @param arbiter.service.headless.annotations Annotations for the headless service.
+      ##
+      annotations: {}
 
 ## @section Hidden Node parameters
 ##
@@ -1876,6 +1888,12 @@ hidden:
     ## @param hidden.service.annotations Provide any additional annotations that may be required
     ##
     annotations: {}
+    ## Headless service properties
+    ##
+    headless:
+      ## @param hidden.service.headless.annotations Annotations for the headless service.
+      ##
+      annotations: {}
 
 ## @section Metrics parameters
 ##
@@ -1896,7 +1914,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mongodb-exporter
-    tag: 0.37.0-debian-11-r5
+    tag: 0.37.0-debian-11-r11
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
