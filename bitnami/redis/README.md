@@ -408,6 +408,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sentinel.service.annotations`                | Additional custom annotations for Redis&reg; Sentinel service                                                                               | `{}`                     |
 | `sentinel.service.sessionAffinity`            | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                                        | `None`                   |
 | `sentinel.service.sessionAffinityConfig`      | Additional settings for the sessionAffinity                                                                                                 | `{}`                     |
+| `sentinel.service.headless.annotations`       | Annotations for the headless service.                                                                                                       | `{}`                     |
 | `sentinel.terminationGracePeriodSeconds`      | Integer setting the termination grace period for the redis-node pods                                                                        | `30`                     |
 
 ### Other Parameters
