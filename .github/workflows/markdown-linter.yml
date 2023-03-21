@@ -13,7 +13,7 @@ jobs:
     steps:
       - name: Install mardownlint
         run: npm install -g markdownlint-cli@0.33.0
-      - name: Checkout bitnami/charts
+      - name: Checkout project
         uses: actions/checkout@v3
       - name: Execute markdownlint
         run: |
@@ -23,6 +23,8 @@ jobs:
           files_changed_data=$(curl -s --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' -X GET -G "$URL")
           files_changed="$(echo "$files_changed_data" | jq -r '.[] | .filename')"
           md_files="$(echo "$files_changed" | grep -o ".*\.md$" | sort | uniq || true)"
+          # Create an empty file, useful when the PR changes ignored files
+          touch ${{runner.temp}}/output
           exit_code=0
           markdownlint -o ${{runner.temp}}/output ${md_files[@]} || exit_code=$?
           while read -r line; do

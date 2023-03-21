@@ -83,7 +83,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | ------------------------- |
 | `image.registry`                                | Schema Registry image registry                                                                                  | `docker.io`               |
 | `image.repository`                              | Schema Registry image repository                                                                                | `bitnami/schema-registry` |
-| `image.tag`                                     | Schema Registry image tag (immutable tags are recommended)                                                      | `7.3.2-debian-11-r1`      |
+| `image.tag`                                     | Schema Registry image tag (immutable tags are recommended)                                                      | `7.3.2-debian-11-r6`      |
 | `image.digest`                                  | Schema Registry image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
 | `image.pullPolicy`                              | Schema Registry image pull policy                                                                               | `IfNotPresent`            |
 | `image.pullSecrets`                             | Schema Registry image pull secrets                                                                              | `[]`                      |
@@ -189,6 +189,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.extraPorts`               | Extra ports to expose in Schema Registry service (normally used with the `sidecars` value)            | `[]`                     |
 | `service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin                                      | `None`                   |
 | `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                           | `{}`                     |
+| `service.headless.annotations`     | Annotations for the headless service.                                                                 | `{}`                     |
 | `ingress.enabled`                  | Enable ingress controller resource                                                                    | `false`                  |
 | `ingress.hostname`                 | Default host for the ingress resource                                                                 | `schema-registry.local`  |
 | `ingress.annotations`              | Ingress annotations                                                                                   | `{}`                     |
@@ -406,13 +407,17 @@ For annotations, please see [this document](https://github.com/kubernetes/ingres
 
 ## Upgrading
 
+### To 9.0.0
+
+This major updates the Kafka subchart to its newest major, 21.0.0. For more information on this subchart's major, please refer to [Kafka upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/kafka#to-2100).
+
 ### To 8.0.0
 
-This major updates the Kafka subchart to it newest major, 20.0.0. For more information on this subchart's major, please refer to [Kafka upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/kafka#to-2000).
+This major updates the Kafka subchart to its newest major, 20.0.0. For more information on this subchart's major, please refer to [Kafka upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/kafka#to-2000).
 
 ### To 6.0.0
 
-This major updates the Kafka subchart to it newest major, 19.0.0. For more information on this subchart's major, please refer to [Kafka upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/kafka#to-1900).
+This major updates the Kafka subchart to its newest major, 19.0.0. For more information on this subchart's major, please refer to [Kafka upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/kafka#to-1900).
 
 ### To 4.0.0
 
