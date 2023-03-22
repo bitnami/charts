@@ -25,7 +25,7 @@ postgresql:
   enabled: true
   auth:
     username: kong
-    password: 
+    password: ""
     database: kong
 extraDeploy:
 - apiVersion: apps/v1
@@ -86,7 +86,7 @@ extraDeploy:
   metadata:
     name: vib-tests
     annotations:
-      konghq.com/strip-path: true
+      konghq.com/strip-path: "true"
       konghq.com/plugins: auth-vib-tests
   spec:
     ingressClassName: kong
