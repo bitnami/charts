@@ -47,7 +47,7 @@ spec:
       {{- else if eq .Values.taskmanager.service.type "ClusterIP" }}
       nodePort: null
       {{- end }}
-    - name: rpc
+    - name: tcp-rpc
       port: {{ .Values.taskmanager.service.ports.rpc }}
       targetPort: {{ .Values.taskmanager.containerPorts.rpc }}
       {{- if and (or (eq .Values.taskmanager.service.type "NodePort") (eq .Values.taskmanager.service.type "LoadBalancer")) (not (empty .Values.taskmanager.service.nodePorts.rpc)) }}

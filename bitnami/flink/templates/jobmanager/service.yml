@@ -39,7 +39,7 @@ spec:
   externalTrafficPolicy: {{ .Values.jobmanager.service.externalTrafficPolicy | quote }}
   {{- end }}
   ports:
-    - name: rpc
+    - name: tcp-rpc
       port: {{ .Values.jobmanager.service.ports.rpc }}
       targetPort: {{ .Values.jobmanager.containerPorts.rpc }}
       {{- if and (or (eq .Values.jobmanager.service.type "NodePort") (eq .Values.jobmanager.service.type "LoadBalancer")) (not (empty .Values.jobmanager.service.nodePorts.rpc)) }}

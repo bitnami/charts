@@ -85,7 +85,7 @@ spec:
           ports:
             - name: data
               containerPort: {{ .Values.taskmanager.containerPorts.data }}
-            - name: rpc
+            - name: tcp-rpc
               containerPort: {{ .Values.taskmanager.containerPorts.rpc }}
           env:
             - name: FLINK_MODE

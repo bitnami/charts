@@ -83,7 +83,7 @@ spec:
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.jobmanager.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}
           ports:
-            - name: rpc
+            - name: tcp-rpc
               containerPort: {{ .Values.jobmanager.containerPorts.rpc }}
             - name: http
               containerPort: {{ .Values.jobmanager.containerPorts.http }}
