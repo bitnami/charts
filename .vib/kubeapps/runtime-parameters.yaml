@@ -15,7 +15,7 @@ dashboard:
     |-
     - name: token
       secret:
-        secretName: {{ include common.names.fullname.namespace . }}-vib-token
+        secretName: {{ include "common.names.fullname.namespace" . }}-vib-token
   extraVolumeMounts:
     - name: token
       mountPath: /app/static/token/token.txt
@@ -59,40 +59,40 @@ extraDeploy:
     apiVersion: v1
     kind: ServiceAccount
     metadata:
-      name: {{ include common.names.fullname.namespace . }}-vib
+      name: {{ include "common.names.fullname.namespace" . }}-vib
       namespace: {{ .Release.Namespace }}
   - |-
     apiVersion: rbac.authorization.k8s.io/v1
     kind: ClusterRoleBinding
     metadata:
-      name: {{ include common.names.fullname.namespace . }}-vib-view
+      name: {{ include "common.names.fullname.namespace" . }}-vib-view
     roleRef:
       apiGroup: rbac.authorization.k8s.io
       kind: ClusterRole
       name: view
     subjects:
     - kind: ServiceAccount
-      name: {{ include common.names.fullname.namespace . }}-vib
+      name: {{ include "common.names.fullname.namespace" . }}-vib
       namespace: {{ .Release.Namespace }}
   - |-
     apiVersion: rbac.authorization.k8s.io/v1
     kind: ClusterRoleBinding
     metadata:
-      name: {{ include common.names.fullname.namespace . }}-vib-edit
+      name: {{ include "common.names.fullname.namespace" . }}-vib-edit
     roleRef:
       apiGroup: rbac.authorization.k8s.io
       kind: ClusterRole
       name: edit
     subjects:
     - kind: ServiceAccount
-      name: {{ include common.names.fullname.namespace . }}-vib
+      name: {{ include "common.names.fullname.namespace" . }}-vib
       namespace: {{ .Release.Namespace }}
   - |-
     apiVersion: v1
     kind: Secret
     type: kubernetes.io/service-account-token
     metadata:
-      name: {{ include common.names.fullname.namespace . }}-vib-token
+      name: {{ include "common.names.fullname.namespace" . }}-vib-token
       namespace: {{ .Release.Namespace }}
       annotations:
-        kubernetes.io/service-account.name: {{ include common.names.fullname.namespace . }}-vib
+        kubernetes.io/service-account.name: {{ include "common.names.fullname.namespace" . }}-vib

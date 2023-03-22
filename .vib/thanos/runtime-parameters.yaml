@@ -2,7 +2,7 @@ objstoreConfig: |-
   type: s3
   config:
     bucket: thanos-test
-    endpoint: {{ include thanos.minio.fullname . }}.{{ .Release.Namespace }}.svc.cluster.local:9000
+    endpoint: {{ include "thanos.minio.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local:9000
     access_key: minio-vib
     secret_key: minio123
     insecure: true
