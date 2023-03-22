@@ -123,21 +123,21 @@ spec:
           {{- else if .Values.taskmanager.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.taskmanager.startupProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
-              port: rpc
+              port: tcp-rpc
           {{- end }}
           {{- if .Values.taskmanager.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.taskmanager.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.taskmanager.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.taskmanager.livenessProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
-              port: rpc
+              port: tcp-rpc
           {{- end }}
           {{- if .Values.taskmanager.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.taskmanager.customReadinessProbe "context" $) | nindent 12 }}
           {{- else if .Values.taskmanager.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.taskmanager.readinessProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
-              port: rpc
+              port: tcp-rpc
           {{- end }}
           {{- end }}
           {{- if .Values.taskmanager.resources }}
