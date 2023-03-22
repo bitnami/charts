@@ -49,6 +49,9 @@
               "pod": {
                 "workload": "deploy-suitecrm"
               }
+            },
+            "wait": {
+              "file": "suitecrm/goss/goss-wait.yaml"
             }
           }
         },

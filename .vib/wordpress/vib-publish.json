@@ -49,6 +49,9 @@
               "pod": {
                 "workload": "deploy-wordpress"
               }
+            },
+            "wait": {
+              "file": "wordpress/goss/goss-wait.yaml"
             }
           }
         },

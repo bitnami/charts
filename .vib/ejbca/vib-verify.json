@@ -49,6 +49,9 @@
               "pod": {
                 "workload": "deploy-ejbca"
               }
+            },
+            "wait": {
+              "file": "ejbca/goss/goss-wait.yaml"
             }
           }
         },
