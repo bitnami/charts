@@ -3,20 +3,20 @@ monitoringAPIPort: 9600
 input: |-
   http { port => 8081 }
   file {
-    path => /tmp/test_input
-    mode => tail
+    path => "/tmp/test_input"
+    mode => "tail"
   }
 filter: |-
   grok {
-    match => { message => %{COMBINEDAPACHELOG} }
+    match => { "message" => "%{COMBINEDAPACHELOG}" }
   }
   date {
-    match => [ timestamp , dd/MMM/yyyy:HH:mm:ss Z ]
+    match => [ "timestamp" , "dd/MMM/yyyy:HH:mm:ss Z" ]
   }
 output: |-
   stdout {}
   file {
-    path => /tmp/test_log
+    path => "/tmp/test_log"
   }
 serviceAccount:
   create: true

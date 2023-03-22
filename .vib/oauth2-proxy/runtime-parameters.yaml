@@ -6,13 +6,13 @@ configuration:
   clientSecret: ZXhhbXBsZS1hcHAtc2VjcmV0
   cookieSecret: vib-tests-cookie
   content: |
-    email_domains = [ * ]
-    provider = oidc
-    oidc_issuer_url = http://vmware-oauth2-proxy.my:5556/dex
-    redirect_url = http://vmware-oauth2-proxy.my/oauth2/callback
+    email_domains = [ "*" ]
+    provider = "oidc"
+    oidc_issuer_url = "http://vmware-oauth2-proxy.my:5556/dex"
+    redirect_url = "http://vmware-oauth2-proxy.my/oauth2/callback"
     cookie_secure = false
-    skip_auth_routes = [ ^\/dex\/.* ]
-    upstreams = [ file:///bitnami/oauth2-proxy/conf/, http://vmware-oauth2-proxy.my:5556/dex/ ]
+    skip_auth_routes = [ "^\/dex\/.*" ]
+    upstreams = [ "file:///bitnami/oauth2-proxy/conf/", "http://vmware-oauth2-proxy.my:5556/dex/" ]
 containerPort: 4181
 hostAliases:
   - ip: 127.0.0.1
@@ -65,7 +65,7 @@ extraDeploy:
         staticClients:
           - id: vib-dex-client
             redirectURIs:
-              - http://vmware-oauth2-proxy.my/oauth2/callback
+              - "http://vmware-oauth2-proxy.my/oauth2/callback"
             name: 'VIB-Dex'
             secret: ZXhhbXBsZS1hcHAtc2VjcmV0
         connectors:
@@ -74,7 +74,7 @@ extraDeploy:
             name: Example
         enablePasswordDB: true
         staticPasswords:
-          - email: admin@example.com
-            hash: $2a$10$2b2cU8CPhOTaGrs1HRQuAueS7JTT5ZHsHSzYiFPm1leZck7Mc8T4W
-            username: admin
-            userID: 08a8684b-db88-4b73-90a9-3cd1661f5466
+          - email: "admin@example.com"
+            hash: "$2a$10$2b2cU8CPhOTaGrs1HRQuAueS7JTT5ZHsHSzYiFPm1leZck7Mc8T4W"
+            username: "admin"
+            userID: "08a8684b-db88-4b73-90a9-3cd1661f5466"

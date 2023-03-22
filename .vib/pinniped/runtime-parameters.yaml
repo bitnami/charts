@@ -21,27 +21,27 @@ concierge:
     create: true
 extraDeploy:
 - |
-  {{- $ca := genCA pinniped-ca 365 }}
-  {{- $pinniped_hostname := pinniped-supervisor }}
+  {{- $ca := genCA "pinniped-ca" 365 }}
+  {{- $pinniped_hostname := "pinniped-supervisor" }}
   {{- $pinniped_cert := genSignedCert $pinniped_hostname nil (list $pinniped_hostname) 365 $ca }}
   apiVersion: v1
   kind: Secret
   metadata:
     name: pinniped-supervisor-default-tls-certificate
-    namespace: {{ include common.names.namespace $ | quote }}
+    namespace: {{ include "common.names.namespace" $ | quote }}
   type: kubernetes.io/tls
   data:
     tls.crt: {{ $pinniped_cert.Cert | b64enc | quote }}
     tls.key: {{ $pinniped_cert.Key | b64enc | quote }}
     ca.crt: {{ $ca.Cert | b64enc | quote }}
   ---
-  {{- $openldap_hostname := (printf openldap.%s.svc.cluster.local .Release.Namespace) }}
+  {{- $openldap_hostname := (printf "openldap.%s.svc.cluster.local" .Release.Namespace) }}
   {{- $openldap_cert := genSignedCert $openldap_hostname nil (list $openldap_hostname) 365 $ca }}
   apiVersion: v1
   kind: Secret
   metadata:
     name: openldap-certs
-    namespace: {{ include common.names.namespace $ | quote }}
+    namespace: {{ include "common.names.namespace" $ | quote }}
   type: kubernetes.io/tls
   data:
     tls.crt: {{ $openldap_cert.Cert | b64enc | quote }}
@@ -54,7 +54,7 @@ extraDeploy:
   kind: FederationDomain
   metadata:
     name: my-provider
-    namespace: {{ include common.names.namespace $ | quote }}
+    namespace: {{ include "common.names.namespace" $ | quote }}
   spec:
     issuer: https://pinniped-supervisor/demo-issuer
   ---
@@ -94,27 +94,27 @@ extraDeploy:
               failureThreshold: 9
             env:
               - name: LDAP_ADMIN_USERNAME
-                value: admin
+                value: "admin"
               - name: LDAP_ADMIN_PASSWORD
-                value: admin123
+                value: "admin123"
               - name: LDAP_ROOT
-                value: dc=pinniped-supervisor
+                value: "dc=pinniped-supervisor"
               - name: LDAP_USER_DC
-                value: users
+                value: "users"
               - name: LDAP_USERS
-                value: vibuser
+                value: "vibuser"
               - name: LDAP_PASSWORDS
-                value: vibUser123
+                value: "vibUser123"
               - name: LDAP_GROUP
-                value: users
+                value: "users"
               - name: LDAP_ENABLE_TLS
-                value: yes
+                value: "yes"
               - name: LDAP_TLS_CERT_FILE
-                value: /var/certs/tls.crt
+                value: "/var/certs/tls.crt"
               - name: LDAP_TLS_KEY_FILE
-                value: /var/certs/tls.key
+                value: "/var/certs/tls.key"
               - name: LDAP_TLS_CA_FILE
-                value: /var/certs/ca.crt
+                value: "/var/certs/ca.crt"
             volumeMounts:
               - name: certs
                 mountPath: /var/certs
@@ -145,20 +145,20 @@ extraDeploy:
   metadata:
     name: openldap
   spec:
-    host: openldap.{{ .Release.Namespace }}.svc.cluster.local
+    host: "openldap.{{ .Release.Namespace }}.svc.cluster.local"
     tls:
       certificateAuthorityData: {{ $ca.Cert | b64enc | quote }}
     userSearch:
-      base: ou=users,dc=pinniped-supervisor
-      filter: &(objectClass=inetOrgPerson)(uid={})
+      base: "ou=users,dc=pinniped-supervisor"
+      filter: "&(objectClass=inetOrgPerson)(uid={})"
       attributes:
-        username: uid
-        uid: uidNumber
+        username: "uid"
+        uid: "uidNumber"
     groupSearch:
-      base: ou=users,dc=pinniped-supervisor
-      filter: &(objectClass=groupOfNames)(member={})
+      base: "ou=users,dc=pinniped-supervisor"
+      filter: "&(objectClass=groupOfNames)(member={})"
       attributes:
-        groupName: cn
+        groupName: "cn"
     bind:
       secretName: openldap-bind-account
   ---
@@ -168,8 +168,8 @@ extraDeploy:
     name: openldap-bind-account
   type: kubernetes.io/basic-auth
   stringData:
-    username: cn=admin,dc=pinniped-supervisor
-    password: admin123
+    username: "cn=admin,dc=pinniped-supervisor"
+    password: "admin123"
   ---
   ## Ref: https://pinniped.dev/docs/howto/configure-concierge-jwt/
   ##
@@ -177,9 +177,9 @@ extraDeploy:
   kind: JWTAuthenticator
   metadata:
     name: supervisor-jwt-authenticator
-    namespace: {{ include common.names.namespace $ | quote }}
+    namespace: {{ include "common.names.namespace" $ | quote }}
   spec:
-    issuer: https://pinniped-supervisor/demo-issuer
+    issuer: "https://pinniped-supervisor/demo-issuer"
     audience: vib-ed9de33c370981f61e9c
     tls:
       certificateAuthorityData: {{ $ca.Cert | b64enc | quote }}

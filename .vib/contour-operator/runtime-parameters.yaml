@@ -1,14 +1,14 @@
 extraDeploy:
 - |
-  {{- $ca := genCA contour-ca 365 }}
-  {{- $contour_hostname := contour }}
+  {{- $ca := genCA "contour-ca" 365 }}
+  {{- $contour_hostname := "contour" }}
   {{- $contour_cert := genSignedCert $contour_hostname nil (list $contour_hostname) 365 $ca }}
   apiVersion: v1
   kind: Secret
   metadata:
     # Only necessary for the ingress to enable HTTPS ports
     name: fake-tls-certificates
-    namespace: {{ include common.names.namespace $ | quote }}
+    namespace: {{ include "common.names.namespace" $ | quote }}
   type: kubernetes.io/tls
   data:
     tls.crt: {{ $contour_cert.Cert | b64enc | quote }}
