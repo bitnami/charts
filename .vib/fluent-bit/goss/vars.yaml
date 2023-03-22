@@ -7,4 +7,4 @@ containerSecurityContext:
 service:
   type: LoadBalancer
   ports:
-    http: 2323
+    http: 80
