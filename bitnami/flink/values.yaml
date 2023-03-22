@@ -226,7 +226,8 @@ jobmanager:
       ##
       http: 8081
       ## @param jobmanager.service.ports.blob Port for blob server
-      ##
+      ## Due the Apache Flink specificities this port should match the jobmanager.containerPorts.blob port. The taskmanager should be
+      ## able to communicate with the jobmanager through the port jobmanager indicates to the taskmanager, being the jobmanager not aware of the service port.
       blob: 6124
     ## Node ports to expose
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport

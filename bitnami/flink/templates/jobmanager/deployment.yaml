@@ -106,6 +106,8 @@ spec:
               value: {{ .Values.jobmanager.containerPorts.http | quote }}
             - name: FLINK_CFG_REST_BIND__ADDRESS
               value: 0.0.0.0
+            - name: FLINK_CFG_BLOB_SERVER_PORT
+              value: {{ .Values.jobmanager.containerPorts.blob | quote }}
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" .Values.image.debug | quote }}
             {{- if .Values.jobmanager.extraEnvVars }}
