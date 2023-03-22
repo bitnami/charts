@@ -22,7 +22,6 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/mariadb"
         },
-        "runtime_parameters": "YXJjaGl0ZWN0dXJlOiByZXBsaWNhdGlvbgphdXRoOgogIGRhdGFiYXNlOiB0ZXN0X2RhdGFiYXNlCiAgdXNlcm5hbWU6ICJ1c2VyIgogIHBhc3N3b3JkOiAiQ29tcGxpY2F0ZWRQYXNzd29yZDEyMyE0IgogIHJvb3RQYXNzd29yZDogIlIwb3QpUGFzc3dvcmQiCnByaW1hcnk6CiAgc2VydmljZToKICAgIHR5cGU6IExvYWRCYWxhbmNlcgogICAgcG9ydHM6CiAgICAgIG15c3FsOiA4MApzZWNvbmRhcnk6CiAgc2VydmljZToKICAgIHR5cGU6IENsdXN0ZXJJUAogICAgcG9ydHM6CiAgICAgIG15c3FsOiAzMzA2",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -42,9 +41,10 @@
           "action_id": "goss",
           "params": {
             "resources": {
-              "path": "/.vib/mariadb/goss"
+              "path": "/.vib"
             },
-            "vars_file": "vars.yaml",
+            "tests_file": "mariadb/goss/goss.yaml",
+            "vars_file": "mariadb/runtime-parameters.yaml",
             "remote": {
               "pod": {
                 "workload": "sts-mariadb-primary"

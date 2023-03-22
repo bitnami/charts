@@ -22,7 +22,6 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/tensorflow-resnet"
         },
-        "runtime_parameters": "Y29udGFpbmVyUG9ydHM6CiAgc2VydmVyOiA4NTAwCiAgcmVzdEFwaTogODUwMQpzZXJ2aWNlOgogIHR5cGU6IExvYWRCYWxhbmNlcgogIHBvcnRzOgogICAgc2VydmVyOiA4NTAxCiAgICByZXN0QXBpOiA4MApjb250YWluZXJTZWN1cml0eUNvbnRleHQ6CiAgZW5hYmxlZDogdHJ1ZQogIHJ1bkFzVXNlcjogMTAwMgogIHJ1bkFzTm9uUm9vdDogdHJ1ZQpwb2RTZWN1cml0eUNvbnRleHQ6CiAgZW5hYmxlZDogdHJ1ZQogIGZzR3JvdXA6IDEwMDIK",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -42,14 +41,15 @@
           "action_id": "goss",
           "params": {
             "resources": {
-              "path": "/.vib/tensorflow-resnet/goss"
+              "path": "/.vib"
             },
+            "tests_file": "tensorflow-resnet/goss/goss.yaml",
+            "vars_file": "tensorflow-resnet/runtime-parameters.yaml",
             "remote": {
               "pod": {
                 "workload": "deploy-tensorflow-resnet"
               }
-            },
-            "vars_file": "vars.yaml"
+            }
           }
         },
         {

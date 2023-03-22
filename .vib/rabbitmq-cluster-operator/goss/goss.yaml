@@ -1,17 +1,16 @@
-addr:
-  tcp://ve-testing:{{ .Vars.rabbitmq.service.ports.amqp }}:
-    reachable: true
 http:
   http://rmq-op-webhook:{{ .Vars.msgTopologyOperator.service.ports.webhook }}:
     status: 400
-  http://ve-testing:{{ .Vars.rabbitmq.service.ports.manager }}:
+  {{- $manager_port := (index (index .Vars.extraDeploy 2).spec.ports 0).targetPort }}
+  http://ve-testing:{{ $manager_port }}:
     status: 200
 command:
   rabbitmqctl-cluster-status:
     exec: rabbitmqctl cluster_status
     exit-status: 0
     stdout:
-    {{ range $e, $i := until .Vars.rabbitmq.replicaCount }}
+    {{- $nodes := (index .Vars.extraDeploy 1).spec.replicas }}
+    {{ range $e, $i := until $nodes }}
       - /ve-testing-server-{{ $i }}.ve-testing-nodes/
     {{ end }}
   check-sa:

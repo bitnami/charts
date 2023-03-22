@@ -1,0 +1,26 @@
+opencartHost: vmware-opencart.my
+opencartUsername: opencartUser
+opencartPassword: Password123!4
+service:
+  type: LoadBalancer
+  ports:
+    http: 80
+    https: 444
+hostAliases:
+  - ip: 127.0.0.1
+    hostnames:
+      - status.localhost
+containerPorts:
+  http: 8081
+  https: 8444
+podSecurityContext:
+  enabled: true
+  fsGroup: 1002
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1002
+mariadb:
+  auth:
+    database: test_oc_database
+    username: test_oc_username
+    password: test_oc_password

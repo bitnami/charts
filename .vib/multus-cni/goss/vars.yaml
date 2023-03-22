@@ -1,5 +1,0 @@
-CNIMountPath: /bitnami/multus-cni/host
-serviceAccount:
-  automountServiceAccountToken: true
-containerSecurityContext:
-  runAsUser: 0

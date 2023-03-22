@@ -22,7 +22,6 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/mediawiki"
         },
-        "runtime_parameters": "bWVkaWF3aWtpSG9zdDogdm13YXJlLW1lZGlhd2lraS5teQptZWRpYXdpa2lVc2VyOiB0ZXN0X3VzZXIKbWVkaWF3aWtpUGFzc3dvcmQ6IENvbXBsaWNhdGVkUGFzc3dvcmQxMjMhNApwZXJzaXN0ZW5jZToKICBlbmFibGVkOiB0cnVlCmhvc3RBbGlhc2VzOgogIC0gaXA6IDEyNy4wLjAuMQogICAgaG9zdG5hbWVzOgogICAgICAtIHN0YXR1cy50ZXN0aG9zdApjb250YWluZXJTZWN1cml0eUNvbnRleHQ6CiAgZW5hYmxlZDogdHJ1ZQogIHJ1bkFzVXNlcjogMTAwMgpwb2RTZWN1cml0eUNvbnRleHQ6CiAgZnNHcm91cDogMTAwMgogIGVuYWJsZWQ6IHRydWUKc2VydmljZToKICB0eXBlOiBMb2FkQmFsYW5jZXIKICBwb3J0czoKICAgIGh0dHA6IDgwCiAgICBodHRwczogNDQ0Cm1hcmlhZGI6CiAgZW5hYmxlZDogdHJ1ZQogIGF1dGg6CiAgICBkYXRhYmFzZTogdGVzdF9kYl9kYXRhYmFzZQogICAgdXNlcm5hbWU6IHRlc3RfZGJfdXNlcgogICAgcGFzc3dvcmQ6IHRlc3RfZGJfcGFzc3dvcmQK",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -42,9 +41,10 @@
           "action_id": "goss",
           "params": {
             "resources": {
-              "path": "/.vib/mediawiki/goss"
+              "path": "/.vib"
             },
-            "vars_file": "vars.yaml",
+            "tests_file": "mediawiki/goss/goss.yaml",
+            "vars_file": "mediawiki/runtime-parameters.yaml",
             "remote": {
               "pod": {
                 "workload": "deploy-mediawiki"

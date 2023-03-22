@@ -58,7 +58,6 @@ Let's take a look at an example and try to understand it!
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/jenkins"
         },
-        "runtime_parameters": "amVua2luc1VzZXI6IHVzZXIKamVua2luc1Bhc3N3b3JkOiBDb21wbGljYXRlZFBhc3N3b3JkMTIzITQKY29udGFpbmVyUG9ydHM6CiAgaHR0cDogODA4MApzZXJ2aWNlOgogIHR5cGU6IExvYWRCYWxhbmNlcgogIHBvcnRzOgogICAgaHR0cDogODAK",
         ...
       },
       "actions": [
@@ -73,12 +72,15 @@ Let's take a look at an example and try to understand it!
           "action_id": "goss",
           "params": {
             "resources": {
-              "path": "/.vib/jenkins/goss"
+              "path": "/.vib"
             },
+            "tests_file": "jenkins/goss/goss.yaml",
+            "vars_file": "jenkins/runtime-parameters.yaml",
             "remote": {
-              "workload": "deploy-jenkins"
-            },
-            "vars_file": "vars.yaml"
+              "pod": {
+                "workload": "deploy-jenkins"
+              }
+            }
           }
         },
         {
@@ -107,9 +109,9 @@ This guide will focus in the `verify` phase section, in which there are some thi
 
 * For each of the `actions`, VIB will deploy **a brand new release** of the chart provided by `verify.context.resources.path`. Consequently, the state between actions is not shared.
 
-* The installation of the chart can be customized via `runtime_parameters`, which should be encoded using base64. See the [Runtime parameters](#runtime-parameters) section for further information.
+* The installation of the chart can be customized via runtime parameters, which are provided using the `runtimes-parameters.yaml` file. See the [Runtime parameters](#runtime-parameters) section for further information.
 
-* The `runtime_parameters` are shared accross all `actions`, which guarantees that each release of the chart is based on the exact same configuration.
+* The runtime parameters are shared accross all `actions`, which guarantees that each release of the chart is based on the exact same configuration.
 
 ### vib-verify.json vs vib-publish.json
 
@@ -152,16 +154,14 @@ It is easily noticeable though that Charts are usually highly configurable artif
 
 Helm allows to customize how a Chart is deployed [during its installation](https://helm.sh/docs/intro/using_helm/#customizing-the-chart-before-installing). The subset of parameters from `values.yaml` (and their values) that are passed in during a Helm Chart installation are referred to as runtime/installation/deployment parameters in this guide. They are of **uttermost** importance as they have a great impact on the instance under test.
 
-When designing a new test suite for an asset, the runtime parameters used for its installation should be inferred. This is not a straightforward task, as only the relevant parameters should be included. In order to determine which parameters from `values.yaml` should form part of the `runtime_parameters`, use the following idea:
+When designing a new test suite for an asset, the runtime parameters used for its installation should be inferred. This is not a straightforward task, as only the relevant parameters should be included. In order to determine which parameters from `values.yaml` should form part of the runtime parameters, use the following idea:
 
 > Does the parameter have a direct influence over any of the tests?
 
-This guarantees that the information in `runtime_parameters` is kept to the essential and prevents lengthy, unrelated params. Let's use a real example for a better undertanding:
+This guarantees that the information in `runtime-parameters.yaml` is kept to the essential and prevents lengthy, unrelated params. Let's use a real example for a better undertanding:
 
 ```bash
-$ cat .vib/moodle/vib-verify.json | grep "runtime_parameters"
-        "runtime_parameters": "bW9vZGxlVXNlcm5hbWU6IHRlc3RfdXNlcgptb29kbGVQYXNzd29yZDogQ29tcGxpY2F0ZWRQYXNzd29yZDEyMyE0CnNlcnZpY2U6CiAgdHlwZTogTG9hZEJhbGFuY2VyCiAgcG9ydHM6CiAgICBodHRwOiA4MAogICAgaHR0cHM6IDQ0NAptYXJpYWRiOgogIGF1dGg6CiAgICBkYXRhYmFzZTogdGVzdF9tb29kbGVfZGF0YWJhc2UKICAgIHVzZXJuYW1lOiB0ZXN0X21vb2RsZV91c2VyCnBvZFNlY3VyaXR5Q29udGV4dDoKICBlbmFibGVkOiB0cnVlCiAgZnNHcm91cDogMTAwMgpjb250YWluZXJTZWN1cml0eUNvbnRleHQ6CiAgZW5hYmxlZDogdHJ1ZQogIHJ1bkFzVXNlcjogMTAwMgpjb250YWluZXJQb3J0czoKICBodHRwOiA4MDgxCiAgaHR0cHM6IDg0NDQ=",
- $ echo "bW9vZGxlVXNlcm5hbWU6IHRlc3RfdXNlcgptb29kbGVQYXNzd29yZDogQ29tcGxpY2F0ZWRQYXNzd29yZDEyMyE0CnNlcnZpY2U6CiAgdHlwZTogTG9hZEJhbGFuY2VyCiAgcG9ydHM6CiAgICBodHRwOiA4MAogICAgaHR0cHM6IDQ0NAptYXJpYWRiOgogIGF1dGg6CiAgICBkYXRhYmFzZTogdGVzdF9tb29kbGVfZGF0YWJhc2UKICAgIHVzZXJuYW1lOiB0ZXN0X21vb2RsZV91c2VyCnBvZFNlY3VyaXR5Q29udGV4dDoKICBlbmFibGVkOiB0cnVlCiAgZnNHcm91cDogMTAwMgpjb250YWluZXJTZWN1cml0eUNvbnRleHQ6CiAgZW5hYmxlZDogdHJ1ZQogIHJ1bkFzVXNlcjogMTAwMgpjb250YWluZXJQb3J0czoKICBodHRwOiA4MDgxCiAgaHR0cHM6IDg0NDQ=" | base64 -d
+$ cat .vib/moodle/runtime-parameters.yaml
 moodleUsername: test_user
 moodlePassword: ComplicatedPassword123!4
 service:
@@ -184,7 +184,7 @@ containerPorts:
   https: 8444
 ```
 
-> ℹ️ As you can see, parameters are encoded in the VIB pipeline files using base64
+> ℹ️ We used to inject the parameters directly into the VIB pipelines under `phases.verify.context.runtime_parameters` and encoded them as a base64 string. This approach was deprecated in favor of using a separate `.yaml` file under `.vib/ASSET/runtime-parameters.yaml`.
 
 1. Why was `moodleUsername` included?
 
@@ -194,7 +194,7 @@ containerPorts:
 
     Although the same reasoning would apply, there are no implicit checks in any of the tests that actively assert the email was changed.
 
-3. Does that mean that every property in `runtime_parameters` should have an associated test?
+3. Does that mean that every property in `runtime-parameters.yaml` should have an associated test?
 
     No, there is no need to have an specific test for each property, but the property **should have influence over the tests** to include it in the installation parameters. For instance, the property `service.type=LoadBalancer` does not have an associated test, but it is crucial for [Cypress](#cypress) to succeed.
 
@@ -265,9 +265,7 @@ Sometimes it is of interest to run the tests locally, for example during develop
 1. Deploy the target Chart in your cluster, using the same installation parameters specified in the `vib-verify.json` pipeline file
 
     ```bash
-    $ cat .vib/nginx/vib-verify.json | grep "runtime_parameters"
-            "runtime_parameters": "Y29udGFpbmVyUG9ydHM6CiAgaHR0cDogODA4MQogIGh0dHBzOiA4NDQ0CnBvZFNlY3VyaXR5Q29udGV4dDoKICBlbmFibGVkOiB0cnVlCiAgZnNHcm91cDogMTAwMgpjb250YWluZXJTZWN1cml0eUNvbnRleHQ6CiAgZW5hYmxlZDogdHJ1ZQogIHJ1bkFzVXNlcjogMTAwMgpzZXJ2aWNlOgogIHR5cGU6IExvYWRCYWxhbmNlcgogIHBvcnRzOgogICAgaHR0cDogODAKICAgIGh0dHBzOiA0NDQK",
-    $ helm install nginx bitnami/nginx -f <(echo "Y29udGFpbmVyUG9ydHM6CiAgaHR0cDogODA4MQogIGh0dHBzOiA4NDQ0CnBvZFNlY3VyaXR5Q29udGV4dDoKICBlbmFibGVkOiB0cnVlCiAgZnNHcm91cDogMTAwMgpjb250YWluZXJTZWN1cml0eUNvbnRleHQ6CiAgZW5hYmxlZDogdHJ1ZQogIHJ1bkFzVXNlcjogMTAwMgpzZXJ2aWNlOgogIHR5cGU6IExvYWRCYWxhbmNlcgogIHBvcnRzOgogICAgaHR0cDogODAKICAgIGh0dHBzOiA0NDQK" | base64 -d)
+    $ helm install nginx bitnami/nginx -f .vib/nginx/runtime-parameters.yaml
     ```
 
 2. Download and install [Cypress](https://www.cypress.io/). The version currently used is `9.5.4`
@@ -398,13 +396,11 @@ Sometimes it is of interest to run the tests locally, for example during develop
 1. Deploy the target Chart in your cluster, using the same installation parameters specified in the `vib-verify.json` pipeline file
 
     ```bash
-    $ cat .vib/metallb/vib-verify.json | grep "runtime_parameters"
-        "runtime_parameters": "Y29udHJvbGxlcjoKICBwb2RTZWN1cml0eUNvbnRleHQ6CiAgICBlbmFibGVkOiB0cnVlCiAgICBmc0dyb3VwOiAxMDAyCiAgY29udGFpbmVyU2VjdXJpdHlDb250ZXh0OgogICAgZW5hYmxlZDogdHJ1ZQogICAgcnVuQXNVc2VyOiAxMDAyCiAgICByZWFkT25seVJvb3RGaWxlc3lzdGVtOiBmYWxzZQogICAgY2FwYWJpbGl0aWVzOgogICAgICBkcm9wOgogICAgICAgIC0gQUxMCiAgc2VydmljZUFjY291bnQ6CiAgICBjcmVhdGU6IHRydWUKICAgIGF1dG9tb3VudFNlcnZpY2VBY2NvdW50VG9rZW46IHRydWU=",
-    $ helm install metallb bitnami/metallb -f <(echo "Y29udHJvbGxlcjoKICBwb2RTZWN1cml0eUNvbnRleHQ6CiAgICBlbmFibGVkOiB0cnVlCiAgICBmc0dyb3VwOiAxMDAyCiAgY29udGFpbmVyU2VjdXJpdHlDb250ZXh0OgogICAgZW5hYmxlZDogdHJ1ZQogICAgcnVuQXNVc2VyOiAxMDAyCiAgICByZWFkT25seVJvb3RGaWxlc3lzdGVtOiBmYWxzZQogICAgY2FwYWJpbGl0aWVzOgogICAgICBkcm9wOgogICAgICAgIC0gQUxMCiAgc2VydmljZUFjY291bnQ6CiAgICBjcmVhdGU6IHRydWUKICAgIGF1dG9tb3VudFNlcnZpY2VBY2NvdW50VG9rZW46IHRydWU=" | base64 -d)
+    $ helm install metallb bitnami/metallb -f .vib/metallb/runtime-parameters.yaml
     ```
 
 2. Download and [install Ginkgo](https://onsi.github.io/ginkgo/#installing-ginkgo) in your system
-3. Execute the tests. Provide the necessary params (usually, the path to the kubeconfig file and namespace name, but check `vib-verify.yaml`).
+3. Execute the tests. Provide the necessary params (usually, the path to the kubeconfig file and namespace name, but check `vib-verify.json`).
 
     ```bash
     $ cd .vib/metallb/ginkgo
@@ -449,15 +445,20 @@ In order for VIB to execute GOSS tests, the following block of code needs to be 
           "action_id": "goss",
           "params": {
             "resources": {
-              "path": "/.vib/$$ASSET$$/goss"
+              "path": "/.vib"
             },
+            "tests_file": "$$ASSET$$/goss/goss.yaml",
+            "vars_file": "$$ASSET$$/runtime-parameters.yaml",
             "remote": {
-              "workload": "deploy-$$DEPLOYMENT_NAME$$" // Use "ds-" or "sts-" for DaemonSet and StatefulSet controllers.
-            },
-            "vars_file": "vars.yaml"
+              "pod": {
+                "workload": "deploy-$$DEPLOYMENT_NAME$$" // Use "ds-" or "sts-" for DaemonSet and StatefulSet controllers.
+              }
+            }
           }
         }
 ```
+
+> ℹ️ Goss will use the `runtime-parameters.yaml` file containing the chart's deployment parameters as its vars file.
 
 ### Run GOSS locally
 
@@ -466,9 +467,7 @@ Sometimes it is of interest to run the tests locally, for example during develop
 1. Deploy the target Chart in your cluster, using the same installation parameters specified in the `vib-verify.json` pipeline file
 
     ```bash
-    $ cat .vib/nginx/vib-verify.json | grep "runtime_parameters"
-            "runtime_parameters": "Y29udGFpbmVyUG9ydHM6CiAgaHR0cDogODA4MQogIGh0dHBzOiA4NDQ0CnBvZFNlY3VyaXR5Q29udGV4dDoKICBlbmFibGVkOiB0cnVlCiAgZnNHcm91cDogMTAwMgpjb250YWluZXJTZWN1cml0eUNvbnRleHQ6CiAgZW5hYmxlZDogdHJ1ZQogIHJ1bkFzVXNlcjogMTAwMgpzZXJ2aWNlOgogIHR5cGU6IExvYWRCYWxhbmNlcgogIHBvcnRzOgogICAgaHR0cDogODAKICAgIGh0dHBzOiA0NDQK",
-    $ helm install nginx bitnami/nginx -f <(echo "Y29udGFpbmVyUG9ydHM6CiAgaHR0cDogODA4MQogIGh0dHBzOiA4NDQ0CnBvZFNlY3VyaXR5Q29udGV4dDoKICBlbmFibGVkOiB0cnVlCiAgZnNHcm91cDogMTAwMgpjb250YWluZXJTZWN1cml0eUNvbnRleHQ6CiAgZW5hYmxlZDogdHJ1ZQogIHJ1bkFzVXNlcjogMTAwMgpzZXJ2aWNlOgogIHR5cGU6IExvYWRCYWxhbmNlcgogIHBvcnRzOgogICAgaHR0cDogODAKICAgIGh0dHBzOiA0NDQK" | base64 -d)
+    $ helm install nginx bitnami/nginx -f .vib/nginx/runtime-parameters.yaml
     ```
 
 2. Download the [GOSS binary for Linux AMD64](https://github.com/goss-org/goss/releases/)
@@ -481,18 +480,18 @@ Sometimes it is of interest to run the tests locally, for example during develop
 
     $ kubectl cp ./goss-linux-amd64 nginx-5fbc8786f-95rpl:/tmp/
     $ kubectl cp .vib/nginx/goss/goss.yaml nginx-5fbc8786f-95rpl:/tmp/
-    $ kubectl cp .vib/nginx/goss/vars.yaml nginx-5fbc8786f-95rpl:/tmp/
+    $ kubectl cp .vib/nginx/runtime-parameters.yaml nginx-5fbc8786f-95rpl:/tmp/
     ```
 
 4. Grant execution permissions to the binary and launch the tests
 
     ```bash
     $ kubectl exec -it nginx-5fbc8786f-95rpl -- chmod +x /tmp/goss-linux-amd64
-    $ kubectl exec -it nginx-5fbc8786f-95rpl -- /tmp/goss-linux-amd64 --gossfile /tmp/goss.yaml --vars /tmp/vars.yaml validate
+    $ kubectl exec -it nginx-5fbc8786f-95rpl -- /tmp/goss-linux-amd64 --gossfile /tmp/goss.yaml --vars /tmp/runtime-parameters.yaml validate
     .........
 
     Total Duration: 0.011s
-    Count: 9, Failed: 0, Skipped: 0
+    Count: 8, Failed: 0, Skipped: 0
     ```
 
 ### Useful GOSS information
@@ -512,7 +511,6 @@ As our Charts implement some standardized properties, there are a number of test
 ### Specific GOSS acceptance criteria
 
 * [ ] Main test file name should be `goss.yaml`
-* [ ] Deployment-related parameters should be specified in a file named `vars.yaml`. This is a subset of the `runtime_parameters`
-* [ ] Use templating to parametrize tests with the help of the `vars.yaml` file
 * [ ] Tests should not rely on system packages (e.g. `curl`). Favor built-in GOSS primitives instead
 * [ ] Prefer checking the exit status of a command rather than looking for a specific output. This will avoid most of the potential flakiness
+* [ ] Use templating to parametrize tests with the help of the `runtime-parameters.yaml` file. This `.yaml` can only contain chart's defined parameters and Goss tests should conform to its structure, not the other way around.

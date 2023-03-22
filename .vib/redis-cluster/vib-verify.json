@@ -22,7 +22,6 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/redis-cluster"
         },
-        "runtime_parameters": "cG9kU2VjdXJpdHlDb250ZXh0OgogIGVuYWJsZWQ6IHRydWUKICBmc0dyb3VwOiAxMDAyCmNvbnRhaW5lclNlY3VyaXR5Q29udGV4dDoKICBlbmFibGVkOiB0cnVlCiAgcnVuQXNVc2VyOiAxMDAyCnVzZVBhc3N3b3JkOiB0cnVlCnBhc3N3b3JkOiBDb21wbGljYXRlZFBhc3N3b3JkMTIzITQKc2VydmljZToKICBwb3J0czoKICAgIHJlZGlzOiA4MAogIHR5cGU6IExvYWRCYWxhbmNlcgpwZXJzaXN0ZW5jZToKICBwYXRoOiAvYml0bmFtaS9yZWRpcy9kYXRhCnJlZGlzOgogIGNvbnRhaW5lclBvcnRzOgogICAgcmVkaXM6IDYzODAKICAgIGJ1czogMTYzODAKY2x1c3RlcjoKICBpbml0OiB0cnVlCiAgbm9kZXM6IDkKICByZXBsaWNhczogMg==",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -41,14 +40,15 @@
           "action_id": "goss",
           "params": {
             "resources": {
-              "path": "/.vib/redis-cluster/goss"
+              "path": "/.vib"
             },
+            "tests_file": "redis-cluster/goss/goss.yaml",
+            "vars_file": "redis-cluster/runtime-parameters.yaml",
             "remote": {
               "pod": {
                 "workload": "sts-redis-cluster"
               }
-            },
-            "vars_file": "vars.yaml"
+            }
           }
         }
       ]

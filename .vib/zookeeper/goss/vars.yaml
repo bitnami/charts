@@ -1,3 +1,0 @@
-preAllocSize: 65536
-containerPorts:
-  client: 2181
