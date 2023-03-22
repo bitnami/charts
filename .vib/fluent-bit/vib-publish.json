@@ -22,7 +22,7 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/fluent-bit"
         },
-        "runtime_parameters": "cmVwbGljYUNvdW50OiAzCmNvbnRhaW5lclBvcnRzOgogIGh0dHA6IDIzNzgKcG9kU2VjdXJpdHlDb250ZXh0OgogIGZzR3JvdXA6IDEwMDIKY29udGFpbmVyU2VjdXJpdHlDb250ZXh0OgogIHJ1bkFzVXNlcjogMTAwMgpzZXJ2aWNlOgogIHR5cGU6IExvYWRCYWxhbmNlcgogIHBvcnRzOgogICAgaHR0cDogMjMyMwo=",
+        "runtime_parameters": "cmVwbGljYUNvdW50OiAzCmNvbnRhaW5lclBvcnRzOgogIGh0dHA6IDIzNzgKcG9kU2VjdXJpdHlDb250ZXh0OgogIGZzR3JvdXA6IDEwMDIKY29udGFpbmVyU2VjdXJpdHlDb250ZXh0OgogIHJ1bkFzVXNlcjogMTAwMgpzZXJ2aWNlOgogIHR5cGU6IExvYWRCYWxhbmNlcgogIHBvcnRzOgogICAgaHR0cDogODAK",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
