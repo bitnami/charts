@@ -42,7 +42,8 @@
             "resources": {
               "path": "/.vib"
             },
-            "tests_file": "postgresql-ha/goss/goss.yaml",
+            "tests_file": "postgresql-ha/goss/repmgr/goss.yaml",
+            "vars_file": "postgresql-ha/runtime-parameters.yaml",
             "remote": {
               "pod": {
                 "workload": "sts-postgresql-ha-postgresql"
@@ -54,14 +55,15 @@
           "action_id": "goss",
           "params": {
             "resources": {
-              "path": "/.vib/postgresql-ha/goss/pgpool"
+              "path": "/.vib"
             },
+            "tests_file": "postgresql-ha/goss/pgpool/goss.yaml",
+            "vars_file": "postgresql-ha/runtime-parameters.yaml",
             "remote": {
               "pod": {
                 "workload": "deploy-postgresql-ha-pgpool"
               }
-            },
-            "vars_file": "vars.yaml"
+            }
           }
         }
       ]

@@ -43,7 +43,8 @@
             "resources": {
               "path": "/.vib"
             },
-            "tests_file": "grafana-loki/goss/goss.yaml",
+            "tests_file": "grafana-loki/goss/promtail/goss.yaml",
+            "vars_file": "grafana-loki/runtime-parameters.yaml",
             "remote": {
               "pod": {
                 "workload": "ds-grafana-loki-promtail"
@@ -55,14 +56,15 @@
           "action_id": "goss",
           "params": {
             "resources": {
-              "path": "/.vib/grafana-loki/goss/querier"
+              "path": "/.vib"
             },
+            "tests_file": "grafana-loki/goss/querier/goss.yaml",
+            "vars_file": "grafana-loki/runtime-parameters.yaml",
             "remote": {
               "pod": {
                 "workload": "sts-grafana-loki-querier"
               }
-            },
-            "vars_file": "vars.yaml"
+            }
           }
         },
         {

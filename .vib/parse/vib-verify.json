@@ -42,7 +42,8 @@
             "resources": {
               "path": "/.vib"
             },
-            "tests_file": "parse/goss/goss.yaml",
+            "tests_file": "parse/goss/server/goss.yaml",
+            "vars_file": "parse/runtime-parameters.yaml",
             "remote": {
               "pod": {
                 "workload": "deploy-parse-server"
@@ -54,14 +55,15 @@
           "action_id": "goss",
           "params": {
             "resources": {
-              "path": "/.vib/parse/goss/dashboard"
+              "path": "/.vib"
             },
+            "tests_file": "parse/goss/dashboard/goss.yaml",
+            "vars_file": "parse/runtime-parameters.yaml",
             "remote": {
               "pod": {
                 "workload": "deploy-parse-dashboard"
               }
-            },
-            "vars_file": "vars.yaml"
+            }
           }
         },
         {
