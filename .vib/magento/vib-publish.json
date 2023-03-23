@@ -22,7 +22,6 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/magento"
         },
-        "runtime_parameters": "bWFnZW50b1VzZXJuYW1lOiB1c2VyCm1hZ2VudG9QYXNzd29yZDogQ29tcGxpY2F0ZWRQYXNzd29yZDEyMyE0Cm1hZ2VudG9Ib3N0OiB2bXdhcmUtbWFnZW50by5teQptYWdlbnRvQWRtaW5Vcmk6IGFkbWluCnNlcnZpY2U6CiAgdHlwZTogTG9hZEJhbGFuY2VyCiAgcG9ydHM6CiAgICBodHRwOiA4MAptYXJpYWRiOgogIGVuYWJsZWQ6IHRydWUKICBhdXRoOgogICAgcm9vdFBhc3N3b3JkOiBDb21wbGljYXRlZG1hcmlhUGFzc3dvcmQxMjMhNAo=",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -42,8 +41,9 @@
           "action_id": "goss",
           "params": {
             "resources": {
-              "path": "/.vib/magento/goss"
+              "path": "/.vib"
             },
+            "tests_file": "magento/goss/goss.yaml",
             "remote": {
               "pod": {
                 "workload": "deploy-magento"

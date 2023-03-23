@@ -1,0 +1,62 @@
+secrets:
+  localAuth:
+    enabled: true
+  localUsers: bitnamiUser:ComplicatedPassword123!4
+web:
+  enabled: true
+  baseUrl: /
+  externalUrl: vmware-concourse.my
+  tls:
+    enabled: true
+  auth:
+    mainTeam:
+      localUser: bitnamiUser
+  containerPorts:
+    http: 8081
+    https: 8081
+    tsa: 2223
+    pprof: 2222
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1002
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1002
+  serviceAccount:
+    create: true
+    automountServiceAccountToken: true
+worker:
+  enabled: true
+  replicaCount: 2
+  mode: deployment
+  containerPorts:
+    garden: 7778
+    health: 8889
+    baggageclaim: 7789
+    pprof: 7788
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1002
+  containerSecurityContext:
+    enabled: true
+    privileged: true
+    runAsUser: 0
+  serviceAccount:
+    create: true
+    automountServiceAccountToken: true
+service:
+  web:
+    type: LoadBalancer
+    ports:
+      http: 80
+      https: 444
+  workerGateway:
+    type: ClusterIP
+    ports:
+      tsa: 2223
+postgresql:
+  enabled: true
+  auth:
+    username: bn_test_concourse
+    password: bitnami_test_concourse_p4ss
+    database: bitnami_test_concourse

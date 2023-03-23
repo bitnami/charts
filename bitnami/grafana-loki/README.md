@@ -704,6 +704,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryFrontend.service.externalTrafficPolicy`    | queryFrontend service external traffic policy                    | `Cluster`   |
 | `queryFrontend.service.annotations`              | Additional custom annotations for queryFrontend service          | `{}`        |
 | `queryFrontend.service.extraPorts`               | Extra ports to expose in the queryFrontend service               | `[]`        |
+| `queryFrontend.service.headless.annotations`     | Annotations for the headless service.                            | `{}`        |
 
 ### Query Scheduler Deployment Parameters
 

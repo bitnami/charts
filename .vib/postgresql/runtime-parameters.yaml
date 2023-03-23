@@ -1,0 +1,35 @@
+architecture: replication
+auth:
+  enablePostgresUser: true
+  postgresPassword: ComplicatedPassword123!4
+  username: test_user
+  password: test_password
+  database: test_database
+  replicationUsername: test_repl_user
+containerPorts:
+  postgresql: 5433
+postgresqlSharedPreloadLibraries: pgaudit, pg_stat_statements
+shmVolume:
+  enabled: true
+primary:
+  name: ptest
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1002
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1002
+  service:
+    type: LoadBalancer
+    ports:
+      postgresql: 5433
+  persistence:
+    enabled: true
+    mountPath: /bitnami/postgresql
+readReplicas:
+  name: rtest
+  replicaCount: 2
+  service:
+    type: LoadBalancer
+    ports:
+      postgresql: 80

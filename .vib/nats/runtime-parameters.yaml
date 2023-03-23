@@ -1,0 +1,46 @@
+natsFilename: nats-testing-server
+auth:
+  enabled: true
+  user: test_nats_client
+  password: ComplicatedPassword123!4
+cluster:
+  auth:
+    enabled: true
+    user: test_nats_cluster
+    password: ClusterPassword123!4
+podSecurityContext:
+  enabled: true
+  fsGroup: 1002
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1002
+containerPorts:
+  client: 4224
+  cluster: 6226
+  monitoring: 8228
+service:
+  ports:
+    monitoring: 80
+    client: 4224
+    cluster: 6226
+  type: LoadBalancer
+resourceType: statefulset
+replicaCount: 2
+extraVolumes:
+  - name: nats-client
+    emptyDir: {}
+extraVolumeMounts:
+  - name: nats-client
+    mountPath: /opt/bitnami/nats/bin/nats
+    subPath: nats
+initContainers:
+  - name: nats-client
+    image: docker.io/bitnami/golang
+    imagePullPolicy: Always
+    command:
+    - sh
+    - -c
+    - CGO_ENABLED=0 go install github.com/nats-io/natscli/nats@latest
+    volumeMounts:
+    - name: nats-client
+      mountPath: /go/bin

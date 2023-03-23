@@ -302,6 +302,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.labels`                   | Service labels. Evaluated as a template                                                                                          | `{}`                     |
 | `service.annotations`              | Service annotations. Evaluated as a template                                                                                     | `{}`                     |
 | `service.annotationsHeadless`      | Headless Service annotations. Evaluated as a template                                                                            | `{}`                     |
+| `service.headless.annotations`     | Annotations for the headless service.                                                                                            | `{}`                     |
 | `service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                             | `None`                   |
 | `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
 | `ingress.enabled`                  | Enable ingress resource for Management console                                                                                   | `false`                  |

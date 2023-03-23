@@ -338,6 +338,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sentinel.image.pullPolicy`                   | Redis&reg; Sentinel image pull policy                                                                                                       | `IfNotPresent`           |
 | `sentinel.image.pullSecrets`                  | Redis&reg; Sentinel image pull secrets                                                                                                      | `[]`                     |
 | `sentinel.image.debug`                        | Enable image debug mode                                                                                                                     | `false`                  |
+| `sentinel.annotations`                        | Additional custom annotations for Redis&reg; Sentinel resource                                                                              | `{}`                     |
 | `sentinel.masterSet`                          | Master set name                                                                                                                             | `mymaster`               |
 | `sentinel.quorum`                             | Sentinel Quorum                                                                                                                             | `2`                      |
 | `sentinel.getMasterTimeout`                   | Amount of time to allow before get_sentinel_master_info() times out.                                                                        | `220`                    |
@@ -408,6 +409,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sentinel.service.annotations`                | Additional custom annotations for Redis&reg; Sentinel service                                                                               | `{}`                     |
 | `sentinel.service.sessionAffinity`            | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                                        | `None`                   |
 | `sentinel.service.sessionAffinityConfig`      | Additional settings for the sessionAffinity                                                                                                 | `{}`                     |
+| `sentinel.service.headless.annotations`       | Annotations for the headless service.                                                                                                       | `{}`                     |
 | `sentinel.terminationGracePeriodSeconds`      | Integer setting the termination grace period for the redis-node pods                                                                        | `30`                     |
 
 ### Other Parameters

@@ -1013,6 +1013,9 @@ sentinel:
     ## Enable debug mode
     ##
     debug: false
+  ## @param sentinel.annotations Additional custom annotations for Redis&reg; Sentinel resource
+  ##
+  annotations: {}
   ## @param sentinel.masterSet Master set name
   ##
   masterSet: mymaster
@@ -1255,6 +1258,12 @@ sentinel:
     ##     timeoutSeconds: 300
     ##
     sessionAffinityConfig: {}
+    ## Headless service properties
+    ##
+    headless:
+      ## @param sentinel.service.headless.annotations Annotations for the headless service.
+      ##
+      annotations: {}
   ## @param sentinel.terminationGracePeriodSeconds Integer setting the termination grace period for the redis-node pods
   ##
   terminationGracePeriodSeconds: 30

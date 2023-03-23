@@ -22,7 +22,6 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/mariadb-galera"
         },
-        "runtime_parameters": "cmVwbGljYUNvdW50OiAzCnNlcnZpY2U6CiAgdHlwZTogTG9hZEJhbGFuY2VyCiAgcG9ydHM6CiAgICBteXNxbDogODAKcG9kU2VjdXJpdHlDb250ZXh0OgogIGVuYWJsZWQ6IHRydWUKICBmc0dyb3VwOiAxMDAyCiAgcnVuQXNVc2VyOiAxMDAyCmNvbnRhaW5lclNlY3VyaXR5Q29udGV4dDoKICBlbmFibGVkOiB0cnVlCiAgcnVuQXNVc2VyOiAxMDAyCnJvb3RVc2VyOgogIHVzZXI6IGJpdG5hbWlyb290CiAgcGFzc3dvcmQ6ICJDb21wbGljYXRlZFBhc3N3b3JkMTIzITQiCmRiOgogIHVzZXI6ICJiaXRuYW1pdXNlciIKICBwYXNzd29yZDogIkJpdG5hbWlQYXNzdzByZCIKICBuYW1lOiBhd2Vzb21lX3pvb19kYgpnYWxlcmE6CiAgbmFtZTogYml0bmFtaWdhbGVyYQpjb250YWluZXJQb3J0czoKICBteXNxbDogMzMwNgogIGdhbGVyYTogNDU2NwogIGlzdDogNDU2OAogIHNzdDogNDQ0NA==",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -42,9 +41,10 @@
           "action_id": "goss",
           "params": {
             "resources": {
-              "path": "/.vib/mariadb-galera/goss"
+              "path": "/.vib"
             },
-            "vars_file": "vars.yaml",
+            "tests_file": "mariadb-galera/goss/goss.yaml",
+            "vars_file": "mariadb-galera/runtime-parameters.yaml",
             "remote": {
               "pod": {
                 "workload": "sts-mariadb-galera"

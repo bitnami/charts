@@ -1,0 +1,12 @@
+magentoUsername: user
+magentoPassword: ComplicatedPassword123!4
+magentoHost: vmware-magento.my
+magentoAdminUri: admin
+service:
+  type: LoadBalancer
+  ports:
+    http: 80
+mariadb:
+  enabled: true
+  auth:
+    rootPassword: ComplicatedmariaPassword123!4
