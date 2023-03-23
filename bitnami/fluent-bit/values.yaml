@@ -537,10 +537,6 @@ ingress:
   ## @param ingress.pathType Ingress path type
   ##
   pathType: ImplementationSpecific
-  ## @param ingress.servicePort Service port to be used
-  ## Default is http. Alternative is https.
-  ##
-  servicePort: http
   ## @param ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
   ## For a full list of possible ingress annotations, please see
   ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
