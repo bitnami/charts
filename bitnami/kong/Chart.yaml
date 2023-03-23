@@ -2,7 +2,7 @@ annotations:
   category: Infrastructure
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 3.2.1
+appVersion: 3.2.2
 dependencies:
   - condition: postgresql.enabled
     name: postgresql
@@ -36,4 +36,4 @@ name: kong
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/kong
   - https://konghq.com/
-version: 9.1.6
+version: 9.1.7

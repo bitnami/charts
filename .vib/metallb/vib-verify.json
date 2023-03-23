@@ -22,7 +22,6 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/metallb"
         },
-        "runtime_parameters": "Y29udHJvbGxlcjoKICBwb2RTZWN1cml0eUNvbnRleHQ6CiAgICBlbmFibGVkOiB0cnVlCiAgICBmc0dyb3VwOiAxMDAyCiAgY29udGFpbmVyU2VjdXJpdHlDb250ZXh0OgogICAgZW5hYmxlZDogdHJ1ZQogICAgcnVuQXNVc2VyOiAxMDAyCiAgICByZWFkT25seVJvb3RGaWxlc3lzdGVtOiBmYWxzZQogICAgY2FwYWJpbGl0aWVzOgogICAgICBkcm9wOgogICAgICAgIC0gQUxMCiAgc2VydmljZUFjY291bnQ6CiAgICBjcmVhdGU6IHRydWUKICAgIGF1dG9tb3VudFNlcnZpY2VBY2NvdW50VG9rZW46IHRydWU=",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -47,9 +46,10 @@
           "action_id": "goss",
           "params": {
             "resources": {
-              "path": "/.vib/metallb/goss"
+              "path": "/.vib"
             },
-            "vars_file": "vars.yaml",
+            "tests_file": "metallb/goss/goss.yaml",
+            "vars_file": "metallb/runtime-parameters.yaml",
             "remote": {
               "pod": {
                 "workload": "deploy-metallb-controller"

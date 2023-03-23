@@ -24,7 +24,9 @@ spec:
       app.kubernetes.io/component: aggregator
   serviceName: {{ include "common.names.fullname" . }}-headless
   podManagementPolicy: {{ .Values.aggregator.podManagementPolicy }}
+  {{- if not .Values.aggregator.autoscaling.enabled }}
   replicas: {{ .Values.aggregator.replicaCount }}
+  {{- end }}
   updateStrategy: {{- toYaml .Values.aggregator.updateStrategy | nindent 4 }}
   template:
     metadata:

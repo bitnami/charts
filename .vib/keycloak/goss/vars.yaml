@@ -1,7 +1,0 @@
-containerPorts:
-  http: 8080
-logging:
-  output: default
-serviceAccount:
-  create: true
-  automountServiceAccountToken: true

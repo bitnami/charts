@@ -1,0 +1,8 @@
+jenkinsUser: user
+jenkinsPassword: ComplicatedPassword123!4
+containerPorts:
+  http: 8080
+service:
+  type: LoadBalancer
+  ports:
+    http: 80
