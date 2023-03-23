@@ -1,0 +1,27 @@
+auth:
+  enabled: true
+  adminPassword: ComplicatedPassword123!4
+  adminUsername: admin_user
+cloudEnabled: true
+cloudBootstrap: true
+collection: vib-test-collection
+collectionShards: 2
+collectionReplicas: 2
+replicaCount: 4
+containerPorts:
+  http: 8984
+podSecurityContext:
+  enabled: true
+  fsGroup: 1002
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1002
+service:
+  ports:
+    http: 80
+  type: LoadBalancer
+persistence:
+  enabled: true
+  mountPath: /bitnami/solr
+zookeeper:
+  enabled: true

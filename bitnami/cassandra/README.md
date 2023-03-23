@@ -206,6 +206,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.annotations`              | Provide any additional annotations which may be required.                     | `{}`        |
 | `service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"          | `None`      |
 | `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                   | `{}`        |
+| `service.headless.annotations`     | Annotations for the headless service.                                         | `{}`        |
 | `networkPolicy.enabled`            | Specifies whether a NetworkPolicy should be created                           | `false`     |
 | `networkPolicy.allowExternal`      | Don't require client label for connections                                    | `true`      |
 
@@ -289,6 +290,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `tls.resources.requests`      | The requested resources for the TLS init container                                            | `{}`    |
 | `tls.certificatesSecret`      | Secret with the TLS certificates.                                                             | `""`    |
 | `tls.tlsEncryptionSecretName` | Secret with the encryption of the TLS certificates                                            | `""`    |
+
+The above parameters map to the env variables defined in [bitnami/cassandra](https://github.com/bitnami/containers/tree/main/bitnami/cassandra). For more information please refer to the [bitnami/cassandra](https://github.com/bitnami/containers/tree/main/bitnami/cassandra) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

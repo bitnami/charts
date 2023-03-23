@@ -81,7 +81,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                                                                                   | `["infinity"]`       |
 | `image.registry`         | Mastodon image registry                                                                                                                             | `docker.io`          |
 | `image.repository`       | Mastodon image repository                                                                                                                           | `bitnami/mastodon`   |
-| `image.tag`              | Mastodon image tag (immutable tags are recommended)                                                                                                 | `4.1.0-debian-11-r3` |
+| `image.tag`              | Mastodon image tag (immutable tags are recommended)                                                                                                 | `4.1.1-debian-11-r1` |
 | `image.digest`           | Mastodon image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended) | `""`                 |
 | `image.pullPolicy`       | Mastodon image pull policy                                                                                                                          | `IfNotPresent`       |
 | `image.pullSecrets`      | Mastodon image pull secrets                                                                                                                         | `[]`                 |
@@ -109,7 +109,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `localDomain`                    | The domain name used by accounts on this instance. Unless you're using                                                       | `""`                                 |
 | `webDomain`                      | Optional alternate domain used when you want to host Mastodon at a                                                           | `""`                                 |
 | `defaultLocale`                  | Set the default locale for this instance                                                                                     | `en`                                 |
-| `s3AliasHost`                    | S3 alias host for Mastodon (will use http://webDomain/bucket if not set)                                                     | `""`                                 |
+| `s3AliasHost`                    | S3 alias host for Mastodon (will use 'http://webDomain/bucket' if not set)                                                   | `""`                                 |
 | `smtp.server`                    | SMTP server                                                                                                                  | `""`                                 |
 | `smtp.port`                      | SMTP port                                                                                                                    | `587`                                |
 | `smtp.from_address`              | From address for sent emails                                                                                                 | `""`                                 |
@@ -405,7 +405,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `11-debian-11-r90`      |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `11-debian-11-r98`      |
 | `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                    |
@@ -614,7 +614,7 @@ externalS3.accessKeySecret=secret
 
 This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application.
 
-To enable Ingress integration, set `apache.ingress.enabled` to `true`. The `apache.ingress.hostname` property can be used to set the host name. The `apache.ingress.tls` parameter can be used to add the TLS configuration for this host. It is also possible to have more than one host, with a separate TLS configuration for each host. [Learn more about configuring and using Ingress](https://docs.bitnami.com/kubernetes/apps/mastodon/configuration/configure-use-ingress/).
+To enable Ingress integration, set `apache.ingress.enabled` to `true`. The `apache.ingress.hostname` property can be used to set the host name. The `apache.ingress.tls` parameter can be used to add the TLS configuration for this host. It is also possible to have more than one host, with a separate TLS configuration for each host. [Learn more about configuring and using Ingress](https://docs.bitnami.com/kubernetes/apps/mastodon/configuration/configure-ingress/).
 
 ### TLS secrets
 

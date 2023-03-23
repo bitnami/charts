@@ -1,0 +1,49 @@
+name: '[CI/CD] Markdown linter'
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - '**.md'
+permissions:
+  contents: read
+jobs:
+  markdown-linter:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Install mardownlint
+        run: npm install -g markdownlint-cli@0.33.0
+      - name: Checkout project
+        uses: actions/checkout@v3
+      - name: Execute markdownlint
+        run: |
+          # Using the Github API to detect the files changed as git merge-base stops working when the branch is behind
+          # and jitterbit/get-changed-files does not support pull_request_target
+          URL="https://api.github.com/repos/${{ github.repository }}/pulls/${{ github.event.pull_request.number }}/files"
+          files_changed_data=$(curl -s --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' -X GET -G "$URL")
+          files_changed="$(echo "$files_changed_data" | jq -r '.[] | .filename')"
+          md_files="$(echo "$files_changed" | grep -o ".*\.md$" | sort | uniq || true)"
+          # Create an empty file, useful when the PR changes ignored files
+          touch ${{runner.temp}}/output
+          exit_code=0
+          markdownlint -o ${{runner.temp}}/output ${md_files[@]} || exit_code=$?
+          while read -r line; do
+            # line format:
+            #   file:row[:column] message
+            # white space inside brackets is intentional to detect the message for the notice.
+            message="${line#*[ ]}"
+            file_row_column="${line%%[ ]*}"
+            # Split by ':'
+            readarray -d : -t strarr < <(printf '%s' "$file_row_column")
+            if [[ "${#strarr[@]}" -eq 3 ]]; then
+              echo "::warning file=${strarr[0]},line=${strarr[1]},col=${strarr[2]}::${message}"
+            elif [[ "${#strarr[@]}" -eq 2 ]]; then
+              echo "::warning file=${strarr[0]},line=${strarr[1]}::${message}"
+            else
+              echo "::warning:: Error processing: ${line}"
+            fi
+          done < ${{runner.temp}}/output
+          if [[ $exit_code -ne 0 ]]; then
+            echo "::error:: Please review linter messages"
+            exit "$exit_code"
+          fi

@@ -210,6 +210,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.annotations`              | Additional annotations for the etcd service                                        | `{}`        |
 | `service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"               | `None`      |
 | `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                        | `{}`        |
+| `service.headless.annotations`     | Annotations for the headless service.                                              | `{}`        |
 
 ### Persistence parameters
 
@@ -218,6 +219,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.enabled`      | If true, use a Persistent Volume Claim. If false, use emptyDir. | `true`              |
 | `persistence.storageClass` | Persistent Volume Storage Class                                 | `""`                |
 | `persistence.annotations`  | Annotations for the PVC                                         | `{}`                |
+| `persistence.labels`       | Labels for the PVC                                              | `{}`                |
 | `persistence.accessModes`  | Persistent Volume Access Modes                                  | `["ReadWriteOnce"]` |
 | `persistence.size`         | PVC Storage Request for etcd data volume                        | `8Gi`               |
 | `persistence.selector`     | Selector to match an existing Persistent Volume                 | `{}`                |
@@ -303,6 +305,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `pdb.create`         | Enable/disable a Pod Disruption Budget creation                | `true` |
 | `pdb.minAvailable`   | Minimum number/percentage of pods that should remain scheduled | `51%`  |
 | `pdb.maxUnavailable` | Maximum number/percentage of pods that may be made unavailable | `""`   |
+
+Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
 helm install my-release \

@@ -73,7 +73,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/sonarqube
-  tag: 9.9.0-debian-11-r8
+  tag: 9.9.0-debian-11-r14
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -159,10 +159,10 @@ ldap:
   ## @param ldap.bindPassword The password of the user to connect with. Leave this blank for anonymous access to the LDAP directory.
   ##
   bindPassword: ""
-  ## @param ldap.authentication Possible values: simple, CRAM-MD5, DIGEST-MD5, GSSAPI. See the tutorial on authentication mechanisms (http://java.sun.com/products/jndi/tutorial/ldap/security/auth.html)
+  ## @param ldap.authentication Possible values: simple, CRAM-MD5, DIGEST-MD5, GSSAPI. See the tutorial on authentication mechanisms (<http://java.sun.com/products/jndi/tutorial/ldap/security/auth.html>)
   ##
   authentication: simple
-  ## @param ldap.realm See Digest-MD5 Authentication, CRAM-MD5 Authentication (http://java.sun.com/products/jndi/tutorial/ldap/security/digest.html)
+  ## @param ldap.realm See Digest-MD5 Authentication, CRAM-MD5 Authentication (<http://java.sun.com/products/jndi/tutorial/ldap/security/digest.html>)
   ##
   realm: ""
   ## @param ldap.contextFactoryClass Context factory class.
@@ -607,7 +607,7 @@ caCerts:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r90
+    tag: 11-debian-11-r98
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -668,7 +668,7 @@ plugins:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r90
+    tag: 11-debian-11-r98
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -749,7 +749,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r90
+    tag: 11-debian-11-r98
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -799,7 +799,7 @@ sysctl:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r90
+    tag: 11-debian-11-r98
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -879,7 +879,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/jmx-exporter
-      tag: 0.17.2-debian-11-r53
+      tag: 0.18.0-debian-11-r3
       digest: ""
       pullPolicy: IfNotPresent
       ## Optionally specify an array of imagePullSecrets.

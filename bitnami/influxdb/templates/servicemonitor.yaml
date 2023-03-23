@@ -5,7 +5,7 @@ metadata:
   name: {{ include "common.names.fullname" . }}
   namespace: {{ default .Release.Namespace .Values.metrics.serviceMonitor.namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
-    app.kubernetes.io/component: influxdb
+    app.kubernetes.io/component: influxdb-metrics
     {{- if .Values.metrics.serviceMonitor.selector }}
     {{- include "common.tplvalues.render" (dict "value" .Values.metrics.serviceMonitor.selector "context" $) | nindent 4 }}
     {{- end }}
@@ -21,7 +21,7 @@ spec:
       {{- if .Values.metrics.serviceMonitor.selector }}
       {{- include "common.tplvalues.render" (dict "value" .Values.metrics.serviceMonitor.selector "context" $) | nindent 6 }}
       {{- end }}
-      app.kubernetes.io/component: influxdb
+      app.kubernetes.io/component: influxdb-metrics
   endpoints:
     - port: http
       path: "/metrics"

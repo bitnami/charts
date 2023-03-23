@@ -7,6 +7,15 @@ metadata:
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: worker
+  {{- if or .Values.commonAnnotations .Values.service.headless.annotations }}
+  annotations:
+    {{- if .Values.service.headless.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.service.headless.annotations "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- end }}
 spec:
   type: ClusterIP
   clusterIP: None

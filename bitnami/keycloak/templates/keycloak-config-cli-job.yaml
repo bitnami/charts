@@ -16,6 +16,9 @@ metadata:
     {{- end }}
 spec:
   backoffLimit: {{ .Values.keycloakConfigCli.backoffLimit }}
+  {{- if .Values.keycloakConfigCli.cleanupAfterFinished.enabled }}
+  ttlSecondsAfterFinished: {{ .Values.keycloakConfigCli.cleanupAfterFinished.seconds }}
+  {{- end }}
   template:
     metadata:
       labels: {{- include "common.labels.standard" . | nindent 8 }}
@@ -39,6 +42,9 @@ spec:
       {{- end }}
       {{- if .Values.keycloakConfigCli.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.keycloakConfigCli.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.keycloakConfigCli.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.keycloakConfigCli.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
       {{- if .Values.keycloakConfigCli.podTolerations }}
       tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.keycloakConfigCli.podTolerations "context" .) | nindent 8 }}

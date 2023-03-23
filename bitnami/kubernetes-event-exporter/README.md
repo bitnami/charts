@@ -81,7 +81,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraContainerPorts`                             | Optionally specify extra list of additional port-mappings for the container                                               | `[]`                                |
 | `image.registry`                                  | Container image registry                                                                                                  | `docker.io`                         |
 | `image.repository`                                | Container image name                                                                                                      | `bitnami/kubernetes-event-exporter` |
-| `image.tag`                                       | Container image tag                                                                                                       | `1.1.0-debian-11-r26`               |
+| `image.tag`                                       | Container image tag                                                                                                       | `1.1.0-debian-11-r32`               |
 | `image.digest`                                    | Container image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                 | `""`                                |
 | `image.pullPolicy`                                | Container image pull policy                                                                                               | `IfNotPresent`                      |
 | `image.pullSecrets`                               | Specify docker-registry secret names as an array                                                                          | `[]`                                |
@@ -152,7 +152,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.prometheusRule.namespace`                | Namespace which Prometheus is running in                                                                                  | `""`                                |
 | `metrics.prometheusRule.labels`                   | Additional labels that can be used so PrometheusRule will be discovered by Prometheus                                     | `{}`                                |
 | `metrics.prometheusRule.groups`                   | Groups, containing the alert rules.                                                                                       | `[]`                                |
-
 
 ## Configuration and installation details
 

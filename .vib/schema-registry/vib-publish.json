@@ -22,7 +22,6 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/schema-registry"
         },
-        "runtime_parameters": "c2VydmljZToKICB0eXBlOiBMb2FkQmFsYW5jZXIKICBwb3J0czoKICAgIGh0dHA6IDgwCmF2cm9Db21wYXRpYmlsaXR5TGV2ZWw6IGJhY2t3YXJkCnNlcnZpY2VBY2NvdW50OgogIGNyZWF0ZTogdHJ1ZQogIGF1dG9tb3VudFNlcnZpY2VBY2NvdW50VG9rZW46IHRydWU=",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -42,12 +41,15 @@
           "action_id": "goss",
           "params": {
             "resources": {
-              "path": "/.vib/schema-registry/goss"
+              "path": "/.vib"
             },
+            "tests_file": "schema-registry/goss/goss.yaml",
+            "vars_file": "schema-registry/runtime-parameters.yaml",
             "remote": {
-              "workload": "sts-schema-registry"
-            },
-            "vars_file": "vars.yaml"
+              "pod": {
+                "workload": "sts-schema-registry"
+              }
+            }
           }
         },
         {
@@ -70,8 +72,10 @@
             "repository": {
               "kind": "S3",
               "url": "{VIB_ENV_S3_URL}",
-              "username": "{VIB_ENV_S3_USERNAME}",
-              "password": "{VIB_ENV_S3_PASSWORD}"
+              "authn": {
+                "access_key_id": "{VIB_ENV_S3_ACCESS_KEY_ID}",
+                "secret_access_key": "{VIB_ENV_S3_SECRET_ACCESS_KEY}"
+              }
             }
           }
         }

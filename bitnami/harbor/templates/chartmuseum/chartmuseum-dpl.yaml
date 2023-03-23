@@ -115,10 +115,15 @@ spec:
             {{- end }}
             - name: BASIC_AUTH_PASS
               valueFrom:
+                {{- if .Values.core.existingSecret }}
                 secretKeyRef:
-                  # Take the password from the core component secret
+                  name: {{ .Values.core.existingSecret }}
+                  key: secret
+                {{- else }}
+                secretKeyRef:
                   name: {{ include "harbor.core" . }}
                   key: secret
+                {{- end }}
             {{- if .Values.chartmuseum.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.chartmuseum.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}

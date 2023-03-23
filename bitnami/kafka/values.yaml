@@ -77,7 +77,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/kafka
-  tag: 3.4.0-debian-11-r6
+  tag: 3.4.0-debian-11-r12
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -244,6 +244,9 @@ auth:
   # https://github.com/bitnami/charts/pull/8902/
   externalClientProtocol: ""
   interBrokerProtocol: plaintext
+  ## @param auth.controllerProtocol Controller protocol. It is used with Kraft mode only.
+  ##
+  controllerProtocol: plaintext
   ## SASL configuration
   ##
   sasl:
@@ -446,11 +449,13 @@ brokerRackAssignment: ""
 ## @param containerPorts.client Kafka client container port
 ## @param containerPorts.internal Kafka inter-broker container port
 ## @param containerPorts.external Kafka external container port
+## @param containerPorts.controller Kafka Controller listener port. It is used if "kraft.enabled: true"
 ##
 containerPorts:
   client: 9092
   internal: 9093
   external: 9094
+  controller: 9095
 ## Configure extra options for Kafka containers' liveness, readiness and startup probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
 ## @param livenessProbe.enabled Enable livenessProbe on Kafka containers
@@ -774,7 +779,7 @@ externalAccess:
     image:
       registry: docker.io
       repository: bitnami/kubectl
-      tag: 1.25.6-debian-11-r14
+      tag: 1.25.7-debian-11-r4
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -842,6 +847,13 @@ externalAccess:
     ##   - 30002
     ##
     nodePorts: []
+    ## @param externalAccess.service.externalIPs Use distinct service host IPs to configure Kafka external listener when service type is NodePort. Length must be the same as replicaCount
+    ## e.g:
+    ## externalIPs:
+    ##   - X.X.X.X
+    ##   - Y.Y.Y.Y
+    ##
+    externalIPs: []
     ## @param externalAccess.service.useHostIPs Use service host IPs to configure Kafka external listener when service type is NodePort
     ##
     useHostIPs: false
@@ -1016,7 +1028,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r90
+    tag: 11-debian-11-r99
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1098,7 +1110,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/kafka-exporter
-      tag: 1.6.0-debian-11-r65
+      tag: 1.6.0-debian-11-r70
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1334,7 +1346,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/jmx-exporter
-      tag: 0.17.2-debian-11-r53
+      tag: 0.18.0-debian-11-r4
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1717,6 +1729,31 @@ provisioning:
   ##
   waitForKafka: true
 
+## @section Kraft chart parameters
+
+## Kraft configuration
+## Kafka mode without Zookeeper. Kafka nodes can work as controllers in this mode.
+##
+kraft:
+  ## @param kraft.enabled Switch to enable or disable the Kraft mode for Kafka
+  ##
+  enabled: false
+  ## @param kraft.processRoles Roles of your Kafka nodes. Nodes can have 'broker', 'controller' roles or both of them.
+  ##
+  processRoles: broker,controller
+  ## @param kraft.controllerListenerNames Controller listener names
+  ##
+  controllerListenerNames: CONTROLLER
+  ## @param kraft.clusterId Kafka ClusterID. You must set it if your cluster contains more than one node.
+  ## Generate with `cat /proc/sys/kernel/random/uuid | tr -d '-' | base64 | cut -b 1-22`. Run `export LC_ALL=C` before if you generate it on MacOS.
+  ## Example: k2yipv1sRue7z2_Y3o976A
+  ##
+  clusterId: "kafka_cluster_id_test1"
+  ## @param kraft.controllerQuorumVoters Quorum voters of Kafka Kraft cluster. Use it for nodes with 'broker' role only.
+  ## Example: 1@controller1.example.com:9095,2@controller2.example.com:9095
+  ##
+  controllerQuorumVoters: ""
+
 ## @section ZooKeeper chart parameters
 ##
 
@@ -1724,7 +1761,7 @@ provisioning:
 ## https://github.com/bitnami/charts/blob/main/bitnami/zookeeper/values.yaml
 ##
 zookeeper:
-  ## @param zookeeper.enabled Switch to enable or disable the ZooKeeper helm chart
+  ## @param zookeeper.enabled Switch to enable or disable the ZooKeeper helm chart. Must be false if you use Kraft mode.
   ##
   enabled: true
   ## @param zookeeper.replicaCount Number of ZooKeeper nodes
@@ -1767,6 +1804,6 @@ zookeeper:
 ## All of these values are only used if `zookeeper.enabled=false`
 ##
 externalZookeeper:
-  ## @param externalZookeeper.servers List of external zookeeper servers to use. Typically used in combination with 'zookeeperChrootPath'.
+  ## @param externalZookeeper.servers List of external zookeeper servers to use. Typically used in combination with 'zookeeperChrootPath'. Must be empty if you use Kraft mode.
   ##
   servers: []

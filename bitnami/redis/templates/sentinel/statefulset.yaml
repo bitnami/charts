@@ -10,8 +10,14 @@ metadata:
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
-  {{- if or .Values.commonAnnotations }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- if or .Values.commonAnnotations .Values.sentinel.annotations }}
+  annotations:
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.sentinel.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.sentinel.annotations "context" $ ) | nindent 4 }}
+    {{- end }}
   {{- end }}
 spec:
   replicas: {{ .Values.replica.replicaCount }}
@@ -22,7 +28,7 @@ spec:
   {{- if .Values.replica.updateStrategy }}
   updateStrategy: {{- toYaml .Values.replica.updateStrategy | nindent 4 }}
   {{- end }}
-  {{- if and .Values.replica.minReadySeconds (semverCompare ">= 1.25" (include "common.capabilities.kubeVersion" .)) }}
+  {{- if and .Values.replica.minReadySeconds (semverCompare ">= 1.23-0" (include "common.capabilities.kubeVersion" .)) }}
   minReadySeconds: {{ .Values.replica.minReadySeconds }}
   {{- end }}
   {{- if .Values.replica.podManagementPolicy }}
@@ -753,6 +759,9 @@ spec:
         name: sentinel-data
         labels: {{- include "common.labels.matchLabels" . | nindent 10 }}
           app.kubernetes.io/component: node
+          {{- if .Values.sentinel.persistence.labels }}
+          {{- toYaml .Values.sentinel.persistence.labels | nindent 4 }}
+          {{- end }}
         {{- if .Values.sentinel.persistence.annotations }}
         annotations: {{- toYaml .Values.sentinel.persistence.annotations | nindent 10 }}
         {{- end }}

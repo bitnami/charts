@@ -205,6 +205,9 @@ spec:
         - name: metrics
           image: {{ template "memcached.metrics.image" . }}
           imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
+          {{- if .Values.metrics.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.metrics.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
           ports:
             - name: metrics
               containerPort: {{ .Values.metrics.containerPorts.metrics }}
@@ -257,9 +260,13 @@ spec:
           {{- if .Values.commonAnnotations }}
           {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 10 }}
           {{- end }}
-        {{- if .Values.commonLabels }}
-        labels: {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 10 }}
-        {{- end }}
+        labels:
+          {{- if .Values.persistence.labels }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.persistence.labels "context" $) | nindent 10 }}
+          {{- end }}
+          {{- if .Values.commonLabels }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 10 }}
+          {{- end }}
       spec:
         accessModes:
         {{- range .Values.persistence.accessModes }}

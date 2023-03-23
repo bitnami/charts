@@ -113,6 +113,7 @@ spec:
             {{- if .Values.contour.debug }}
             - --debug
             {{- end }}
+            - --log-format={{ .Values.contour.logFormat }}
             - --kubernetes-debug={{ .Values.contour.kubernetesDebug }}
             {{- if (include "contour.isIngressClassNameDefined" .) }}
             - --ingress-class-name={{ include "contour.ingressClassName" . }}
@@ -224,8 +225,7 @@ spec:
       dnsPolicy: ClusterFirst
       serviceAccountName: {{ include "contour.contourServiceAccountName" . }}
       {{- if .Values.contour.podSecurityContext.enabled }}
-      securityContext:
-        fsGroup: {{ .Values.contour.podSecurityContext.fsGroup }}
+      securityContext: {{- omit .Values.contour.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       volumes:
         - name: contourcert

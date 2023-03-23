@@ -2,7 +2,7 @@ annotations:
   category: CMS
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 4.1.0
+appVersion: 4.1.1
 dependencies:
   - condition: redis.enabled
     name: redis
@@ -42,4 +42,4 @@ name: mastodon
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/mastodon
   - https://github.com/mastodon/mastodon/
-version: 1.1.1
+version: 1.1.6
