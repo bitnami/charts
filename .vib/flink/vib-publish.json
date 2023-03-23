@@ -42,12 +42,13 @@
           "action_id": "goss",
           "params": {
             "resources": {
-              "path": "/.vib/flink/goss"
+              "path": "/.vib"
             },
+            "tests_file": "flink/goss/goss.yaml",
+            "vars_file": "flink/runtime-parameters.yaml",
             "remote": {
               "workload": "deploy-flink-jobmanager"
-            },
-            "vars_file": "vars.yaml"
+            }
           }
         },
         {
