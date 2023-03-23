@@ -44,7 +44,7 @@
               "path": "/.vib"
             },
             "tests_file": "fluent-bit/goss/goss.yaml",
-            "vars_file": "fuent-bit/runtime-parameters.yaml",
+            "vars_file": "fluent-bit/runtime-parameters.yaml",
             "remote": {
               "pod": {
                 "workload": "deploy-fluent-bit"
