@@ -48,8 +48,7 @@
               "pod": {
                 "workload": "deploy-fluent-bit"
               }
-            },
-            "vars_file": "vars.yaml"
+            }
           }
         }
       ]
