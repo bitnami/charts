@@ -22,7 +22,6 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/fluent-bit"
         },
-        "runtime_parameters": "cmVwbGljYUNvdW50OiAzCmNvbnRhaW5lclBvcnRzOgogIGh0dHA6IDIzNzgKcG9kU2VjdXJpdHlDb250ZXh0OgogIGVuYWJsZWQ6IHRydWUKICBmc0dyb3VwOiAxMDAyCmNvbnRhaW5lclNlY3VyaXR5Q29udGV4dDoKICBlbmFibGVkOiB0cnVlCiAgcnVuQXNVc2VyOiAxMDAyCnNlcnZpY2VBY2NvdW50OgogIGNyZWF0ZTogdHJ1ZQogIGF1dG9tb3VudFNlcnZpY2VBY2NvdW50VG9rZW46IHRydWUKc2VydmljZToKICB0eXBlOiBMb2FkQmFsYW5jZXIKICBwb3J0czoKICAgIGh0dHA6IDgwCg==",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -42,8 +41,9 @@
           "action_id": "goss",
           "params": {
             "resources": {
-              "path": "/.vib/fluent-bit/goss"
+              "path": "/.vib"
             },
+            "tests_file": "fluent-bit/goss/goss.yaml",
             "remote": {
               "pod": {
                 "workload": "deploy-fluent-bit"

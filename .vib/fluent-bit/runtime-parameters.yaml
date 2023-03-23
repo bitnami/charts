@@ -1,0 +1,16 @@
+replicaCount: 3
+containerPorts:
+  http: 2378
+podSecurityContext:
+  enabled: true
+  fsGroup: 1002
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1002
+serviceAccount:
+  create: true
+  automountServiceAccountToken: true
+service:
+  type: LoadBalancer
+  ports:
+    http: 80
