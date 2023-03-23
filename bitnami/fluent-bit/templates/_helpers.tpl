@@ -9,20 +9,11 @@ Return the proper fluent-bit image name
 {{- end -}}
 
 {{/*
-Return the proper cassandra external image name
-*/}}
-{{- define "fluentBit.cqlshImage" -}}
-{{ include "common.images.image" (dict "imageRoot" .Values.cqlshImage "global" .Values.global) }}
-{{- end -}}
-
-
-{{/*
 Create the name of the deployment
 */}}
 {{- define "fluentBit.fullname" -}}
     {{ printf "%s" (include "common.names.fullname" .) }}
 {{- end -}}
-
 
 {{/*
 Create the name of the service account to use
