@@ -28,7 +28,7 @@ it('allows installing/uninstalling an application and inviting new users', () =>
     cy.get('button[class*="dropdown-toggle"]').click({ force: true });
   });
   cy.contains('Uninstall').click({ force: true });
-  cy.get('button[name="action_uninstall"]').click();
+  cy.get('[name*="uninstall"]').click();
   cy.reload();
 
   cy.get('[title="Home Menu"]').click();
