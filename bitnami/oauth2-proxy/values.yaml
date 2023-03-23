@@ -212,6 +212,9 @@ ingress:
   ##       -----END CERTIFICATE-----
   ##
   secrets: []
+  ## @param ingress.secretName Specify your own secretName for the certificate
+  ##
+  secretName: ""
   ## @param ingress.extraRules Additional rules to be covered with this ingress record
   ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
   ## e.g:
