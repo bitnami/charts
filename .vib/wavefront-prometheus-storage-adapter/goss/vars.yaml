@@ -1,6 +1,0 @@
-containerSecurityContext:
-  runAsUser: 1002
-podSecurityContext:
-  fsGroup: 1002
-containerPorts:
-  http: 1235

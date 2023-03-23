@@ -297,6 +297,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `keycloakConfigCli.podLabels`                             | Pod extra labels                                                                                                              | `{}`                          |
 | `keycloakConfigCli.podAnnotations`                        | Annotations for job pod                                                                                                       | `{}`                          |
 | `keycloakConfigCli.extraEnvVars`                          | Additional environment variables to set                                                                                       | `[]`                          |
+| `keycloakConfigCli.nodeSelector`                          | Node labels for pod assignment                                                                                                | `{}`                          |
 | `keycloakConfigCli.podTolerations`                        | Tolerations for job pod assignment                                                                                            | `[]`                          |
 | `keycloakConfigCli.extraEnvVarsCM`                        | ConfigMap with extra environment variables                                                                                    | `""`                          |
 | `keycloakConfigCli.extraEnvVarsSecret`                    | Secret with extra environment variables                                                                                       | `""`                          |
@@ -306,6 +307,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `keycloakConfigCli.sidecars`                              | Add additional sidecar containers to the Keycloak config cli pod                                                              | `[]`                          |
 | `keycloakConfigCli.configuration`                         | keycloak-config-cli realms configuration                                                                                      | `{}`                          |
 | `keycloakConfigCli.existingConfigmap`                     | ConfigMap with keycloak-config-cli configuration. This will override `keycloakConfigCli.config`                               | `""`                          |
+| `keycloakConfigCli.cleanupAfterFinished.enabled`          | Enables Cleanup for Finished Jobs                                                                                             | `false`                       |
+| `keycloakConfigCli.cleanupAfterFinished.seconds`          | Sets the value of ttlSecondsAfterFinished                                                                                     | `600`                         |
 
 ### Database parameters
 

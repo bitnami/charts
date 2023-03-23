@@ -22,7 +22,6 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/tomcat"
         },
-        "runtime_parameters": "dG9tY2F0VXNlcm5hbWU6ICJ0b21jYXRVc2VyIgp0b21jYXRQYXNzd29yZDogIkNvbXBsaWNhdGVkUGFzc3dvcmQxMjMhNCIKdG9tY2F0QWxsb3dSZW1vdGVNYW5hZ2VtZW50OiAxCmRlcGxveW1lbnQ6CiAgdHlwZTogImRlcGxveW1lbnQiCnNlcnZpY2U6CiAgdHlwZTogTG9hZEJhbGFuY2VyCiAgcG9ydHM6CiAgICBodHRwOiA4MApjb250YWluZXJQb3J0czoKICBodHRwOiA4MDgwCnBvZFNlY3VyaXR5Q29udGV4dDoKICBlbmFibGVkOiB0cnVlCiAgZnNHcm91cDogMTAwMgpjb250YWluZXJTZWN1cml0eUNvbnRleHQ6CiAgZW5hYmxlZDogdHJ1ZQogIHJ1bkFzVXNlcjogMTAwMgo=",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -42,9 +41,10 @@
           "action_id": "goss",
           "params": {
             "resources": {
-              "path": "/.vib/tomcat/goss"
+              "path": "/.vib"
             },
-            "vars_file": "vars.yaml",
+            "tests_file": "tomcat/goss/goss.yaml",
+            "vars_file": "tomcat/runtime-parameters.yaml",
             "remote": {
               "pod": {
                 "workload": "deploy-tomcat"

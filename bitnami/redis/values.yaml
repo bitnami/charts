@@ -1013,6 +1013,9 @@ sentinel:
     ## Enable debug mode
     ##
     debug: false
+  ## @param sentinel.annotations Additional custom annotations for Redis&reg; Sentinel resource
+  ##
+  annotations: {}
   ## @param sentinel.masterSet Master set name
   ##
   masterSet: mymaster

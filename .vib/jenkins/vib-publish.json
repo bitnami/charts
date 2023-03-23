@@ -22,7 +22,6 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/jenkins"
         },
-        "runtime_parameters": "amVua2luc1VzZXI6IHVzZXIKamVua2luc1Bhc3N3b3JkOiBDb21wbGljYXRlZFBhc3N3b3JkMTIzITQKY29udGFpbmVyUG9ydHM6CiAgaHR0cDogODA4MApzZXJ2aWNlOgogIHR5cGU6IExvYWRCYWxhbmNlcgogIHBvcnRzOgogICAgaHR0cDogODAK",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -42,14 +41,15 @@
           "action_id": "goss",
           "params": {
             "resources": {
-              "path": "/.vib/jenkins/goss"
+              "path": "/.vib"
             },
+            "tests_file": "jenkins/goss/goss.yaml",
+            "vars_file": "jenkins/runtime-parameters.yaml",
             "remote": {
               "pod": {
                 "workload": "deploy-jenkins"
               }
-            },
-            "vars_file": "vars.yaml"
+            }
           }
         },
         {

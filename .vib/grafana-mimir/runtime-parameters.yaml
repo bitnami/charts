@@ -1,0 +1,53 @@
+mimir:
+  dataDir: /bitnami/grafana-mimir
+  containerPorts:
+    http: 8082
+    gossipRing: 8946
+  gossipRing:
+    service:
+      ports:
+        http: 8946
+  httpPrefix:
+    prometheus: /prometheus-test
+gateway:
+  enabled: true
+  service:
+    ports:
+      http: 80
+    type: LoadBalancer
+compactor:
+  service:
+    ports:
+      http: 8082
+distributor:
+  service:
+    ports:
+      http: 8082
+queryFrontend:
+  service:
+    ports:
+      http: 8082
+storeGateway:
+  podSecurityContext:
+    fsGroup: 1002
+  containerSecurityContext:
+    runAsUser: 1002
+  service:
+    ports:
+      http: 8082
+memcachedchunks:
+  service:
+    ports:
+      memcached: 11212
+memcachedfrontend:
+  service:
+    ports:
+      memcached: 11212
+memcachedindex:
+  service:
+    ports:
+      memcached: 11212
+memcachedmetadata:
+  service:
+    ports:
+      memcached: 11212

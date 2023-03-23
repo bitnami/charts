@@ -1,0 +1,15 @@
+adminPassword: ComplicatedPassword123!4
+exposureType: proxy
+service:
+  ports:
+    https: 443
+  type: LoadBalancer
+logLevel: debug
+persistence:
+  imageChartStorage:
+    filesystem:
+      rootdirectory: /storage
+registry:
+  server:
+    containerPorts:
+      debug: 5001

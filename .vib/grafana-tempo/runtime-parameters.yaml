@@ -1,0 +1,68 @@
+tempo:
+  dataDir: /bitnami/grafana-tempo/data
+  traces:
+    jaeger:
+      thriftHttp: true
+  search:
+    enabled: true
+  containerPorts:
+    web: 3101
+    gossipRing: 7946
+compactor:
+  enabled: true
+  replicaCount: 2
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1002
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1002
+  service:
+    type: LoadBalancer
+    ports:
+      http: 80
+distributor:
+  replicaCount: 1
+  service:
+    ports:
+      http: 3101
+ingester:
+  replicaCount: 1
+  service:
+    ports:
+      http: 3101
+querier:
+  replicaCount: 1
+  service:
+    ports:
+      http: 3101
+queryFrontend:
+  service:
+    type: LoadBalancer
+    ports:
+      http: 80
+vulture:
+  enabled: true
+extraDeploy:
+- apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    labels:
+      app: vib-synthetic-load-generator
+    name: vib-synthetic-load-generator
+  spec:
+    replicas: 1
+    selector:
+      matchLabels:
+        app: vib-synthetic-load-generator
+    template:
+      metadata:
+        labels:
+          app: vib-synthetic-load-generator
+      spec:
+        containers:
+        - image: omnition/synthetic-load-generator:1.0.29
+          name: synthetic-load-generator
+          env:
+          - name: JAEGER_COLLECTOR_URL
+            value: http://grafana-tempo-distributor:14268
