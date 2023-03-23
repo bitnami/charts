@@ -73,17 +73,19 @@ spec:
             - ":{{ .Values.applicationSet.containerPorts.metrics }}"
             - --probe-addr
             - ":{{ .Values.applicationSet.containerPorts.probe }}"
-            {{- if or (gt ( .Values.applicationSet.replicaCount | int64) 1) .Values.applicationSet.defaultArgs.enableLeaderElection }}
-            - --enable-leader-election=true
-            {{- end }}
             - --argocd-repo-server
             - {{ include "argocd.repo-server" . }}:{{ .Values.repoServer.service.port }}
             - --policy
             - {{ .Values.applicationSet.defaultArgs.policy | quote }}
+            {{- if or (gt ( .Values.applicationSet.replicaCount | int64) 1) .Values.applicationSet.defaultArgs.enableLeaderElection }}
+            - --enable-leader-election=true
+            {{- end }}
+            {{- if .Values.applicationSet.defaultArgs.debug }}
             - --debug
-            - {{ .Values.applicationSet.defaultArgs.debug | quote }}
+            {{- end }}
+            {{- if .Values.applicationSet.defaultArgs.dryRun }}
             - --dry-run
-            - {{ .Values.applicationSet.defaultArgs.dryRun | quote }}
+            {{- end }}
           {{- if .Values.applicationSet.extraArgs }}
           {{- include "common.tplvalues.render" (dict "value" .Values.applicationSet.extraArgs "context" $) | nindent 12 }}
           {{- end }}
