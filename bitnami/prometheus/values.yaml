@@ -60,304 +60,587 @@ diagnosticMode:
   args:
     - infinity
 
-## @section Prometheus Parameters
+## @section Prometheus server Parameters
 ##
 ## Bitnami Prometheus image
 ## ref: https://hub.docker.com/r/bitnami/prometheus/tags/
-## @param image.registry Prometheus image registry
-## @param image.repository Prometheus image repository
-## @param image.tag Prometheus image tag (immutable tags are recommended)
-## @param image.digest Prometheus image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
-## @param image.pullPolicy Prometheus image pull policy
-## @param image.pullSecrets Prometheus image pull secrets
+## @param server.image.registry Prometheus image registry
+## @param server.image.repository Prometheus image repository
+## @param server.image.tag Prometheus image tag (immutable tags are recommended)
+## @param server.image.digest Prometheus image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
+## @param server.image.pullPolicy Prometheus image pull policy
+## @param server.image.pullSecrets Prometheus image pull secrets
 ##
-image:
-  registry: docker.io
-  repository: bitnami/prometheus
-  tag: 2.42.0-debian-11-r13
-  digest: ""
-  ## Specify a imagePullPolicy
-  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+server:
+  image:
+    registry: docker.io
+    repository: bitnami/prometheus
+    tag: 2.42.0-debian-11-r13
+    digest: ""
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+
+  ## @param server.configuration [object] Promethus configuration. This content will be stored in the the prometheus.yaml file and the content can be a template.
+  ## @skip configuration.global
+  ## @skip configuration.scrape_configs
+  ## ref: <https://github.com/prometheus-community/helm-charts/blob/main/charts/prometheus/values.yaml>
   ##
-  pullPolicy: IfNotPresent
-  ## Optionally specify an array of imagePullSecrets.
-  ## Secrets must be manually created in the namespace.
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  configuration:
+    global:
+      scrape_interval: 1m
+      scrape_timeout: 10s
+      evaluation_interval: 1m
+      external_labels:
+        monitor: "{{ template \"common.names.fullname\" . }}"
+    scrape_configs:
+      - job_name: prometheus
+        # Override the global default and scrape targets from this job every 5 seconds.
+        static_configs:
+          - targets: [localhost:9090]
+
+  ## @param server.replicaCount Number of Prometheus replicas to deploy
+  ##
+  replicaCount: 1
+  ## @param server.containerPorts.http Prometheus HTTP container port
+  ## @param server.containerPorts.https Prometheus HTTPS container port
+  ##
+  containerPorts:
+    http: 9090
+    https: 443
+  ## Configure extra options for Prometheus containers' liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param server.livenessProbe.enabled Enable livenessProbe on Prometheus containers
+  ## @param server.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param server.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param server.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param server.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param server.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 5
+    periodSeconds: 20
+    timeoutSeconds: 3
+    failureThreshold: 3
+    successThreshold: 1
+  ## @param server.readinessProbe.enabled Enable readinessProbe on Prometheus containers
+  ## @param server.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param server.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param server.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param server.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param server.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 2
+    failureThreshold: 5
+    successThreshold: 1
+  ## @param server.startupProbe.enabled Enable startupProbe on Prometheus containers
+  ## @param server.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param server.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param server.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param server.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param server.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 2
+    periodSeconds: 5
+    timeoutSeconds: 2
+    failureThreshold: 10
+    successThreshold: 1
+  ## @param server.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param server.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param server.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## Prometheus resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param server.resources.limits The resources limits for the Prometheus containers
+  ## @param server.resources.requests The requested resources for the Prometheus containers
+  ##
+  resources:
+    limits: {}
+    requests: {}
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param server.podSecurityContext.enabled Enabled Prometheus pods' Security Context
+  ## @param server.podSecurityContext.fsGroup Set Prometheus pod's Security Context fsGroup
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param server.containerSecurityContext.enabled Enabled Prometheus containers' Security Context
+  ## @param server.containerSecurityContext.runAsUser Set Prometheus containers' Security Context runAsUser
+  ## @param server.containerSecurityContext.runAsNonRoot Set Prometheus containers' Security Context runAsNonRoot
+  ## @param server.containerSecurityContext.readOnlyRootFilesystem Set Prometheus containers' Security Context runAsNonRoot
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
+    readOnlyRootFilesystem: false
+
+  ## @param server.existingConfigmap The name of an existing ConfigMap with your custom configuration for Prometheus
+  ##
+  existingConfigmap: ""
+  ## @param server.existingConfigmapKey The name of the key with the Prometheus config file
+  ##
+  existingConfigmapKey: ""
+  ## @param server.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param server.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param server.hostAliases Prometheus pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param server.podLabels Extra labels for Prometheus pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param server.podAnnotations Annotations for Prometheus pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param server.podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param server.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: soft
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param server.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param server.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param server.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ##
+  pdb:
+    create: false
+    minAvailable: 1
+    maxUnavailable: ""
+  ## Autoscaling configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
+  ## @param server.autoscaling.enabled Enable autoscaling for Prometheus
+  ## @param server.autoscaling.minReplicas Minimum number of Prometheus replicas
+  ## @param server.autoscaling.maxReplicas Maximum number of Prometheus replicas
+  ## @param server.autoscaling.targetCPU Target CPU utilization percentage
+  ## @param server.autoscaling.targetMemory Target Memory utilization percentage
+  ##
+  autoscaling:
+    enabled: false
+    minReplicas: ""
+    maxReplicas: ""
+    targetCPU: ""
+    targetMemory: ""
+  ## Node affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param server.nodeAffinityPreset.type Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param server.nodeAffinityPreset.key Node label key to match. Ignored if `affinity` is set
+    ##
+    key: ""
+    ## @param server.nodeAffinityPreset.values Node label values to match. Ignored if `affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param server.affinity Affinity for Prometheus pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `podAffinityPreset`, `podAntiAffinityPreset`, and `nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param server.nodeSelector Node labels for Prometheus pods assignment
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+  ## @param server.tolerations Tolerations for Prometheus pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param server.updateStrategy.type Prometheus statefulset strategy type
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy:
+    ## StrategyType
+    ## Can be set to RollingUpdate or OnDelete
+    ##
+    type: RollingUpdate
+
+  ## @param server.priorityClassName Prometheus pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param server.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: []
+  ## @param server.schedulerName Name of the k8s scheduler (other than default) for Prometheus pods
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param server.terminationGracePeriodSeconds Seconds Redmine pod needs to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
+  ## @param server.lifecycleHooks for the Prometheus container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param server.extraEnvVars Array with extra environment variables to add to Prometheus nodes
   ## e.g:
-  ## pullSecrets:
-  ##   - myRegistryKeySecretName
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
   ##
-  pullSecrets: []
-
-## @param configuration [object] Promethus configuration. This content will be stored in the the prometheus.yaml file and the content can be a template.
-## @skip configuration.global
-## @skip configuration.scrape_configs
-## ref: <https://github.com/prometheus-community/helm-charts/blob/main/charts/prometheus/values.yaml>
-##
-configuration:
-  global:
-    scrape_interval: 1m
-    scrape_timeout: 10s
-    evaluation_interval: 1m
-    external_labels:
-      monitor: "{{ template \"common.names.fullname\" . }}"
-  scrape_configs:
-    - job_name: prometheus
-      # Override the global default and scrape targets from this job every 5 seconds.
-      static_configs:
-        - targets: [localhost:9090]
-
-## @param replicaCount Number of Prometheus replicas to deploy
-##
-replicaCount: 1
-## @param containerPorts.http Prometheus HTTP container port
-## @param containerPorts.https Prometheus HTTPS container port
-##
-containerPorts:
-  http: 9090
-  https: 443
-## Configure extra options for Prometheus containers' liveness and readiness probes
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
-## @param livenessProbe.enabled Enable livenessProbe on Prometheus containers
-## @param livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
-## @param livenessProbe.periodSeconds Period seconds for livenessProbe
-## @param livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
-## @param livenessProbe.failureThreshold Failure threshold for livenessProbe
-## @param livenessProbe.successThreshold Success threshold for livenessProbe
-##
-livenessProbe:
-  enabled: true
-  initialDelaySeconds: 5
-  periodSeconds: 20
-  timeoutSeconds: 3
-  failureThreshold: 3
-  successThreshold: 1
-## @param readinessProbe.enabled Enable readinessProbe on Prometheus containers
-## @param readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
-## @param readinessProbe.periodSeconds Period seconds for readinessProbe
-## @param readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
-## @param readinessProbe.failureThreshold Failure threshold for readinessProbe
-## @param readinessProbe.successThreshold Success threshold for readinessProbe
-##
-readinessProbe:
-  enabled: true
-  initialDelaySeconds: 5
-  periodSeconds: 10
-  timeoutSeconds: 2
-  failureThreshold: 5
-  successThreshold: 1
-## @param startupProbe.enabled Enable startupProbe on Prometheus containers
-## @param startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
-## @param startupProbe.periodSeconds Period seconds for startupProbe
-## @param startupProbe.timeoutSeconds Timeout seconds for startupProbe
-## @param startupProbe.failureThreshold Failure threshold for startupProbe
-## @param startupProbe.successThreshold Success threshold for startupProbe
-##
-startupProbe:
-  enabled: false
-  initialDelaySeconds: 2
-  periodSeconds: 5
-  timeoutSeconds: 2
-  failureThreshold: 10
-  successThreshold: 1
-## @param customLivenessProbe Custom livenessProbe that overrides the default one
-##
-customLivenessProbe: {}
-## @param customReadinessProbe Custom readinessProbe that overrides the default one
-##
-customReadinessProbe: {}
-## @param customStartupProbe Custom startupProbe that overrides the default one
-##
-customStartupProbe: {}
-## Prometheus resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources/
-## @param resources.limits The resources limits for the Prometheus containers
-## @param resources.requests The requested resources for the Prometheus containers
-##
-resources:
-  limits: {}
-  requests: {}
-## Configure Pods Security Context
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-## @param podSecurityContext.enabled Enabled Prometheus pods' Security Context
-## @param podSecurityContext.fsGroup Set Prometheus pod's Security Context fsGroup
-##
-podSecurityContext:
-  enabled: true
-  fsGroup: 1001
-## Configure Container Security Context
-## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-## @param containerSecurityContext.enabled Enabled Prometheus containers' Security Context
-## @param containerSecurityContext.runAsUser Set Prometheus containers' Security Context runAsUser
-## @param containerSecurityContext.runAsNonRoot Set Prometheus containers' Security Context runAsNonRoot
-## @param containerSecurityContext.readOnlyRootFilesystem Set Prometheus containers' Security Context runAsNonRoot
-##
-containerSecurityContext:
-  enabled: true
-  runAsUser: 1001
-  runAsNonRoot: true
-  readOnlyRootFilesystem: false
-
-## @param existingConfigmap The name of an existing ConfigMap with your custom configuration for Prometheus
-##
-existingConfigmap: ""
-## @param existingConfigmapKey The name of the key with the Prometheus config file
-##
-existingConfigmapKey: ""
-## @param command Override default container command (useful when using custom images)
-##
-command: []
-## @param args Override default container args (useful when using custom images)
-##
-args: []
-## @param hostAliases Prometheus pods host aliases
-## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
-##
-hostAliases: []
-## @param podLabels Extra labels for Prometheus pods
-## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
-##
-podLabels: {}
-## @param podAnnotations Annotations for Prometheus pods
-## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
-##
-podAnnotations: {}
-## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
-## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-##
-podAffinityPreset: ""
-## @param podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
-## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-##
-podAntiAffinityPreset: soft
-## Pod Disruption Budget configuration
-## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
-## @param pdb.create Enable/disable a Pod Disruption Budget creation
-## @param pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
-## @param pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
-##
-pdb:
-  create: false
-  minAvailable: 1
-  maxUnavailable: ""
-## Autoscaling configuration
-## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
-## @param autoscaling.enabled Enable autoscaling for Prometheus
-## @param autoscaling.minReplicas Minimum number of Prometheus replicas
-## @param autoscaling.maxReplicas Maximum number of Prometheus replicas
-## @param autoscaling.targetCPU Target CPU utilization percentage
-## @param autoscaling.targetMemory Target Memory utilization percentage
-##
-autoscaling:
-  enabled: false
-  minReplicas: ""
-  maxReplicas: ""
-  targetCPU: ""
-  targetMemory: ""
-## Node affinity preset
-## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-##
-nodeAffinityPreset:
-  ## @param nodeAffinityPreset.type Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+  extraEnvVars: []
+  ## @param server.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Prometheus nodes
   ##
-  type: ""
-  ## @param nodeAffinityPreset.key Node label key to match. Ignored if `affinity` is set
+  extraEnvVarsCM: ""
+  ## @param server.extraEnvVarsSecret Name of existing Secret containing extra env vars for Prometheus nodes
   ##
-  key: ""
-  ## @param nodeAffinityPreset.values Node label values to match. Ignored if `affinity` is set
-  ## E.g.
-  ## values:
-  ##   - e2e-az1
-  ##   - e2e-az2
+  extraEnvVarsSecret: ""
+  ## @param server.extraVolumes Optionally specify extra list of additional volumes for the Prometheus pod(s)
   ##
-  values: []
-## @param affinity Affinity for Prometheus pods assignment
-## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-## NOTE: `podAffinityPreset`, `podAntiAffinityPreset`, and `nodeAffinityPreset` will be ignored when it's set
-##
-affinity: {}
-## @param nodeSelector Node labels for Prometheus pods assignment
-## ref: https://kubernetes.io/docs/user-guide/node-selection/
-##
-nodeSelector: {}
-## @param tolerations Tolerations for Prometheus pods assignment
-## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-##
-tolerations: []
-## @param updateStrategy.type Prometheus statefulset strategy type
-## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
-##
-updateStrategy:
-  ## StrategyType
-  ## Can be set to RollingUpdate or OnDelete
+  extraVolumes: []
+  ## @param server.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Prometheus container(s)
   ##
-  type: RollingUpdate
+  extraVolumeMounts: []
+  ## @param server.sidecars Add additional sidecar containers to the Prometheus pod(s)
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param server.initContainers Add additional init containers to the Prometheus pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
 
-## ONLY FOR STATEFULSETS
-## @param podManagementPolicy Statefulset Pod management policy, it needs to be Parallel to be able to complete the cluster join
-## Ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
-##
-podManagementPolicy: OrderedReady
-
-## @param priorityClassName Prometheus pods' priorityClassName
-##
-priorityClassName: ""
-## @param topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
-## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
-##
-topologySpreadConstraints: []
-## @param schedulerName Name of the k8s scheduler (other than default) for Prometheus pods
-## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
-##
-schedulerName: ""
-## @param terminationGracePeriodSeconds Seconds Redmine pod needs to terminate gracefully
-## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
-##
-terminationGracePeriodSeconds: ""
-## @param lifecycleHooks for the Prometheus container(s) to automate configuration before or after startup
-##
-lifecycleHooks: {}
-## @param extraEnvVars Array with extra environment variables to add to Prometheus nodes
-## e.g:
-## extraEnvVars:
-##   - name: FOO
-##     value: "bar"
-##
-extraEnvVars: []
-## @param extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Prometheus nodes
-##
-extraEnvVarsCM: ""
-## @param extraEnvVarsSecret Name of existing Secret containing extra env vars for Prometheus nodes
-##
-extraEnvVarsSecret: ""
-## @param extraVolumes Optionally specify extra list of additional volumes for the Prometheus pod(s)
-##
-extraVolumes: []
-## @param extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Prometheus container(s)
-##
-extraVolumeMounts: []
-## @param sidecars Add additional sidecar containers to the Prometheus pod(s)
-## e.g:
-## sidecars:
-##   - name: your-image-name
-##     image: your-image
-##     imagePullPolicy: Always
-##     ports:
-##       - name: portname
-##         containerPort: 1234
-##
-sidecars: []
-## @param initContainers Add additional init containers to the Prometheus pod(s)
-## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
-## e.g:
-## initContainers:
-##  - name: your-image-name
-##    image: your-image
-##    imagePullPolicy: Always
-##    command: ['sh', '-c', 'echo "hello world"']
-##
-initContainers: []
+  ## Thanos sidecar container configuration
+  ##
+  thanos:
+    ## @param server.thanos.create Create a Thanos sidecar container
+    ##
+    create: false
+    ## Bitnami Thanos image
+    ## ref: https://hub.docker.com/r/bitnami/thanos/tags/
+    ## @param server.thanos.image.registry Thanos image registry
+    ## @param server.thanos.image.repository Thanos image name
+    ## @param server.thanos.image.tag Thanos image tag
+    ## @param server.thanos.image.digest Thanos image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+    ## @param server.thanos.image.pullPolicy Thanos image pull policy
+    ## @param server.thanos.image.pullSecrets Specify docker-registry secret names as an array
+    ##
+    image:
+      registry: docker.io
+      repository: bitnami/thanos
+      tag: 0.30.2-scratch-r4
+      digest: ""
+      ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+      ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+      ##
+      pullPolicy: IfNotPresent
+      ## Optionally specify an array of imagePullSecrets.
+      ## Secrets must be manually created in the namespace.
+      ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+      ## Example:
+      ## pullSecrets:
+      ##   - myRegistryKeySecretName
+      ##
+      pullSecrets: []
+    ## Thanos Sidecar container's securityContext
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+    ## @param server.thanos.containerSecurityContext.enabled Enable container security context
+    ## @param server.thanos.containerSecurityContext.readOnlyRootFilesystem mount / (root) as a readonly filesystem
+    ## @param server.thanos.containerSecurityContext.allowPrivilegeEscalation Switch privilegeEscalation possibility on or off
+    ## @param server.thanos.containerSecurityContext.runAsNonRoot Force the container to run as a non root user
+    ## @param server.thanos.containerSecurityContext.capabilities.drop [array] Linux Kernel capabilities which should be dropped
+    ##
+    containerSecurityContext:
+      enabled: true
+      readOnlyRootFilesystem: false
+      allowPrivilegeEscalation: false
+      runAsNonRoot: true
+      capabilities:
+        drop:
+          - ALL
+    ## @param server.thanos.prometheusUrl Override default prometheus url `http://localhost:9090`
+    ##
+    prometheusUrl: ""
+    ## @param server.thanos.extraArgs Additional arguments passed to the thanos sidecar container
+    ## extraArgs:
+    ## - --log.level=debug
+    ## - --tsdb.path=/data/
+    ##
+    extraArgs: []
+    ## @param server.thanos.objectStorageConfig Support mounting a Secret for the objectStorageConfig of the sideCar container.
+    ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/thanos.md
+    ## objectStorageConfig:
+    ##    secretName: thanos-objstore-config
+    ##    secretKey: thanos.yaml
+    ##
+    objectStorageConfig: {}
+    ## ref: https://github.com/thanos-io/thanos/blob/main/docs/components/sidecar.md
+    ## @param server.thanos.extraVolumeMounts Additional volumeMounts from `prometheus.volumes` for thanos sidecar container
+    ## extraVolumeMounts:
+    ## - name: my-secret-volume
+    ##   mountPath: /etc/thanos/secrets/my-secret
+    ##
+    extraVolumeMounts: []
+    ## Thanos sidecar container resource requests and limits.
+    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+    ## We usually recommend not to specify default resources and to leave this as a conscious
+    ## choice for the user. This also increases chances charts run on environments with little
+    ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+    ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+    ## @param server.thanos.resources.limits The resources limits for the Thanos sidecar container
+    ## @param server.thanos.resources.requests The resources requests for the Thanos sidecar container
+    ##
+    resources:
+      ## Example:
+      ## limits:
+      ##    cpu: 100m
+      ##    memory: 128Mi
+      ##
+      limits: {}
+      ## Examples:
+      ## requests:
+      ##    cpu: 100m
+      ##    memory: 128Mi
+      ##
+      requests: {}
+    ## Configure extra options for liveness probe
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+    ## @param server.thanos.livenessProbe.enabled Turn on and off liveness probe
+    ## @param server.thanos.livenessProbe.initialDelaySeconds Delay before liveness probe is initiated
+    ## @param server.thanos.livenessProbe.periodSeconds How often to perform the probe
+    ## @param server.thanos.livenessProbe.timeoutSeconds When the probe times out
+    ## @param server.thanos.livenessProbe.failureThreshold Minimum consecutive failures for the probe
+    ## @param server.thanos.livenessProbe.successThreshold Minimum consecutive successes for the probe
+    ##
+    livenessProbe:
+      enabled: true
+      initialDelaySeconds: 0
+      periodSeconds: 5
+      timeoutSeconds: 3
+      failureThreshold: 120
+      successThreshold: 1
+    ## Configure extra options for readiness probe
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+    ## @param server.thanos.readinessProbe.enabled Turn on and off readiness probe
+    ## @param server.thanos.readinessProbe.initialDelaySeconds Delay before readiness probe is initiated
+    ## @param server.thanos.readinessProbe.periodSeconds How often to perform the probe
+    ## @param server.thanos.readinessProbe.timeoutSeconds When the probe times out
+    ## @param server.thanos.readinessProbe.failureThreshold Minimum consecutive failures for the probe
+    ## @param server.thanos.readinessProbe.successThreshold Minimum consecutive successes for the probe
+    ##
+    readinessProbe:
+      enabled: true
+      initialDelaySeconds: 0
+      periodSeconds: 5
+      timeoutSeconds: 3
+      failureThreshold: 120
+      successThreshold: 1
+    ## @param server.thanos.customLivenessProbe Custom livenessProbe that overrides the default one
+    ##
+    customLivenessProbe: {}
+    ## @param server.thanos.customReadinessProbe Custom readinessProbe that overrides the default one
+    ##
+    customReadinessProbe: {}
+    ## Thanos Sidecar Service
+    ##
+    service:
+      ## @param server.thanos.service.type Kubernetes service type
+      ##
+      type: ClusterIP
+      ## @param server.thanos.service.ports.grpc Thanos service port
+      ##
+      ports:
+        grpc: 10901
+      ## @param server.thanos.service.clusterIP Specific cluster IP when service type is cluster IP. Use `None` to create headless service by default.
+      ## Use a "headless" service by default so it returns every pod's IP instead of loadbalancing requests.
+      ##
+      clusterIP: None
+      ## @param server.thanos.service.nodePorts.grpc Specify the nodePort value for the LoadBalancer and NodePort service types.
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+      ## e.g:
+      ## nodePort: 30901
+      ##
+      nodePorts:
+        grpc: ""
+      ## @param server.thanos.service.loadBalancerIP `loadBalancerIP` if service type is `LoadBalancer`
+      ## Set the LoadBalancer service type to internal only
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+      ##
+      loadBalancerIP: ""
+      ## @param server.thanos.service.loadBalancerSourceRanges Address that are allowed when svc is `LoadBalancer`
+      ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+      ## e.g:
+      ## loadBalancerSourceRanges:
+      ## - 10.10.10.0/24
+      ##
+      loadBalancerSourceRanges: []
+      ## @param server.thanos.service.annotations Additional annotations for Prometheus service
+      ##
+      annotations: {}
+      ## @param server.thanos.service.extraPorts Additional ports to expose from the Thanos sidecar container
+      ## extraPorts:
+      ##   - name: http
+      ##     port: 10902
+      ##     targetPort: http
+      ##     protocol: TCP
+      ##
+      extraPorts: []
+      ## @param server.thanos.service.externalTrafficPolicy Prometheus service external traffic policy
+      ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+      ##
+      externalTrafficPolicy: Cluster
+      ## @param server.thanos.service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+      ## If "ClientIP", consecutive client requests will be directed to the same Pod
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+      ##
+      sessionAffinity: None
+      ## @param server.thanos.service.sessionAffinityConfig Additional settings for the sessionAffinity
+      ## sessionAffinityConfig:
+      ##   clientIP:
+      ##     timeoutSeconds: 300
+      ##
+      sessionAffinityConfig: {}
+    ## Configure the ingress resource that allows you to access the
+    ## Thanos Sidecar installation. Set up the URL
+    ## ref: https://kubernetes.io/docs/user-guide/ingress/
+    ##
+    ingress:
+      ## @param server.thanos.ingress.enabled Enable ingress controller resource
+      ##
+      enabled: false
+      ## @param server.thanos.ingress.pathType Ingress path type
+      ##
+      pathType: ImplementationSpecific
+      ## @param server.thanos.ingress.apiVersion Force Ingress API version (automatically detected if not set)
+      ##
+      apiVersion: ""
+      ## @param server.thanos.ingress.hostname Default host for the ingress record
+      ##
+      hostname: thanos.prometheus.local
+      ## @param server.thanos.ingress.path Default path for the ingress record
+      ## NOTE: You may need to set this to '/*' in order to use this with ALB ingress controllers
+      ##
+      path: /
+      ## @param server.thanos.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
+      ## For a full list of possible ingress annotations, please see
+      ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
+      ## Use this parameter to set the required annotations for cert-manager, see
+      ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
+      ##
+      ## Examples:
+      ## kubernetes.io/ingress.class: nginx
+      ## cert-manager.io/cluster-issuer: cluster-issuer-name
+      ##
+      annotations: {}
+      ## @param server.thanos.ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+      ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+      ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+      ##
+      ingressClassName: ""
+      ## @param server.thanos.ingress.tls Enable TLS configuration for the host defined at `ingress.hostname` parameter
+      ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.ingress.hostname }}`
+      ## You can:
+      ##   - Use the `ingress.secrets` parameter to create this TLS secret
+      ##   - Relay on cert-manager to create it by setting `ingress.certManager=true`
+      ##   - Relay on Helm to create self-signed certificates by setting `ingress.selfSigned=true`
+      ##
+      tls: false
+      ## @param server.thanos.ingress.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
+      ##
+      selfSigned: false
+      ## @param server.thanos.ingress.extraHosts An array with additional hostname(s) to be covered with the ingress record
+      ## e.g:
+      ## extraHosts:
+      ##   - name: thanos.prometheus.local
+      ##     path: /
+      ##
+      extraHosts: []
+      ## @param server.thanos.ingress.extraPaths An array with additional arbitrary paths that may need to be added to the ingress under the main host
+      ## e.g:
+      ## extraPaths:
+      ## - path: /*
+      ##   backend:
+      ##     serviceName: ssl-redirect
+      ##     servicePort: use-annotation
+      ##
+      extraPaths: []
+      ## @param server.thanos.ingress.extraTls TLS configuration for additional hostname(s) to be covered with this ingress record
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+      ## e.g:
+      ## extraTls:
+      ## - hosts:
+      ##     - thanos.prometheus.local
+      ##   secretName: thanos.prometheus.local-tls
+      ##
+      extraTls: []
+      ## @param server.thanos.ingress.secrets Custom TLS certificates as secrets
+      ## NOTE: 'key' and 'certificate' are expected in PEM format
+      ## NOTE: 'name' should line up with a 'secretName' set further up
+      ## If it is not set and you're using cert-manager, this is unneeded, as it will create a secret for you with valid certificates
+      ## If it is not set and you're NOT using cert-manager either, self-signed certificates will be created valid for 365 days
+      ## It is also possible to create and manage the certificates outside of this helm chart
+      ## Please see README.md for more information
+      ## e.g:
+      ## secrets:
+      ##   - name: thanos.prometheus.local-tls
+      ##     key: |-
+      ##       -----BEGIN RSA PRIVATE KEY-----
+      ##       ...
+      ##       -----END RSA PRIVATE KEY-----
+      ##     certificate: |-
+      ##       -----BEGIN CERTIFICATE-----
+      ##       ...
+      ##       -----END CERTIFICATE-----
+      ##
+      secrets: []
+      ## @param server.thanos.ingress.extraRules The list of additional rules to be added to this ingress record. Evaluated as a template
+      ## Useful when looking for additional customization, such as using different backend
+      ##
+      extraRules: []
 
 ## @section Traffic Exposure Parameters
 ##
@@ -594,7 +877,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r%%IMAGE_REVISION%%
+    tag: 11-debian-11-r99
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

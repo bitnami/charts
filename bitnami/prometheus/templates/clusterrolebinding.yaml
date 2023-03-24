@@ -15,5 +15,5 @@ roleRef:
   name: {{ template "common.names.fullname" . }}
 subjects:
   - kind: ServiceAccount
-    name: {{ template "prometheus.serviceAccountName" . }}
+    name: {{ template "prometheus.server.serviceAccountName" . }}
     namespace: {{ include "common.names.namespace" . | quote }}

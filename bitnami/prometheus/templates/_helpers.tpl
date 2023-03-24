@@ -1,28 +1,35 @@
 {{/*
 Return the proper image name
 */}}
-{{- define "prometheus.image" -}}
-{{ include "common.images.image" (dict "imageRoot" .Values.image "global" .Values.global) }}
+{{- define "prometheus.server.image" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.server.image "global" .Values.global) }}
+{{- end -}}
+
+{{/*
+Return the proper image name
+*/}}
+{{- define "prometheus.server.thanosImage" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.server.thanos.image "global" .Values.global) }}
 {{- end -}}
 
 {{/*
 Return the proper image name (for the init container volume-permissions image)
 */}}
-{{- define "prometheus.volumePermissions.image" -}}
+{{- define "prometheus.server.volumePermissions.image" -}}
 {{- include "common.images.image" ( dict "imageRoot" .Values.volumePermissions.image "global" .Values.global ) -}}
 {{- end -}}
 
 {{/*
 Return the proper Docker Image Registry Secret Names
 */}}
-{{- define "prometheus.imagePullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.volumePermissions.image) "global" .Values.global) -}}
+{{- define "prometheus.server.imagePullSecrets" -}}
+{{- include "common.images.pullSecrets" (dict "images" (list .Values.server.image .Values.volumePermissions.image .Values.server.thanos.image) "global" .Values.global) -}}
 {{- end -}}
 
 {{/*
 Create the name of the service account to use
 */}}
-{{- define "prometheus.serviceAccountName" -}}
+{{- define "prometheus.server.serviceAccountName" -}}
 {{- if .Values.serviceAccount.create -}}
     {{ default (include "common.names.fullname" .) .Values.serviceAccount.name }}
 {{- else -}}
@@ -34,7 +41,7 @@ Create the name of the service account to use
 Return true if cert-manager required annotations for TLS signed certificates are set in the Ingress annotations
 Ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
 */}}
-{{- define "prometheus.ingress.certManagerRequest" -}}
+{{- define "prometheus.server.ingress.certManagerRequest" -}}
 {{ if or (hasKey . "cert-manager.io/cluster-issuer") (hasKey . "cert-manager.io/issuer") }}
     {{- true -}}
 {{- end -}}
@@ -43,7 +50,7 @@ Ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
 {{/*
 Compile all warnings into a single message.
 */}}
-{{- define "prometheus.validateValues" -}}
+{{- define "prometheus.server.validateValues" -}}
 {{- $messages := list -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
@@ -56,7 +63,7 @@ Compile all warnings into a single message.
 {{/*
 Get the Prometheus configuration configmap.
 */}}
-{{- define "prometheus.configmapName" -}}
+{{- define "prometheus.server.configmapName" -}}
 {{- if .Values.existingConfigmap -}}
     {{- include "common.tplvalues.render" (dict "value" .Values.existingConfigmap "context" .) -}}
 {{- else }}
@@ -67,10 +74,10 @@ Get the Prometheus configuration configmap.
 {{/*
 Get the Prometheus configuration configmap key.
 */}}
-{{- define "prometheus.configmapKey" -}}
+{{- define "prometheus.server.configmapKey" -}}
 {{- if .Values.existingConfigmapKey -}}
     {{- include "common.tplvalues.render" (dict "value" .Values.existingConfigmapKey "context" .) -}}
 {{- else }}
-    {{- printf "prometheus.yaml" -}}
+    {{- printf "prometheus.server.yaml" -}}
 {{- end -}}
 {{- end -}}

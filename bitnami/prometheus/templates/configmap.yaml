@@ -12,6 +12,6 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 data:
-  {{ include "prometheus.configmapKey" . }}:
+  {{ include "prometheus.server.configmapKey" . }}:
     {{- include "common.tplvalues.render" (dict "value" .Values.configuration "context" $) | toYaml | nindent 4 }}
 {{- end }}

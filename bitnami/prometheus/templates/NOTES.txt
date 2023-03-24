@@ -28,5 +28,7 @@ In order to replicate the container startup scripts execute this command:
 
 {{- end }}
 
-{{- include "common.warnings.rollingTag" .Values.image }}
-{{- include "prometheus.validateValues" . }}
+{{- include "common.warnings.rollingTag" .Values.server.image }}
+{{- include "common.warnings.rollingTag" .Values.server.thanos.image }}
+{{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
+{{- include "prometheus.server.validateValues" . }}
