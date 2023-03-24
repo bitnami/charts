@@ -98,7 +98,7 @@ spec:
                 mc admin user add {{ $minioAlias }} "${username}" "${password}";
 
                 if [ "${set_policies}" == "true" ]; then
-                  mc admin policy attach {{ $minioAlias }} "${policies_list}" user="${username}";
+                  mc admin policy attach {{ $minioAlias }} "${policies_list}" --user="${username}";
                 else
                   IFS=',' read -r -a POLICIES <<< "${policies_list}";
                   for policy in "${POLICIES[@]}"; do
@@ -137,7 +137,7 @@ spec:
               {{- range $user := .Values.provisioning.users }}
               mc admin user add {{ $minioAlias }} {{ $user.username }} {{ $user.password }};
               {{- if $user.setPolicies }}
-              mc admin policy attach {{ $minioAlias }} "{{ join "," $user.policies }}" user={{ $user.username }};
+              mc admin policy attach {{ $minioAlias }} "{{ join "," $user.policies }}" --user={{ $user.username }};
               {{- else }}
               {{- range $policy := $user.policies }}
               addPolicy user {{ $user.username }} {{ $policy }};
@@ -155,7 +155,7 @@ spec:
               {{- range $group := .Values.provisioning.groups }}
               mc admin group add {{ $minioAlias }} {{ $group.name }} {{ join " " $group.members }};
               {{- if $group.setPolicies }}
-              mc admin policy attach {{ $minioAlias }} "{{ join "," $group.policies }}" group={{ $group.name }};
+              mc admin policy attach {{ $minioAlias }} "{{ join "," $group.policies }}" --group={{ $group.name }};
               {{- else }}
               {{- range $policy := $group.policies }}
               addPolicy group {{ $group.name }} {{ $policy }};
