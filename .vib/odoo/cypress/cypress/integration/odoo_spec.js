@@ -8,8 +8,8 @@ it('allows installing/uninstalling an application and inviting new users', () =>
   cy.get('[title="Sales"]').within(() => {
     cy.get('button[name="button_immediate_install"]').click();
   });
-  cy.reload();
 
+  cy.visit('/');
   cy.get('[title="Home Menu"]').click();
   cy.contains('Settings').click();
   cy.fixture('users').then((user) => {
@@ -22,9 +22,9 @@ it('allows installing/uninstalling an application and inviting new users', () =>
 
   cy.get('[title="Home Menu"]').click();
   cy.contains('a', 'Apps').click();
-  cy.get('[role="searchbox"]').type('Discuss {enter}');
+  cy.get('[role="searchbox"]').type('Invoicing {enter}');
   cy.contains('1-1');
-  cy.contains('[role="article"]', 'Discuss').within(() => {
+  cy.contains('[role="article"]', 'Invoicing').within(() => {
     cy.get('button[class*="dropdown-toggle"]').click({ force: true });
   });
   cy.contains('Uninstall').click({ force: true });
@@ -32,5 +32,5 @@ it('allows installing/uninstalling an application and inviting new users', () =>
   cy.reload();
 
   cy.get('[title="Home Menu"]').click();
-  cy.contains('a', 'Discuss').should('not.exist');
+  cy.contains('a', 'Invoicing').should('not.exist');
 });
