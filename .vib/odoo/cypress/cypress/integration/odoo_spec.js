@@ -9,7 +9,13 @@ it('allows installing/uninstalling an application and inviting new users', () =>
     cy.get('button[name="button_immediate_install"]').click();
   });
   cy.reload();
-  cy.login();
+
+  // Perform a second login in case the user is logged out after installing the Sales app
+  cy.get('#login', {timeout: 0}).then($login => {
+    if ($login.is(':visible')) {
+      cy.login();
+    }
+  });
 
   cy.get('[title="Home Menu"]').click();
   cy.contains('Settings').click();
