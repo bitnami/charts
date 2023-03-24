@@ -8,8 +8,9 @@ it('allows installing/uninstalling an application and inviting new users', () =>
   cy.get('[title="Sales"]').within(() => {
     cy.get('button[name="button_immediate_install"]').click();
   });
+  cy.reload();
+  cy.login();
 
-  cy.visit('/');
   cy.get('[title="Home Menu"]').click();
   cy.contains('Settings').click();
   cy.fixture('users').then((user) => {
