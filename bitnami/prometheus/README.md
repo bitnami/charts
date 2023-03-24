@@ -258,17 +258,17 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Init Container Parameters
 
-| Name                                                   | Description                                                                                     | Value                              |
-| ------------------------------------------------------ | ----------------------------------------------------------------------------------------------- | ---------------------------------- |
-| `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                            |
-| `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                    | `docker.io`                        |
-| `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell`            |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `11-debian-11-r%%IMAGE_REVISION%%` |
-| `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                 | `IfNotPresent`                     |
-| `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                | `[]`                               |
-| `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                               |
-| `volumePermissions.resources.requests`                 | The requested resources for the init container                                                  | `{}`                               |
-| `volumePermissions.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                 | `0`                                |
+| Name                                                   | Description                                                                                     | Value                   |
+| ------------------------------------------------------ | ----------------------------------------------------------------------------------------------- | ----------------------- |
+| `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
+| `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                    | `docker.io`             |
+| `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `11-debian-11-r99`      |
+| `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
+| `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                | `[]`                    |
+| `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                    |
+| `volumePermissions.resources.requests`                 | The requested resources for the init container                                                  | `{}`                    |
+| `volumePermissions.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                 | `0`                     |
 
 ### Other Parameters
 
