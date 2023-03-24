@@ -84,7 +84,7 @@ spec:
                 local tmp=$(mc admin $1 info {{ $minioAlias }} $2 | sed -n -e 's/^Policy.*: \(.*\)$/\1/p');
                 IFS=',' read -r -a CURRENT_POLICIES <<< "$tmp";
                 if [[ ! "${CURRENT_POLICIES[*]}" =~ "$3" ]]; then
-                  mc admin policy attach {{ $minioAlias }} $3 $1=$2;
+                  mc admin policy attach {{ $minioAlias }} $3 --$1=$2;
                 fi;
               };
 
