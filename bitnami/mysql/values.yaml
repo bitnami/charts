@@ -1053,6 +1053,16 @@ metrics:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
+  ## MySQL metrics container security context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param metrics.containerSecurityContext.enabled MySQL metrics container securityContext
+  ## @param metrics.containerSecurityContext.runAsUser User ID for the MySQL metrics container
+  ## @param metrics.containerSecurityContext.runAsNonRoot Set MySQL metrics container's Security Context runAsNonRoot
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
   ## MySQL Prometheus exporter service parameters
   ## Mysqld Prometheus exporter liveness and readiness probes
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes

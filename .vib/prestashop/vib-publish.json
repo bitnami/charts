@@ -22,7 +22,6 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/prestashop"
         },
-        "runtime_parameters": "aG9zdEFsaWFzZXM6CiAgLSBpcDogIjEyNy4wLjAuMSIKICAgIGhvc3RuYW1lczoKICAgICAgLSAic3RhdHVzLmxvY2FsaG9zdCIKcHJlc3Rhc2hvcFNraXBJbnN0YWxsOiBmYWxzZQpwcmVzdGFzaG9wSG9zdDogdm13YXJlLXByZXN0YXNob3AubXkKcHJlc3Rhc2hvcFVzZXJuYW1lOiBiaXRuYW1pVGVzdApwcmVzdGFzaG9wRW1haWw6IGJpdG5hbWlUZXN0QGV4YW1wbGUuY29tCnByZXN0YXNob3BQYXNzd29yZDogQ29tcGxpY2F0ZWRQYXNzd29yZDEyMyE0CnByZXN0YXNob3BDb29raWVDaGVja0lQOiAibm8iCmNvbnRhaW5lclBvcnRzOgogIGh0dHA6IDgwODEKICBodHRwczogODQ0NApwb2RTZWN1cml0eUNvbnRleHQ6CiAgZW5hYmxlZDogdHJ1ZQogIGZzR3JvdXA6IDEwMDIKY29udGFpbmVyU2VjdXJpdHlDb250ZXh0OgogIGVuYWJsZWQ6IHRydWUKICBydW5Bc1VzZXI6IDEwMDIKc2VydmljZToKICB0eXBlOiBMb2FkQmFsYW5jZXIKICBwb3J0czoKICAgIGh0dHA6IDgwCm1hcmlhZGI6CiAgZW5hYmxlZDogdHJ1ZQogIGF1dGg6CiAgICBkYXRhYmFzZTogYml0bmFtaV90ZXN0X3ByZXN0YXNob3AKICAgIHVzZXJuYW1lOiBibl90ZXN0X3ByZXN0YXNob3AKICAgIHBhc3N3b3JkOiBiaXRuYW1pX3Rlc3RfcHJlc3Rhc2hvcA==",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -42,9 +41,10 @@
           "action_id": "goss",
           "params": {
             "resources": {
-              "path": "/.vib/prestashop/goss"
+              "path": "/.vib"
             },
-            "vars_file": "vars.yaml",
+            "tests_file": "prestashop/goss/goss.yaml",
+            "vars_file": "prestashop/runtime-parameters.yaml",
             "remote": {
               "pod": {
                 "workload": "deploy-prestashop"

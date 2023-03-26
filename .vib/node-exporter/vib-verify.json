@@ -22,7 +22,6 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/node-exporter"
         },
-        "runtime_parameters": "cmJhYzoKICBjcmVhdGU6IHRydWUKICBwc3BFbmFibGVkOiB0cnVlCnNlcnZpY2VBY2NvdW50OgogIGNyZWF0ZTogdHJ1ZQogIGF1dG9tb3VudFNlcnZpY2VBY2NvdW50VG9rZW46IHRydWUKY29udGFpbmVyUG9ydHM6CiAgbWV0cmljczogOTEwMQpwb2RTZWN1cml0eUNvbnRleHQ6CiAgZW5hYmxlZDogdHJ1ZQogIGZzR3JvdXA6IDEwMDIKY29udGFpbmVyU2VjdXJpdHlDb250ZXh0OgogIGVuYWJsZWQ6IHRydWUKICBydW5Bc1VzZXI6IDEwMDIKc2VydmljZToKICBwb3J0czogCiAgICBtZXRyaWNzOiA4MAogIHR5cGU6IExvYWRCYWxhbmNlcg==",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -42,14 +41,15 @@
           "action_id": "goss",
           "params": {
             "resources": {
-              "path": "/.vib/node-exporter/goss"
+              "path": "/.vib"
             },
+            "tests_file": "node-exporter/goss/goss.yaml",
+            "vars_file": "node-exporter/runtime-parameters.yaml",
             "remote": {
               "pod": {
                 "workload": "ds-node-exporter"
               }
-            },
-            "vars_file": "vars.yaml"
+            }
           }
         },
         {

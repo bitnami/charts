@@ -6,7 +6,7 @@ file:
 command:
   {{- $key := printf "key_%s" (randAlpha 5) }}
   {{- $value := printf "value_%s" (randAlpha 5) }}
-  {{- $server_connection := printf "(exec 3<>/dev/tcp/memcached/%s; cat >&3; cat <&3; exec 3<&-)" .Vars.service.ports.memcached }}
+  {{- $server_connection := printf "(exec 3<>/dev/tcp/memcached/%d; cat >&3; cat <&3; exec 3<&-)" .Vars.service.ports.memcached }}
   manage-key:
     exec: bash -c 'printf "set {{ $key }} 0 300 11\r\n{{ $value }}\r\nquit\n" | {{ $server_connection }} && printf "get {{ $key }}\r\nquit\n" | {{ $server_connection }}'
     exit-status: 0

@@ -22,7 +22,6 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/matomo"
         },
-        "runtime_parameters": "bWF0b21vVXNlcm5hbWU6IHVzZXIKbWF0b21vUGFzc3dvcmQ6IENvbXBsaWNhdGVkUGFzc3dvcmQxMjMhNAptYXRvbW9FbWFpbDogdXNlckBleGFtcGxlLmNvbQptYXRvbW9XZWJzaXRlSG9zdDogaHR0cHM6Ly9iaXRuYW1pLW1hdG9tby5teQpzZXJ2aWNlOgogIHR5cGU6IExvYWRCYWxhbmNlcgogIHBvcnRzOgogICAgaHR0cDogODAK",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -42,8 +41,9 @@
           "action_id": "goss",
           "params": {
             "resources": {
-              "path": "/.vib/matomo/goss"
+              "path": "/.vib"
             },
+            "tests_file": "matomo/goss/goss.yaml",
             "remote": {
               "pod": {
                 "workload": "deploy-matomo"

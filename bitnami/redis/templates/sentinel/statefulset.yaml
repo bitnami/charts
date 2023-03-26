@@ -10,8 +10,14 @@ metadata:
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
-  {{- if or .Values.commonAnnotations }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- if or .Values.commonAnnotations .Values.sentinel.annotations }}
+  annotations:
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.sentinel.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.sentinel.annotations "context" $ ) | nindent 4 }}
+    {{- end }}
   {{- end }}
 spec:
   replicas: {{ .Values.replica.replicaCount }}

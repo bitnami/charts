@@ -22,7 +22,6 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/clickhouse"
         },
-        "runtime_parameters": "YXV0aDoKICB1c2VybmFtZTogdGVzdF91c2VyCiAgcGFzc3dvcmQ6IGJpdG5hbWkxMjM0CnNlcnZpY2U6CiAgdHlwZTogTG9hZEJhbGFuY2VyCiAgcG9ydHM6CiAgICBodHRwOiA4MAogICAgdGNwOiA5MDAxCiAgICB0Y3BTZWN1cmU6IDk0NDEKICAgIG15c3FsOiA5MDA1CiAgICBwb3N0Z3Jlc3FsOiA5MDA2CiAgICBpbnRlcnNlcnZlcjogOTAxMAogICAgbWV0cmljczogODAwMgpjb250YWluZXJQb3J0czoKICBodHRwOiA4MTI0CiAgdGNwOiA5MDAxCiAgdGNwU2VjdXJlOiA5NDQxCiAgbXlzcWw6IDkwMDUKICBwb3N0Z3Jlc3FsOiA5MDA2CiAgaW50ZXJzZXJ2ZXI6IDkwMTAKICBtZXRyaWNzOiA4MDAyCnNlcnZpY2VBY2NvdW50OgogIGNyZWF0ZTogdHJ1ZQogIGF1dG9tb3VudFNlcnZpY2VBY2NvdW50VG9rZW46IHRydWUKc2hhcmRzOiAyCnJlcGxpY2FDb3VudDogMgpwb2RTZWN1cml0eUNvbnRleHQ6CiAgZW5hYmxlZDogdHJ1ZQogIGZzR3JvdXA6IDEwMDIKY29udGFpbmVyU2VjdXJpdHlDb250ZXh0OgogIGVuYWJsZWQ6IHRydWUKICBydW5Bc1VzZXI6IDEwMDIK",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -42,9 +41,10 @@
           "action_id": "goss",
           "params": {
             "resources": {
-              "path": "/.vib/clickhouse/goss"
+              "path": "/.vib"
             },
-            "vars_file": "vars.yaml",
+            "tests_file": "clickhouse/goss/goss.yaml",
+            "vars_file": "clickhouse/runtime-parameters.yaml",
             "remote": {
               "pod": {
                 "workload": "sts-clickhouse-shard0"

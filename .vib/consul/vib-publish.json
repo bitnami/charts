@@ -22,7 +22,6 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/consul"
         },
-        "runtime_parameters": "Y29udGFpbmVyUG9ydHM6CiAgaHR0cDogODUwMApzZXJ2aWNlOgogIHBvcnRzOgogICAgaHR0cDogODAKICB0eXBlOiBMb2FkQmFsYW5jZXIKZGF0YWNlbnRlck5hbWU6IGRhdGFjZW50ZXIxCnJlcGxpY2FDb3VudDogMwo=",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -56,14 +55,15 @@
           "action_id": "goss",
           "params": {
             "resources": {
-              "path": "/.vib/consul/goss"
+              "path": "/.vib"
             },
+            "tests_file": "consul/goss/goss.yaml",
+            "vars_file": "consul/runtime-parameters.yaml",
             "remote": {
               "pod": {
                 "workload": "sts-consul"
               }
-            },
-            "vars_file": "vars.yaml"
+            }
           }
         }
       ]

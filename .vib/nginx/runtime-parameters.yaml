@@ -1,0 +1,14 @@
+containerPorts:
+  http: 8081
+  https: 8444
+podSecurityContext:
+  enabled: true
+  fsGroup: 1002
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1002
+service:
+  type: LoadBalancer
+  ports:
+    http: 80
+    https: 444

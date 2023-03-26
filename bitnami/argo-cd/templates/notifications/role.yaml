@@ -1,0 +1,47 @@
+{{- if and .Values.notifications.enabled .Values.rbac.create }}
+kind: Role
+apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
+metadata:
+  name: {{ include "argocd.notifications" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+rules:
+  - apiGroups:
+    - argoproj.io
+    resources:
+    - applications
+    - appprojects
+    verbs:
+    - get
+    - list
+    - watch
+    - update
+    - patch
+  - apiGroups:
+    - ""
+    resources:
+    - configmaps
+    - secrets
+    verbs:
+    - list
+    - watch
+  - apiGroups:
+    - ""
+    resourceNames:
+    - argocd-notifications-cm
+    resources:
+    - configmaps
+    verbs:
+    - get
+  - apiGroups:
+    - ""
+    resourceNames:
+    - argocd-notifications-secret
+    resources:
+    - secrets
+    verbs:
+    - get
+{{- end }}

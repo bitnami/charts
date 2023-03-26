@@ -1,0 +1,14 @@
+podSecurityContext:
+  enabled: true
+  fsGroup: 1002
+  runAsUser: 1002
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1002
+cloneFilesFromGit:
+  enabled: true
+  repository: https://github.com/pytorch/tutorials.git
+  revision: main
+persistence:
+  enabled: true
+  mountPath: /bitnami/pytorch

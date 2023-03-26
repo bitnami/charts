@@ -249,6 +249,9 @@ spec:
         - name: metrics
           image: {{ include "mysql.metrics.image" . }}
           imagePullPolicy: {{ .Values.metrics.image.pullPolicy | quote }}
+          {{- if .Values.metrics.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.metrics.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
           env:
             {{- if .Values.auth.usePasswordFiles }}
             - name: MYSQL_ROOT_PASSWORD_FILE

@@ -1,4 +1,4 @@
-{{- if and (include "mastodon.web.domain" .) (include "mastodon.s3.aliasHost" .) }}
+{{- if and (include "mastodon.web.domain" .) (or .Values.enableS3 .Values.persistence.enabled) }}
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:

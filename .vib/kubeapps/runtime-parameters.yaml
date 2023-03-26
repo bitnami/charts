@@ -1,0 +1,98 @@
+packaging:
+  helm:
+    enabled: true
+frontend:
+  service:
+    type: LoadBalancer
+    ports:
+      http: 80
+dashboard:
+  enabled: true
+  service:
+    ports:
+      http: 8081
+  extraVolumes:
+    |-
+    - name: token
+      secret:
+        secretName: {{ include "common.names.fullname.namespace" . }}-vib-token
+  extraVolumeMounts:
+    - name: token
+      mountPath: /app/static/token/token.txt
+      subPath: token
+apprepository:
+  initialRepos:
+    - name: bitnami
+      url: https://charts.bitnami.com/bitnami
+  watchAllNamespaces: false
+authProxy:
+  enabled: false
+pinnipedProxy:
+  enabled: false
+clusters:
+  - name: default
+    domain: cluster.local
+rbac:
+  create: true
+kubeappsapis:
+  pluginConfig:
+    core:
+      packages:
+        v1alpha1:
+          timeoutSeconds: 250
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1002
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1002
+  service:
+    ports:
+      http: 8081
+  serviceAccount:
+    create: true
+    automountServiceAccountToken: true
+postgresql:
+  enabled: true
+extraDeploy:
+  - |-
+    apiVersion: v1
+    kind: ServiceAccount
+    metadata:
+      name: {{ include "common.names.fullname.namespace" . }}-vib
+      namespace: {{ .Release.Namespace }}
+  - |-
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: ClusterRoleBinding
+    metadata:
+      name: {{ include "common.names.fullname.namespace" . }}-vib-view
+    roleRef:
+      apiGroup: rbac.authorization.k8s.io
+      kind: ClusterRole
+      name: view
+    subjects:
+    - kind: ServiceAccount
+      name: {{ include "common.names.fullname.namespace" . }}-vib
+      namespace: {{ .Release.Namespace }}
+  - |-
+    apiVersion: rbac.authorization.k8s.io/v1
+    kind: ClusterRoleBinding
+    metadata:
+      name: {{ include "common.names.fullname.namespace" . }}-vib-edit
+    roleRef:
+      apiGroup: rbac.authorization.k8s.io
+      kind: ClusterRole
+      name: edit
+    subjects:
+    - kind: ServiceAccount
+      name: {{ include "common.names.fullname.namespace" . }}-vib
+      namespace: {{ .Release.Namespace }}
+  - |-
+    apiVersion: v1
+    kind: Secret
+    type: kubernetes.io/service-account-token
+    metadata:
+      name: {{ include "common.names.fullname.namespace" . }}-vib-token
+      namespace: {{ .Release.Namespace }}
+      annotations:
+        kubernetes.io/service-account.name: {{ include "common.names.fullname.namespace" . }}-vib
