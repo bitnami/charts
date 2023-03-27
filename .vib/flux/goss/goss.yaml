@@ -27,17 +27,17 @@ file:
   {{ .Vars.sourceController.persistence.mountPath }}:
     exists: true
     filetype: directory
-    mode: "0777"
+    mode: "2775"
     owner: root
   # Verify the two cloned git repositories
   {{ .Vars.sourceController.persistence.mountPath }}/gitrepository/{{ .Env.RUNTIME_NAMESPACE }}/vib-bitnami-charts:
     exists: true
     filetype: directory
-    mode: "0700"
+    mode: "2700"
   {{ .Vars.sourceController.persistence.mountPath }}/gitrepository/{{ .Env.RUNTIME_NAMESPACE }}/vib-podinfo:
     exists: true
     filetype: directory
-    mode: "0700"
+    mode: "2700"
 http:
   # Source Controller
   http://127.0.0.1:{{ .Vars.sourceController.containerPorts.http }}:
