@@ -401,22 +401,26 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Source Controller service parameters
 
-| Name                                                | Description                                                                                  | Value       |
-| --------------------------------------------------- | -------------------------------------------------------------------------------------------- | ----------- |
-| `sourceController.service.type`                     | Source Controller service type                                                               | `ClusterIP` |
-| `sourceController.service.ports.http`               | Source Controller service metrics port                                                       | `80`        |
-| `sourceController.service.nodePorts.http`           | Node port for HTTP                                                                           | `""`        |
-| `sourceController.service.clusterIP`                | Source Controller service Cluster IP                                                         | `""`        |
-| `sourceController.service.loadBalancerIP`           | Source Controller service Load Balancer IP                                                   | `""`        |
-| `sourceController.service.loadBalancerSourceRanges` | Source Controller service Load Balancer sources                                              | `[]`        |
-| `sourceController.service.externalTrafficPolicy`    | Source Controller service external traffic policy                                            | `Cluster`   |
-| `sourceController.service.annotations`              | Additional custom annotations for Source Controller service                                  | `{}`        |
-| `sourceController.service.extraPorts`               | Extra ports to expose in Source Controller service (normally used with the `sidecars` value) | `[]`        |
-| `sourceController.service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin                             | `None`      |
-| `sourceController.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                  | `{}`        |
-| `sourceController.networkPolicy.enabled`            | Enable the default NetworkPolicy policy                                                      | `false`     |
-| `sourceController.networkPolicy.allowExternal`      | Don't require client label for connections                                                   | `true`      |
-| `sourceController.networkPolicy.extraFromClauses`   | Allows to add extra 'from' clauses to the NetworkPolicy                                      | `[]`        |
+| Name                                                     | Description                                                                                  | Value       |
+| -------------------------------------------------------- | -------------------------------------------------------------------------------------------- | ----------- |
+| `sourceController.service.type`                          | Source Controller service type                                                               | `ClusterIP` |
+| `sourceController.service.ports.http`                    | Source Controller service metrics port                                                       | `80`        |
+| `sourceController.service.nodePorts.http`                | Node port for HTTP                                                                           | `""`        |
+| `sourceController.service.clusterIP`                     | Source Controller service Cluster IP                                                         | `""`        |
+| `sourceController.service.loadBalancerIP`                | Source Controller service Load Balancer IP                                                   | `""`        |
+| `sourceController.service.loadBalancerSourceRanges`      | Source Controller service Load Balancer sources                                              | `[]`        |
+| `sourceController.service.externalTrafficPolicy`         | Source Controller service external traffic policy                                            | `Cluster`   |
+| `sourceController.service.annotations`                   | Additional custom annotations for Source Controller service                                  | `{}`        |
+| `sourceController.service.extraPorts`                    | Extra ports to expose in Source Controller service (normally used with the `sidecars` value) | `[]`        |
+| `sourceController.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin                             | `None`      |
+| `sourceController.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                  | `{}`        |
+| `sourceController.networkPolicy.enabled`                 | Enable the default NetworkPolicy policy                                                      | `false`     |
+| `sourceController.networkPolicy.allowExternal`           | Don't require client label for connections                                                   | `true`      |
+| `sourceController.networkPolicy.extraFromClauses`        | Allows to add extra 'from' clauses to the NetworkPolicy                                      | `[]`        |
+| `sourceController.networkPolicy.extraIngress`            | Add extra ingress rules to the NetworkPolicy                                                 | `[]`        |
+| `sourceController.networkPolicy.extraEgress`             | Add extra ingress rules to the NetworkPolicy                                                 | `[]`        |
+| `sourceController.networkPolicy.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces                                       | `{}`        |
+| `sourceController.networkPolicy.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces                                   | `{}`        |
 
 ### Source Conttroller Persistence Parameters
 

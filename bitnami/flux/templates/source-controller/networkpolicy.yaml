@@ -17,17 +17,41 @@ spec:
   podSelector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: source-controller
+  {{- if .Values.sourceController.networkPolicy.extraEgress }}
+  egress: {{- include "common.tplvalues.render" ( dict "value" .Values.sourceController.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
+  {{- end }}
   ingress:
     # Allow inbound connections
     - ports:
         - port: {{ .Values.sourceController.containerPorts.http }}
-        - port: {{ .Values.sourceController.containerPorts.metrics }}
       {{- if not .Values.sourceController.networkPolicy.allowExternal }}
       from:
         - podSelector:
             matchLabels: {{- include "common.labels.matchLabels" . | nindent 14 }}
         {{- if .Values.sourceController.networkPolicy.extraFromClauses }}
-        {{- toYaml .Values.sourceController.networkPolicy.extraFromClauses | nindent 8 }}
+        {{- include "commot.tplvalues.render" ( dict "value" .Values.sourceController.networkPolicy.extraFromClauses "context" $ )| nindent 8 }}
+        {{- end }}
+        {{- if .Values.sourceController.networkPolicy.ingressNSMatchLabels }}
+        - namespaceSelector:
+            matchLabels:
+              {{- range $key, $value := .Values.sourceController.networkPolicy.ingressNSMatchLabels }}
+              {{ $key | quote }}: {{ $value | quote }}
+              {{- end }}
+          {{- if .Values.sourceController.networkPolicy.ingressNSPodMatchLabels }}
+          podSelector:
+            matchLabels:
+              {{- range $key, $value := .Values.sourceController.networkPolicy.ingressNSPodMatchLabels }}
+              {{ $key | quote }}: {{ $value | quote }}
+              {{- end }}
+          {{- end }}
         {{- end }}
       {{- end }}
+    {{- if .Values.sourceController.metrics.enabled }}
+    # Allow prometheus scrapes for metrics
+    - ports:
+        - port: {{ .Values.sourceController.containerPorts.metrics }}
+    {{- end }}
+    {{- if .Values.sourceController.networkPolicy.extraIngress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.sourceController.networkPolicy.extraIngress "context" $ ) | nindent 4 }}
+    {{- end }}
 {{- end }}

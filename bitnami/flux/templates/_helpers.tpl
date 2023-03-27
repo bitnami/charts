@@ -2,7 +2,7 @@
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "flux.imagePullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.kustomizeController.image) "global" .Values.global) -}}
+{{- include "common.images.pullSecrets" (dict "images" (list .Values.helmController.image .Values.imageAutomationController.image .Values.imageReflectorController.image .Values.kustomizeController.image .Values.notificationController.image .Values.sourceController.image .Values.volumePermissions.image ) "global" .Values.global) -}}
 {{- end -}}
 
 {{/*
@@ -225,7 +225,7 @@ Validate values for flux.
 Function to validate the controller deployment
 */}}
 {{- define "flux.validateValues.controllers" -}}
-{{- if not (or .Values.kustomizeController.enabled .Values.helmController.enabled .Values.sourceController.enabled .Values.notificationController.enabled .Values.imageReflectionController.enabled .Values.imageAutomationController.enabled) -}}
+{{- if not (or .Values.kustomizeController.enabled .Values.helmController.enabled .Values.sourceController.enabled .Values.notificationController.enabled .Values.imageReflectorController.enabled .Values.imageAutomationController.enabled) -}}
 flux: Missing controllers. At least one controller should be enabled.
 {{- end -}}
 {{- end -}}
