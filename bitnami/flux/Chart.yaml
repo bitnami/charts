@@ -16,7 +16,7 @@ keywords:
   - deployment
   - gitops
   - cd
-  - continuos-delivery
+  - continuous-delivery
   - helm
   - kustomize
 maintainers:
