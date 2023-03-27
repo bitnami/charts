@@ -66,23 +66,21 @@ imageReflectorController:
 extraDeploy:
   # This is for kustomize-controller and source-controller
   # Source: https://fluxcd.io/flux/components/kustomize/kustomization/
-  - |
-    apiVersion: source.toolkit.fluxcd.io/v1beta2
+  - apiVersion: source.toolkit.fluxcd.io/v1beta2
     kind: GitRepository
     metadata:
       name: vib-podinfo
-      namespace: {{ include "common.names.namespace" . }}
+      namespace: '{{ include "common.names.namespace" . }}'
     spec:
       interval: 5m
       url: https://github.com/stefanprodan/podinfo
       ref:
         branch: master
-  - |
-    apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+  - apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
     kind: Kustomization
     metadata:
       name: vib-podinfo
-      namespace: {{ include "common.names.namespace" . }}
+      namespace: '{{ include "common.names.namespace" . }}'
     spec:
       interval: 10m
       targetNamespace: default
@@ -93,23 +91,21 @@ extraDeploy:
       prune: false
   # This is for helm-controller and source-controller
   # We use bitnami charts for not causing conflicts with the deployment above
-  - |
-    apiVersion: source.toolkit.fluxcd.io/v1beta2
+  - apiVersion: source.toolkit.fluxcd.io/v1beta2
     kind: GitRepository
     metadata:
       name: vib-bitnami-charts
-      namespace: {{ include "common.names.namespace" . }}
+      namespace: '{{ include "common.names.namespace" . }}'
     spec:
       interval: 5m0s
       url: https://github.com/bitnami/charts
       ref:
         branch: main
-  - |
-    apiVersion: helm.toolkit.fluxcd.io/v2beta1
+  - apiVersion: helm.toolkit.fluxcd.io/v2beta1
     kind: HelmRelease
     metadata:
       name: vib-dokuwiki
-      namespace: {{ include "common.names.namespace" . }}
+      namespace: '{{ include "common.names.namespace" . }}'
     spec:
       interval: 5m
       chart:
@@ -118,7 +114,7 @@ extraDeploy:
           sourceRef:
             kind: GitRepository
             name: vib-bitnami-charts
-            namespace:  {{ include "common.names.namespace" .}}
+            namespace: '{{ include "common.names.namespace" . }}'
           interval: 1m
       values:
         fullnameOverride: vib-dokuwiki
@@ -127,12 +123,11 @@ extraDeploy:
   # This is for image-notification-controller. We will use the metrics to ensure that it is consumed
   # and therefore RBAC is correct. The values do not need to be correct
   # Source: https://fluxcd.io/flux/components/notification/receiver/
-  - |
-    apiVersion: notification.toolkit.fluxcd.io/v1beta2
+  - apiVersion: notification.toolkit.fluxcd.io/v1beta2
     kind: Receiver
     metadata:
       name: vib-github-receiver
-      namespace: {{ include "common.names.namespace" . }}
+      namespace: '{{ include "common.names.namespace" . }}'
     spec:
       type: github
       events:
@@ -144,15 +139,15 @@ extraDeploy:
         - apiVersion: source.toolkit.fluxcd.io/v1beta2
           kind: GitRepository
           name: bitnami-charts
+          namespace: '{{ include "common.names.namespace" . }}'
   # This is for image-reflector-controller. We will use the metrics to ensure that it is consumed
   # and therefore RBAC is correct. The values do not need to be correct
   # Source: https://fluxcd.io/flux/components/image/imagerepositories/
-  - |
-    apiVersion: image.toolkit.fluxcd.io/v1beta2
+  - apiVersion: image.toolkit.fluxcd.io/v1beta2
     kind: ImageRepository
     metadata:
       name: vib-image-rep-podinfo
-      namespace: {{ include "common.names.namespace" . }}
+      namespace: '{{ include "common.names.namespace" . }}'
     spec:
       image: stefanprodan/podinfo
       interval: 1h
@@ -160,15 +155,14 @@ extraDeploy:
   # This is for image-automation-controller. We will use the metrics to ensure that it is consumed
   # and therefore RBAC is correct. The values do not need to be correct
   # Source: https://fluxcd.io/flux/components/image/imagerepositories/
-  - |
-    apiVersion: image.toolkit.fluxcd.io/v1beta1
+  - apiVersion: image.toolkit.fluxcd.io/v1beta1
     kind: ImageUpdateAutomation
     metadata:
       name: vib-update-automation
-      namespace: {{ include "common.names.namespace" . }}
+      namespace: '{{ include "common.names.namespace" . }}'
     spec:
       interval: 5m
       sourceRef:
         kind: GitRepository
         name: bitnami-charts
-        namespace: flux-system
+        namespace: '{{ include "common.names.namespace" . }}'
