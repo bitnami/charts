@@ -1,3 +1,25 @@
+jobmanager:
+  containerPorts:
+    rpc: 6555
+    http: 8078
+    blob: 9191
+  service:
+    type: LoadBalancer
+    ports:
+      rpc: 6557
+      http: 80
+      # Must be equal to the containerPort.blob. More info in the values documentation.
+      blob: 9191
+  podSecurityContext:
+    fsGroup: 1002
+  containerSecurityContext:
+    runAsUser: 1002
+taskmanager:
+  service:
+    ports:
+      rpc: 14272
+  containerPorts:
+    rpc: 5779
 extraDeploy:
   - |
     apiVersion: batch/v1
@@ -10,7 +32,7 @@ extraDeploy:
           restartPolicy: OnFailure
           containers:
             - name: job-runner
-              image: docker.io/bitnami/flink:1.16.1-debian-11-r0
+              image: docker.io/bitnami/flink:latest
               command:
                 - /bin/bash
               args:
@@ -86,31 +108,8 @@ extraDeploy:
     data:
       flink-conf.yaml: |+
         jobmanager.rpc.address: flink-jobmanager
-        jobmanager.rpc.port: 6557
+        jobmanager.rpc.port: {{ .Values.jobmanager.service.ports.rpc }}
         rest.address: flink-jobmanager
         rest.bind-address: 0.0.0.0
         blob.server.port: 9292
-        rest.port: 80
-
-jobmanager:
-  containerPorts:
-    rpc: 6555
-    http: 8078
-    blob: 9191
-  service:
-    type: LoadBalancer
-    ports:
-      rpc: 6557
-      http: 80
-      # Must be equal to the containerPort.blob. More info in the values documentation.
-      blob: 9191
-  podSecurityContext:
-    fsGroup: 1002
-  containerSecurityContext:
-    runAsUser: 1002
-taskmanager:
-  service:
-    ports:
-      rpc: 14272
-  containerPorts:
-    rpc: 5779
+        rest.port: {{ .Values.jobmanager.service.ports.http }}
