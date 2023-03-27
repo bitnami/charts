@@ -14,6 +14,9 @@ home: https://fluxcd.io/
 icon: https://bitnami.com/assets/stacks/fluxcd-kustomize-controller/img/fluxcd-kustomize-controller-stack-220x234.png
 keywords:
   - deployment
+  - gitops
+  - cd
+  - continuos-delivery
   - helm
   - kustomize
 maintainers:
