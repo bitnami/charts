@@ -414,6 +414,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sourceController.service.extraPorts`               | Extra ports to expose in Source Controller service (normally used with the `sidecars` value) | `[]`        |
 | `sourceController.service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin                             | `None`      |
 | `sourceController.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                  | `{}`        |
+| `sourceController.networkPolicy.enabled`            | Enable the default NetworkPolicy policy                                                      | `false`     |
+| `sourceController.networkPolicy.allowExternal`      | Don't require client label for connections                                                   | `true`      |
+| `sourceController.networkPolicy.extraFromClauses`   | Allows to add extra 'from' clauses to the NetworkPolicy                                      | `[]`        |
 
 ### Source Conttroller Persistence Parameters
 
