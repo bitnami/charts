@@ -40,9 +40,10 @@
         {
           "action_id": "goss",
           "params": {
+            "tests_file": "flux/goss/goss.yaml",
             "vars_file": "flux/runtime-parameters.yaml",
             "resources": {
-              "path": "/.vib/flux/goss"
+              "path": "/.vib"
             },
             "remote": {
               "pod": {
