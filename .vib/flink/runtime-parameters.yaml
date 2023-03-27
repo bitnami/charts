@@ -111,5 +111,5 @@ extraDeploy:
         jobmanager.rpc.port: {{ .Values.jobmanager.service.ports.rpc }}
         rest.address: flink-jobmanager
         rest.bind-address: 0.0.0.0
-        blob.server.port: {{ .Vars.jobmanager.service.ports.blob }}
+        blob.server.port: {{ .Values.jobmanager.service.ports.blob }}
         rest.port: {{ .Values.jobmanager.service.ports.http }}
