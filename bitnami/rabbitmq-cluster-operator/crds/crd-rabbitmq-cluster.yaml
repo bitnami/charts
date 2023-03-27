@@ -3,11 +3,12 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.9.2
+    controller-gen.kubebuilder.io/version: v0.11.3
   labels:
     app.kubernetes.io/component: rabbitmq-operator
     app.kubernetes.io/name: rabbitmq-cluster-operator
     app.kubernetes.io/part-of: rabbitmq
+    servicebinding.io/provisioned-service: "true"
   name: rabbitmqclusters.rabbitmq.com
 spec:
   group: rabbitmq.com
@@ -882,6 +883,21 @@ spec:
                         type: array
                     type: object
                 type: object
+              delayStartSeconds:
+                default: 30
+                description: DelayStartSeconds is the time the init container (`setup-container`)
+                  will sleep before terminating. This effectively delays the time
+                  between starting the Pod and starting the `rabbitmq` container.
+                  RabbitMQ relies on up-to-date DNS entries early during peer discovery.
+                  The purpose of this artificial delay is to ensure that DNS entries
+                  are up-to-date when booting RabbitMQ. For more information, see
+                  https://github.com/kubernetes/kubernetes/issues/92559 If your Kubernetes
+                  DNS backend is configured with a low DNS cache value or publishes
+                  not ready addresses promptly, you can decrase this value or set
+                  it to 0.
+                format: int32
+                minimum: 0
+                type: integer
               image:
                 description: Image is the name of the RabbitMQ docker image to use
                   for RabbitMQ nodes in the RabbitmqCluster. Must be provided together
@@ -1022,6 +1038,16 @@ spec:
                         type: object
                       spec:
                         properties:
+                          minReadySeconds:
+                            format: int32
+                            type: integer
+                          persistentVolumeClaimRetentionPolicy:
+                            properties:
+                              whenDeleted:
+                                type: string
+                              whenScaled:
+                                type: string
+                            type: object
                           podManagementPolicy:
                             type: string
                           replicas:
@@ -1831,6 +1857,18 @@ spec:
                                           type: object
                                         resources:
                                           properties:
+                                            claims:
+                                              items:
+                                                properties:
+                                                  name:
+                                                    type: string
+                                                required:
+                                                - name
+                                                type: object
+                                              type: array
+                                              x-kubernetes-list-map-keys:
+                                              - name
+                                              x-kubernetes-list-type: map
                                             limits:
                                               additionalProperties:
                                                 anyOf:
@@ -2448,6 +2486,18 @@ spec:
                                           type: object
                                         resources:
                                           properties:
+                                            claims:
+                                              items:
+                                                properties:
+                                                  name:
+                                                    type: string
+                                                required:
+                                                - name
+                                                type: object
+                                              type: array
+                                              x-kubernetes-list-map-keys:
+                                              - name
+                                              x-kubernetes-list-type: map
                                             limits:
                                               additionalProperties:
                                                 anyOf:
@@ -3072,6 +3122,18 @@ spec:
                                           type: object
                                         resources:
                                           properties:
+                                            claims:
+                                              items:
+                                                properties:
+                                                  name:
+                                                    type: string
+                                                required:
+                                                - name
+                                                type: object
+                                              type: array
+                                              x-kubernetes-list-map-keys:
+                                              - name
+                                              x-kubernetes-list-type: map
                                             limits:
                                               additionalProperties:
                                                 anyOf:
@@ -3314,12 +3376,43 @@ spec:
                                       - conditionType
                                       type: object
                                     type: array
+                                  resourceClaims:
+                                    items:
+                                      properties:
+                                        name:
+                                          type: string
+                                        source:
+                                          properties:
+                                            resourceClaimName:
+                                              type: string
+                                            resourceClaimTemplateName:
+                                              type: string
+                                          type: object
+                                      required:
+                                      - name
+                                      type: object
+                                    type: array
+                                    x-kubernetes-list-map-keys:
+                                    - name
+                                    x-kubernetes-list-type: map
                                   restartPolicy:
                                     type: string
                                   runtimeClassName:
                                     type: string
                                   schedulerName:
                                     type: string
+                                  schedulingGates:
+                                    items:
+                                      properties:
+                                        name:
+                                          type: string
+                                      required:
+                                      - name
+                                      type: object
+                                    type: array
+                                    x-kubernetes-list-map-keys:
+                                    - name
+                                    x-kubernetes-list-type: map
                                   securityContext:
                                     properties:
                                       fsGroup:
@@ -3691,13 +3784,26 @@ spec:
                                                           type: string
                                                         name:
                                                           type: string
+                                                        namespace:
+                                                          type: string
                                                       required:
                                                       - kind
                                                       - name
                                                       type: object
-                                                      x-kubernetes-map-type: atomic
                                                     resources:
                                                       properties:
+                                                        claims:
+                                                          items:
+                                                            properties:
+                                                              name:
+                                                                type: string
+                                                            required:
+                                                            - name
+                                                            type: object
+                                                          type: array
+                                                          x-kubernetes-list-map-keys:
+                                                          - name
+                                                          x-kubernetes-list-type: map
                                                         limits:
                                                           additionalProperties:
                                                             anyOf:
@@ -4236,13 +4342,26 @@ spec:
                                           type: string
                                         name:
                                           type: string
+                                        namespace:
+                                          type: string
                                       required:
                                       - kind
                                       - name
                                       type: object
-                                      x-kubernetes-map-type: atomic
                                     resources:
                                       properties:
+                                        claims:
+                                          items:
+                                            properties:
+                                              name:
+                                                type: string
+                                            required:
+                                            - name
+                                            type: object
+                                          type: array
+                                          x-kubernetes-list-map-keys:
+                                          - name
+                                          x-kubernetes-list-type: map
                                         limits:
                                           additionalProperties:
                                             anyOf:
@@ -4375,6 +4494,26 @@ spec:
                 description: The desired compute resource requirements of Pods in
                   the cluster.
                 properties:
+                  claims:
+                    description: "Claims lists the names of resources, defined in
+                      spec.resourceClaims, that are used by this container. \n This
+                      is an alpha field and requires enabling the DynamicResourceAllocation
+                      feature gate. \n This field is immutable."
+                    items:
+                      description: ResourceClaim references one entry in PodSpec.ResourceClaims.
+                      properties:
+                        name:
+                          description: Name must match the name of one entry in pod.spec.resourceClaims
+                            of the Pod where this field is used. It makes that resource
+                            available inside a container.
+                          type: string
+                      required:
+                      - name
+                      type: object
+                    type: array
+                    x-kubernetes-list-map-keys:
+                    - name
+                    x-kubernetes-list-type: map
                   limits:
                     additionalProperties:
                       anyOf:
@@ -4403,6 +4542,16 @@ spec:
                   Enables to fetch default user credentials and certificates from
                   K8s external secret stores.
                 properties:
+                  externalSecret:
+                    description: LocalObjectReference contains enough information
+                      to let you locate the referenced object inside the same namespace.
+                    properties:
+                      name:
+                        description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                          TODO: Add other useful fields. apiVersion, kind, uid?'
+                        type: string
+                    type: object
+                    x-kubernetes-map-type: atomic
                   vault:
                     description: VaultSpec will add Vault annotations (see https://www.vaultproject.io/docs/platform/k8s/injector/annotations)
                       to RabbitMQ Pods. It requires a Vault Agent Sidecar Injector
