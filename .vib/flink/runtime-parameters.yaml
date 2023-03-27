@@ -46,11 +46,11 @@ extraDeploy:
     
                   . /opt/bitnami/scripts/libos.sh
     
-                  jobmanager_ready() {
-                      # Set the endpoint URL
-                      host=flink-jobmanager
-                      port={{ .Values.jobmanager.service.ports.rpc }}
+                  # Set the endpoint URL
+                  host=flink-jobmanager
+                  port={{ .Values.jobmanager.service.ports.rpc }}
     
+                  jobmanager_ready() {
                       # Test the TCP connection with a timeout
                       if timeout 5 bash -c "</dev/tcp/$host/$port"; then
                           return 0
@@ -69,7 +69,7 @@ extraDeploy:
                     sleep 10
                     while true
                     do
-                    ./bin/flink run ./examples/batch/EnumTriangles.jar --jobmanager flink-jobmanager:{{ .Values.jobmanager.service.ports.rpc }} -Drest.port={{ .Values.jobmanager.service.ports.http }}
+                    ./bin/flink run ./examples/batch/EnumTriangles.jar --jobmanager $host:$port -Drest.port={{ .Values.jobmanager.service.ports.http }}
                     echo "1" > /tmp/ready
                     done
                   fi
