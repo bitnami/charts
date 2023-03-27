@@ -1,7 +1,7 @@
 addr:
   tcp://localhost:{{ .Vars.jobmanager.containerPorts.rpc }}:
     reachable: true
-  tcp://localhost:{{ .Vars.jobmanager.service.ports.blob }}:
+  tcp://flink-jobmanager:{{ .Vars.jobmanager.service.ports.blob }}:
     reachable: true
   tcp://flink-taskmanager:{{ .Vars.taskmanager.service.ports.rpc }}:
     reachable: true
