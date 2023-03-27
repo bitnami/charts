@@ -23,7 +23,6 @@ config:
 extraVolumeMounts:
   - name: logs
     mountPath: /logs
-    readOnly: false
 extraVolumes:
   - name: logs
     emptyDir: {}
