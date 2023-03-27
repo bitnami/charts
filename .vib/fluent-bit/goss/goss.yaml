@@ -9,7 +9,7 @@ file:
   /logs:
     exists: true
     filetype: directory
-    mode: "0755"
+    mode: "2777"
   /logs/cpu.0:
     exists: true
     filetype: file
