@@ -83,7 +83,7 @@ extraDeploy:
       namespace: '{{ include "common.names.namespace" . }}'
     spec:
       interval: 10m
-      targetNamespace: default
+      targetNamespace: '{{ include "common.names.namespace" . }}'
       sourceRef:
         kind: GitRepository
         name: vib-podinfo
