@@ -14,3 +14,16 @@ service:
   type: LoadBalancer
   ports:
     http: 80
+config:
+  outputs: |
+    [OUTPUT]
+        Name file
+        Match *
+        Path /logs
+extraVolumeMounts:
+  - name: logs
+    mountPath: /logs
+    readOnly: false
+extraVolumes:
+  - name: logs
+    emptyDir: {}

@@ -6,6 +6,15 @@ file:
     exists: true
     filetype: directory
     mode: "0755"
+  /log:
+    exists: true
+    filetype: directory
+    mode: "0755"
+  /opt/bitnami/fluentd/conf/fluentd-inputs.conf:
+    exists: true
+    filetype: file
+    contains:
+      - "cpu.0:"
 command:
   {{- $uid := .Vars.containerSecurityContext.runAsUser }}
   {{- $gid := .Vars.podSecurityContext.fsGroup }}
