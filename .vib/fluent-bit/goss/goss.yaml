@@ -6,11 +6,11 @@ file:
     exists: true
     filetype: directory
     mode: "0755"
-  /log:
+  /logs:
     exists: true
     filetype: directory
     mode: "0755"
-  /opt/bitnami/fluentd/conf/fluentd-inputs.conf:
+  /logs/cpu.0:
     exists: true
     filetype: file
     contains:
