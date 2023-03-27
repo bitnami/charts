@@ -1268,6 +1268,27 @@ sourceController:
     ##
     sessionAffinityConfig: {}
 
+  ## NetworkPolicy parameters
+  ##
+  networkPolicy:
+    ## @param sourceController.networkPolicy.enabled Enable the default NetworkPolicy policy
+    ##
+    enabled: false
+    ## @param sourceController.networkPolicy.allowExternal Don't require client label for connections
+    ## When set to false, only pods with the correct client label will have network access to the port MinIO&reg; is
+    ## listening on. When true, MinIO&reg; will accept connections from any source (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param sourceController.networkPolicy.extraFromClauses Allows to add extra 'from' clauses to the NetworkPolicy
+    ##
+    extraFromClauses: []
+    ## Example
+    ## extraFromClauses:
+    ## - podSelector:
+    ##     matchLabels:
+    ##       a: b
+    ##
+
   ## @section Source Conttroller Persistence Parameters
   ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
