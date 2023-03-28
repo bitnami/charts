@@ -22,7 +22,6 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/aspnet-core"
         },
-        "runtime_parameters": "YXBwRnJvbUV4dGVybmFsUmVwbzoKICBlbmFibGVkOiB0cnVlCiAgY2xvbmU6CiAgICByZXBvc2l0b3J5OiAiaHR0cHM6Ly9naXRodWIuY29tL2RvdG5ldC9Bc3BOZXRDb3JlLkRvY3MuZ2l0IgogICAgcmV2aXNpb246ICJtYWluIgogIHB1Ymxpc2g6CiAgICBzdWJGb2xkZXI6ICJhc3BuZXRjb3JlL3BlcmZvcm1hbmNlL2NhY2hpbmcvb3V0cHV0L3NhbXBsZXMvNy54LyIKICBzdGFydENvbW1hbmQ6IFsiZG90bmV0IiwgIk9DTWluaW1hbC5kbGwiXQpjb250YWluZXJQb3J0czoKICBodHRwOiA4MDgwCnNlcnZpY2VBY2NvdW50OgogIGNyZWF0ZTogdHJ1ZQogIGF1dG9tb3VudFNlcnZpY2VBY2NvdW50VG9rZW46IHRydWUKc2VydmljZToKICB0eXBlOiBMb2FkQmFsYW5jZXIKICBwb3J0czoKICAgIGh0dHA6IDgw",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_ALTERNATIVE_TARGET_PLATFORM}",
           "size": {
@@ -42,9 +41,10 @@
           "action_id": "goss",
           "params": {
             "resources": {
-              "path": "/.vib/aspnet-core/goss"
+              "path": "/.vib"
             },
-            "vars_file": "vars.yaml",
+            "tests_file": "aspnet-core/goss/goss.yaml",
+            "vars_file": "aspnet-core/runtime-parameters.yaml",
             "remote": {
               "pod": {
                 "workload": "deploy-aspnet-core"

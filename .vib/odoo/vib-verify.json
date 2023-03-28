@@ -22,7 +22,6 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/odoo"
         },
-        "runtime_parameters": "b2Rvb0VtYWlsOiB1c2VyQGV4YW1wbGUuY29tCm9kb29QYXNzd29yZDogQ29tcGxpY2F0ZWRQYXNzd29yZDEyMyE0CnBvc3RncmVzcWw6CiAgYXV0aDoKICAgIHVzZXJuYW1lOiBibl9vZG9vCiAgICBwYXNzd29yZDogN2RNeExmY3F4TgpzZXJ2aWNlOgogIHBvcnQ6IDgwCiAgdHlwZTogTG9hZEJhbGFuY2VyCmNvbnRhaW5lclBvcnRzOgogIGh0dHA6IDgwNjk=",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_ALTERNATIVE_TARGET_PLATFORM}",
           "size": {
@@ -56,14 +55,15 @@
           "action_id": "goss",
           "params": {
             "resources": {
-              "path": "/.vib/odoo/goss"
+              "path": "/.vib"
             },
+            "tests_file": "odoo/goss/goss.yaml",
+            "vars_file": "odoo/runtime-parameters.yaml",
             "remote": {
               "pod": {
                 "workload": "deploy-odoo"
               }
-            },
-            "vars_file": "vars.yaml"
+            }
           }
         }
       ]

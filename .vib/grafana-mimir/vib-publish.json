@@ -22,7 +22,6 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/grafana-mimir"
         },
-        "runtime_parameters": "bWltaXI6CiAgZGF0YURpcjogIi9iaXRuYW1pL2dyYWZhbmEtbWltaXIiCiAgY29udGFpbmVyUG9ydHM6CiAgICBodHRwOiA4MDgyCiAgICBnb3NzaXBSaW5nOiA4OTQ2CiAgZ29zc2lwUmluZzoKICAgIHNlcnZpY2U6CiAgICAgIHBvcnRzOgogICAgICAgIGh0dHA6IDg5NDYKICBodHRwUHJlZml4OgogICAgcHJvbWV0aGV1czogL3Byb21ldGhldXMtdGVzdApnYXRld2F5OgogIGVuYWJsZWQ6IHRydWUKICBzZXJ2aWNlOgogICAgcG9ydHM6CiAgICAgIGh0dHA6IDgwCiAgICB0eXBlOiBMb2FkQmFsYW5jZXIKY29tcGFjdG9yOgogIHNlcnZpY2U6CiAgICBwb3J0czoKICAgICAgaHR0cDogODA4MgpkaXN0cmlidXRvcjoKICBzZXJ2aWNlOgogICAgcG9ydHM6CiAgICAgIGh0dHA6IDgwODIKcXVlcnlGcm9udGVuZDoKICBzZXJ2aWNlOgogICAgcG9ydHM6CiAgICAgIGh0dHA6IDgwODIKc3RvcmVHYXRld2F5OgogIHBvZFNlY3VyaXR5Q29udGV4dDoKICAgIGZzR3JvdXA6IDEwMDIKICBjb250YWluZXJTZWN1cml0eUNvbnRleHQ6CiAgICBydW5Bc1VzZXI6IDEwMDIKICBzZXJ2aWNlOgogICAgcG9ydHM6CiAgICAgIGh0dHA6IDgwODIKbWVtY2FjaGVkY2h1bmtzOgogIHNlcnZpY2U6CiAgICBwb3J0czoKICAgICAgbWVtY2FjaGVkOiAxMTIxMgptZW1jYWNoZWRmcm9udGVuZDoKICBzZXJ2aWNlOgogICAgcG9ydHM6CiAgICAgIG1lbWNhY2hlZDogMTEyMTIKbWVtY2FjaGVkaW5kZXg6CiAgc2VydmljZToKICAgIHBvcnRzOgogICAgICBtZW1jYWNoZWQ6IDExMjEyCm1lbWNhY2hlZG1ldGFkYXRhOgogIHNlcnZpY2U6CiAgICBwb3J0czoKICAgICAgbWVtY2FjaGVkOiAxMTIxMg==",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -42,14 +41,15 @@
           "action_id": "goss",
           "params": {
             "resources": {
-              "path": "/.vib/grafana-mimir/goss"
+              "path": "/.vib"
             },
+            "tests_file": "grafana-mimir/goss/goss.yaml",
+            "vars_file": "grafana-mimir/runtime-parameters.yaml",
             "remote": {
               "pod": {
                 "workload": "sts-grafana-mimir-store-gateway"
               }
-            },
-            "vars_file": "vars.yaml"
+            }
           }
         },
         {

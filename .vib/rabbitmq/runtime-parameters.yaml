@@ -1,0 +1,35 @@
+auth:
+  username: test_user
+  password: ComplicatedPassword123!4
+  erlangCookie: RjspCC3nm4kLv4LjWFNfFHW3xLxb7zTC
+plugins: rabbitmq_management rabbitmq_peer_discovery_k8s
+extraPlugins: rabbitmq_auth_backend_ldap rabbitmq_top
+clustering:
+  enabled: true
+containerPorts:
+  amqp: 5672
+  dist: 25672
+  manager: 15672
+  epmd: 4369
+replicaCount: 2
+podSecurityContext:
+  enabled: true
+  fsGroup: 1002
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1002
+serviceAccount:
+  create: true
+  automountServiceAccountToken: true
+rbac:
+  create: true
+persistence:
+  enabled: true
+  mountPath: /bitnami/rabbitmq/mnesia
+service:
+  ports:
+    amqp: 5673
+    dist: 25673
+    manager: 80
+    epmd: 4370
+  type: LoadBalancer

@@ -1,0 +1,20 @@
+containerPorts:
+  http: 7980
+cloudflare:
+  apiKey: testingapikey1234
+  email: test@test.org
+provider: cloudflare
+service:
+  ports:
+    http: 80
+  type: LoadBalancer
+serviceAccount:
+  create: true
+  automountServiceAccountToken: true
+rbac:
+  create: true
+  clusterRole: true
+podSecurityContext:
+  enabled: true
+  fsGroup: 1002
+  runAsUser: 1002

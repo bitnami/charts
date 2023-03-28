@@ -33,7 +33,9 @@ command:
     exec: rabbitmq-plugins list --enabled
     exit-status: 0
     stdout:
-      - {{ .Vars.extraPlugins }}
+    {{ range $plugin := (split " " .Vars.extraPlugins) }}
+      - {{ $plugin }}
+    {{ end }}
   {{- $uid := .Vars.containerSecurityContext.runAsUser }}
   {{- $gid := .Vars.podSecurityContext.fsGroup }}
   check-user-info:

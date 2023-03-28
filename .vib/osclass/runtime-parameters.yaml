@@ -1,0 +1,26 @@
+osclassUsername: test_user
+osclassPassword: ComplicatedPassword123!4
+service:
+  ports:
+    http: 80
+    https: 444
+  type: LoadBalancer
+containerPorts:
+  http: 8081
+  https: 8444
+mariadb:
+  enabled: true
+  auth:
+    database: test_osclass_database
+    username: test_osclass_username
+    password: test_osclass_password
+podSecurityContext:
+  enabled: true
+  fsGroup: 1002
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1002
+hostAliases:
+  - ip: 127.0.0.1
+    hostnames:
+      - status.testhost

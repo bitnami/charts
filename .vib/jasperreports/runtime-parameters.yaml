@@ -1,0 +1,20 @@
+jasperreportsUsername: jaspervibadmin
+jasperreportsPassword: ComplicatedPassword123!4
+podSecurityContext:
+  enabled: true
+  fsGroup: 1002
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1002
+persistence:
+  enabled: true
+service:
+  type: LoadBalancer
+  ports:
+    http: 80
+mariadb:
+  enabled: true
+  auth:
+    database: bitnami_test_jasperreports
+    username: bn_test_jasperreports
+    password: bitnami_test_password

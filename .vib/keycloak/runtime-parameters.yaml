@@ -1,0 +1,17 @@
+auth:
+  adminUser: user
+  adminPassword: ComplicatedPassword123!4
+containerPorts:
+  http: 8080
+postgresql:
+  auth:
+    username: bn_keycloak
+logging:
+  output: default
+service:
+  type: LoadBalancer
+  ports:
+    http: 80
+serviceAccount:
+  create: true
+  automountServiceAccountToken: true

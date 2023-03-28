@@ -35,7 +35,7 @@ To install the chart with the release name `my-release`:
 
 ```console
 helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/rabbitmq-cluster-operators
+helm install my-release my-repo/rabbitmq-cluster-operator
 ```
 
 The command deploy the RabbitMQ Cluster Kubernetes Operator on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -169,7 +169,7 @@ This solution allows to easily deploy multiple RabbitMQ instances compared to th
 | `credentialUpdaterImage.pullSecrets`                              | RabbitMQ Default User Credential Updater image pull secrets                                                                              | `[]`                                     |
 | `clusterOperator.image.registry`                                  | RabbitMQ Cluster Operator image registry                                                                                                 | `docker.io`                              |
 | `clusterOperator.image.repository`                                | RabbitMQ Cluster Operator image repository                                                                                               | `bitnami/rabbitmq-cluster-operator`      |
-| `clusterOperator.image.tag`                                       | RabbitMQ Cluster Operator image tag (immutable tags are recommended)                                                                     | `2.2.0-scratch-r0`                       |
+| `clusterOperator.image.tag`                                       | RabbitMQ Cluster Operator image tag (immutable tags are recommended)                                                                     | `2.2.0-scratch-r1`                       |
 | `clusterOperator.image.digest`                                    | RabbitMQ Cluster Operator image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                | `""`                                     |
 | `clusterOperator.image.pullPolicy`                                | RabbitMQ Cluster Operator image pull policy                                                                                              | `IfNotPresent`                           |
 | `clusterOperator.image.pullSecrets`                               | RabbitMQ Cluster Operator image pull secrets                                                                                             | `[]`                                     |

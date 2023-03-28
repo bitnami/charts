@@ -1,11 +1,12 @@
 command:
-  {{- $user := .Vars.secrets.localUser }}
-  {{- $pwd := .Vars.secrets.localPassword }}
+  {{- $user := (split ":" .Vars.secrets.localUsers)._0 }}
+  {{- $pwd := (split ":" .Vars.secrets.localUsers)._1 }}
   {{- $target := printf "target_%s" (randAlphaNum 5 | toLower) }}
   {{- $pipeline := printf "pipe_%s" (randAlphaNum 5 | toLower) }}
+  {{- $example_pipeline := "ICBqb2JzOgogIC0gbmFtZTogam9iCiAgICBwdWJsaWM6IHRydWUKICAgIHBsYW46CiAgICAtIHRhc2s6IHNpbXBsZS10YXNrCiAgICAgIGNvbmZpZzoKICAgICAgICBwbGF0Zm9ybTogbGludXgKICAgICAgICBpbWFnZV9yZXNvdXJjZToKICAgICAgICAgIHR5cGU6IHJlZ2lzdHJ5LWltYWdlCiAgICAgICAgICBzb3VyY2U6IHsgcmVwb3NpdG9yeTogYml0bmFtaS9iaXRuYW1pLXNoZWxsIH0KICAgICAgICBydW46CiAgICAgICAgICBwYXRoOiBlY2hvCiAgICAgICAgICBhcmdzOiBbIkhlbGxvIHdvcmxkISJd" }}
   {{- $port := .Vars.service.web.ports.http }}
   create-pipeline-trigger-job:
-    exec: fly -t {{ $target }} login -c http://concourse-web:{{ $port }} -u {{ $user }} -p '{{ $pwd }}' && (echo '{{ .Vars.examplePipeline | b64enc }}' | base64 -d) > /tmp/pipeline.yaml && fly -t {{ $target }} set-pipeline -p {{ $pipeline }} -c /tmp/pipeline.yaml -n && fly -t {{ $target }} unpause-pipeline -p {{ $pipeline }} && fly -t {{ $target }} trigger-job -j {{ $pipeline }}/job && sleep 35 && fly -t {{ $target }} jobs -p {{ $pipeline }}
+    exec: fly -t {{ $target }} login -c http://concourse-web:{{ $port }} -u {{ $user }} -p '{{ $pwd }}' && (echo '{{ $example_pipeline }}' | base64 -d) > /tmp/pipeline.yaml && fly -t {{ $target }} set-pipeline -p {{ $pipeline }} -c /tmp/pipeline.yaml -n && fly -t {{ $target }} unpause-pipeline -p {{ $pipeline }} && fly -t {{ $target }} trigger-job -j {{ $pipeline }}/job && sleep 35 && fly -t {{ $target }} jobs -p {{ $pipeline }}
     exit-status: 0
     stdout:
       - "succeeded"
