@@ -61,6 +61,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
+
 ### Common parameters
 
 | Name                     | Description                                                                             | Value          |
@@ -75,6 +76,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`    |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]` |
 
+
 ### Apache Flink parameters
 
 | Name                | Description                                                                                                  | Value                 |
@@ -86,6 +88,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `image.pullPolicy`  | image pull policy                                                                                            | `IfNotPresent`        |
 | `image.pullSecrets` | Apache Flink image pull secrets                                                                              | `[]`                  |
 | `image.debug`       | Enable image debug mode                                                                                      | `false`               |
+
 
 ### Jobmanager deployment parameters
 
@@ -169,6 +172,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `jobmanager.extraVolumes`                                      | Optionally specify extra list of additional volumes for flink container                   | `[]`            |
 | `jobmanager.initContainers`                                    | Add additional init containers to the flink pods                                          | `[]`            |
 | `jobmanager.sidecars`                                          | Add additional sidecar containers to the flink pods                                       | `[]`            |
+
 
 ### TaskManager deployment parameters
 
