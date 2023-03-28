@@ -82,7 +82,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/redis
-  tag: 7.0.9-debian-11-r1
+  tag: 7.0.10-debian-11-r2
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -995,7 +995,7 @@ sentinel:
   image:
     registry: docker.io
     repository: bitnami/redis-sentinel
-    tag: 7.0.9-debian-11-r0
+    tag: 7.0.10-debian-11-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1013,6 +1013,9 @@ sentinel:
     ## Enable debug mode
     ##
     debug: false
+  ## @param sentinel.annotations Additional custom annotations for Redis&reg; Sentinel resource
+  ##
+  annotations: {}
   ## @param sentinel.masterSet Master set name
   ##
   masterSet: mymaster
@@ -1255,6 +1258,12 @@ sentinel:
     ##     timeoutSeconds: 300
     ##
     sessionAffinityConfig: {}
+    ## Headless service properties
+    ##
+    headless:
+      ## @param sentinel.service.headless.annotations Annotations for the headless service.
+      ##
+      annotations: {}
   ## @param sentinel.terminationGracePeriodSeconds Integer setting the termination grace period for the redis-node pods
   ##
   terminationGracePeriodSeconds: 30
@@ -1428,7 +1437,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/redis-exporter
-    tag: 1.47.0-debian-11-r1
+    tag: 1.48.0-debian-11-r6
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1679,7 +1688,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r92
+    tag: 11-debian-11-r99
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1727,7 +1736,7 @@ sysctl:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r92
+    tag: 11-debian-11-r99
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

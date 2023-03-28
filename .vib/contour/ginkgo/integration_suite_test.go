@@ -9,7 +9,9 @@ import (
 	"net/http"
 	"strings"
 	"testing"
+	"time"
 
+	v1 "k8s.io/api/core/v1"
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
 
@@ -40,6 +42,21 @@ func clusterConfigOrDie() *rest.Config {
 	}
 
 	return config
+}
+
+func resolvesToDeployment(ctx context.Context, address string) (bool, error) {
+	var client http.Client
+	resp, err := client.Get(address)
+	if err != nil {
+		fmt.Printf("There was an error during the GET request: %q", err)
+	}
+	defer resp.Body.Close()
+
+	if resp.StatusCode == http.StatusOK {
+		return true, err
+	} else {
+		return false, err
+	}
 }
 
 func getResponseBodyOrDie(ctx context.Context, address string) []string {
@@ -78,6 +95,31 @@ func (r interruptableReader) Read(p []byte) (int, error) {
 		return n, err
 	}
 	return n, r.ctx.Err()
+}
+
+func returnValidHost(ingress v1.LoadBalancerIngress) string {
+	if ingress.IP != "" {
+		return ingress.IP + ".nip.io"
+	} else if ingress.Hostname != "" {
+		return ingress.Hostname
+	} else {
+		panic("No valid host found for the provided ingress")
+	}
+}
+
+func retry(name string, attempts int, sleep time.Duration, f func() (bool, error)) (res bool, err error) {
+	for i := 0; i < attempts; i++ {
+		fmt.Printf("[retriable] operation %q executing now [attempt %d/%d]\n", name, (i + 1), attempts)
+		res, err = f()
+		if res {
+			fmt.Printf("[retriable] operation %q succedeed [attempt %d/%d]\n", name, (i + 1), attempts)
+			return res, err
+		}
+		fmt.Printf("[retriable] operation %q failed, sleeping for %q now...\n", name, sleep)
+		time.Sleep(sleep)
+	}
+	fmt.Printf("[retriable] operation %q failed [attempt %d/%d]\n", name, attempts, attempts)
+	return res, err
 }
 
 func containsString(haystack []string, needle string) bool {

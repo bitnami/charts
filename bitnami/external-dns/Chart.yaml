@@ -2,7 +2,7 @@ annotations:
   category: DeveloperTools
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 0.13.3
+appVersion: 0.13.4
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami

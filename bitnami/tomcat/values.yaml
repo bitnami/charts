@@ -58,7 +58,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/tomcat
-  tag: 10.1.5-debian-11-r20
+  tag: 10.1.7-debian-11-r1
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -451,6 +451,12 @@ service:
   ##     timeoutSeconds: 300
   ##
   sessionAffinityConfig: {}
+  ## Headless service properties
+  ##
+  headless:
+    ## @param service.headless.annotations Annotations for the headless service.
+    ##
+    annotations: {}
 ## Ingress configuratiom
 ##
 ingress:
@@ -576,7 +582,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r90
+    tag: 11-debian-11-r98
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -636,7 +642,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/jmx-exporter
-      tag: 0.17.2-debian-11-r53
+      tag: 0.18.0-debian-11-r3
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

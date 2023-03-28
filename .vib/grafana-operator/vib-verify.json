@@ -22,7 +22,6 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/grafana-operator"
         },
-        "runtime_parameters": "b3BlcmF0b3I6CiAgZW5hYmxlZDogdHJ1ZQogIGNvbnRhaW5lclNlY3VyaXR5Q29udGV4dDoKICAgIGVuYWJsZWQ6IHRydWUKICAgIHJ1bkFzVXNlcjogMTAwMgogIHBvZFNlY3VyaXR5Q29udGV4dDoKICAgIGZzR3JvdXA6IDEwMDIKICBjb250YWluZXJQb3J0czoKICAgIG1ldHJpY3M6IDgwODAKICBwb2RMYWJlbHM6CiAgICBpbnN0YW5jZTogb3BlcmF0b3IKICByYmFjOgogICAgY3JlYXRlOiB0cnVlCiAgc2VydmljZUFjY291bnQ6CiAgICBjcmVhdGU6IHRydWUKICAgIGF1dG9tb3VudFNlcnZpY2VBY2NvdW50VG9rZW46IHRydWUKZ3JhZmFuYToKICBlbmFibGVkOiB0cnVlCiAgY29uZmlnOgogICAgc2VjdXJpdHk6CiAgICAgIGFkbWluX3VzZXI6IHRlc3RfYWRtaW4KICAgICAgYWRtaW5fcGFzc3dvcmQ6IENvbXBsaWNhdGVkUGFzc3dvcmQxMjMhNAogIGNvbnRhaW5lclNlY3VyaXR5Q29udGV4dDoKICAgIGVuYWJsZWQ6IHRydWUKICAgIHJ1bkFzVXNlcjogMTAwMgogICAgcnVuQXNHcm91cDogMAogIHNlcnZpY2U6CiAgICB0eXBlOiBMb2FkQmFsYW5jZXIKICAgIGV4dHJhUG9ydHM6CiAgICAgIC0gbmFtZTogZ3JhZmFuYS12ZQogICAgICAgIHBvcnQ6IDgwCiAgICAgICAgcHJvdG9jb2w6IFRDUAogICAgICAgIHRhcmdldFBvcnQ6IGdyYWZhbmEtaHR0cA==",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -42,14 +41,15 @@
           "action_id": "goss",
           "params": {
             "resources": {
-              "path": "/.vib/grafana-operator/goss"
+              "path": "/.vib"
             },
+            "tests_file": "grafana-operator/goss/goss.yaml",
+            "vars_file": "grafana-operator/runtime-parameters.yaml",
             "remote": {
               "pod": {
                 "workload": "deploy-grafana-operator"
               }
-            },
-            "vars_file": "vars.yaml"
+            }
           }
         },
         {

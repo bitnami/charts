@@ -1,0 +1,28 @@
+rbac:
+  singleNamespace: false
+createAggregateRoles: true
+server:
+  enabled: true
+  rbac:
+    create: true
+  auth:
+    enabled: true
+    mode: server
+  clusterWorkflowTemplates:
+    enabled: true
+    enableEditing: true
+  secure: false
+  service:
+    ports:
+      http: 80
+    type: LoadBalancer
+workflows:
+  rbac:
+    create: true
+postgresql:
+  enabled: true
+  service:
+    ports:
+      postgresql: 5432
+mysql:
+  enabled: false

@@ -69,7 +69,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/fluentd
-  tag: 1.15.3-debian-11-r40
+  tag: 1.15.3-debian-11-r46
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -847,7 +847,12 @@ aggregator:
     ## @param aggregator.service.annotationsHeadless Provide any additional annotations which may be required on headless service
     ##
     annotationsHeadless: {}
-
+    ## Headless service properties
+    ##
+    headless:
+      ## @param aggregator.service.headless.annotations Annotations for the headless service.
+      ##
+      annotations: {}
   ## Configure the ingress resource that allows you to access the
   ## Fluentd aggregator. Set up the URL
   ## ref: https://kubernetes.io/docs/user-guide/ingress/
