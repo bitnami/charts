@@ -52,6 +52,9 @@ spec:
         podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.bucketweb.podAntiAffinityPreset "component" "bucketweb" "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.bucketweb.nodeAffinityPreset.type "key" .Values.bucketweb.nodeAffinityPreset.key "values" .Values.bucketweb.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
+      {{- if .Values.bucketweb.dnsConfig }}
+      dnsConfig: {{- include "common.tplvalues.render" (dict "value" .Values.bucketweb.dnsConfig "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.bucketweb.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.bucketweb.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
