@@ -1,7 +1,7 @@
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name:  {{ include "flink.jobmanager.fullname" . }}
+  name:  flink-jobmanager
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
@@ -101,7 +101,7 @@ spec:
             - name: FLINK_CFG_JOBMANAGER_BIND__HOST
               value: 0.0.0.0
             - name: FLINK_CFG_REST_ADDRESS
-              value: {{ include "flink.jobmanager.fullname" . }}
+              value: {{ include "flink.jobmanager.fullname" . | quote }}
             - name: FLINK_CFG_REST_PORT
               value: {{ .Values.jobmanager.containerPorts.http | quote }}
             - name: FLINK_CFG_REST_BIND__ADDRESS
