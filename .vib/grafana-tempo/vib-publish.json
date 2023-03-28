@@ -69,6 +69,19 @@
               "gossipRingPort": "7946"
             }
           }
+        },
+        {
+          "action_id": "ginkgo",
+          "params": {
+            "resources": {
+              "path": "/.vib/grafana-tempo/ginkgo"
+            },
+            "params": {
+              "kubeconfig": "{{kubeconfig}}",
+              "namespace": "{{namespace}}",
+              "api-port": "80"
+            }
+          }
         }
       ]
     },
