@@ -46,6 +46,8 @@ var _ = Describe("Grafana Tempo", func() {
 			frontendHost = returnValidHost(frontendSvc.Status.LoadBalancer.Ingress[0])
 		})
 
+		// This test has been commented because 'omnition/synthetic-load-generator' image does not exist anymore.
+		// An internal issue has been filed to replace that image.
 		// It("allows to access registered tracing spans", func() {
 		// 	// Obtain a sample traceID and route gerenerated by the synthetic app
 		// 	var traceID, route string
