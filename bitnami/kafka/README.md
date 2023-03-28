@@ -164,7 +164,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                                | Description                                                                                                                                                                                   | Value           |
 | --------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
 | `replicaCount`                                      | Number of Kafka nodes                                                                                                                                                                         | `1`             |
-| `minBrokerId`                                       | Minimal broker.id value, nodes increment their `broker.id` respectively                                                                                                                       | `0`             |
+| `minId`                                             | Minimal node.id or broker.id values, nodes increment their value respectively                                                                                                                 | `0`             |
 | `brokerRackAssignment`                              | Set Broker Assignment for multi tenant environment Allowed values: `aws-az`                                                                                                                   | `""`            |
 | `containerPorts.client`                             | Kafka client container port                                                                                                                                                                   | `9092`          |
 | `containerPorts.internal`                           | Kafka inter-broker container port                                                                                                                                                             | `9093`          |
@@ -471,7 +471,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                            | Description                                                                             | Value                    |
 | ------------------------------- | --------------------------------------------------------------------------------------- | ------------------------ |
-| `kraft.enabled`                 | Switch to enable or disable the Kraft mode for Kafka                                    | `false`                  |
+| `kraft.enabled`                 | Switch to enable or disable the Kraft mode for Kafka                                    | `true`                   |
 | `kraft.processRoles`            | Roles of your Kafka nodes. Nodes can have 'broker', 'controller' roles or both of them. | `broker,controller`      |
 | `kraft.controllerListenerNames` | Controller listener names                                                               | `CONTROLLER`             |
 | `kraft.clusterId`               | Kafka ClusterID. You must set it if your cluster contains more than one node.           | `kafka_cluster_id_test1` |
@@ -481,7 +481,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                                    | Description                                                                                                                                                             | Value               |
 | --------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
-| `zookeeper.enabled`                     | Switch to enable or disable the ZooKeeper helm chart. Must be false if you use Kraft mode.                                                                              | `true`              |
+| `zookeeper.enabled`                     | Switch to enable or disable the ZooKeeper helm chart. Must be false if you use Kraft mode.                                                                              | `false`             |
 | `zookeeper.replicaCount`                | Number of ZooKeeper nodes                                                                                                                                               | `1`                 |
 | `zookeeper.auth.client.enabled`         | Enable ZooKeeper auth                                                                                                                                                   | `false`             |
 | `zookeeper.auth.client.clientUser`      | User that will use ZooKeeper clients to auth                                                                                                                            | `""`                |
