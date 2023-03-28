@@ -18,8 +18,6 @@ taskmanager:
   service:
     ports:
       rpc: 14272
-  containerPorts:
-    rpc: 5779
 extraDeploy:
   - |
     apiVersion: batch/v1
