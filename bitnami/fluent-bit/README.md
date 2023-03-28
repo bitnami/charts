@@ -239,7 +239,7 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 ### Persistence
 
-The [Bitnami Fluent Bit](https://github.com/bitnami/containers/tree/main/bitnami/fluent-bit) image stores the trace onto an external database. Persistent Volume Claims are used to keep the data across deployments.
+The [Bitnami Fluent Bit](https://github.com/bitnami/containers/tree/main/bitnami/fluent-bit) doesn't implement storage persistence by default, but you could mount an extraVolume with Persistent Volume Claims to keep the buffer and/or the output if configured out-of-memory (see [Buffering & Storage](https://docs.fluentbit.io/manual/administration/buffering-and-storage))
 
 ### Additional environment variables
 
