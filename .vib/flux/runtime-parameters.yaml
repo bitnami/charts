@@ -14,14 +14,19 @@ sourceController:
       ports:
         metrics: 8881
   podSecurityContext:
+    enabled: true
     fsGroup: 1002
   containerSecurityContext:
+    enabled: true
     runAsUser: 1002
   persistence:
     enabled: true
     mountPath: /test/bitnami/path
   serviceAccount:
+    create: true
     automountServiceAccountToken: true
+  rbac:
+    create: true
 
 kustomizeController:
   enabled: true
@@ -30,6 +35,8 @@ kustomizeController:
     service:
       ports:
         metrics: 8882
+  rbac:
+    create: true
 
 helmController:
   enabled: true
@@ -38,6 +45,8 @@ helmController:
     service:
       ports:
         metrics: 8883
+  rbac:
+    create: true
 
 notificationController:
   enabled: true
@@ -46,6 +55,8 @@ notificationController:
     service:
       ports:
         metrics: 8884
+  rbac:
+    create: true
 
 imageAutomationController:
   enabled: true
@@ -54,6 +65,8 @@ imageAutomationController:
     service:
       ports:
         metrics: 8885
+  rbac:
+    create: true
 
 imageReflectorController:
   enabled: true
@@ -62,6 +75,8 @@ imageReflectorController:
     service:
       ports:
         metrics: 8886
+  rbac:
+    create: true
 
 extraDeploy:
   # This is for kustomize-controller and source-controller
