@@ -308,11 +308,16 @@ jobmanager:
   ## @param jobmanager.containerSecurityContext.enabled Enabled Apache Flink containers' Security Context
   ## @param jobmanager.containerSecurityContext.runAsUser Set Apache Flink container's Security Context runAsUser
   ## @param jobmanager.containerSecurityContext.runAsNonRoot Force the container to be run as non root
+  ## @param jobmanager.containerSecurityContext.allowPrivilegeEscalation Allows privilege escalation
+  ## @param jobmanager.containerSecurityContext.capabilities.drop List of capabilities to be dropped
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: [ "ALL" ]
   ## @param jobmanager.podAnnotations Additional pod annotations
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
@@ -590,20 +595,28 @@ taskmanager:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param taskmanager.podSecurityContext.enabled Enabled Apache Flink pods' Security Context
   ## @param taskmanager.podSecurityContext.fsGroup Set Apache Flink pod's Security Context fsGroup
+  ## @param taskmanager.podSecurityContext.seccompProfile.type Rules specifying actions to take based on the requested syscall
   ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
+    seccompProfile:
+      type: "RuntimeDefault"
   ## Configure Container Security Context (only main container)
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param taskmanager.containerSecurityContext.enabled Enabled Apache Flink containers' Security Context
   ## @param taskmanager.containerSecurityContext.runAsUser Set Apache Flink container's Security Context runAsUser
   ## @param taskmanager.containerSecurityContext.runAsNonRoot Force the container to be run as non root
+  ## @param taskmanager.containerSecurityContext.allowPrivilegeEscalation Allows privilege escalation
+  ## @param taskmanager.containerSecurityContext.capabilities.drop List of capabilities to be dropped
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    allowPrivilegeEscalation: false
+    capabilities:
+      drop: [ "ALL" ]
   ## @param taskmanager.podAnnotations Additional pod annotations
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
   ##
