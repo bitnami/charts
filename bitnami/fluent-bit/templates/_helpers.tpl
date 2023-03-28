@@ -50,10 +50,3 @@ Return the ingress anotation
 {{- define "fluent-bit.ingress.annotations" -}}
 {{ .Values.ingress.annotations | toYaml }}
 {{- end -}}
-
-{{/*
-Return the ingress hostname
-*/}}
-{{- define "fluent-bit.ingress.hostname" -}}
-{{- .Values.ingress.hostname -}}
-{{- end -}}
