@@ -1,0 +1,8 @@
+addr:
+  {{- $chartReleaseName := (index .Vars.extraDeploy 3).metadata.name }}
+  http://{{ $chartReleaseName }}/doku.php:
+    reachable: true
+    timeout: 2000
+  http://podinfo:9898:
+    reachable: true
+    timeout: 2000

@@ -49,6 +49,9 @@
               "pod": {
                 "workload": "deploy-flux-source-controller"
               }
+            },
+            "wait": {
+              "file": "flux/goss/goss-wait.yaml"
             }
           }
         }
