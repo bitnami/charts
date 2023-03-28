@@ -299,10 +299,13 @@ jobmanager:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param jobmanager.podSecurityContext.enabled Enabled Apache Flink pods' Security Context
   ## @param jobmanager.podSecurityContext.fsGroup Set Apache Flink pod's Security Context fsGroup
+  ## @param jobmanager.podSecurityContext.seccompProfile.type Rules specifying actions to take based on the requested syscall
   ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
+    seccompProfile:
+      type: "RuntimeDefault"
   ## Configure Container Security Context (only main container)
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param jobmanager.containerSecurityContext.enabled Enabled Apache Flink containers' Security Context
