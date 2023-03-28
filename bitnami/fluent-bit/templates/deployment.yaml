@@ -2,7 +2,7 @@
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name:  {{ include "fluentBit.fullname" . }}
+  name:  {{ include "fluent-bit.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/part-of: fluent-bit
@@ -67,7 +67,7 @@ spec:
       {{- end }}
       containers:
         - name: fluentbit
-          image: {{ include "fluentBit.image" . }}
+          image: {{ include "fluent-bit.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}

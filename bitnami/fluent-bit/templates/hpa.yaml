@@ -20,7 +20,7 @@ spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: {{ include "fluentBit.fullname" . }}
+    name: {{ include "fluent-bit.fullname" . }}
   minReplicas: {{ .Values.autoscaling.hpa.minReplicas }}
   maxReplicas: {{ .Values.autoscaling.hpa.maxReplicas }}
   metrics:

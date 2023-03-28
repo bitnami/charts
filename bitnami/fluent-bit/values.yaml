@@ -576,7 +576,7 @@ ingress:
   ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
   ## e.g:
   ## extraHosts:
-  ##   - name: fluentBit.local
+  ##   - name: fluent-bit.local
   ##     path: /
   ##
   extraHosts: []
@@ -594,8 +594,8 @@ ingress:
   ## e.g:
   ## extraTls:
   ## - hosts:
-  ##     - fluentBit.local
-  ##   secretName: fluentBit.local-tls
+  ##     - fluent-bit.local
+  ##   secretName: fluent-bit.local-tls
   ##
   extraTls: []
   ## @param ingress.secrets If you're providing your own certificates, please use this to add the certificates as secrets
@@ -609,7 +609,7 @@ ingress:
   ##
   ## Example
   ## secrets:
-  ##   - name: fluentBit.local-tls
+  ##   - name: fluent-bit.local-tls
   ##     key: ""
   ##     certificate: ""
   ##

@@ -32,10 +32,10 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
     spec:
-      {{- include "fluentBit.imagePullSecrets" . | nindent 6 }}
+      {{- include "fluent-bit.imagePullSecrets" . | nindent 6 }}
       hostNetwork: false
       dnsPolicy: ClusterFirstWithHostNet
-      serviceAccountName: {{ include "fluentBit.serviceAccountName" . }}
+      serviceAccountName: {{ include "fluent-bit.serviceAccountName" . }}
       {{- if .Values.podSecurityContext.enabled }}
       securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
@@ -69,7 +69,7 @@ spec:
         {{- end }}
       containers:
         - name: fluentbit
-          image: {{ include "fluentBit.image" . }}
+          image: {{ include "fluent-bit.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}

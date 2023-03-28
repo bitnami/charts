@@ -10,7 +10,7 @@ metadata:
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
   annotations:
-    {{- $annotations := fromYaml (include "fluentBit.ingress.annotations" .) -}}
+    {{- $annotations := fromYaml (include "fluent-bit.ingress.annotations" .) -}}
     {{- if $annotations }}
     {{- include "common.tplvalues.render" (dict "value" $annotations "context" $) | nindent 4 }}
     {{- end }}
@@ -22,8 +22,8 @@ spec:
   ingressClassName: {{ .Values.ingress.ingressClassName | quote }}
   {{- end }}
   rules:
-    {{- if (include "fluentBit.ingress.hostname" .) }}
-    - host: {{ include "fluentBit.ingress.hostname" . }}
+    {{- if (include "fluent-bit.ingress.hostname" .) }}
+    - host: {{ include "fluent-bit.ingress.hostname" . }}
       http:
         paths:
           {{- if .Values.ingress.extraPaths }}
@@ -33,7 +33,7 @@ spec:
             {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
             pathType: {{ .Values.ingress.pathType }}
             {{- end }}
-            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "fluentBit.fullname" . ) "servicePort" "http" "context" $)  | nindent 14 }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "fluent-bit.fullname" . ) "servicePort" "http" "context" $)  | nindent 14 }}
     {{- end }}
     {{- range .Values.ingress.extraHosts }}
     - host: {{ .name | quote }}
@@ -52,8 +52,8 @@ spec:
   tls:
     {{- if and .Values.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" $annotations )) .Values.ingress.selfSigned) }}
     - hosts:
-        - {{ include "fluentBit.ingress.hostname" . }}
-      secretName: {{ printf "%s-tls" (include "fluentBit.ingress.hostname" .) }}
+        - {{ include "fluent-bit.ingress.hostname" . }}
+      secretName: {{ printf "%s-tls" (include "fluent-bit.ingress.hostname" .) }}
     {{- end }}
     {{- if .Values.ingress.extraTls }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.ingress.extraTls "context" $ ) | nindent 4 }}

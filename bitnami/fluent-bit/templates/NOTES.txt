@@ -13,7 +13,7 @@ APP VERSION: {{ .Chart.AppVersion }}
 {{- else if contains "LoadBalancer" .Values.service.type }}
      NOTE: It may take a few minutes for the LoadBalancer IP to be available.
            You can watch the status of by running 'kubectl get --namespace {{ .Release.Namespace }} svc -w {{ include "common.names.fullname" . }}'
-    export SERVICE_IP=$(kubectl get svc --namespace {{ include "fluentBit.fullname" . }} {{ include "common.names.fullname" . }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+    export SERVICE_IP=$(kubectl get svc --namespace {{ include "fluent-bit.fullname" . }} {{ include "common.names.fullname" . }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
     echo "TCP port at $SERVICE_IP:{{ .Values.service.ports.http }}"
 {{- else if contains "ClusterIP" .Values.service.type }}
     echo "TCP port at 127.0.0.1:2020"

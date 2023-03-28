@@ -29,8 +29,8 @@ spec:
       {{- end }}
   targetRef:
     apiVersion: apps/v1
-    kind: {{ include "fluentBit.kind" . }}
-    name: {{ include "fluentBit.fullname" . }}
+    kind: {{ include "fluent-bit.kind" . }}
+    name: {{ include "fluent-bit.fullname" . }}
   {{- if .Values.autoscaling.vpa.updatePolicy }}
   updatePolicy:
     {{- with .Values.autoscaling.vpa.updatePolicy.updateMode }}
