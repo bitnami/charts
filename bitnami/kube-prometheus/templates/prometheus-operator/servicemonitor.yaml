@@ -34,6 +34,7 @@ spec:
       {{- if .Values.operator.serviceMonitor.relabelings }}
       relabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.operator.serviceMonitor.relabelings "context" $) | nindent 8 }}
       {{- end }}
+  jobLabel: {{ .Values.operator.serviceMonitor.jobLabel | quote }}
   selector:
     matchLabels: {{- include "kube-prometheus.operator.matchLabels" . | nindent 6 }}
   namespaceSelector:
