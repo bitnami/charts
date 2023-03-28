@@ -46,22 +46,24 @@ var _ = Describe("Grafana Tempo", func() {
 			frontendHost = returnValidHost(frontendSvc.Status.LoadBalancer.Ingress[0])
 		})
 
-		// This test has been commented because 'omnition/synthetic-load-generator' image does not exist anymore.
-		// An internal issue has been filed to replace that image.
-		// It("allows to access registered tracing spans", func() {
-		// 	// Obtain a sample traceID and route gerenerated by the synthetic app
-		// 	var traceID, route string
-		// 	lgPods := getPodsByLabelOrDie(ctx, c, "app=vib-synthetic-load-generator")
-		// 	containerLogs := getContainerLogsOrDie(ctx, c, lgPods.Items[0].GetName(), "synthetic-load-generator")
+		It("allows to access registered tracing spans", func() {
+			// This test has been commented because 'omnition/synthetic-load-generator' image does not exist anymore.
+			// An internal issue has been filed to replace that image.
+			Skip("The 'omnition/synthetic-load-generator' image does not exist anymore. Skipping test")
 
-		// 	traceID = findFirstPattern(containerLogs, "traceId ([a-z0-9]+)", 1)
-		// 	Expect(traceID).NotTo(BeEmpty())
+			// Obtain a sample traceID and route gerenerated by the synthetic app
+			var traceID, route string
+			lgPods := getPodsByLabelOrDie(ctx, c, "app=vib-synthetic-load-generator")
+			containerLogs := getContainerLogsOrDie(ctx, c, lgPods.Items[0].GetName(), "synthetic-load-generator")
 
-		// 	route = findFirstPattern(containerLogs, `route (\/\w+)`, 1)
-		// 	Expect(route).NotTo(BeEmpty())
+			traceID = findFirstPattern(containerLogs, "traceId ([a-z0-9]+)", 1)
+			Expect(traceID).NotTo(BeEmpty())
 
-		// 	responseBody := getResponseBodyOrDie(ctx, fmt.Sprintf("http://%s:%s/api/traces/%s", frontendHost, *apiPort, traceID))
-		// 	Expect(containsString(responseBody, route)).To(BeTrue())
-		// })
+			route = findFirstPattern(containerLogs, `route (\/\w+)`, 1)
+			Expect(route).NotTo(BeEmpty())
+
+			responseBody := getResponseBodyOrDie(ctx, fmt.Sprintf("http://%s:%s/api/traces/%s", frontendHost, *apiPort, traceID))
+			Expect(containsString(responseBody, route)).To(BeTrue())
+		})
 	})
 })
