@@ -10,9 +10,9 @@ it('allows installing/uninstalling an application and inviting new users', () =>
   });
   cy.reload();
 
-  // Perform a second login in case the user is logged out after installing the Sales app
-  cy.get('#login', {timeout: 0}).then($login => {
-    if ($login.is(':visible')) {
+  // Perform the second login only if the #login selector is visible
+  cy.get('#login').should('be.visible').then($login => {
+    if ($login.length > 0) {
       cy.login();
     }
   });
