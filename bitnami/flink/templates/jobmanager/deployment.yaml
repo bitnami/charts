@@ -1,7 +1,7 @@
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name:  flink-jobmanager
+  name:  {{ include "flink.jobmanager.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
@@ -63,7 +63,7 @@ spec:
       {{- include "common.tplvalues.render" (dict "value" .Values.jobmanager.initContainers "context" $) | nindent 8 }}
       {{- end }}
       containers:
-        - name: {{ include "flink.jobmanager.fullname" . }}
+        - name: flink-jobmanager
           image: {{ include "flink.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.jobmanager.containerSecurityContext.enabled }}
