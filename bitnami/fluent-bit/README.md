@@ -175,6 +175,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `config.extraFiles`    | Extra config files                                                                                     | `{}`    |
 | `rbac.create`          | Create Role and RoleBinding                                                                            | `false` |
 | `rbac.nodeAccess`      | RBAC node access                                                                                       | `false` |
+| `rbac.rules`           | Custom RBAC rules to set                                                                               | `[]`    |
 
 ### Autoscaling
 
