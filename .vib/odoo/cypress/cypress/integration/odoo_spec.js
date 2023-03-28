@@ -11,11 +11,11 @@ it('allows installing/uninstalling an application and inviting new users', () =>
   cy.reload();
 
   // Perform the second login only if the #login selector is visible
-  cy.get('#login').should('be.visible').then($login => {
-    if ($login.length > 0) {
-      cy.login();
-    }
-  });
+  cy.get("body").then(($body) => {
+      if ($body.text().includes('Log in')) {
+        cy.login();
+      }
+  })
 
   cy.get('[title="Home Menu"]').click();
   cy.contains('Settings').click();
