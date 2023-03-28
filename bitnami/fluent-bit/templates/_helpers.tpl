@@ -43,10 +43,3 @@ Return the k8s deploy kind
         {{ printf "%s" "Deployment" }}
     {{- end -}}
 {{- end -}}
-
-{{/*
-Return the ingress anotation
-*/}}
-{{- define "fluent-bit.ingress.annotations" -}}
-{{ .Values.ingress.annotations | toYaml }}
-{{- end -}}

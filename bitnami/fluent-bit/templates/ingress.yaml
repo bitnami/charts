@@ -10,10 +10,7 @@ metadata:
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
   annotations:
-    {{- $annotations := fromYaml (include "fluent-bit.ingress.annotations" .) -}}
-    {{- if $annotations }}
-    {{- include "common.tplvalues.render" (dict "value" $annotations "context" $) | nindent 4 }}
-    {{- end }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.ingress.annotations "context" $ ) | nindent 4 }}
     {{- if .Values.commonAnnotations }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
     {{- end }}
