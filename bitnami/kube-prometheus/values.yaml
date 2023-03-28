@@ -2487,7 +2487,7 @@ kubeScheduler:
     ## Requires proper certs (not self-signed) and delegated authentication/authorization checks
     ##
     https: false
-    ## @param kubeSchedule.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
+    ## @param kubeScheduler.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
     ##
     jobLabel: component
     ## @param kubeScheduler.serviceMonitor.insecureSkipVerify Skip TLS certificate validation when scraping
