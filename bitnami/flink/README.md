@@ -89,86 +89,87 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Jobmanager deployment parameters
 
-| Name                                                           | Description                                                                               | Value           |
-| -------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | --------------- |
-| `jobmanager.command`                                           | Command for running the container (set to default if not set). Use array form             | `[]`            |
-| `jobmanager.args`                                              | Args for running the container (set to default if not set). Use array form                | `[]`            |
-| `jobmanager.lifecycleHooks`                                    | Override default etcd container hooks                                                     | `{}`            |
-| `jobmanager.extraEnvVars`                                      | Extra environment variables to be set on flink container                                  | `[]`            |
-| `jobmanager.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars                                      | `""`            |
-| `jobmanager.extraEnvVarsSecret`                                | Name of existing Secret containing extra env vars                                         | `""`            |
-| `jobmanager.replicaCount`                                      | Number of Apache Flink Jobmanager replicas                                                | `1`             |
-| `jobmanager.livenessProbe.enabled`                             | Enable livenessProbe on Jobmanager nodes                                                  | `true`          |
-| `jobmanager.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                   | `20`            |
-| `jobmanager.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                          | `10`            |
-| `jobmanager.livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                         | `1`             |
-| `jobmanager.livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                       | `3`             |
-| `jobmanager.livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                       | `1`             |
-| `jobmanager.startupProbe.enabled`                              | Enable startupProbe on Jobmanager containers                                              | `true`          |
-| `jobmanager.startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                    | `20`            |
-| `jobmanager.startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                           | `10`            |
-| `jobmanager.startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                          | `1`             |
-| `jobmanager.startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                        | `15`            |
-| `jobmanager.startupProbe.successThreshold`                     | Success threshold for startupProbe                                                        | `1`             |
-| `jobmanager.readinessProbe.enabled`                            | Enable readinessProbe                                                                     | `true`          |
-| `jobmanager.readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                  | `20`            |
-| `jobmanager.readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                         | `10`            |
-| `jobmanager.readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                        | `1`             |
-| `jobmanager.readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                      | `15`            |
-| `jobmanager.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                      | `1`             |
-| `jobmanager.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                       | `{}`            |
-| `jobmanager.customStartupProbe`                                | Override default startup probe                                                            | `{}`            |
-| `jobmanager.customReadinessProbe`                              | Override default readiness probe                                                          | `{}`            |
-| `jobmanager.resources.limits`                                  | The resources limits for Apache Flink containers                                          | `{}`            |
-| `jobmanager.resources.requests`                                | The requested resources for Apache Flink containers                                       | `{}`            |
-| `jobmanager.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for flink container              | `[]`            |
-| `jobmanager.containerPorts.rpc`                                | Port for RPC                                                                              | `6123`          |
-| `jobmanager.containerPorts.http`                               | Port for http UI                                                                          | `8081`          |
-| `jobmanager.containerPorts.blob`                               | Port for blob server                                                                      | `6124`          |
-| `jobmanager.service.type`                                      | Apache Flink service type                                                                 | `ClusterIP`     |
-| `jobmanager.service.ports.rpc`                                 | Port for RPC                                                                              | `6123`          |
-| `jobmanager.service.ports.http`                                | Port for http UI                                                                          | `8081`          |
-| `jobmanager.service.ports.blob`                                | Port for blob server                                                                      | `6124`          |
-| `jobmanager.service.nodePorts.rpc`                             | Node port for RPC                                                                         | `""`            |
-| `jobmanager.service.nodePorts.http`                            | Node port for http UI                                                                     | `""`            |
-| `jobmanager.service.nodePorts.blob`                            | Port for blob server                                                                      | `""`            |
-| `jobmanager.service.extraPorts`                                | Extra ports to expose in the service (normally used with the `sidecar` value)             | `[]`            |
-| `jobmanager.service.loadBalancerIP`                            | LoadBalancerIP if service type is `LoadBalancer`                                          | `""`            |
-| `jobmanager.service.loadBalancerSourceRanges`                  | Service Load Balancer sources                                                             | `[]`            |
-| `jobmanager.service.clusterIP`                                 | Service Cluster IP                                                                        | `""`            |
-| `jobmanager.service.externalTrafficPolicy`                     | Service external traffic policy                                                           | `Cluster`       |
-| `jobmanager.service.annotations`                               | Provide any additional annotations which may be required.                                 | `{}`            |
-| `jobmanager.service.sessionAffinity`                           | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                      | `None`          |
-| `jobmanager.service.sessionAffinityConfig`                     | Additional settings for the sessionAffinity                                               | `{}`            |
-| `jobmanager.serviceAccount.create`                             | Enables ServiceAccount                                                                    | `true`          |
-| `jobmanager.serviceAccount.name`                               | ServiceAccount name                                                                       | `""`            |
-| `jobmanager.serviceAccount.annotations`                        | Annotations to add to all deployed objects                                                | `{}`            |
-| `jobmanager.serviceAccount.automountServiceAccountToken`       | Automount API credentials for a service account.                                          | `true`          |
-| `jobmanager.podSecurityContext.enabled`                        | Enabled Apache Flink pods' Security Context                                               | `true`          |
-| `jobmanager.podSecurityContext.fsGroup`                        | Set Apache Flink pod's Security Context fsGroup                                           | `1001`          |
-| `jobmanager.containerSecurityContext.enabled`                  | Enabled Apache Flink containers' Security Context                                         | `true`          |
-| `jobmanager.containerSecurityContext.runAsUser`                | Set Apache Flink container's Security Context runAsUser                                   | `1001`          |
-| `jobmanager.containerSecurityContext.runAsNonRoot`             | Force the container to be run as non root                                                 | `true`          |
-| `jobmanager.containerSecurityContext.allowPrivilegeEscalation` | Allows privilege escalation                                                               | `false`         |
-| `jobmanager.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                        | `["ALL"]`       |
-| `jobmanager.podAnnotations`                                    | Additional pod annotations                                                                | `{}`            |
-| `jobmanager.podLabels`                                         | Additional pod labels                                                                     | `{}`            |
-| `jobmanager.podAffinityPreset`                                 | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`            |
-| `jobmanager.podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`          |
-| `jobmanager.nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`            |
-| `jobmanager.nodeAffinityPreset.key`                            | Node label key to match. Ignored if `affinity` is set                                     | `""`            |
-| `jobmanager.nodeAffinityPreset.values`                         | Node label values to match. Ignored if `affinity` is set                                  | `[]`            |
-| `jobmanager.priorityClassName`                                 | Server priorityClassName                                                                  | `""`            |
-| `jobmanager.affinity`                                          | Affinity for pod assignment                                                               | `{}`            |
-| `jobmanager.nodeSelector`                                      | Node labels for pod assignment                                                            | `{}`            |
-| `jobmanager.tolerations`                                       | Tolerations for pod assignment                                                            | `[]`            |
-| `jobmanager.topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment                                            | `[]`            |
-| `jobmanager.schedulerName`                                     | Alternative scheduler                                                                     | `""`            |
-| `jobmanager.updateStrategy.type`                               | Apache Flink jobmanager deployment strategy type                                          | `RollingUpdate` |
-| `jobmanager.updateStrategy.rollingUpdate`                      | Apache Flink jobmanager deployment rolling update configuration parameters                | `{}`            |
-| `jobmanager.extraVolumes`                                      | Optionally specify extra list of additional volumes for flink container                   | `[]`            |
-| `jobmanager.initContainers`                                    | Add additional init containers to the flink pods                                          | `[]`            |
-| `jobmanager.sidecars`                                          | Add additional sidecar containers to the flink pods                                       | `[]`            |
+| Name                                                           | Description                                                                               | Value            |
+| -------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | ---------------- |
+| `jobmanager.command`                                           | Command for running the container (set to default if not set). Use array form             | `[]`             |
+| `jobmanager.args`                                              | Args for running the container (set to default if not set). Use array form                | `[]`             |
+| `jobmanager.lifecycleHooks`                                    | Override default etcd container hooks                                                     | `{}`             |
+| `jobmanager.extraEnvVars`                                      | Extra environment variables to be set on flink container                                  | `[]`             |
+| `jobmanager.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars                                      | `""`             |
+| `jobmanager.extraEnvVarsSecret`                                | Name of existing Secret containing extra env vars                                         | `""`             |
+| `jobmanager.replicaCount`                                      | Number of Apache Flink Jobmanager replicas                                                | `1`              |
+| `jobmanager.livenessProbe.enabled`                             | Enable livenessProbe on Jobmanager nodes                                                  | `true`           |
+| `jobmanager.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                   | `20`             |
+| `jobmanager.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                          | `10`             |
+| `jobmanager.livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                         | `1`              |
+| `jobmanager.livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                       | `3`              |
+| `jobmanager.livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                       | `1`              |
+| `jobmanager.startupProbe.enabled`                              | Enable startupProbe on Jobmanager containers                                              | `true`           |
+| `jobmanager.startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                    | `20`             |
+| `jobmanager.startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                           | `10`             |
+| `jobmanager.startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                          | `1`              |
+| `jobmanager.startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                        | `15`             |
+| `jobmanager.startupProbe.successThreshold`                     | Success threshold for startupProbe                                                        | `1`              |
+| `jobmanager.readinessProbe.enabled`                            | Enable readinessProbe                                                                     | `true`           |
+| `jobmanager.readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                  | `20`             |
+| `jobmanager.readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                         | `10`             |
+| `jobmanager.readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                        | `1`              |
+| `jobmanager.readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                      | `15`             |
+| `jobmanager.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                      | `1`              |
+| `jobmanager.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                       | `{}`             |
+| `jobmanager.customStartupProbe`                                | Override default startup probe                                                            | `{}`             |
+| `jobmanager.customReadinessProbe`                              | Override default readiness probe                                                          | `{}`             |
+| `jobmanager.resources.limits`                                  | The resources limits for Apache Flink containers                                          | `{}`             |
+| `jobmanager.resources.requests`                                | The requested resources for Apache Flink containers                                       | `{}`             |
+| `jobmanager.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for flink container              | `[]`             |
+| `jobmanager.containerPorts.rpc`                                | Port for RPC                                                                              | `6123`           |
+| `jobmanager.containerPorts.http`                               | Port for http UI                                                                          | `8081`           |
+| `jobmanager.containerPorts.blob`                               | Port for blob server                                                                      | `6124`           |
+| `jobmanager.service.type`                                      | Apache Flink service type                                                                 | `ClusterIP`      |
+| `jobmanager.service.ports.rpc`                                 | Port for RPC                                                                              | `6123`           |
+| `jobmanager.service.ports.http`                                | Port for http UI                                                                          | `8081`           |
+| `jobmanager.service.ports.blob`                                | Port for blob server                                                                      | `6124`           |
+| `jobmanager.service.nodePorts.rpc`                             | Node port for RPC                                                                         | `""`             |
+| `jobmanager.service.nodePorts.http`                            | Node port for http UI                                                                     | `""`             |
+| `jobmanager.service.nodePorts.blob`                            | Port for blob server                                                                      | `""`             |
+| `jobmanager.service.extraPorts`                                | Extra ports to expose in the service (normally used with the `sidecar` value)             | `[]`             |
+| `jobmanager.service.loadBalancerIP`                            | LoadBalancerIP if service type is `LoadBalancer`                                          | `""`             |
+| `jobmanager.service.loadBalancerSourceRanges`                  | Service Load Balancer sources                                                             | `[]`             |
+| `jobmanager.service.clusterIP`                                 | Service Cluster IP                                                                        | `""`             |
+| `jobmanager.service.externalTrafficPolicy`                     | Service external traffic policy                                                           | `Cluster`        |
+| `jobmanager.service.annotations`                               | Provide any additional annotations which may be required.                                 | `{}`             |
+| `jobmanager.service.sessionAffinity`                           | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                      | `None`           |
+| `jobmanager.service.sessionAffinityConfig`                     | Additional settings for the sessionAffinity                                               | `{}`             |
+| `jobmanager.serviceAccount.create`                             | Enables ServiceAccount                                                                    | `true`           |
+| `jobmanager.serviceAccount.name`                               | ServiceAccount name                                                                       | `""`             |
+| `jobmanager.serviceAccount.annotations`                        | Annotations to add to all deployed objects                                                | `{}`             |
+| `jobmanager.serviceAccount.automountServiceAccountToken`       | Automount API credentials for a service account.                                          | `true`           |
+| `jobmanager.podSecurityContext.enabled`                        | Enabled Apache Flink pods' Security Context                                               | `true`           |
+| `jobmanager.podSecurityContext.fsGroup`                        | Set Apache Flink pod's Security Context fsGroup                                           | `1001`           |
+| `jobmanager.podSecurityContext.seccompProfile.type`            | Rules specifying actions to take based on the requested syscall                           | `RuntimeDefault` |
+| `jobmanager.containerSecurityContext.enabled`                  | Enabled Apache Flink containers' Security Context                                         | `true`           |
+| `jobmanager.containerSecurityContext.runAsUser`                | Set Apache Flink container's Security Context runAsUser                                   | `1001`           |
+| `jobmanager.containerSecurityContext.runAsNonRoot`             | Force the container to be run as non root                                                 | `true`           |
+| `jobmanager.containerSecurityContext.allowPrivilegeEscalation` | Allows privilege escalation                                                               | `false`          |
+| `jobmanager.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                        | `["ALL"]`        |
+| `jobmanager.podAnnotations`                                    | Additional pod annotations                                                                | `{}`             |
+| `jobmanager.podLabels`                                         | Additional pod labels                                                                     | `{}`             |
+| `jobmanager.podAffinityPreset`                                 | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`             |
+| `jobmanager.podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`           |
+| `jobmanager.nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`             |
+| `jobmanager.nodeAffinityPreset.key`                            | Node label key to match. Ignored if `affinity` is set                                     | `""`             |
+| `jobmanager.nodeAffinityPreset.values`                         | Node label values to match. Ignored if `affinity` is set                                  | `[]`             |
+| `jobmanager.priorityClassName`                                 | Server priorityClassName                                                                  | `""`             |
+| `jobmanager.affinity`                                          | Affinity for pod assignment                                                               | `{}`             |
+| `jobmanager.nodeSelector`                                      | Node labels for pod assignment                                                            | `{}`             |
+| `jobmanager.tolerations`                                       | Tolerations for pod assignment                                                            | `[]`             |
+| `jobmanager.topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment                                            | `[]`             |
+| `jobmanager.schedulerName`                                     | Alternative scheduler                                                                     | `""`             |
+| `jobmanager.updateStrategy.type`                               | Apache Flink jobmanager deployment strategy type                                          | `RollingUpdate`  |
+| `jobmanager.updateStrategy.rollingUpdate`                      | Apache Flink jobmanager deployment rolling update configuration parameters                | `{}`             |
+| `jobmanager.extraVolumes`                                      | Optionally specify extra list of additional volumes for flink container                   | `[]`             |
+| `jobmanager.initContainers`                                    | Add additional init containers to the flink pods                                          | `[]`             |
+| `jobmanager.sidecars`                                          | Add additional sidecar containers to the flink pods                                       | `[]`             |
 
 ### TaskManager deployment parameters
 
