@@ -251,8 +251,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `taskmanager.initContainers`                                    | Add additional init containers to the flink pods                                          | `[]`             |
 | `taskmanager.sidecars`                                          | Add additional sidecar containers to the flink pods                                       | `[]`             |
 
-
-
 ## Configuration and installation details
 
 ### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
