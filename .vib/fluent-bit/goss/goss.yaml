@@ -3,7 +3,7 @@ http://fluent-bit:{{ .Vars.service.ports.http }}/:
   body:
     - /version.*{{ .Env.APP_VERSION }}/
 file:
-  /opt/bitnami/fluent-bit:
+  /opt/bitnami/fluent-bit/conf:
     exists: true
     filetype: directory
     mode: "0755"
