@@ -1,6 +1,7 @@
-http:
-  http://fluent-bit:{{ .Vars.service.ports.http }}/api/v1/health:
-    status: 200
+http://fluent-bit:{{ .Vars.service.ports.http }}/:
+  status: 200
+  body:
+    - /version.*{{ .Env.APP_VERSION }}/
 file:
   /opt/bitnami/fluent-bit:
     exists: true
