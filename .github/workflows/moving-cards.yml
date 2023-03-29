@@ -110,7 +110,6 @@ jobs:
     needs:
       - get-issue
     # The job shouldn't run for solved cards
-    if: ${{ github.event.project_card.column_id != env.SOLVED_COLUMN_ID }}
     steps:
       - name: Repo checkout
         uses: actions/checkout@v3
@@ -122,7 +121,7 @@ jobs:
           path: .github/workflows/
       - name: Assign to a person to work on it
         # Assign when there is nobody assigned or the card is new
-        if: ${{ needs.get-issue.outputs.assignees == '[]' || github.event.action == 'created' }}
+        if: ${{ github.event.project_card.column_id != env.SOLVED_COLUMN_ID && (needs.get-issue.outputs.assignees == '[]' || github.event.action == 'created') }}
         uses: pozil/auto-assign-issue@v1.11.0
         with:
           numOfAssignee: 1
