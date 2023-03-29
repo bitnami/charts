@@ -504,6 +504,9 @@ autoscaling:
       ##
       updateMode: Auto
   hpa:
+    ## @param autoscaling.hpa.annotations Annotations for HPA resource
+    ##
+    annotations: {}
     ## @param autoscaling.hpa.enabled Enable HPA
     ##
     enabled: false
