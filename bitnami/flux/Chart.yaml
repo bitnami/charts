@@ -9,7 +9,7 @@ dependencies:
     tags:
       - bitnami-common
     version: 2.x.x
-description: Flux is a tool for keeping Kubernetes clusters in sync with sources of configuration.
+description: Flux is a tool for keeping Kubernetes clusters in sync with sources of configuration
 home: https://fluxcd.io/
 icon: https://bitnami.com/assets/stacks/fluxcd-kustomize-controller/img/fluxcd-kustomize-controller-stack-220x234.png
 keywords:
@@ -31,4 +31,4 @@ sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/fluxcd-image-automation-controller
   - https://github.com/bitnami/containers/tree/main/bitnami/fluxcd-image-reflector-controller
   - https://github.com/fluxcd
-version: 0.1.0
+version: 0.1.1
