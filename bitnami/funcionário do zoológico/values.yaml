@@ -478,7 +478,7 @@ pdb:
 service:
   ## @param service.type Kubernetes Service type
   ##
-  type: ClusterIP
+  type: NodePort
   ## @param service.ports.client ZooKeeper client service port
   ## @param service.ports.tls ZooKeeper TLS service port
   ## @param service.ports.follower ZooKeeper follower service port
