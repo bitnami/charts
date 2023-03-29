@@ -1,4 +1,3 @@
-replicaCount: 3
 containerPorts:
   http: 2378
 podSecurityContext:
