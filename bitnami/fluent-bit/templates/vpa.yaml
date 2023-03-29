@@ -14,7 +14,7 @@ metadata:
 spec:
   resourcePolicy:
     containerPolicies:
-    - containerName: {{ .Chart.Name }}
+    - containerName: fluent-bit
       {{- with .Values.autoscaling.vpa.controlledResources }}
       controlledResources:
         {{- toYaml . | nindent 8 }}
@@ -29,7 +29,7 @@ spec:
       {{- end }}
   targetRef:
     apiVersion: apps/v1
-    kind: {{ include "fluent-bit.kind" . }}
+    kind: {{ ternary "DaemonSet" "Deployment" .Values.useDaemonset }}
     name: {{ include "fluent-bit.fullname" . }}
   {{- if .Values.autoscaling.vpa.updatePolicy }}
   updatePolicy:
