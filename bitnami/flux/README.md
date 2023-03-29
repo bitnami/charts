@@ -2,9 +2,9 @@
 
 # Flux packaged by Bitnami
 
-Flux is a tool for keeping Kubernetes clusters in sync with sources of configuration.
+Flux is a tool for keeping Kubernetes clusters in sync with sources of configuration
 
-[Overview of Flux](https://fluxcd.io/)
+[Overview of Flux](https://github.com/fluxcd/flux2)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 
