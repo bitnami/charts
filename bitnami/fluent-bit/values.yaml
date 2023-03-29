@@ -87,6 +87,10 @@ image:
 ## @param useDaemonset Use a daemonset instead of a deployment. `replicaCount` will not take effect.
 ##
 useDaemonset: false
+## @param hostNetwork Enable HOST Network
+## If hostNetwork true ->  dnsPolicy is set to ClusterFirstWithHostNet
+##
+hostNetwork: false
 ## @param command Command for running the container (set to default if not set). Use array form
 ##
 command: []
