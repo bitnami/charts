@@ -1,0 +1,40 @@
+{{- if and .Values.imageReflectorController.enabled .Values.imageReflectorController.persistence.enabled (not .Values.imageReflectorController.persistence.existingClaim) }}
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ template "flux.image-reflector-controller.fullname" . }}
+  namespace: {{ .Release.Namespace | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  annotations:
+    {{- if .Values.imageReflectorController.persistence.resourcePolicy }}
+    helm.sh/resource-policy: {{ .Values.imageReflectorController.persistence.resourcePolicy | quote }}
+    {{- end }}
+    {{- if .Values.imageReflectorController.persistence.annotations }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.imageReflectorController.persistence.annotations "context" $) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+spec:
+  accessModes:
+  {{- if not (empty .Values.imageReflectorController.persistence.accessModes) }}
+  {{- range .Values.imageReflectorController.persistence.accessModes }}
+    - {{ . | quote }}
+  {{- end }}
+  {{- else }}
+    - {{ .Values.imageReflectorController.persistence.accessMode | quote }}
+  {{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.imageReflectorController.persistence.size | quote }}
+  {{- if .Values.imageReflectorController.persistence.selector }}
+  selector: {{- include "common.tplvalues.render" (dict "value" .Values.imageReflectorController.persistence.selector "context" $) | nindent 4 }}
+  {{- end -}}
+  {{- if .Values.imageReflectorController.persistence.dataSource }}
+  dataSource: {{- include "common.tplvalues.render" (dict "value" .Values.imageReflectorController.persistence.dataSource "context" $) | nindent 4 }}
+  {{- end }}
+  {{- include "common.storage.class" (dict "persistence" .Values.imageReflectorController.persistence "global" .Values.global) | nindent 2 }}
+{{- end }}
