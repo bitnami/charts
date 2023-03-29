@@ -229,6 +229,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.serviceMonitor.metricRelabelings`          | Specify additional relabeling of metrics                                                                                                                               | `[]`                     |
 | `metrics.serviceMonitor.relabelings`                | Specify general relabeling                                                                                                                                             | `[]`                     |
 | `metrics.serviceMonitor.selector`                   | Prometheus instance selector labels                                                                                                                                    | `{}`                     |
+| `extraDeploy`                                       | Array of extra objects to deploy with the release                                                                                                                      | `[]`                     |
 
 ## Configuration and installation details
 
