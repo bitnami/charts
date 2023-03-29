@@ -14,18 +14,16 @@ metadata:
   {{- end }}
 data:
   custom_parsers.conf: |
-    {{- (tpl .Values.config.customParsers $) | nindent 4 }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.config.customParsers "context" $ ) | nindent 4 }}
   fluent-bit.conf: |
-    {{- (tpl .Values.config.service $)  | nindent 4 }}
-    {{- (tpl .Values.config.inputs $)  | nindent 4 }}
-    {{- (tpl .Values.config.filters $)  | nindent 4 }}
-    {{- (tpl .Values.config.outputs $)  | nindent 4 }}
-  {{- range $key, $val := .Values.config.upstream }}
-  {{ $key }}: |
-    {{- (tpl $val $) | nindent 4 }}
-  {{- end }}
-  {{- range $key, $val := .Values.config.extraFiles }}
-  {{ $key }}: |
-    {{- (tpl $val $) | nindent 4 }}
-  {{- end }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.config.service "context" $ ) | nindent 4 }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.config.inputs "context" $ ) | nindent 4 }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.config.filters "context" $ ) | nindent 4 }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.config.outputs "context" $ ) | nindent 4 }}
+  {{- if  .Values.config.upstream }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.config.upstream "context" $ ) | nindent 2 }}
+  {{- end -}}
+  {{- if  .Values.config.extraFiles }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.config.extraFiles "context" $ ) | nindent 2 }}
+  {{- end -}}
 {{- end -}}
