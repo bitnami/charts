@@ -86,6 +86,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `image.pullSecrets`                           | Fluent Bit image pull secrets                                                                              | `[]`                  |
 | `image.debug`                                 | Enable image debug mode                                                                                    | `false`               |
 | `useDaemonset`                                | Use a daemonset instead of a deployment. `replicaCount` will not take effect.                              | `false`               |
+| `hostNetwork`                                 | Enable HOST Network                                                                                        | `false`               |
 | `command`                                     | Command for running the container (set to default if not set). Use array form                              | `[]`                  |
 | `args`                                        | Args for running the container (set to default if not set). Use array form                                 | `[]`                  |
 | `lifecycleHooks`                              | Override default etcd container hooks                                                                      | `{}`                  |
