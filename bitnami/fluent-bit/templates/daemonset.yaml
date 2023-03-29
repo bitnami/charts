@@ -70,7 +70,7 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
         {{- end }}
       containers:
-        - name: fluentbit
+        - name: fluent-bit
           image: {{ include "fluent-bit.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.containerSecurityContext.enabled }}
@@ -158,7 +158,7 @@ spec:
       volumes:
         - name: config
           configMap:
-            name: fluentbit-config
+            name: fluent-bit-config
         - name: varlog
           hostPath:
             path: /var/log

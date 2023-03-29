@@ -66,7 +66,7 @@ spec:
       {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
       {{- end }}
       containers:
-        - name: fluentbit
+        - name: fluent-bit
           image: {{ include "fluent-bit.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.containerSecurityContext.enabled }}
@@ -146,7 +146,7 @@ spec:
       volumes:
         - name: config
           configMap:
-            name: fluentbit-config
+            name: fluent-bit-config
         {{- if .Values.extraVolumes }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
