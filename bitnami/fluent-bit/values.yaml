@@ -413,15 +413,17 @@ config:
 
   ## @param config.filters [string] Set of plugins that can be used to filter, modify, or enrich log data that is processed by Fluent Bit.
   ## https://docs.fluentbit.io/manual/pipeline/filters
+  ## Example:
+  ## filters: |
+  ##   [FILTER]
+  ##       Name kubernetes
+  ##       Match kube.*
+  ##       Merge_Log On
+  ##       Keep_Log Off
+  ##       K8S-Logging.Parser On
+  ##       K8S-Logging.Exclude On
   ##
-  filters: |
-    [FILTER]
-        Name parser
-        Match dummy.*
-        Key_Name data
-        Parser dummy_test
-        Reserve_Data On
-        Preserve_Key On
+  filters: ""
   ## @param config.outputs [string] Outputs to send the collected data to different destinations
   ## https://docs.fluentbit.io/manual/pipeline/outputs
   ##
