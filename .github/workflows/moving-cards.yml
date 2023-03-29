@@ -109,9 +109,8 @@ jobs:
     runs-on: ubuntu-latest
     needs:
       - get-issue
-    # The job shouldn't run for solved cards or new PRs created by bitnami-bot
-    if: |
-      (github.event.action != 'created' || needs.get-issue.outputs.type != 'pull_request' || needs.get-issue.outputs.author != 'bitnami-bot')
+    # The job shouldn't run for solved cards
+    if: ${{ github.event.project_card.column_id != env.SOLVED_COLUMN_ID }}
     steps:
       - name: Repo checkout
         uses: actions/checkout@v3
@@ -123,21 +122,23 @@ jobs:
           path: .github/workflows/
       - name: Assign to a person to work on it
         # Assign when there is nobody assigned or the card is new
-        if: ${{ github.event.project_card.column_id != env.SOLVED_COLUMN_ID && (needs.get-issue.outputs.assignees == '[]' || github.event.action == 'created') }}
-        uses: pozil/auto-assign-issue@v1.9.0
+        if: ${{ needs.get-issue.outputs.assignees == '[]' || github.event.action == 'created' }}
+        uses: pozil/auto-assign-issue@v1.11.0
         with:
           numOfAssignee: 1
           teams: ${{ github.event.project_card.column_id == env.BITNAMI_COLUMN_ID && env.SUPPORT_TEAM_NAME || (github.event.project_card.column_id == env.BUILD_MAINTENANCE_COLUMN_ID && env.BUILD_MAINTAINERS_TEAM_NAME || env.TRIAGE_TEAM_NAME) }}
           repo-token: ${{ secrets.BITNAMI_BOT_TOKEN }}
+          allowSelfAssign: false
       - name: Reassign when moved into 'In progress' from 'Triage'
         # Reassigned when moved into In progress FROM Triage
         if: |
           github.event.action == 'moved' && needs.get-issue.outputs.assignees != '[]' &&
           github.event.project_card.column_id == env.IN_PROGRESS_COLUMN_ID &&
           github.event.changes.column_id.from == env.TRIAGE_COLUMN_ID
-        uses: pozil/auto-assign-issue@v1.9.0
+        uses: pozil/auto-assign-issue@v1.11.0
         with:
           numOfAssignee: 1
           removePreviousAssignees: true
           teams: ${{ env.SUPPORT_TEAM_NAME }}
           repo-token: ${{ secrets.BITNAMI_BOT_TOKEN }}
+          allowSelfAssign: false
