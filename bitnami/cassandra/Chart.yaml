@@ -2,7 +2,7 @@ annotations:
   category: Database
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 4.1.0
+appVersion: 4.1.1
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -23,4 +23,4 @@ name: cassandra
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/cassandra
   - http://cassandra.apache.org
-version: 10.1.0
+version: 10.1.1
