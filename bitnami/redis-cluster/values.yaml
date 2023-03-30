@@ -844,6 +844,13 @@ metrics:
   ##   check-keys: myKey,myOtherKey
   ##
   extraArgs: {}
+  ## @param metrics.extraEnvVars Array with extra environment variables to add to Redis&reg; exporter
+  ## e.g:
+  # extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
   ## @param metrics.podAnnotations [object] Additional annotations for Metrics exporter pod
   ##
   podAnnotations:
