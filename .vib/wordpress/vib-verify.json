@@ -22,7 +22,6 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/wordpress"
         },
-        "runtime_parameters": "d29yZHByZXNzVXNlcm5hbWU6IHRlc3RfdXNlcgp3b3JkcHJlc3NQYXNzd29yZDogQ29tcGxpY2F0ZWRQYXNzd29yZDEyMyE0CndvcmRwcmVzc0VtYWlsOiB0ZXN0X3VzZXJfZW1haWxAZW1haWwuY29tCm1hcmlhZGI6CiAgYXV0aDoKICAgIGRhdGFiYXNlOiB0ZXN0X3dvcmRwcmVzc19kYXRhYmFzZQogICAgdXNlcm5hbWU6IHRlc3Rfd29yZHByZXNzX3VzZXJuYW1lCiAgICBwYXNzd29yZDogdGVzdF93b3JkcHJlc3NfcGFzc3dvcmQKcG9kU2VjdXJpdHlDb250ZXh0OgogIGVuYWJsZWQ6IHRydWUKICBmc0dyb3VwOiAxMDAyCmNvbnRhaW5lclNlY3VyaXR5Q29udGV4dDoKICBlbmFibGVkOiB0cnVlCiAgcnVuQXNVc2VyOiAxMDAyCndvcmRwcmVzc1RhYmxlUHJlZml4OiB3b3JkcHJlc3NfCnNlcnZpY2U6CiAgdHlwZTogTG9hZEJhbGFuY2VyCiAgcG9ydHM6CiAgICBodHRwOiA4MAogICAgaHR0cHM6IDQ0Mwpjb250YWluZXJQb3J0czoKICBodHRwOiA4MDgxCiAgaHR0cHM6IDg0NDQKaG9zdEFsaWFzZXM6CiAgLSBpcDogMTI3LjAuMC4xCiAgICBob3N0bmFtZXM6CiAgICAgIC0gc3RhdHVzLmxvY2FsaG9zdA==",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -42,16 +41,17 @@
           "action_id": "goss",
           "params": {
             "resources": {
-              "path": "/.vib/wordpress/goss"
+              "path": "/.vib"
             },
+            "tests_file": "wordpress/goss/goss.yaml",
+            "vars_file": "wordpress/runtime-parameters.yaml",
             "remote": {
               "pod": {
                 "workload": "deploy-wordpress"
               }
             },
-            "vars_file": "vars.yaml",
             "wait": {
-              "file": "goss-wait.yaml"
+              "file": "wordpress/goss/goss-wait.yaml"
             }
           }
         },

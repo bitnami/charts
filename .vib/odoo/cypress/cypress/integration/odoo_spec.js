@@ -10,6 +10,13 @@ it('allows installing/uninstalling an application and inviting new users', () =>
   });
   cy.reload();
 
+  // Perform the second login only if the #login selector is visible
+  cy.get("body").then(($body) => {
+      if ($body.text().includes('Log in')) {
+        cy.login();
+      }
+  })
+
   cy.get('[title="Home Menu"]').click();
   cy.contains('Settings').click();
   cy.fixture('users').then((user) => {
@@ -22,15 +29,15 @@ it('allows installing/uninstalling an application and inviting new users', () =>
 
   cy.get('[title="Home Menu"]').click();
   cy.contains('a', 'Apps').click();
-  cy.get('[role="searchbox"]').type('Discuss {enter}');
+  cy.get('[role="searchbox"]').type('Invoicing {enter}');
   cy.contains('1-1');
-  cy.contains('[role="article"]', 'Discuss').within(() => {
+  cy.contains('[role="article"]', 'Invoicing').within(() => {
     cy.get('button[class*="dropdown-toggle"]').click({ force: true });
   });
   cy.contains('Uninstall').click({ force: true });
-  cy.get('button[name="action_uninstall"]').click();
+  cy.get('[name*="uninstall"]').click();
   cy.reload();
 
   cy.get('[title="Home Menu"]').click();
-  cy.contains('a', 'Discuss').should('not.exist');
+  cy.contains('a', 'Invoicing').should('not.exist');
 });

@@ -22,7 +22,6 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/joomla"
         },
-        "runtime_parameters": "am9vbWxhVXNlcm5hbWU6IHVzZXIKam9vbWxhUGFzc3dvcmQ6IENvbXBsaWNhdGVkUGFzc3dvcmQxMjMhNApzZXJ2aWNlOgogIHR5cGU6IExvYWRCYWxhbmNlcgogIHBvcnRzOgogICAgaHR0cDogODAKbWFyaWFkYjoKICBhdXRoOgogICAgZGF0YWJhc2U6IGJpdG5hbWlfam9vbWxh",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -42,14 +41,15 @@
           "action_id": "goss",
           "params": {
             "resources": {
-              "path": "/.vib/joomla/goss"
+              "path": "/.vib"
             },
+            "tests_file": "joomla/goss/goss.yaml",
+            "vars_file": "joomla/runtime-parameters.yaml",
             "remote": {
               "pod": {
                 "workload": "deploy-joomla"
               }
-            },
-            "vars_file": "vars.yaml"
+            }
           }
         },
         {

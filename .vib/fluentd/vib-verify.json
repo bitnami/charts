@@ -22,7 +22,6 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/fluentd"
         },
-        "runtime_parameters": "YWdncmVnYXRvcjoKICBlbmFibGVkOiB0cnVlCmZvcndhcmRlcjoKICBlbmFibGVkOiB0cnVlCiAgc2VydmljZToKICAgIHR5cGU6IExvYWRCYWxhbmNlcgogICAgcG9ydHM6CiAgICAgIGh0dHA6CiAgICAgICAgcG9ydDogODA=",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_ALTERNATIVE_TARGET_PLATFORM}",
           "size": {
@@ -43,8 +42,9 @@
           "action_id": "goss",
           "params": {
             "resources": {
-              "path": "/.vib/fluentd/goss"
+              "path": "/.vib"
             },
+            "tests_file": "fluentd/goss/goss.yaml",
             "remote": {
               "pod": {
                 "workload": "ds-fluentd"

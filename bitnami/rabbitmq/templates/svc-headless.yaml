@@ -7,14 +7,17 @@ metadata:
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
-  {{- if or .Values.service.annotationsHeadless .Values.commonAnnotations }}
+  {{- if or .Values.service.annotationsHeadless .Values.commonAnnotations .Values.service.headless.annotations }}
   annotations:
-    {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 4 }}
-    {{- end -}}
+    {{- if .Values.service.headless.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.service.headless.annotations "context" $ ) | nindent 4 }}
+    {{- end }}
     {{- if .Values.service.annotationsHeadless }}
     {{- include "common.tplvalues.render" (dict "value" .Values.service.annotationsHeadless "context" $) | nindent 4 }}
-    {{- end -}}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
   {{- end }}
 spec:
   clusterIP: None

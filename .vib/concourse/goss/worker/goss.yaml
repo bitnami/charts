@@ -5,8 +5,8 @@ file:
     mode: "2777"
     owner: root
 command:
-  {{- $user := .Vars.secrets.localUser }}
-  {{- $pwd := .Vars.secrets.localPassword }}
+  {{- $user := (split ":" .Vars.secrets.localUsers)._0 }}
+  {{- $pwd := (split ":" .Vars.secrets.localUsers)._1 }}
   {{- $target := printf "target_%s" (randAlphaNum 5 | toLower) }}
   {{- $port := .Vars.service.web.ports.http }}
   check-running-workers:

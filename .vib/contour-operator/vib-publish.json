@@ -22,7 +22,6 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/contour-operator"
         },
-        "runtime_parameters": "ZXh0cmFEZXBsb3k6Ci0gfAogIHt7LSAkY2EgOj0gZ2VuQ0EgImNvbnRvdXItY2EiIDM2NSB9fQogIHt7LSAkY29udG91cl9ob3N0bmFtZSA6PSAiY29udG91ciIgfX0KICB7ey0gJGNvbnRvdXJfY2VydCA6PSBnZW5TaWduZWRDZXJ0ICRjb250b3VyX2hvc3RuYW1lIG5pbCAobGlzdCAkY29udG91cl9ob3N0bmFtZSkgMzY1ICRjYSB9fQogIGFwaVZlcnNpb246IHYxCiAga2luZDogU2VjcmV0CiAgbWV0YWRhdGE6CiAgICAjIE9ubHkgbmVjZXNzYXJ5IGZvciB0aGUgaW5ncmVzcyB0byBlbmFibGUgSFRUUFMgcG9ydHMKICAgIG5hbWU6IGZha2UtdGxzLWNlcnRpZmljYXRlcwogICAgbmFtZXNwYWNlOiB7eyBpbmNsdWRlICJjb21tb24ubmFtZXMubmFtZXNwYWNlIiAkIHwgcXVvdGUgfX0KICB0eXBlOiBrdWJlcm5ldGVzLmlvL3RscwogIGRhdGE6CiAgICB0bHMuY3J0OiB7eyAkY29udG91cl9jZXJ0LkNlcnQgfCBiNjRlbmMgfCBxdW90ZSB9fQogICAgdGxzLmtleToge3sgJGNvbnRvdXJfY2VydC5LZXkgfCBiNjRlbmMgfCBxdW90ZSB9fQogICAgY2EuY3J0OiB7eyAkY2EuQ2VydCB8IGI2NGVuYyB8IHF1b3RlIH19CiAgLS0tCiAgYXBpVmVyc2lvbjogYXBwcy92MQogIGtpbmQ6IERlcGxveW1lbnQKICBtZXRhZGF0YToKICAgIGxhYmVsczoKICAgICAgYXBwOiBhcGFjaGUKICAgIG5hbWU6IGFwYWNoZQogIHNwZWM6CiAgICByZXBsaWNhczogMQogICAgc2VsZWN0b3I6CiAgICAgIG1hdGNoTGFiZWxzOgogICAgICAgIGFwcDogYXBhY2hlCiAgICB0ZW1wbGF0ZToKICAgICAgbWV0YWRhdGE6CiAgICAgICAgbGFiZWxzOgogICAgICAgICAgYXBwOiBhcGFjaGUKICAgICAgc3BlYzoKICAgICAgICBjb250YWluZXJzOgogICAgICAgIC0gaW1hZ2U6IGRvY2tlci5pby9iaXRuYW1pL2FwYWNoZTpsYXRlc3QKICAgICAgICAgIG5hbWU6IGFwYWNoZQogIC0tLQogIGFwaVZlcnNpb246IHYxCiAga2luZDogU2VydmljZQogIG1ldGFkYXRhOgogICAgbGFiZWxzOgogICAgICBhcHA6IGFwYWNoZQogICAgbmFtZTogYXBhY2hlCiAgc3BlYzoKICAgIHBvcnRzOgogICAgLSBuYW1lOiBodHRwCiAgICAgIHBvcnQ6IDgwCiAgICAgIHByb3RvY29sOiBUQ1AKICAgICAgdGFyZ2V0UG9ydDogODA4MAogICAgLSBuYW1lOiBodHRwcwogICAgICBwb3J0OiA0NDMKICAgICAgcHJvdG9jb2w6IFRDUAogICAgICB0YXJnZXRQb3J0OiA4NDQzCiAgICBzZWxlY3RvcjoKICAgICAgYXBwOiBhcGFjaGUKICAgIHNlc3Npb25BZmZpbml0eTogTm9uZQogICAgdHlwZTogQ2x1c3RlcklQ",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_ALTERNATIVE_TARGET_PLATFORM}",
           "size": {
@@ -36,7 +35,6 @@
           "params": {
             "resources": {
               "path": "/.vib/contour-operator/ginkgo"
-
             },
             "params": {
               "kubeconfig": "{{kubeconfig}}",

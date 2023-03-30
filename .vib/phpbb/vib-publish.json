@@ -22,7 +22,6 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/phpbb"
         },
-        "runtime_parameters": "cGhwYmJVc2VybmFtZTogInVzZXIiCnBocGJiUGFzc3dvcmQ6ICJDb21wbGljYXRlZFBhc3N3b3JkMTIzITQiCnNlcnZpY2U6CiAgdHlwZTogTG9hZEJhbGFuY2VyCiAgcG9ydHM6CiAgICBodHRwOiA4MAo=",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -42,8 +41,9 @@
           "action_id": "goss",
           "params": {
             "resources": {
-              "path": "/.vib/phpbb/goss"
+              "path": "/.vib"
             },
+            "tests_file": "phpbb/goss/goss.yaml",
             "remote": {
               "pod": {
                 "workload": "deploy-phpbb"

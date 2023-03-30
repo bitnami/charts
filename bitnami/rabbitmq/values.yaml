@@ -31,7 +31,7 @@ global:
 image:
   registry: docker.io
   repository: bitnami/rabbitmq
-  tag: 3.11.10-debian-11-r0
+  tag: 3.11.11-debian-11-r0
   digest: ""
   ## set to true if you would like to see extra information on logs
   ## It turns BASH and/or NAMI debugging in the image
@@ -660,6 +660,10 @@ updateStrategy:
 ## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 ##
 statefulsetLabels: {}
+## @param statefulsetAnnotations RabbitMQ statefulset annotations. Evaluated as a template
+## Ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+##
+statefulsetAnnotations: {}
 ## @param priorityClassName Name of the priority class to be used by RabbitMQ pods, priority class needs to be created beforehand
 ## Ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
 ##
@@ -1048,12 +1052,19 @@ service:
   ##   service.beta.kubernetes.io/aws-load-balancer-internal: 0.0.0.0/0
   ##
   annotations: {}
+  ## DEPRECATED service.annotationsHeadless it will removed in a future release, please use service.headless.annotations instead
   ## @param service.annotationsHeadless Headless Service annotations. Evaluated as a template
   ## Example:
   ## annotations:
   ##   external-dns.alpha.kubernetes.io/internal-hostname: rabbitmq.example.com
   ##
   annotationsHeadless: {}
+  ## Headless service properties
+  ##
+  headless:
+    ## @param service.headless.annotations Annotations for the headless service.
+    ##
+    annotations: {}
   ## @param service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
   ## If "ClientIP", consecutive client requests will be directed to the same Pod
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
@@ -1367,7 +1378,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r92
+    tag: 11-debian-11-r98
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

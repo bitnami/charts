@@ -19,7 +19,7 @@ file:
     mode: "3777"
     owner: root
 command:
-  {{- $password := .Vars.server.secret.argocdServerAdminPassword }}
+  {{- $password := .Vars.config.secret.argocdServerAdminPassword }}
   check-argocd-cli:
     exec: argocd login argo-cd-server --insecure --username admin --password {{ $password }}
     exit-status: 0

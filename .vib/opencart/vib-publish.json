@@ -22,7 +22,6 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/opencart"
         },
-        "runtime_parameters": "b3BlbmNhcnRIb3N0OiB2bXdhcmUtb3BlbmNhcnQubXkKb3BlbmNhcnRVc2VybmFtZTogb3BlbmNhcnRVc2VyCm9wZW5jYXJ0UGFzc3dvcmQ6IFBhc3N3b3JkMTIzITQKc2VydmljZToKICB0eXBlOiBMb2FkQmFsYW5jZXIKICBwb3J0czogCiAgICBodHRwOiA4MAogICAgaHR0cHM6IDQ0NApob3N0QWxpYXNlczoKICAtIGlwOiAiMTI3LjAuMC4xIgogICAgaG9zdG5hbWVzOgogICAgICAtICJzdGF0dXMubG9jYWxob3N0Igpjb250YWluZXJQb3J0czoKICBodHRwOiA4MDgxCiAgaHR0cHM6IDg0NDQKcG9kU2VjdXJpdHlDb250ZXh0OgogIGVuYWJsZWQ6IHRydWUKICBmc0dyb3VwOiAxMDAyCmNvbnRhaW5lclNlY3VyaXR5Q29udGV4dDoKICBlbmFibGVkOiB0cnVlCiAgcnVuQXNVc2VyOiAxMDAyCm1hcmlhZGI6CiAgYXV0aDoKICAgIGRhdGFiYXNlOiB0ZXN0X29jX2RhdGFiYXNlCiAgICB1c2VybmFtZTogdGVzdF9vY191c2VybmFtZQogICAgcGFzc3dvcmQ6IHRlc3Rfb2NfcGFzc3dvcmQK",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -42,9 +41,10 @@
           "action_id": "goss",
           "params": {
             "resources": {
-              "path": "/.vib/opencart/goss"
+              "path": "/.vib"
             },
-            "vars_file": "vars.yaml",
+            "tests_file": "opencart/goss/goss.yaml",
+            "vars_file": "opencart/runtime-parameters.yaml",
             "remote": {
               "pod": {
                 "workload": "deploy-opencart"

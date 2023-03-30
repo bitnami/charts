@@ -22,7 +22,6 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/apache"
         },
-        "runtime_parameters": "c2VydmljZToKICB0eXBlOiBMb2FkQmFsYW5jZXIKICBwb3J0czoKICAgIGh0dHA6IDgwCiAgICBodHRwczogNDQ0CmNvbnRhaW5lclBvcnRzOgogIGh0dHA6IDgwODEKICBodHRwczogODQ0NApob3N0QWxpYXNlczoKICAtIGlwOiAxMjcuMC4wLjEKICAgIGhvc3RuYW1lczoKICAgICAgLSBzdGF0dXMubG9jYWxob3N0CnBvZFNlY3VyaXR5Q29udGV4dDoKICBlbmFibGVkOiB0cnVlCiAgZnNHcm91cDogMTAwMgpjb250YWluZXJTZWN1cml0eUNvbnRleHQ6CiAgZW5hYmxlZDogdHJ1ZQogIHJ1bkFzVXNlcjogMTAwMg==",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -42,14 +41,15 @@
           "action_id": "goss",
           "params": {
             "resources": {
-              "path": "/.vib/apache/goss"
+              "path": "/.vib"
             },
+            "tests_file": "apache/goss/goss.yaml",
+            "vars_file": "apache/runtime-parameters.yaml",
             "remote": {
               "pod": {
                 "workload": "deploy-apache"
               }
-            },
-            "vars_file": "vars.yaml"
+            }
           }
         },
         {

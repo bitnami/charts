@@ -1,0 +1,19 @@
+admin:
+  user: test_admin
+  password: ComplicatedPassword123!4
+plugins: grafana-kubernetes-app
+grafana:
+  containerPorts:
+    grafana: 3000
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1002
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1002
+service:
+  type: LoadBalancer
+  ports:
+    grafana: 80
+persistence:
+  enabled: true

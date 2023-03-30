@@ -1,5 +1,5 @@
 http:
-  http://logstash:{{ .Vars.service.ports.http }}:
+  http://logstash:{{ (index .Vars.service.ports 0).port }}:
     status: 200
 file:
   {{ .Vars.persistence.mountPath }}:
@@ -13,7 +13,7 @@ file:
     mode: "0777"
     owner: root
     contains:
-    - /port.*{{ .Vars.containerPorts.http }}/
+    - /port.*{{ (index .Vars.containerPorts 0).containerPort }}/
 command:
   {{- $rnd_ip := printf "%s.%s.%s.%s" (randNumeric 2) (randNumeric 2) (randNumeric 2) (randNumeric 2) }}
   {{- $rnd_address := printf "http://%s.com" (randAlpha 5) }}

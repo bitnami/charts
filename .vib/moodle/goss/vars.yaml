@@ -1,7 +1,0 @@
-service:
-  ports:
-    https: 444
-podSecurityContext:
-  fsGroup: 1002
-containerSecurityContext:
-  runAsUser: 1002

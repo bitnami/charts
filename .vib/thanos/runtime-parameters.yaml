@@ -1,0 +1,37 @@
+objstoreConfig: |-
+  type: s3
+  config:
+    bucket: thanos-test
+    endpoint: {{ include "thanos.minio.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local:9000
+    access_key: minio-vib
+    secret_key: minio123
+    insecure: true
+minio:
+  enabled: true
+  auth:
+    rootUser: minio-vib
+    rootPassword: minio123
+  defaultBuckets: thanos-test
+  service:
+    ports:
+      api: 9000
+query:
+  enabled: true
+queryFrontend:
+  enabled: true
+  service:
+    type: LoadBalancer
+    ports:
+      http: 80
+bucketweb:
+  enabled: true
+storegateway:
+  enabled: true
+  service:
+    ports:
+      grpc: 10903
+receive:
+  enabled: true
+  service:
+    ports:
+      grpc: 10904

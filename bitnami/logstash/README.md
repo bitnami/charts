@@ -80,7 +80,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
 | `image.registry`                              | Logstash image registry                                                                                                           | `docker.io`              |
 | `image.repository`                            | Logstash image repository                                                                                                         | `bitnami/logstash`       |
-| `image.tag`                                   | Logstash image tag (immutable tags are recommended)                                                                               | `8.6.2-debian-11-r3`     |
+| `image.tag`                                   | Logstash image tag (immutable tags are recommended)                                                                               | `8.6.2-debian-11-r9`     |
 | `image.digest`                                | Logstash image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                          | `""`                     |
 | `image.pullPolicy`                            | Logstash image pull policy                                                                                                        | `IfNotPresent`           |
 | `image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                                  | `[]`                     |
@@ -163,6 +163,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.annotations`                         | Annotations for Logstash service                                                                                                  | `{}`                     |
 | `service.sessionAffinity`                     | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                              | `None`                   |
 | `service.sessionAffinityConfig`               | Additional settings for the sessionAffinity                                                                                       | `{}`                     |
+| `service.headless.annotations`                | Annotations for the headless service.                                                                                             | `{}`                     |
 | `persistence.enabled`                         | Enable Logstash data persistence using PVC                                                                                        | `false`                  |
 | `persistence.existingClaim`                   | A manually managed Persistent Volume and Claim                                                                                    | `""`                     |
 | `persistence.storageClass`                    | PVC Storage Class for Logstash data volume                                                                                        | `""`                     |
@@ -175,7 +176,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.securityContext.runAsUser` | User ID for the volumePermissions init container                                                                                  | `0`                      |
 | `volumePermissions.image.registry`            | Init container volume-permissions image registry                                                                                  | `docker.io`              |
 | `volumePermissions.image.repository`          | Init container volume-permissions image repository                                                                                | `bitnami/bitnami-shell`  |
-| `volumePermissions.image.tag`                 | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r90`       |
+| `volumePermissions.image.tag`                 | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r99`       |
 | `volumePermissions.image.digest`              | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                     |
 | `volumePermissions.image.pullPolicy`          | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`           |
 | `volumePermissions.image.pullSecrets`         | Specify docker-registry secret names as an array                                                                                  | `[]`                     |

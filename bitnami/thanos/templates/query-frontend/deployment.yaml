@@ -57,6 +57,9 @@ spec:
         podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.queryFrontend.podAntiAffinityPreset "component" "query-frontend" "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.queryFrontend.nodeAffinityPreset.type "key" .Values.queryFrontend.nodeAffinityPreset.key "values" .Values.queryFrontend.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
+      {{- if .Values.queryFrontend.dnsConfig }}
+      dnsConfig: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.dnsConfig "context" $) | nindent 8 }}
+      {{- end }}
       {{- if .Values.queryFrontend.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
