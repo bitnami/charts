@@ -90,15 +90,15 @@ image:
 ## If daemonset is enabled, Fluent Bit deployment will be disabled
 ##
 daemonset:
-  ## @param useDaemonset Use a daemonset instead of a deployment. `replicaCount` will not take effect.
+  ## @param daemonset.enabled Use a daemonset instead of a deployment. `replicaCount` will not take effect.
   ##
   enabled: true
   ## Pod security context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param podSecurityContext.enabled Enable security context for daemonset pods
-  ## @param podSecurityContext.runAsUser User ID for daemonset containers
-  ## @param podSecurityContext.runAsGroup Group ID for daemonset containers
-  ## @param podSecurityContext.fsGroup Group ID for daemonset containers filesystem
+  ## @param daemonset.podSecurityContext.enabled Enable security context for daemonset pods
+  ## @param daemonset.podSecurityContext.runAsUser User ID for daemonset containers
+  ## @param daemonset.podSecurityContext.runAsGroup Group ID for daemonset containers
+  ## @param daemonset.podSecurityContext.fsGroup Group ID for daemonset containers filesystem
   ##
   podSecurityContext:
     enabled: true
