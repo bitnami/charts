@@ -1,4 +1,4 @@
-# Based on: https://github.com/metallb/metallb/blob/v0.13.4/charts/metallb/charts/crds/templates/crds.yaml
+# Based on: https://github.com/metallb/metallb/blob/v0.13.9/charts/metallb/charts/crds/templates/crds.yaml
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
@@ -773,6 +773,10 @@ spec:
               sourceAddress:
                 description: Source address to use when establishing the session.
                 type: string
+              vrf:
+                description: To set if we want to peer with the BGPPeer using an interface
+                  belonging to a host vrf
+                type: string
             required:
             - myASN
             - peerASN
@@ -850,6 +854,130 @@ spec:
                 description: AvoidBuggyIPs prevents addresses ending with .0 and .255
                   to be used by a pool.
                 type: boolean
+              serviceAllocation:
+                description: AllocateTo makes ip pool allocation to specific namespace
+                  and/or service. The controller will use the pool with lowest value
+                  of priority in case of multiple matches. A pool with no priority
+                  set will be used only if the pools with priority can't be used.
+                  If multiple matching IPAddressPools are available it will check
+                  for the availability of IPs sorting the matching IPAddressPools
+                  by priority, starting from the highest to the lowest. If multiple
+                  IPAddressPools have the same priority, choice will be random.
+                properties:
+                  namespaceSelectors:
+                    description: NamespaceSelectors list of label selectors to select
+                      namespace(s) for ip pool, an alternative to using namespace
+                      list.
+                    items:
+                      description: A label selector is a label query over a set of
+                        resources. The result of matchLabels and matchExpressions
+                        are ANDed. An empty label selector matches all objects. A
+                        null label selector matches no objects.
+                      properties:
+                        matchExpressions:
+                          description: matchExpressions is a list of label selector
+                            requirements. The requirements are ANDed.
+                          items:
+                            description: A label selector requirement is a selector
+                              that contains values, a key, and an operator that relates
+                              the key and values.
+                            properties:
+                              key:
+                                description: key is the label key that the selector
+                                  applies to.
+                                type: string
+                              operator:
+                                description: operator represents a key's relationship
+                                  to a set of values. Valid operators are In, NotIn,
+                                  Exists and DoesNotExist.
+                                type: string
+                              values:
+                                description: values is an array of string values.
+                                  If the operator is In or NotIn, the values array
+                                  must be non-empty. If the operator is Exists or
+                                  DoesNotExist, the values array must be empty. This
+                                  array is replaced during a strategic merge patch.
+                                items:
+                                  type: string
+                                type: array
+                            required:
+                            - key
+                            - operator
+                            type: object
+                          type: array
+                        matchLabels:
+                          additionalProperties:
+                            type: string
+                          description: matchLabels is a map of {key,value} pairs.
+                            A single {key,value} in the matchLabels map is equivalent
+                            to an element of matchExpressions, whose key field is
+                            "key", the operator is "In", and the values array contains
+                            only "value". The requirements are ANDed.
+                          type: object
+                      type: object
+                    type: array
+                  namespaces:
+                    description: Namespaces list of namespace(s) on which ip pool
+                      can be attached.
+                    items:
+                      type: string
+                    type: array
+                  priority:
+                    description: Priority priority given for ip pool while ip allocation
+                      on a service.
+                    type: integer
+                  serviceSelectors:
+                    description: ServiceSelectors list of label selector to select
+                      service(s) for which ip pool can be used for ip allocation.
+                    items:
+                      description: A label selector is a label query over a set of
+                        resources. The result of matchLabels and matchExpressions
+                        are ANDed. An empty label selector matches all objects. A
+                        null label selector matches no objects.
+                      properties:
+                        matchExpressions:
+                          description: matchExpressions is a list of label selector
+                            requirements. The requirements are ANDed.
+                          items:
+                            description: A label selector requirement is a selector
+                              that contains values, a key, and an operator that relates
+                              the key and values.
+                            properties:
+                              key:
+                                description: key is the label key that the selector
+                                  applies to.
+                                type: string
+                              operator:
+                                description: operator represents a key's relationship
+                                  to a set of values. Valid operators are In, NotIn,
+                                  Exists and DoesNotExist.
+                                type: string
+                              values:
+                                description: values is an array of string values.
+                                  If the operator is In or NotIn, the values array
+                                  must be non-empty. If the operator is Exists or
+                                  DoesNotExist, the values array must be empty. This
+                                  array is replaced during a strategic merge patch.
+                                items:
+                                  type: string
+                                type: array
+                            required:
+                            - key
+                            - operator
+                            type: object
+                          type: array
+                        matchLabels:
+                          additionalProperties:
+                            type: string
+                          description: matchLabels is a map of {key,value} pairs.
+                            A single {key,value} in the matchLabels map is equivalent
+                            to an element of matchExpressions, whose key field is
+                            "key", the operator is "In", and the values array contains
+                            only "value". The requirements are ANDed.
+                          type: object
+                      type: object
+                    type: array
+                type: object
             required:
             - addresses
             type: object
@@ -907,6 +1035,13 @@ spec:
           spec:
             description: L2AdvertisementSpec defines the desired state of L2Advertisement.
             properties:
+              interfaces:
+                description: A list of interfaces to announce from. The LB IP will
+                  be announced only from these interfaces. If the field is not set,
+                  we advertise from all the interfaces on the host.
+                items:
+                  type: string
+                type: array
               ipAddressPoolSelectors:
                 description: A selector for the IPAddressPools which would get advertised
                   via this advertisement. If no IPAddressPool is selected by this
