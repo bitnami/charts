@@ -24,7 +24,7 @@ spec:
       {{- if .Values.prometheus.configReloader.serviceMonitor.interval }}
       interval: {{ .Values.prometheus.configReloader.serviceMonitor.interval }}
       {{- end }}
-      path: {{ trimSuffix "/" .Values.prometheus.configReloader.routePrefix }}/metrics
+      path: {{ .Values.prometheus.configReloader.serviceMonitor.path }}
       {{- if .Values.prometheus.configReloader.serviceMonitor.metricRelabelings }}
       metricRelabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.prometheus.configReloader.serviceMonitor.metricRelabelings "context" $) | nindent 8 }}
       {{- end }}

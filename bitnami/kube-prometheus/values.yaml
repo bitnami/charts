@@ -1477,6 +1477,9 @@ prometheus:
       ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#endpoint
       ##
       interval: ""
+      ## @param prometheus.configReloader.serviceMonitor.path HTTP path to scrape for metrics
+      ##
+      path: /metrics
       ## @param prometheus.configReloader.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
       ##
       jobLabel: ""
