@@ -1,4 +1,3 @@
-{{- if .Values.config.tlsCerts }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -18,4 +17,3 @@ metadata:
   {{- end }}
 data:
   {{- include "common.tplvalues.render" (dict "value" .Values.config.tlsCerts "context" $) | nindent 2 }}
-{{- end }}
