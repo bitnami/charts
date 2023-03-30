@@ -85,7 +85,7 @@ image:
   ##
   debug: false
 
-## @section Fluent Bit daemonset configuration.
+## @section Fluent Bit daemonset configuration
 ## Running as daemonset eases kubernetes pod monitoring and ensures its integrity
 ## If daemonset is enabled, Fluent Bit deployment will be disabled
 ##

@@ -86,7 +86,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `image.pullSecrets` | Fluent Bit image pull secrets                                                                              | `[]`                  |
 | `image.debug`       | Enable image debug mode                                                                                    | `false`               |
 
-### Fluent Bit daemonset configuration.
+### Fluent Bit daemonset configuration
 
 | Name                                          | Description                                                                               | Value           |
 | --------------------------------------------- | ----------------------------------------------------------------------------------------- | --------------- |
