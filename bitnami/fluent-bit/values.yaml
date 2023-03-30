@@ -105,6 +105,16 @@ daemonset:
     runAsUser: 0
     runAsGroup: 0
     fsGroup: 0
+  ## Pod host paths
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param daemonset.hostPaths.logs Path to the node logs dir
+  ## @param daemonset.hostPaths.containerLogs Path to the container logs dir
+  ## @param daemonset.hostPaths.machineId Path to the machine-id file
+  ##
+  hostPaths:
+    logs: /var/log
+    containerLogs: /var/lib/docker/containers
+    machineId: /etc/machine-id
 ## @param hostNetwork Enable HOST Network
 ## If hostNetwork true ->  dnsPolicy is set to ClusterFirstWithHostNet
 ##
