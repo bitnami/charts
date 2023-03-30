@@ -76,9 +76,14 @@ image:
 ## ref: https://github.com/bitnami/containers/tree/main/bitnami/jasperreports#configuration
 ##
 jasperreportsUsername: jasperadmin
+## @param existingSecret Name of existing secret containing JasperReports credentials
+## NOTE: Must contain key `jasperreports-password`, and optionally the `smtp-password`
+##
+existingSecret: ""
 ## @param jasperreportsPassword JasperReports password
 ## Defaults to a random 10-character alphanumeric string if not set
 ## ref: https://github.com/bitnami/containers/tree/main/bitnami/jasperreports#configuration
+## Ignored if `existingSecret` is provided
 ##
 jasperreportsPassword: ""
 ## @param jasperreportsEmail JasperReports user email
@@ -95,7 +100,7 @@ allowEmptyPassword: "no"
 ## @param smtpPort SMTP port
 ## @param smtpEmail SMTP email
 ## @param smtpUser SMTP user
-## @param smtpPassword SMTP password
+## @param smtpPassword SMTP password (Ignored if `existingSecret` is provided)
 ## @param smtpProtocol SMTP protocol [`ssl`, `none`]
 ##
 smtpHost: ""
