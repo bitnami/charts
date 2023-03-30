@@ -1,4 +1,4 @@
-{{- if and .Values.pdb.create (not .Values.useDaemonset) }}
+{{- if and .Values.pdb.create (not .Values.daemonset.enable) }}
 apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
 kind: PodDisruptionBudget
 metadata:

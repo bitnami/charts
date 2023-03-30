@@ -84,9 +84,27 @@ image:
   ## Enable debug mode
   ##
   debug: false
-## @param useDaemonset Use a daemonset instead of a deployment. `replicaCount` will not take effect.
+
+## @section Fluent Bit daemonset configuration.
+## Running as daemonset eases kubernetes pod monitoring and ensures its integrity
+## If daemonset is enabled, Fluent Bit deployment will be disabled
 ##
-useDaemonset: false
+daemonset:
+  ## @param useDaemonset Use a daemonset instead of a deployment. `replicaCount` will not take effect.
+  ##
+  enabled: true
+  ## Pod security context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param podSecurityContext.enabled Enable security context for daemonset pods
+  ## @param podSecurityContext.runAsUser User ID for daemonset containers
+  ## @param podSecurityContext.runAsGroup Group ID for daemonset containers
+  ## @param podSecurityContext.fsGroup Group ID for daemonset containers filesystem
+  ##
+  podSecurityContext:
+    enabled: true
+    runAsUser: 0
+    runAsGroup: 0
+    fsGroup: 0
 ## @param hostNetwork Enable HOST Network
 ## If hostNetwork true ->  dnsPolicy is set to ClusterFirstWithHostNet
 ##

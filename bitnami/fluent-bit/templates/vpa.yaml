@@ -33,7 +33,7 @@ spec:
       {{- end }}
   targetRef:
     apiVersion: apps/v1
-    kind: {{ ternary "DaemonSet" "Deployment" .Values.useDaemonset }}
+    kind: {{ ternary "DaemonSet" "Deployment" .Values.daemonset.enable }}
     name: {{ include "fluent-bit.fullname" . }}
   {{- if .Values.autoscaling.vpa.updatePolicy }}
   updatePolicy:
