@@ -43,6 +43,7 @@ spec:
       schedulerName: {{ .Values.schedulerName }}
       {{- end }}
       priorityClassName: {{ .Values.priorityClassName | quote }}
+      serviceAccountName: {{ include "fluent-bit.serviceAccountName" . }}
       {{- if .Values.affinity }}
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.affinity "context" $) | nindent 8 }}
       {{- else }}
