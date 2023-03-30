@@ -796,10 +796,10 @@ prometheus:
   tolerations: []
   ## @param prometheus.scrapeInterval Interval between consecutive scrapes
   ##
-  scrapeInterval: ""
+  scrapeInterval: "1m"
   ## @param prometheus.evaluationInterval Interval between consecutive evaluations
   ##
-  evaluationInterval: ""
+  evaluationInterval: "1m"
   ## @param prometheus.listenLocal ListenLocal makes the Prometheus server listen on loopback
   ##
   listenLocal: false
