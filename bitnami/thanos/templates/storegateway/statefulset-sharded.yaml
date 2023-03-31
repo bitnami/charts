@@ -72,8 +72,8 @@ spec:
         podAntiAffinity: {{- include "common.affinities.pods" (dict "type" $.Values.storegateway.podAntiAffinityPreset "component" "storegateway" "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" $.Values.storegateway.nodeAffinityPreset.type "key" $.Values.storegateway.nodeAffinityPreset.key "values" $.Values.storegateway.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
-      {{- if .Values.storegateway.dnsConfig }}
-      dnsConfig: {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.dnsConfig "context" $) | nindent 8 }}
+      {{- if $.Values.storegateway.dnsConfig }}
+      dnsConfig: {{- include "common.tplvalues.render" (dict "value" $.Values.storegateway.dnsConfig "context" $) | nindent 8 }}
       {{- end }}
       {{- if $.Values.storegateway.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" $.Values.storegateway.nodeSelector "context" (set $ "shardLoopId" $index)) | nindent 8 }}
