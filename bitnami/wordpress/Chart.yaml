@@ -2,7 +2,7 @@ annotations:
   category: CMS
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 6.1.1
+appVersion: 6.2.0
 dependencies:
   - condition: memcached.enabled
     name: memcached
@@ -35,4 +35,4 @@ name: wordpress
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/wordpress
   - https://wordpress.org/
-version: 15.2.59
+version: 15.2.60
