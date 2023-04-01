@@ -26,4 +26,4 @@ name: kubernetes-event-exporter
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/kubernetes-event-exporter
   - https://github.com/resmoio/kubernetes-event-exporter
-version: 2.2.5
+version: 2.2.6
