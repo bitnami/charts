@@ -1,21 +1,21 @@
 dependencies:
 - name: minio
   repository: https://charts.bitnami.com/bitnami
-  version: 12.1.12
+  version: 12.2.3
 - name: memcached
   repository: https://charts.bitnami.com/bitnami
-  version: 6.3.12
+  version: 6.3.13
 - name: memcached
   repository: https://charts.bitnami.com/bitnami
-  version: 6.3.12
+  version: 6.3.13
 - name: memcached
   repository: https://charts.bitnami.com/bitnami
-  version: 6.3.12
+  version: 6.3.13
 - name: memcached
   repository: https://charts.bitnami.com/bitnami
-  version: 6.3.12
+  version: 6.3.13
 - name: common
   repository: https://charts.bitnami.com/bitnami
   version: 2.2.4
-digest: sha256:00db34d6c59c8d0898ec178d2520e0f5b42dac1b1108948f7d307b8690477feb
-generated: "2023-03-18T22:04:37.306264802Z"
+digest: sha256:92950d7da3fe8ac1f46c534100ce0202574c47eb9c1ac7b994b2b94d2c8490f9
+generated: "2023-04-01T12:55:10.228411305Z"
