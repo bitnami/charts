@@ -4,6 +4,6 @@ dependencies:
   version: 2.2.4
 - name: cassandra
   repository: https://charts.bitnami.com/bitnami
-  version: 10.1.0
-digest: sha256:608f8cd9b75d12e5347f76e78c2f2125985c432feea5871d4f39766be7e08fb0
-generated: "2023-03-18T22:17:06.658265446Z"
+  version: 10.1.2
+digest: sha256:23c06bfec427b132558b7a2efdda7742277db0c6c7f35f961a47cdbc05707833
+generated: "2023-04-01T11:17:56.650761735Z"
