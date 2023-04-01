@@ -46,8 +46,6 @@ spec:
       targetPort: mysql
       {{- if (and (or (eq .Values.secondary.service.type "NodePort") (eq .Values.secondary.service.type "LoadBalancer")) (coalesce .Values.secondary.service.nodePorts.mysql .Values.secondary.service.nodePort)) }}
       nodePort: {{ coalesce .Values.secondary.service.nodePorts.mysql .Values.secondary.service.nodePort }}
-      {{- else if eq .Values.secondary.service.type "ClusterIP" }}
-      nodePort: null
       {{- end }}
     {{- if and .Values.metrics.enabled (gt (.Values.secondary.service.ports.metrics | int) 0) }}
     - name: metrics
