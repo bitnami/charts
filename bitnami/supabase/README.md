@@ -804,7 +804,7 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 ### External database support
 
-You may want to have supabase connect to an external database rather than installing one inside your cluster. Typical reasons for this are to use a managed database service, or to share a common database server for all your applications. To achieve this, the chart allows you to specify credentials for an external database with the [`externalDatabase` parameter](#parameters). You should also disable the MongoDB installation with the `postgresql.enabled` option. Here is an example:
+You may want to have supabase connect to an external database rather than installing one inside your cluster. Typical reasons for this are to use a managed database service, or to share a common database server for all your applications. To achieve this, the chart allows you to specify credentials for an external database with the [`externalDatabase` parameter](#parameters). You should also disable the PostgreSQL installation with the `postgresql.enabled` option. Here is an example:
 
 ```console
 postgresql.enabled=false
