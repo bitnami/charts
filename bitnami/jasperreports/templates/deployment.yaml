@@ -94,7 +94,7 @@ spec:
             - name: JASPERREPORTS_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ template "common.names.fullname" . }}
+                  name: {{ default (include "common.names.fullname" .) .Values.existingSecret | quote }}
                   key: jasperreports-password
             - name: JASPERREPORTS_EMAIL
               value: {{ .Values.jasperreportsEmail | quote }}
