@@ -2,7 +2,7 @@ annotations:
   category: CMS
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 6.3.0
+appVersion: 6.2.0
 dependencies:
   - condition: memcached.enabled
     name: memcached
