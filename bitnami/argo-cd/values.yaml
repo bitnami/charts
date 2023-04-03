@@ -1641,7 +1641,7 @@ server:
 
   ## Argo CD server config. This object will be directly rendered
   ## @param server.config [object] Argo CD server configuration that will end on the argocd-cm Config Map
-  ## Ref: https://argoproj.github.io/argo-cd/operator-manual/user-management/
+  ## Ref: https://argo-cd.readthedocs.io/en/stable/operator-manual/user-management/
   ## E.g:
   ## repositories:
   ##   - url: git@github.com:group/repo.git
@@ -1912,7 +1912,7 @@ server:
 
   ## Configure the ingress resource that allows you to access the Argo CD gRPC API
   ## Ref: https://kubernetes.io/docs/user-guide/ingress/
-  ## Ref: https://argoproj.github.io/argo-cd/operator-manual/ingress/
+  ## Ref: https://argo-cd.readthedocs.io/en/stable/operator-manual/ingress/
   ## @param server.ingressGrpc.enabled Enable the creation of an ingress for the Argo CD gRPC server
   ## @param server.ingressGrpc.pathType Path type for the Argo CD gRPC server ingress
   ## @param server.ingressGrpc.apiVersion Ingress API version for the Argo CD gRPC server ingress
@@ -3214,7 +3214,7 @@ config:
     gogsSecret: ""
 
     ## Extra keys to add to the general config secret. Useful for injecting SSO secrets into environment variables.
-    ## Ref: https://argoproj.github.io/argo-cd/operator-manual/sso/
+    ## Ref: https://argo-cd.readthedocs.io/en/stable/operator-manual/user-management/#sso
     ## @param config.secret.extra Extra keys to add to the configuration secret.
     ## All values must be non-empty.
     ## E.g:
@@ -3263,8 +3263,8 @@ config:
 
   ## External Cluster Credentials
   ## Refs:
-  ## - https://argoproj.github.io/argo-cd/operator-manual/declarative-setup/#clusters
-  ## - https://argoproj.github.io/argo-cd/operator-manual/security/#external-cluster-credentials
+  ## - https://argo-cd.readthedocs.io/en/stable/operator-manual/declarative-setup/#clusters
+  ## - https://argo-cd.readthedocs.io/en/stable/operator-manual/security/#external-cluster-credentials
   ## @param config.clusterCredentials Configure external cluster credentials
   ## E.g
   ##  - name: mycluster
