@@ -86,6 +86,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `image.pullPolicy`      | JasperReports image pull policy                                                                               | `IfNotPresent`          |
 | `image.pullSecrets`     | Specify docker-registry secret names as an array                                                              | `[]`                    |
 | `jasperreportsUsername` | JasperReports user                                                                                            | `jasperadmin`           |
+| `existingSecret`        | Name of existing secret containing JasperReports credentials                                                  | `""`                    |
 | `jasperreportsPassword` | JasperReports password                                                                                        | `""`                    |
 | `jasperreportsEmail`    | JasperReports user email                                                                                      | `user@example.com`      |
 | `allowEmptyPassword`    | Set to `yes` to allow the container to be started with blank passwords                                        | `no`                    |
@@ -93,7 +94,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `smtpPort`              | SMTP port                                                                                                     | `""`                    |
 | `smtpEmail`             | SMTP email                                                                                                    | `""`                    |
 | `smtpUser`              | SMTP user                                                                                                     | `""`                    |
-| `smtpPassword`          | SMTP password                                                                                                 | `""`                    |
+| `smtpPassword`          | SMTP password (Ignored if `existingSecret` is provided)                                                       | `""`                    |
 | `smtpProtocol`          | SMTP protocol [`ssl`, `none`]                                                                                 | `""`                    |
 | `command`               | Override default container command (useful when using custom images)                                          | `[]`                    |
 | `args`                  | Override default container args (useful when using custom images)                                             | `[]`                    |
