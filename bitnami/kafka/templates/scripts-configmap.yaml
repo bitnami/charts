@@ -192,7 +192,8 @@ data:
                 exit 1
             fi
             echo $FIND_CA_RESULT | sort | xargs cat >> "$PEM_CA_LOCATION"
-            cat ${CERT_DIR}/xx00 > "$PEM_CERT_LOCATION"
+            # keep whole chain in kafka.keystore.pem
+            cp "$PEM_CERT" "$PEM_CERT_LOCATION"
         {{- else }}
             if [[ -f "$PEM_CA" ]]; then
                 cp "$PEM_CA" "$PEM_CA_LOCATION"
