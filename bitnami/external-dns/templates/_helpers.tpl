@@ -114,6 +114,8 @@ Return true if a secret object should be created
     {{- true -}}
 {{- else if and (eq .Values.provider "digitalocean") .Values.digitalocean.apiToken (not .Values.digitalocean.secretName) -}}
     {{- true -}}
+{{- else if and (eq .Values.provider "exoscale") .Values.exoscale.apiKey (not .Values.exoscale.secretName) -}}
+    {{- true -}}
 {{- else if and (eq .Values.provider "google") .Values.google.serviceAccountKey (not .Values.google.serviceAccountSecret) -}}
     {{- true -}}
 {{- else if and (eq .Values.provider "hetzner") .Values.hetzner.token (not .Values.hetzner.secretName) -}}
@@ -170,6 +172,8 @@ Return the name of the Secret used to store the passwords
 {{- .Values.cloudflare.secretName }}
 {{- else if and (eq .Values.provider "digitalocean") .Values.digitalocean.secretName }}
 {{- .Values.digitalocean.secretName }}
+{{- else if and (eq .Values.provider "exoscale") .Values.exoscale.secretName }}
+{{- .Values.exoscale.secretName }}
 {{- else if and (eq .Values.provider "google") .Values.google.serviceAccountSecret }}
 {{- .Values.google.serviceAccountSecret }}
 {{- else if and (eq .Values.provider "hetzner") .Values.hetzner.secretName }}
