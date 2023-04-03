@@ -7,16 +7,16 @@ containerSecurityContext:
   enabled: true
   runAsUser: 1002
 extraConfiguration:
-  csp.strict: false
+  "csp.strict": false
 service:
-  ports: 
+  ports:
     http: 80
   type: LoadBalancer
 elasticsearch:
   hosts:
     - localhost
   port: 9200
-sidecars: 
+sidecars:
  - name: elasticsearch
    image: bitnami/elasticsearch:latest
    imagePullPolicy: IfNotPresent

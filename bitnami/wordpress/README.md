@@ -78,15 +78,15 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### WordPress Image parameters
 
-| Name                | Description                                                                                               | Value                 |
-| ------------------- | --------------------------------------------------------------------------------------------------------- | --------------------- |
-| `image.registry`    | WordPress image registry                                                                                  | `docker.io`           |
-| `image.repository`  | WordPress image repository                                                                                | `bitnami/wordpress`   |
-| `image.tag`         | WordPress image tag (immutable tags are recommended)                                                      | `6.1.1-debian-11-r71` |
-| `image.digest`      | WordPress image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
-| `image.pullPolicy`  | WordPress image pull policy                                                                               | `IfNotPresent`        |
-| `image.pullSecrets` | WordPress image pull secrets                                                                              | `[]`                  |
-| `image.debug`       | Specify if debug values should be set                                                                     | `false`               |
+| Name                | Description                                                                                               | Value                |
+| ------------------- | --------------------------------------------------------------------------------------------------------- | -------------------- |
+| `image.registry`    | WordPress image registry                                                                                  | `docker.io`          |
+| `image.repository`  | WordPress image repository                                                                                | `bitnami/wordpress`  |
+| `image.tag`         | WordPress image tag (immutable tags are recommended)                                                      | `6.2.0-debian-11-r1` |
+| `image.digest`      | WordPress image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                 |
+| `image.pullPolicy`  | WordPress image pull policy                                                                               | `IfNotPresent`       |
+| `image.pullSecrets` | WordPress image pull secrets                                                                              | `[]`                 |
+| `image.debug`       | Specify if debug values should be set                                                                     | `false`              |
 
 ### WordPress Configuration parameters
 
@@ -199,37 +199,37 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Traffic Exposure Parameters
 
-| Name                               | Description                                                                                                                      | Value                    |
-| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `service.type`                     | WordPress service type                                                                                                           | `LoadBalancer`           |
-| `service.ports.http`               | WordPress service HTTP port                                                                                                      | `80`                     |
-| `service.ports.https`              | WordPress service HTTPS port                                                                                                     | `443`                    |
-| `service.httpsTargetPort`          | Target port for HTTPS                                                                                                            | `https`                  |
-| `service.nodePorts.http`           | Node port for HTTP                                                                                                               | `""`                     |
-| `service.nodePorts.https`          | Node port for HTTPS                                                                                                              | `""`                     |
-| `service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin                                                                 | `None`                   |
-| `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
-| `service.clusterIP`                | WordPress service Cluster IP                                                                                                     | `""`                     |
-| `service.loadBalancerIP`           | WordPress service Load Balancer IP                                                                                               | `""`                     |
-| `service.loadBalancerSourceRanges` | WordPress service Load Balancer sources                                                                                          | `[]`                     |
-| `service.externalTrafficPolicy`    | WordPress service external traffic policy                                                                                        | `Cluster`                |
-| `service.annotations`              | Additional custom annotations for WordPress service                                                                              | `{}`                     |
-| `service.extraPorts`               | Extra port to expose on WordPress service                                                                                        | `[]`                     |
-| `ingress.enabled`                  | Enable ingress record generation for WordPress                                                                                   | `false`                  |
-| `ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
-| `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
-| `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
-| `ingress.hostname`                 | Default host for the ingress record                                                                                              | `wordpress.local`        |
-| `ingress.path`                     | Default path for the ingress record                                                                                              | `/`                      |
-| `ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
-| `ingress.tls`                      | Enable TLS configuration for the host defined at `ingress.hostname` parameter                                                    | `false`                  |
-| `ingress.tlsWwwPrefix`             | Adds www subdomain to default cert                                                                                               | `false`                  |
-| `ingress.selfSigned`               | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
-| `ingress.extraHosts`               | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                     |
-| `ingress.extraPaths`               | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                     |
-| `ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
-| `ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                     |
-| `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
+| Name                               | Description                                                                                                                                              | Value                    |
+| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `service.type`                     | WordPress service type                                                                                                                                   | `LoadBalancer`           |
+| `service.ports.http`               | WordPress service HTTP port                                                                                                                              | `80`                     |
+| `service.ports.https`              | WordPress service HTTPS port                                                                                                                             | `443`                    |
+| `service.httpsTargetPort`          | Target port for HTTPS                                                                                                                                    | `https`                  |
+| `service.nodePorts.http`           | Node port for HTTP                                                                                                                                       | `""`                     |
+| `service.nodePorts.https`          | Node port for HTTPS                                                                                                                                      | `""`                     |
+| `service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin                                                                                         | `None`                   |
+| `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                                              | `{}`                     |
+| `service.clusterIP`                | WordPress service Cluster IP                                                                                                                             | `""`                     |
+| `service.loadBalancerIP`           | WordPress service Load Balancer IP                                                                                                                       | `""`                     |
+| `service.loadBalancerSourceRanges` | WordPress service Load Balancer sources                                                                                                                  | `[]`                     |
+| `service.externalTrafficPolicy`    | WordPress service external traffic policy                                                                                                                | `Cluster`                |
+| `service.annotations`              | Additional custom annotations for WordPress service                                                                                                      | `{}`                     |
+| `service.extraPorts`               | Extra port to expose on WordPress service                                                                                                                | `[]`                     |
+| `ingress.enabled`                  | Enable ingress record generation for WordPress                                                                                                           | `false`                  |
+| `ingress.pathType`                 | Ingress path type                                                                                                                                        | `ImplementationSpecific` |
+| `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                                            | `""`                     |
+| `ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                                            | `""`                     |
+| `ingress.hostname`                 | Default host for the ingress record. The hostname is templated and thus can contain other variable references.                                           | `wordpress.local`        |
+| `ingress.path`                     | Default path for the ingress record                                                                                                                      | `/`                      |
+| `ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.                         | `{}`                     |
+| `ingress.tls`                      | Enable TLS configuration for the host defined at `ingress.hostname` parameter                                                                            | `false`                  |
+| `ingress.tlsWwwPrefix`             | Adds www subdomain to default cert                                                                                                                       | `false`                  |
+| `ingress.selfSigned`               | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                                             | `false`                  |
+| `ingress.extraHosts`               | An array with additional hostname(s) to be covered with the ingress record. The host names are templated and thus can contain other variable references. | `[]`                     |
+| `ingress.extraPaths`               | An array with additional arbitrary paths that may need to be added to the ingress under the main host                                                    | `[]`                     |
+| `ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                                                                      | `[]`                     |
+| `ingress.secrets`                  | Custom TLS certificates as secrets                                                                                                                       | `[]`                     |
+| `ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                                                  | `[]`                     |
 
 ### Persistence Parameters
 
@@ -247,7 +247,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`               | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r101`     |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r102`     |
 | `volumePermissions.image.digest`                       | Bitnami Shell image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                              | `[]`                    |
@@ -279,7 +279,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                            | Start a sidecar prometheus exporter to expose metrics                                                           | `false`                   |
 | `metrics.image.registry`                     | Apache exporter image registry                                                                                  | `docker.io`               |
 | `metrics.image.repository`                   | Apache exporter image repository                                                                                | `bitnami/apache-exporter` |
-| `metrics.image.tag`                          | Apache exporter image tag (immutable tags are recommended)                                                      | `0.13.1-debian-11-r0`     |
+| `metrics.image.tag`                          | Apache exporter image tag (immutable tags are recommended)                                                      | `0.13.1-debian-11-r1`     |
 | `metrics.image.digest`                       | Apache exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
 | `metrics.image.pullPolicy`                   | Apache exporter image pull policy                                                                               | `IfNotPresent`            |
 | `metrics.image.pullSecrets`                  | Apache exporter image pull secrets                                                                              | `[]`                      |
