@@ -463,6 +463,18 @@ master:
   ## @param master.replicaCount Number of master-elegible replicas to deploy
   ##
   replicaCount: 2
+
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param master.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param master.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param master.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ##
+  pdb:
+    create: false
+    minAvailable: 1
+    maxUnavailable: ""
+
   ## @param master.nameOverride String to partially override elasticsearch.master.fullname
   ##
   nameOverride: ""
@@ -768,6 +780,18 @@ data:
   ## @param data.replicaCount Number of data-only replicas to deploy
   ##
   replicaCount: 2
+
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param data.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param data.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param data.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ##
+  pdb:
+    create: false
+    minAvailable: 1
+    maxUnavailable: ""
+
   ## @param data.nameOverride String to partially override elasticsearch.data.fullname
   ##
   nameOverride: ""
@@ -1063,6 +1087,18 @@ coordinating:
   ## @param coordinating.replicaCount Number of coordinating-only replicas to deploy
   ##
   replicaCount: 2
+
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param coordinating.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param coordinating.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param coordinating.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ##
+  pdb:
+    create: false
+    minAvailable: 1
+    maxUnavailable: ""
+
   ## @param coordinating.nameOverride String to partially override elasticsearch.coordinating.fullname
   ##
   nameOverride: ""
@@ -1322,6 +1358,18 @@ ingest:
   ## @param ingest.replicaCount Number of ingest-only replicas to deploy
   ##
   replicaCount: 2
+
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param ingest.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param ingest.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param ingest.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ##
+  pdb:
+    create: false
+    minAvailable: 1
+    maxUnavailable: ""
+
   ## @param ingest.nameOverride String to partially override elasticsearch.ingest.fullname
   ##
   nameOverride: ""
