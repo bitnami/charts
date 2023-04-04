@@ -430,7 +430,9 @@ spec:
             {{- end }}
   {{- else }}
   volumeClaimTemplates:
-    - metadata:
+    - apiVersion: v1
+      kind: PersistentVolumeClaim
+      metadata:
         name: data
         labels:
           {{- include "common.labels.matchLabels" . | nindent 10 }}
