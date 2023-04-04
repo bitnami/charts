@@ -382,6 +382,21 @@ designate:
     content: ""
     mountPath: "/config/designate"
     filename: "designate-ca.pem"
+## Exoscale configuration to be set via arguments/env. variables
+##
+exoscale:
+  ## @param exoscale.apiKey When using the Exoscale provider, `EXTERNAL_DNS_EXOSCALE_APIKEY` to set (optional)
+  ##
+  apiKey: ""
+  ## @param exoscale.apiToken When using the Exoscale provider, `EXTERNAL_DNS_EXOSCALE_APISECRET` to set (optional)
+  ##
+  apiToken: ""
+  ## @param exoscale.secretName Use an existing secret with keys "exoscale_api_key" and "exoscale_api_token" defined.
+  ## This ignores exoscale.apiKey and exoscale.apiToken
+  ##
+  secretName: ""
+## Google configuration to be set via arguments/env. variables
+##
 ## DigitalOcean configuration to be set via arguments/env. variables
 ##
 digitalocean:

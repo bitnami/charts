@@ -17,3 +17,13 @@ for (const command of ['click']) {
 Cypress.Commands.add('forceClick', { prevSubject: 'element' }, (subject) => {
   cy.wrap(subject).click({ force: true });
 });
+
+Cypress.on('uncaught:exception', (err) => {
+  // We expect an error "Cannot read properties of undefined (reading 'includes')"
+  // during the installation of a template so we add an exception
+  if (err.message.includes("Cannot read properties of undefined (reading 'includes')")) {
+    return false;
+  }
+  // we still want to ensure there are no other unexpected
+  // errors, so we let them fail the test
+})
