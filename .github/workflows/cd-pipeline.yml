@@ -24,6 +24,7 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/elasticsearch/**'
       - 'bitnami/etcd/**'
       - 'bitnami/external-dns/**'
+      - 'bitnami/flink/**'
       - 'bitnami/fluentd/**'
       - 'bitnami/flux/**'
       - 'bitnami/ghost/**'

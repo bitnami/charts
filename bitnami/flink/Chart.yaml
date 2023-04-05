@@ -1,0 +1,26 @@
+annotations:
+  category: Infrastructure
+  licenses: Apache-2.0
+apiVersion: v2
+appVersion: 1.16.0
+dependencies:
+  - name: common
+    repository: https://charts.bitnami.com/bitnami
+    tags:
+      - bitnami-common
+    version: 2.x.x
+description: Apache Flink is an open-source, unified stream-processing and batch-processing framework developed by the Apache Software Foundation.
+home: https://github.com/bitnami/charts/tree/main/bitnami/flink
+icon: https://bitnami.com/assets/stacks/flink/img/flink-stack-220x234.png
+keywords:
+  - flink
+  - stream-processing
+  - batch-processing
+maintainers:
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
+name: flink
+sources:
+  - https://github.com/apache/flink
+  - https://flink.apache.org/
+version: 0.1.0
