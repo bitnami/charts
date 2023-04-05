@@ -1410,6 +1410,9 @@ prometheus:
     ## config-reloader sidecar Service
     ##
     service:
+      ## @param prometheus.configReloader.service.enabled Enable config-reloader sidecar service
+      ##
+      enabled: true
       ## @param prometheus.configReloader.service.type Kubernetes service type
       ##
       type: ClusterIP
@@ -1472,7 +1475,7 @@ prometheus:
     serviceMonitor:
       ## @param prometheus.configReloader.serviceMonitor.enabled Creates a ServiceMonitor to monitor Prometheus config-reloader sidecar
       ##
-      enabled: false
+      enabled: true
       ## @param prometheus.configReloader.serviceMonitor.interval Scrape interval (use by default, falling back to Prometheus' default)
       ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#endpoint
       ##
