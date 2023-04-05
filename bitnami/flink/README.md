@@ -2,7 +2,7 @@
 
 # Apache Flink packaged by Bitnami
 
-Apache Flink is an open-source, unified stream-processing and batch-processing framework developed by the Apache Software Foundation.
+Apache Flink is a framework and distributed processing engine for stateful computations over unbounded and bounded data streams.
 
 [Overview of Apache Flink](https://flink.apache.org/)
 
