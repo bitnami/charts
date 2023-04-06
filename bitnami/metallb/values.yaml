@@ -448,6 +448,7 @@ controller:
 ## ref: https://hub.docker.com/r/bitnami/metallb-speaker/tags
 ##
 speaker:
+  enabled: true # set to false to disable speaker
   ## @param speaker.image.registry MetalLB Speaker image registry
   ## @param speaker.image.repository MetalLB Speaker image repository
   ## @param speaker.image.tag MetalLB Speaker  image tag (immutable tags are recommended)
