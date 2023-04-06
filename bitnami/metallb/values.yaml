@@ -448,6 +448,11 @@ controller:
 ## ref: https://hub.docker.com/r/bitnami/metallb-speaker/tags
 ##
 speaker:
+  ## @param speaker.enabled Whether to enable BGP speakers or not
+  ## ref: https://metallb.universe.tf/configuration/calico/#the-easy-way
+  ## Some CNI implementations (e.g. Calico) does not require speakers
+  ##
+  enabled: true
   ## @param speaker.image.registry MetalLB Speaker image registry
   ## @param speaker.image.repository MetalLB Speaker image repository
   ## @param speaker.image.tag MetalLB Speaker  image tag (immutable tags are recommended)

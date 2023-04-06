@@ -184,7 +184,8 @@ The command removes all the Kubernetes components associated with the chart and 
 ### Speaker parameters
 
 | Name                                                        | Description                                                                                                                                 | Value                     |
-| ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
+|-------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------|---------------------------|
+| `speaker.enabled`                                           | MetalLB enable Speaker                                                                                                                      | `true`                    |
 | `speaker.image.registry`                                    | MetalLB Speaker image registry                                                                                                              | `docker.io`               |
 | `speaker.image.repository`                                  | MetalLB Speaker image repository                                                                                                            | `bitnami/metallb-speaker` |
 | `speaker.image.tag`                                         | MetalLB Speaker  image tag (immutable tags are recommended)                                                                                 | `0.13.9-debian-11-r11`    |
