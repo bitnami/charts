@@ -387,6 +387,9 @@ configuration: |-
   cluster_formation.node_cleanup.only_log_warning = true
   cluster_partition_handling = {{ .Values.clustering.partitionHandling }}
   {{- end }}
+  {{ if and .Values.clustering.enabled .Values.loadDefinition.enabled }}
+  cluster_formation.target_cluster_size_hint = {{ .Values.replicaCount }}
+  {{ end }}
   {{- if .Values.loadDefinition.enabled }}
   load_definitions = {{ .Values.loadDefinition.file }}
   {{- end }}

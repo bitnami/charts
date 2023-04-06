@@ -49,6 +49,9 @@ diagnosticMode:
   ##
   args:
     - infinity
+## @param installCRDs Flag to install metallb CRDs
+##
+installCRDs: true
 ## @section MetalLB parameters
 
 ## RBAC creation for controller and speaker
