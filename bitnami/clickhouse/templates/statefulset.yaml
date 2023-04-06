@@ -387,12 +387,13 @@ spec:
           {{- if $.Values.commonAnnotations }}
           {{- include "common.tplvalues.render" (dict "value" $.Values.commonAnnotations "context" $) | nindent 10 }}
           {{- end }}
-        labels:
+        labels: {{- include "common.labels.standard" $ | nindent 10 }}
+          app.kubernetes.io/component: clickhouse
           {{- if $.Values.commonLabels }}
           {{- include "common.tplvalues.render" (dict "value" $.Values.commonLabels "context" $) | nindent 10 }}
           {{- end }}
           {{- if $.Values.persistence.labels }}
-          labels: {{- include "common.tplvalues.render" (dict "value" $.Values.persistence.labels "context" $) | nindent 10 }}
+          {{- include "common.tplvalues.render" (dict "value" $.Values.persistence.labels "context" $) | nindent 10 }}
           {{- end }}
       spec:
         accessModes:
