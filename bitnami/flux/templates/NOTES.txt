@@ -1,0 +1,55 @@
+CHART NAME: {{ .Chart.Name  }}
+CHART VERSION: {{ .Chart.Version  }}
+APP VERSION: {{ .Chart.AppVersion  }}
+
+** Please be patient while the chart is being deployed **
+
+{{- if .Values.diagnosticMode.enabled }}
+The chart has been deployed in diagnostic mode. All probes have been disabled and the command has been overwritten with:
+
+  command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 4 }}
+  args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 4 }}
+
+Get the list of pods by executing:
+
+  kubectl get pods --namespace {{ include "common.names.namespace" . | quote }} -l app.kubernetes.io/instance={{ .Release.Name }}
+
+Access the pod you want to debug by executing
+
+  kubectl exec --namespace {{ include "common.names.namespace" . | quote }} -ti <NAME OF THE POD> -- bash
+
+{{- else }}
+
+The following controllers have been deployed:
+
+  {{- if .Values.helmController.enabled }}
+  - helm-controller
+  {{- end }}
+  {{- if .Values.imageAutomationController.enabled }}
+  - image-automation-controller
+  {{- end }}
+  {{- if .Values.imageReflectorController.enabled }}
+  - image-reflector-controller
+  {{- end }}
+  {{- if .Values.kustomizeController.enabled }}
+  - kustomize-controller
+  {{- end }}
+  {{- if .Values.notificationController.enabled }}
+  - notification-controller
+  {{- end }}
+  {{- if .Values.sourceController.enabled }}
+  - source-controller
+  {{- end }}
+
+{{- end }}
+
+Check the status of the pods by running this command:
+
+  kubectl get pods --namespace {{ include "common.names.namespace" . | quote }} -l app.kubernetes.io/instance={{ .Release.Name }}
+
+Read the upstream flux documentation to start working with the controllers:
+
+  https://fluxcd.io/flux/components/
+
+{{- include "common.warnings.rollingTag" .Values.kustomizeController.image }}
+{{- include "flux.validateValues" . }}

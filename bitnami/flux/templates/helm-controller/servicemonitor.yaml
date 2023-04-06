@@ -1,0 +1,52 @@
+{{- if and .Values.helmController.metrics.enabled .Values.helmController.metrics.serviceMonitor.enabled  }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ template "flux.helm-controller.fullname" . }}
+  namespace: {{ default (include "common.names.namespace" .) .Values.helmController.metrics.serviceMonitor.namespace | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/part-of: flux
+      app.kubernetes.io/component: helm-controller
+    {{- if .Values.helmController.metrics.serviceMonitor.labels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.helmController.metrics.serviceMonitor.labels "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  annotations:
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.helmController.metrics.serviceMonitor.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.helmController.metrics.serviceMonitor.annotations "context" $ ) | nindent 4 }}
+    {{- end }}
+spec:
+  jobLabel: {{ .Values.helmController.metrics.serviceMonitor.jobLabel | quote }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: helm-controller
+      {{- if .Values.helmController.metrics.serviceMonitor.selector }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.helmController.metrics.serviceMonitor.selector "context" $) | nindent 6 }}
+      {{- end }}
+  endpoints:
+    - port: http-metrics
+      path: "/metrics"
+      {{- if .Values.helmController.metrics.serviceMonitor.interval }}
+      interval: {{ .Values.helmController.metrics.serviceMonitor.interval }}
+      {{- end }}
+      {{- if .Values.helmController.metrics.serviceMonitor.scrapeTimeout }}
+      scrapeTimeout: {{ .Values.helmController.metrics.serviceMonitor.scrapeTimeout }}
+      {{- end }}
+      {{- if .Values.helmController.metrics.serviceMonitor.honorLabels }}
+      honorLabels: {{ .Values.helmController.metrics.serviceMonitor.honorLabels }}
+      {{- end }}
+      {{- if .Values.helmController.metrics.serviceMonitor.metricRelabelings }}
+      metricRelabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.helmController.metrics.serviceMonitor.metricRelabelings "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.helmController.metrics.serviceMonitor.relabelings }}
+      relabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.helmController.metrics.serviceMonitor.relabelings "context" $) | nindent 8 }}
+      {{- end }}
+  namespaceSelector:
+    matchNames:
+    - {{ include "common.names.namespace" . | quote }}
+{{- end }}

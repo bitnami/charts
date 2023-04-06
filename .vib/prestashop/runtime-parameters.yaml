@@ -7,7 +7,7 @@ prestashopHost: vmware-prestashop.my
 prestashopUsername: bitnamiTest
 prestashopEmail: bitnamiTest@example.com
 prestashopPassword: ComplicatedPassword123!4
-prestashopCookieCheckIP: no
+prestashopCookieCheckIP: "no"
 containerPorts:
   http: 8081
   https: 8444

@@ -72,9 +72,9 @@ data:
     DNS.1 = $svc
     DNS.2 = $my_hostname
     {{- if eq .Values.architecture "replicaset" }}
-    DNS.3 = $my_hostname.$svc.$MY_POD_NAMESPACE.svc.cluster.local
+    DNS.3 = $my_hostname.$svc.$MY_POD_NAMESPACE.svc.{{ .Values.clusterDomain }}
     {{- else }}
-    DNS.3 = $svc.$MY_POD_NAMESPACE.svc.cluster.local
+    DNS.3 = $svc.$MY_POD_NAMESPACE.svc.{{ .Values.clusterDomain }}
     {{- end }}
     DNS.4 = localhost
     IP.0 = ${MY_POD_HOST_IP}

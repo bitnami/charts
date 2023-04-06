@@ -72,7 +72,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/solr
-  tag: 9.1.1-debian-11-r15
+  tag: 9.1.1-debian-11-r18
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -597,7 +597,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r98
+    tag: 11-debian-11-r102
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

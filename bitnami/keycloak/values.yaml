@@ -78,7 +78,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/keycloak
-  tag: 20.0.5-debian-11-r4
+  tag: 21.0.2-debian-11-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -839,7 +839,7 @@ keycloakConfigCli:
   image:
     registry: docker.io
     repository: bitnami/keycloak-config-cli
-    tag: 5.5.0-debian-11-r36
+    tag: 5.6.1-debian-11-r5
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -915,6 +915,11 @@ keycloakConfigCli:
   ##   - name: FOO
   ##     value: "bar"
   ##
+  ## @param keycloakConfigCli.nodeSelector Node labels for pod assignment
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+  ##
   ## @param keycloakConfigCli.podTolerations Tolerations for job pod assignment
   ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
@@ -973,6 +978,14 @@ keycloakConfigCli:
   ## NOTE: This will override keycloakConfigCli.configuration
   ##
   existingConfigmap: ""
+  ## Automatic Cleanup for Finished Jobs
+  ## @param keycloakConfigCli.cleanupAfterFinished.enabled Enables Cleanup for Finished Jobs
+  ## @param keycloakConfigCli.cleanupAfterFinished.seconds Sets the value of ttlSecondsAfterFinished
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/ttlafterfinished/
+  ##
+  cleanupAfterFinished:
+    enabled: false
+    seconds: 600
 
 ## @section Database parameters
 
