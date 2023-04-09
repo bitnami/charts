@@ -752,10 +752,10 @@ A major chart version change (like v1.2.3 -> v2.0.0) indicates that there is an 
 
 ### RDB compatibility
 
-It's common to have RDB format changes across Redis&reg; releases where we see backward compatibility but no forward compatibility. For example: version 7.0 can load an RDB created by version 6.2, but version 6.2 can't load an RDB created by 7.0.  
-When that's the case the rolling update can cause replicas to temporarily stop synchronizing while they are running a lower version than master.  
-For example: on a rolling update `master-0` and `replica-2` are updated first from version 6.2 to 7.0, `replica-0` and `replica-1` won't be able to start a full sync with `master-0` because they still run 6.2 and can't understand the RDB format from version 7.0 that master is using.  
-This issue can be mitigated by splitting upgrade in two stages: one for all replicas and another for any master.  
+It's common to have RDB format changes across Redis&reg; releases where we see backward compatibility but no forward compatibility. For example, v7.0 can load an RDB created by v6.2 , but the opposite is not true.  
+When that's the case, the rolling update can cause replicas to temporarily stop synchronizing while they are running a lower version than master.  
+For example, on a rolling update `master-0` and `replica-2` are updated first from version v6.2 to v7.0; `replica-0` and `replica-1` won't be able to start a full sync with `master-0` because they are still running v6.2 and can't support the RDB format from version 7.0 that master is now using.  
+This issue can be mitigated by splitting the upgrade into two stages: one for all replicas and another for any master.  
 
 - Stage 1 (replicas only, as there's no master with an ordinal higher than 99):  
 `helm upgrade my-repo/redis --set master.updateStrategy.rollingUpdate.partition=99`  
