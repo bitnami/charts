@@ -55,7 +55,7 @@ Please refer to the [Quick Start guide](https://helm.sh/docs/intro/quickstart/) 
 Useful Helm Client Commands:
 
 - Install a chart: `helm install my-release oci://registry-1.docker.io/bitnamicharts/<chart>`
-- Upgrade your application: `helm upgrade ...`
+- Upgrade your application: `helm upgrade my-release oci://registry-1.docker.io/bitnamicharts/<chart>`
 
 ## License
 
