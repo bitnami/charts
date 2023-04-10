@@ -1,16 +1,13 @@
-http://fluent-bit:{{ .Vars.service.ports.http }}/:
-  status: 200
-  body:
-    - /version.*{{ .Env.APP_VERSION }}/
+addr:
+  # Container ports
+  http://localhost:{{ .Vars.containerPorts.http }}/:
+    status: 200
+  # Service ports
+  http://fluent-bit:{{ .Vars.service.ports.http }}/:
+    status: 200
+    body:
+      - /version.*{{ .Env.APP_VERSION }}/
 file:
-  /opt/bitnami/fluent-bit/conf:
-    exists: true
-    filetype: directory
-    mode: "0755"
-  /logs:
-    exists: true
-    filetype: directory
-    mode: "2777"
   /logs/cpu.0:
     exists: true
     filetype: file
