@@ -73,7 +73,7 @@ image:
   ## Bitnami Redis&reg; image tag
   ## ref: https://github.com/bitnami/containers/tree/main/bitnami/redis#supported-tags-and-respective-dockerfile-links
   ##
-  tag: 7.0.9-debian-11-r1
+  tag: 7.0.10-debian-11-r4
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -284,6 +284,12 @@ service:
   ##     timeoutSeconds: 300
   ##
   sessionAffinityConfig: {}
+  ## Headless service properties
+  ##
+  headless:
+    ## @param service.headless.annotations Annotations for the headless service.
+    ##
+    annotations: {}
 ## Enable persistence using Persistent Volume Claims
 ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
 ##
@@ -342,7 +348,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r92
+    tag: 11-debian-11-r102
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -818,7 +824,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/redis-exporter
-    tag: 1.47.0-debian-11-r1
+    tag: 1.48.0-debian-11-r7
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -838,6 +844,13 @@ metrics:
   ##   check-keys: myKey,myOtherKey
   ##
   extraArgs: {}
+  ## @param metrics.extraEnvVars Array with extra environment variables to add to Redis&reg; exporter
+  ## e.g:
+  # extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
   ## @param metrics.podAnnotations [object] Additional annotations for Metrics exporter pod
   ##
   podAnnotations:
@@ -980,7 +993,7 @@ sysctlImage:
   ##
   registry: docker.io
   repository: bitnami/bitnami-shell
-  tag: 11-debian-11-r92
+  tag: 11-debian-11-r102
   digest: ""
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.

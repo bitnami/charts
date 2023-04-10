@@ -1,0 +1,23 @@
+hostAliases:
+  - ip: 127.0.0.1
+    hostnames:
+      - status.testhost
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1002
+podSecurityContext:
+  fsGroup: 1002
+  enabled: true
+service:
+  type: LoadBalancer
+  ports:
+    http: 80
+    https: 444
+db:
+  host: mariadb
+  allowArbitraryServer: true
+  port: 3306
+  bundleTestDB: true
+mariadb:
+  auth:
+    rootPassword: rootPassword

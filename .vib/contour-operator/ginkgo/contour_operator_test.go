@@ -8,9 +8,11 @@ import (
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 
+	appsv1 "k8s.io/api/apps/v1"
 	v1 "k8s.io/api/core/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/dynamic"
+	appscv1 "k8s.io/client-go/kubernetes/typed/apps/v1"
 	cv1 "k8s.io/client-go/kubernetes/typed/core/v1"
 	netcv1 "k8s.io/client-go/kubernetes/typed/networking/v1"
 
@@ -22,7 +24,9 @@ var _ = Describe("Contour Operator:", func() {
 	Context("When both operator and testing resources are deployed", Ordered, func() {
 		var netclient netcv1.NetworkingV1Interface
 		var coreclient cv1.CoreV1Interface
+		var appsclient appscv1.AppsV1Interface
 		var dynamicClient dynamic.Interface
+		var contourOperatorDeploy *appsv1.Deployment
 		var envoySvc *v1.Service
 		var ctx context.Context
 		var err error
@@ -34,10 +38,21 @@ var _ = Describe("Contour Operator:", func() {
 			var ingressHost string
 			var hasIP, isReady bool
 
+			appsclient = appscv1.NewForConfigOrDie(clusterConfigOrDie())
 			netclient = netcv1.NewForConfigOrDie(clusterConfigOrDie())
 			coreclient = cv1.NewForConfigOrDie(clusterConfigOrDie())
 			dynamicClient = dynamic.NewForConfigOrDie(clusterConfigOrDie())
 			ctx = context.Background()
+
+			contourOperatorDeploy, err = appsclient.Deployments(*namespace).Get(ctx, "contour-operator", metav1.GetOptions{})
+			if err != nil {
+				panic(fmt.Sprintf("There was an error retrieving the Contour Operator deployment: %q", err))
+			}
+			usesPrivateRegistries := len(contourOperatorDeploy.Spec.Template.Spec.ImagePullSecrets) != 0
+
+			if usesPrivateRegistries {
+				Skip("Contour operator does not support the use of private registries. Skipping tests")
+			}
 
 			// The tests evaluate the Operator by deploying both Contour and Ingress resources.
 			// Their creation takes some time, so they will be deployed once and reused across the different checks.
@@ -85,6 +100,7 @@ var _ = Describe("Contour Operator:", func() {
 			if err != nil {
 				panic(fmt.Sprintf("There was an error retrieving the %q Ingress resource: %q", ingressName, err))
 			}
+
 			Expect(returnValidHost(testingIngress.Status.LoadBalancer.Ingress[0])).To(Equal(returnValidHost(envoySvc.Status.LoadBalancer.Ingress[0])))
 		})
 

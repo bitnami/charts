@@ -22,7 +22,6 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/rabbitmq-cluster-operator"
         },
-        "runtime_parameters": "ZXh0cmFEZXBsb3k6Ci0gYXBpVmVyc2lvbjogdjEKICBraW5kOiBTZWNyZXQKICBtZXRhZGF0YToKICAgIG5hbWU6IHZlLXRlc3RpbmctZGVmYXVsdC11c2VyCiAgc3RyaW5nRGF0YToKICAgIGRlZmF1bHRfdXNlci5jb25mOiB8CiAgICAgIGRlZmF1bHRfdXNlciA9IHRlc3RfdXNlcgogICAgICBkZWZhdWx0X3Bhc3MgPSBDb21wbGljYXRlZFBhc3N3b3JkMTIzITQKICAgIHBhc3N3b3JkOiBDb21wbGljYXRlZFBhc3N3b3JkMTIzITQKICAgIHVzZXJuYW1lOiB0ZXN0X3VzZXIKLSBhcGlWZXJzaW9uOiByYWJiaXRtcS5jb20vdjFiZXRhMQogIGtpbmQ6IFJhYmJpdG1xQ2x1c3RlcgogIG1ldGFkYXRhOgogICAgbmFtZTogdmUtdGVzdGluZwogIHNwZWM6CiAgICByZXBsaWNhczogMgogICAgcmVzb3VyY2VzOgogICAgICByZXF1ZXN0czoKICAgICAgICBjcHU6IDEwMG0KICAgICAgICBtZW1vcnk6IDEwME1pCi0gYXBpVmVyc2lvbjogdjEKICBraW5kOiBTZXJ2aWNlCiAgbWV0YWRhdGE6CiAgICBuYW1lOiBleHRyYS1zdmMKICBzcGVjOgogICAgdHlwZTogTG9hZEJhbGFuY2VyCiAgICBwb3J0czoKICAgICAgLSBhcHBQcm90b2NvbDogaHR0cAogICAgICAgIG5hbWU6IG1hbmFnZW1lbnQKICAgICAgICBwb3J0OiA4MAogICAgICAgIHByb3RvY29sOiBUQ1AKICAgICAgICB0YXJnZXRQb3J0OiAxNTY3MgogICAgc2VsZWN0b3I6CiAgICAgIGFwcC5rdWJlcm5ldGVzLmlvL25hbWU6IHZlLXRlc3RpbmcKbXNnVG9wb2xvZ3lPcGVyYXRvcjoKICBmdWxsbmFtZU92ZXJyaWRlOiBybXEtb3AKICBjb250YWluZXJQb3J0czoKICAgIG1ldHJpY3M6IDgwODAKICBzZXJ2aWNlOgogICAgcG9ydHM6CiAgICAgIHdlYmhvb2s6IDQ0MwogICAgdHlwZTogTG9hZEJhbGFuY2Vy",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_ALTERNATIVE_TARGET_PLATFORM}",
           "size": {
@@ -42,14 +41,15 @@
           "action_id": "goss",
           "params": {
             "resources": {
-              "path": "/.vib/rabbitmq-cluster-operator/goss"
+              "path": "/.vib"
             },
+            "tests_file": "rabbitmq-cluster-operator/goss/goss.yaml",
+            "vars_file": "rabbitmq-cluster-operator/runtime-parameters.yaml",
             "remote": {
               "pod": {
                 "workload": "sts-ve-testing-server"
               }
-            },
-            "vars_file": "vars.yaml"
+            }
           }
         },
         {

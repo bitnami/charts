@@ -33,6 +33,9 @@ spec:
     podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.compactor.podAntiAffinityPreset "component" "compactor" "context" $) | nindent 6 }}
     nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.compactor.nodeAffinityPreset.type "key" .Values.compactor.nodeAffinityPreset.key "values" .Values.compactor.nodeAffinityPreset.values) | nindent 6 }}
   {{- end }}
+  {{- if .Values.compactor.dnsConfig }}
+  dnsConfig: {{- include "common.tplvalues.render" (dict "value" .Values.compactor.dnsConfig "context" $) | nindent 4 }}
+  {{- end }}
   {{- if .Values.compactor.nodeSelector }}
   nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.compactor.nodeSelector "context" $) | nindent 4 }}
   {{- end }}

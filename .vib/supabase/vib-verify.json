@@ -22,7 +22,6 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/supabase"
         },
-        "runtime_parameters": "and0OgogIHNlY3JldDogImFiY2RlZmdoaWprbG1ub3BxcnN0dXZ3eHl6MTIzNDU2IgogIGFub25LZXk6ICJleUpoYkdjaU9pSklVekkxTmlJc0luUjVjQ0k2SWtwWFZDSjkuZXdvZ0lDQWdJbkp2YkdVaU9pQWlZVzV2YmlJc0NpQWdJQ0FpYVhOeklqb2dJbk4xY0dGaVlYTmxJaXdLSUNBZ0lDSnBZWFFpT2lBeE5qYzFOREF3TkRBd0xBb2dJQ0FnSW1WNGNDSTZJREU0TXpNeE5qWTRNREFLZlEuenR1aUJ6amFWb0ZIbW9salVYV21udURONlFVMldnSklDZXF3eXp5Wk84OCIKICBzZXJ2aWNlS2V5OiAiZXlKaGJHY2lPaUpJVXpJMU5pSXNJblI1Y0NJNklrcFhWQ0o5LmV3b2dJQ0FnSW5KdmJHVWlPaUFpYzJWeWRtbGpaVjl5YjJ4bElpd0tJQ0FnSUNKcGMzTWlPaUFpYzNWd1lXSmhjMlVpTEFvZ0lDQWdJbWxoZENJNklERTJOelUwTURBME1EQXNDaUFnSUNBaVpYaHdJam9nTVRnek16RTJOamd3TUFwOS5xTnNtWHp6NHRHN2VxSlBoMVk1OERidElsSkJhdXdwcXgzOVVGLU13TThrIgoKYXV0aDoKICBzZXJ2aWNlOgogICAgcG9ydHM6CiAgICAgIGh0dHA6IDIyMjIKbWV0YToKICBzZXJ2aWNlOgogICAgcG9ydHM6CiAgICAgIGh0dHA6IDIyMjMKcmVhbHRpbWU6CiAgc2VydmljZToKICAgIHBvcnRzOgogICAgICBodHRwOiAyMjI0CnJlc3Q6CiAgc2VydmljZToKICAgIHBvcnRzOgogICAgICBodHRwOiAyMjI1CnN0b3JhZ2U6CiAgc2VydmljZToKICAgIHBvcnRzOgogICAgICBodHRwOiAyMjI2CnN0dWRpbzoKICBzZXJ2aWNlOgogICAgcG9ydHM6CiAgICAgIGh0dHA6IDIyMjcKCmtvbmc6CiAgc2VydmljZToKICAgIHBvcnRzOgogICAgICBwcm94eUh0dHA6IDgwCiAga29uZzoKICAgIGV4dHJhVm9sdW1lTW91bnRzOgogICAgICAtIG5hbWU6IHJlbmRlcmVkLWRlY2xhcmF0aXZlLWNvbmYKICAgICAgICBtb3VudFBhdGg6IC9iaXRuYW1pL2tvbmcvZGVjbGFyYXRpdmUtY29uZi8KICAgIGV4dHJhRW52VmFyczoKICAgICAgLSBuYW1lOiBLT05HX0RFQ0xBUkFUSVZFX0NPTkZJRwogICAgICAgIHZhbHVlOiAiL2JpdG5hbWkva29uZy9kZWNsYXJhdGl2ZS1jb25mL2tvbmcueW1sIgogICAgICAtIG5hbWU6IEtPTkdfRE5TX09SREVSCiAgICAgICAgdmFsdWU6IExBU1QsQSxDTkFNRQogICAgICAtIG5hbWU6IEtPTkdfUExVR0lOUwogICAgICAgIHZhbHVlOiByZXF1ZXN0LXRyYW5zZm9ybWVyLGNvcnMsa2V5LWF1dGgsYWNsCg==",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -42,14 +41,15 @@
           "action_id": "goss",
           "params": {
             "resources": {
-              "path": "/.vib/supabase/goss"
+              "path": "/.vib"
             },
+            "tests_file": "supabase/goss/goss.yaml",
+            "vars_file": "supabase/runtime-parameters.yaml",
             "remote": {
               "pod": {
                 "workload": "deploy-supabase-kong"
               }
-            },
-            "vars_file": "vars.yaml"
+            }
           }
         },
         {

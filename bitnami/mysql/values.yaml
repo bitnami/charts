@@ -82,7 +82,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mysql
-  tag: 8.0.32-debian-11-r14
+  tag: 8.0.32-debian-11-r21
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1008,7 +1008,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r94
+    tag: 11-debian-11-r102
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1042,7 +1042,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mysqld-exporter
-    tag: 0.14.0-debian-11-r96
+    tag: 0.14.0-debian-11-r103
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1053,6 +1053,16 @@ metrics:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
+  ## MySQL metrics container security context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param metrics.containerSecurityContext.enabled MySQL metrics container securityContext
+  ## @param metrics.containerSecurityContext.runAsUser User ID for the MySQL metrics container
+  ## @param metrics.containerSecurityContext.runAsNonRoot Set MySQL metrics container's Security Context runAsNonRoot
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
   ## MySQL Prometheus exporter service parameters
   ## Mysqld Prometheus exporter liveness and readiness probes
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes

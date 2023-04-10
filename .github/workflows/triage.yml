@@ -9,6 +9,9 @@ on:
     types:
       - reopened
       - opened
+permissions:
+  issues: write
+  pull-requests: write
 # Avoid concurrency over the same issue
 concurrency:
   group: card-movement-${{ github.event_name != 'issues' && github.event.number || github.event.issue.number }}
@@ -31,9 +34,12 @@ jobs:
         run: |
           author="${{ github.event.issue != null && github.event.issue.user.login || github.event.pull_request.user.login }}"
           number="${{ github.event_name != 'issues' && github.event.number || github.event.issue.number }}"
+          type="${{ github.event_name != 'issues' && 'pull_request' || 'issue' }}"
           echo "author=${author}" >> $GITHUB_OUTPUT
           echo "number=${number}" >> $GITHUB_OUTPUT
+          echo "type=${type}" >> $GITHUB_OUTPUT
       - name: Send to the board
+        if: ${{steps.get-issue.outputs.author != 'bitnami-bot' || steps.get-issue.outputs.type != 'pull_request'}}
         uses: peter-evans/create-or-update-project-card@v2
         with:
           project-name: Support
@@ -41,3 +47,17 @@ jobs:
           column-name: ${{ (contains(fromJson(env.BITNAMI_TEAM), steps.get-issue.outputs.author)) && 'From Bitnami' || 'Triage' }}
           token: "${{ secrets.BITNAMI_BOT_TOKEN }}"
           issue-number: ${{ steps.get-issue.outputs.number }}
+      # The project API is not efficient and requires several requests to create the project card. For that reason we decided to create
+      # a card for the automated PRs only when it is needed.
+      - name: From Bitnami labeling
+        if: ${{steps.get-issue.outputs.author == 'bitnami-bot' && steps.get-issue.outputs.type == 'pull_request'}}
+        uses: fmulero/labeler@1.1.0
+        with:
+          add-labels: 'automated, auto-merge'
+      - name: Verify labeling
+        if: ${{steps.get-issue.outputs.author == 'bitnami-bot' && steps.get-issue.outputs.type == 'pull_request'}}
+        uses: fmulero/labeler@1.1.0
+        with:
+          # Bitnami bot token is required to trigger CI workflows
+          repo-token: ${{ secrets.BITNAMI_BOT_TOKEN }}
+          add-labels: verify

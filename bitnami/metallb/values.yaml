@@ -49,6 +49,9 @@ diagnosticMode:
   ##
   args:
     - infinity
+## @param installCRDs Flag to install metallb CRDs
+##
+installCRDs: true
 ## @section MetalLB parameters
 
 ## RBAC creation for controller and speaker
@@ -98,7 +101,7 @@ controller:
   image:
     registry: docker.io
     repository: bitnami/metallb-controller
-    tag: 0.13.9-debian-11-r3
+    tag: 0.13.9-debian-11-r12
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -455,7 +458,7 @@ speaker:
   image:
     registry: docker.io
     repository: bitnami/metallb-speaker
-    tag: 0.13.9-debian-11-r2
+    tag: 0.13.9-debian-11-r11
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

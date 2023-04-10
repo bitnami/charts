@@ -1,12 +1,12 @@
 dependencies:
 - name: postgresql
   repository: https://charts.bitnami.com/bitnami
-  version: 12.2.3
+  version: 12.2.6
 - name: kong
   repository: https://charts.bitnami.com/bitnami
-  version: 9.1.6
+  version: 9.1.8
 - name: common
   repository: https://charts.bitnami.com/bitnami
   version: 2.2.4
-digest: sha256:2db6035f465d4f1027a7547932ed79519a3e54682fc37b03c3b0f8396a0745a4
-generated: "2023-03-14T15:16:58.338509779Z"
+digest: sha256:1b028177b21abf08ca28759998dd2eff57063ad67e5d66975a783c770b05e63d
+generated: "2023-04-01T15:03:20.353314684Z"

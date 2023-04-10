@@ -1,0 +1,7 @@
+dokuwikiUsername: user
+dokuwikiPassword: ComplicatedPassword123!4
+dokuwikiWikiName: My Super Wiki
+service:
+  type: LoadBalancer
+  ports:
+    http: 80

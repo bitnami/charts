@@ -1,0 +1,18 @@
+auth:
+  rbac:
+    rootPassword: ComplicatedPassword123!4
+replicaCount: 3
+containerPorts:
+  client: 2378
+  peer: 2381
+podSecurityContext:
+  enabled: true
+  fsGroup: 1002
+containerSecurityContext:
+  enabled: true
+  runAsUser: 1002
+service:
+  type: LoadBalancer
+  ports:
+    client: 80
+    peer: 2381

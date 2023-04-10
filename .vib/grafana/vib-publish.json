@@ -22,7 +22,6 @@
           "url": "{SHA_ARCHIVE}",
           "path": "/bitnami/grafana"
         },
-        "runtime_parameters": "YWRtaW46CiAgdXNlcjogdGVzdF9hZG1pbgogIHBhc3N3b3JkOiBDb21wbGljYXRlZFBhc3N3b3JkMTIzITQKcGx1Z2luczogZ3JhZmFuYS1rdWJlcm5ldGVzLWFwcApncmFmYW5hOgogIGNvbnRhaW5lclBvcnRzOgogICAgZ3JhZmFuYTogMzAwMAogIHBvZFNlY3VyaXR5Q29udGV4dDoKICAgIGVuYWJsZWQ6IHRydWUKICAgIGZzR3JvdXA6IDEwMDIKICBjb250YWluZXJTZWN1cml0eUNvbnRleHQ6CiAgICBlbmFibGVkOiB0cnVlCiAgICBydW5Bc1VzZXI6IDEwMDIKc2VydmljZToKICB0eXBlOiBMb2FkQmFsYW5jZXIKICBwb3J0czoKICAgIGdyYWZhbmE6IDgwCnBlcnNpc3RlbmNlOgogIGVuYWJsZWQ6IHRydWU=",
         "target_platform": {
           "target_platform_id": "{VIB_ENV_TARGET_PLATFORM}",
           "size": {
@@ -42,14 +41,15 @@
           "action_id": "goss",
           "params": {
             "resources": {
-              "path": "/.vib/grafana/goss"
+              "path": "/.vib"
             },
+            "tests_file": "grafana/goss/goss.yaml",
+            "vars_file": "grafana/runtime-parameters.yaml",
             "remote": {
               "pod": {
                 "workload": "deploy-grafana"
               }
-            },
-            "vars_file": "vars.yaml"
+            }
           }
         },
         {

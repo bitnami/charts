@@ -9,8 +9,14 @@ metadata:
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
-  {{- if .Values.commonAnnotations }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- if or .Values.commonAnnotations .Values.queryFrontend.service.headless.annotations }}
+  annotations:
+    {{- if .Values.queryFrontend.service.headless.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.queryFrontend.service.headless.annotations "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
   {{- end }}
 spec:
   # NOTE: this is based on this https://github.com/grafana/helm-charts/pull/451. Should be reviewed if it is actually necessary in the future
