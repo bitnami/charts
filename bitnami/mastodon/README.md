@@ -105,6 +105,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraConfigExistingSecret`      | The name of an existing Secret with your extra configuration for Mastodon                                                    | `""`                                 |
 | `enableSearches`                 | Enable the search engine (uses Elasticsearch under the hood)                                                                 | `true`                               |
 | `enableS3`                       | Enable the S3 storage engine                                                                                                 | `true`                               |
+| `forceHttpsS3Protocol`           | Force Mastodon's S3_PROTOCOL to be https (Useful when TLS is terminated using cert-manager/Ingress)                          | `false`                              |
+| `useSecureWebSocket`             | Set Mastodon's STREAMING_API_BASE_URL to use secure websocket (wss:// instead of ws://)                                      | `false`                              |
 | `local_https`                    | Set this instance to advertise itself to the fediverse using HTTPS rather than HTTP URLs. This should almost always be true. | `true`                               |
 | `localDomain`                    | The domain name used by accounts on this instance. Unless you're using                                                       | `""`                                 |
 | `webDomain`                      | Optional alternate domain used when you want to host Mastodon at a                                                           | `""`                                 |

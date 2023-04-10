@@ -148,7 +148,7 @@ defaultConfig: |
   S3_HOSTNAME: {{ include "mastodon.s3.host" . | quote }}
   S3_REGION: {{ include "mastodon.s3.region" . | quote }}
   S3_ALIAS_HOST: {{ include "mastodon.s3.aliasHost" . | quote }}
-  S3_PROTOCOL: {{ include "mastodon.s3.protocol" . | quote }}
+  S3_PROTOCOL: {{ include "mastodon.s3.protocol.setting" . | quote }}
   {{- end }}
 
 ## @param defaultSecretConfig [string] Default secret configuration for Mastodon in the form of environment variables
@@ -189,6 +189,13 @@ enableSearches: true
 ## @param enableS3 Enable the S3 storage engine
 ##
 enableS3: true
+
+## @param forceHttpsS3Protocol Force Mastodon's S3_PROTOCOL to be https (Useful when TLS is terminated using cert-manager/Ingress)
+##
+forceHttpsS3Protocol: false
+
+## @param useSecureWebSocket Set Mastodon's STREAMING_API_BASE_URL to use secure websocket (wss:// instead of ws://)
+useSecureWebSocket: false
 
 ## @param local_https Set this instance to advertise itself to the fediverse using HTTPS rather than HTTP URLs. This should almost always be true.
 ##
