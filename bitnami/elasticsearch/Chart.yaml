@@ -6,10 +6,10 @@ appVersion: 8.7.0
 dependencies:
   - condition: global.kibanaEnabled
     name: kibana
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     version: 10.x.x
   - name: common
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     tags:
       - bitnami-common
     version: 2.x.x

@@ -11,8 +11,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/keycloak
+helm install my-release oci://registry-1.docker.io/bitnamicharts/keycloak
 ```
 
 ## Introduction
@@ -33,8 +32,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/keycloak
+helm install my-release oci://registry-1.docker.io/bitnamicharts/keycloak
 ```
 
 These commands deploy a Keycloak application on the Kubernetes cluster in the default configuration.
@@ -347,7 +345,7 @@ The command removes all the Kubernetes components associated with the chart and 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-helm install my-release --set auth.adminPassword=secretpassword my-repo/keycloak
+helm install my-release --set auth.adminPassword=secretpassword oci://registry-1.docker.io/bitnamicharts/keycloak
 ```
 
 The above command sets the Keycloak administrator password to `secretpassword`.
@@ -357,7 +355,7 @@ The above command sets the Keycloak administrator password to `secretpassword`.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml my-repo/keycloak
+helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/keycloak
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)

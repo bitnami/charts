@@ -5,10 +5,10 @@ apiVersion: v2
 appVersion: 6.0.0
 dependencies:
   - name: mongodb
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     version: 13.x.x
   - name: common
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     tags:
       - bitnami-common
     version: 2.x.x

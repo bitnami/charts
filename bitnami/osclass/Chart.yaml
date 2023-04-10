@@ -6,12 +6,12 @@ appVersion: 8.1.1
 dependencies:
   - condition: mariadb.enabled
     name: mariadb
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     tags:
       - osclass-database
     version: 11.x.x
   - name: common
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     tags:
       - bitnami-common
     version: 2.x.x

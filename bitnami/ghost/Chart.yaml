@@ -6,12 +6,12 @@ appVersion: 5.44.0
 dependencies:
   - condition: mysql.enabled
     name: mysql
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     tags:
       - ghost-database
     version: 9.x.x
   - name: common
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     tags:
       - bitnami-common
     version: 2.x.x

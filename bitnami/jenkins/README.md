@@ -11,8 +11,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/jenkins
+helm install my-release oci://registry-1.docker.io/bitnamicharts/jenkins
 ```
 
 ## Introduction
@@ -33,8 +32,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/jenkins
+helm install my-release oci://registry-1.docker.io/bitnamicharts/jenkins
 ```
 
 These commands deploy Jenkins on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -323,7 +321,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 helm install my-release \
   --set jenkinsUser=admin \
   --set jenkinsPassword=password \
-  my-repo/jenkins
+  oci://registry-1.docker.io/bitnamicharts/jenkins
 ```
 
 The above command sets the Jenkins administrator account username and password to `admin` and `password` respectively.
@@ -333,7 +331,7 @@ The above command sets the Jenkins administrator account username and password t
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml my-repo/jenkins
+helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/jenkins
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -432,7 +430,7 @@ kubectl delete deployments.apps jenkins
 - Upgrade your release and delete data that should not be persisted anymore:
 
 ```console
-helm upgrade jenkins my-repo/jenkins --set jenkinsPassword=$JENKINS_PASSWORD --set jenkinsHome=/bitnami/jenkins/jenkins_home
+helm upgrade jenkins oci://registry-1.docker.io/bitnamicharts/jenkins --set jenkinsPassword=$JENKINS_PASSWORD --set jenkinsHome=/bitnami/jenkins/jenkins_home
 kubectl exec -it $(kubectl get pod -l app.kubernetes.io/instance=jenkins,app.kubernetes.io/name=jenkins -o jsonpath="{.items[0].metadata.name}") -- find /bitnami/jenkins -mindepth 1 -maxdepth 1 -not -name jenkins_home -exec rm -rf {} \;
 ```
 
@@ -447,7 +445,7 @@ Consequences:
 ```console
 export JENKINS_PASSWORD=$(kubectl get secret --namespace default jenkins -o jsonpath="{.data.jenkins-password}" | base64 -d)
 kubectl delete deployments.apps jenkins
-helm upgrade jenkins my-repo/jenkins --set jenkinsPassword=$JENKINS_PASSWORD
+helm upgrade jenkins oci://registry-1.docker.io/bitnamicharts/jenkins --set jenkinsPassword=$JENKINS_PASSWORD
 ```
 
 ### To 6.1.0

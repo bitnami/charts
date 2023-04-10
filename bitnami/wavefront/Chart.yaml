@@ -6,10 +6,10 @@ appVersion: 1.13.0
 dependencies:
   - condition: kube-state-metrics.enabled
     name: kube-state-metrics
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     version: 3.x.x
   - name: common
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     tags:
       - bitnami-common
     version: 2.x.x

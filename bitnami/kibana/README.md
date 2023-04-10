@@ -11,8 +11,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/kibana --set elasticsearch.hosts[0]=<Hostname of your ES instance> --set elasticsearch.port=<port of your ES instance>
+helm install my-release oci://registry-1.docker.io/bitnamicharts/kibana --set elasticsearch.hosts[0]=<Hostname of your ES instance> --set elasticsearch.port=<port of your ES instance>
 ```
 
 ## Introduction
@@ -33,8 +32,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/kibana \
+helm install my-release oci://registry-1.docker.io/bitnamicharts/kibana \
   --set elasticsearch.hosts[0]=<Hostname of your ES instance> \
   --set elasticsearch.port=<port of your ES instance> \
 ```
@@ -248,7 +246,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```console
 helm install my-release \
-  --set admin.user=admin-user my-repo/kibana
+  --set admin.user=admin-user oci://registry-1.docker.io/bitnamicharts/kibana
 ```
 
 The above command sets the Kibana admin user to `admin-user`.
@@ -258,7 +256,7 @@ The above command sets the Kibana admin user to `admin-user`.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml my-repo/kibana
+helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/kibana
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)

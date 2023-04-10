@@ -5,13 +5,13 @@ apiVersion: v2
 appVersion: 1.44.0
 dependencies:
   - name: common
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     tags:
       - bitnami-common
     version: 2.x.x
   - condition: cassandra.enabled
     name: cassandra
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     version: 10.x.x
 description: Jaeger is a distributed tracing system. It is used for monitoring and troubleshooting microservices-based distributed systems.
 home: https://github.com/bitnami/charts/tree/main/bitnami/jaeger
