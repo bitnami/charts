@@ -20,7 +20,7 @@ keywords:
   - arp
   - vrrp
   - vip
-kubeVersion: ">= 1.19.0-0"
+kubeVersion: '>= 1.19.0-0'
 maintainers:
   - name: Bitnami
     url: https://github.com/bitnami/charts
