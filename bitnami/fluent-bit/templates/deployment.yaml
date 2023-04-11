@@ -1,4 +1,4 @@
-{{- if not .Values.daemonset.enable }}
+{{- if not .Values.daemonset.enabled }}
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
