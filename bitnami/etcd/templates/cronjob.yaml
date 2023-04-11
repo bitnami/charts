@@ -86,6 +86,8 @@ spec:
                   value: {{ printf "%s.%s.svc.%s" $etcdHeadlessServiceName $releaseNamespace $clusterDomain | quote }}
                 - name: ETCD_SNAPSHOT_HISTORY_LIMIT
                   value: {{ .Values.disasterRecovery.cronjob.snapshotHistoryLimit | quote }}
+                - name: ETCD_SNAPSHOTS_DIR
+                  value: {{ .Values.disasterRecovery.cronjob.snapshotsDir | quote }}
                 {{- if .Values.auth.client.secureTransport }}
                 - name: ETCD_CERT_FILE
                   value: "/opt/bitnami/etcd/certs/client/{{ .Values.auth.client.certFilename }}"
@@ -123,7 +125,7 @@ spec:
             {{- if .Values.auth.client.secureTransport }}
             - name: certs
               secret:
-                secretName: {{ required "A secret containinig the client certificates is required" (tpl .Values.auth.client.existingSecret .) }}
+                secretName: {{ required "A secret containing the client certificates is required" (tpl .Values.auth.client.existingSecret .) }}
                 defaultMode: 256
             {{- end }}
             - name: snapshot-volume

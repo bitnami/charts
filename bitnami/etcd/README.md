@@ -279,6 +279,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `disasterRecovery.cronjob.schedule`             | Schedule in Cron format to save snapshots                               | `*/30 * * * *` |
 | `disasterRecovery.cronjob.historyLimit`         | Number of successful finished jobs to retain                            | `1`            |
 | `disasterRecovery.cronjob.snapshotHistoryLimit` | Number of etcd snapshots to retain, tagged by date                      | `1`            |
+| `disasterRecovery.cronjob.snapshotsDir`         | Directory to store snapshots                                            | `/snapshots`   |
 | `disasterRecovery.cronjob.podAnnotations`       | Pod annotations for cronjob pods                                        | `{}`           |
 | `disasterRecovery.cronjob.resources.limits`     | Cronjob container resource limits                                       | `{}`           |
 | `disasterRecovery.cronjob.resources.requests`   | Cronjob container resource requests                                     | `{}`           |
