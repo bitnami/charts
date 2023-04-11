@@ -469,6 +469,7 @@ Persistent Volume Claims are used to keep the data across deployments. This is k
 See the [Parameters](#parameters) section to configure the PVC or to disable persistence.
 
 ## Adding Plugins
+
 In order to have plugins automatically install on container startup it is necessary to add the install commands as a container startup command. In order to have these install commands run correctly the original startup script (which takes another script as an aargument) must also be added to the custom startup command before the plugin install commands. Instructions for installing plugins on containers can be found in the [Bitnami Docker docs](https://docs.bitnami.com/aws/apps/discourse/configuration/install-plugins/)
 
 ```console
