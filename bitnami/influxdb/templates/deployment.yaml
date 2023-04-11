@@ -147,6 +147,10 @@ spec:
               value: {{ .Values.auth.admin.bucket | quote }}
             - name: INFLUXDB_ADMIN_ORG
               value: {{ .Values.auth.admin.org | quote }}
+            {{- if .Values.auth.admin.retention }}
+            - name: INFLUXDB_ADMIN_RETENTION
+              value: {{ .Values.auth.admin.retention | quote }}
+            {{- end }}
             {{- if .Values.auth.user.username }}
             - name: INFLUXDB_USER
               value: {{ .Values.auth.user.username | quote }}
