@@ -1,6 +1,6 @@
 addr:
   # Container ports
-  tcp://fluent-bit:{{ .Vars.containerPorts.http }}/:
+  tcp://localhost:{{ .Vars.containerPorts.http }}/:
     reachable: true
   # Service ports
 http:
