@@ -96,6 +96,9 @@ git:
 ## @param replicaCount Number of replicas of the Apache deployment
 ##
 replicaCount: 1
+## @param revisionHistoryLimit The number of old history to retain to allow rollback
+##
+revisionHistoryLimit: 10
 ## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
 ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
 ##
