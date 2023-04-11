@@ -60,6 +60,480 @@ diagnosticMode:
   args:
     - infinity
 
+## @section Alertmanager Parameters
+##
+## Bitnami Alertmanager image
+## ref: https://hub.docker.com/r/bitnami/alertmanager/tags/
+## @param alertmanager.enabled Alertmanager enabled
+## @param alertmanager.image.registry Alertmanager image registry
+## @param alertmanager.image.repository Alertmanager image repository
+## @param alertmanager.image.tag Alertmanager image tag (immutable tags are recommended)
+## @param alertmanager.image.digest Alertmanager image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
+## @param alertmanager.image.pullPolicy Alertmanager image pull policy
+## @param alertmanager.image.pullSecrets Alertmanager image pull secrets
+##
+alertmanager:
+  enabled: true
+  image:
+    registry: docker.io
+    repository: bitnami/alertmanager
+    tag: 0.25.0-debian-11-r36
+    digest: ""
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+
+  ## @param alertmanager.configuration [string] Alertmanager configuration. This content will be stored in the the alertmanager.yaml file and the content can be a template.
+  ## ref: <https://github.com/prometheus-community/helm-charts/blob/8f2743ed3a9c93c56978a95b62a63e84c52f5748/charts/alertmanager/values.yaml#L171-L188>
+  ##
+  configuration: |
+    receivers:
+      - name: default-receiver
+    route:
+      group_wait: 10s
+      group_interval: 5m
+      receiver: default-receiver
+      repeat_interval: 3h
+
+  ## @param alertmanager.replicaCount Number of Alertmanager replicas to deploy
+  ##
+  replicaCount: 1
+  ## @param alertmanager.containerPorts.http Alertmanager HTTP container port
+  ## @param alertmanager.containerPorts.cluster Alertmanager Cluster HA port
+  ##
+  containerPorts:
+    http: 9093
+    cluster: 9094
+  ## Configure extra options for Alertmanager containers' liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param alertmanager.livenessProbe.enabled Enable livenessProbe on Alertmanager containers
+  ## @param alertmanager.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param alertmanager.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param alertmanager.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param alertmanager.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param alertmanager.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 5
+    periodSeconds: 20
+    timeoutSeconds: 3
+    failureThreshold: 3
+    successThreshold: 1
+  ## @param alertmanager.readinessProbe.enabled Enable readinessProbe on Alertmanager containers
+  ## @param alertmanager.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param alertmanager.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param alertmanager.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param alertmanager.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param alertmanager.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 5
+    periodSeconds: 10
+    timeoutSeconds: 2
+    failureThreshold: 5
+    successThreshold: 1
+  ## @param alertmanager.startupProbe.enabled Enable startupProbe on Alertmanager containers
+  ## @param alertmanager.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param alertmanager.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param alertmanager.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param alertmanager.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param alertmanager.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 2
+    periodSeconds: 5
+    timeoutSeconds: 2
+    failureThreshold: 10
+    successThreshold: 1
+  ## @param alertmanager.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param alertmanager.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param alertmanager.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## Alertmanager resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param alertmanager.resources.limits The resources limits for the Alertmanager containers
+  ## @param alertmanager.resources.requests The requested resources for the Alertmanager containers
+  ##
+  resources:
+    limits: {}
+    requests: {}
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param alertmanager.podSecurityContext.enabled Enabled Alertmanager pods' Security Context
+  ## @param alertmanager.podSecurityContext.fsGroup Set Alertmanager pod's Security Context fsGroup
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param alertmanager.containerSecurityContext.enabled Enabled Alertmanager containers' Security Context
+  ## @param alertmanager.containerSecurityContext.runAsUser Set Alertmanager containers' Security Context runAsUser
+  ## @param alertmanager.containerSecurityContext.runAsNonRoot Set Alertmanager containers' Security Context runAsNonRoot
+  ## @param alertmanager.containerSecurityContext.readOnlyRootFilesystem Set Alertmanager containers' Security Context runAsNonRoot
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
+    readOnlyRootFilesystem: false
+
+  ## @param alertmanager.existingConfigmap The name of an existing ConfigMap with your custom configuration for Alertmanager
+  ##
+  existingConfigmap: ""
+  ## @param alertmanager.existingConfigmapKey The name of the key with the Alertmanager config file
+  ##
+  existingConfigmapKey: ""
+  ## @param alertmanager.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param alertmanager.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param alertmanager.extraArgs Additional arguments passed to the Prometheus server container
+  ## extraArgs:
+  ## - --log.level=debug
+  ## - --tsdb.path=/data/
+  ##
+  extraArgs: []
+  ## @param alertmanager.hostAliases Alertmanager pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param alertmanager.podLabels Extra labels for Alertmanager pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param alertmanager.podAnnotations Annotations for Alertmanager pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param alertmanager.podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param alertmanager.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: soft
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param alertmanager.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param alertmanager.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param alertmanager.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ##
+  pdb:
+    create: false
+    minAvailable: 1
+    maxUnavailable: ""
+  ## Autoscaling configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
+  ## @param alertmanager.autoscaling.enabled Enable autoscaling for Alertmanager
+  ## @param alertmanager.autoscaling.minReplicas Minimum number of Alertmanager replicas
+  ## @param alertmanager.autoscaling.maxReplicas Maximum number of Alertmanager replicas
+  ## @param alertmanager.autoscaling.targetCPU Target CPU utilization percentage
+  ## @param alertmanager.autoscaling.targetMemory Target Memory utilization percentage
+  ##
+  autoscaling:
+    enabled: false
+    minReplicas: ""
+    maxReplicas: ""
+    targetCPU: ""
+    targetMemory: ""
+  ## Node affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param alertmanager.nodeAffinityPreset.type Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param alertmanager.nodeAffinityPreset.key Node label key to match. Ignored if `affinity` is set
+    ##
+    key: ""
+    ## @param alertmanager.nodeAffinityPreset.values Node label values to match. Ignored if `affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param alertmanager.affinity Affinity for Alertmanager pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `podAffinityPreset`, `podAntiAffinityPreset`, and `nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param alertmanager.nodeSelector Node labels for Alertmanager pods assignment
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+  ## @param alertmanager.tolerations Tolerations for Alertmanager pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param alertmanager.updateStrategy.type Alertmanager statefulset strategy type
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy:
+    ## StrategyType
+    ## Can be set to RollingUpdate or OnDelete
+    ##
+    type: RollingUpdate
+
+  ## @param alertmanager.priorityClassName Alertmanager pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param alertmanager.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: []
+  ## @param alertmanager.schedulerName Name of the k8s scheduler (other than default) for Alertmanager pods
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param alertmanager.terminationGracePeriodSeconds Seconds Redmine pod needs to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
+  ## @param alertmanager.lifecycleHooks for the Alertmanager container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param alertmanager.extraEnvVars Array with extra environment variables to add to Alertmanager nodes
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param alertmanager.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for Alertmanager nodes
+  ##
+  extraEnvVarsCM: ""
+  ## @param alertmanager.extraEnvVarsSecret Name of existing Secret containing extra env vars for Alertmanager nodes
+  ##
+  extraEnvVarsSecret: ""
+  ## @param alertmanager.extraVolumes Optionally specify extra list of additional volumes for the Alertmanager pod(s)
+  ##
+  extraVolumes: []
+  ## @param alertmanager.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Alertmanager container(s)
+  ##
+  extraVolumeMounts: []
+  ## @param alertmanager.sidecars Add additional sidecar containers to the Alertmanager pod(s)
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param alertmanager.initContainers Add additional init containers to the Alertmanager pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
+
+  ## Alertmanager ingress parameters
+  ## ref: http://kubernetes.io/docs/user-guide/ingress/
+  ##
+  ingress:
+    ## @param alertmanager.ingress.enabled Enable ingress record generation for Alertmanager
+    ##
+    enabled: false
+    ## @param alertmanager.ingress.pathType Ingress path type
+    ##
+    pathType: ImplementationSpecific
+    ## @param alertmanager.ingress.apiVersion Force Ingress API version (automatically detected if not set)
+    ##
+    apiVersion: ""
+    ## @param alertmanager.ingress.hostname Default host for the ingress record
+    ##
+    hostname: prometheus.local
+    ## @param alertmanager.ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+    ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+    ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+    ##
+    ingressClassName: ""
+    ## @param alertmanager.ingress.path Default path for the ingress record
+    ## NOTE: You may need to set this to '/*' in order to use this with ALB ingress controllers
+    ##
+    path: /
+    ## @param alertmanager.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
+    ## Use this parameter to set the required annotations for cert-manager, see
+    ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
+    ## e.g:
+    ## annotations:
+    ##   kubernetes.io/ingress.class: nginx
+    ##   cert-manager.io/cluster-issuer: cluster-issuer-name
+    ##
+    annotations: {}
+    ## @param alertmanager.ingress.tls Enable TLS configuration for the host defined at `ingress.hostname` parameter
+    ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.ingress.hostname }}`
+    ## You can:
+    ##   - Use the `ingress.secrets` parameter to create this TLS secret
+    ##   - Rely on cert-manager to create it by setting the corresponding annotations
+    ##   - Rely on Helm to create self-signed certificates by setting `ingress.selfSigned=true`
+    ##
+    tls: false
+    ## @param alertmanager.ingress.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
+    ##
+    selfSigned: false
+    ## @param alertmanager.ingress.extraHosts An array with additional hostname(s) to be covered with the ingress record
+    ## e.g:
+    ## extraHosts:
+    ##   - name: prometheus.local
+    ##     path: /
+    ##
+    extraHosts: []
+    ## @param alertmanager.ingress.extraPaths An array with additional arbitrary paths that may need to be added to the ingress under the main host
+    ## e.g:
+    ## extraPaths:
+    ## - path: /*
+    ##   backend:
+    ##     serviceName: ssl-redirect
+    ##     servicePort: use-annotation
+    ##
+    extraPaths: []
+    ## @param alertmanager.ingress.extraTls TLS configuration for additional hostname(s) to be covered with this ingress record
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+    ## e.g:
+    ## extraTls:
+    ## - hosts:
+    ##     - prometheus.local
+    ##   secretName: prometheus.local-tls
+    ##
+    extraTls: []
+    ## @param alertmanager.ingress.secrets Custom TLS certificates as secrets
+    ## NOTE: 'key' and 'certificate' are expected in PEM format
+    ## NOTE: 'name' should line up with a 'secretName' set further up
+    ## If it is not set and you're using cert-manager, this is unneeded, as it will create a secret for you with valid certificates
+    ## If it is not set and you're NOT using cert-manager either, self-signed certificates will be created valid for 365 days
+    ## It is also possible to create and manage the certificates outside of this helm chart
+    ## Please see README.md for more information
+    ## e.g:
+    ## secrets:
+    ##   - name: prometheus.local-tls
+    ##     key: |-
+    ##       -----BEGIN RSA PRIVATE KEY-----
+    ##       ...
+    ##       -----END RSA PRIVATE KEY-----
+    ##     certificate: |-
+    ##       -----BEGIN CERTIFICATE-----
+    ##       ...
+    ##       -----END CERTIFICATE-----
+    ##
+    secrets: []
+    ## @param alertmanager.ingress.extraRules Additional rules to be covered with this ingress record
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
+    ## e.g:
+    ## extraRules:
+    ## - host: example.local
+    ##     http:
+    ##       path: /
+    ##       backend:
+    ##         service:
+    ##           name: example-svc
+    ##           port:
+    ##             name: http
+    ##
+    extraRules: []
+
+  ## ServiceAccount configuration
+  ##
+  serviceAccount:
+    ## @param alertmanager.serviceAccount.create Specifies whether a ServiceAccount should be created
+    ##
+    create: true
+    ## @param alertmanager.serviceAccount.name The name of the ServiceAccount to use.
+    ## If not set and create is true, a name is generated using the common.names.fullname template
+    ##
+    name: ""
+    ## @param alertmanager.serviceAccount.annotations Additional Service Account annotations (evaluated as a template)
+    ##
+    annotations: {}
+    ## @param alertmanager.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+    ##
+    automountServiceAccountToken: true
+
+  ## Alertmanager service parameters
+  ##
+  service:
+    ## @param alertmanager.service.type Alertmanager service type
+    ##
+    type: LoadBalancer
+    ## @param alertmanager.service.ports.http Alertmanager service HTTP port
+    ## @param alertmanager.service.ports.cluster Alertmanager cluster HA port
+    ##
+    ports:
+      http: 80
+      cluster: 9094
+    ## Node ports to expose
+    ## @param alertmanager.service.nodePorts.http Node port for HTTP
+    ## NOTE: choose port between <30000-32767>
+    ##
+    nodePorts:
+      http: ""
+    ## @param alertmanager.service.clusterIP Alertmanager service Cluster IP
+    ## e.g.:
+    ## clusterIP: None
+    ##
+    clusterIP: ""
+    ## @param alertmanager.service.loadBalancerIP Alertmanager service Load Balancer IP
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerIP: ""
+    ## @param alertmanager.service.loadBalancerSourceRanges Alertmanager service Load Balancer sources
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g:
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param alertmanager.service.externalTrafficPolicy Alertmanager service external traffic policy
+    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param alertmanager.service.annotations Additional custom annotations for Alertmanager service
+    ##
+    annotations: {}
+    ## @param alertmanager.service.extraPorts Extra ports to expose in Alertmanager service (normally used with the `sidecars` value)
+    ##
+    extraPorts: []
+    ## @param alertmanager.service.sessionAffinity Control where client requests go, to the same pod or round-robin
+    ## Values: ClientIP or None
+    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ##
+    sessionAffinity: None
+    ## @param alertmanager.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
+
 ## @section Prometheus server Parameters
 ##
 ## Bitnami Prometheus image
@@ -91,23 +565,28 @@ server:
     ##
     pullSecrets: []
 
-  ## @param server.configuration [object] Promethus configuration. This content will be stored in the the prometheus.yaml file and the content can be a template.
-  ## @skip configuration.global
-  ## @skip configuration.scrape_configs
+  ## @param server.configuration [string] Promethus configuration. This content will be stored in the the prometheus.yaml file and the content can be a template.
   ## ref: <https://github.com/prometheus-community/helm-charts/blob/main/charts/prometheus/values.yaml>
   ##
-  configuration:
+  configuration: |
     global:
       scrape_interval: 1m
       scrape_timeout: 10s
       evaluation_interval: 1m
       external_labels:
-        monitor: "{{ template \"common.names.fullname\" . }}"
+        monitor: {{ template "common.names.fullname" . }}
     scrape_configs:
       - job_name: prometheus
         # Override the global default and scrape targets from this job every 5 seconds.
         static_configs:
           - targets: [localhost:9090]
+    {{- if .Values.alertmanager.enabled}}
+    alerting:
+      alertmanagers:
+        - scheme: HTTP
+          static_configs:
+            - targets: [ {{include "prometheus.alertmanager.fullname" . | quote }}]
+    {{- end }}
 
   ## @param server.replicaCount Number of Prometheus replicas to deploy
   ##
@@ -212,6 +691,12 @@ server:
   ## @param server.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param server.extraArgs Additional arguments passed to the Prometheus server container
+  ## extraArgs:
+  ## - --log.level=debug
+  ## - --tsdb.path=/data/
+  ##
+  extraArgs: []
   ## @param server.hostAliases Prometheus pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -544,6 +1029,7 @@ server:
       ##     timeoutSeconds: 300
       ##
       sessionAffinityConfig: {}
+
     ## Configure the ingress resource that allows you to access the
     ## Thanos Sidecar installation. Set up the URL
     ## ref: https://kubernetes.io/docs/user-guide/ingress/
@@ -641,171 +1127,185 @@ server:
       ## Useful when looking for additional customization, such as using different backend
       ##
       extraRules: []
+  ## Prometheus Server ingress parameters
+  ## ref: http://kubernetes.io/docs/user-guide/ingress/
+  ##
+  ingress:
+    ## @param server.ingress.enabled Enable ingress record generation for Prometheus
+    ##
+    enabled: false
+    ## @param server.ingress.pathType Ingress path type
+    ##
+    pathType: ImplementationSpecific
+    ## @param server.ingress.apiVersion Force Ingress API version (automatically detected if not set)
+    ##
+    apiVersion: ""
+    ## @param server.ingress.hostname Default host for the ingress record
+    ##
+    hostname: prometheus.local
+    ## @param server.ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+    ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+    ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+    ##
+    ingressClassName: ""
+    ## @param server.ingress.path Default path for the ingress record
+    ## NOTE: You may need to set this to '/*' in order to use this with ALB ingress controllers
+    ##
+    path: /
+    ## @param server.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
+    ## Use this parameter to set the required annotations for cert-manager, see
+    ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
+    ## e.g:
+    ## annotations:
+    ##   kubernetes.io/ingress.class: nginx
+    ##   cert-manager.io/cluster-issuer: cluster-issuer-name
+    ##
+    annotations: {}
+    ## @param server.ingress.tls Enable TLS configuration for the host defined at `ingress.hostname` parameter
+    ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.ingress.hostname }}`
+    ## You can:
+    ##   - Use the `ingress.secrets` parameter to create this TLS secret
+    ##   - Rely on cert-manager to create it by setting the corresponding annotations
+    ##   - Rely on Helm to create self-signed certificates by setting `ingress.selfSigned=true`
+    ##
+    tls: false
+    ## @param server.ingress.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
+    ##
+    selfSigned: false
+    ## @param server.ingress.extraHosts An array with additional hostname(s) to be covered with the ingress record
+    ## e.g:
+    ## extraHosts:
+    ##   - name: prometheus.local
+    ##     path: /
+    ##
+    extraHosts: []
+    ## @param server.ingress.extraPaths An array with additional arbitrary paths that may need to be added to the ingress under the main host
+    ## e.g:
+    ## extraPaths:
+    ## - path: /*
+    ##   backend:
+    ##     serviceName: ssl-redirect
+    ##     servicePort: use-annotation
+    ##
+    extraPaths: []
+    ## @param server.ingress.extraTls TLS configuration for additional hostname(s) to be covered with this ingress record
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+    ## e.g:
+    ## extraTls:
+    ## - hosts:
+    ##     - prometheus.local
+    ##   secretName: prometheus.local-tls
+    ##
+    extraTls: []
+    ## @param server.ingress.secrets Custom TLS certificates as secrets
+    ## NOTE: 'key' and 'certificate' are expected in PEM format
+    ## NOTE: 'name' should line up with a 'secretName' set further up
+    ## If it is not set and you're using cert-manager, this is unneeded, as it will create a secret for you with valid certificates
+    ## If it is not set and you're NOT using cert-manager either, self-signed certificates will be created valid for 365 days
+    ## It is also possible to create and manage the certificates outside of this helm chart
+    ## Please see README.md for more information
+    ## e.g:
+    ## secrets:
+    ##   - name: prometheus.local-tls
+    ##     key: |-
+    ##       -----BEGIN RSA PRIVATE KEY-----
+    ##       ...
+    ##       -----END RSA PRIVATE KEY-----
+    ##     certificate: |-
+    ##       -----BEGIN CERTIFICATE-----
+    ##       ...
+    ##       -----END CERTIFICATE-----
+    ##
+    secrets: []
+    ## @param server.ingress.extraRules Additional rules to be covered with this ingress record
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
+    ## e.g:
+    ## extraRules:
+    ## - host: example.local
+    ##     http:
+    ##       path: /
+    ##       backend:
+    ##         service:
+    ##           name: example-svc
+    ##           port:
+    ##             name: http
+    ##
+    extraRules: []
 
-## @section Traffic Exposure Parameters
-##
+  ## ServiceAccount configuration
+  ##
+  serviceAccount:
+    ## @param server.serviceAccount.create Specifies whether a ServiceAccount should be created
+    ##
+    create: true
+    ## @param server.serviceAccount.name The name of the ServiceAccount to use.
+    ## If not set and create is true, a name is generated using the common.names.fullname template
+    ##
+    name: ""
+    ## @param server.serviceAccount.annotations Additional Service Account annotations (evaluated as a template)
+    ##
+    annotations: {}
+    ## @param server.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+    ##
+    automountServiceAccountToken: true
 
-## Prometheus service parameters
-##
-service:
-  ## @param service.type Prometheus service type
+  ## Prometheus service parameters
   ##
-  type: LoadBalancer
-  ## @param service.ports.http Prometheus service HTTP port
-  ## @param service.ports.https Prometheus service HTTPS port
-  ##
-  ports:
-    http: 80
-    https: 443
-  ## Node ports to expose
-  ## @param service.nodePorts.http Node port for HTTP
-  ## @param service.nodePorts.https Node port for HTTPS
-  ## NOTE: choose port between <30000-32767>
-  ##
-  nodePorts:
-    http: ""
-    https: ""
-  ## @param service.clusterIP Prometheus service Cluster IP
-  ## e.g.:
-  ## clusterIP: None
-  ##
-  clusterIP: ""
-  ## @param service.loadBalancerIP Prometheus service Load Balancer IP
-  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
-  ##
-  loadBalancerIP: ""
-  ## @param service.loadBalancerSourceRanges Prometheus service Load Balancer sources
-  ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
-  ## e.g:
-  ## loadBalancerSourceRanges:
-  ##   - 10.10.10.0/24
-  ##
-  loadBalancerSourceRanges: []
-  ## @param service.externalTrafficPolicy Prometheus service external traffic policy
-  ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
-  ##
-  externalTrafficPolicy: Cluster
-  ## @param service.annotations Additional custom annotations for Prometheus service
-  ##
-  annotations: {}
-  ## @param service.extraPorts Extra ports to expose in Prometheus service (normally used with the `sidecars` value)
-  ##
-  extraPorts: []
-  ## @param service.sessionAffinity Control where client requests go, to the same pod or round-robin
-  ## Values: ClientIP or None
-  ## ref: https://kubernetes.io/docs/user-guide/services/
-  ##
-  sessionAffinity: None
-  ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
-  ## sessionAffinityConfig:
-  ##   clientIP:
-  ##     timeoutSeconds: 300
-  ##
-  sessionAffinityConfig: {}
-## Prometheus ingress parameters
-## ref: http://kubernetes.io/docs/user-guide/ingress/
-##
-ingress:
-  ## @param ingress.enabled Enable ingress record generation for Prometheus
-  ##
-  enabled: false
-  ## @param ingress.pathType Ingress path type
-  ##
-  pathType: ImplementationSpecific
-  ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
-  ##
-  apiVersion: ""
-  ## @param ingress.hostname Default host for the ingress record
-  ##
-  hostname: prometheus.local
-  ## @param ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
-  ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
-  ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
-  ##
-  ingressClassName: ""
-  ## @param ingress.path Default path for the ingress record
-  ## NOTE: You may need to set this to '/*' in order to use this with ALB ingress controllers
-  ##
-  path: /
-  ## @param ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
-  ## Use this parameter to set the required annotations for cert-manager, see
-  ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
-  ## e.g:
-  ## annotations:
-  ##   kubernetes.io/ingress.class: nginx
-  ##   cert-manager.io/cluster-issuer: cluster-issuer-name
-  ##
-  annotations: {}
-  ## @param ingress.tls Enable TLS configuration for the host defined at `ingress.hostname` parameter
-  ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.ingress.hostname }}`
-  ## You can:
-  ##   - Use the `ingress.secrets` parameter to create this TLS secret
-  ##   - Rely on cert-manager to create it by setting the corresponding annotations
-  ##   - Rely on Helm to create self-signed certificates by setting `ingress.selfSigned=true`
-  ##
-  tls: false
-  ## @param ingress.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
-  ##
-  selfSigned: false
-  ## @param ingress.extraHosts An array with additional hostname(s) to be covered with the ingress record
-  ## e.g:
-  ## extraHosts:
-  ##   - name: prometheus.local
-  ##     path: /
-  ##
-  extraHosts: []
-  ## @param ingress.extraPaths An array with additional arbitrary paths that may need to be added to the ingress under the main host
-  ## e.g:
-  ## extraPaths:
-  ## - path: /*
-  ##   backend:
-  ##     serviceName: ssl-redirect
-  ##     servicePort: use-annotation
-  ##
-  extraPaths: []
-  ## @param ingress.extraTls TLS configuration for additional hostname(s) to be covered with this ingress record
-  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
-  ## e.g:
-  ## extraTls:
-  ## - hosts:
-  ##     - prometheus.local
-  ##   secretName: prometheus.local-tls
-  ##
-  extraTls: []
-  ## @param ingress.secrets Custom TLS certificates as secrets
-  ## NOTE: 'key' and 'certificate' are expected in PEM format
-  ## NOTE: 'name' should line up with a 'secretName' set further up
-  ## If it is not set and you're using cert-manager, this is unneeded, as it will create a secret for you with valid certificates
-  ## If it is not set and you're NOT using cert-manager either, self-signed certificates will be created valid for 365 days
-  ## It is also possible to create and manage the certificates outside of this helm chart
-  ## Please see README.md for more information
-  ## e.g:
-  ## secrets:
-  ##   - name: prometheus.local-tls
-  ##     key: |-
-  ##       -----BEGIN RSA PRIVATE KEY-----
-  ##       ...
-  ##       -----END RSA PRIVATE KEY-----
-  ##     certificate: |-
-  ##       -----BEGIN CERTIFICATE-----
-  ##       ...
-  ##       -----END CERTIFICATE-----
-  ##
-  secrets: []
-  ## @param ingress.extraRules Additional rules to be covered with this ingress record
-  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
-  ## e.g:
-  ## extraRules:
-  ## - host: example.local
-  ##     http:
-  ##       path: /
-  ##       backend:
-  ##         service:
-  ##           name: example-svc
-  ##           port:
-  ##             name: http
-  ##
-  extraRules: []
+  service:
+    ## @param server.service.type Prometheus service type
+    ##
+    type: LoadBalancer
+    ## @param server.service.ports.http Prometheus service HTTP port
+    ## @param server.service.ports.https Prometheus service HTTPS port
+    ##
+    ports:
+      http: 80
+      https: 443
+    ## Node ports to expose
+    ## @param server.service.nodePorts.http Node port for HTTP
+    ## @param server.service.nodePorts.https Node port for HTTPS
+    ## NOTE: choose port between <30000-32767>
+    ##
+    nodePorts:
+      http: ""
+      https: ""
+    ## @param server.service.clusterIP Prometheus service Cluster IP
+    ## e.g.:
+    ## clusterIP: None
+    ##
+    clusterIP: ""
+    ## @param server.service.loadBalancerIP Prometheus service Load Balancer IP
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerIP: ""
+    ## @param server.service.loadBalancerSourceRanges Prometheus service Load Balancer sources
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g:
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param server.service.externalTrafficPolicy Prometheus service external traffic policy
+    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param server.service.annotations Additional custom annotations for Prometheus service
+    ##
+    annotations: {}
+    ## @param server.service.extraPorts Extra ports to expose in Prometheus service (normally used with the `sidecars` value)
+    ##
+    extraPorts: []
+    ## @param server.service.sessionAffinity Control where client requests go, to the same pod or round-robin
+    ## Values: ClientIP or None
+    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ##
+    sessionAffinity: None
+    ## @param server.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
 
 ## @section Persistence Parameters
 ##
@@ -926,23 +1426,6 @@ rbac:
   ##       - list
   ##
   rules: []
-
-## ServiceAccount configuration
-##
-serviceAccount:
-  ## @param serviceAccount.create Specifies whether a ServiceAccount should be created
-  ##
-  create: true
-  ## @param serviceAccount.name The name of the ServiceAccount to use.
-  ## If not set and create is true, a name is generated using the common.names.fullname template
-  ##
-  name: ""
-  ## @param serviceAccount.annotations Additional Service Account annotations (evaluated as a template)
-  ##
-  annotations: {}
-  ## @param serviceAccount.automountServiceAccountToken Automount service account token for the server service account
-  ##
-  automountServiceAccountToken: true
 
 ## Prometheus metrics
 ##

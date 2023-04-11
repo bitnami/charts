@@ -8,6 +8,13 @@ Return the proper image name
 {{/*
 Return the proper image name
 */}}
+{{- define "prometheus.alertmanager.image" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.alertmanager.image "global" .Values.global) }}
+{{- end -}}
+
+{{/*
+Return the proper image name
+*/}}
 {{- define "prometheus.server.thanosImage" -}}
 {{ include "common.images.image" (dict "imageRoot" .Values.server.thanos.image "global" .Values.global) }}
 {{- end -}}
@@ -22,18 +29,18 @@ Return the proper image name (for the init container volume-permissions image)
 {{/*
 Return the proper Docker Image Registry Secret Names
 */}}
-{{- define "prometheus.server.imagePullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.server.image .Values.volumePermissions.image .Values.server.thanos.image) "global" .Values.global) -}}
+{{- define "prometheus.imagePullSecrets" -}}
+{{- include "common.images.pullSecrets" (dict "images" (list .Values.server.image .Values.volumePermissions.image .Values.server.thanos.image .Values.alertmanager.image) "global" .Values.global) -}}
 {{- end -}}
 
 {{/*
 Create the name of the service account to use
 */}}
 {{- define "prometheus.server.serviceAccountName" -}}
-{{- if .Values.serviceAccount.create -}}
-    {{ default (include "common.names.fullname" .) .Values.serviceAccount.name }}
+{{- if .Values.server.serviceAccount.create -}}
+    {{ default (include "common.names.fullname" .) .Values.server.serviceAccount.name }}
 {{- else -}}
-    {{ default "default" .Values.serviceAccount.name }}
+    {{ default "default" .Values.server.serviceAccount.name }}
 {{- end -}}
 {{- end -}}
 
@@ -64,8 +71,8 @@ Compile all warnings into a single message.
 Get the Prometheus configuration configmap.
 */}}
 {{- define "prometheus.server.configmapName" -}}
-{{- if .Values.existingConfigmap -}}
-    {{- include "common.tplvalues.render" (dict "value" .Values.existingConfigmap "context" .) -}}
+{{- if .Values.server.existingConfigmap -}}
+    {{- include "common.tplvalues.render" (dict "value" .Values.server.existingConfigmap "context" .) -}}
 {{- else }}
     {{- printf "%s" (include "common.names.fullname" . ) -}}
 {{- end -}}
@@ -75,9 +82,49 @@ Get the Prometheus configuration configmap.
 Get the Prometheus configuration configmap key.
 */}}
 {{- define "prometheus.server.configmapKey" -}}
-{{- if .Values.existingConfigmapKey -}}
-    {{- include "common.tplvalues.render" (dict "value" .Values.existingConfigmapKey "context" .) -}}
+{{- if .Values.server.existingConfigmapKey -}}
+    {{- include "common.tplvalues.render" (dict "value" .Values.server.existingConfigmapKey "context" .) -}}
 {{- else }}
     {{- printf "prometheus.server.yaml" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Get the Prometheus Alertmanager configuration configmap key.
+*/}}
+{{- define "prometheus.alertmanager.configmapKey" -}}
+{{- if .Values.alertmanager.existingConfigmapKey -}}
+    {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.existingConfigmapKey "context" .) -}}
+{{- else }}
+    {{- printf "alertmanager.yaml" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Create the name of the service account to use in alertmanager
+*/}}
+{{- define "prometheus.alertmanager.serviceAccountName" -}}
+{{- if .Values.alertmanager.serviceAccount.create -}}
+    {{ default (include "prometheus.alertmanager.fullname" .) .Values.alertmanager.serviceAccount.name }}
+{{- else -}}
+    {{ default "default" .Values.alertmanager.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return alertmanager name
+*/}}
+{{- define "prometheus.alertmanager.fullname" -}}
+    {{- printf "%s-alertmanager" (include "common.names.fullname" .) }}
+{{- end -}}
+
+{{/*
+Get the Alertmanager configuration configmap.
+*/}}
+{{- define "prometheus.alertmanager.configmapName" -}}
+{{- if .Values.alertmanager.existingConfigmap -}}
+    {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.existingConfigmap "context" .) -}}
+{{- else }}
+    {{- printf "%s" (include "prometheus.alertmanager.fullname" . ) -}}
 {{- end -}}
 {{- end -}}

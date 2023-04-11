@@ -1,12 +1,12 @@
-{{- if not .Values.existingConfigmap }}
+{{- if and .Values.alertmanager.enabled (not .Values.alertmanager.existingConfigmap) }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ template "common.names.fullname" . }}
+  name: {{ include "prometheus.alertmanager.fullname" . | quote }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/part-of: prometheus
-    app.kubernetes.io/component: server
+    app.kubernetes.io/component: alertmanager
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
@@ -14,6 +14,6 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 data:
-  {{ include "prometheus.server.configmapKey" . }}:
-    {{- include "common.tplvalues.render" (dict "value" .Values.server.configuration "context" $) | toYaml | nindent 4 }}
+  {{ include "prometheus.alertmanager.configmapKey" . }}:
+    {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.configuration "context" $) | toYaml | nindent 4 }}
 {{- end }}
