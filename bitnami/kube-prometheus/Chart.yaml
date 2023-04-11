@@ -2,7 +2,7 @@ annotations:
   category: Analytics
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 0.63.0
+appVersion: 0.64.0
 dependencies:
   - condition: exporters.enabled,exporters.node-exporter.enabled
     name: node-exporter

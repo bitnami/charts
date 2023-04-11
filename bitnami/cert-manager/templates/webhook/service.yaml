@@ -1,4 +1,3 @@
-{{- if .Values.metrics.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -14,4 +13,3 @@ spec:
     - name: https
       port: {{ .Values.webhook.httpsPort }}
       targetPort: {{ .Values.webhook.containerPort }}
-{{- end }}
