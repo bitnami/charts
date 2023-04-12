@@ -80,10 +80,9 @@ jasperreportsUsername: jasperadmin
 ## NOTE: Must contain key `jasperreports-password`, and optionally the `smtp-password`
 ##
 existingSecret: ""
-## @param jasperreportsPassword JasperReports password
+## @param jasperreportsPassword JasperReports password (Ignored if `existingSecret` is provided)
 ## Defaults to a random 10-character alphanumeric string if not set
 ## ref: https://github.com/bitnami/containers/tree/main/bitnami/jasperreports#configuration
-## Ignored if `existingSecret` is provided
 ##
 jasperreportsPassword: ""
 ## @param jasperreportsEmail JasperReports user email

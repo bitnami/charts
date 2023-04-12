@@ -87,7 +87,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `image.pullSecrets`     | Specify docker-registry secret names as an array                                                              | `[]`                    |
 | `jasperreportsUsername` | JasperReports user                                                                                            | `jasperadmin`           |
 | `existingSecret`        | Name of existing secret containing JasperReports credentials                                                  | `""`                    |
-| `jasperreportsPassword` | JasperReports password                                                                                        | `""`                    |
+| `jasperreportsPassword` | JasperReports password (Ignored if `existingSecret` is provided)                                              | `""`                    |
 | `jasperreportsEmail`    | JasperReports user email                                                                                      | `user@example.com`      |
 | `allowEmptyPassword`    | Set to `yes` to allow the container to be started with blank passwords                                        | `no`                    |
 | `smtpHost`              | SMTP host                                                                                                     | `""`                    |
