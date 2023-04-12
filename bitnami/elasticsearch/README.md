@@ -814,7 +814,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ### To 19.6.0
 
-This version fixes the headless serivces creation. When upgrading you will need to manually delete the services first in order to get them created when upgrading.
+This version fixes the headless services creation. When upgrading you will need to manually delete the services first in order to get them created when upgrading.
 
 ### To 19.0.0
 
