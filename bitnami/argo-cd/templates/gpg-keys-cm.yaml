@@ -1,4 +1,3 @@
-{{- if .Values.config.gpgKeys }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
@@ -16,4 +15,3 @@ metadata:
   {{- end }}
 data:
   {{- include "common.tplvalues.render" (dict "value" .Values.config.gpgKeys "context" $) | nindent 2 }}
-{{- end }}

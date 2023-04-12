@@ -92,6 +92,26 @@ rules:
       - get
       - list
       - watch
+  - apiGroups:
+      - gateway.networking.k8s.io
+    resources:
+      - gateways
+      - httproutes
+      - tlsroutes
+      - tcproutes
+      - udproutes
+    verbs:
+      - get
+      - list
+      - watch
+  - apiGroups:
+      - cis.f5.com
+    resources:
+      - virtualservers
+    verbs:
+      - get
+      - watch
+      - list
   {{- if or .Values.crd.create .Values.crd.apiversion }}
   - apiGroups:
       {{- if .Values.crd.create }}

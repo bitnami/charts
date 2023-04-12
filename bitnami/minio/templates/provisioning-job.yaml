@@ -84,7 +84,7 @@ spec:
                 local tmp=$(mc admin $1 info {{ $minioAlias }} $2 | sed -n -e 's/^Policy.*: \(.*\)$/\1/p');
                 IFS=',' read -r -a CURRENT_POLICIES <<< "$tmp";
                 if [[ ! "${CURRENT_POLICIES[*]}" =~ "$3" ]]; then
-                  mc admin policy update {{ $minioAlias }} $3 $1=$2;
+                  mc admin policy attach {{ $minioAlias }} $3 --$1=$2;
                 fi;
               };
 
@@ -98,7 +98,7 @@ spec:
                 mc admin user add {{ $minioAlias }} "${username}" "${password}";
 
                 if [ "${set_policies}" == "true" ]; then
-                  mc admin policy set {{ $minioAlias }} "${policies_list}" user="${username}";
+                  mc admin policy attach {{ $minioAlias }} "${policies_list}" --user="${username}";
                 else
                   IFS=',' read -r -a POLICIES <<< "${policies_list}";
                   for policy in "${POLICIES[@]}"; do
@@ -131,13 +131,13 @@ spec:
               mc admin service restart {{ $minioAlias }};
 
               {{- range $policy := .Values.provisioning.policies }}
-              mc admin policy add {{ $minioAlias }} {{ $policy.name }} /etc/ilm/policy-{{ $policy.name }}.json;
+              mc admin policy create {{ $minioAlias }} {{ $policy.name }} /etc/ilm/policy-{{ $policy.name }}.json;
               {{- end }}
 
               {{- range $user := .Values.provisioning.users }}
               mc admin user add {{ $minioAlias }} {{ $user.username }} {{ $user.password }};
               {{- if $user.setPolicies }}
-              mc admin policy set {{ $minioAlias }} "{{ join "," $user.policies }}" user={{ $user.username }};
+              mc admin policy attach {{ $minioAlias }} "{{ join "," $user.policies }}" --user={{ $user.username }};
               {{- else }}
               {{- range $policy := $user.policies }}
               addPolicy user {{ $user.username }} {{ $policy }};
@@ -155,7 +155,7 @@ spec:
               {{- range $group := .Values.provisioning.groups }}
               mc admin group add {{ $minioAlias }} {{ $group.name }} {{ join " " $group.members }};
               {{- if $group.setPolicies }}
-              mc admin policy set {{ $minioAlias }} "{{ join "," $group.policies }}" group={{ $group.name }};
+              mc admin policy attach {{ $minioAlias }} "{{ join "," $group.policies }}" --group={{ $group.name }};
               {{- else }}
               {{- range $policy := $group.policies }}
               addPolicy group {{ $group.name }} {{ $policy }};
