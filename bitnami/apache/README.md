@@ -92,6 +92,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `git.pullPolicy`                        | Git image pull policy                                                                                                    | `IfNotPresent`        |
 | `git.pullSecrets`                       | Specify docker-registry secret names as an array                                                                         | `[]`                  |
 | `replicaCount`                          | Number of replicas of the Apache deployment                                                                              | `1`                   |
+| `revisionHistoryLimit`                  | The number of old history to retain to allow rollback                                                                    | `10`                  |
 | `podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                      | `""`                  |
 | `podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                 | `soft`                |
 | `nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                | `""`                  |
