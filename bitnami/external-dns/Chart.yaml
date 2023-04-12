@@ -24,4 +24,4 @@ sources:
   - https://github.com/kubernetes-sigs/external-dns
   - https://github.com/bitnami/containers/tree/main/bitnami/external-dns
   - https://github.com/kubernetes-sigs/external-dns
-version: 6.17.0
+version: 6.18.0
