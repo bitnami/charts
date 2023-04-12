@@ -1,9 +1,8 @@
-addr:
+http:
   # Container ports
-  tcp://localhost:{{ .Vars.containerPorts.http }}/:
+  http://localhost:{{ .Vars.containerPorts.http }}/:
     reachable: true
   # Service ports
-http:
   http://fluent-bit:{{ .Vars.service.ports.http }}/:
     status: 200
     body:
