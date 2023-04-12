@@ -90,7 +90,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                                          | Description                                                                               | Value                        |
 | --------------------------------------------- | ----------------------------------------------------------------------------------------- | ---------------------------- |
-| `daemonset.enabled`                           | Use a daemonset instead of a deployment. `replicaCount` will not take effect.             | `true`                       |
+| `daemonset.enabled`                           | Use a daemonset instead of a deployment. `replicaCount` will not take effect.             | `false`                      |
 | `daemonset.podSecurityContext.enabled`        | Enable security context for daemonset pods                                                | `true`                       |
 | `daemonset.podSecurityContext.runAsUser`      | User ID for daemonset containers                                                          | `0`                          |
 | `daemonset.podSecurityContext.runAsGroup`     | Group ID for daemonset containers                                                         | `0`                          |
@@ -144,7 +144,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.annotations`                         | Provide any additional annotations which may be required.                                 | `{}`                         |
 | `service.sessionAffinity`                     | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                      | `None`                       |
 | `service.sessionAffinityConfig`               | Additional settings for the sessionAffinity                                               | `{}`                         |
-| `service.metrics.annotations`                 | Annotations for Prometheus metrics                                                        | `{}`                         |
 | `serviceAccount.create`                       | Enables ServiceAccount                                                                    | `true`                       |
 | `serviceAccount.name`                         | ServiceAccount name                                                                       | `""`                         |
 | `serviceAccount.annotations`                  | Annotations to add to all deployed objects                                                | `{}`                         |

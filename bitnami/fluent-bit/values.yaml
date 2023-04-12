@@ -682,7 +682,7 @@ metrics:
     ## @param metrics.serviceMonitor.namespace Namespace in which Prometheus is running
     ##
     namespace: ""
-    ## @param metrics.serviceMonitor.annotations Additional custom annotations for the ServiceMonitor
+    ## @param metrics.serviceMonitor.annotations [object] Additional custom annotations for the ServiceMonitor
     ##
     annotations:
       prometheus.io/scrape: "true"
