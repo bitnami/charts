@@ -114,6 +114,9 @@ auth:
     ## @param auth.admin.bucket InfluxDB&trade; admin user's bucket. Only valid with InfluxDB&trade; v2
     ##
     bucket: primary
+    ## @param auth.admin.retention InfluxDB&trade; admin user's bucket retention. Only valid with InfluxDB&trade; v2
+    ##
+    retention: ""
   ## @param auth.createUserToken Whether to create tokens for the different users. Take into account these tokens are going to be created by CLI randomly and they will not be accessible from a secret. See more influxdb 2.0 [auth ref](https://docs.influxdata.com/influxdb/v2.0/security/tokens/)
   ## You should take into account these tokens are going to be created by CLI
   ## so it is not possible to get them by k8s secrets nor to provide them though

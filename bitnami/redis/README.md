@@ -750,6 +750,18 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 A major chart version change (like v1.2.3 -> v2.0.0) indicates that there is an incompatible breaking change needing manual actions.
 
+### RDB compatibility
+
+It's common to have RDB format changes across Redis&reg; releases where we see backward compatibility but no forward compatibility. For example, v7.0 can load an RDB created by v6.2 , but the opposite is not true.  
+When that's the case, the rolling update can cause replicas to temporarily stop synchronizing while they are running a lower version than master.  
+For example, on a rolling update `master-0` and `replica-2` are updated first from version v6.2 to v7.0; `replica-0` and `replica-1` won't be able to start a full sync with `master-0` because they are still running v6.2 and can't support the RDB format from version 7.0 that master is now using.  
+This issue can be mitigated by splitting the upgrade into two stages: one for all replicas and another for any master.  
+
+- Stage 1 (replicas only, as there's no master with an ordinal higher than 99):  
+`helm upgrade my-repo/redis --set master.updateStrategy.rollingUpdate.partition=99`  
+- Stage 2 (anything else that is not up to date, in this case only master):  
+`helm upgrade my-repo/redis`  
+
 ### To 17.0.0
 
 This major version updates the Redis&reg; docker image version used from `6.2` to `7.0`, the new stable version. There are no major changes in the chart, but we recommend checking the [Redis&reg; 7.0 release notes](https://raw.githubusercontent.com/redis/redis/7.0/00-RELEASENOTES) before upgrading.

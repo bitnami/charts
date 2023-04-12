@@ -38,7 +38,7 @@ subjects:
   - kind: ServiceAccount
     name: {{ include "metallb.controller.serviceAccountName" . }}
 {{- end }}
-{{- if .Values.speaker.rbac.create }}
+{{- if and .Values.speaker.enabled .Values.speaker.rbac.create }}
   - kind: ServiceAccount
     name: {{ include "metallb.speaker.serviceAccountName" . }}
 {{- end }}
