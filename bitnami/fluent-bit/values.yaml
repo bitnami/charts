@@ -92,7 +92,7 @@ image:
 daemonset:
   ## @param daemonset.enabled Use a daemonset instead of a deployment. `replicaCount` will not take effect.
   ##
-  enabled: true
+  enabled: false
   ## Pod security context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param daemonset.podSecurityContext.enabled Enable security context for daemonset pods
@@ -295,12 +295,6 @@ service:
   ##     timeoutSeconds: 300
   ##
   sessionAffinityConfig: {}
-  ## @param service.metrics.annotations [object] Annotations for Prometheus metrics
-  metrics:
-    annotations:
-      prometheus.io/scrape: "true"
-      prometheus.io/port: "{{ .Values.service.ports.http }}"
-      prometheus.io/path: "/metrics"
 ## Fluent Bit serviceAccount parameters
 ##
 serviceAccount:
@@ -429,7 +423,7 @@ config:
         Config_Watch On
         HTTP_Server  On
         HTTP_Listen  0.0.0.0
-        HTTP_Port {{ .Values.containerPorts.http }}
+        HTTP_Port    {{ .Values.containerPorts.http }}
   ## @param config.inputs [string] Defines the source from where Fluent Bit can collect data
   ## https://docs.fluentbit.io/manual/pipeline/inputs
   ##
@@ -690,7 +684,10 @@ metrics:
     namespace: ""
     ## @param metrics.serviceMonitor.annotations Additional custom annotations for the ServiceMonitor
     ##
-    annotations: {}
+    annotations:
+      prometheus.io/scrape: "true"
+      prometheus.io/port: "{{ .Values.service.ports.http }}"
+      prometheus.io/path: "/metrics"
     ## @param metrics.serviceMonitor.labels Extra labels for the ServiceMonitor
     ##
     labels: {}
