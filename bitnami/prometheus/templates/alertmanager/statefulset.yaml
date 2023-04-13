@@ -210,6 +210,10 @@ spec:
         - name: config
           configMap:
             name: {{ include "prometheus.alertmanager.configmapName" . }}
+        {{- if not .Values.persistence.enabled }}
+        - name: data
+          emptyDir: {}
+        {{- end}}
         {{- if .Values.alertmanager.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.extraVolumes "context" $) | nindent 8 }}
         {{- end }}

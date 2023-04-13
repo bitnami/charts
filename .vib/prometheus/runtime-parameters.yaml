@@ -1,4 +1,7 @@
+rbac:
+  create: true
 server:
+  replicaCount: 1
   serviceAccount:
     create: true
     automountServiceAccountToken: true
@@ -13,6 +16,7 @@ server:
       - ALL
     runAsNonRoot: true
     readOnlyRootFilesystem: false
+    runAsUser: 1002
   serviceMonitor:
     enabled: true
   service:

@@ -577,10 +577,10 @@ server:
         monitor: {{ template "common.names.fullname" . }}
     scrape_configs:
       - job_name: prometheus
-        # Override the global default and scrape targets from this job every 5 seconds.
-        static_configs:
-          - targets: [localhost:9090]
+      {{ include "prometheus.scrape_config" (dict "component" "server" "context" $) | nindent 4 }}
     {{- if .Values.alertmanager.enabled}}
+      - job_name: alertmanager
+        {{ include "prometheus.scrape_config" (dict "component" "alertmanager" "context" $) | nindent 4 }}
     alerting:
       alertmanagers:
         - scheme: HTTP
@@ -727,20 +727,6 @@ server:
     create: false
     minAvailable: 1
     maxUnavailable: ""
-  ## Autoscaling configuration
-  ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
-  ## @param server.autoscaling.enabled Enable autoscaling for Prometheus
-  ## @param server.autoscaling.minReplicas Minimum number of Prometheus replicas
-  ## @param server.autoscaling.maxReplicas Maximum number of Prometheus replicas
-  ## @param server.autoscaling.targetCPU Target CPU utilization percentage
-  ## @param server.autoscaling.targetMemory Target Memory utilization percentage
-  ##
-  autoscaling:
-    enabled: false
-    minReplicas: ""
-    maxReplicas: ""
-    targetCPU: ""
-    targetMemory: ""
   ## Node affinity preset
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
   ##
@@ -838,6 +824,8 @@ server:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
+  ## @param server.prefixURL Prefix for the internal routes of web endpoints
+  prefixURL: /
 
   ## Thanos sidecar container configuration
   ##
@@ -1127,6 +1115,7 @@ server:
       ## Useful when looking for additional customization, such as using different backend
       ##
       extraRules: []
+
   ## Prometheus Server ingress parameters
   ## ref: http://kubernetes.io/docs/user-guide/ingress/
   ##
@@ -1295,11 +1284,11 @@ server:
     ## @param server.service.extraPorts Extra ports to expose in Prometheus service (normally used with the `sidecars` value)
     ##
     extraPorts: []
-    ## @param server.service.sessionAffinity Control where client requests go, to the same pod or round-robin
+    ## @param server.service.sessionAffinity Control where client requests go, to the same pod or round-robin. ClientIP by default.
     ## Values: ClientIP or None
     ## ref: https://kubernetes.io/docs/user-guide/services/
     ##
-    sessionAffinity: None
+    sessionAffinity: ClientIP
     ## @param server.service.sessionAffinityConfig Additional settings for the sessionAffinity
     ## sessionAffinityConfig:
     ##   clientIP:
@@ -1314,9 +1303,9 @@ server:
 ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
 ##
 persistence:
-  ## @param persistence.enabled Enable persistence using Persistent Volume Claims
+  ## @param persistence.enabled Enable persistence using Persistent Volume Claims. If you have multiple instances (server.repicacount > 1), please considere using an external storage service like Thanos or Grafana Mimir
   ##
-  enabled: true
+  enabled: false
   ## @param persistence.mountPath Path to mount the volume at.
   ##
   mountPath: /bitnami/prometheus/data

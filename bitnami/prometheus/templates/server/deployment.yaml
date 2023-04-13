@@ -13,9 +13,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  {{- if not .Values.server.autoscaling.enabled }}
   replicas: {{ .Values.server.replicaCount }}
-  {{- end }}
   {{- if .Values.server.updateStrategy }}
   strategy: {{- toYaml .Values.server.updateStrategy | nindent 4 }}
   {{- end }}
@@ -25,9 +23,11 @@ spec:
       app.kubernetes.io/component: server
   template:
     metadata:
-      {{- if .Values.server.podAnnotations }}
-      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.server.podAnnotations "context" $) | nindent 8 }}
-      {{- end }}
+      annotations:
+        checksum/configmap: {{ include (print $.Template.BasePath "/server/configmap.yaml") . | sha256sum }}
+        {{- if .Values.server.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.server.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/part-of: prometheus
         app.kubernetes.io/component: server
@@ -119,6 +119,9 @@ spec:
             - "--storage.tsdb.path=/opt/bitnami/prometheus/data"
             - "--web.console.libraries=/opt/bitnami/prometheus/conf/console_libraries"
             - "--web.console.templates=/opt/bitnami/prometheus/conf/consoles"
+            {{- if .Values.server.prefixURL }}
+            - --web.route-prefix={{ .Values.server.prefixURL }}
+            {{- end }}
             {{- if .Values.server.extraArgs }}
             {{- include "common.tplvalues.render" (dict "value" .Values.server.extraArgs "context" $) | nindent 12 }}
             {{- end }}

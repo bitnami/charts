@@ -7,7 +7,7 @@ it('allows executing a query and displaying response data for each deployment', 
   Object.keys(deployments).forEach((podName, i) => {
     const query = Object.values(deployments)[i].query;
 
-    cy.get('[role="textbox"]').clear({force: true}).type(`${query}{enter}`);
+    cy.get('[role="textbox"]').clear({force: true}).type(`${query}{enter}`,{delay: 100});
     cy.contains('Execute').click();
     cy.contains('.data-table', `container="${podName}"`)
   })
