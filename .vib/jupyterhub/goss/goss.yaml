@@ -23,8 +23,6 @@ file:
     owner: root
     contains:
     - postgresql://{{ .Vars.postgresql.auth.username }}@jupyterhub-postgresql:{{ .Vars.postgresql.service.ports.postgresql }}/{{ .Vars.postgresql.auth.database }}
-    - /uid.*{{ .Vars.singleuser.containerSecurityContext.runAsUser }}/
-    - /fsGid.*{{ .Vars.singleuser.podSecurityContext.fsGroup }}/
     - /type.*dynamic/
 command:
   {{- $uid := .Vars.hub.containerSecurityContext.runAsUser }}
