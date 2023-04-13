@@ -80,18 +80,19 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | --------------------- |
 | `image.registry`                        | Apache image registry                                                                                                    | `docker.io`           |
 | `image.repository`                      | Apache image repository                                                                                                  | `bitnami/apache`      |
-| `image.tag`                             | Apache image tag (immutable tags are recommended)                                                                        | `2.4.56-debian-11-r8` |
+| `image.tag`                             | Apache image tag (immutable tags are recommended)                                                                        | `2.4.57-debian-11-r3` |
 | `image.digest`                          | Apache image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                   | `""`                  |
 | `image.pullPolicy`                      | Apache image pull policy                                                                                                 | `IfNotPresent`        |
 | `image.pullSecrets`                     | Apache image pull secrets                                                                                                | `[]`                  |
 | `image.debug`                           | Enable image debug mode                                                                                                  | `false`               |
 | `git.registry`                          | Git image registry                                                                                                       | `docker.io`           |
 | `git.repository`                        | Git image name                                                                                                           | `bitnami/git`         |
-| `git.tag`                               | Git image tag (immutable tags are recommended)                                                                           | `2.40.0-debian-11-r4` |
+| `git.tag`                               | Git image tag (immutable tags are recommended)                                                                           | `2.40.0-debian-11-r8` |
 | `git.digest`                            | Git image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                      | `""`                  |
 | `git.pullPolicy`                        | Git image pull policy                                                                                                    | `IfNotPresent`        |
 | `git.pullSecrets`                       | Specify docker-registry secret names as an array                                                                         | `[]`                  |
 | `replicaCount`                          | Number of replicas of the Apache deployment                                                                              | `1`                   |
+| `revisionHistoryLimit`                  | The number of old history to retain to allow rollback                                                                    | `10`                  |
 | `podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                      | `""`                  |
 | `podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                 | `soft`                |
 | `nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                | `""`                  |
@@ -219,7 +220,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                          | Start a sidecar prometheus exporter to expose Apache metrics                                                                              | `false`                   |
 | `metrics.image.registry`                   | Apache Exporter image registry                                                                                                            | `docker.io`               |
 | `metrics.image.repository`                 | Apache Exporter image repository                                                                                                          | `bitnami/apache-exporter` |
-| `metrics.image.tag`                        | Apache Exporter image tag (immutable tags are recommended)                                                                                | `0.13.1-debian-11-r1`     |
+| `metrics.image.tag`                        | Apache Exporter image tag (immutable tags are recommended)                                                                                | `0.13.1-debian-11-r5`     |
 | `metrics.image.digest`                     | Apache Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                           | `""`                      |
 | `metrics.image.pullPolicy`                 | Apache Exporter image pull policy                                                                                                         | `IfNotPresent`            |
 | `metrics.image.pullSecrets`                | Apache Exporter image pull secrets                                                                                                        | `[]`                      |

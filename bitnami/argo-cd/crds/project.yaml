@@ -1,4 +1,4 @@
-# CRDs source: https://github.com/argoproj/argo-cd/blob/v2.3.1/manifests/crds/appproject-crd.yaml
+# CRDs source: https://github.com/argoproj/argo-helm/blob/main/charts/argo-cd/templates/crds/crd-project.yaml (2.6.6)
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
@@ -160,6 +160,10 @@ spec:
                       for apps which have orphaned resources
                     type: boolean
                 type: object
+              permitOnlyProjectScopedClusters:
+                description: PermitOnlyProjectScopedClusters determines whether destinations
+                  can only reference clusters which are project-scoped
+                type: boolean
               roles:
                 description: Roles are user defined RBAC roles associated with this
                   project
@@ -221,6 +225,12 @@ spec:
                   required:
                   - keyID
                   type: object
+                type: array
+              sourceNamespaces:
+                description: SourceNamespaces defines the namespaces application resources
+                  are allowed to be created in
+                items:
+                  type: string
                 type: array
               sourceRepos:
                 description: SourceRepos contains list of repository URLs which can

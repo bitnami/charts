@@ -8,6 +8,9 @@ metadata:
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
+    {{- if .Values.prometheus.service.labels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.prometheus.service.labels "context" $ ) | nindent 4 }}
+    {{- end }}
   annotations:
     {{- if .Values.commonAnnotations }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}

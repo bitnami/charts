@@ -52,7 +52,11 @@ Return the proper Mastodon streaming fullname
 Return Mastodon streaming url
 */}}
 {{- define "mastodon.streaming.url" -}}
-{{- printf "ws://%s" (include "mastodon.web.domain" .) | trunc 63 | trimSuffix "-" -}}
+  {{- if .Values.useSecureWebSocket -}}
+    {{- printf "wss://%s" (include "mastodon.web.domain" .) | trunc 63 | trimSuffix "-" -}}
+  {{- else -}}
+    {{- printf "ws://%s" (include "mastodon.web.domain" .) | trunc 63 | trimSuffix "-" -}}
+  {{- end -}}  
 {{- end -}}
 
 {{/*
@@ -157,6 +161,14 @@ Return the S3 protocol
         {{- ternary "https" "http" .Values.minio.tls.enabled  -}}
     {{- else -}}
         {{- print .Values.externalS3.protocol -}}
+    {{- end -}}
+{{- end -}}
+
+{{- define "mastodon.s3.protocol.setting" -}}
+    {{- if .Values.forceHttpsS3Protocol -}}
+        {{- print "https" -}}
+    {{- else -}}
+        {{- print (include "mastodon.s3.protocol" .) -}}
     {{- end -}}
 {{- end -}}
 
