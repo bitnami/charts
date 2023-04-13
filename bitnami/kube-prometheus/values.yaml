@@ -239,6 +239,9 @@ operator:
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
     healthCheckNodePort: ""
+    ## @param operator.service.labels Additional labels for Prometheus Operator service
+    ##
+    labels: {}
     ## @param operator.service.annotations Additional annotations for Prometheus Operator service
     ##
     annotations: {}
@@ -262,6 +265,9 @@ operator:
     ## @param operator.serviceMonitor.enabled Creates a ServiceMonitor to monitor Prometheus Operator
     ##
     enabled: true
+    ## @param operator.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
+    ##
+    jobLabel: ""
     ## @param operator.serviceMonitor.interval Scrape interval (use by default, falling back to Prometheus' default)
     ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ##
@@ -613,6 +619,9 @@ prometheus:
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
     healthCheckNodePort: ""
+    ## @param prometheus.service.labels Additional labels for Prometheus service  (this value is evaluated as a template)
+    ##
+    labels: {}
     ## @param prometheus.service.annotations Additional annotations for Prometheus service  (this value is evaluated as a template)
     ##
     annotations: {}
@@ -631,6 +640,9 @@ prometheus:
     ## @param prometheus.serviceMonitor.enabled Creates a ServiceMonitor to monitor Prometheus itself
     ##
     enabled: true
+    ## @param prometheus.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
+    ##
+    jobLabel: ""
     ## @param prometheus.serviceMonitor.interval Scrape interval (use by default, falling back to Prometheus' default)
     ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ##
@@ -1954,6 +1966,9 @@ kubelet:
     ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ##
     interval: ""
+    ## @param kubelet.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
+    ##
+    jobLabel: k8s-app
     ## @param kubelet.serviceMonitor.resource Enable scraping /metrics/resource from kubelet's service
     ##
     resource: false
@@ -2362,6 +2377,9 @@ kubeApiServer:
     ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ##
     interval: ""
+    ## @param kubeApiServer.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
+    ##
+    jobLabel: component
     ## @param kubeApiServer.serviceMonitor.metricRelabelings Metric relabeling
     ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#metric_relabel_configs
     ##
@@ -2402,11 +2420,17 @@ kubeControllerManager:
     ##   component: kube-controller-manager
     ##
     selector: {}
+    ## @param kubeControllerManager.service.labels Additional labels for kube-controller-manaer service
+    ##
+    labels: {}
   serviceMonitor:
     ## @param kubeControllerManager.serviceMonitor.interval Scrape interval (use by default, falling back to Prometheus' default)
     ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ##
     interval: ""
+    ## @param kubeControllerManager.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
+    ##
+    jobLabel: component
     ## @param kubeControllerManager.serviceMonitor.https Enable scraping kube-controller-manager over https
     ## Requires proper certs (not self-signed) and delegated authentication/authorization checks
     ##
@@ -2457,6 +2481,9 @@ kubeScheduler:
     ##   component: kube-scheduler
     ##
     selector: {}
+    ## @param kubeScheduler.service.labels Additional labels for kube-scheduler service
+    ##
+    labels: {}
   serviceMonitor:
     ## @param kubeScheduler.serviceMonitor.interval Scrape interval (use by default, falling back to Prometheus' default)
     ##
@@ -2465,6 +2492,9 @@ kubeScheduler:
     ## Requires proper certs (not self-signed) and delegated authentication/authorization checks
     ##
     https: false
+    ## @param kubeScheduler.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
+    ##
+    jobLabel: component
     ## @param kubeScheduler.serviceMonitor.insecureSkipVerify Skip TLS certificate validation when scraping
     ##
     insecureSkipVerify: ""
@@ -2519,10 +2549,16 @@ coreDns:
     ##   component: kube-dns
     ##
     selector: {}
+    ## @param coreDns.service.labels Additional labels for coredns service
+    ##
+    labels: {}
   serviceMonitor:
     ## @param coreDns.serviceMonitor.interval Scrape interval. If not set, the Prometheus default scrape interval is used.
     ##
     interval: ""
+    ## @param coreDns.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
+    ##
+    jobLabel: k8s-app
     ## @param coreDns.serviceMonitor.metricRelabelings Metric relabel configs to apply to samples before ingestion.
     ## metricRelabelings:
     ##  - action: keep
@@ -2571,6 +2607,9 @@ kubeProxy:
     ##   k8s-app: kube-proxy
     ##
     selector: {}
+    ## @param kubeProxy.service.labels Additional labels for kube-proxy service
+    ##
+    labels: {}
   serviceMonitor:
     ## @param kubeProxy.serviceMonitor.https Enable scraping kube-proxy over https.
     ## Requires proper certs (not self-signed) and delegated authentication/authorization checks
@@ -2580,6 +2619,9 @@ kubeProxy:
     ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#endpoint
     ##
     interval: ""
+    ## @param kubeProxy.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
+    ##
+    jobLabel: k8s-app
     ## @param kubeProxy.serviceMonitor.metricRelabelings Metric relabeling
     ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#metric_relabel_configs
     ##
