@@ -570,19 +570,26 @@ server:
   ##
   configuration: |
     global:
-      scrape_interval: 1m
-      scrape_timeout: 10s
-      evaluation_interval: 1m
+      scrape_interval: {{ .Values.server.scrapeInterval }}
+      scrape_timeout: {{ .Values.server.scrapeTimeout }}
+      evaluation_interval: {{ .Values.server.evaluationInterval }}
       external_labels:
         monitor: {{ template "common.names.fullname" . }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.server.externalLabels "context" $) | nindent 4 }}
+    {{- if .Values.server.remoteWrite }}
+    remote_write: {{- include "common.tplvalues.render" (dict "value" .Values.server.remoteWrite "context" $) | nindent 4 }}
+    {{- end }}
     scrape_configs:
       - job_name: prometheus
       {{ include "prometheus.scrape_config" (dict "component" "server" "context" $) | nindent 4 }}
-    {{- if .Values.alertmanager.enabled}}
+    {{- if .Values.alertmanager.enabled }}
       - job_name: alertmanager
         {{ include "prometheus.scrape_config" (dict "component" "alertmanager" "context" $) | nindent 4 }}
+    {{- end }}
+    {{- if or .Values.alertmanager.enabled .Values.server.alertingEndpoints}}
     alerting:
       alertmanagers:
+        {{- include "common.tplvalues.render" (dict "value" .Values.server.alertingEndpoints "context" $) | nindent 4 }}
         - scheme: HTTP
           static_configs:
             - targets: [ {{include "prometheus.alertmanager.fullname" . | quote }}]
@@ -824,8 +831,51 @@ server:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
-  ## @param server.prefixURL Prefix for the internal routes of web endpoints
-  prefixURL: /
+  ## @param server.routePrefix Prefix for the internal routes of web endpoints
+  ## 
+  routePrefix: /
+  ## @param server.remoteWrite The remote_write spec configuration for Prometheus
+  ##
+  remoteWrite: []
+  ## @param server.scrapeInterval Interval between consecutive scrapes. Example: "1m"
+  ##
+  scrapeInterval: ""
+  ## @param server.scrapeTimeout Interval between consecutive scrapes. Example: "10s"
+  ## 
+  scrapeTimeout: ""
+  ## @param server.evaluationInterval Interval between consecutive evaluations. Example: "1m"
+  ##
+  evaluationInterval: ""
+  ## @param server.enableAdminAPI Enable Prometheus adminitrative API
+  ## ref: https://prometheus.io/docs/prometheus/latest/querying/api/#tsdb-admin-apis
+  ##
+  enableAdminAPI: false
+  ## @param server.enableRemoteWriteReceiver Enable Prometheus to be used as a receiver for the Prometheus remote write protocol.
+  ##
+  enableRemoteWriteReceiver: false
+  ## @param server.enableFeatures Enable access to Prometheus disabled features.
+  ## ref: https://prometheus.io/docs/prometheus/latest/disabled_features/
+  ##
+  enableFeatures: []
+  ## @param server.logLevel Log level for Prometheus
+  ##
+  logLevel: info
+  ## @param server.logFormat Log format for Prometheus
+  ##
+  logFormat: logfmt
+  ## @param server.retention Metrics retention days
+  ##
+  retention: 10d
+  ## @param server.retentionSize Maximum size of metrics
+  ##
+  retentionSize: ""
+  ## @param server.alertingEndpoints Alertmanagers to which alerts will be sent
+  ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#alertmanager_config
+  ##
+  alertingEndpoints: []
+  ## @param server.externalLabels External labels to add to any time series or alerts when communicating with external systems
+  ##
+  externalLabels: {}
 
   ## Thanos sidecar container configuration
   ##
@@ -885,14 +935,14 @@ server:
     ##
     extraArgs: []
     ## @param server.thanos.objectStorageConfig Support mounting a Secret for the objectStorageConfig of the sideCar container.
-    ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/thanos.md
+    ## ref: https://github.com/thanos-io/thanos/blob/main/docs/storage.md
     ## objectStorageConfig:
     ##    secretName: thanos-objstore-config
     ##    secretKey: thanos.yaml
     ##
     objectStorageConfig: {}
     ## ref: https://github.com/thanos-io/thanos/blob/main/docs/components/sidecar.md
-    ## @param server.thanos.extraVolumeMounts Additional volumeMounts from `prometheus.volumes` for thanos sidecar container
+    ## @param server.thanos.extraVolumeMounts Additional volumeMounts from `server.volumes` for thanos sidecar container
     ## extraVolumeMounts:
     ## - name: my-secret-volume
     ##   mountPath: /etc/thanos/secrets/my-secret
@@ -1422,10 +1472,10 @@ metrics:
   ## @param metrics.enabled Enable the export of Prometheus metrics
   ##
   enabled: false
-  ## Prometheus Operator ServiceMonitor configuration
+  ## Prometheus ServiceMonitor configuration
   ##
   serviceMonitor:
-    ## @param metrics.serviceMonitor.enabled if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)
+    ## @param metrics.serviceMonitor.enabled if `true`, creates a Prometheus ServiceMonitor (also requires `metrics.enabled` to be `true`)
     ##
     enabled: false
     ## @param metrics.serviceMonitor.namespace Namespace in which Prometheus is running

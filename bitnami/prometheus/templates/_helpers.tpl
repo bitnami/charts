@@ -112,7 +112,14 @@ Create the name of the service account to use in alertmanager
 {{- end -}}
 
 {{/*
-Return alertmanager name
+Return Thanos sidecar service/ingress name
+*/}}
+{{- define "prometheus.thanos-sidecar.fullname" -}}
+    {{- printf "%s-thanos" (include "common.names.fullname" .) }}
+{{- end -}}
+
+{{/*
+Return Alertmanager name
 */}}
 {{- define "prometheus.alertmanager.fullname" -}}
     {{- printf "%s-alertmanager" (include "common.names.fullname" .) }}

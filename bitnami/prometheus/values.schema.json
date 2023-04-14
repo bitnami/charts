@@ -781,7 +781,7 @@
                 "configuration": {
                     "type": "string",
                     "description": "Promethus configuration. This content will be stored in the the prometheus.yaml file and the content can be a template.",
-                    "default": "global:\n  scrape_interval: 1m\n  scrape_timeout: 10s\n  evaluation_interval: 1m\n  external_labels:\n    monitor: {{ template \"common.names.fullname\" . }}\nscrape_configs:\n  - job_name: prometheus\n    # Override the global default and scrape targets from this job every 5 seconds.\n    static_configs:\n      - targets: [localhost:9090]\n{{- if .Values.alertmanager.enabled}}\nalerting:\n  alertmanagers:\n    - scheme: HTTP\n      static_configs:\n        - targets: [ {{include \"prometheus.alertmanager.fullname\" . | quote }}]\n{{- end }}\n"
+                    "default": "global:\n  scrape_interval: {{ .Values.server.scrapeInterval }}\n  scrape_timeout: {{ .Values.server.scrapeTimeout }}\n  evaluation_interval: {{ .Values.server.evaluationInterval }}\n  external_labels:\n    monitor: {{ template \"common.names.fullname\" . }}\n    {{- include \"common.tplvalues.render\" (dict \"value\" .Values.server.externalLabels \"context\" $) | nindent 4 }}\n{{- if .Values.server.remoteWrite }}\nremote_write: {{- include \"common.tplvalues.render\" (dict \"value\" .Values.server.remoteWrite \"context\" $) | nindent 4 }}\n{{- end }}\nscrape_configs:\n  - job_name: prometheus\n  {{ include \"prometheus.scrape_config\" (dict \"component\" \"server\" \"context\" $) | nindent 4 }}\n{{- if .Values.alertmanager.enabled }}\n  - job_name: alertmanager\n    {{ include \"prometheus.scrape_config\" (dict \"component\" \"alertmanager\" \"context\" $) | nindent 4 }}\n{{- end }}\n{{- if or .Values.alertmanager.enabled .Values.server.alertingEndpoints}}\nalerting:\n  alertmanagers:\n    {{- include \"common.tplvalues.render\" (dict \"value\" .Values.server.alertingEndpoints \"context\" $) | nindent 4 }}\n    - scheme: HTTP\n      static_configs:\n        - targets: [ {{include \"prometheus.alertmanager.fullname\" . | quote }}]\n{{- end }}\n"
                 },
                 "replicaCount": {
                     "type": "number",
@@ -1052,36 +1052,6 @@
                         }
                     }
                 },
-                "autoscaling": {
-                    "type": "object",
-                    "properties": {
-                        "enabled": {
-                            "type": "boolean",
-                            "description": "Enable autoscaling for Prometheus",
-                            "default": false
-                        },
-                        "minReplicas": {
-                            "type": "string",
-                            "description": "Minimum number of Prometheus replicas",
-                            "default": ""
-                        },
-                        "maxReplicas": {
-                            "type": "string",
-                            "description": "Maximum number of Prometheus replicas",
-                            "default": ""
-                        },
-                        "targetCPU": {
-                            "type": "string",
-                            "description": "Target CPU utilization percentage",
-                            "default": ""
-                        },
-                        "targetMemory": {
-                            "type": "string",
-                            "description": "Target Memory utilization percentage",
-                            "default": ""
-                        }
-                    }
-                },
                 "nodeAffinityPreset": {
                     "type": "object",
                     "properties": {
@@ -1195,6 +1165,79 @@
                     "default": [],
                     "items": {}
                 },
+                "routePrefix": {
+                    "type": "string",
+                    "description": "Prefix for the internal routes of web endpoints",
+                    "default": "/"
+                },
+                "remoteWrite": {
+                    "type": "array",
+                    "description": "The remote_write spec configuration for Prometheus",
+                    "default": [],
+                    "items": {}
+                },
+                "scrapeInterval": {
+                    "type": "string",
+                    "description": "Interval between consecutive scrapes. Example: \"1m\"",
+                    "default": ""
+                },
+                "scrapeTimeout": {
+                    "type": "string",
+                    "description": "Interval between consecutive scrapes. Example: \"10s\"",
+                    "default": ""
+                },
+                "evaluationInterval": {
+                    "type": "string",
+                    "description": "Interval between consecutive evaluations. Example: \"1m\"",
+                    "default": ""
+                },
+                "enableAdminAPI": {
+                    "type": "boolean",
+                    "description": "Enable Prometheus adminitrative API",
+                    "default": false
+                },
+                "enableRemoteWriteReceiver": {
+                    "type": "boolean",
+                    "description": "Enable Prometheus to be used as a receiver for the Prometheus remote write protocol.",
+                    "default": false
+                },
+                "enableFeatures": {
+                    "type": "array",
+                    "description": "Enable access to Prometheus disabled features.",
+                    "default": [],
+                    "items": {}
+                },
+                "logLevel": {
+                    "type": "string",
+                    "description": "Log level for Prometheus",
+                    "default": "info"
+                },
+                "logFormat": {
+                    "type": "string",
+                    "description": "Log format for Prometheus",
+                    "default": "logfmt"
+                },
+                "retention": {
+                    "type": "string",
+                    "description": "Metrics retention days",
+                    "default": "10d"
+                },
+                "retentionSize": {
+                    "type": "string",
+                    "description": "Maximum size of metrics",
+                    "default": ""
+                },
+                "alertingEndpoints": {
+                    "type": "array",
+                    "description": "Alertmanagers to which alerts will be sent",
+                    "default": [],
+                    "items": {}
+                },
+                "externalLabels": {
+                    "type": "object",
+                    "description": "External labels to add to any time series or alerts when communicating with external systems",
+                    "default": {}
+                },
                 "thanos": {
                     "type": "object",
                     "properties": {
@@ -1297,7 +1340,7 @@
                         },
                         "extraVolumeMounts": {
                             "type": "array",
-                            "description": "Additional volumeMounts from `prometheus.volumes` for thanos sidecar container",
+                            "description": "Additional volumeMounts from `server.volumes` for thanos sidecar container",
                             "default": [],
                             "items": {}
                         },
@@ -1727,8 +1770,8 @@
                         },
                         "sessionAffinity": {
                             "type": "string",
-                            "description": "Control where client requests go, to the same pod or round-robin",
-                            "default": "None"
+                            "description": "Control where client requests go, to the same pod or round-robin. ClientIP by default.",
+                            "default": "ClientIP"
                         },
                         "sessionAffinityConfig": {
                             "type": "object",
@@ -1744,8 +1787,8 @@
             "properties": {
                 "enabled": {
                     "type": "boolean",
-                    "description": "Enable persistence using Persistent Volume Claims",
-                    "default": true
+                    "description": "Enable persistence using Persistent Volume Claims. If you have multiple instances (server.repicacount > 1), please considere using an external storage service like Thanos or Grafana Mimir",
+                    "default": false
                 },
                 "mountPath": {
                     "type": "string",
@@ -1894,7 +1937,7 @@
                     "properties": {
                         "enabled": {
                             "type": "boolean",
-                            "description": "if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)",
+                            "description": "if `true`, creates a Prometheus ServiceMonitor (also requires `metrics.enabled` to be `true`)",
                             "default": false
                         },
                         "namespace": {

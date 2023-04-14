@@ -117,10 +117,23 @@ spec:
           args:
             - "--config.file=/opt/bitnami/prometheus/conf/{{ include "prometheus.server.configmapKey" . }}"
             - "--storage.tsdb.path=/opt/bitnami/prometheus/data"
+            - "--storage.tsdb.retention.time={{ .Values.server.retention }}"
+            - "--storage.tsdb.retention.size={{ .Values.server.retentionSize }}"
+            - "--log.level={{ .Values.server.logLevel }}"
+            - "--log.format={{ .Values.server.logFormat }}"
             - "--web.console.libraries=/opt/bitnami/prometheus/conf/console_libraries"
             - "--web.console.templates=/opt/bitnami/prometheus/conf/consoles"
-            {{- if .Values.server.prefixURL }}
-            - --web.route-prefix={{ .Values.server.prefixURL }}
+            {{- if .Values.server.enableAdminAPI}}
+            - "--web.enable-admin-api"
+            {{- end }}
+            {{- if .Values.server.enableRemoteWriteReceiver }}
+            -  "--web.enable-remote-write-receiver"
+            {{- end }}
+            {{- if .Values.server.routePrefix }}
+            - "--web.route-prefix={{ .Values.server.routePrefix }}"
+            {{- end }}
+            {{- if .Values.server.enableFeatures }}
+            - "--enable-feature={{ join "," .Values.server.enableFeatures }}"
             {{- end }}
             {{- if .Values.server.extraArgs }}
             {{- include "common.tplvalues.render" (dict "value" .Values.server.extraArgs "context" $) | nindent 12 }}
@@ -199,7 +212,7 @@ spec:
             - --objstore.config=$(OBJSTORE_CONFIG)
             {{- end }}
             {{- if .Values.server.thanos.extraArgs }}
-            {{ toYaml .Values.server.thanos.extraArgs | indent 8  | trim }}
+            {{ toYaml .Values.server.thanos.extraArgs | indent 12  | trim }}
             {{- end }}
           {{- if .Values.server.thanos.objectStorageConfig }}
           env:
@@ -210,7 +223,7 @@ spec:
                   key: {{ .Values.server.thanos.objectStorageConfig.secretKey | default "thanos.yaml" }}
           {{- end }}
           {{- if .Values.server.thanos.resources }}
-          resources: {{- toYaml .Values.server.thanos.resources | nindent 8 }}
+          resources: {{- toYaml .Values.server.thanos.resources | nindent 12 }}
           {{- end }}
           ports:
             - name: grpc
@@ -223,10 +236,10 @@ spec:
             - mountPath: /prometheus
               name: data
             {{- if .Values.server.thanos.extraVolumeMounts }}
-            {{- include "common.tplvalues.render" (dict "value" .Values.server.thanos.extraVolumeMounts "context" $) | nindent 8 }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.server.thanos.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
           {{- if .Values.server.thanos.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.server.thanos.containerSecurityContext "enabled" | toYaml | nindent 8 }}
+          securityContext: {{- omit .Values.server.thanos.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           {{- if .Values.server.thanos.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.server.thanos.customLivenessProbe "context" $) | nindent 12 }}

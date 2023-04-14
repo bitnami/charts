@@ -23,6 +23,7 @@ server:
     type: LoadBalancer
     ports:
       http: 80
+  enableFeatures: [ "memory-snapshot-on-shutdown" ]
 alertmanager:
   enabled: true
   replicaCount: 2

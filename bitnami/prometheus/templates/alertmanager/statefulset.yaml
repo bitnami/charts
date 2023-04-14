@@ -123,6 +123,7 @@ spec:
           args:
             - "--config.file=/opt/bitnami/alertmanager/conf/{{ include "prometheus.alertmanager.configmapKey" . }}"
             - "--storage.path=/opt/bitnami/alertmanager/data"
+            - "--web.listen-address=0.0.0.0:{{ .Values.alertmanager.containerPorts.http }}"
             {{- if gt (int .Values.alertmanager.replicaCount) 1 }}
             - "--cluster.advertise-address=[$(POD_IP)]:{{ $clusterPort }}"
             - "--cluster.listen-address=0.0.0.0:{{ $clusterPort }}"

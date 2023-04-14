@@ -240,11 +240,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.pdb.create`                                               | Enable/disable a Pod Disruption Budget creation                                                                                                       | `false`                   |
 | `server.pdb.minAvailable`                                         | Minimum number/percentage of pods that should remain scheduled                                                                                        | `1`                       |
 | `server.pdb.maxUnavailable`                                       | Maximum number/percentage of pods that may be made unavailable                                                                                        | `""`                      |
-| `server.autoscaling.enabled`                                      | Enable autoscaling for Prometheus                                                                                                                     | `false`                   |
-| `server.autoscaling.minReplicas`                                  | Minimum number of Prometheus replicas                                                                                                                 | `""`                      |
-| `server.autoscaling.maxReplicas`                                  | Maximum number of Prometheus replicas                                                                                                                 | `""`                      |
-| `server.autoscaling.targetCPU`                                    | Target CPU utilization percentage                                                                                                                     | `""`                      |
-| `server.autoscaling.targetMemory`                                 | Target Memory utilization percentage                                                                                                                  | `""`                      |
 | `server.nodeAffinityPreset.type`                                  | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                             | `""`                      |
 | `server.nodeAffinityPreset.key`                                   | Node label key to match. Ignored if `affinity` is set                                                                                                 | `""`                      |
 | `server.nodeAffinityPreset.values`                                | Node label values to match. Ignored if `affinity` is set                                                                                              | `[]`                      |
@@ -264,6 +259,20 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.extraVolumeMounts`                                        | Optionally specify extra list of additional volumeMounts for the Prometheus container(s)                                                              | `[]`                      |
 | `server.sidecars`                                                 | Add additional sidecar containers to the Prometheus pod(s)                                                                                            | `[]`                      |
 | `server.initContainers`                                           | Add additional init containers to the Prometheus pod(s)                                                                                               | `[]`                      |
+| `server.routePrefix`                                              | Prefix for the internal routes of web endpoints                                                                                                       | `/`                       |
+| `server.remoteWrite`                                              | The remote_write spec configuration for Prometheus                                                                                                    | `[]`                      |
+| `server.scrapeInterval`                                           | Interval between consecutive scrapes. Example: "1m"                                                                                                   | `""`                      |
+| `server.scrapeTimeout`                                            | Interval between consecutive scrapes. Example: "10s"                                                                                                  | `""`                      |
+| `server.evaluationInterval`                                       | Interval between consecutive evaluations. Example: "1m"                                                                                               | `""`                      |
+| `server.enableAdminAPI`                                           | Enable Prometheus adminitrative API                                                                                                                   | `false`                   |
+| `server.enableRemoteWriteReceiver`                                | Enable Prometheus to be used as a receiver for the Prometheus remote write protocol.                                                                  | `false`                   |
+| `server.enableFeatures`                                           | Enable access to Prometheus disabled features.                                                                                                        | `[]`                      |
+| `server.logLevel`                                                 | Log level for Prometheus                                                                                                                              | `info`                    |
+| `server.logFormat`                                                | Log format for Prometheus                                                                                                                             | `logfmt`                  |
+| `server.retention`                                                | Metrics retention days                                                                                                                                | `10d`                     |
+| `server.retentionSize`                                            | Maximum size of metrics                                                                                                                               | `""`                      |
+| `server.alertingEndpoints`                                        | Alertmanagers to which alerts will be sent                                                                                                            | `[]`                      |
+| `server.externalLabels`                                           | External labels to add to any time series or alerts when communicating with external systems                                                          | `{}`                      |
 | `server.thanos.create`                                            | Create a Thanos sidecar container                                                                                                                     | `false`                   |
 | `server.thanos.image.registry`                                    | Thanos image registry                                                                                                                                 | `docker.io`               |
 | `server.thanos.image.repository`                                  | Thanos image name                                                                                                                                     | `bitnami/thanos`          |
@@ -279,7 +288,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.thanos.prometheusUrl`                                     | Override default prometheus url `http://localhost:9090`                                                                                               | `""`                      |
 | `server.thanos.extraArgs`                                         | Additional arguments passed to the thanos sidecar container                                                                                           | `[]`                      |
 | `server.thanos.objectStorageConfig`                               | Support mounting a Secret for the objectStorageConfig of the sideCar container.                                                                       | `{}`                      |
-| `server.thanos.extraVolumeMounts`                                 | Additional volumeMounts from `prometheus.volumes` for thanos sidecar container                                                                        | `[]`                      |
+| `server.thanos.extraVolumeMounts`                                 | Additional volumeMounts from `server.volumes` for thanos sidecar container                                                                            | `[]`                      |
 | `server.thanos.resources.limits`                                  | The resources limits for the Thanos sidecar container                                                                                                 | `{}`                      |
 | `server.thanos.resources.requests`                                | The resources requests for the Thanos sidecar container                                                                                               | `{}`                      |
 | `server.thanos.livenessProbe.enabled`                             | Turn on and off liveness probe                                                                                                                        | `true`                    |
@@ -350,23 +359,23 @@ The command removes all the Kubernetes components associated with the chart and 
 | `server.service.externalTrafficPolicy`                            | Prometheus service external traffic policy                                                                                                            | `Cluster`                 |
 | `server.service.annotations`                                      | Additional custom annotations for Prometheus service                                                                                                  | `{}`                      |
 | `server.service.extraPorts`                                       | Extra ports to expose in Prometheus service (normally used with the `sidecars` value)                                                                 | `[]`                      |
-| `server.service.sessionAffinity`                                  | Control where client requests go, to the same pod or round-robin                                                                                      | `None`                    |
+| `server.service.sessionAffinity`                                  | Control where client requests go, to the same pod or round-robin. ClientIP by default.                                                                | `ClientIP`                |
 | `server.service.sessionAffinityConfig`                            | Additional settings for the sessionAffinity                                                                                                           | `{}`                      |
 
 ### Persistence Parameters
 
-| Name                        | Description                                                                                             | Value                      |
-| --------------------------- | ------------------------------------------------------------------------------------------------------- | -------------------------- |
-| `persistence.enabled`       | Enable persistence using Persistent Volume Claims                                                       | `true`                     |
-| `persistence.mountPath`     | Path to mount the volume at.                                                                            | `/bitnami/prometheus/data` |
-| `persistence.subPath`       | The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services | `""`                       |
-| `persistence.storageClass`  | Storage class of backing PVC                                                                            | `""`                       |
-| `persistence.annotations`   | Persistent Volume Claim annotations                                                                     | `{}`                       |
-| `persistence.accessModes`   | Persistent Volume Access Modes                                                                          | `["ReadWriteOnce"]`        |
-| `persistence.size`          | Size of data volume                                                                                     | `8Gi`                      |
-| `persistence.existingClaim` | The name of an existing PVC to use for persistence                                                      | `""`                       |
-| `persistence.selector`      | Selector to match an existing Persistent Volume for WordPress data PVC                                  | `{}`                       |
-| `persistence.dataSource`    | Custom PVC data source                                                                                  | `{}`                       |
+| Name                        | Description                                                                                                                                                                                 | Value                      |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
+| `persistence.enabled`       | Enable persistence using Persistent Volume Claims. If you have multiple instances (server.repicacount > 1), please considere using an external storage service like Thanos or Grafana Mimir | `false`                    |
+| `persistence.mountPath`     | Path to mount the volume at.                                                                                                                                                                | `/bitnami/prometheus/data` |
+| `persistence.subPath`       | The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services                                                                                     | `""`                       |
+| `persistence.storageClass`  | Storage class of backing PVC                                                                                                                                                                | `""`                       |
+| `persistence.annotations`   | Persistent Volume Claim annotations                                                                                                                                                         | `{}`                       |
+| `persistence.accessModes`   | Persistent Volume Access Modes                                                                                                                                                              | `["ReadWriteOnce"]`        |
+| `persistence.size`          | Size of data volume                                                                                                                                                                         | `8Gi`                      |
+| `persistence.existingClaim` | The name of an existing PVC to use for persistence                                                                                                                                          | `""`                       |
+| `persistence.selector`      | Selector to match an existing Persistent Volume for WordPress data PVC                                                                                                                      | `{}`                       |
+| `persistence.dataSource`    | Custom PVC data source                                                                                                                                                                      | `{}`                       |
 
 ### Init Container Parameters
 
@@ -384,26 +393,200 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Other Parameters
 
-| Name                                       | Description                                                                                            | Value   |
-| ------------------------------------------ | ------------------------------------------------------------------------------------------------------ | ------- |
-| `rbac.create`                              | Specifies whether RBAC resources should be created                                                     | `false` |
-| `rbac.rules`                               | Custom RBAC rules to set                                                                               | `[]`    |
-| `metrics.enabled`                          | Enable the export of Prometheus metrics                                                                | `false` |
-| `metrics.serviceMonitor.enabled`           | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`) | `false` |
-| `metrics.serviceMonitor.namespace`         | Namespace in which Prometheus is running                                                               | `""`    |
-| `metrics.serviceMonitor.annotations`       | Additional custom annotations for the ServiceMonitor                                                   | `{}`    |
-| `metrics.serviceMonitor.labels`            | Extra labels for the ServiceMonitor                                                                    | `{}`    |
-| `metrics.serviceMonitor.jobLabel`          | The name of the label on the target service to use as the job name in Prometheus                       | `""`    |
-| `metrics.serviceMonitor.honorLabels`       | honorLabels chooses the metric's labels on collisions with target labels                               | `false` |
-| `metrics.serviceMonitor.interval`          | Interval at which metrics should be scraped.                                                           | `""`    |
-| `metrics.serviceMonitor.scrapeTimeout`     | Timeout after which the scrape is ended                                                                | `""`    |
-| `metrics.serviceMonitor.metricRelabelings` | Specify additional relabeling of metrics                                                               | `[]`    |
-| `metrics.serviceMonitor.relabelings`       | Specify general relabeling                                                                             | `[]`    |
-| `metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                                                    | `{}`    |
+| Name                                       | Description                                                                                   | Value   |
+| ------------------------------------------ | --------------------------------------------------------------------------------------------- | ------- |
+| `rbac.create`                              | Specifies whether RBAC resources should be created                                            | `false` |
+| `rbac.rules`                               | Custom RBAC rules to set                                                                      | `[]`    |
+| `metrics.enabled`                          | Enable the export of Prometheus metrics                                                       | `false` |
+| `metrics.serviceMonitor.enabled`           | if `true`, creates a Prometheus ServiceMonitor (also requires `metrics.enabled` to be `true`) | `false` |
+| `metrics.serviceMonitor.namespace`         | Namespace in which Prometheus is running                                                      | `""`    |
+| `metrics.serviceMonitor.annotations`       | Additional custom annotations for the ServiceMonitor                                          | `{}`    |
+| `metrics.serviceMonitor.labels`            | Extra labels for the ServiceMonitor                                                           | `{}`    |
+| `metrics.serviceMonitor.jobLabel`          | The name of the label on the target service to use as the job name in Prometheus              | `""`    |
+| `metrics.serviceMonitor.honorLabels`       | honorLabels chooses the metric's labels on collisions with target labels                      | `false` |
+| `metrics.serviceMonitor.interval`          | Interval at which metrics should be scraped.                                                  | `""`    |
+| `metrics.serviceMonitor.scrapeTimeout`     | Timeout after which the scrape is ended                                                       | `""`    |
+| `metrics.serviceMonitor.metricRelabelings` | Specify additional relabeling of metrics                                                      | `[]`    |
+| `metrics.serviceMonitor.relabelings`       | Specify general relabeling                                                                    | `[]`    |
+| `metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                                           | `{}`    |
 
-This chart allows you to set your custom affinity using the `affinity` parameter. Find more information about Pod affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
-As an alternative, use one of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `podAffinityPreset`, `podAntiAffinityPreset`, or `nodeAffinityPreset` parameters.
+```console
+helm install my-release --set alertamanager.enabled=true my-repo/prometheus
+```
+
+The above command install Prometheus chart with Alertmanager.
+
+Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
+
+```console
+helm install my-release -f values.yaml my-repo/prometheus
+```
+
+> **Tip**: You can use the default [values.yaml](values.yaml)
+
+## Configuration and installation details
+
+### [Rolling VS Immutable tags](https://docs.bitnami.com/containers/how-to/understand-rolling-tags-containers/)
+
+It is strongly recommended to use immutable tags in a production environment. This ensures your deployment does not change automatically if the same tag is updated with a different image.
+
+Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
+
+### Deploy extra resources
+
+There are cases where you may want to deploy extra objects, such a ConfigMap containing your app's configuration or some extra deployment with a micro service used by your app. For covering this case, the chart allows adding the full specification of other objects using the `extraDeploy` parameter.
+
+### Setting Pod's affinity
+
+This chart allows you to set your custom affinity using the `XXX.affinity` parameter(s). Find more information about Pod's affinity in the [kubernetes documentation](https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity).
+
+As an alternative, you can use of the preset configurations for pod affinity, pod anti-affinity, and node affinity available at the [bitnami/common](https://github.com/bitnami/charts/tree/main/bitnami/common#affinities) chart. To do so, set the `XXX.podAffinityPreset`, `XXX.podAntiAffinityPreset`, or `XXX.nodeAffinityPreset` parameters.
+
+### Integrate Prometheus and Alertmanager with Thanos
+
+You can integrate Prometheus & Alertmanager with Thanos using this chart and the [Bitnami Thanos chart](https://github.com/bitnami/charts/tree/main/bitnami/thanos) following the steps below:
+
+> Note: in this example we will use MinIO&reg; (subchart) as the Objstore. Every component will be deployed in the "monitoring" namespace.
+
+- Create a **values.yaml** like the one below for Thanos:
+
+```yaml
+objstoreConfig: |-
+  type: s3
+  config:
+    bucket: thanos
+    endpoint: {{ include "thanos.minio.fullname" . }}.{{ .Release.Namespace }}.svc.cluster.local:9000
+    access_key: minio
+    secret_key: minio123
+    insecure: true
+query:
+  dnsDiscovery:
+    sidecarsService: prometheus-thanos
+    sidecarsNamespace: monitoring
+bucketweb:
+  enabled: true
+compactor:
+  enabled: true
+storegateway:
+  enabled: true
+ruler:
+  enabled: true
+  alertmanagers:
+    - http://prometheus-alertmanager.monitoring.svc.cluster.local:9093
+  config: |-
+    groups:
+      - name: "metamonitoring"
+        rules:
+          - alert: "PrometheusDown"
+            expr: absent(up{prometheus="monitoring/prometheus"})
+metrics:
+  enabled: true
+  serviceMonitor:
+    enabled: true
+minio:
+  enabled: true
+  auth:
+    rootPassword: minio123
+    rootUser: minio
+  monitoringBuckets: thanos
+  accessKey:
+    password: minio
+  secretKey:
+    password: minio123
+```
+
+- Install Prometheus and Thanos charts:
+
+For Helm 3:
+
+```console
+kubectl create namespace monitoring
+helm install prometheus \
+    --set prometheus.thanos.create=true \
+    --namespace monitoring \
+    bitnami/prometheus
+helm install thanos \
+    --values values.yaml \
+    --namespace monitoring \
+    my-repo/thanos
+```
+
+That's all! Now you have Thanos fully integrated with Prometheus and Alertmanager.
+
+### Integrate Prometheus with Grafana Mimir
+
+You can integrate Prometheus with Grafana Mimir using this chart and the [Bitnami Grafana Mimir chart](https://github.com/bitnami/charts/tree/main/bitnami/grafana-mimir) adding a `remoteWrite` entry:
+
+- Create a **values.yaml** like the one below for Prometheus:
+
+```yaml
+server:
+  remoteWrite:
+    - url: http://grafana-mimir-gateway.svc.cluster.local/api/v1/push
+      headers:
+        X-Scope-OrgID: demo
+```
+
+- Install Prometheus and Grafana Mimir charts:
+
+For Helm 3:
+
+```console
+kubectl create namespace monitoring
+helm install prometheus \
+    --values values.yaml \
+    --namespace monitoring \
+    my-repo/prometheus
+helm install grafana-mimir \
+    bitnami/grafana-mimir
+```
+
+That's all! Now you have Prometheus integrated with Grafana Mimir.
+
+### Integrate Prometheus with Grafana
+
+You can integrate Prometheus with Grafana Dashboard using this chart and the [Bitnami Grafana chart](https://github.com/bitnami/charts/tree/main/bitnami/grafana) just adding the prometheus datasources:
+
+- Create a **values.yaml** like the one below for Grafana:
+```yaml
+datasources:
+  secretDefinition:
+    apiVersion: 1
+    datasources:
+      - name: Prometheus
+        type: prometheus
+        access: proxy
+        orgId: 1
+        url: http://prometheus-alertmanager.monitoring.svc.cluster.local
+        version: 1
+        editable: true
+        isDefault: true
+      - name: Alertmanager
+        uid: alertmanager
+        type: alertmanager
+        access: proxy
+        orgId: 1
+        url: http://prometheus-alertmanager.monitoring.svc.cluster.local:9093
+        version: 1
+        editable: true
+```
+
+- Install Prometheus and Grafana charts:
+
+For Helm 3:
+
+```console
+kubectl create namespace monitoring
+helm install prometheus \
+    --namespace monitoring \
+    my-repo/prometheus
+helm install grafana-mimir \
+    --values values.yaml \
+    --namespace monitoring \
+    bitnami/grafana
+```
 
 ## Troubleshooting
 
