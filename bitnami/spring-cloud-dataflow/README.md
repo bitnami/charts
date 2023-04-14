@@ -526,8 +526,8 @@ externalDatabase.port=3306
 externalDatabase.password=mypassword
 externalDatabase.dataflow.user=mydataflowuser
 externalDatabase.dataflow.database=mydataflowdatabase
-externalDatabase.dataflow.user=myskipperuser
-externalDatabase.dataflow.database=myskipperdatabase
+externalDatabase.skipper.user=myskipperuser
+externalDatabase.skipper.database=myskipperdatabase
 ```
 
 NOTE: When using the individual properties (scheme, host, port, database, an optional jdbcParameters) this chart will format the JDBC URL as `jdbc:{scheme}://{host}:{port}/{database}{jdbcParameters}`. The URL format follows that of the MariaDB database drive but may not work for other database vendors.

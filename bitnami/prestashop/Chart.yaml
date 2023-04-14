@@ -2,7 +2,7 @@ annotations:
   category: E-Commerce
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 8.0.2
+appVersion: 8.0.3
 dependencies:
   - condition: mariadb.enabled
     name: mariadb
@@ -29,4 +29,4 @@ name: prestashop
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/prestashop
   - https://prestashop.com/
-version: 16.0.8
+version: 16.0.9

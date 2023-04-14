@@ -206,6 +206,9 @@ spec:
   {{- if .Values.prometheus.tolerations }}
   tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.tolerations "context" $) | nindent 4 }}
   {{- end }}
+  {{- if .Values.prometheus.topologySpreadConstraints }}
+  topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.topologySpreadConstraints "context" $) | nindent 4 }}
+  {{- end }}
   {{- if .Values.prometheus.volumes }}
   volumes: {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.volumes "context" $) | nindent 4 }}
   {{- end }}

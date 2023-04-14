@@ -30,12 +30,6 @@ proxy:
 imagePuller:
   enabled: true
 singleuser:
-  containerSecurityContext:
-    enabled: true
-    runAsUser: 1002
-  podSecurityContext:
-    enabled: true
-    fsGroup: 1002
   persistence:
     enabled: true
 postgresql:
