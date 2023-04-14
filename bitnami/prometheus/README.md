@@ -515,7 +515,7 @@ helm install thanos \
 
 That's all! Now you have Thanos fully integrated with Prometheus and Alertmanager.
 
-### Integrate Prometheus with Grafana Mimir
+### Integrate Prometheus with Grafana Mimir
 
 You can integrate Prometheus with Grafana Mimir using this chart and the [Bitnami Grafana Mimir chart](https://github.com/bitnami/charts/tree/main/bitnami/grafana-mimir) adding a `remoteWrite` entry:
 
@@ -545,11 +545,12 @@ helm install grafana-mimir \
 
 That's all! Now you have Prometheus integrated with Grafana Mimir.
 
-### Integrate Prometheus with Grafana
+### Integrate Prometheus with Grafana
 
 You can integrate Prometheus with Grafana Dashboard using this chart and the [Bitnami Grafana chart](https://github.com/bitnami/charts/tree/main/bitnami/grafana) just adding the prometheus datasources:
 
 - Create a **values.yaml** like the one below for Grafana:
+
 ```yaml
 datasources:
   secretDefinition:
