@@ -2,7 +2,7 @@ annotations:
   category: Database
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 2.6.1
+appVersion: 2.7.0
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -24,4 +24,4 @@ name: influxdb
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/influxdb
   - https://www.influxdata.com/products/influxdb-overview/
-version: 5.4.21
+version: 5.4.22
