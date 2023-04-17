@@ -816,6 +816,9 @@ disasterRecovery:
     ## @param disasterRecovery.cronjob.snapshotHistoryLimit Number of etcd snapshots to retain, tagged by date
     ##
     snapshotHistoryLimit: 1
+    ## @param disasterRecovery.cronjob.snapshotsDir Directory to store snapshots
+    ##
+    snapshotsDir: "/snapshots"
     ## @param disasterRecovery.cronjob.podAnnotations [object] Pod annotations for cronjob pods
     ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
     ##
