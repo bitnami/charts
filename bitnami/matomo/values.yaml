@@ -354,7 +354,7 @@ containerSecurityContext:
 ##
 startupProbe:
   enabled: false
-  path: /
+  path: /matomo.php
   initialDelaySeconds: 600
   periodSeconds: 10
   timeoutSeconds: 5
@@ -376,7 +376,7 @@ startupProbe:
 ##
 livenessProbe:
   enabled: true
-  path: /
+  path: /matomo.php
   initialDelaySeconds: 600
   periodSeconds: 10
   timeoutSeconds: 5
@@ -398,7 +398,7 @@ livenessProbe:
 ##
 readinessProbe:
   enabled: true
-  path: /
+  path: /matomo.php
   initialDelaySeconds: 30
   periodSeconds: 5
   timeoutSeconds: 1

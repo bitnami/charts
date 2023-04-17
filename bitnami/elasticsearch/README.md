@@ -812,6 +812,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 19.6.0
+
+This version fixes the headless services creation. When upgrading you will need to manually delete the services first in order to get them created when upgrading.
+
 ### To 19.0.0
 
 The new version of this chart no longer supports elasticsearch-curator, this repository has been deprecated.

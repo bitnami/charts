@@ -143,21 +143,21 @@ The command removes all the Kubernetes components associated with the chart and 
 | `containerSecurityContext.runAsUser`    | Matomo containers' Security Context                                                                                   | `1001`                |
 | `containerSecurityContext.runAsNonRoot` | Set Controller container's Security Context runAsNonRoot                                                              | `true`                |
 | `startupProbe.enabled`                  | Enable startupProbe                                                                                                   | `false`               |
-| `startupProbe.path`                     | Request path for startupProbe                                                                                         | `/`                   |
+| `startupProbe.path`                     | Request path for startupProbe                                                                                         | `/matomo.php`         |
 | `startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                                | `600`                 |
 | `startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                                       | `10`                  |
 | `startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                                      | `5`                   |
 | `startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                                    | `5`                   |
 | `startupProbe.successThreshold`         | Success threshold for startupProbe                                                                                    | `1`                   |
 | `livenessProbe.enabled`                 | Enable livenessProbe                                                                                                  | `true`                |
-| `livenessProbe.path`                    | Request path for livenessProbe                                                                                        | `/`                   |
+| `livenessProbe.path`                    | Request path for livenessProbe                                                                                        | `/matomo.php`         |
 | `livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                               | `600`                 |
 | `livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                                      | `10`                  |
 | `livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                                     | `5`                   |
 | `livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                                   | `5`                   |
 | `livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                                   | `1`                   |
 | `readinessProbe.enabled`                | Enable readinessProbe                                                                                                 | `true`                |
-| `readinessProbe.path`                   | Request path for readinessProbe                                                                                       | `/`                   |
+| `readinessProbe.path`                   | Request path for readinessProbe                                                                                       | `/matomo.php`         |
 | `readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                              | `30`                  |
 | `readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                                     | `5`                   |
 | `readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                                    | `1`                   |

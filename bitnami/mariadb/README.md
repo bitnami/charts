@@ -378,7 +378,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.ingressRules.secondaryAccessOnlyFrom.podSelector`       | Pods selector label that is allowed to access the secondary nodes. This label will be used to identified the allowed pod(s).           | `{}`    |
 | `networkPolicy.ingressRules.secondaryAccessOnlyFrom.customRules`       | Custom network policy for the secondary nodes.                                                                                         | `[]`    |
 | `networkPolicy.egressRules.denyConnectionsToExternal`                  | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).                                         | `false` |
-| `networkPolicy.egressRules.customRules`                                | Custom network policy rule                                                                                                             | `[]`    |
+| `networkPolicy.egressRules.customRules`                                | Custom network policy rule                                                                                                             | `{}`    |
 
 The above parameters map to the env variables defined in [bitnami/mariadb](https://github.com/bitnami/containers/tree/main/bitnami/mariadb). For more information please refer to the [bitnami/mariadb](https://github.com/bitnami/containers/tree/main/bitnami/mariadb) image documentation.
 
