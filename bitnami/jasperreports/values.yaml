@@ -76,7 +76,10 @@ image:
 ## ref: https://github.com/bitnami/containers/tree/main/bitnami/jasperreports#configuration
 ##
 jasperreportsUsername: jasperadmin
-## @param jasperreportsPassword JasperReports password
+## @param jasperreportsExistingSecret Name of existing secret containing the key `jasperreports-password`
+##
+jasperreportsExistingSecret: ""
+## @param jasperreportsPassword JasperReports password (Ignored if `jasperreportsExistingSecret` is provided)
 ## Defaults to a random 10-character alphanumeric string if not set
 ## ref: https://github.com/bitnami/containers/tree/main/bitnami/jasperreports#configuration
 ##
@@ -95,13 +98,15 @@ allowEmptyPassword: "no"
 ## @param smtpPort SMTP port
 ## @param smtpEmail SMTP email
 ## @param smtpUser SMTP user
-## @param smtpPassword SMTP password
+## @param smtpExistingSecret Name of existing secret containing the key `smtp-password`
+## @param smtpPassword SMTP password (Ignored if `smtpExistingSecret` is provided)
 ## @param smtpProtocol SMTP protocol [`ssl`, `none`]
 ##
 smtpHost: ""
 smtpPort: ""
 smtpEmail: ""
 smtpUser: ""
+smtpExistingSecret: ""
 smtpPassword: ""
 smtpProtocol: ""
 ## @param command Override default container command (useful when using custom images)
