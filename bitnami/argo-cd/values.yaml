@@ -2881,7 +2881,7 @@ dex:
   ##
   metrics:
     ## Enable metrics for Argo Dex
-    ## @param dex.metrics.enabled Enable metrics for Dex
+    ## @param dex.metrics.enabled Enable metrics service for Dex
     ##
     enabled: false
     service:

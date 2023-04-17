@@ -746,7 +746,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dex.containerPorts.http`                               | Dex container HTTP port                                                                             | `5556`                |
 | `dex.containerPorts.grpc`                               | Dex gRPC port                                                                                       | `5557`                |
 | `dex.containerPorts.metrics`                            | Dex metrics port                                                                                    | `5558`                |
-| `dex.metrics.enabled`                                   | Enable metrics for Dex                                                                              | `false`               |
+| `dex.metrics.enabled`                                   | Enable metrics service for Dex                                                                      | `false`               |
 | `dex.metrics.service.type`                              | Dex service type                                                                                    | `ClusterIP`           |
 | `dex.metrics.service.port`                              | Dex metrics service port                                                                            | `5558`                |
 | `dex.metrics.service.nodePort`                          | Node port for the Dex service                                                                       | `""`                  |
