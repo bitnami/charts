@@ -2,7 +2,7 @@ annotations:
   category: Infrastructure
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 2.9.15
+appVersion: 2.9.16
 dependencies:
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -24,4 +24,4 @@ name: nats
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/nats
   - https://nats.io/
-version: 7.6.1
+version: 7.6.2
