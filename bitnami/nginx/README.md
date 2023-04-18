@@ -165,8 +165,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sidecarSingleProcessNamespace`               | Enable sharing the process namespace with sidecars                                        | `false`         |
 | `initContainers`                              | Extra init containers                                                                     | `[]`            |
 | `pdb.create`                                  | Created a PodDisruptionBudget                                                             | `false`         |
-| `pdb.minAvailable`                            | Min number of pods that must still be available after the eviction                        | `1`             |
-| `pdb.maxUnavailable`                          | Max number of pods that can be unavailable after the eviction                             | `0`             |
+| `pdb.minAvailable`                            | Min number of pods that must still be available after the eviction.                       | `1`             |
+| `pdb.maxUnavailable`                          | Max number of pods that can be unavailable after the eviction.                            | `0`             |
 
 ### Custom NGINX application parameters
 
