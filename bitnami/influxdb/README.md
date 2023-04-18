@@ -238,25 +238,17 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.serviceMonitor.metricRelabelings`    | MetricRelabelConfigs to apply to samples before ingestion                                                                                   | `[]`                |
 | `metrics.serviceMonitor.selector`             | Prometheus instance selector labels                                                                                                         | `{}`                |
 | `metrics.serviceMonitor.honorLabels`          | honorLabels chooses the metric's labels on collisions with target labels                                                                    | `false`             |
-| `networkPolicy.enabled`                       | Enable NetworkPolicy                                                                                                                        | `false`             |
-| `networkPolicy.allowExternal`                 | Don't require client label for connections                                                                                                  | `true`              |
-| `persistence.enabled`                         | Enable data persistence                                                                                                                     | `true`              |
-| `persistence.existingClaim`                   | Use a existing PVC which must be created manually before bound                                                                              | `""`                |
-| `persistence.storageClass`                    | Specify the `storageClass` used to provision the volume                                                                                     | `""`                |
-| `persistence.accessModes`                     | Access mode of data volume                                                                                                                  | `["ReadWriteOnce"]` |
-| `persistence.size`                            | Size of data volume                                                                                                                         | `8Gi`               |
-| `persistence.annotations`                     | Persistent Volume Claim annotations                                                                                                         | `{}`                |
-| `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                                                        | `true`              |
-| `serviceAccount.name`                         | Name of the service account to use. If not set and create is true, a name is generated using the fullname template.                         | `""`                |
-| `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                                              | `true`              |
-| `serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                                                  | `{}`                |
-| `psp.create`                                  | Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later | `false`             |
-| `rbac.create`                                 | Create Role and RoleBinding (required for PSP to work)                                                                                      | `false`             |
 
 ### Volume permissions parameters
 
 | Name                                          | Description                                                                                                                       | Value                   |
 | --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
+| `persistence.enabled`                         | Enable data persistence                                                                                                           | `true`                  |
+| `persistence.existingClaim`                   | Use a existing PVC which must be created manually before bound                                                                    | `""`                    |
+| `persistence.storageClass`                    | Specify the `storageClass` used to provision the volume                                                                           | `""`                    |
+| `persistence.accessModes`                     | Access mode of data volume                                                                                                        | `["ReadWriteOnce"]`     |
+| `persistence.size`                            | Size of data volume                                                                                                               | `8Gi`                   |
+| `persistence.annotations`                     | Persistent Volume Claim annotations                                                                                               | `{}`                    |
 | `volumePermissions.enabled`                   | Enable init container that changes the owner and group of the persistent volume mountpoint to `runAsUser:fsGroup`                 | `false`                 |
 | `volumePermissions.image.registry`            | Init container volume-permissions image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`          | Init container volume-permissions image name                                                                                      | `bitnami/bitnami-shell` |
@@ -321,6 +313,23 @@ The command removes all the Kubernetes components associated with the chart and 
 | `backup.uploadProviders.aws.image.digest`         | AWS CLI image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag          | `""`                       |
 | `backup.uploadProviders.aws.image.pullPolicy`     | AWS CLI image pull policy                                                                                        | `IfNotPresent`             |
 | `backup.uploadProviders.aws.image.pullSecrets`    | Specify docker-registry secret names as an array                                                                 | `[]`                       |
+
+### NetworkPolicy parameters
+
+| Name                                          | Description                                | Value   |
+| --------------------------------------------- | -------------------------------------------|---------|
+| `networkPolicy.enabled`                       | Enable NetworkPolicy                       | `false` |
+| `networkPolicy.allowExternal`                 | Don't require client label for connections | `true`  |
+
+## RBAC Parameters
+
+| Name                                          | Description                                                                                                                                 | Value   |
+| `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                                                        | `true`  |
+| `serviceAccount.name`                         | Name of the service account to use. If not set and create is true, a name is generated using the fullname template.                         | `""`    |
+| `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                                              | `true`  |
+| `serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                                                  | `{}`    |
+| `psp.create`                                  | Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later | `false` |
+| `rbac.create`                                 | Create Role and RoleBinding (required for PSP to work)                                                                                      | `false` |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
