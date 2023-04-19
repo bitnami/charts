@@ -290,6 +290,11 @@ operator:
     ## @param operator.serviceMonitor.annotations Extra annotations for the ServiceMonitor
     ##
     annotations: {}
+    ## @param operator.serviceMonitor.extraParameters Any extra parameter to be added to the endpoint configured in the ServiceMonitor
+    ## (e.g. tlsConfig for further customization of the HTTPS behavior)
+    ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#monitoring.coreos.com/v1.Endpoint
+    ##
+    extraParameters: {}
   ## @param operator.resources Configure resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ##
@@ -1610,6 +1615,11 @@ alertmanager:
     ## @param alertmanager.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
     ##
     honorLabels: false
+    ## @param alertmanager.serviceMonitor.extraParameters Any extra parameter to be added to the endpoint configured in the ServiceMonitor
+    ## (e.g. tlsConfig for further customization of the HTTPS behavior)
+    ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#monitoring.coreos.com/v1.Endpoint
+    ##
+    extraParameters: {}
   ## Configure the ingress resource that allows you to access the
   ## Alertmanager installation. Set up the URL
   ## ref: https://kubernetes.io/docs/user-guide/ingress/
