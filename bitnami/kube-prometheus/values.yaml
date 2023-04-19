@@ -1141,6 +1141,16 @@ prometheus:
     enabled: false
     name: ""
     key: ""
+  ## Enable additional Prometheus AlertManager configs that are managed externally to this chart
+  ## Note that the prometheus will fail to provision if the correct secret does not exist.
+  ## @param prometheus.additionalAlertManagerExternal.enabled Enable additional Prometheus AlertManager configs that are managed externally to this chart
+  ## @param prometheus.additionalAlertManagerExternal.name Name of the secret that Prometheus should use for the additional Prometheus AlertManager configuration
+  ## @param prometheus.additionalAlertManagerExternal.key Name of the key inside the secret to be used for the additional Prometheus AlertManager configuration
+  ##
+  additionalAlertManagerExternal:
+    enabled: false
+    name: ""
+    key: ""
   ## Thanos sidecar container configuration
   ##
   thanos:
