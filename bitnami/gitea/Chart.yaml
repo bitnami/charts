@@ -6,10 +6,10 @@ appVersion: 1.19.1
 dependencies:
   - condition: postgresql.enabled
     name: postgresql
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     version: 12.x.x
   - name: common
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     tags:
       - bitnami-common
     version: 2.x.x
@@ -30,4 +30,4 @@ name: gitea
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/gitea
   - https://gitea.io/
-version: 0.1.19
+version: 0.2.0

@@ -11,8 +11,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/external-dns
+helm install my-release oci://registry-1.docker.io/bitnamicharts/external-dns
 ```
 
 ## Introduction
@@ -31,8 +30,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/external-dns
+helm install my-release oci://registry-1.docker.io/bitnamicharts/external-dns
 ```
 
 The command deploys ExternalDNS on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -348,13 +346,13 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```console
 helm install my-release \
-  --set provider=aws my-repo/external-dns
+  --set provider=aws oci://registry-1.docker.io/bitnamicharts/external-dns
 ```
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml my-repo/external-dns
+helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/external-dns
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -402,7 +400,7 @@ helm install my-release \
   --set aws.zoneType=public \
   --set txtOwnerId=HOSTED_ZONE_IDENTIFIER \
   --set domainFilters[0]=HOSTED_ZONE_NAME \
-  my-repo/external-dns
+  oci://registry-1.docker.io/bitnamicharts/external-dns
 ```
 
 ## Troubleshooting
@@ -469,7 +467,7 @@ Use the workaround below to upgrade from versions previous to 1.0.0. The followi
 
 ```console
 kubectl delete deployment my-release-external-dns
-helm upgrade my-release my-repo/external-dns
+helm upgrade my-release oci://registry-1.docker.io/bitnamicharts/external-dns
 ```
 
 Other mayor changes included in this major version are:

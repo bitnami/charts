@@ -11,8 +11,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/grafana
+helm install my-release oci://registry-1.docker.io/bitnamicharts/grafana
 ```
 
 ## Introduction
@@ -33,8 +32,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/grafana
+helm install my-release oci://registry-1.docker.io/bitnamicharts/grafana
 ```
 
 These commands deploy grafana on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -454,7 +452,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```console
 helm install my-release \
-  --set admin.user=admin-user my-repo/grafana
+  --set admin.user=admin-user oci://registry-1.docker.io/bitnamicharts/grafana
 ```
 
 The above command sets the Grafana admin user to `admin-user`.
@@ -464,7 +462,7 @@ The above command sets the Grafana admin user to `admin-user`.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml my-repo/grafana
+helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/grafana
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -626,7 +624,7 @@ Since the volume access mode when persistence is enabled is `ReadWriteOnce` in o
 
 ```console
 kubectl delete deployment <deployment-name>
-helm upgrade <release-name> my-repo/grafana
+helm upgrade <release-name> oci://registry-1.docker.io/bitnamicharts/grafana
 ```
 
 ### To 4.1.0

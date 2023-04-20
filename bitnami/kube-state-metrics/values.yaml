@@ -507,6 +507,11 @@ serviceMonitor:
   ## @param serviceMonitor.labels Extra labels for the ServiceMonitor
   ##
   labels: {}
+  ## @param serviceMonitor.extraParameters Any extra parameter to be added to the endpoint configured in the ServiceMonitor
+  ## (e.g. tlsConfig for further customization of the HTTPS behavior)
+  ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#monitoring.coreos.com/v1.Endpoint
+  ##
+  extraParameters: {}
 ## selfMonitor configuration
 ##
 selfMonitor:

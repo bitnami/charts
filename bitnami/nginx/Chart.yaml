@@ -5,7 +5,7 @@ apiVersion: v2
 appVersion: 1.23.4
 dependencies:
   - name: common
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     tags:
       - bitnami-common
     version: 2.x.x
@@ -25,4 +25,4 @@ name: nginx
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/nginx
   - https://www.nginx.org
-version: 13.2.34
+version: 13.3.0
