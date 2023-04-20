@@ -46,4 +46,7 @@ spec:
       {{- if .Values.alertmanager.serviceMonitor.relabelings }}
       relabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.alertmanager.serviceMonitor.relabelings "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.alertmanager.serviceMonitor.extraParameters }}
+      {{- toYaml .Values.alertmanager.serviceMonitor.extraParameters | nindent 6 }}
+      {{- end }}
 {{- end }}

@@ -20,7 +20,7 @@ metadata:
     {{- include "common.tplvalues.render" ( dict "value" .Values.kubeProxy.serviceMonitor.annotations "context" $ ) | nindent 4 }}
     {{- end }}
 spec:
-  jobLabel: component
+  jobLabel: {{ .Values.kubeApiServer.serviceMonitor.jobLabel }}
   selector:
     matchLabels:
       component: apiserver

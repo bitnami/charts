@@ -70,7 +70,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/influxdb
-  tag: 2.6.1-debian-11-r27
+  tag: 2.7.0-debian-11-r1
   digest: ""
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -114,6 +114,9 @@ auth:
     ## @param auth.admin.bucket InfluxDB&trade; admin user's bucket. Only valid with InfluxDB&trade; v2
     ##
     bucket: primary
+    ## @param auth.admin.retention InfluxDB&trade; admin user's bucket retention. Only valid with InfluxDB&trade; v2
+    ##
+    retention: ""
   ## @param auth.createUserToken Whether to create tokens for the different users. Take into account these tokens are going to be created by CLI randomly and they will not be accessible from a secret. See more influxdb 2.0 [auth ref](https://docs.influxdata.com/influxdb/v2.0/security/tokens/)
   ## You should take into account these tokens are going to be created by CLI
   ## so it is not possible to get them by k8s secrets nor to provide them though
@@ -817,7 +820,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r98
+    tag: 11-debian-11-r107
     digest: ""
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -948,7 +951,7 @@ backup:
       image:
         registry: docker.io
         repository: bitnami/google-cloud-sdk
-        tag: 0.422.0-debian-11-r0
+        tag: 0.426.0-debian-11-r2
         digest: ""
         ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
         ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -987,7 +990,7 @@ backup:
       image:
         registry: docker.io
         repository: bitnami/azure-cli
-        tag: 2.46.0-debian-11-r3
+        tag: 2.47.0-debian-11-r4
         digest: ""
         ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
         ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1026,7 +1029,7 @@ backup:
       image:
         registry: docker.io
         repository: bitnami/aws-cli
-        tag: 2.11.4-debian-11-r0
+        tag: 2.11.13-debian-11-r1
         digest: ""
         ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
         ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images

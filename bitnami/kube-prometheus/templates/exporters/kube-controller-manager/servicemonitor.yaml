@@ -20,7 +20,7 @@ metadata:
     {{- include "common.tplvalues.render" ( dict "value" .Values.kubeProxy.serviceMonitor.annotations "context" $ ) | nindent 4 }}
     {{- end }}
 spec:
-  jobLabel: component
+  jobLabel: {{ .Values.kubeControllerManager.serviceMonitor.jobLabel }}
   selector:
     matchLabels:
       app.kubernetes.io/component: kube-controller-manager

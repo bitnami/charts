@@ -1,0 +1,52 @@
+{{- if and .Values.imageReflectorController.metrics.enabled .Values.imageReflectorController.metrics.serviceMonitor.enabled  }}
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: {{ template "flux.image-reflector-controller.fullname" . }}
+  namespace: {{ default (include "common.names.namespace" .) .Values.imageReflectorController.metrics.serviceMonitor.namespace | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/part-of: flux
+      app.kubernetes.io/component: image-reflector-controller
+    {{- if .Values.imageReflectorController.metrics.serviceMonitor.labels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.imageReflectorController.metrics.serviceMonitor.labels "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  annotations:
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.imageReflectorController.metrics.serviceMonitor.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.imageReflectorController.metrics.serviceMonitor.annotations "context" $ ) | nindent 4 }}
+    {{- end }}
+spec:
+  jobLabel: {{ .Values.imageReflectorController.metrics.serviceMonitor.jobLabel | quote }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: image-reflector-controller
+      {{- if .Values.imageReflectorController.metrics.serviceMonitor.selector }}
+      {{- include "common.tplvalues.render" (dict "value" .Values.imageReflectorController.metrics.serviceMonitor.selector "context" $) | nindent 6 }}
+      {{- end }}
+  endpoints:
+    - port: http-metrics
+      path: "/metrics"
+      {{- if .Values.imageReflectorController.metrics.serviceMonitor.interval }}
+      interval: {{ .Values.imageReflectorController.metrics.serviceMonitor.interval }}
+      {{- end }}
+      {{- if .Values.imageReflectorController.metrics.serviceMonitor.scrapeTimeout }}
+      scrapeTimeout: {{ .Values.imageReflectorController.metrics.serviceMonitor.scrapeTimeout }}
+      {{- end }}
+      {{- if .Values.imageReflectorController.metrics.serviceMonitor.honorLabels }}
+      honorLabels: {{ .Values.imageReflectorController.metrics.serviceMonitor.honorLabels }}
+      {{- end }}
+      {{- if .Values.imageReflectorController.metrics.serviceMonitor.metricRelabelings }}
+      metricRelabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.imageReflectorController.metrics.serviceMonitor.metricRelabelings "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.imageReflectorController.metrics.serviceMonitor.relabelings }}
+      relabelings: {{- include "common.tplvalues.render" ( dict "value" .Values.imageReflectorController.metrics.serviceMonitor.relabelings "context" $) | nindent 8 }}
+      {{- end }}
+  namespaceSelector:
+    matchNames:
+    - {{ include "common.names.namespace" . | quote }}
+{{- end }}

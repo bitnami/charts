@@ -81,7 +81,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`                        | Matomo image registry                                                                                                 | `docker.io`           |
 | `image.repository`                      | Matomo Image name                                                                                                     | `bitnami/matomo`      |
-| `image.tag`                             | Matomo Image tag                                                                                                      | `4.14.1-debian-11-r0` |
+| `image.tag`                             | Matomo Image tag                                                                                                      | `4.14.2-debian-11-r0` |
 | `image.digest`                          | Matomo image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                | `""`                  |
 | `image.pullPolicy`                      | Matomo image pull policy                                                                                              | `IfNotPresent`        |
 | `image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                      | `[]`                  |
@@ -143,21 +143,21 @@ The command removes all the Kubernetes components associated with the chart and 
 | `containerSecurityContext.runAsUser`    | Matomo containers' Security Context                                                                                   | `1001`                |
 | `containerSecurityContext.runAsNonRoot` | Set Controller container's Security Context runAsNonRoot                                                              | `true`                |
 | `startupProbe.enabled`                  | Enable startupProbe                                                                                                   | `false`               |
-| `startupProbe.path`                     | Request path for startupProbe                                                                                         | `/`                   |
+| `startupProbe.path`                     | Request path for startupProbe                                                                                         | `/matomo.php`         |
 | `startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                                | `600`                 |
 | `startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                                       | `10`                  |
 | `startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                                      | `5`                   |
 | `startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                                    | `5`                   |
 | `startupProbe.successThreshold`         | Success threshold for startupProbe                                                                                    | `1`                   |
 | `livenessProbe.enabled`                 | Enable livenessProbe                                                                                                  | `true`                |
-| `livenessProbe.path`                    | Request path for livenessProbe                                                                                        | `/`                   |
+| `livenessProbe.path`                    | Request path for livenessProbe                                                                                        | `/matomo.php`         |
 | `livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                               | `600`                 |
 | `livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                                      | `10`                  |
 | `livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                                     | `5`                   |
 | `livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                                   | `5`                   |
 | `livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                                   | `1`                   |
 | `readinessProbe.enabled`                | Enable readinessProbe                                                                                                 | `true`                |
-| `readinessProbe.path`                   | Request path for readinessProbe                                                                                       | `/`                   |
+| `readinessProbe.path`                   | Request path for readinessProbe                                                                                       | `/matomo.php`         |
 | `readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                              | `30`                  |
 | `readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                                     | `5`                   |
 | `readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                                    | `1`                   |
@@ -231,7 +231,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                                          | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                                                              | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `11-debian-11-r98`      |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `11-debian-11-r107`     |
 | `volumePermissions.image.digest`       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                         | `""`                    |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                                          | `[]`                    |
@@ -245,7 +245,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`           | Start a exporter side-car                                                                                       | `false`                   |
 | `metrics.image.registry`    | Apache exporter image registry                                                                                  | `docker.io`               |
 | `metrics.image.repository`  | Apache exporter image repository                                                                                | `bitnami/apache-exporter` |
-| `metrics.image.tag`         | Apache exporter image tag                                                                                       | `0.13.0-debian-11-r8`     |
+| `metrics.image.tag`         | Apache exporter image tag                                                                                       | `0.13.1-debian-11-r7`     |
 | `metrics.image.digest`      | Apache exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
 | `metrics.image.pullPolicy`  | Image pull policy                                                                                               | `IfNotPresent`            |
 | `metrics.image.pullSecrets` | Specify docker-registry secret names as an array                                                                | `[]`                      |
@@ -270,7 +270,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `certificates.extraEnvVarsSecret`                    | Secret containing extra env vars (in case of sensitive data)                                                      | `""`                                     |
 | `certificates.image.registry`                        | Container sidecar registry                                                                                        | `docker.io`                              |
 | `certificates.image.repository`                      | Container sidecar image                                                                                           | `bitnami/bitnami-shell`                  |
-| `certificates.image.tag`                             | Container sidecar image tag                                                                                       | `11-debian-11-r98`                       |
+| `certificates.image.tag`                             | Container sidecar image tag                                                                                       | `11-debian-11-r107`                      |
 | `certificates.image.digest`                          | Container sidecar image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                                     |
 | `certificates.image.pullPolicy`                      | Container sidecar image pull policy                                                                               | `IfNotPresent`                           |
 | `certificates.image.pullSecrets`                     | Container sidecar image pull secrets                                                                              | `[]`                                     |

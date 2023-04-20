@@ -139,7 +139,7 @@ spec:
             - {{ include "argocd.repo-server" . }}:{{ .Values.repoServer.service.port }}
             {{- if .Values.dex.enabled }}
             - --dex-server
-            - http://{{ include "argocd.dex" . }}:{{ .Values.dex.service.ports.http }}
+            - https://{{ include "argocd.dex" . }}:{{ .Values.dex.service.ports.http }}
             {{- end }}
             - --logformat
             - {{ .Values.server.logFormat }}
