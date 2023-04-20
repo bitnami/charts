@@ -6,14 +6,14 @@ appVersion: 1.9.16
 dependencies:
   - condition: redis.enabled
     name: redis
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     version: 17.x.x
   - condition: mongodb.enabled
     name: mongodb
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     version: 13.x.x
   - name: common
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     tags:
       - bitnami-common
     version: 2.x.x
@@ -30,4 +30,4 @@ name: appsmith
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/appsmith
   - https://github.com/appsmithorg/appsmith/
-version: 0.1.23
+version: 0.2.0

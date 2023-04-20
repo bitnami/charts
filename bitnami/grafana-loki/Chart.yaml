@@ -7,25 +7,25 @@ dependencies:
   - alias: memcachedchunks
     condition: memcachedchunks.enabled
     name: memcached
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     version: 6.x.x
   - alias: memcachedfrontend
     condition: memcachedfrontend.enabled
     name: memcached
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     version: 6.x.x
   - alias: memcachedindexqueries
     condition: memcachedindexqueries.enabled
     name: memcached
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     version: 6.x.x
   - alias: memcachedindexwrites
     condition: memcachedindexwrites.enabled
     name: memcached
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     version: 6.x.x
   - name: common
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     tags:
       - bitnami-common
     version: 2.x.x
@@ -44,4 +44,4 @@ name: grafana-loki
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/grafana-loki
   - https://github.com/grafana/loki/
-version: 2.6.3
+version: 2.7.0

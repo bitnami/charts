@@ -6,14 +6,14 @@ appVersion: 0.64.0
 dependencies:
   - condition: exporters.enabled,exporters.node-exporter.enabled
     name: node-exporter
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     version: 3.x.x
   - condition: exporters.enabled,exporters.kube-state-metrics.enabled
     name: kube-state-metrics
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     version: 3.x.x
   - name: common
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     tags:
       - bitnami-common
     version: 2.x.x
@@ -35,4 +35,4 @@ sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/prometheus
   - https://github.com/bitnami/containers/tree/main/bitnami/alertmanager
   - https://github.com/prometheus-operator/kube-prometheus
-version: 8.6.0
+version: 8.7.0

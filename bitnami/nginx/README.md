@@ -11,8 +11,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/nginx
+helm install my-release oci://registry-1.docker.io/bitnamicharts/nginx
 ```
 
 ## Introduction
@@ -33,8 +32,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/nginx
+helm install my-release oci://registry-1.docker.io/bitnamicharts/nginx
 ```
 
 These commands deploy NGINX Open Source on the Kubernetes cluster in the default configuration.
@@ -277,7 +275,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 helm install my-release \
   --set imagePullPolicy=Always \
-    my-repo/nginx
+    oci://registry-1.docker.io/bitnamicharts/nginx
 ```
 
 The above command sets the `imagePullPolicy` to `Always`.
@@ -285,7 +283,7 @@ The above command sets the `imagePullPolicy` to `Always`.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml my-repo/nginx
+helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/nginx
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -442,7 +440,7 @@ Use the workaround below to upgrade from versions previous to 5.0.0. The followi
 
 ```console
 kubectl delete deployment nginx --cascade=false
-helm upgrade nginx my-repo/nginx
+helm upgrade nginx oci://registry-1.docker.io/bitnamicharts/nginx
 ```
 
 ### To 1.0.0

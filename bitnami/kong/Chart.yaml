@@ -6,16 +6,16 @@ appVersion: 3.2.2
 dependencies:
   - condition: postgresql.enabled
     name: postgresql
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     version: 12.x.x
   - name: common
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     tags:
       - bitnami-common
     version: 2.x.x
   - condition: cassandra.enabled
     name: cassandra
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     version: 10.x.x
 description: Kong is an open source Microservice API gateway and platform designed for managing microservices requests of high-availability, fault-tolerance, and distributed systems.
 home: https://github.com/bitnami/charts/tree/main/bitnami/kong
@@ -36,4 +36,4 @@ name: kong
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/kong
   - https://konghq.com/
-version: 9.1.8
+version: 9.2.0

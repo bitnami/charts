@@ -5,7 +5,7 @@ apiVersion: v2
 appVersion: 10.6.12
 dependencies:
   - name: common
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     tags:
       - bitnami-common
     version: 2.x.x
@@ -26,4 +26,4 @@ sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/mariadb
   - https://github.com/prometheus/mysqld_exporter
   - https://mariadb.org
-version: 11.5.7
+version: 11.6.0

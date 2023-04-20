@@ -11,8 +11,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/airflow
+helm install my-release oci://registry-1.docker.io/bitnamicharts/airflow
 ```
 
 ## Introduction
@@ -31,8 +30,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/airflow
+helm install my-release oci://registry-1.docker.io/bitnamicharts/airflow
 ```
 
 These commands deploy Airflow on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -491,7 +489,7 @@ helm install my-release \
                --set auth.password=my-passsword \
                --set auth.fernetKey=my-fernet-key \
                --set auth.secretKey=my-secret-key \
-               my-repo/airflow
+               oci://registry-1.docker.io/bitnamicharts/airflow
 ```
 
 The above command sets the credentials to access the Airflow web UI.
@@ -501,7 +499,7 @@ The above command sets the credentials to access the Airflow web UI.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml my-repo/airflow
+helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/airflow
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)

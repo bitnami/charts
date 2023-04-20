@@ -11,8 +11,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/nginx-ingress-controller
+helm install my-release oci://registry-1.docker.io/bitnamicharts/nginx-ingress-controller
 ```
 
 ## Introduction
@@ -33,8 +32,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/nginx-ingress-controller
+helm install my-release oci://registry-1.docker.io/bitnamicharts/nginx-ingress-controller
 ```
 
 These commands deploy nginx-ingress-controller on the Kubernetes cluster in the default configuration.
@@ -332,7 +330,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 helm install my-release \
     --set image.pullPolicy=Always \
-    my-repo/nginx-ingress-controller
+    oci://registry-1.docker.io/bitnamicharts/nginx-ingress-controller
 ```
 
 The above command sets the `image.pullPolicy` to `Always`.
@@ -340,7 +338,7 @@ The above command sets the `image.pullPolicy` to `Always`.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml my-repo/nginx-ingress-controller
+helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/nginx-ingress-controller
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)

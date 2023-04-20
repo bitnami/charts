@@ -5,7 +5,7 @@ apiVersion: v2
 appVersion: 2023.4.13
 dependencies:
   - name: common
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     tags:
       - bitnami-common
     version: 2.x.x
@@ -25,4 +25,4 @@ name: minio
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/minio
   - https://min.io
-version: 12.2.6
+version: 12.3.0
