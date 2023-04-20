@@ -179,6 +179,9 @@ contour:
   ## @param contour.envoyServiceName Name of the envoy service to inspect for Ingress status details.
   ##
   envoyServiceName: ""
+  ## @param contour.leaderElectionResourceName Name of the contour (Lease) leader election will lease.
+  ##
+  leaderElectionResourceName: ""
   ## @param contour.ingressStatusAddress Address to set in Ingress object status. It is exclusive with `envoyServiceName` and `envoyServiceNamespace`.
   ##
   ingressStatusAddress: ""
