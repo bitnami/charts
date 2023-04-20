@@ -1436,6 +1436,98 @@ prometheus:
       ## Useful when looking for additional customization, such as using different backend
       ##
       extraRules: []
+  ## config-reloader sidecar container configuration
+  ##
+  configReloader:
+    ## config-reloader sidecar Service
+    ##
+    service:
+      ## @param prometheus.configReloader.service.enabled Enable config-reloader sidecar service
+      ##
+      enabled: false
+      ## @param prometheus.configReloader.service.type Kubernetes service type
+      ##
+      type: ClusterIP
+      ## @param prometheus.configReloader.service.ports.http config-reloader sidecar container service port
+      ##
+      ports:
+        http: 8080
+      ## @param prometheus.configReloader.service.clusterIP Specific cluster IP when service type is cluster IP. Use `None` to create headless service by default.
+      ## Use a "headless" service by default so it returns every pod's IP instead of loadbalancing requests.
+      ##
+      clusterIP: None
+      ## @param prometheus.configReloader.service.nodePorts.http Specify the nodePort value for the LoadBalancer and NodePort service types.
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+      ## e.g:
+      ## nodePort: 30901
+      ##
+      nodePorts:
+        http: ""
+      ## @param prometheus.configReloader.service.loadBalancerIP `loadBalancerIP` if service type is `LoadBalancer`
+      ## Set the LoadBalancer service type to internal only
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+      ##
+      loadBalancerIP: ""
+      ## @param prometheus.configReloader.service.loadBalancerSourceRanges Address that are allowed when svc is `LoadBalancer`
+      ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+      ## e.g:
+      ## loadBalancerSourceRanges:
+      ## - 10.10.10.0/24
+      ##
+      loadBalancerSourceRanges: []
+      ## @param prometheus.configReloader.service.labels Additional labels for Prometheus service
+      ##
+      labels: {}
+      ## @param prometheus.configReloader.service.annotations Additional annotations for Prometheus service
+      ##
+      annotations: {}
+      ## @param prometheus.configReloader.service.extraPorts Additional ports to expose from the config-reloader sidecar container
+      ## extraPorts:
+      ##   - name: http
+      ##     port: 10902
+      ##     targetPort: http
+      ##     protocol: TCP
+      ##
+      extraPorts: []
+      ## @param prometheus.configReloader.service.externalTrafficPolicy Prometheus service external traffic policy
+      ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+      ##
+      externalTrafficPolicy: Cluster
+      ## @param prometheus.configReloader.service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+      ## If "ClientIP", consecutive client requests will be directed to the same Pod
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+      ##
+      sessionAffinity: None
+      ## @param prometheus.configReloader.service.sessionAffinityConfig Additional settings for the sessionAffinity
+      ## sessionAffinityConfig:
+      ##   clientIP:
+      ##     timeoutSeconds: 300
+      ##
+      sessionAffinityConfig: {}
+    ## Create a ServiceMonitor to monitor Prometheus config-reloader sidecar
+    ##
+    serviceMonitor:
+      ## @param prometheus.configReloader.serviceMonitor.enabled Creates a ServiceMonitor to monitor Prometheus config-reloader sidecar
+      ##
+      enabled: false
+      ## @param prometheus.configReloader.serviceMonitor.interval Scrape interval (use by default, falling back to Prometheus' default)
+      ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#endpoint
+      ##
+      interval: ""
+      ## @param prometheus.configReloader.serviceMonitor.path HTTP path to scrape for metrics
+      ##
+      path: /metrics
+      ## @param prometheus.configReloader.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
+      ##
+      jobLabel: ""
+      ## @param prometheus.configReloader.serviceMonitor.metricRelabelings Metric relabeling
+      ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#metric_relabel_configs
+      ##
+      metricRelabelings: []
+      ## @param prometheus.configReloader.serviceMonitor.relabelings Relabel configs
+      ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config
+      ##
+      relabelings: []
   ## @param prometheus.portName Port name used for the pods and governing service. This defaults to web
   ##
   portName: web
