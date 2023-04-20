@@ -453,9 +453,9 @@ brokerRackAssignment: ""
 ##
 containerPorts:
   client: 9092
-  internal: 9093
-  external: 9094
-  controller: 9095
+  controller: 9093
+  internal: 9094
+  external: 9095
 ## Configure extra options for Kafka containers' liveness, readiness and startup probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
 ## @param livenessProbe.enabled Enable livenessProbe on Kafka containers
@@ -694,8 +694,9 @@ service:
   ##
   ports:
     client: 9092
-    internal: 9093
-    external: 9094
+    controller: 9093
+    internal: 9094
+    external: 9095
   ## @param service.nodePorts.client Node port for the Kafka client connections
   ## @param service.nodePorts.external Node port for the Kafka external connections
   ## NOTE: choose port between <30000-32767>
