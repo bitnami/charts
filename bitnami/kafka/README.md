@@ -495,7 +495,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `zookeeper.persistence.size`            | Persistent Volume size                                                                                                                                                  | `8Gi`               |
 | `externalZookeeper.servers`             | List of external zookeeper servers to use. Typically used in combination with 'zookeeperChrootPath'. Must be empty if you use Kraft mode.                               | `[]`                |
 
-
+```console
 helm install my-release \
   --set replicaCount=3 \
   oci://registry-1.docker.io/bitnamicharts/kafka
