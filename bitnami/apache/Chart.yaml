@@ -5,7 +5,7 @@ apiVersion: v2
 appVersion: 2.4.57
 dependencies:
   - name: common
-    repository: oci://registry-1.docker.io/bitnamicharts
+    repository: https://charts.bitnami.com/bitnami
     tags:
       - bitnami-common
     version: 2.x.x
@@ -26,4 +26,4 @@ name: apache
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/apache
   - https://httpd.apache.org
-version: 9.4.0
+version: 9.4.1
