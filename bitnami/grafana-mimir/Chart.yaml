@@ -2,7 +2,7 @@ annotations:
   category: Infrastructure
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 2.7.1
+appVersion: 2.7.2
 dependencies:
   - condition: minio.enabled
     name: minio
@@ -29,7 +29,7 @@ dependencies:
     repository: oci://registry-1.docker.io/bitnamicharts
     version: 6.x.x
   - name: common
-    repository: oci://registry-1.docker.io/bitnamicharts
+    repository: https://charts.bitnami.com/bitnami
     tags:
       - bitnami-common
     version: 2.x.x
@@ -48,4 +48,4 @@ name: grafana-mimir
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/grafana-mimir
   - https://github.com/grafana/mimir
-version: 0.3.0
+version: 0.3.1
