@@ -447,9 +447,9 @@ minId: 0
 ##
 brokerRackAssignment: ""
 ## @param containerPorts.client Kafka client container port
+## @param containerPorts.controller Kafka Controller listener port. It is used if "kraft.enabled: true"
 ## @param containerPorts.internal Kafka inter-broker container port
 ## @param containerPorts.external Kafka external container port
-## @param containerPorts.controller Kafka Controller listener port. It is used if "kraft.enabled: true"
 ##
 containerPorts:
   client: 9092
@@ -689,6 +689,7 @@ service:
   ##
   type: ClusterIP
   ## @param service.ports.client Kafka svc port for client connections
+  ## @param service.ports.controller Kafka svc port for controller connections. It is used if "kraft.enabled: true"
   ## @param service.ports.internal Kafka svc port for inter-broker connections
   ## @param service.ports.external Kafka svc port for external connections
   ##

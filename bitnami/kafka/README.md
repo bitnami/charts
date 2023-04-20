@@ -58,6 +58,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
+
 ### Common parameters
 
 | Name                      | Description                                                                             | Value           |
@@ -73,6 +74,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.enabled`  | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
 | `diagnosticMode.command`  | Command to override all containers in the statefulset                                   | `["sleep"]`     |
 | `diagnosticMode.args`     | Args to override all containers in the statefulset                                      | `["infinity"]`  |
+
 
 ### Kafka parameters
 
@@ -159,6 +161,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraEnvVarsCM`                                  | ConfigMap with extra environment variables                                                                                                                                          | `""`                                |
 | `extraEnvVarsSecret`                              | Secret with extra environment variables                                                                                                                                             | `""`                                |
 
+
 ### Statefulset parameters
 
 | Name                                                | Description                                                                                                                                                                                   | Value           |
@@ -167,9 +170,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `minId`                                             | Minimal node.id or broker.id values, nodes increment their value respectively                                                                                                                 | `0`             |
 | `brokerRackAssignment`                              | Set Broker Assignment for multi tenant environment Allowed values: `aws-az`                                                                                                                   | `""`            |
 | `containerPorts.client`                             | Kafka client container port                                                                                                                                                                   | `9092`          |
-| `containerPorts.internal`                           | Kafka inter-broker container port                                                                                                                                                             | `9093`          |
-| `containerPorts.external`                           | Kafka external container port                                                                                                                                                                 | `9094`          |
-| `containerPorts.controller`                         | Kafka Controller listener port. It is used if "kraft.enabled: true"                                                                                                                           | `9095`          |
+| `containerPorts.controller`                         | Kafka Controller listener port. It is used if "kraft.enabled: true"                                                                                                                           | `9093`          |
+| `containerPorts.internal`                           | Kafka inter-broker container port                                                                                                                                                             | `9094`          |
+| `containerPorts.external`                           | Kafka external container port                                                                                                                                                                 | `9095`          |
 | `livenessProbe.enabled`                             | Enable livenessProbe on Kafka containers                                                                                                                                                      | `true`          |
 | `livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                                                                                       | `10`            |
 | `livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                                                                                              | `10`            |
@@ -228,14 +231,16 @@ The command removes all the Kubernetes components associated with the chart and 
 | `pdb.minAvailable`                                  | Maximum number/percentage of unavailable Kafka replicas                                                                                                                                       | `""`            |
 | `pdb.maxUnavailable`                                | Maximum number/percentage of unavailable Kafka replicas                                                                                                                                       | `1`             |
 
+
 ### Traffic Exposure parameters
 
 | Name                                              | Description                                                                                                                               | Value                 |
 | ------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
 | `service.type`                                    | Kubernetes Service type                                                                                                                   | `ClusterIP`           |
 | `service.ports.client`                            | Kafka svc port for client connections                                                                                                     | `9092`                |
-| `service.ports.internal`                          | Kafka svc port for inter-broker connections                                                                                               | `9093`                |
-| `service.ports.external`                          | Kafka svc port for external connections                                                                                                   | `9094`                |
+| `service.ports.controller`                        | Kafka svc port for controller connections. It is used if "kraft.enabled: true"                                                            | `9093`                |
+| `service.ports.internal`                          | Kafka svc port for inter-broker connections                                                                                               | `9094`                |
+| `service.ports.external`                          | Kafka svc port for external connections                                                                                                   | `9095`                |
 | `service.nodePorts.client`                        | Node port for the Kafka client connections                                                                                                | `""`                  |
 | `service.nodePorts.external`                      | Node port for the Kafka external connections                                                                                              | `""`                  |
 | `service.sessionAffinity`                         | Control where client requests go, to the same pod or round-robin                                                                          | `None`                |
@@ -280,6 +285,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.externalAccess.from`               | customize the from section for External Access on tcp-external port                                                                       | `[]`                  |
 | `networkPolicy.egressRules.customRules`           | Custom network policy rule                                                                                                                | `{}`                  |
 
+
 ### Persistence parameters
 
 | Name                           | Description                                                                                                                            | Value                     |
@@ -302,6 +308,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `logPersistence.selector`      | Selector to match an existing Persistent Volume for Kafka log data PVC. If set, the PVC can't have a PV dynamically provisioned for it | `{}`                      |
 | `logPersistence.mountPath`     | Mount path of the Kafka logs volume                                                                                                    | `/opt/bitnami/kafka/logs` |
 
+
 ### Volume Permissions parameters
 
 | Name                                                   | Description                                                                                                                       | Value                   |
@@ -317,6 +324,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.resources.requests`                 | Init container volume-permissions resource requests                                                                               | `{}`                    |
 | `volumePermissions.containerSecurityContext.runAsUser` | User ID for the init container                                                                                                    | `0`                     |
 
+
 ### Other Parameters
 
 | Name                                          | Description                                                                                    | Value   |
@@ -326,6 +334,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created                         | `true`  |
 | `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                                           | `{}`    |
 | `rbac.create`                                 | Whether to create & use RBAC resources or not                                                  | `false` |
+
 
 ### Metrics parameters
 
@@ -415,6 +424,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.prometheusRule.labels`                             | Additional labels that can be used so PrometheusRule will be discovered by Prometheus                                            | `{}`                                                                                    |
 | `metrics.prometheusRule.groups`                             | Prometheus Rule Groups for Kafka                                                                                                 | `[]`                                                                                    |
 
+
 ### Kafka provisioning parameters
 
 | Name                                                       | Description                                                                                                                   | Value                 |
@@ -467,6 +477,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `provisioning.initContainers`                              | Add additional Add init containers to the Kafka provisioning pod(s)                                                           | `[]`                  |
 | `provisioning.waitForKafka`                                | If true use an init container to wait until kafka is ready before starting provisioning                                       | `true`                |
 
+
 ### Kraft chart parameters
 
 | Name                            | Description                                                                             | Value                    |
@@ -476,6 +487,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `kraft.controllerListenerNames` | Controller listener names                                                               | `CONTROLLER`             |
 | `kraft.clusterId`               | Kafka ClusterID. You must set it if your cluster contains more than one node.           | `kafka_cluster_id_test1` |
 | `kraft.controllerQuorumVoters`  | Quorum voters of Kafka Kraft cluster. Use it for nodes with 'broker' role only.         | `""`                     |
+
 
 ### ZooKeeper chart parameters
 
@@ -494,7 +506,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `zookeeper.persistence.size`            | Persistent Volume size                                                                                                                                                  | `8Gi`               |
 | `externalZookeeper.servers`             | List of external zookeeper servers to use. Typically used in combination with 'zookeeperChrootPath'. Must be empty if you use Kraft mode.                               | `[]`                |
 
-```console
+
 helm install my-release \
   --set replicaCount=3 \
   oci://registry-1.docker.io/bitnamicharts/kafka
