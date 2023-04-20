@@ -865,7 +865,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ### To 22.0.0
 
-This major updates the Kafka's configuration to use Kraft by default. You can learn more about this configuration [here](https://developer.confluent.io/learn/kraft).
+This major updates the Kafka's configuration to use Kraft by default. You can learn more about this configuration [here](https://developer.confluent.io/learn/kraft). Apart from seting the `kraft.enabled` parameter to `true`, we also made the following changes:
+
+- Renamed `minBrokerId` parameter to `minId` to set the minimum ID to use when configuring the node.id or broker.id parameter depending on the Kafka's configuration. This parameter sets the `KAFKA_CFG_NODE_ID` env var in the container.
+- Updated the `containerPorts` and `service.ports` parameters to include the new controller port.
 
 ### To 21.0.0
 
