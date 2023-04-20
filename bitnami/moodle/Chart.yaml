@@ -6,10 +6,10 @@ appVersion: 4.1.2
 dependencies:
   - condition: mariadb.enabled
     name: mariadb
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     version: 11.x.x
   - name: common
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     tags:
       - bitnami-common
     version: 2.x.x
@@ -27,4 +27,4 @@ name: moodle
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/moodle
   - https://www.moodle.org/
-version: 14.3.14
+version: 14.4.0

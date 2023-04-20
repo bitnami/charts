@@ -5,7 +5,7 @@ apiVersion: v2
 appVersion: 3.5.8
 dependencies:
   - name: common
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     tags:
       - bitnami-common
     version: 2.x.x
@@ -25,4 +25,4 @@ name: etcd
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/etcd
   - https://coreos.com/etcd/
-version: 8.9.0
+version: 8.10.0

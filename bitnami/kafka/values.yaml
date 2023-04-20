@@ -1568,7 +1568,10 @@ provisioning:
       type: jks
       ## @param provisioning.auth.tls.certificatesSecret Existing secret containing the TLS certificates for the Kafka provisioning Job.
       ## When using 'jks' format for certificates, the secret should contain a truststore and a keystore.
-      ## When using 'pem' format for certificates, the secret should contain a public CA certificate, a public certificate and one private key.
+      ## When using 'pem' format for certificates, the secret should contain one of the following:
+      ## 1. A public CA certificate, a public certificate and one private key.
+      ## 2. A truststore and a keystore in PEM format
+      ## If caCert is set, option 1 will be taken, otherwise option 2.
       ##
       certificatesSecret: ""
       ## @param provisioning.auth.tls.cert The secret key from the certificatesSecret if 'cert' key different from the default (tls.crt)

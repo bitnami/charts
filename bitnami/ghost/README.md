@@ -11,8 +11,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/ghost
+helm install my-release oci://registry-1.docker.io/bitnamicharts/ghost
 ```
 
 ## Introduction
@@ -35,8 +34,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/ghost
+helm install my-release oci://registry-1.docker.io/bitnamicharts/ghost
 ```
 
 The command deploys Ghost on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -289,7 +287,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 helm install my-release \
   --set ghostUsername=admin,ghostPassword=password,mysql.auth.rootPassword=secretpassword \
-    my-repo/ghost
+    oci://registry-1.docker.io/bitnamicharts/ghost
 ```
 
 The above command sets the Ghost administrator account username and password to `admin` and `password` respectively. Additionally, it sets the MySQL `root` user password to `secretpassword`.
@@ -299,7 +297,7 @@ The above command sets the Ghost administrator account username and password to 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml my-repo/ghost
+helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/ghost
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -470,7 +468,7 @@ Delete the Ghost deployment and delete the MariaDB statefulset. Notice the optio
 Upgrade you release to 11.0.0 reusing the existing PVC, and enabling back MariaDB:
 
 ```console
-helm upgrade ghost my-repo/ghost --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set ghostPassword=$GHOST_PASSWORD --set ghostHost=$GHOST_HOST
+helm upgrade ghost oci://registry-1.docker.io/bitnamicharts/ghost --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set ghostPassword=$GHOST_PASSWORD --set ghostHost=$GHOST_HOST
 ```
 
 You will need to kill the existing MariaDB pod now as the new statefulset is going to create a new one:

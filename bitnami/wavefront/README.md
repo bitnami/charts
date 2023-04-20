@@ -9,8 +9,7 @@ Wavefront is a high-performance streaming analytics platform for monitoring and 
 ## TL;DR
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/wavefront --namespace wavefront --create-namespace \
+helm install my-release oci://registry-1.docker.io/bitnamicharts/wavefront --namespace wavefront --create-namespace \
     --set clusterName=<K8s-CLUSTER-NAME> \
     --set wavefront.url=https://<YOUR_CLUSTER>.wavefront.com \
     --set wavefront.token=<YOUR_API_TOKEN>
@@ -35,8 +34,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/wavefront --namespace wavefront --create-namespace\
+helm install my-release oci://registry-1.docker.io/bitnamicharts/wavefront --namespace wavefront --create-namespace\
     --set clusterName=<K8s-CLUSTER-NAME> \
     --set wavefront.url=https://<YOUR_CLUSTER>.wavefront.com \
     --set wavefront.token=<YOUR_API_TOKEN>
@@ -271,7 +269,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 helm install my-release \
   --set proxy.replicaCount=3 \
-    my-repo/wavefront
+    oci://registry-1.docker.io/bitnamicharts/wavefront
 ```
 
 The above command sets 3 proxy replicas.
@@ -279,7 +277,7 @@ The above command sets 3 proxy replicas.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml my-repo/wavefront
+helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/wavefront
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)

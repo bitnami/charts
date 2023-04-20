@@ -5,7 +5,7 @@ apiVersion: v2
 appVersion: 1.16.1
 dependencies:
   - name: common
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     tags:
       - bitnami-common
     version: 2.x.x
@@ -25,4 +25,4 @@ name: fluentd
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/fluentd
   - https://www.fluentd.org/
-version: 5.6.5
+version: 5.7.0

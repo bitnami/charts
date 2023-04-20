@@ -2,14 +2,14 @@ annotations:
   category: CMS
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 4.2.9
+appVersion: 4.3.0
 dependencies:
   - condition: mariadb.enabled
     name: mariadb
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     version: 11.x.x
   - name: common
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     tags:
       - bitnami-common
     version: 2.x.x
@@ -29,4 +29,4 @@ name: joomla
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/joomla
   - https://www.joomla.org/
-version: 13.3.19
+version: 13.4.0

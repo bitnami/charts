@@ -5,7 +5,7 @@ apiVersion: v2
 appVersion: 1.6.19
 dependencies:
   - name: common
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     tags:
       - bitnami-common
     version: 2.x.x
@@ -22,4 +22,4 @@ name: memcached
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/memcached
   - http://memcached.org/
-version: 6.3.14
+version: 6.4.0
