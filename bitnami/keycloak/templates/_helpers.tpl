@@ -59,6 +59,16 @@ Create the name of the service account to use
 {{- end -}}
 
 {{/*
+Return the path Keycloak is hosted on. This looks at httpRelativePath and returns it with a trailing slash. For example:
+    / -> / (the default httpRelativePath)
+    /auth -> /auth/ (trailing slash added)
+    /custom/ -> /custom/ (unchanged)
+*/}}
+{{- define "keycloak.httpPath" -}}
+{{ ternary .Values.httpRelativePath (printf "%s%s" .Values.httpRelativePath "/") (hasSuffix "/" .Values.httpRelativePath) }}
+{{- end -}}
+
+{{/*
 Return the Keycloak configuration configmap
 */}}
 {{- define "keycloak.configmapName" -}}
