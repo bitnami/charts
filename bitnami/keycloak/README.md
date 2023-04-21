@@ -184,7 +184,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                               | Description                                                                                                                      | Value                    |
 | ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `service.type`                     | Kubernetes service type                                                                                                          | `LoadBalancer`           |
+| `service.type`                     | Kubernetes service type                                                                                                          | `ClusterIP`              |
 | `service.http.enabled`             | Enable http port on service                                                                                                      | `true`                   |
 | `service.ports.http`               | Keycloak service HTTP port                                                                                                       | `80`                     |
 | `service.ports.https`              | Keycloak service HTTPS port                                                                                                      | `443`                    |
@@ -459,6 +459,10 @@ Refer to the [chart documentation on managing passwords](https://docs.bitnami.co
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 15.0.0
+
+This major updates the default serviceType from `LoadBalancer` to `ClusterIP` to avoid inadvertently exposing Keycloak directly to the internet without an Ingress.
 
 ### To 12.0.0
 
