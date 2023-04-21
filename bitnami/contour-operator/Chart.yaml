@@ -5,7 +5,7 @@ apiVersion: v2
 appVersion: 1.24.0
 dependencies:
   - name: common
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     tags:
       - bitnami-common
     version: 2.x.x
@@ -25,4 +25,4 @@ name: contour-operator
 sources:
   - https://github.com/projectcontour/contour-operator
   - https://github.com/bitnami/containers/tree/main/bitnami/contour-operator
-version: 4.0.3
+version: 4.1.0

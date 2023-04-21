@@ -11,8 +11,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/prestashop
+helm install my-release oci://registry-1.docker.io/bitnamicharts/prestashop
 ```
 
 ## Introduction
@@ -35,8 +34,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/prestashop
+helm install my-release oci://registry-1.docker.io/bitnamicharts/prestashop
 ```
 
 The command deploys PrestaShop on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -318,7 +316,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 helm install my-release \
   --set prestashopUsername=admin,prestashopPassword=password,mariadb.auth.rootPassword=secretpassword \
-    my-repo/prestashop
+    oci://registry-1.docker.io/bitnamicharts/prestashop
 ```
 
 The above command sets the PrestaShop administrator account username and password to `admin` and `password` respectively. Additionally, it sets the MariaDB `root` user password to `secretpassword`.
@@ -328,7 +326,7 @@ The above command sets the PrestaShop administrator account username and passwor
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml my-repo/prestashop
+helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/prestashop
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -379,7 +377,7 @@ See the [Parameters](#parameters) section to configure the PVC or to disable per
 3. Install the chart
 
 ```console
-helm install my-release --set persistence.existingClaim=PVC_NAME my-repo/prestashop
+helm install my-release --set persistence.existingClaim=PVC_NAME oci://registry-1.docker.io/bitnamicharts/prestashop
 ```
 
 ### Host path
@@ -395,7 +393,7 @@ helm install my-release --set persistence.existingClaim=PVC_NAME my-repo/prestas
 2. Install the chart
 
    ```console
-   helm install my-release --set persistence.hostPath=/PATH/TO/HOST/MOUNT my-repo/prestashop
+   helm install my-release --set persistence.hostPath=/PATH/TO/HOST/MOUNT oci://registry-1.docker.io/bitnamicharts/prestashop
    ```
 
    This will mount the `prestashop-data` volume into the `hostPath` directory. The site data will be persisted if the mount path contains valid data, else the site data will be initialized at first launch.
@@ -484,13 +482,13 @@ export MARIADB_PVC=$(kubectl get pvc -l app.kubernetes.io/instance=prestashop,ap
 Upgrade your release (maintaining the version) disabling MariaDB and scaling Prestashop replicas to 0:
 
 ```console
-helm upgrade prestashop my-repo/prestashop --set prestashopPassword=$PRESTASHOP_PASSWORD --set replicaCount=0 --set mariadb.enabled=false --version 10.0.0
+helm upgrade prestashop oci://registry-1.docker.io/bitnamicharts/prestashop --set prestashopPassword=$PRESTASHOP_PASSWORD --set replicaCount=0 --set mariadb.enabled=false --version 10.0.0
 ```
 
 Finally, upgrade you release to 11.0.0 reusing the existing PVC, and enabling back MariaDB:
 
 ```console
-helm upgrade prestashop my-repo/prestashop --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set prestashopPassword=$PRESTASHOP_PASSWORD
+helm upgrade prestashop oci://registry-1.docker.io/bitnamicharts/prestashop --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set prestashopPassword=$PRESTASHOP_PASSWORD
 ```
 
 You should see the lines below in MariaDB container logs:

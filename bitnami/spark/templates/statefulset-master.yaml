@@ -178,7 +178,7 @@ spec:
           volumeMounts:
             {{- if .Values.master.existingConfigmap }}
             - name: config
-              mountPath: /bitnami/spark/conf/
+              mountPath: /opt/bitnami/spark/conf/
             {{- end }}
             {{- if .Values.security.ssl.enabled }}
             - name: shared-certs

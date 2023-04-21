@@ -6,10 +6,10 @@ appVersion: 3.3.10
 dependencies:
   - condition: mariadb.enabled
     name: mariadb
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     version: 11.x.x
   - name: common
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     tags:
       - bitnami-common
     version: 2.x.x
@@ -28,4 +28,4 @@ name: phpbb
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/phpbb
   - https://www.phpbb.com/
-version: 12.3.15
+version: 12.4.0

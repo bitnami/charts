@@ -11,8 +11,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/mxnet
+helm install my-release oci://registry-1.docker.io/bitnamicharts/mxnet
 ```
 
 ## Introduction
@@ -33,8 +32,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/mxnet
+helm install my-release oci://registry-1.docker.io/bitnamicharts/mxnet
 ```
 
 These commands deploy Apache MXNet (Incubating) on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured.
@@ -391,7 +389,7 @@ helm install my-release \
   --set mode=distributed \
   --set server.replicaCount=2 \
   --set worker.replicaCount=3 \
-    my-repo/mxnet
+    oci://registry-1.docker.io/bitnamicharts/mxnet
 ```
 
 The above command creates 6 pods for Apache MXNet (Incubating): one scheduler, two servers, and three workers.
@@ -399,7 +397,7 @@ The above command creates 6 pods for Apache MXNet (Incubating): one scheduler, t
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml my-repo/mxnet
+helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/mxnet
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -430,7 +428,7 @@ Finally, if you want to clone a git repository you can use the following paramet
 
 ```console
 cloneFilesFromGit.enabled=true
-cloneFilesFromGit.repository=https://github.com/my-user/my-repo
+cloneFilesFromGit.repository=https://github.com/my-user/oci://registry-1.docker.io/bitnamicharts
 cloneFilesFromGit.revision=master
 ```
 

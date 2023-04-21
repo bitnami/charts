@@ -6,10 +6,10 @@ appVersion: 3.4.0
 dependencies:
   - condition: zookeeper.enabled
     name: zookeeper
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     version: 11.x.x
   - name: common
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     tags:
       - bitnami-common
     version: 2.x.x
@@ -29,4 +29,4 @@ name: kafka
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/kafka
   - https://kafka.apache.org/
-version: 21.4.4
+version: 21.5.0

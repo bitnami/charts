@@ -11,8 +11,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/nats
+helm install my-release oci://registry-1.docker.io/bitnamicharts/nats
 ```
 
 ## Introduction
@@ -31,8 +30,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/nats
+helm install my-release oci://registry-1.docker.io/bitnamicharts/nats
 ```
 
 The command deploys NATS on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -263,7 +261,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 helm install my-release \
   --set auth.enabled=true,auth.user=my-user,auth.password=T0pS3cr3t \
-    my-repo/nats
+    oci://registry-1.docker.io/bitnamicharts/nats
 ```
 
 The above command enables NATS client authentication with `my-user` as user and `T0pS3cr3t` as password credentials.
@@ -273,7 +271,7 @@ The above command enables NATS client authentication with `my-user` as user and 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml my-repo/nats
+helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/nats
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -326,7 +324,7 @@ NATS version 2.0.0 has renamed the server binary filename from `gnatsd` to `nats
 however, it is still possible to use the chart to deploy NATS version 1.x.x using the `natsFilename` property.
 
 ```console
-helm install nats-v1 --set natsFilename=gnatsd --set image.tag=1.4.1 my-repo/nats
+helm install nats-v1 --set natsFilename=gnatsd --set image.tag=1.4.1 oci://registry-1.docker.io/bitnamicharts/nats
 ```
 
 ### To 7.0.0

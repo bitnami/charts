@@ -580,6 +580,23 @@ postgresql:
     ## @param postgresql.tls.certKeyFilename Certificate key filename
     ##
     certKeyFilename: ""
+  ## @param postgresql.preStopDelayAfterPgStopSeconds Minimal number of seconds preStop hook waits after postgres instance is stopped
+  ## It is used to delay postgres pod termination. It gives pgpool time to detect that node goes down. Down up cycle in
+  ## pgpool makes sure postgres node is registered correctly in pgpool (mainly primary flag).
+  ## Note: it could be replaced with .spec.minReadySeconds for Kubernetes v1.25 or later once
+  ##       https://github.com/kubernetes/kubernetes/issues/112066 is fixed.
+  ## Note: must be set to lower value than terminationGracePeriodSeconds (defaults to 30) so that preStop hook finishes
+  ## before grace period expires
+  ##
+  preStopDelayAfterPgStopSeconds: 25
+  ## @param postgresql.headlessWithNotReadyAddresses set postgres headless service into publishNotReadyAddresses mode
+  ## It can be used to minimize/eliminate pgpool restarts during PG rolling upgrades or edge-case situations like
+  ## network split. It expects that no other external component will use PG headless service to connect or that
+  ## such component implements re-try logic.
+  ## This mode also enables enriched readiness probe implementation which delays first switch of POD to READY state
+  ## after start/restart of container. It gives pgpool time switch node back from DOWN to UP state during rolling
+  ## upgrade.
+  headlessWithNotReadyAddresses: false
 
 witness:
   ## ref: https://hub.docker.com/r/bitnami/postgresql/tags/

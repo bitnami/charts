@@ -13,6 +13,7 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/cassandra/**'
       - 'bitnami/cert-manager/**'
       - 'bitnami/clickhouse/**'
+      - 'bitnami/common/**'
       - 'bitnami/concourse/**'
       - 'bitnami/consul/**'
       - 'bitnami/contour-operator/**'

@@ -5,7 +5,7 @@ apiVersion: v2
 appVersion: 2.7.6
 dependencies:
   - name: common
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     tags:
       - bitnami-common
     version: 2.x.x
@@ -23,4 +23,4 @@ name: haproxy
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/haproxy
   - https://github.com/haproxytech/haproxy
-version: 0.6.16
+version: 0.7.0
