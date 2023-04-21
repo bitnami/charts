@@ -9,7 +9,7 @@ dependencies:
     repository: oci://registry-1.docker.io/bitnamicharts
     tags:
       - phpmyadmin-database
-    version: 11.x.x
+    version: 12.x.x
   - name: common
     repository: oci://registry-1.docker.io/bitnamicharts
     tags:
@@ -29,4 +29,4 @@ name: phpmyadmin
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/phpmyadmin
   - https://www.phpmyadmin.net/
-version: 10.5.0
+version: 11.0.0
