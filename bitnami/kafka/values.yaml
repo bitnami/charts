@@ -1747,7 +1747,7 @@ kraft:
   ## @param kraft.controllerListenerNames Controller listener names
   ##
   controllerListenerNames: CONTROLLER
-  ## @param kraft.clusterId Kafka ClusterID. You must set it if your cluster contains more than one node.
+  ## @param kraft.clusterId Kafka ClusterID. You must set it if your cluster contains more than one node and it should match the regex `[a-zA-Z0-9_\-]{22}.
   ## Generate with `cat /proc/sys/kernel/random/uuid | tr -d '-' | base64 | cut -b 1-22`. Run `export LC_ALL=C` before if you generate it on MacOS.
   ## Example: k2yipv1sRue7z2_Y3o976A
   ##
