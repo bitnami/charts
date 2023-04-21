@@ -465,7 +465,7 @@ mariadbConfiguration: |-
   # Enabled for performance per https://mariadb.com/kb/en/innodb-system-variables/#innodb_flush_log_at_trx_commit
   innodb_flush_log_at_trx_commit=2
   # MYISAM REPLICATION SUPPORT #
-  wsrep_replicate_myisam=ON
+  wsrep_mode=REPLICATE_MYISAM
 
   [mariadb]
   plugin_load_add=auth_pam
