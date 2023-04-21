@@ -2,10 +2,10 @@ annotations:
   category: Database
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 10.6.12
+appVersion: 10.11.2
 dependencies:
   - name: common
-    repository: oci://registry-1.docker.io/bitnamicharts
+    repository: https://charts.bitnami.com/bitnami
     tags:
       - bitnami-common
     version: 2.x.x
@@ -27,4 +27,4 @@ sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/mariadb-galera
   - https://github.com/prometheus/mysqld_exporter
   - https://mariadb.org
-version: 7.6.0
+version: 8.0.0
