@@ -9,7 +9,7 @@ dependencies:
     repository: oci://registry-1.docker.io/bitnamicharts
     tags:
       - magento-database
-    version: 11.x.x
+    version: 12.x.x
   - condition: elasticsearch.enabled
     name: elasticsearch
     repository: oci://registry-1.docker.io/bitnamicharts
@@ -35,4 +35,4 @@ name: magento
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/magento
   - https://magento.com/
-version: 21.2.0
+version: 22.0.0
