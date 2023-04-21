@@ -469,13 +469,13 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Kraft chart parameters
 
-| Name                            | Description                                                                             | Value                    |
-| ------------------------------- | --------------------------------------------------------------------------------------- | ------------------------ |
-| `kraft.enabled`                 | Switch to enable or disable the Kraft mode for Kafka                                    | `false`                  |
-| `kraft.processRoles`            | Roles of your Kafka nodes. Nodes can have 'broker', 'controller' roles or both of them. | `broker,controller`      |
-| `kraft.controllerListenerNames` | Controller listener names                                                               | `CONTROLLER`             |
-| `kraft.clusterId`               | Kafka ClusterID. You must set it if your cluster contains more than one node.           | `kafka_cluster_id_test1` |
-| `kraft.controllerQuorumVoters`  | Quorum voters of Kafka Kraft cluster. Use it for nodes with 'broker' role only.         | `""`                     |
+| Name                            | Description                                                                                                                     | Value                    |
+| ------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `kraft.enabled`                 | Switch to enable or disable the Kraft mode for Kafka                                                                            | `false`                  |
+| `kraft.processRoles`            | Roles of your Kafka nodes. Nodes can have 'broker', 'controller' roles or both of them.                                         | `broker,controller`      |
+| `kraft.controllerListenerNames` | Controller listener names                                                                                                       | `CONTROLLER`             |
+| `kraft.clusterId`               | Kafka ClusterID. You must set it if your cluster contains more than one node and it should match the regex `[a-zA-Z0-9_\-]{22}. | `kafka_cluster_id_test1` |
+| `kraft.controllerQuorumVoters`  | Quorum voters of Kafka Kraft cluster. Use it for nodes with 'broker' role only.                                                 | `""`                     |
 
 ### ZooKeeper chart parameters
 
