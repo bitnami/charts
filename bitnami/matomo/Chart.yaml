@@ -7,7 +7,7 @@ dependencies:
   - condition: mariadb.enabled
     name: mariadb
     repository: oci://registry-1.docker.io/bitnamicharts
-    version: 11.x.x
+    version: 12.x.x
   - name: common
     repository: oci://registry-1.docker.io/bitnamicharts
     tags:
@@ -30,4 +30,4 @@ name: matomo
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/matomo
   - https://www.matomo.org/
-version: 0.3.0
+version: 1.0.0
