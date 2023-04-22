@@ -6,7 +6,7 @@ entries:
       licenses: Apache-2.0
     apiVersion: v2
     appVersion: 1.23.4
-    created: "2023-04-22T15:56:55.6063462+02:00"
+    created: "2023-04-22T16:02:22.531223+02:00"
     dependencies:
     - name: common
       repository: https://charts.bitnami.com/bitnami
@@ -35,4 +35,4 @@ entries:
     urls:
     - https://mathysdev.github.io/bitnami-helm-charts/bitnami/bitnami/nginx-13.2.34.tgz
     version: 13.2.34
-generated: "2023-04-22T15:56:55.6006606+02:00"
+generated: "2023-04-22T16:02:22.5285596+02:00"
