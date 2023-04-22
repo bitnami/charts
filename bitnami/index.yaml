@@ -6,7 +6,7 @@ entries:
       licenses: Apache-2.0
     apiVersion: v2
     appVersion: 1.23.4
-    created: "2023-04-22T16:25:39.5842691+02:00"
+    created: "2023-04-22T16:36:00.9475791+02:00"
     dependencies:
     - name: common
       repository: https://charts.bitnami.com/bitnami
@@ -16,7 +16,7 @@ entries:
     description: NGINX Open Source is a web server that can be also used as a reverse
       proxy, load balancer, and HTTP cache. Recommended for high-demanding sites due
       to its ability to provide faster content.
-    digest: cb601e1b03bf05a8cc7ddf02564163f05d0158afef1bfae80dab0dfde38dad4b
+    digest: 108f991c8766c74427b6e845db7a695cd33d141374d9c2229cd7a82916468d51
     home: https://github.com/bitnami/charts/tree/main/bitnami/nginx
     icon: https://bitnami.com/assets/stacks/nginx/img/nginx-stack-220x234.png
     keywords:
@@ -35,4 +35,4 @@ entries:
     urls:
     - https://mathysdev.github.io/bitnami-helm-charts/bitnami/nginx-13.2.34.tgz
     version: 13.2.34
-generated: "2023-04-22T16:25:39.5816189+02:00"
+generated: "2023-04-22T16:36:00.9427535+02:00"
