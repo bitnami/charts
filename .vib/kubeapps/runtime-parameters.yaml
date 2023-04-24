@@ -23,7 +23,7 @@ dashboard:
 apprepository:
   initialRepos:
     - name: bitnami
-      url: https://charts.bitnami.com/bitnami
+      url: oci://registry-1.docker.io/bitnamicharts
   watchAllNamespaces: false
 authProxy:
   enabled: false

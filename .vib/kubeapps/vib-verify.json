@@ -62,7 +62,7 @@
             "app_protocol": "HTTP",
             "env": {
               "repoName": "bitnami",
-              "repoURL": "https://charts.bitnami.com/bitnami"
+              "repoURL": "oci://registry-1.docker.io/bitnamicharts"
             }
           }
         }
