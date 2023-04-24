@@ -237,9 +237,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `kafka.auth.sasl.jaas.zookeeperPassword`         | Kafka Zookeeper password for SASL authentication                                                                    | `""`                             |
 | `kafka.auth.sasl.jaas.existingSecret`            | Name of the existing secret containing credentials for brokerUser, interBrokerUser and zookeeperUser                | `""`                             |
 | `kafka.service.ports.client`                     | Kafka service port for client connections                                                                           | `9092`                           |
-| `kafka.zookeeper.enabled`                        | Enable/disable Zookeeper chart installation                                                                         | `true`                           |
-| `kafka.zookeeper.replicaCount`                   | Number of Zookeeper replicas                                                                                        | `1`                              |
-| `kafka.zookeeper.auth`                           | Zookeeper auth settings                                                                                             | `{}`                             |
 | `externalKafka.brokers`                          | Array of Kafka brokers to connect to. Format: protocol://broker_hostname:port                                       | `["PLAINTEXT://localhost:9092"]` |
 | `externalKafka.auth.protocol`                    | Authentication protocol. Allowed protocols: plaintext, tls, sasl and sasl_tls                                       | `plaintext`                      |
 | `externalKafka.auth.jaas.user`                   | User for SASL authentication                                                                                        | `user`                           |

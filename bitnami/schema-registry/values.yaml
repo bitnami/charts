@@ -710,27 +710,7 @@ kafka:
     ##
     ports:
       client: 9092
-  ##
-  ## Zookeeper chart configuration
-  ## For information about these parameters, refer to:
-  ##   https://github.com/bitnami/charts/blob/main/bitnami/zookeeper/values.yaml
-  ##
-  zookeeper:
-    ## @param kafka.zookeeper.enabled Enable/disable Zookeeper chart installation
-    ##
-    enabled: true
-    ## @param kafka.zookeeper.replicaCount Number of Zookeeper replicas
-    ##
-    replicaCount: 1
-    ## @param kafka.zookeeper.auth [object] Zookeeper auth settings
-    auth:
-      client:
-        enabled: false
-        clientUser: zookeeperUser
-        clientPassword: ""
-        serverUsers: zookeeperUser
-        serverPasswords: ""
-        existingSecret: ""
+
 ##
 ## External Kafka Configuration
 ## All of these values are only used when kafka.enabled is set to false
