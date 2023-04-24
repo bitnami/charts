@@ -1,5 +1,5 @@
 {
-  "baseUrl": "http://127.0.0.1/",
+  "baseUrl": "http://localhost/",
   "env": {
     "repoName": "bitnami",
     "repoURL": "oci://registry-1.docker.io/bitnamicharts"
