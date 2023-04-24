@@ -25,4 +25,4 @@ sources:
   - https://github.com/envoyproxy/envoy
   - https://github.com/bitnami/containers/tree/main/bitnami/contour
   - https://projectcontour.io
-version: 11.2.0
+version: 11.3.0
