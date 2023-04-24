@@ -1604,12 +1604,7 @@ kafka:
   ## @param kafka.offsetsTopicReplicationFactor Kafka Secret Key
   ##
   offsetsTopicReplicationFactor: 1
-  ## Zookeeper chart configuration
-  ## https://github.com/bitnami/charts/blob/main/bitnami/zookeeper/values.yaml
-  ## @param kafka.zookeeper.replicaCount Number of Zookeeper replicas
-  ##
-  zookeeper:
-    replicaCount: 1
+
 ## External Kafka Configuration
 ## All of these values are ignored when kafka.enabled is set to true
 ##

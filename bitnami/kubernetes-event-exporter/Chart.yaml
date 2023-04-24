@@ -5,7 +5,7 @@ apiVersion: v2
 appVersion: 1.1.0
 dependencies:
   - name: common
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     tags:
       - bitnami-common
     version: 2.x.x
@@ -26,4 +26,4 @@ name: kubernetes-event-exporter
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/kubernetes-event-exporter
   - https://github.com/resmoio/kubernetes-event-exporter
-version: 2.2.6
+version: 2.3.0

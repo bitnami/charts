@@ -2,31 +2,31 @@ annotations:
   category: Infrastructure
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 2.7.1
+appVersion: 2.7.2
 dependencies:
   - condition: minio.enabled
     name: minio
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     version: 12.x.x
   - alias: memcachedmetadata
     condition: memcachedmetadata.enabled
     name: memcached
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     version: 6.x.x
   - alias: memcachedindex
     condition: memcachedindex.enabled
     name: memcached
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     version: 6.x.x
   - alias: memcachedfrontend
     condition: memcachedfrontend.enabled
     name: memcached
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     version: 6.x.x
   - alias: memcachedchunks
     condition: memcachedchunks.enabled
     name: memcached
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     version: 6.x.x
   - name: common
     repository: https://charts.bitnami.com/bitnami
@@ -48,4 +48,4 @@ name: grafana-mimir
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/grafana-mimir
   - https://github.com/grafana/mimir
-version: 0.2.3
+version: 0.3.1

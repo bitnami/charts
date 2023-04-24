@@ -5,7 +5,7 @@ apiVersion: v2
 appVersion: 0.6.1
 dependencies:
   - name: common
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     tags:
       - bitnami-common
     version: 2.x.x
@@ -24,4 +24,4 @@ name: whereabouts
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/whereabouts
   - https://github.com/k8snetworkplumbingwg/whereabouts/
-version: 0.1.5
+version: 0.2.0

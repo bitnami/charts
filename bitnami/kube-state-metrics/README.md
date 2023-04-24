@@ -11,8 +11,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/kube-state-metrics
+helm install my-release oci://registry-1.docker.io/bitnamicharts/kube-state-metrics
 ```
 
 ## Introduction
@@ -31,8 +30,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/kube-state-metrics
+helm install my-release oci://registry-1.docker.io/bitnamicharts/kube-state-metrics
 ```
 
 The command deploys kube-state-metrics on the Kubernetes cluster in the default configuration. The [configuration](#configuration-and-installation-details) section lists the parameters that can be configured during installation.
@@ -197,6 +195,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceMonitor.relabelings`                    | ServiceMonitor relabelings                                                                                                                                         | `[]`                         |
 | `serviceMonitor.metricRelabelings`              | ServiceMonitor metricRelabelings                                                                                                                                   | `[]`                         |
 | `serviceMonitor.labels`                         | Extra labels for the ServiceMonitor                                                                                                                                | `{}`                         |
+| `serviceMonitor.extraParameters`                | Any extra parameter to be added to the endpoint configured in the ServiceMonitor                                                                                   | `{}`                         |
 | `selfMonitor.enabled`                           | Creates a selfMonitor to monitor kube-state-metrics itself                                                                                                         | `false`                      |
 | `selfMonitor.telemetryPort`                     | Kube-state-metrics telemetry Port                                                                                                                                  | `8081`                       |
 | `selfMonitor.telemetryNodePort`                 | Kube-state-metrics Node Port                                                                                                                                       | `""`                         |
@@ -204,13 +203,13 @@ The command removes all the Kubernetes components associated with the chart and 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example the following command sets the `replicas` of the kube-state-metrics Pods to `2`.
 
 ```console
-helm install my-release --set replicas=2 my-repo/kube-state-metrics
+helm install my-release --set replicas=2 oci://registry-1.docker.io/bitnamicharts/kube-state-metrics
 ```
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml my-repo/kube-state-metrics
+helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/kube-state-metrics
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -242,7 +241,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 ## Upgrading
 
 ```console
-helm upgrade my-release my-repo/kube-state-metrics
+helm upgrade my-release oci://registry-1.docker.io/bitnamicharts/kube-state-metrics
 ```
 
 ### To 3.0.0

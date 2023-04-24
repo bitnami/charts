@@ -76,20 +76,6 @@
           }
         }
       }
-    },
-    "pdb": {
-      "type": "object",
-      "properties": {
-        "create": {
-          "type": "boolean"
-        },
-        "minAvailable": {
-          "type": "integer"
-        },
-        "maxUnavailable": {
-          "type": "integer"
-        }
-      }
     }
   }
 }

@@ -5,7 +5,7 @@ apiVersion: v2
 appVersion: 1.7.0
 dependencies:
   - name: common
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     tags:
       - bitnami-common
     version: 2.x.x
@@ -27,4 +27,4 @@ name: nginx-ingress-controller
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/nginx-ingress-controller
   - https://github.com/kubernetes/ingress-nginx
-version: 9.5.1
+version: 9.6.0

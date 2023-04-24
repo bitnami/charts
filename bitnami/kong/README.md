@@ -11,8 +11,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/kong
+helm install my-release oci://registry-1.docker.io/bitnamicharts/kong
 ```
 
 ## Introduction
@@ -34,8 +33,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/kong
+helm install my-release oci://registry-1.docker.io/bitnamicharts/kong
 ```
 
 These commands deploy kong on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -344,7 +342,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```console
 helm install my-release \
-  --set service.exposeAdmin=true my-repo/kong
+  --set service.exposeAdmin=true oci://registry-1.docker.io/bitnamicharts/kong
 ```
 
 The above command exposes the Kong admin ports inside the Kong service.
@@ -352,7 +350,7 @@ The above command exposes the Kong admin ports inside the Kong service.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml my-repo/kong
+helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/kong
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -372,13 +370,13 @@ The Bitnami Kong chart allows setting two database backends: PostgreSQL or Cassa
 - Deploy the PostgreSQL sub-chart (default)
 
 ```console
-helm install my-release my-repo/kong
+helm install my-release oci://registry-1.docker.io/bitnamicharts/kong
 ```
 
 - Use an external PostgreSQL database
 
 ```console
-helm install my-release my-repo/kong \
+helm install my-release oci://registry-1.docker.io/bitnamicharts/kong \
     --set postgresql.enabled=false \
     --set postgresql.external.host=_HOST_OF_YOUR_POSTGRESQL_INSTALLATION_ \
     --set postgresql.external.password=_PASSWORD_OF_YOUR_POSTGRESQL_INSTALLATION_ \
@@ -388,7 +386,7 @@ helm install my-release my-repo/kong \
 - Deploy the Cassandra sub-chart
 
 ```console
-helm install my-release my-repo/kong \
+helm install my-release oci://registry-1.docker.io/bitnamicharts/kong \
     --set database=cassandra \
     --set postgresql.enabled=false \
     --set cassandra.enabled=true
@@ -397,7 +395,7 @@ helm install my-release my-repo/kong \
 - Use an existing Cassandra installation
 
 ```console
-helm install my-release my-repo/kong \
+helm install my-release oci://registry-1.docker.io/bitnamicharts/kong \
     --set database=cassandra \
     --set postgresql.enabled=false \
     --set cassandra.enabled=false \
@@ -511,7 +509,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 It's necessary to specify the existing passwords while performing a upgrade to ensure the secrets are not updated with invalid randomly generated passwords. Remember to specify the existing values of the `postgresql.postgresqlPassword` or `cassandra.password` parameters when upgrading the chart:
 
 ```console
-helm upgrade my-release my-repo/kong \
+helm upgrade my-release oci://registry-1.docker.io/bitnamicharts/kong \
     --set database=postgresql
     --set postgresql.enabled=true
     --set
@@ -582,7 +580,7 @@ kubectl delete statefulsets.apps kong-postgresql --cascade=false
 ##### Upgrade the chart release
 
 ```console
-helm upgrade kong my-repo/kong \
+helm upgrade kong oci://registry-1.docker.io/bitnamicharts/kong \
     --set postgresql.postgresqlPassword=$POSTGRESQL_PASSWORD \
     --set postgresql.persistence.existingClaim=$POSTGRESQL_PVC
 ```

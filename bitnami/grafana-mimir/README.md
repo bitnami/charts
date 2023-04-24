@@ -11,8 +11,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/grafana-mimir
+helm install my-release oci://registry-1.docker.io/bitnamicharts/grafana-mimir
 ```
 
 ## Introduction
@@ -36,7 +35,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release my-repo/grafana-mimir
+helm install my-release oci://registry-1.docker.io/bitnamicharts/grafana-mimir
 ```
 
 The command deploys grafana-mimir on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -85,7 +84,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
 | `mimir.image.registry`                 | Grafana Mimir image registry                                                                                                                             | `docker.io`              |
 | `mimir.image.repository`               | Grafana Mimir image repository                                                                                                                           | `bitnami/grafana-mimir`  |
-| `mimir.image.tag`                      | Grafana Mimir image tag (immutable tags are recommended)                                                                                                 | `2.7.1-debian-11-r4`     |
+| `mimir.image.tag`                      | Grafana Mimir image tag (immutable tags are recommended)                                                                                                 | `2.7.2-debian-11-r0`     |
 | `mimir.image.digest`                   | Grafana Mimir image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended) | `""`                     |
 | `mimir.image.pullPolicy`               | Grafana Mimir image pull policy                                                                                                                          | `IfNotPresent`           |
 | `mimir.image.pullSecrets`              | Grafana Mimir image pull secrets                                                                                                                         | `[]`                     |
@@ -380,7 +379,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `gateway.enabled`                               | Enable Gateway deployment                                                                             | `true`                |
 | `gateway.image.registry`                        | Nginx image registry                                                                                  | `docker.io`           |
 | `gateway.image.repository`                      | Nginx image repository                                                                                | `bitnami/nginx`       |
-| `gateway.image.tag`                             | Nginx image tag (immutable tags are recommended)                                                      | `1.23.4-debian-11-r0` |
+| `gateway.image.tag`                             | Nginx image tag (immutable tags are recommended)                                                      | `1.23.4-debian-11-r8` |
 | `gateway.image.digest`                          | Nginx image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
 | `gateway.image.pullPolicy`                      | Nginx image pull policy                                                                               | `IfNotPresent`        |
 | `gateway.image.pullSecrets`                     | Nginx image pull secrets                                                                              | `[]`                  |
@@ -1097,7 +1096,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `11-debian-11-r102`     |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `11-debian-11-r108`     |
 | `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                    |
@@ -1148,16 +1147,16 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Memcached Sub-chart Parameters (Chunks)
 
-| Name                                      | Description                                                                                               | Value                 |
-| ----------------------------------------- | --------------------------------------------------------------------------------------------------------- | --------------------- |
-| `memcachedchunks.enabled`                 | Deploy memcached sub-chart                                                                                | `true`                |
-| `memcachedchunks.image.registry`          | Memcached image registry                                                                                  | `docker.io`           |
-| `memcachedchunks.image.repository`        | Memcached image repository                                                                                | `bitnami/memcached`   |
-| `memcachedchunks.image.tag`               | Memcached image tag (immutable tags are recommended)                                                      | `1.6.19-debian-11-r6` |
-| `memcachedchunks.image.digest`            | Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
-| `memcachedchunks.nameOverride`            | override the subchart name                                                                                | `""`                  |
-| `memcachedchunks.architecture`            | Memcached architecture                                                                                    | `high-availability`   |
-| `memcachedchunks.service.ports.memcached` | Memcached service port                                                                                    | `11211`               |
+| Name                                      | Description                                                                                               | Value                  |
+| ----------------------------------------- | --------------------------------------------------------------------------------------------------------- | ---------------------- |
+| `memcachedchunks.enabled`                 | Deploy memcached sub-chart                                                                                | `true`                 |
+| `memcachedchunks.image.registry`          | Memcached image registry                                                                                  | `docker.io`            |
+| `memcachedchunks.image.repository`        | Memcached image repository                                                                                | `bitnami/memcached`    |
+| `memcachedchunks.image.tag`               | Memcached image tag (immutable tags are recommended)                                                      | `1.6.19-debian-11-r13` |
+| `memcachedchunks.image.digest`            | Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
+| `memcachedchunks.nameOverride`            | override the subchart name                                                                                | `""`                   |
+| `memcachedchunks.architecture`            | Memcached architecture                                                                                    | `high-availability`    |
+| `memcachedchunks.service.ports.memcached` | Memcached service port                                                                                    | `11211`                |
 
 ### External Memcached (Frontend) Parameters
 
@@ -1168,16 +1167,16 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Memcached Sub-chart Parameters (Frontend)
 
-| Name                                        | Description                                                                                               | Value                 |
-| ------------------------------------------- | --------------------------------------------------------------------------------------------------------- | --------------------- |
-| `memcachedfrontend.enabled`                 | Deploy memcached sub-chart                                                                                | `true`                |
-| `memcachedfrontend.image.registry`          | Memcached image registry                                                                                  | `docker.io`           |
-| `memcachedfrontend.image.repository`        | Memcached image repository                                                                                | `bitnami/memcached`   |
-| `memcachedfrontend.image.tag`               | Memcached image tag (immutable tags are recommended)                                                      | `1.6.19-debian-11-r6` |
-| `memcachedfrontend.image.digest`            | Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
-| `memcachedfrontend.architecture`            | Memcached architecture                                                                                    | `high-availability`   |
-| `memcachedfrontend.nameOverride`            | override the subchart name                                                                                | `""`                  |
-| `memcachedfrontend.service.ports.memcached` | Memcached service port                                                                                    | `11211`               |
+| Name                                        | Description                                                                                               | Value                  |
+| ------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ---------------------- |
+| `memcachedfrontend.enabled`                 | Deploy memcached sub-chart                                                                                | `true`                 |
+| `memcachedfrontend.image.registry`          | Memcached image registry                                                                                  | `docker.io`            |
+| `memcachedfrontend.image.repository`        | Memcached image repository                                                                                | `bitnami/memcached`    |
+| `memcachedfrontend.image.tag`               | Memcached image tag (immutable tags are recommended)                                                      | `1.6.19-debian-11-r13` |
+| `memcachedfrontend.image.digest`            | Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
+| `memcachedfrontend.architecture`            | Memcached architecture                                                                                    | `high-availability`    |
+| `memcachedfrontend.nameOverride`            | override the subchart name                                                                                | `""`                   |
+| `memcachedfrontend.service.ports.memcached` | Memcached service port                                                                                    | `11211`                |
 
 ### External Memcached (Index) Parameters
 
@@ -1188,16 +1187,16 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Memcached Sub-chart Parameters (Index)
 
-| Name                                     | Description                                                                                               | Value                 |
-| ---------------------------------------- | --------------------------------------------------------------------------------------------------------- | --------------------- |
-| `memcachedindex.enabled`                 | Deploy memcached sub-chart                                                                                | `true`                |
-| `memcachedindex.image.registry`          | Memcached image registry                                                                                  | `docker.io`           |
-| `memcachedindex.image.repository`        | Memcached image repository                                                                                | `bitnami/memcached`   |
-| `memcachedindex.image.tag`               | Memcached image tag (immutable tags are recommended)                                                      | `1.6.19-debian-11-r6` |
-| `memcachedindex.image.digest`            | Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
-| `memcachedindex.architecture`            | Memcached architecture                                                                                    | `high-availability`   |
-| `memcachedindex.nameOverride`            | override the subchart name                                                                                | `""`                  |
-| `memcachedindex.service.ports.memcached` | Memcached service port                                                                                    | `11211`               |
+| Name                                     | Description                                                                                               | Value                  |
+| ---------------------------------------- | --------------------------------------------------------------------------------------------------------- | ---------------------- |
+| `memcachedindex.enabled`                 | Deploy memcached sub-chart                                                                                | `true`                 |
+| `memcachedindex.image.registry`          | Memcached image registry                                                                                  | `docker.io`            |
+| `memcachedindex.image.repository`        | Memcached image repository                                                                                | `bitnami/memcached`    |
+| `memcachedindex.image.tag`               | Memcached image tag (immutable tags are recommended)                                                      | `1.6.19-debian-11-r13` |
+| `memcachedindex.image.digest`            | Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
+| `memcachedindex.architecture`            | Memcached architecture                                                                                    | `high-availability`    |
+| `memcachedindex.nameOverride`            | override the subchart name                                                                                | `""`                   |
+| `memcachedindex.service.ports.memcached` | Memcached service port                                                                                    | `11211`                |
 
 ### External Memcached (Metadata) Parameters
 
@@ -1208,16 +1207,16 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Memcached Sub-chart Parameters (Metadata)
 
-| Name                                        | Description                                                                                               | Value                 |
-| ------------------------------------------- | --------------------------------------------------------------------------------------------------------- | --------------------- |
-| `memcachedmetadata.enabled`                 | Deploy memcached sub-chart                                                                                | `true`                |
-| `memcachedmetadata.image.registry`          | Memcached image registry                                                                                  | `docker.io`           |
-| `memcachedmetadata.image.repository`        | Memcached image repository                                                                                | `bitnami/memcached`   |
-| `memcachedmetadata.image.tag`               | Memcached image tag (immutable tags are recommended)                                                      | `1.6.19-debian-11-r6` |
-| `memcachedmetadata.image.digest`            | Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
-| `memcachedmetadata.architecture`            | Memcached architecture                                                                                    | `high-availability`   |
-| `memcachedmetadata.nameOverride`            | override the subchart name                                                                                | `""`                  |
-| `memcachedmetadata.service.ports.memcached` | Memcached service port                                                                                    | `11211`               |
+| Name                                        | Description                                                                                               | Value                  |
+| ------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ---------------------- |
+| `memcachedmetadata.enabled`                 | Deploy memcached sub-chart                                                                                | `true`                 |
+| `memcachedmetadata.image.registry`          | Memcached image registry                                                                                  | `docker.io`            |
+| `memcachedmetadata.image.repository`        | Memcached image repository                                                                                | `bitnami/memcached`    |
+| `memcachedmetadata.image.tag`               | Memcached image tag (immutable tags are recommended)                                                      | `1.6.19-debian-11-r13` |
+| `memcachedmetadata.image.digest`            | Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
+| `memcachedmetadata.architecture`            | Memcached architecture                                                                                    | `high-availability`    |
+| `memcachedmetadata.nameOverride`            | override the subchart name                                                                                | `""`                   |
+| `memcachedmetadata.service.ports.memcached` | Memcached service port                                                                                    | `11211`                |
 
 See <https://github.com/bitnami-labs/readme-generator-for-helm> to create the table
 
@@ -1226,7 +1225,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 helm install my-release \
   --set mimir.image.debug=true \
-  my-repo/grafana-mimir
+  oci://registry-1.docker.io/bitnamicharts/grafana-mimir
 ```
 
 The above command enables the debug mode in the image.
@@ -1234,7 +1233,7 @@ The above command enables the debug mode in the image.
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml my-repo/grafana-mimir
+helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/grafana-mimir
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml) as starting point.

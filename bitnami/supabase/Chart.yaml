@@ -6,14 +6,14 @@ appVersion: 0.23.2
 dependencies:
   - condition: postgresql.enabled
     name: postgresql
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     version: 12.x.x
   - condition: kong.enabled
     name: kong
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     version: 9.x.x
   - name: common
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     tags:
       - bitnami-common
     version: 2.x.x
@@ -30,4 +30,4 @@ name: supabase
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/supabase
   - https://github.com/supabaseorg/supabase/
-version: 0.1.5
+version: 0.2.0

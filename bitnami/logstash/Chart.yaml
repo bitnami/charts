@@ -5,7 +5,7 @@ apiVersion: v2
 appVersion: 8.7.0
 dependencies:
   - name: common
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     tags:
       - bitnami-common
     version: 2.x.x
@@ -23,4 +23,4 @@ name: logstash
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/logstash
   - https://www.elastic.co/products/logstash
-version: 5.2.2
+version: 5.3.0

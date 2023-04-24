@@ -5,7 +5,8 @@ externalAccess:
   service:
     ports:
       client: 9092
-      internal: 9093
+      controller: 9093
+      internal: 9094
       external: 80
     type: LoadBalancer
 rbac:
@@ -13,8 +14,9 @@ rbac:
 superUsers: User:admin,User:test_user
 containerPorts:
   client: 9092
-  internal: 9093
-  external: 9094
+  controller: 9093
+  internal: 9094
+  external: 9095
 logPersistence:
   mountPath: /opt/bitnami/kafka/logs
 persistence:

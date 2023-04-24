@@ -465,6 +465,10 @@ infoblox:
   ## @param infoblox.domainFilter When using the Infoblox provider, specify the domain (optional)
   ##
   domainFilter: ""
+  ##
+  ## @param infoblox.nameRegex When using the Infoblox provider, specify the name regex filter (optional)
+  ##
+  nameRegex: ""
   ## @param infoblox.noSslVerify When using the Infoblox provider, disable SSL verification (optional)
   ##
   noSslVerify: false
