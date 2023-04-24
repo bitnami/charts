@@ -220,27 +220,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Kafka chart parameters
 
-| Name                                             | Description                                                                                                         | Value                            |
-| ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------- | -------------------------------- |
-| `kafka.enabled`                                  | Enable/disable Kafka chart installation                                                                             | `true`                           |
-| `kafka.replicaCount`                             | Number of Kafka brokers                                                                                             | `1`                              |
-| `kafka.auth.clientProtocol`                      | Authentication protocol for communications with clients. Allowed protocols: plaintext, tls, mtls, sasl and sasl_tls | `plaintext`                      |
-| `kafka.auth.interBrokerProtocol`                 | Authentication protocol for inter-broker communications. Allowed protocols: plaintext, tls, mtls, sasl and sasl_tls | `plaintext`                      |
-| `kafka.auth.tls.existingSecrets`                 | Array existing secrets containing the TLS certificates for the Kafka brokers                                        | `[]`                             |
-| `kafka.auth.tls.password`                        | Password to access the JKS files or PEM key when they are password-protected.                                       | `""`                             |
-| `kafka.auth.tls.endpointIdentificationAlgorithm` | The endpoint identification algorithm to validate server hostname using server certificate                          | `https`                          |
-| `kafka.auth.sasl.jaas.clientUsers`               | Kafka client users for SASL authentication                                                                          | `[]`                             |
-| `kafka.auth.sasl.jaas.clientPasswords`           | Kafka client passwords for SASL authentication                                                                      | `[]`                             |
-| `kafka.auth.sasl.jaas.interBrokerUser`           | Kafka inter broker communication user for SASL authentication                                                       | `admin`                          |
-| `kafka.auth.sasl.jaas.interBrokerPassword`       | Kafka inter broker communication password for SASL authentication                                                   | `""`                             |
-| `kafka.auth.sasl.jaas.zookeeperUser`             | Kafka Zookeeper user for SASL authentication                                                                        | `""`                             |
-| `kafka.auth.sasl.jaas.zookeeperPassword`         | Kafka Zookeeper password for SASL authentication                                                                    | `""`                             |
-| `kafka.auth.sasl.jaas.existingSecret`            | Name of the existing secret containing credentials for brokerUser, interBrokerUser and zookeeperUser                | `""`                             |
-| `kafka.service.ports.client`                     | Kafka service port for client connections                                                                           | `9092`                           |
-| `externalKafka.brokers`                          | Array of Kafka brokers to connect to. Format: protocol://broker_hostname:port                                       | `["PLAINTEXT://localhost:9092"]` |
-| `externalKafka.auth.protocol`                    | Authentication protocol. Allowed protocols: plaintext, tls, sasl and sasl_tls                                       | `plaintext`                      |
-| `externalKafka.auth.jaas.user`                   | User for SASL authentication                                                                                        | `user`                           |
-| `externalKafka.auth.jaas.password`               | Password for SASL authentication                                                                                    | `""`                             |
+| Name                               | Description                                                                   | Value                            |
+| ---------------------------------- | ----------------------------------------------------------------------------- | -------------------------------- |
+| `kafka.enabled`                    | Enable/disable Kafka chart installation                                       | `true`                           |
+| `kafka.replicaCount`               | Number of Kafka brokers                                                       | `1`                              |
+| `externalKafka.brokers`            | Array of Kafka brokers to connect to. Format: protocol://broker_hostname:port | `["PLAINTEXT://localhost:9092"]` |
+| `externalKafka.auth.protocol`      | Authentication protocol. Allowed protocols: plaintext, tls, sasl and sasl_tls | `plaintext`                      |
+| `externalKafka.auth.jaas.user`     | User for SASL authentication                                                  | `user`                           |
+| `externalKafka.auth.jaas.password` | Password for SASL authentication                                              | `""`                             |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
