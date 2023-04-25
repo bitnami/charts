@@ -77,7 +77,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ----------------------- |
 | `image.registry`                        | DokuWiki image registry                                                                                               | `docker.io`             |
 | `image.repository`                      | DokuWiki image repository                                                                                             | `bitnami/dokuwiki`      |
-| `image.tag`                             | DokuWiki image tag                                                                                                    | `2023.4.4-debian-11-r1` |
+| `image.tag`                             | DokuWiki image tag                                                                                                    | `2023.4.4-debian-11-r2` |
 | `image.digest`                          | DokuWiki image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag              | `""`                    |
 | `image.pullPolicy`                      | Image pull policy                                                                                                     | `IfNotPresent`          |
 | `image.pullSecrets`                     | Image pull policy                                                                                                     | `[]`                    |
