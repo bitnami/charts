@@ -27,6 +27,7 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/external-dns/**'
       - 'bitnami/flink/**'
       - 'bitnami/fluentd/**'
+      - 'bitnami/fluent-bit/**'
       - 'bitnami/flux/**'
       - 'bitnami/ghost/**'
       - 'bitnami/gitea/**'
