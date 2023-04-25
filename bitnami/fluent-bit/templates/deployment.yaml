@@ -146,7 +146,7 @@ spec:
       volumes:
         - name: config
           configMap:
-            name: fluent-bit-config
+            name: {{ include "fluent-bit.configuration.configMap" . }}
         {{- if .Values.extraVolumes }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
         {{- end }}

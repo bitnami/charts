@@ -32,3 +32,10 @@ Return the proper Docker Image Registry Secret Names
 {{- define "fluent-bit.imagePullSecrets" -}}
 {{- include "common.images.pullSecrets" (dict "images" (list .Values.image) "global" .Values.global) -}}
 {{- end -}}
+
+{{/*
+Name the configuration configmap
+*/}}
+{{- define "fluent-bit.configuration.configMap" -}}
+{{- printf "%s-config" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
+{{- end -}}

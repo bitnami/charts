@@ -159,7 +159,7 @@ spec:
       volumes:
         - name: config
           configMap:
-            name: fluent-bit-config
+            name: {{ include "fluent-bit.configuration.configMap" . }}
         - name: varlog
           hostPath:
             path: {{ .Values.daemonset.hostPaths.logs }}
