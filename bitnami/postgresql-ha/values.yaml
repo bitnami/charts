@@ -400,7 +400,7 @@ postgresql:
   ## @param postgresql.syncReplicationMode This specifies the method to choose synchronous standbys from the listed servers. Valid values: empty, first, any.
   ## ref: https://www.postgresql.org/docs/current/runtime-config-replication.html#GUC-SYNCHRONOUS-STANDBY-NAMES
   ##
-  syncReplicationMode: ''
+  syncReplicationMode: ""
   ## Repmgr configuration parameters
   ## @param postgresql.repmgrUsername PostgreSQL Repmgr username
   ## @param postgresql.repmgrPassword PostgreSQL Repmgr password
