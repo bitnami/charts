@@ -2,7 +2,7 @@ annotations:
   category: Wiki
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 20220731.1.0
+appVersion: 2023.4.4
 dependencies:
   - name: common
     repository: oci://registry-1.docker.io/bitnamicharts
@@ -26,4 +26,4 @@ name: dokuwiki
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/dokuwiki
   - http://www.dokuwiki.org/
-version: 13.2.0
+version: 14.0.1
