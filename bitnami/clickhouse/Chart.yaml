@@ -9,7 +9,7 @@ dependencies:
     repository: oci://registry-1.docker.io/bitnamicharts
     version: 11.x.x
   - name: common
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     tags:
       - bitnami-common
     version: 2.x.x
@@ -26,4 +26,4 @@ name: clickhouse
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/clickhouse
   - https://github.com/ClickHouse/ClickHouse
-version: 3.2.1
+version: 3.3.0

@@ -5,7 +5,7 @@ apiVersion: v2
 appVersion: 15.2.0
 dependencies:
   - name: common
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     tags:
       - bitnami-common
     version: 2.x.x
@@ -26,4 +26,4 @@ name: postgresql
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/postgresql
   - https://www.postgresql.org/
-version: 12.3.2
+version: 12.4.0

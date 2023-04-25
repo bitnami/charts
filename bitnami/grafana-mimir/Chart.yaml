@@ -29,7 +29,7 @@ dependencies:
     repository: oci://registry-1.docker.io/bitnamicharts
     version: 6.x.x
   - name: common
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     tags:
       - bitnami-common
     version: 2.x.x
@@ -48,4 +48,4 @@ name: grafana-mimir
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/grafana-mimir
   - https://github.com/grafana/mimir
-version: 0.3.1
+version: 0.4.0
