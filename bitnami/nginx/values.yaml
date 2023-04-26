@@ -256,6 +256,30 @@ resources:
   ##    memory: 128Mi
   requests: {}
 
+## syncer containers' resource requests and limits
+## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+## We usually recommend not to specify default resources and to leave this as a conscious
+## choice for the user. This also increases chances charts run on environments with little
+## resources, such as Minikube. If you do want to specify resources, uncomment the following
+## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+## @param syncer.resources.limits The resources limits for the Syncer-container
+## @param syncer.resources.requests The requested resources for the Syncer-container
+##  
+syncer:
+  resources:
+  ## Example:
+  ## limits:
+  ##    cpu: 100m
+  ##    memory: 128Mi
+    limits: {}
+    ## Examples:
+    ## requests:
+    ##    cpu: 100m
+    ##    memory: 128Mi
+    requests: {}
+
+
+
 ## NGINX containers' lifecycleHooks
 ## ref: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/attach-handler-lifecycle-event/
