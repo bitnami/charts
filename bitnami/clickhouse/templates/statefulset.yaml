@@ -82,8 +82,8 @@ spec:
           {{- if $.Values.resources }}
           resources: {{- toYaml $.Values.resources | nindent 12 }}
           {{- end }}
-          # We don't require a privileged container in this case
           {{- if $.Values.containerSecurityContext.enabled }}
+          # We don't require a privileged container in this case
           securityContext: {{- omit $.Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           command:
@@ -123,9 +123,8 @@ spec:
               {{- end }}
               chmod 600 {{ include "clickhouse.tlsCertKey" $ }}
               {{- end }}
-          {{- if $.Values.containerSecurityContext.enabled }}
-          securityContext: {{- omit $.Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
-          {{- end }}
+          securityContext:
+            runAsUser: {{ $.Values.volumePermissions.containerSecurityContext.runAsUser }}
           {{- if $.Values.volumePermissions.resources }}
           resources: {{- toYaml $.Values.volumePermissions.resources | nindent 12 }}
           {{- end }}
