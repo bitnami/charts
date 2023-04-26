@@ -54,7 +54,7 @@ data:
         {{- if .Values.useHostnames }}
         echo "${full_hostname}"
         {{- else }}
-        getent hosts "${full_hostname}" | awk '{ print $1 ; exit }'
+        until getent hosts "${full_hostname}"; do sleep 5; done | awk '{ print $1 ; exit }';
         {{- end }}
     }
 
@@ -278,7 +278,7 @@ data:
         {{- if .Values.useHostnames }}
         echo "${full_hostname}"
         {{- else }}
-        getent hosts "${full_hostname}" | awk '{ print $1 ; exit }'
+        until getent hosts "${full_hostname}"; do sleep 5; done | awk '{ print $1 ; exit }';
         {{- end }}
     }
 
@@ -448,7 +448,7 @@ data:
         {{- if .Values.useHostnames }}
         echo "${full_hostname}"
         {{- else }}
-        getent hosts "${full_hostname}" | awk '{ print $1 ; exit }'
+        until getent hosts "${full_hostname}"; do sleep 5; done | awk '{ print $1 ; exit }';
         {{- end }}
     }
 
@@ -521,7 +521,7 @@ data:
         {{- if .Values.useHostnames }}
         echo "${full_hostname}"
         {{- else }}
-        getent hosts "${full_hostname}" | awk '{ print $1 ; exit }'
+        until getent hosts "${full_hostname}"; do sleep 5; done | awk '{ print $1 ; exit }';
         {{- end }}
     }
 
@@ -650,7 +650,7 @@ data:
         {{- if .Values.useHostnames }}
         echo "${full_hostname}"
         {{- else }}
-        getent hosts "${full_hostname}" | awk '{ print $1 ; exit }'
+        until getent hosts "${full_hostname}"; do sleep 5; done | awk '{ print $1 ; exit }';
         {{- end }}
     }
 
