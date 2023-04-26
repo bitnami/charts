@@ -101,25 +101,28 @@ spec:
         - name: volume-permissions
           image: {{ include "clickhouse.volumePermissions.image" $ }}
           imagePullPolicy: {{ $.Values.volumePermissions.image.pullPolicy | quote }}
-          command: |
-            mkdir -p /bitnami/clickhouse/data
-            chmod 700 /bitnami/clickhouse/data
-            {{- if $.Values.keeper.enabled }}
-            mkdir -p /bitnami/clickhouse/keeper
-            chmod 700 /bitnami/clickhouse/keeper
-            {{- end }}
-            chown {{ $.Values.containerSecurityContext.runAsUser }}:{{ $.Values.podSecurityContext.fsGroup }} /bitnami/clickhouse
-            find /bitnami/clickhouse -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | \
-            xargs -r chown -R {{ $.Values.containerSecurityContext.runAsUser }}:{{ $.Values.podSecurityContext.fsGroup }}
-            {{- if $.Values.tls.enabled }}
-            cp /tmp/certs/* /opt/bitnami/clickhouse/certs/
-            {{- if eq ( toString ( $.Values.volumePermissions.containerSecurityContext.runAsUser )) "auto" }}
-            chown -R `id -u`:`id -G | cut -d " " -f2` /opt/bitnami/clickhouse/certs/
-            {{- else }}
-            chown -R {{ $.Values.containerSecurityContext.runAsUser }}:{{ $.Values.podSecurityContext.fsGroup }} /opt/bitnami/clickhouse/certs/
-            {{- end }}
-            chmod 600 {{ include "clickhouse.tlsCertKey" $ }}
-            {{- end }}
+          command:
+            - /bin/sh
+            - -ec
+            - |
+              mkdir -p /bitnami/clickhouse/data
+              chmod 700 /bitnami/clickhouse/data
+              {{- if $.Values.keeper.enabled }}
+              mkdir -p /bitnami/clickhouse/keeper
+              chmod 700 /bitnami/clickhouse/keeper
+              {{- end }}
+              chown {{ $.Values.containerSecurityContext.runAsUser }}:{{ $.Values.podSecurityContext.fsGroup }} /bitnami/clickhouse
+              find /bitnami/clickhouse -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | \
+              xargs -r chown -R {{ $.Values.containerSecurityContext.runAsUser }}:{{ $.Values.podSecurityContext.fsGroup }}
+              {{- if $.Values.tls.enabled }}
+              cp /tmp/certs/* /opt/bitnami/clickhouse/certs/
+              {{- if eq ( toString ( $.Values.volumePermissions.containerSecurityContext.runAsUser )) "auto" }}
+              chown -R `id -u`:`id -G | cut -d " " -f2` /opt/bitnami/clickhouse/certs/
+              {{- else }}
+              chown -R {{ $.Values.containerSecurityContext.runAsUser }}:{{ $.Values.podSecurityContext.fsGroup }} /opt/bitnami/clickhouse/certs/
+              {{- end }}
+              chmod 600 {{ include "clickhouse.tlsCertKey" $ }}
+              {{- end }}
           {{- if $.Values.containerSecurityContext.enabled }}
           securityContext: {{- omit $.Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
