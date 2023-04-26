@@ -126,6 +126,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraContainerPorts`                         | Array of additional container ports for the Nginx container                               | `[]`            |
 | `resources.limits`                            | The resources limits for the NGINX container                                              | `{}`            |
 | `resources.requests`                          | The requested resources for the NGINX container                                           | `{}`            |
+| `syncer.resources.limits`                     | The resources limits for the Syncer-container                                             | `{}`            |
+| `syncer.resources.requests`                   | The requested resources for the Syncer-container                                          | `{}`            |
 | `lifecycleHooks`                              | Optional lifecycleHooks for the NGINX container                                           | `{}`            |
 | `startupProbe.enabled`                        | Enable startupProbe                                                                       | `false`         |
 | `startupProbe.initialDelaySeconds`            | Initial delay seconds for startupProbe                                                    | `30`            |
