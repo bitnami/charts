@@ -1,5 +1,4 @@
 server:
-  type: LoadBalancer
   command:
     - /bin/bash
   args:
@@ -75,6 +74,7 @@ server:
     http: 8100
     internal: 8300
   service:
+    type: LoadBalancer
     ports:
       http: 80
       internal: 8600
@@ -97,6 +97,13 @@ server:
   persistence:
     enabled: true
     mountPath: /vib-vault/test
+  # We need to add /tmp for GOSS tests
+  extraVolumes:
+    - name: tmp
+      emptyDir: {}
+  extraVolumeMounts:
+    - name: tmp
+      mountPath: /tmp
 injector:
   service:
     ports:
