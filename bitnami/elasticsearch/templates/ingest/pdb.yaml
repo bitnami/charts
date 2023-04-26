@@ -1,4 +1,4 @@
-{{- if and (include "elasticsearch.ingest.enabled" .) .Values.ingest.pdb.create }}
+{{- if and ( include "elasticsearch.ingest.enabled" . ) .Values.ingest.pdb.create }}
 apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
 kind: PodDisruptionBudget
 metadata:
@@ -9,6 +9,7 @@ metadata:
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
     {{- end }}
+  {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
@@ -18,6 +19,7 @@ spec:
   {{- if .Values.ingest.pdb.maxUnavailable }}
   maxUnavailable: {{ .Values.ingest.pdb.maxUnavailable }}
   {{- end }}
-  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
-    app.kubernetes.io/component: ingest
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: ingest
 {{- end }}
