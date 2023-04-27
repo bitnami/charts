@@ -65,6 +65,11 @@ If release name contains chart name it will be used as a full name.
 {{- printf "%s-thanos" (include "kube-prometheus.prometheus.fullname" .) -}}
 {{- end -}}
 
+{{/* Fullname suffixed with config-reloader */}}
+{{- define "kube-prometheus.configReloader.fullname" -}}
+{{- printf "%s-config-reloader" (include "kube-prometheus.prometheus.fullname" .) -}}
+{{- end -}}
+
 {{/*
 Labels for operator
 */}}

@@ -5,7 +5,7 @@ apiVersion: v2
 appVersion: 8.7.0
 dependencies:
   - name: common
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     tags:
       - bitnami-common
     version: 2.x.x
@@ -25,4 +25,4 @@ name: kibana
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/kibana
   - https://www.elastic.co/products/kibana
-version: 10.2.18
+version: 10.3.0

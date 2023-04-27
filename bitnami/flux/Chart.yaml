@@ -5,7 +5,7 @@ apiVersion: v2
 appVersion: 0.36.1
 dependencies:
   - name: common
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     tags:
       - bitnami-common
     version: 2.x.x
@@ -31,4 +31,4 @@ sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/fluxcd-image-automation-controller
   - https://github.com/bitnami/containers/tree/main/bitnami/fluxcd-image-reflector-controller
   - https://github.com/fluxcd
-version: 0.1.2
+version: 0.2.0

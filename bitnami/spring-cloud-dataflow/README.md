@@ -9,8 +9,7 @@ Spring Cloud Data Flow is a microservices-based toolkit for building streaming a
 ## TL;DR
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/spring-cloud-dataflow
+helm install my-release oci://registry-1.docker.io/bitnamicharts/spring-cloud-dataflow
 ```
 
 ## Introduction
@@ -30,8 +29,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/spring-cloud-dataflow
+helm install my-release oci://registry-1.docker.io/bitnamicharts/spring-cloud-dataflow
 ```
 
 These commands deploy Spring Cloud Data Flow on the Kubernetes cluster with the default configuration. The [parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -447,7 +445,6 @@ helm uninstall my-release
 | `kafka.enabled`                       | Enable/disable Kafka chart installation | `false`          |
 | `kafka.replicaCount`                  | Number of Kafka brokers                 | `1`              |
 | `kafka.offsetsTopicReplicationFactor` | Kafka Secret Key                        | `1`              |
-| `kafka.zookeeper.replicaCount`        | Number of Zookeeper replicas            | `1`              |
 | `externalKafka.enabled`               | Enable/disable external Kafka           | `false`          |
 | `externalKafka.brokers`               | External Kafka brokers                  | `localhost:9092` |
 | `externalKafka.zkNodes`               | External Zookeeper nodes                | `localhost:2181` |
@@ -455,7 +452,7 @@ helm uninstall my-release
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-helm install my-release --set server.replicaCount=2 my-repo/spring-cloud-dataflow
+helm install my-release --set server.replicaCount=2 oci://registry-1.docker.io/bitnamicharts/spring-cloud-dataflow
 ```
 
 The above command installs Spring Cloud Data Flow chart with 2 Dataflow server replicas.
@@ -463,7 +460,7 @@ The above command installs Spring Cloud Data Flow chart with 2 Dataflow server r
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml my-repo/spring-cloud-dataflow
+helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/spring-cloud-dataflow
 ```
 
 > **Tip**: You can use the default [values.yaml](https://github.com/bitnami/charts/blob/main/bitnami/spring-cloud-dataflow/values.yaml)
@@ -659,6 +656,14 @@ Find more information about how to deal with common errors related to Bitnami He
 
 If you enabled RabbitMQ chart to be used as the messaging solution for Skipper to manage streaming content, then it's necessary to set the `rabbitmq.auth.password` and `rabbitmq.auth.erlangCookie` parameters when upgrading for readiness/liveness probes to work properly. Inspect the RabbitMQ secret to obtain the password and the Erlang cookie, then you can upgrade your chart using the command below:
 
+### To 18.0.0
+
+This major updates the Kafka subchart to its newest major, 22.0.0. This new version of Kafka uses Kraft by default. For more information on this subchart's major, please refer to [Kafka upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/kafka#to-2200).
+
+### To 17.0.0
+
+This major release bumps the MariaDB version to 10.11. Follow the [upstream instructions](https://mariadb.com/kb/en/upgrading-from-mariadb-10-6-to-mariadb-10-11/) for upgrading from MariaDB 10.6 to 10.11. No major issues are expected during the upgrade.
+
 ### To 16.0.0
 
 This major updates the Kafka subchart to its newest major, 21.0.0. [Here](https://github.com/bitnami/charts/tree/main/bitnami/kafka#to-2100) you can find more information about the changes introduced in that version.
@@ -716,7 +721,7 @@ To upgrade to *6.0.0* from *5.x* using Kafka as messaging solution, it should be
 
     ```console
     $ export CURRENT_KAFKA_VERSION=$(kubectl exec scdf-kafka-0 -- bash -c 'echo $BITNAMI_IMAGE_VERSION')
-    helm upgrade scdf my-repo/spring-cloud-dataflow \
+    helm upgrade scdf oci://registry-1.docker.io/bitnamicharts/spring-cloud-dataflow \
       --set rabbitmq.enabled=false \
       --set kafka.enabled=true \
       --set kafka.image.tag=$CURRENT_KAFKA_VERSION \
@@ -770,13 +775,13 @@ This major updates the Kafka subchart to its newest major 13.0.0. For more infor
 ### v0.x.x
 
 ```console
-helm upgrade my-release my-repo/spring-cloud-dataflow --set mariadb.rootUser.password=[MARIADB_ROOT_PASSWORD] --set rabbitmq.auth.password=[RABBITMQ_PASSWORD] --set rabbitmq.auth.erlangCookie=[RABBITMQ_ERLANG_COOKIE]
+helm upgrade my-release oci://registry-1.docker.io/bitnamicharts/spring-cloud-dataflow --set mariadb.rootUser.password=[MARIADB_ROOT_PASSWORD] --set rabbitmq.auth.password=[RABBITMQ_PASSWORD] --set rabbitmq.auth.erlangCookie=[RABBITMQ_ERLANG_COOKIE]
 ```
 
 ### v1.x.x
 
 ```console
-helm upgrade my-release my-repo/spring-cloud-dataflow --set mariadb.auth.rootPassword=[MARIADB_ROOT_PASSWORD] --set rabbitmq.auth.password=[RABBITMQ_PASSWORD] --set rabbitmq.auth.erlangCookie=[RABBITMQ_ERLANG_COOKIE]
+helm upgrade my-release oci://registry-1.docker.io/bitnamicharts/spring-cloud-dataflow --set mariadb.auth.rootPassword=[MARIADB_ROOT_PASSWORD] --set rabbitmq.auth.password=[RABBITMQ_PASSWORD] --set rabbitmq.auth.erlangCookie=[RABBITMQ_ERLANG_COOKIE]
 ```
 
 ### To 1.0.0
@@ -800,7 +805,7 @@ export RABBITMQ_ERLANG_COOKIE=$(kubectl get secret --namespace default dataflow-
 Upgrade your release (maintaining the version) disabling MariaDB and scaling Data Flow replicas to 0:
 
 ```console
-helm upgrade dataflow my-repo/spring-cloud-dataflow --version 0.7.4 \
+helm upgrade dataflow oci://registry-1.docker.io/bitnamicharts/spring-cloud-dataflow --version 0.7.4 \
   --set server.replicaCount=0 \
   --set skipper.replicaCount=0 \
   --set mariadb.enabled=false \
@@ -811,7 +816,7 @@ helm upgrade dataflow my-repo/spring-cloud-dataflow --version 0.7.4 \
 Finally, upgrade you release to 1.0.0 reusing the existing PVC, and enabling back MariaDB:
 
 ```console
-helm upgrade dataflow my-repo/spring-cloud-dataflow \
+helm upgrade dataflow oci://registry-1.docker.io/bitnamicharts/spring-cloud-dataflow \
   --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC \
   --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD \
   --set mariadb.auth.password=$MARIADB_PASSWORD \
