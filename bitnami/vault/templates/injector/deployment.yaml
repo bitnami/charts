@@ -22,6 +22,7 @@ spec:
   {{- end }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/part-of: vault
       app.kubernetes.io/component: injector
   template:
     metadata:
@@ -29,6 +30,7 @@ spec:
       annotations: {{- include "common.tplvalues.render" (dict "value" .Values.injector.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
       labels: {{- include "common.labels.standard" . | nindent 8 }}
+        app.kubernetes.io/part-of: vault
         app.kubernetes.io/component: injector
         {{- if .Values.injector.podLabels }}
         {{- include "common.tplvalues.render" (dict "value" .Values.injector.podLabels "context" $) | nindent 8 }}

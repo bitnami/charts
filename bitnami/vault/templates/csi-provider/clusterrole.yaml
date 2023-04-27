@@ -1,9 +1,8 @@
-{{- if and .Values.injector.enabled .Values.injector.rbac.create }}
+{{- if and .Values.csiProvider.enabled .Values.csiProvider.rbac.create }}
 kind: ClusterRole
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 metadata:
   name: {{ include "vault.csi-provider.fullname.namespace" . }}
-  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/part-of: vault
     app.kubernetes.io/component: csi-provider

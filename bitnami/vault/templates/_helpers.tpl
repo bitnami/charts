@@ -6,28 +6,28 @@ Return the proper Docker Image Registry Secret Names
 {{- end -}}
 
 {{/*
-Return the proper Helm Controller fullname
+Return the proper Vault Server fullname
 */}}
 {{- define "vault.server.fullname" -}}
 {{- printf "%s-%s" (include "common.names.fullname" .) "server" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
-Return the proper Helm Controller fullname (with namespace)
+Return the proper Vault Server fullname (with namespace)
 */}}
 {{- define "vault.server.fullname.namespace" -}}
 {{- printf "%s-%s" (include "common.names.fullname.namespace" .) "server" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
-Return the proper Helm Controller image name
+Return the proper Vault Server image name
 */}}
 {{- define "vault.server.image" -}}
 {{ include "common.images.image" (dict "imageRoot" .Values.server.image "global" .Values.global) }}
 {{- end -}}
 
 {{/*
-Create the name of the service account to use (Helm Controller)
+Create the name of the service account to use (Vault Server)
 */}}
 {{- define "vault.server.serviceAccountName" -}}
 {{- if .Values.server.serviceAccount.create -}}
@@ -49,14 +49,14 @@ Name of the server ConfigMap
 {{- end -}}
 
 {{/*
-Return the proper Image Reflector Controller fullname
+Return the proper Vault Kubernetes Injector fullname
 */}}
 {{- define "vault.injector.fullname" -}}
 {{- printf "%s-%s" (include "common.names.fullname" .) "injector" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
-Return the proper Image Reflector Controller fullname (with namespace)
+Return the proper Vault Kubernetes Injector fullname (with namespace)
 (removing image- prefix to avoid name length issues)
 */}}
 {{- define "vault.injector.fullname.namespace" -}}
@@ -64,14 +64,14 @@ Return the proper Image Reflector Controller fullname (with namespace)
 {{- end -}}
 
 {{/*
-Return the proper Image Reflector Controller image name
+Return the proper Vault Kubernetes Injector image name
 */}}
 {{- define "vault.injector.image" -}}
 {{ include "common.images.image" (dict "imageRoot" .Values.injector.image "global" .Values.global) }}
 {{- end -}}
 
 {{/*
-Create the name of the service account to use (Image Reflector Controller)
+Create the name of the service account to use (Vault Kubernetes Injector)
 */}}
 {{- define "vault.injector.serviceAccountName" -}}
 {{- if .Values.injector.serviceAccount.create -}}
@@ -82,28 +82,28 @@ Create the name of the service account to use (Image Reflector Controller)
 {{- end -}}
 
 {{/*
-Return the proper Image Automation Controller fullname
+Return the proper Vault CSI Provider fullname
 */}}
 {{- define "vault.csi-provider.fullname" -}}
 {{- printf "%s-%s" (include "common.names.fullname" .) "csi-provider" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
-Return the proper Image Automation Controller fullname (with namespace)
+Return the proper Vault CSI Provider fullname (with namespace)
 */}}
 {{- define "vault.csi-provider.fullname.namespace" -}}
 {{- printf "%s-%s" (include "common.names.fullname.namespace" .) "csi-provider" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
-Return the proper Image Automation Controller image name
+Return the proper Vault CSI Provider image name
 */}}
 {{- define "vault.csi-provider.image" -}}
 {{ include "common.images.image" (dict "imageRoot" .Values.csiProvider.image "global" .Values.global) }}
 {{- end -}}
 
 {{/*
-Create the name of the service account to use (Image Automation Controller)
+Create the name of the service account to use (Vault CSI Provider)
 */}}
 {{- define "vault.csi-provider.serviceAccountName" -}}
 {{- if .Values.csiProvider.serviceAccount.create -}}
@@ -132,7 +132,7 @@ Return the proper image name (for the init container volume-permissions image)
 {{- end -}}
 
 {{/*
-Validate values for flux.
+Validate values for Vault.
 */}}
 {{- define "vault.validateValues" -}}
 {{- $messages := list -}}

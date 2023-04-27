@@ -68,7 +68,7 @@ server:
   ##
   enabled: true
   ## Bitnami Vault Server image
-  ## ref: https://hub.docker.com/r/bitnami/fluxcd-server/tags/
+  ## ref: https://hub.docker.com/r/bitnami/vault/tags/
   ## @param server.image.registry Vault Server image registry
   ## @param server.image.repository Vault Server image repository
   ## @param server.image.tag Vault Server image tag (immutable tags are recommended)
@@ -614,7 +614,6 @@ server:
   ##
   persistence:
     ## @param server.persistence.enabled Enable persistence using Persistent Volume Claims
-    ## (NOTE: Disabled by default in upstream flux configuration)
     ##
     enabled: true
     ## @param server.persistence.mountPath Persistent Volume mount root path
@@ -718,7 +717,7 @@ csiProvider:
   ##
   enabled: false
   ## Bitnami Vault CSI Provider image
-  ## ref: https://hub.docker.com/r/bitnami/fluxcd-csi-provider/tags/
+  ## ref: https://hub.docker.com/r/bitnami/vault-csi-provider/tags/
   ## @param csiProvider.image.registry Vault CSI Provider image registry
   ## @param csiProvider.image.repository Vault CSI Provider image repository
   ## @param csiProvider.image.tag Vault CSI Provider image tag (immutable tags are recommended)
@@ -791,16 +790,6 @@ csiProvider:
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
   podAntiAffinityPreset: soft
-  ## Pod Disruption Budget configuration
-  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
-  ## @param csiProvider.pdb.create Enable/disable a Pod Disruption Budget creation
-  ## @param csiProvider.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
-  ## @param csiProvider.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
-  ##
-  pdb:
-    create: false
-    minAvailable: 1
-    maxUnavailable: ""
   ## Node csiProvider.affinity preset
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
   ##
@@ -1163,7 +1152,7 @@ injector:
   ##
   enabled: true
   ## Bitnami Vault Kubernetes Injector image
-  ## ref: https://hub.docker.com/r/bitnami/vault-server/tags/
+  ## ref: https://hub.docker.com/r/bitnami/vault-k8s/tags/
   ## @param injector.image.registry Vault Kubernetes Injector image registry
   ## @param injector.image.repository Vault Kubernetes Injector image repository
   ## @param injector.image.tag Vault Kubernetes Injector image tag (immutable tags are recommended)
