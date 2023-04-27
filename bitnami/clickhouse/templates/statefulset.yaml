@@ -123,7 +123,7 @@ spec:
               {{- end }}
               chmod 600 {{ include "clickhouse.tlsCertKey" $ }}
               {{- end }}
-          securityContext: {{ $.Values.volumePermissions.containerSecurityContext | toYaml | nindent 12 }}
+          securityContext: {{- include "common.tplvalues.render" (dict "value" $.Values.volumePermissions.containerSecurityContext "context" $) | nindent 12 }}
           {{- if $.Values.volumePermissions.resources }}
           resources: {{- toYaml $.Values.volumePermissions.resources | nindent 12 }}
           {{- end }}
