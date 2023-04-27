@@ -133,8 +133,8 @@ spec:
           {{- if .Values.cloneStaticSiteFromGit.gitSync.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.cloneStaticSiteFromGit.gitSync.args "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.syncer.resources }}
-          resources: {{- toYaml .Values.syncer.resources | nindent 12 }}
+          {{- if .Values.cloneStaticSiteFromGit.gitSync.resources }}
+          resources: {{- toYaml .Values.cloneStaticSiteFromGit.gitSync.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: staticsite
