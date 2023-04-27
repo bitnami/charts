@@ -10,10 +10,10 @@ metadata:
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
-  {{- if or .Values.server.service.annotations .Values.commonAnnotations }}
+  {{- if or .Values.server.service.general.annotations .Values.commonAnnotations }}
   annotations:
-    {{- if .Values.server.service.annotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.server.service.annotations "context" $) | nindent 4 }}
+    {{- if .Values.server.service.general.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.server.service.general.annotations "context" $) | nindent 4 }}
     {{- end }}
     {{- if and .Values.server.metrics.enabled .Values.server.metrics.annotations }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.server.metrics.annotations "context" $) | nindent 4 }}
@@ -23,46 +23,46 @@ metadata:
     {{- end }}
   {{- end }}
 spec:
-  type: {{ .Values.server.service.type }}
-  {{- if and .Values.server.service.clusterIP (eq .Values.server.service.type "ClusterIP") }}
-  clusterIP: {{ .Values.server.service.clusterIP }}
+  type: {{ .Values.server.service.general.type }}
+  {{- if and .Values.server.service.general.clusterIP (eq .Values.server.service.general.type "ClusterIP") }}
+  clusterIP: {{ .Values.server.service.general.clusterIP }}
   {{- end }}
-  {{- if .Values.server.service.sessionAffinity }}
-  sessionAffinity: {{ .Values.server.service.sessionAffinity }}
+  {{- if .Values.server.service.general.sessionAffinity }}
+  sessionAffinity: {{ .Values.server.service.general.sessionAffinity }}
   {{- end }}
-  {{- if .Values.server.service.sessionAffinityConfig }}
-  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.server.service.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- if .Values.server.service.general.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.server.service.general.sessionAffinityConfig "context" $) | nindent 4 }}
   {{- end }}
-  {{- if or (eq .Values.server.service.type "LoadBalancer") (eq .Values.server.service.type "NodePort") }}
-  externalTrafficPolicy: {{ .Values.server.service.externalTrafficPolicy | quote }}
+  {{- if or (eq .Values.server.service.general.type "LoadBalancer") (eq .Values.server.service.general.type "NodePort") }}
+  externalTrafficPolicy: {{ .Values.server.service.general.externalTrafficPolicy | quote }}
   {{- end }}
-  {{- if and (eq .Values.server.service.type "LoadBalancer") (not (empty .Values.server.service.loadBalancerSourceRanges)) }}
-  loadBalancerSourceRanges: {{ .Values.server.service.loadBalancerSourceRanges }}
+  {{- if and (eq .Values.server.service.general.type "LoadBalancer") (not (empty .Values.server.service.general.loadBalancerSourceRanges)) }}
+  loadBalancerSourceRanges: {{ .Values.server.service.general.loadBalancerSourceRanges }}
   {{- end }}
-  {{- if and (eq .Values.server.service.type "LoadBalancer") (not (empty .Values.server.service.loadBalancerIP)) }}
-  loadBalancerIP: {{ .Values.server.service.loadBalancerIP }}
+  {{- if and (eq .Values.server.service.general.type "LoadBalancer") (not (empty .Values.server.service.general.loadBalancerIP)) }}
+  loadBalancerIP: {{ .Values.server.service.general.loadBalancerIP }}
   {{- end }}
   ports:
     - name: http
-      port: {{ .Values.server.service.ports.http }}
+      port: {{ .Values.server.service.general.ports.http }}
       protocol: TCP
-      {{- if and (or (eq .Values.server.service.type "NodePort") (eq .Values.server.service.type "LoadBalancer")) (not (empty .Values.server.service.nodePorts.http)) }}
-      nodePort: {{ .Values.server.service.nodePorts.http }}
-      {{- else if eq .Values.server.service.type "ClusterIP" }}
+      {{- if and (or (eq .Values.server.service.general.type "NodePort") (eq .Values.server.service.general.type "LoadBalancer")) (not (empty .Values.server.service.general.nodePorts.http)) }}
+      nodePort: {{ .Values.server.service.general.nodePorts.http }}
+      {{- else if eq .Values.server.service.general.type "ClusterIP" }}
       nodePort: null
       {{- end }}
       targetPort: http
     - name: https-internal
-      port: {{ .Values.server.service.ports.internal }}
+      port: {{ .Values.server.service.general.ports.internal }}
       protocol: TCP
-      {{- if and (or (eq .Values.server.service.type "NodePort") (eq .Values.server.service.type "LoadBalancer")) (not (empty .Values.server.service.nodePorts.internal)) }}
-      nodePort: {{ .Values.server.service.nodePorts.internal }}
-      {{- else if eq .Values.server.service.type "ClusterIP" }}
+      {{- if and (or (eq .Values.server.service.general.type "NodePort") (eq .Values.server.service.general.type "LoadBalancer")) (not (empty .Values.server.service.general.nodePorts.internal)) }}
+      nodePort: {{ .Values.server.service.general.nodePorts.internal }}
+      {{- else if eq .Values.server.service.general.type "ClusterIP" }}
       nodePort: null
       {{- end }}
       targetPort: https-internal
-    {{- if .Values.server.service.extraPorts }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.server.service.extraPorts "context" $) | nindent 4 }}
+    {{- if .Values.server.service.general.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.server.service.general.extraPorts "context" $) | nindent 4 }}
     {{- end }}
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: server

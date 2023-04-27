@@ -33,7 +33,7 @@
         {
           "action_id": "health-check",
           "params": {
-            "endpoint": "lb-vault-server-http",
+            "endpoint": "lb-vault-server-active-http",
             "app_protocol": "HTTP"
           }
         },
@@ -58,7 +58,7 @@
             "resources": {
               "path": "/.vib/vault/cypress"
             },
-            "endpoint": "lb-vault-server-http",
+            "endpoint": "lb-vault-server-active-http",
             "app_protocol": "HTTP",
             "env": {
               "username": "vib-user",

@@ -74,10 +74,16 @@ server:
     http: 8100
     internal: 8300
   service:
-    type: LoadBalancer
-    ports:
-      http: 80
-      internal: 8600
+    active:
+      type: LoadBalancer
+      ports:
+        http: 80
+        internal: 8600
+    general:
+      type: ClusterIP
+      ports:
+        http: 8081
+        internal: 8700
   serviceAccount:
     create: true
     automountServiceAccountToken: true

@@ -18,10 +18,10 @@ spec:
   publishNotReadyAddresses: true
   ports:
     - name: http
-      port: {{ .Values.server.service.ports.http }}
+      port: {{ .Values.server.service.general.ports.http }}
       targetPort: http
     - name: https-internal
-      port: {{ .Values.server.service.ports.internal }}
+      port: {{ .Values.server.service.general.ports.internal }}
       targetPort: https-internal
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/part-of: vault

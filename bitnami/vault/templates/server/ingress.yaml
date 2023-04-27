@@ -35,7 +35,7 @@ spec:
             {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
             pathType: {{ .Values.server.ingress.pathType }}
             {{- end }}
-            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "vault.server.fullname" .) "servicePort" "http" "context" $)  | nindent 14 }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (printf "%s-active" (include "vault.server.fullname" .) | trunc 63 | trimSuffix "-") "servicePort" "http" "context" $)  | nindent 14 }}
     {{- end }}
     {{- range .Values.server.ingress.extraHosts }}
     - host: {{ .name | quote }}
@@ -45,7 +45,7 @@ spec:
             {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
             pathType: {{ default "ImplementationSpecific" .pathType }}
             {{- end }}
-            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "vault.sever.fullname" $) "servicePort" "http" "context" $) | nindent 14 }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (printf "%s-active" (include "vault.server.fullname" $) | trunc 63 | trimSuffix "-") "servicePort" "http" "context" $) | nindent 14 }}
     {{- end }}
     {{- if .Values.server.ingress.extraRules }}
     {{- include "common.tplvalues.render" (dict "value" .Values.server.ingress.extraRules "context" $) | nindent 4 }}

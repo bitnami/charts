@@ -156,35 +156,48 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Vault Server Traffic Exposure Parameters
 
-| Name                                      | Description                                                                                                                      | Value                    |
-| ----------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `server.service.type`                     | Vault Server service type                                                                                                        | `ClusterIP`              |
-| `server.service.ports.http`               | Vault Server service HTTP port                                                                                                   | `8200`                   |
-| `server.service.ports.internal`           | Vault Server internal port                                                                                                       | `8201`                   |
-| `server.service.nodePorts.http`           | Node port for HTTP                                                                                                               | `""`                     |
-| `server.service.nodePorts.internal`       | Node port for HTTP                                                                                                               | `""`                     |
-| `server.service.clusterIP`                | Vault Server service Cluster IP                                                                                                  | `""`                     |
-| `server.service.loadBalancerIP`           | Vault Server service Load Balancer IP                                                                                            | `""`                     |
-| `server.service.loadBalancerSourceRanges` | Vault Server service Load Balancer sources                                                                                       | `[]`                     |
-| `server.service.externalTrafficPolicy`    | Vault Server service external traffic policy                                                                                     | `Cluster`                |
-| `server.service.annotations`              | Additional custom annotations for Vault Server service                                                                           | `{}`                     |
-| `server.service.extraPorts`               | Extra ports to expose in Vault Server service (normally used with the `sidecars` value)                                          | `[]`                     |
-| `server.service.sessionAffinity`          | Control where web requests go, to the same pod or round-robin                                                                    | `None`                   |
-| `server.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
-| `server.ingress.enabled`                  | Enable ingress record generation for Vault                                                                                       | `false`                  |
-| `server.ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
-| `server.ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
-| `server.ingress.hostname`                 | Default host for the ingress record                                                                                              | `vault.local`            |
-| `server.ingress.ingressClassName`         | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
-| `server.ingress.path`                     | Default path for the ingress record                                                                                              | `/`                      |
-| `server.ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
-| `server.ingress.tls`                      | Enable TLS configuration for the host defined at `client.ingress.hostname` parameter                                             | `false`                  |
-| `server.ingress.selfSigned`               | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
-| `server.ingress.extraHosts`               | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                     |
-| `server.ingress.extraPaths`               | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                     |
-| `server.ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
-| `server.ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                     |
-| `server.ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
+| Name                                              | Description                                                                                                                      | Value                    |
+| ------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `server.service.general.type`                     | Vault Server service type                                                                                                        | `ClusterIP`              |
+| `server.service.general.ports.http`               | Vault Server service HTTP port                                                                                                   | `8200`                   |
+| `server.service.general.ports.internal`           | Vault Server internal port                                                                                                       | `8201`                   |
+| `server.service.general.nodePorts.http`           | Node port for HTTP                                                                                                               | `""`                     |
+| `server.service.general.nodePorts.internal`       | Node port for HTTP                                                                                                               | `""`                     |
+| `server.service.general.clusterIP`                | Vault Server service Cluster IP                                                                                                  | `""`                     |
+| `server.service.general.loadBalancerIP`           | Vault Server service Load Balancer IP                                                                                            | `""`                     |
+| `server.service.general.loadBalancerSourceRanges` | Vault Server service Load Balancer sources                                                                                       | `[]`                     |
+| `server.service.general.externalTrafficPolicy`    | Vault Server service external traffic policy                                                                                     | `Cluster`                |
+| `server.service.general.annotations`              | Additional custom annotations for Vault Server service                                                                           | `{}`                     |
+| `server.service.general.extraPorts`               | Extra ports to expose in Vault Server service (normally used with the `sidecars` value)                                          | `[]`                     |
+| `server.service.general.sessionAffinity`          | Control where web requests go, to the same pod or round-robin                                                                    | `None`                   |
+| `server.service.general.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
+| `server.service.active.type`                      | Vault Server service type                                                                                                        | `ClusterIP`              |
+| `server.service.active.ports.http`                | Vault Server service HTTP port                                                                                                   | `8200`                   |
+| `server.service.active.ports.internal`            | Vault Server internal port                                                                                                       | `8201`                   |
+| `server.service.active.nodePorts.http`            | Node port for HTTP                                                                                                               | `""`                     |
+| `server.service.active.nodePorts.internal`        | Node port for HTTP                                                                                                               | `""`                     |
+| `server.service.active.clusterIP`                 | Vault Server service Cluster IP                                                                                                  | `""`                     |
+| `server.service.active.loadBalancerIP`            | Vault Server service Load Balancer IP                                                                                            | `""`                     |
+| `server.service.active.loadBalancerSourceRanges`  | Vault Server service Load Balancer sources                                                                                       | `[]`                     |
+| `server.service.active.externalTrafficPolicy`     | Vault Server service external traffic policy                                                                                     | `Cluster`                |
+| `server.service.active.annotations`               | Additional custom annotations for Vault Server service                                                                           | `{}`                     |
+| `server.service.active.extraPorts`                | Extra ports to expose in Vault Server service (normally used with the `sidecars` value)                                          | `[]`                     |
+| `server.service.active.sessionAffinity`           | Control where web requests go, to the same pod or round-robin                                                                    | `None`                   |
+| `server.service.active.sessionAffinityConfig`     | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
+| `server.ingress.enabled`                          | Enable ingress record generation for Vault                                                                                       | `false`                  |
+| `server.ingress.pathType`                         | Ingress path type                                                                                                                | `ImplementationSpecific` |
+| `server.ingress.apiVersion`                       | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
+| `server.ingress.hostname`                         | Default host for the ingress record                                                                                              | `vault.local`            |
+| `server.ingress.ingressClassName`                 | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
+| `server.ingress.path`                             | Default path for the ingress record                                                                                              | `/`                      |
+| `server.ingress.annotations`                      | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
+| `server.ingress.tls`                              | Enable TLS configuration for the host defined at `client.ingress.hostname` parameter                                             | `false`                  |
+| `server.ingress.selfSigned`                       | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                  |
+| `server.ingress.extraHosts`                       | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                     |
+| `server.ingress.extraPaths`                       | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                     |
+| `server.ingress.extraTls`                         | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
+| `server.ingress.secrets`                          | Custom TLS certificates as secrets                                                                                               | `[]`                     |
+| `server.ingress.extraRules`                       | Additional rules to be covered with this ingress record                                                                          | `[]`                     |
 
 ### Vault Server RBAC Parameters
 

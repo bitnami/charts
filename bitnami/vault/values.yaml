@@ -228,9 +228,11 @@ server:
       }
       {{- end }}
     }
-    storage "file" {
+    storage "raft" {
       path = "{{ .Values.server.persistence.mountPath }}"
     }
+
+    service_registration "kubernetes" {}
 
   ## @param server.existingConfigMap name of a ConfigMap with existing configuration for the server
   ##
@@ -363,60 +365,116 @@ server:
   ## @section Vault Server Traffic Exposure Parameters
   ##
   service:
-    ## @param server.service.type Vault Server service type
-    ##
-    type: ClusterIP
-    ## @param server.service.ports.http Vault Server service HTTP port
-    ## @param server.service.ports.internal Vault Server internal port
-    ##
-    ports:
-      http: 8200
-      internal: 8201
-    ## Node ports to expose
-    ## @param server.service.nodePorts.http Node port for HTTP
-    ## @param server.service.nodePorts.internal Node port for HTTP
-    ## NOTE: choose port between <30000-32767>
-    ##
-    nodePorts:
-      http: ""
-      internal: ""
-    ## @param server.service.clusterIP Vault Server service Cluster IP
-    ## e.g.:
-    ## clusterIP: None
-    ##
-    clusterIP: ""
-    ## @param server.service.loadBalancerIP Vault Server service Load Balancer IP
-    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
-    ##
-    loadBalancerIP: ""
-    ## @param server.service.loadBalancerSourceRanges Vault Server service Load Balancer sources
-    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
-    ## e.g:
-    ## loadBalancerSourceRanges:
-    ##   - 10.10.10.0/24
-    ##
-    loadBalancerSourceRanges: []
-    ## @param server.service.externalTrafficPolicy Vault Server service external traffic policy
-    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-web-source-ip
-    ##
-    externalTrafficPolicy: Cluster
-    ## @param server.service.annotations Additional custom annotations for Vault Server service
-    ##
-    annotations: {}
-    ## @param server.service.extraPorts Extra ports to expose in Vault Server service (normally used with the `sidecars` value)
-    ##
-    extraPorts: []
-    ## @param server.service.sessionAffinity Control where web requests go, to the same pod or round-robin
-    ## Values: WebIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
-    ##
-    sessionAffinity: None
-    ## @param server.service.sessionAffinityConfig Additional settings for the sessionAffinity
-    ## sessionAffinityConfig:
-    ##   webIP:
-    ##     timeoutSeconds: 300
-    ##
-    sessionAffinityConfig: {}
+    general:
+      ## @param server.service.general.type Vault Server service type
+      ##
+      type: ClusterIP
+      ## @param server.service.general.ports.http Vault Server service HTTP port
+      ## @param server.service.general.ports.internal Vault Server internal port
+      ##
+      ports:
+        http: 8200
+        internal: 8201
+      ## Node ports to expose
+      ## @param server.service.general.nodePorts.http Node port for HTTP
+      ## @param server.service.general.nodePorts.internal Node port for HTTP
+      ## NOTE: choose port between <30000-32767>
+      ##
+      nodePorts:
+        http: ""
+        internal: ""
+      ## @param server.service.general.clusterIP Vault Server service Cluster IP
+      ## e.g.:
+      ## clusterIP: None
+      ##
+      clusterIP: ""
+      ## @param server.service.general.loadBalancerIP Vault Server service Load Balancer IP
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+      ##
+      loadBalancerIP: ""
+      ## @param server.service.general.loadBalancerSourceRanges Vault Server service Load Balancer sources
+      ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+      ## e.g:
+      ## loadBalancerSourceRanges:
+      ##   - 10.10.10.0/24
+      ##
+      loadBalancerSourceRanges: []
+      ## @param server.service.general.externalTrafficPolicy Vault Server service external traffic policy
+      ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-web-source-ip
+      ##
+      externalTrafficPolicy: Cluster
+      ## @param server.service.general.annotations Additional custom annotations for Vault Server service
+      ##
+      annotations: {}
+      ## @param server.service.general.extraPorts Extra ports to expose in Vault Server service (normally used with the `sidecars` value)
+      ##
+      extraPorts: []
+      ## @param server.service.general.sessionAffinity Control where web requests go, to the same pod or round-robin
+      ## Values: WebIP or None
+      ## ref: https://kubernetes.io/docs/user-guide/services/
+      ##
+      sessionAffinity: None
+      ## @param server.service.general.sessionAffinityConfig Additional settings for the sessionAffinity
+      ## sessionAffinityConfig:
+      ##   webIP:
+      ##     timeoutSeconds: 300
+      ##
+      sessionAffinityConfig: {}
+    active:
+      ## @param server.service.active.type Vault Server service type
+      ##
+      type: ClusterIP
+      ## @param server.service.active.ports.http Vault Server service HTTP port
+      ## @param server.service.active.ports.internal Vault Server internal port
+      ##
+      ports:
+        http: 8200
+        internal: 8201
+      ## Node ports to expose
+      ## @param server.service.active.nodePorts.http Node port for HTTP
+      ## @param server.service.active.nodePorts.internal Node port for HTTP
+      ## NOTE: choose port between <30000-32767>
+      ##
+      nodePorts:
+        http: ""
+        internal: ""
+      ## @param server.service.active.clusterIP Vault Server service Cluster IP
+      ## e.g.:
+      ## clusterIP: None
+      ##
+      clusterIP: ""
+      ## @param server.service.active.loadBalancerIP Vault Server service Load Balancer IP
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+      ##
+      loadBalancerIP: ""
+      ## @param server.service.active.loadBalancerSourceRanges Vault Server service Load Balancer sources
+      ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+      ## e.g:
+      ## loadBalancerSourceRanges:
+      ##   - 10.10.10.0/24
+      ##
+      loadBalancerSourceRanges: []
+      ## @param server.service.active.externalTrafficPolicy Vault Server service external traffic policy
+      ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-web-source-ip
+      ##
+      externalTrafficPolicy: Cluster
+      ## @param server.service.active.annotations Additional custom annotations for Vault Server service
+      ##
+      annotations: {}
+      ## @param server.service.active.extraPorts Extra ports to expose in Vault Server service (normally used with the `sidecars` value)
+      ##
+      extraPorts: []
+      ## @param server.service.active.sessionAffinity Control where web requests go, to the same pod or round-robin
+      ## Values: WebIP or None
+      ## ref: https://kubernetes.io/docs/user-guide/services/
+      ##
+      sessionAffinity: None
+      ## @param server.service.active.sessionAffinityConfig Additional settings for the sessionAffinity
+      ## sessionAffinityConfig:
+      ##   webIP:
+      ##     timeoutSeconds: 300
+      ##
+      sessionAffinityConfig: {}
 
   ## ref: http://kubernetes.io/docs/user-guide/ingress/
   ##
@@ -604,7 +662,7 @@ server:
     ## @param server.metrics.annotations [object] Annotations for the server service in order to scrape metrics
     annotations:
       prometheus.io/scrape: "true"
-      prometheus.io/port: "{{ .Values.server.service.ports.http }}"
+      prometheus.io/port: "{{ .Values.server.service.general.ports.http }}"
     ## Prometheus Operator ServiceMonitor configuration
     ##
     serviceMonitor:
@@ -695,7 +753,7 @@ csiProvider:
   ##
   config: |
     vault {
-        "address" = "http://{{ include "vault.server.fullname" }}:{{ .Values.server.service.ports.http }}
+        "address" = "http://{{ include "vault.server.fullname" }}:{{ .Values.server.service.general.ports.http }}
     }
 
     cache {}
