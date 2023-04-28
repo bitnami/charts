@@ -112,11 +112,11 @@ spec:
             - -c
             - |
               {{- if .Values.discourse.plugins }}
-              pushd "/opt/bitnami/discourse" >/dev/null || exit
+              pushd "/opt/bitnami/discourse" >/dev/null || exit 1
               {{- range $plugin := .Values.discourse.plugins }}
               RAILS_ENV=production bundle exec rake plugin:install repo={{ $plugin }}
               {{- end }}
-              popd >/dev/null || exit
+              popd >/dev/null || exit 1
               {{- end }}
               /opt/bitnami/scripts/discourse/entrypoint.sh /opt/bitnami/scripts/discourse/run.sh
           {{- end }}

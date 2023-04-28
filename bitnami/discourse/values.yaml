@@ -256,6 +256,7 @@ discourse:
   skipInstall: false
   ## @param discourse.plugins List of plugins to be installed before the container initialization
   ## NOTE: This will be ignored if the values 'discourse.command' or 'discourse.args' are provided.
+  ## Additionally, consider increasing the value discourse.livenessProbe.initialDelaySeconds if the container restarts before the initialization finishes.
   ## e.g:
   ## plugins:
   ##   - https://github.com/discourse/discourse-oauth2-basic
