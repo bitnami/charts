@@ -255,7 +255,6 @@ resources:
   ##    cpu: 100m
   ##    memory: 128Mi
   requests: {}
-
 ## NGINX containers' lifecycleHooks
 ## ref: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/attach-handler-lifecycle-event/
@@ -465,6 +464,14 @@ cloneStaticSiteFromGit:
     ## @param cloneStaticSiteFromGit.gitSync.args Override default container args for git-repo-syncer
     ##
     args: []
+    ## git-repo-syncer resource requests and limits
+    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+    ## @param cloneStaticSiteFromGit.gitSync.resources.limits The resources limits for the git-repo-syncer container
+    ## @param cloneStaticSiteFromGit.gitSync.resources.requests The requested resources for the git-repo-syncer container
+    ##
+    resources:
+      limits: {}
+      requests: {}
   ## @param cloneStaticSiteFromGit.extraEnvVars Additional environment variables to set for the in the containers that clone static site from git
   ## E.g:
   ## extraEnvVars:
