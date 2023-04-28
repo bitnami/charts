@@ -130,8 +130,6 @@ spec:
           volumeMounts:
             - name: data
               mountPath: /bitnami/clickhouse
-            - name: config
-              mountPath: /bitnami/clickhouse/conf/default
             {{- if $.Values.tls.enabled }}
             - name: raw-certificates
               mountPath: /tmp/certs
