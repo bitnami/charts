@@ -38,7 +38,7 @@ Return the proper Mastodon tootctl media option to include follows
 */}}
 {{- define "mastodon.tootctlMediaManagement.includeFollows" -}}
     {{- if .Values.tootctlMediaManagement.includeFollows -}}
-    	{{- print --include-follows -}}	
+    	{{- print "--include-follows" -}}	
     {{- end -}}
 {{- end -}}
 

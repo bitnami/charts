@@ -1,7 +1,15 @@
+{{- if .Values.tootctlMediaManagement.enabled }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: tootctl-media-management-configmap
+  name: {{ template "mastodon.tootctlMediaManagement.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/part-of: mastodon
+    app.kubernetes.io/component: tootctlMediaManagement
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
 data:
   media-cache-manage.sh: |
     set -o errexit
@@ -19,16 +27,28 @@ data:
     eval "$(mastodon_runtime_env)"
     #List usage
     #tootctl media usage
-    
+    {{- if .Values.tootctlMediaManagement.removeAttachments }}
     #Attachements:
-    tootctl media remove --days=7
+    tootctl media remove --days={{ .Values.tootctlMediaManagement.removeAttachmentsDays }}
+    {{- end }}
+    {{- if .Values.tootctlMediaManagement.removeCustomEmoji }}
     #Remote Custom Emoji (remote)
     tootctl emoji purge --remote-only
+    {{- end }}
+    {{- if .Values.tootctlMediaManagement.removePreviewCards }}
     #Preview cards:
-    tootctl preview_cards remove --days=7
-    #Avatars and Deaders
-    tootctl media remove --prune-profiles --include-follows --days=7
-    #Headers only:
-    #tootctl media remove --remove-headers --include-follows --days=7
+    tootctl preview_cards remove --days={{ .Values.tootctlMediaManagement.removePreviewCardsDays }}
+    {{- end }}
+    {{- if .Values.tootctlMediaManagement.removeAvatars }}
+    #Avatars
+    tootctl media remove --prune-profiles {{ template "mastodon.tootctlMediaManagement.includeFollows" . }} --days={{ .Values.tootctlMediaManagement.removeAvatarsDays }}
+    {{- end }}
+    {{- if .Values.tootctlMediaManagement.removeHeaders }}
+    #Headers
+    tootctl media remove --remove-headers {{ template "mastodon.tootctlMediaManagement.includeFollows" . }} --days={{ .Values.tootctlMediaManagement.removeHeadersDays }}
+    {{- end }}
+    {{- if .Values.tootctlMediaManagement.removeOrphans }}
     #Orphaned files
     tootctl media remove-orphans
+    {{- end }}
+{{- end }}
