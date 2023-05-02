@@ -20,7 +20,7 @@ it('allows a user to add an item and register', () => {
     cy.get('#input-shipping-postcode').type(customer.newCustomer.postCode);
     cy.get('#input-shipping-zone').select(customer.newCustomer.zone);
   });
-  cy.get('#agree').click();
+  cy.get('#input-register-agree').click();
   cy.get('#button-register').click();
   cy.contains('Your account has been created');
   cy.login();
