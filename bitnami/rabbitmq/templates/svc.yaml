@@ -58,7 +58,7 @@ spec:
     {{- if .Values.auth.tls.enabled }}
     - name: {{ .Values.service.portNames.amqpTls }}
       port: {{ .Values.service.ports.amqpTls }}
-      targetPort: amqp-ssl
+      targetPort: amqp-tls
       {{- if (eq .Values.service.type "ClusterIP") }}
       nodePort: null
       {{- else if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.amqpTls)) }}
