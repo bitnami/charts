@@ -78,7 +78,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/keycloak
-  tag: 21.0.2-debian-11-r0
+  tag: 21.1.1-debian-11-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -544,9 +544,9 @@ ingress:
   ## @param ingress.hostname Default host for the ingress record (evaluated as template)
   ##
   hostname: keycloak.local
-  ## @param ingress.path Default path for the ingress record
+  ## @param ingress.path [string] Default path for the ingress record (evaluated as template)
   ##
-  path: /
+  path: "{{ .Values.httpRelativePath }}"
   ## @param ingress.servicePort Backend service port to use
   ## Default is http. Alternative is https.
   ##
@@ -756,8 +756,8 @@ metrics:
     ## @param metrics.serviceMonitor.endpoints [array] The endpoint configuration of the ServiceMonitor. Path is mandatory. Interval, timeout and labellings can be overwritten.
     ##
     endpoints:
-      - path: /metrics
-      - path: /realms/master/metrics
+      - path: '{{ include "keycloak.httpPath" . }}metrics'
+      - path: '{{ include "keycloak.httpPath" . }}realms/master/metrics'
     ## @param metrics.serviceMonitor.path Metrics service HTTP path. Deprecated: Use @param metrics.serviceMonitor.endpoints instead
     ##
     path: ""
@@ -839,7 +839,7 @@ keycloakConfigCli:
   image:
     registry: docker.io
     repository: bitnami/keycloak-config-cli
-    tag: 5.6.1-debian-11-r5
+    tag: 5.6.1-debian-11-r15
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

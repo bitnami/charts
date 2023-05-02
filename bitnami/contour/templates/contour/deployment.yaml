@@ -109,7 +109,7 @@ spec:
             - --envoy-service-namespace={{ default .Release.Namespace .Values.contour.envoyServiceNamespace }}
             - --envoy-service-name={{ default (printf "%s-envoy" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-") .Values.contour.envoyServiceName }}
             {{- end }}
-            - --leader-election-resource-name={{ include "common.names.namespace" . }}
+            - --leader-election-resource-name={{ default (printf "%s-%s" (include "common.names.namespace" .) (printf "%s-contour" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-")) .Values.contour.leaderElectionResourceName }}
             {{- if .Values.contour.debug }}
             - --debug
             {{- end }}

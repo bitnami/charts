@@ -131,6 +131,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                              | Description                                                                                  | Value           |
 | ------------------------------------------------- | -------------------------------------------------------------------------------------------- | --------------- |
 | `discourse.skipInstall`                           | Do not run the Discourse installation wizard                                                 | `false`         |
+| `discourse.plugins`                               | List of plugins to be installed before the container initialization                          | `[]`            |
 | `discourse.command`                               | Custom command to override image cmd                                                         | `[]`            |
 | `discourse.args`                                  | Custom args for the custom command                                                           | `[]`            |
 | `discourse.extraEnvVars`                          | Array with extra environment variables to add Discourse pods                                 | `[]`            |

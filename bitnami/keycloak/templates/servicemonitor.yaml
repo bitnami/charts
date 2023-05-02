@@ -25,7 +25,7 @@ spec:
     {{- range $endpoints }}
     {{- $endpoint := merge . $defaultEndpoint }}
     - port: {{ $endpoint.port }}
-      path: {{ $endpoint.path }}
+      path: {{ include "common.tplvalues.render" ( dict "value" $endpoint.path "context" $) }}
       {{- if $endpoint.interval }}
       interval: {{ $endpoint.interval }}
       {{- end }}

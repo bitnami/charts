@@ -77,7 +77,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/kafka
-  tag: 3.4.0-debian-11-r15
+  tag: 3.4.0-debian-11-r22
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -437,25 +437,25 @@ extraEnvVarsSecret: ""
 ## @param replicaCount Number of Kafka nodes
 ##
 replicaCount: 1
-## @param minBrokerId Minimal broker.id value, nodes increment their `broker.id` respectively
-## Brokers increment their ID starting at this minimal value.
-## E.g., with `minBrokerId=100` and 3 nodes, IDs will be 100, 101, 102 for brokers 0, 1, and 2, respectively.
+## @param minId Minimal node.id or broker.id values, nodes increment their value respectively
+## Nodes or Brokers idncrement their ID starting at this minimal value.
+## E.g., with `minId=100` and 3 nodes, IDs will be 100, 101, 102 for brokers 0, 1, and 2, respectively.
 ##
-minBrokerId: 0
+minId: 0
 ## @param brokerRackAssignment Set Broker Assignment for multi tenant environment Allowed values: `aws-az`
 ## ref: https://cwiki.apache.org/confluence/display/KAFKA/KIP-392%3A+Allow+consumers+to+fetch+from+closest+replica
 ##
 brokerRackAssignment: ""
 ## @param containerPorts.client Kafka client container port
+## @param containerPorts.controller Kafka Controller listener port. It is used if "kraft.enabled: true"
 ## @param containerPorts.internal Kafka inter-broker container port
 ## @param containerPorts.external Kafka external container port
-## @param containerPorts.controller Kafka Controller listener port. It is used if "kraft.enabled: true"
 ##
 containerPorts:
   client: 9092
-  internal: 9093
-  external: 9094
-  controller: 9095
+  controller: 9093
+  internal: 9094
+  external: 9095
 ## Configure extra options for Kafka containers' liveness, readiness and startup probes
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
 ## @param livenessProbe.enabled Enable livenessProbe on Kafka containers
@@ -689,13 +689,15 @@ service:
   ##
   type: ClusterIP
   ## @param service.ports.client Kafka svc port for client connections
+  ## @param service.ports.controller Kafka svc port for controller connections. It is used if "kraft.enabled: true"
   ## @param service.ports.internal Kafka svc port for inter-broker connections
   ## @param service.ports.external Kafka svc port for external connections
   ##
   ports:
     client: 9092
-    internal: 9093
-    external: 9094
+    controller: 9093
+    internal: 9094
+    external: 9095
   ## @param service.nodePorts.client Node port for the Kafka client connections
   ## @param service.nodePorts.external Node port for the Kafka external connections
   ## NOTE: choose port between <30000-32767>
@@ -779,7 +781,7 @@ externalAccess:
     image:
       registry: docker.io
       repository: bitnami/kubectl
-      tag: 1.25.8-debian-11-r2
+      tag: 1.25.9-debian-11-r2
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1028,7 +1030,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r102
+    tag: 11-debian-11-r108
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1110,7 +1112,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/kafka-exporter
-      tag: 1.6.0-debian-11-r73
+      tag: 1.6.0-debian-11-r80
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1346,7 +1348,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/jmx-exporter
-      tag: 0.18.0-debian-11-r5
+      tag: 0.18.0-debian-11-r12
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1740,7 +1742,7 @@ provisioning:
 kraft:
   ## @param kraft.enabled Switch to enable or disable the Kraft mode for Kafka
   ##
-  enabled: false
+  enabled: true
   ## @param kraft.processRoles Roles of your Kafka nodes. Nodes can have 'broker', 'controller' roles or both of them.
   ##
   processRoles: broker,controller
@@ -1766,7 +1768,7 @@ kraft:
 zookeeper:
   ## @param zookeeper.enabled Switch to enable or disable the ZooKeeper helm chart. Must be false if you use Kraft mode.
   ##
-  enabled: true
+  enabled: false
   ## @param zookeeper.replicaCount Number of ZooKeeper nodes
   ##
   replicaCount: 1
