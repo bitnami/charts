@@ -2,7 +2,7 @@ annotations:
   category: DeveloperTools
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 6.0.0
+appVersion: 6.1.0
 dependencies:
   - name: mongodb
     repository: oci://registry-1.docker.io/bitnamicharts
@@ -30,4 +30,4 @@ sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/parse
   - https://github.com/bitnami/containers/tree/main/bitnami/parse-dashboard
   - https://parse.com/
-version: 20.1.1
+version: 20.1.2
