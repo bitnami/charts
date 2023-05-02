@@ -2,7 +2,7 @@ annotations:
   category: Infrastructure
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 1.24.3
+appVersion: 1.24.4
 dependencies:
   - name: common
     repository: oci://registry-1.docker.io/bitnamicharts
@@ -25,4 +25,4 @@ sources:
   - https://github.com/envoyproxy/envoy
   - https://github.com/bitnami/containers/tree/main/bitnami/contour
   - https://projectcontour.io
-version: 11.3.0
+version: 11.3.1
