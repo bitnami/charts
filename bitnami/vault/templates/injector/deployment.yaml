@@ -75,7 +75,7 @@ spec:
       {{- end }}
       {{- if .Values.injector.initContainers }}
       initContainers:
-        {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.injector.initContainers "context" $) | nindent 8 }}
       {{- end }}
       containers:
         - name: sidecar-injector
