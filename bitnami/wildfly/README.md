@@ -78,15 +78,15 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### WildFly Image parameters
 
-| Name                | Description                                                                                             | Value                  |
-| ------------------- | ------------------------------------------------------------------------------------------------------- | ---------------------- |
-| `image.registry`    | WildFly image registry                                                                                  | `docker.io`            |
-| `image.repository`  | WildFly image repository                                                                                | `bitnami/wildfly`      |
-| `image.tag`         | WildFly image tag (immutable tags are recommended)                                                      | `27.0.1-debian-11-r47` |
-| `image.digest`      | WildFly image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
-| `image.pullPolicy`  | WildFly image pull policy                                                                               | `IfNotPresent`         |
-| `image.pullSecrets` | WildFly image pull secrets                                                                              | `[]`                   |
-| `image.debug`       | Enable image debug mode                                                                                 | `false`                |
+| Name                | Description                                                                                             | Value                 |
+| ------------------- | ------------------------------------------------------------------------------------------------------- | --------------------- |
+| `image.registry`    | WildFly image registry                                                                                  | `docker.io`           |
+| `image.repository`  | WildFly image repository                                                                                | `bitnami/wildfly`     |
+| `image.tag`         | WildFly image tag (immutable tags are recommended)                                                      | `28.0.0-debian-11-r3` |
+| `image.digest`      | WildFly image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
+| `image.pullPolicy`  | WildFly image pull policy                                                                               | `IfNotPresent`        |
+| `image.pullSecrets` | WildFly image pull secrets                                                                              | `[]`                  |
+| `image.debug`       | Enable image debug mode                                                                                 | `false`               |
 
 ### WildFly Configuration parameters
 
