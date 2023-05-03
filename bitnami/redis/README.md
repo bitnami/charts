@@ -87,6 +87,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `clusterDomain`          | Kubernetes cluster domain name                                                          | `cluster.local` |
 | `extraDeploy`            | Array of extra objects to deploy with the release                                       | `[]`            |
 | `useHostnames`           | Use hostnames internally when announcing replication                                    | `true`          |
+| `useHostnamesThreshold`  | Failure threshold for internal hostnames collection                                     | `true`          |
+| `useHostnamesTimeout`    | Timeout seconds between probes for internal hostnames collection                        | `true`          |
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
 | `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]`  |

@@ -50,6 +50,12 @@ extraDeploy: []
 ## @param useHostnames Use hostnames internally when announcing replication
 ###
 useHostnames: true
+## @param useHostnamesRetry Failure threshold for internal hostnames collection
+###
+useHostnamesThreshold: 5
+## @param useHostnamesDelay Timeout seconds between probes for internal hostnames collection
+###
+useHostnamesTimeout: 5
 
 ## Enable diagnostic mode in the deployment
 ##
