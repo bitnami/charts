@@ -38,6 +38,9 @@ Check the status of the pods by running this command:
 
   kubectl get pods --namespace {{ include "common.names.namespace" . | quote }} -l app.kubernetes.io/instance={{ .Release.Name }}
 
+IMPORTANT: The chart is deploying a sealed Vault instance. The service will not be ready until the instance is unsealed.
+This is a manual process that must be performed with maximum precaution.
+
 Read the upstream vault documentation for unsealing and initializing the instance:
 
   https://developer.hashicorp.com/vault/docs/platform/k8s/helm/run#initialize-and-unseal-vault
