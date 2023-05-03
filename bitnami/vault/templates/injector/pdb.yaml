@@ -1,0 +1,27 @@
+{{- if .Values.injector.pdb.create }}
+apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
+kind: PodDisruptionBudget
+metadata:
+  name: {{ template "vault.injector.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/part-of: vault
+    app.kubernetes.io/component: injector
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if .Values.injector.pdb.minAvailable }}
+  minAvailable: {{ .Values.injector.pdb.minAvailable }}
+  {{- end }}
+  {{- if .Values.injector.pdb.maxUnavailable }}
+  maxUnavailable: {{ .Values.injector.pdb.maxUnavailable }}
+  {{- end }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/part-of: vault
+      app.kubernetes.io/component: injector
+{{- end }}

@@ -104,6 +104,7 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/tensorflow-resnet/**'
       - 'bitnami/thanos/**'
       - 'bitnami/tomcat/**'
+      - 'bitnami/vault/**'
       - 'bitnami/wavefront/**'
       - 'bitnami/wavefront-hpa-adapter/**'
       - 'bitnami/wavefront-prometheus-storage-adapter/**'
