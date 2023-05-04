@@ -93,7 +93,7 @@ data:
         fi
     fi
 
-    if [[ $KAFKA_CFG_PROCESS_ROLES == *"controller"* ]]; then
+    if [[ $KAFKA_CFG_PROCESS_ROLES == *"controller"* && -z $KAFKA_CFG_CONTROLLER_QUORUM_VOTERS ]]; then
         node_id={{ .Values.minId }}
         pod_id=0
         while :
