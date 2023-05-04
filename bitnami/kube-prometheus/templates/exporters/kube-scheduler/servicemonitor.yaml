@@ -20,7 +20,7 @@ metadata:
     {{- include "common.tplvalues.render" ( dict "value" .Values.kubeScheduler.serviceMonitor.annotations "context" $ ) | nindent 4 }}
     {{- end }}
 spec:
-  jobLabel: component
+  jobLabel: {{ .Values.kubeScheduler.serviceMonitor.jobLabel }}
   selector:
     matchLabels:
       app.kubernetes.io/component: kube-scheduler

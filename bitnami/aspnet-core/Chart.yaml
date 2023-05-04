@@ -2,10 +2,10 @@ annotations:
   category: DeveloperTools
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 7.0.4
+appVersion: 7.0.5
 dependencies:
   - name: common
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     tags:
       - bitnami-common
     version: 2.x.x
@@ -22,4 +22,4 @@ name: aspnet-core
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/aspnet-core
   - https://dotnet.microsoft.com/apps/aspnet
-version: 4.0.10
+version: 4.1.0

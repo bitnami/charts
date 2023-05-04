@@ -73,7 +73,7 @@ spec:
         {{- end }}
         {{- if .Values.redisWait.enabled }}
         - name: wait-for-redis
-          image: {{ include "common.images.image" (dict "imageRoot" .Values.redis.image "global" .Values.global) }}
+          image: {{ include "argocd.redis.image" . }}
           imagePullPolicy: {{ .Values.redis.image.pullPolicy | quote }}
           {{- with .Values.redisWait.securityContext }}
           securityContext: {{ . | toYaml }}
@@ -139,7 +139,7 @@ spec:
             - {{ include "argocd.repo-server" . }}:{{ .Values.repoServer.service.port }}
             {{- if .Values.dex.enabled }}
             - --dex-server
-            - http://{{ include "argocd.dex" . }}:{{ .Values.dex.service.ports.http }}
+            - https://{{ include "argocd.dex" . }}:{{ .Values.dex.service.ports.http }}
             {{- end }}
             - --logformat
             - {{ .Values.server.logFormat }}

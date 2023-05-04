@@ -58,13 +58,7 @@ jobs:
             # Changes done in only one chart -> OK
             chart_name=$(echo "$charts_dirs_changed" | sed "s|bitnami/||g")
             echo "chart=${chart_name}" >> $GITHUB_OUTPUT
-            if [[ "$chart_name" == "common" ]]; then
-                # Changes done in bitnami/common -> SKIP
-                echo "result=skip" >> $GITHUB_OUTPUT
-            else
-                # Changes done in a chart different from common -> OK
-                echo "result=ok" >> $GITHUB_OUTPUT
-            fi
+            echo "result=ok" >> $GITHUB_OUTPUT
           elif [[ "$num_charts_changed" -le "0" ]]; then
             # Changes done in the bitnami/ folder but not inside a chart subfolder -> SKIP
             echo "error=No changes detected in charts. The rest of the tests will be skipped." >> $GITHUB_OUTPUT
@@ -174,7 +168,7 @@ jobs:
       # post a comment on the PR and assign a maintainer agent to review it
       - name: Manual review required
         if: ${{ always() && (needs.vib-verify.result != 'success' || steps.merge.outcome != 'success' ) }}
-        uses: peter-evans/create-or-update-comment@v2.0.0
+        uses: peter-evans/create-or-update-comment@v3.0.0
         with:
           issue-number: ${{ github.event.number }}
           # Necessary to trigger support workflows

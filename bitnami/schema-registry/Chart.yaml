@@ -2,14 +2,14 @@ annotations:
   category: Infrastructure
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 7.3.2
+appVersion: 7.3.3
 dependencies:
   - condition: kafka.enabled
     name: kafka
-    repository: https://charts.bitnami.com/bitnami
-    version: 21.x.x
+    repository: oci://registry-1.docker.io/bitnamicharts
+    version: 22.x.x
   - name: common
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     tags:
       - bitnami-common
     version: 2.x.x
@@ -28,4 +28,4 @@ maintainers:
 name: schema-registry
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/schema-registry
-version: 9.0.1
+version: 10.0.0

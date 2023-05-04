@@ -11,8 +11,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/metrics-server
+helm install my-release oci://registry-1.docker.io/bitnamicharts/metrics-server
 ```
 
 ## Introduction
@@ -31,8 +30,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/metrics-server
+helm install my-release oci://registry-1.docker.io/bitnamicharts/metrics-server
 ```
 
 These commands deploy Metrics Server on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -79,7 +77,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------ |
 | `image.registry`                                  | Metrics Server image registry                                                                                                                                            | `docker.io`              |
 | `image.repository`                                | Metrics Server image repository                                                                                                                                          | `bitnami/metrics-server` |
-| `image.tag`                                       | Metrics Server image tag (immutable tags are recommended)                                                                                                                | `0.6.3-debian-11-r3`     |
+| `image.tag`                                       | Metrics Server image tag (immutable tags are recommended)                                                                                                                | `0.6.3-debian-11-r10`    |
 | `image.digest`                                    | Metrics Server image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                           | `""`                     |
 | `image.pullPolicy`                                | Metrics Server image pull policy                                                                                                                                         | `IfNotPresent`           |
 | `image.pullSecrets`                               | Metrics Server image pull secrets                                                                                                                                        | `[]`                     |
@@ -171,7 +169,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```console
 helm install my-release \
-  --set rbac.create=true my-repo/metrics-server
+  --set rbac.create=true oci://registry-1.docker.io/bitnamicharts/metrics-server
 ```
 
 The above command enables RBAC authentication.
@@ -179,7 +177,7 @@ The above command enables RBAC authentication.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml my-repo/metrics-server
+helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/metrics-server
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -239,7 +237,7 @@ Use the workaround below to upgrade from versions previous to 4.0.0. The followi
 
 ```console
 kubectl delete deployment metrics-server --cascade=false
-helm upgrade metrics-server my-repo/metrics-server
+helm upgrade metrics-server oci://registry-1.docker.io/bitnamicharts/metrics-server
 ```
 
 ### To 2.0.0

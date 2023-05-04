@@ -147,3 +147,13 @@ mariadb: architecture
     "replication". Please set a valid architecture (--set architecture="xxxx")
 {{- end -}}
 {{- end -}}
+
+{{/*
+Get existing password to access MariaDB
+*/}}
+{{- define "mariadb.secret.existPassword" -}}
+{{- $secret := (lookup "v1" "Secret" .Release.Namespace (include "mariadb.secretName" .)).data -}}
+{{- if hasKey $secret "mariadb-password" }}
+    {{- true -}}
+{{- end -}}
+{{- end -}}

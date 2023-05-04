@@ -1,0 +1,6 @@
+{
+    "operation": {
+        "command": "read /sys/mounts",
+        "expectedOutput": "cubbyhole/"
+    }
+}

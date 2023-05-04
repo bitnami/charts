@@ -83,14 +83,18 @@ data:
         if [[ $KAFKA_CFG_PROCESS_ROLES == "" ]]; then
             export KAFKA_CFG_BROKER_ID="$(grep "broker.id" "{{ .Values.logsDirs | splitList "," | first }}/meta.properties" | awk -F '=' '{print $2}')"
         else
-            export KAFKA_CFG_BROKER_ID="$(grep "node.id" "{{ .Values.logsDirs | splitList "," | first }}/meta.properties" | awk -F '=' '{print $2}')"
+            export KAFKA_CFG_NODE_ID="$(grep "node.id" "{{ .Values.logsDirs | splitList "," | first }}/meta.properties" | awk -F '=' '{print $2}')"
         fi
     else
-        export KAFKA_CFG_BROKER_ID="$((ID + {{ .Values.minBrokerId }}))"
+        if [[ $KAFKA_CFG_PROCESS_ROLES == "" ]]; then
+            export KAFKA_CFG_BROKER_ID="$((ID + {{ .Values.minId }}))"
+        else
+            export KAFKA_CFG_NODE_ID="$((ID + {{ .Values.minId }}))"
+        fi
     fi
 
     if [[ $KAFKA_CFG_PROCESS_ROLES == *"controller"* ]]; then
-        node_id={{ .Values.minBrokerId }}
+        node_id={{ .Values.minId }}
         pod_id=0
         while :
         do 

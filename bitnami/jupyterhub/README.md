@@ -11,8 +11,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/jupyterhub
+helm install my-release oci://registry-1.docker.io/bitnamicharts/jupyterhub
 ```
 
 ## Introduction
@@ -36,8 +35,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/jupyterhub
+helm install my-release oci://registry-1.docker.io/bitnamicharts/jupyterhub
 ```
 
 These commands deploy JupyterHub on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -85,7 +83,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | --------------------- |
 | `hub.image.registry`                        | Hub image registry                                                                                                       | `docker.io`           |
 | `hub.image.repository`                      | Hub image repository                                                                                                     | `bitnami/jupyterhub`  |
-| `hub.image.tag`                             | Hub image tag (immutable tags are recommended)                                                                           | `3.1.1-debian-11-r20` |
+| `hub.image.tag`                             | Hub image tag (immutable tags are recommended)                                                                           | `3.1.1-debian-11-r29` |
 | `hub.image.digest`                          | Hub image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                      | `""`                  |
 | `hub.image.pullPolicy`                      | Hub image pull policy                                                                                                    | `IfNotPresent`        |
 | `hub.image.pullSecrets`                     | Hub image pull secrets                                                                                                   | `[]`                  |
@@ -209,7 +207,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | --------------------------------- |
 | `proxy.image.registry`                        | Proxy image registry                                                                                                     | `docker.io`                       |
 | `proxy.image.repository`                      | Proxy image repository                                                                                                   | `bitnami/configurable-http-proxy` |
-| `proxy.image.tag`                             | Proxy image tag (immutable tags are recommended)                                                                         | `4.5.4-debian-11-r39`             |
+| `proxy.image.tag`                             | Proxy image tag (immutable tags are recommended)                                                                         | `4.5.5-debian-11-r8`              |
 | `proxy.image.digest`                          | Proxy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                    | `""`                              |
 | `proxy.image.pullPolicy`                      | Proxy image pull policy                                                                                                  | `IfNotPresent`                    |
 | `proxy.image.pullSecrets`                     | Proxy image pull secrets                                                                                                 | `[]`                              |
@@ -398,7 +396,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------- | ------------------------------------ |
 | `singleuser.image.registry`                     | Single User image registry                                                                                  | `docker.io`                          |
 | `singleuser.image.repository`                   | Single User image repository                                                                                | `bitnami/jupyter-base-notebook`      |
-| `singleuser.image.tag`                          | Single User image tag (immutabe tags are recommended)                                                       | `3.1.1-debian-11-r20`                |
+| `singleuser.image.tag`                          | Single User image tag (immutabe tags are recommended)                                                       | `3.1.1-debian-11-r30`                |
 | `singleuser.image.digest`                       | Single User image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                                 |
 | `singleuser.image.pullPolicy`                   | Single User image pull policy                                                                               | `IfNotPresent`                       |
 | `singleuser.image.pullSecrets`                  | Single User image pull secrets                                                                              | `[]`                                 |
@@ -458,7 +456,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ---------------------------- | --------------------------------------------------------------------------------------------------------- | ----------------------- |
 | `auxiliaryImage.registry`    | Auxiliary image registry                                                                                  | `docker.io`             |
 | `auxiliaryImage.repository`  | Auxiliary image repository                                                                                | `bitnami/bitnami-shell` |
-| `auxiliaryImage.tag`         | Auxiliary image tag (immutabe tags are recommended)                                                       | `11-debian-11-r102`     |
+| `auxiliaryImage.tag`         | Auxiliary image tag (immutabe tags are recommended)                                                       | `11-debian-11-r111`     |
 | `auxiliaryImage.digest`      | Auxiliary image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `auxiliaryImage.pullPolicy`  | Auxiliary image pull policy                                                                               | `IfNotPresent`          |
 | `auxiliaryImage.pullSecrets` | Auxiliary image pull secrets                                                                              | `[]`                    |
@@ -487,7 +485,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 helm install my-release \
   --set proxy.livenessProbe.successThreshold=5 \
-    my-repo/jupyterhub
+    oci://registry-1.docker.io/bitnamicharts/jupyterhub
 ```
 
 The above command sets the `proxy.livenessProbe.successThreshold` to `5`.
@@ -495,7 +493,7 @@ The above command sets the `proxy.livenessProbe.successThreshold` to `5`.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml my-repo/jupyterhub
+helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/jupyterhub
 ```
 
 ## Configuration and installation details

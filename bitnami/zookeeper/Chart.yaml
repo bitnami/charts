@@ -5,7 +5,7 @@ apiVersion: v2
 appVersion: 3.8.1
 dependencies:
   - name: common
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     tags:
       - bitnami-common
     version: 2.x.x
@@ -21,4 +21,4 @@ name: zookeeper
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/zookeeper
   - https://zookeeper.apache.org/
-version: 11.1.6
+version: 11.3.1

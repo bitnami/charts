@@ -5,7 +5,7 @@ apiVersion: v2
 appVersion: 9.4.7
 dependencies:
   - name: common
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     tags:
       - bitnami-common
     version: 2.x.x
@@ -24,4 +24,4 @@ name: grafana
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/grafana
   - https://grafana.com/
-version: 8.2.33
+version: 8.3.0

@@ -1,0 +1,36 @@
+{{- if .Values.injector.enabled }}
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: {{ include "vault.injector.fullname.namespace" . }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/part-of: vault
+    app.kubernetes.io/component: injector
+  {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+webhooks:
+  - name: vault.hashicorp.com
+    failurePolicy: Ignore
+    matchPolicy: Exact
+    sideEffects: None
+    timeoutSeconds: 30
+    admissionReviewVersions: ["v1", "v1beta1"]
+    clientConfig:
+      service:
+        name: {{ include "vault.injector.fullname" . }}
+        namespace: {{ include "common.names.namespace" . | quote }}
+        path: "/mutate"
+      caBundle: ""
+    rules:
+      - operations: ["CREATE", "UPDATE"]
+        apiGroups: [""]
+        apiVersions: ["v1"]
+        resources: ["pods"]
+    objectSelector:
+      matchExpressions:
+        - key: app.kubernetes.io/component
+          operator: NotIn
+          values:
+            - injector
+{{- end }}

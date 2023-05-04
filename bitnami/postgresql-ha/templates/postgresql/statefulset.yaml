@@ -147,6 +147,7 @@ spec:
               exec:
                 command:
                   - /pre-stop.sh
+                  - {{ .Values.postgresql.preStopDelayAfterPgStopSeconds | quote }}
           {{- end }}
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
@@ -389,10 +390,16 @@ spec:
           {{- else if .Values.postgresql.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.postgresql.readinessProbe "enabled") "context" $) | nindent 12 }}
             exec:
+            {{- if .Values.postgresql.headlessWithNotReadyAddresses }}
+              command:
+                - /readiness-probe.sh
+                - {{ add .Values.pgpool.livenessProbe.periodSeconds .Values.pgpool.livenessProbe.timeoutSeconds | quote }}
+            {{- else }}
               command:
                 - bash
                 - -ec
                 - '{{ include "postgresql-ha.pgpassword" . }} psql -w -U {{ include "postgresql-ha.postgresqlUsername" . | quote }} -d {{ (include "postgresql-ha.postgresqlDatabase" .) | quote }} -h 127.0.0.1 -p {{ .Values.postgresql.containerPorts.postgresql }} -c "SELECT 1"'
+            {{- end }}
           {{- end }}
           {{- if .Values.postgresql.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.postgresql.customStartupProbe "context" $) | nindent 12 }}
@@ -438,6 +445,9 @@ spec:
             - name: hooks-scripts
               mountPath: /pre-stop.sh
               subPath: pre-stop.sh
+            - name: hooks-scripts
+              mountPath: /readiness-probe.sh
+              subPath: readiness-probe.sh
             {{- if .Values.postgresql.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.postgresql.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
