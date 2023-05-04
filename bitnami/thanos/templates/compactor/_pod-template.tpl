@@ -204,8 +204,8 @@ spec:
     - name: objstore-config
       secret:
         secretName: {{ include "thanos.objstoreSecretName" . }}
-        {{- if .Values.existingObjstoreSecretItems }}
-        items: {{- toYaml .Values.existingObjstoreSecretItems | nindent 10 }}
+        {{- if .Values.existingConfigSecretItems }}
+        items: {{- toYaml .Values.existingConfigSecretItems | nindent 10 }}
         {{- end }}
     {{- if (include "thanos.httpConfigEnabled" .) }}
     - name: http-config

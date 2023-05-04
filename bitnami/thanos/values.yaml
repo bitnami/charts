@@ -80,13 +80,13 @@ indexCacheConfig: ""
 ## Specify content for bucket-cache.yml
 ##
 bucketCacheConfig: ""
-## @param existingObjstoreSecret Secret with Objstore Configuration
-## Note: This will override objstoreConfig
+## @param existingConfigSecret Secret with configuration files
+## Note: This will override objstoreConfig, indexCacheConfig and bucketCacheConfig
 ##
-existingObjstoreSecret: ""
-## @param existingObjstoreSecretItems Optional item list for specifying a custom Secret key. If so, path should be objstore.yml
+existingConfigSecret: ""
+## @param existingConfigSecretItems Optional item list for specifying a custom Secret key. If so, path should be objstore.yml
 ##
-existingObjstoreSecretItems: []
+existingConfigSecretItems: []
 ## @param httpConfig The [https and basic auth configuration](https://thanos.io/tip/operating/https.md/)
 ## If provided, overrides settings under https.* and auth.*
 httpConfig: ""

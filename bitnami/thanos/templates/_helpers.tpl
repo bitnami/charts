@@ -41,8 +41,8 @@ Return the proper Docker Image Registry Secret Names
 Return the Thanos Objstore configuration secret.
 */}}
 {{- define "thanos.objstoreSecretName" -}}
-{{- if .Values.existingObjstoreSecret -}}
-    {{- printf "%s" (tpl .Values.existingObjstoreSecret $) -}}
+{{- if .Values.existingConfigSecret -}}
+    {{- printf "%s" (tpl .Values.existingConfigSecret $) -}}
 {{- else -}}
     {{- printf "%s-objstore-secret" (include "common.names.fullname" .) -}}
 {{- end -}}
@@ -52,7 +52,7 @@ Return the Thanos Objstore configuration secret.
 Return true if a secret object should be created
 */}}
 {{- define "thanos.createObjstoreSecret" -}}
-{{- if and .Values.objstoreConfig (not .Values.existingObjstoreSecret) }}
+{{- if and .Values.objstoreConfig (not .Values.existingConfigSecret) }}
     {{- true -}}
 {{- else -}}
 {{- end -}}
@@ -239,13 +239,13 @@ Compile all warnings into a single message, and call fail.
 
 {{/* Validate values of Thanos - Objstore configuration */}}
 {{- define "thanos.validateValues.objstore" -}}
-{{- if and (or .Values.bucketweb.enabled .Values.compactor.enabled .Values.ruler.enabled .Values.storegateway.enabled) (not (include "thanos.createObjstoreSecret" .)) ( not .Values.existingObjstoreSecret) -}}
+{{- if and (or .Values.bucketweb.enabled .Values.compactor.enabled .Values.ruler.enabled .Values.storegateway.enabled) (not (include "thanos.createObjstoreSecret" .)) ( not .Values.existingConfigSecret) -}}
 thanos: objstore configuration
     When enabling Bucket Web, Compactor, Ruler or Store component,
     you must provide a valid objstore configuration.
     There are three alternatives to provide it:
       1) Provide it using the 'objstoreConfig' parameter
-      2) Provide it using an existing Secret and using the 'existingObjstoreSecret' parameter
+      2) Provide it using an existing Secret and using the 'existingConfigSecret' parameter
       3) Put your objstore.yml under the 'files/conf/' directory
 {{- end -}}
 {{- end -}}

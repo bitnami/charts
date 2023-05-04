@@ -123,7 +123,7 @@ spec:
             - --grpc-address=0.0.0.0:10901
             - --http-address=0.0.0.0:10902
             - --remote-write.address=0.0.0.0:19291
-            {{- if or .Values.objstoreConfig .Values.existingObjstoreSecret }}
+            {{- if or .Values.objstoreConfig .Values.existingConfigSecret }}
             - --objstore.config=$(OBJSTORE_CONFIG)
             {{- end }}
             {{- if (include "thanos.httpConfigEnabled" .) }}
@@ -160,7 +160,7 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
-            {{- if or .Values.objstoreConfig .Values.existingObjstoreSecret }}
+            {{- if or .Values.objstoreConfig .Values.existingConfigSecret }}
             - name: OBJSTORE_CONFIG
               valueFrom:
                 secretKeyRef:

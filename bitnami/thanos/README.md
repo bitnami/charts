@@ -114,8 +114,8 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `objstoreConfig`                              | The [objstore configuration](https://thanos.io/tip/thanos/storage.md/)                                              | `""`                |
 | `indexCacheConfig`                            | The [index cache configuration](https://thanos.io/tip/components/store.md/)                                         | `""`                |
 | `bucketCacheConfig`                           | The [bucket cache configuration](https://thanos.io/tip/components/store.md/)                                        | `""`                |
-| `existingObjstoreSecret`                      | Secret with Objstore Configuration                                                                                  | `""`                |
-| `existingObjstoreSecretItems`                 | Optional item list for specifying a custom Secret key. If so, path should be objstore.yml                           | `[]`                |
+| `existingConfigSecret`                        | Secret with configuration files                                                                                     | `""`                |
+| `existingConfigSecretItems`                   | Optional item list for specifying a custom Secret key. If so, path should be objstore.yml                           | `[]`                |
 | `httpConfig`                                  | The [https and basic auth configuration](https://thanos.io/tip/operating/https.md/)                                 | `""`                |
 | `existingHttpConfigSecret`                    | Secret containing the HTTPS and Basic auth configuration                                                            | `""`                |
 | `https.enabled`                               | Set to true to enable HTTPS. Requires a secret containing the certificate and key.                                  | `false`             |
@@ -1250,7 +1250,7 @@ This helm chart supports using custom Objstore configuration.
 
 You can specify the Objstore configuration using the `objstoreConfig` parameter.
 
-In addition, you can also set an external Secret with the configuration file. This is done by setting the `existingObjstoreSecret` parameter. Note that this will override the previous option. If needed you can also provide a custom Secret Key with `existingObjstoreSecretItems`, please be aware that the Path of your Secret should be `objstore.yml`.
+In addition, you can also set an external Secret with the configuration file. This is done by setting the `existingConfigSecret` parameter. Note that this will override the previous option. If needed you can also provide a custom Secret Key with `existingConfigSecretItems`, please be aware that the Path of your Secret should be `objstore.yml`.
 
 ### Using custom Query Service Discovery configuration
 

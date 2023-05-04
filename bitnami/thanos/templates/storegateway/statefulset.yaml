@@ -127,10 +127,10 @@ spec:
             {{- if (include "thanos.httpConfigEnabled" .) }}
             - --http.config=/conf/http/http-config.yml
             {{- end }}
-            {{- if .Values.indexCacheConfig }}
+            {{- if or .Values.indexCacheConfig ( and .Values.existingConfigSecret ( index ( lookup "v1" "Secret" .Release.Namespace .Values.existingConfigSecret ).data "index-cache.yml" )) }}
             - --index-cache.config-file=/conf/index-cache.yml
             {{- end }}
-            {{- if .Values.bucketCacheConfig }}
+            {{- if or .Values.bucketCacheConfig ( and .Values.existingConfigSecret ( index ( lookup "v1" "Secret" .Release.Namespace .Values.existingConfigSecret ).data "bucket-cache.yml" )) }}
             - --store.caching-bucket.config-file=/conf/bucket-cache.yml
             {{- end }}
             {{- if or .Values.storegateway.config .Values.storegateway.existingConfigmap }}
@@ -242,8 +242,8 @@ spec:
         - name: objstore-config
           secret:
             secretName: {{ include "thanos.objstoreSecretName" . }}
-            {{- if .Values.existingObjstoreSecretItems }}
-            items: {{- toYaml .Values.existingObjstoreSecretItems | nindent 14 }}
+            {{- if .Values.existingConfigSecretItems }}
+            items: {{- toYaml .Values.existingConfigSecretItems | nindent 14 }}
             {{- end }}
         {{- if .Values.storegateway.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.extraVolumes "context" $) | nindent 8 }}
