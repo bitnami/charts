@@ -2,7 +2,7 @@ annotations:
   category: Infrastructure
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 1.31.1
+appVersion: 1.13.1
 dependencies:
   - name: common
     repository: oci://registry-1.docker.io/bitnamicharts
@@ -25,4 +25,4 @@ sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/vault
   - https://github.com/bitnami/containers/tree/main/bitnami/vault-csi-provider
   - https://github.com/bitnami/containers/tree/main/bitnami/vault-k8s
-version: 0.1.0
+version: 0.1.1

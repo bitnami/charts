@@ -1,4 +1,4 @@
-<!--- app-name: HashiCorp Vault[<35;40;21M] -->
+<!--- app-name: HashiCorp Vault -->
 
 # HashiCorp Vault packaged by Bitnami
 
