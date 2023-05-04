@@ -4,18 +4,23 @@
 
 Prometheus is an open source monitoring and alerting system. It enables sysadmins to monitor their infrastructures by collecting metrics from configured targets at given intervals.
 
-[Overview of Prometheus](https://prometheus.io/")
+[Overview of Prometheus](https://prometheus.io/)
 
 ## TL;DR
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/prometheus
+helm install my-release oci://registry-1.docker.io/bitnamicharts/prometheus
 ```
 
 ## Introduction
 
-TODO
+Bitnami charts for Helm are carefully engineered, actively maintained and are the quickest and easiest way to deploy containers on a Kubernetes cluster that are ready to handle production workloads.
+
+This chart bootstraps a [Prometheus](https://prometheus.io) Deployment in a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
+
+[Learn more about the default configuration of the chart](https://docs.bitnami.com/kubernetes/infrastructure/prometheus/get-started/).
 
 ## Prerequisites
 
@@ -29,7 +34,7 @@ TODO
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release my-repo/prometheus
+helm install my-release oci://registry-1.docker.io/bitnamicharts/prometheus
 ```
 
 The command deploys Prometheus on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -413,7 +418,8 @@ The command removes all the Kubernetes components associated with the chart and 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-helm install my-release --set alertamanager.enabled=true my-repo/prometheus
+helm install my-release --set alertamanager.enabled=true \
+  oci://registry-1.docker.io/bitnamicharts/prometheus
 ```
 
 The above command install Prometheus chart with Alertmanager.
@@ -421,7 +427,7 @@ The above command install Prometheus chart with Alertmanager.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml my-repo/prometheus
+helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/prometheus
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -506,11 +512,11 @@ kubectl create namespace monitoring
 helm install prometheus \
     --set prometheus.thanos.create=true \
     --namespace monitoring \
-    bitnami/prometheus
+    oci://registry-1.docker.io/bitnamicharts/prometheus
 helm install thanos \
     --values values.yaml \
     --namespace monitoring \
-    my-repo/thanos
+    oci://registry-1.docker.io/bitnamicharts/thanos
 ```
 
 That's all! Now you have Thanos fully integrated with Prometheus and Alertmanager.
@@ -538,9 +544,9 @@ kubectl create namespace monitoring
 helm install prometheus \
     --values values.yaml \
     --namespace monitoring \
-    my-repo/prometheus
+    oci://registry-1.docker.io/bitnamicharts/prometheus
 helm install grafana-mimir \
-    bitnami/grafana-mimir
+    oci://registry-1.docker.io/bitnamicharts/grafana-mimir
 ```
 
 That's all! Now you have Prometheus integrated with Grafana Mimir.
@@ -582,11 +588,11 @@ For Helm 3:
 kubectl create namespace monitoring
 helm install prometheus \
     --namespace monitoring \
-    my-repo/prometheus
+    oci://registry-1.docker.io/bitnamicharts/prometheus
 helm install grafana-mimir \
     --values values.yaml \
     --namespace monitoring \
-    bitnami/grafana
+    oci://registry-1.docker.io/bitnamicharts/grafana
 ```
 
 ## Troubleshooting
