@@ -1015,6 +1015,10 @@ postgresql:
 ## @param externalDatabase.password Password for the non-root username for Keycloak
 ## @param externalDatabase.database Keycloak database name
 ## @param externalDatabase.existingSecret Name of an existing secret resource containing the database credentials
+## @param externalDatabase.existingSecretHostKey Name of an existing secret key containing the database host name
+## @param externalDatabase.existingSecretPortKey Name of an existing secret key containing the database port
+## @param externalDatabase.existingSecretUserKey Name of an existing secret key containing the database user
+## @param externalDatabase.existingSecretDatabaseKey Name of an existing secret key containing the database name
 ## @param externalDatabase.existingSecretPasswordKey Name of an existing secret key containing the database credentials
 ##
 externalDatabase:
@@ -1024,6 +1028,10 @@ externalDatabase:
   database: bitnami_keycloak
   password: ""
   existingSecret: ""
+  existingSecretHostKey: ""
+  existingSecretPortKey: ""
+  existingSecretUserKey: ""
+  existingSecretDatabaseKey: ""
   existingSecretPasswordKey: ""
 
 ## @section Keycloak Cache parameters

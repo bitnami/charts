@@ -325,6 +325,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.password`                  | Password for the non-root username for Keycloak                                                                   | `""`               |
 | `externalDatabase.database`                  | Keycloak database name                                                                                            | `bitnami_keycloak` |
 | `externalDatabase.existingSecret`            | Name of an existing secret resource containing the database credentials                                           | `""`               |
+| `externalDatabase.existingSecretHostKey`     | Name of an existing secret key containing the database host name                                                  | `""`               |
+| `externalDatabase.existingSecretPortKey`     | Name of an existing secret key containing the database port                                                       | `""`               |
+| `externalDatabase.existingSecretUserKey`     | Name of an existing secret key containing the database user                                                       | `""`               |
+| `externalDatabase.existingSecretDatabaseKey` | Name of an existing secret key containing the database name                                                       | `""`               |
 | `externalDatabase.existingSecretPasswordKey` | Name of an existing secret key containing the database credentials                                                | `""`               |
 
 ### Keycloak Cache parameters
