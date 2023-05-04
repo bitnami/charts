@@ -57,7 +57,7 @@ This deployment will be incomplete until you configure Discourse with a resolvab
 
 2. Complete your Discourse deployment by running:
 
-    helm upgrade --namespace {{ $releaseNamespace }} {{ .Release.Name }} my-repo/{{ .Chart.Name }} \
+    helm upgrade --namespace {{ $releaseNamespace }} {{ .Release.Name }} oci://registry-1.docker.io/bitnamicharts/{{ .Chart.Name }} \
       {{- if .Values.global }}
       {{- if .Values.global.imagePullSecrets }}
       --set global.imagePullSecrets={{ .Values.global.imagePullSecrets }} \

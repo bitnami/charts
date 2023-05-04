@@ -142,11 +142,9 @@ spec:
             - name: grpc
               containerPort: {{ .Values.dex.containerPorts.grpc }}
               protocol: TCP
-            {{- if .Values.dex.metrics.enabled }}
             - name: metrics
               containerPort: {{ .Values.dex.containerPorts.metrics }}
               protocol: TCP
-            {{- end }}
           env:
             {{- if .Values.dex.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.dex.extraEnvVars "context" $) | nindent 12 }}
@@ -168,8 +166,8 @@ spec:
           {{- else if .Values.dex.startupProbe.enabled }}
           startupProbe:
             httpGet:
-              path: /healthz
-              port: {{ .Values.dex.containerPorts.http }}
+              path: /healthz/live
+              port: metrics
             initialDelaySeconds: {{ .Values.dex.startupProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.dex.startupProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.dex.startupProbe.timeoutSeconds }}
@@ -181,8 +179,8 @@ spec:
           {{- else if .Values.dex.livenessProbe.enabled }}
           livenessProbe:
             httpGet:
-              path: /healthz
-              port: {{ .Values.dex.containerPorts.http }}
+              path: /healthz/live
+              port: metrics
             initialDelaySeconds: {{ .Values.dex.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.dex.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.dex.livenessProbe.timeoutSeconds }}
@@ -194,8 +192,8 @@ spec:
           {{- else if .Values.dex.readinessProbe.enabled }}
           readinessProbe:
             httpGet:
-              path: /healthz
-              port: {{ .Values.dex.containerPorts.http }}
+              path: /healthz/ready
+              port: metrics
             initialDelaySeconds: {{ .Values.dex.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.dex.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.dex.readinessProbe.timeoutSeconds }}

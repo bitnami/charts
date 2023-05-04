@@ -1,0 +1,71 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name:  {{ include "flink.jobmanager.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/part-of: flink
+    app.kubernetes.io/component: jobmanager
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if or .Values.jobmanager.service.annotations .Values.commonAnnotations }}
+  annotations:
+    {{- if .Values.jobmanager.service.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.jobmanager.service.annotations "context" $) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+spec:
+  type: {{ .Values.jobmanager.service.type }}
+  {{- if and (eq .Values.jobmanager.service.type "LoadBalancer") (not (empty .Values.jobmanager.service.loadBalancerIP)) }}
+  loadBalancerIP: {{ .Values.jobmanager.service.loadBalancerIP }}
+  {{- end }}
+  {{- if and (eq .Values.jobmanager.service.type "LoadBalancer") (not (empty .Values.jobmanager.service.loadBalancerSourceRanges)) }}
+  loadBalancerSourceRanges: {{ .Values.jobmanager.service.loadBalancerSourceRanges }}
+  {{- end }}
+  {{- if and .Values.jobmanager.service.clusterIP (eq .Values.jobmanager.service.type "ClusterIP") }}
+  clusterIP: {{ .Values.jobmanager.service.clusterIP }}
+  {{- end }}
+  {{- if .Values.jobmanager.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.jobmanager.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.jobmanager.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.jobmanager.service.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if or (eq .Values.jobmanager.service.type "LoadBalancer") (eq .Values.jobmanager.service.type "NodePort") }}
+  externalTrafficPolicy: {{ .Values.jobmanager.service.externalTrafficPolicy | quote }}
+  {{- end }}
+  ports:
+    - name: tcp-rpc
+      port: {{ .Values.jobmanager.service.ports.rpc }}
+      targetPort: {{ .Values.jobmanager.containerPorts.rpc }}
+      {{- if and (or (eq .Values.jobmanager.service.type "NodePort") (eq .Values.jobmanager.service.type "LoadBalancer")) (not (empty .Values.jobmanager.service.nodePorts.rpc)) }}
+      nodePort: {{ .Values.jobmanager.service.nodePorts.rpc }}
+      {{- else if eq .Values.jobmanager.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    - name: http
+      port: {{ .Values.jobmanager.service.ports.http }}
+      targetPort: {{ .Values.jobmanager.containerPorts.http }}
+      {{- if and (or (eq .Values.jobmanager.service.type "NodePort") (eq .Values.jobmanager.service.type "LoadBalancer")) (not (empty .Values.jobmanager.service.nodePorts.http)) }}
+      nodePort: {{ .Values.jobmanager.service.nodePorts.http }}
+      {{- else if eq .Values.jobmanager.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    - name: tcp-blob
+      port: {{ .Values.jobmanager.service.ports.blob }}
+      targetPort: {{ .Values.jobmanager.containerPorts.blob }}
+      {{- if and (or (eq .Values.jobmanager.service.type "NodePort") (eq .Values.jobmanager.service.type "LoadBalancer")) (not (empty .Values.jobmanager.service.nodePorts.blob)) }}
+      nodePort: {{ .Values.jobmanager.service.nodePorts.blob }}
+      {{- else if eq .Values.jobmanager.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    {{- if .Values.jobmanager.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.jobmanager.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
+    app.kubernetes.io/part-of: flink
+    app.kubernetes.io/component: jobmanager

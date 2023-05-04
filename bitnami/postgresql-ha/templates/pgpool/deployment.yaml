@@ -278,6 +278,12 @@ spec:
               value: {{ template "postgresql-ha.pgpool.tlsCACert" . }}
             {{- end }}
             {{- end }}
+            - name: PGPOOL_HEALTH_CHECK_PSQL_TIMEOUT
+            {{- if .Values.pgpool.customLivenessProbe }}
+              value: {{ add 1 (default 1 .Values.pgpool.customLivenessProbe.timeoutSeconds) | quote }}
+            {{- else }}
+              value: {{ add 1 (default 1 .Values.pgpool.livenessProbe.timeoutSeconds) | quote }}
+            {{- end }}
             {{- if .Values.pgpool.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.pgpool.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}

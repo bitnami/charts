@@ -20,7 +20,7 @@ metadata:
     {{- include "common.tplvalues.render" ( dict "value" .Values.kubelet.serviceMonitor.annotations "context" $ ) | nindent 4 }}
     {{- end }}
 spec:
-  jobLabel: k8s-app
+  jobLabel: {{ .Values.kubelet.serviceMonitor.jobLabel }}
   selector:
     matchLabels:
       k8s-app: kubelet

@@ -11,8 +11,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/kafka
+helm install my-release oci://registry-1.docker.io/bitnamicharts/kafka
 ```
 
 ## Introduction
@@ -32,8 +31,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/kafka
+helm install my-release oci://registry-1.docker.io/bitnamicharts/kafka
 ```
 
 These commands deploy Kafka on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -82,7 +80,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------- |
 | `image.registry`                                  | Kafka image registry                                                                                                                                                                | `docker.io`                         |
 | `image.repository`                                | Kafka image repository                                                                                                                                                              | `bitnami/kafka`                     |
-| `image.tag`                                       | Kafka image tag (immutable tags are recommended)                                                                                                                                    | `3.4.0-debian-11-r15`               |
+| `image.tag`                                       | Kafka image tag (immutable tags are recommended)                                                                                                                                    | `3.4.0-debian-11-r22`               |
 | `image.digest`                                    | Kafka image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                               | `""`                                |
 | `image.pullPolicy`                                | Kafka image pull policy                                                                                                                                                             | `IfNotPresent`                      |
 | `image.pullSecrets`                               | Specify docker-registry secret names as an array                                                                                                                                    | `[]`                                |
@@ -166,12 +164,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                                | Description                                                                                                                                                                                   | Value           |
 | --------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------- |
 | `replicaCount`                                      | Number of Kafka nodes                                                                                                                                                                         | `1`             |
-| `minBrokerId`                                       | Minimal broker.id value, nodes increment their `broker.id` respectively                                                                                                                       | `0`             |
+| `minId`                                             | Minimal node.id or broker.id values, nodes increment their value respectively                                                                                                                 | `0`             |
 | `brokerRackAssignment`                              | Set Broker Assignment for multi tenant environment Allowed values: `aws-az`                                                                                                                   | `""`            |
 | `containerPorts.client`                             | Kafka client container port                                                                                                                                                                   | `9092`          |
-| `containerPorts.internal`                           | Kafka inter-broker container port                                                                                                                                                             | `9093`          |
-| `containerPorts.external`                           | Kafka external container port                                                                                                                                                                 | `9094`          |
-| `containerPorts.controller`                         | Kafka Controller listener port. It is used if "kraft.enabled: true"                                                                                                                           | `9095`          |
+| `containerPorts.controller`                         | Kafka Controller listener port. It is used if "kraft.enabled: true"                                                                                                                           | `9093`          |
+| `containerPorts.internal`                           | Kafka inter-broker container port                                                                                                                                                             | `9094`          |
+| `containerPorts.external`                           | Kafka external container port                                                                                                                                                                 | `9095`          |
 | `livenessProbe.enabled`                             | Enable livenessProbe on Kafka containers                                                                                                                                                      | `true`          |
 | `livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                                                                                       | `10`            |
 | `livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                                                                                              | `10`            |
@@ -236,8 +234,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
 | `service.type`                                    | Kubernetes Service type                                                                                                                   | `ClusterIP`           |
 | `service.ports.client`                            | Kafka svc port for client connections                                                                                                     | `9092`                |
-| `service.ports.internal`                          | Kafka svc port for inter-broker connections                                                                                               | `9093`                |
-| `service.ports.external`                          | Kafka svc port for external connections                                                                                                   | `9094`                |
+| `service.ports.controller`                        | Kafka svc port for controller connections. It is used if "kraft.enabled: true"                                                            | `9093`                |
+| `service.ports.internal`                          | Kafka svc port for inter-broker connections                                                                                               | `9094`                |
+| `service.ports.external`                          | Kafka svc port for external connections                                                                                                   | `9095`                |
 | `service.nodePorts.client`                        | Node port for the Kafka client connections                                                                                                | `""`                  |
 | `service.nodePorts.external`                      | Node port for the Kafka external connections                                                                                              | `""`                  |
 | `service.sessionAffinity`                         | Control where client requests go, to the same pod or round-robin                                                                          | `None`                |
@@ -255,7 +254,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalAccess.autoDiscovery.enabled`            | Enable using an init container to auto-detect external IPs/ports by querying the K8s API                                                  | `false`               |
 | `externalAccess.autoDiscovery.image.registry`     | Init container auto-discovery image registry                                                                                              | `docker.io`           |
 | `externalAccess.autoDiscovery.image.repository`   | Init container auto-discovery image repository                                                                                            | `bitnami/kubectl`     |
-| `externalAccess.autoDiscovery.image.tag`          | Init container auto-discovery image tag (immutable tags are recommended)                                                                  | `1.25.8-debian-11-r2` |
+| `externalAccess.autoDiscovery.image.tag`          | Init container auto-discovery image tag (immutable tags are recommended)                                                                  | `1.25.9-debian-11-r2` |
 | `externalAccess.autoDiscovery.image.digest`       | Kubectl image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                   | `""`                  |
 | `externalAccess.autoDiscovery.image.pullPolicy`   | Init container auto-discovery image pull policy                                                                                           | `IfNotPresent`        |
 | `externalAccess.autoDiscovery.image.pullSecrets`  | Init container auto-discovery image pull secrets                                                                                          | `[]`                  |
@@ -311,7 +310,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner and group of the persistent volume                                                   | `false`                 |
 | `volumePermissions.image.registry`                     | Init container volume-permissions image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`                   | Init container volume-permissions image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r102`     |
+| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r108`     |
 | `volumePermissions.image.digest`                       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Init container volume-permissions image pull secrets                                                                              | `[]`                    |
@@ -336,7 +335,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.kafka.enabled`                                     | Whether or not to create a standalone Kafka exporter to expose Kafka metrics                                                     | `false`                                                                                 |
 | `metrics.kafka.image.registry`                              | Kafka exporter image registry                                                                                                    | `docker.io`                                                                             |
 | `metrics.kafka.image.repository`                            | Kafka exporter image repository                                                                                                  | `bitnami/kafka-exporter`                                                                |
-| `metrics.kafka.image.tag`                                   | Kafka exporter image tag (immutable tags are recommended)                                                                        | `1.6.0-debian-11-r73`                                                                   |
+| `metrics.kafka.image.tag`                                   | Kafka exporter image tag (immutable tags are recommended)                                                                        | `1.6.0-debian-11-r80`                                                                   |
 | `metrics.kafka.image.digest`                                | Kafka exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                   | `""`                                                                                    |
 | `metrics.kafka.image.pullPolicy`                            | Kafka exporter image pull policy                                                                                                 | `IfNotPresent`                                                                          |
 | `metrics.kafka.image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                                 | `[]`                                                                                    |
@@ -384,7 +383,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.jmx.enabled`                                       | Whether or not to expose JMX metrics to Prometheus                                                                               | `false`                                                                                 |
 | `metrics.jmx.image.registry`                                | JMX exporter image registry                                                                                                      | `docker.io`                                                                             |
 | `metrics.jmx.image.repository`                              | JMX exporter image repository                                                                                                    | `bitnami/jmx-exporter`                                                                  |
-| `metrics.jmx.image.tag`                                     | JMX exporter image tag (immutable tags are recommended)                                                                          | `0.18.0-debian-11-r5`                                                                   |
+| `metrics.jmx.image.tag`                                     | JMX exporter image tag (immutable tags are recommended)                                                                          | `0.18.0-debian-11-r12`                                                                  |
 | `metrics.jmx.image.digest`                                  | JMX exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                     | `""`                                                                                    |
 | `metrics.jmx.image.pullPolicy`                              | JMX exporter image pull policy                                                                                                   | `IfNotPresent`                                                                          |
 | `metrics.jmx.image.pullSecrets`                             | Specify docker-registry secret names as an array                                                                                 | `[]`                                                                                    |
@@ -473,7 +472,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                            | Description                                                                             | Value                    |
 | ------------------------------- | --------------------------------------------------------------------------------------- | ------------------------ |
-| `kraft.enabled`                 | Switch to enable or disable the Kraft mode for Kafka                                    | `false`                  |
+| `kraft.enabled`                 | Switch to enable or disable the Kraft mode for Kafka                                    | `true`                   |
 | `kraft.processRoles`            | Roles of your Kafka nodes. Nodes can have 'broker', 'controller' roles or both of them. | `broker,controller`      |
 | `kraft.controllerListenerNames` | Controller listener names                                                               | `CONTROLLER`             |
 | `kraft.clusterId`               | Kafka ClusterID. You must set it if your cluster contains more than one node.           | `kafka_cluster_id_test1` |
@@ -483,7 +482,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                                    | Description                                                                                                                                                             | Value               |
 | --------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
-| `zookeeper.enabled`                     | Switch to enable or disable the ZooKeeper helm chart. Must be false if you use Kraft mode.                                                                              | `true`              |
+| `zookeeper.enabled`                     | Switch to enable or disable the ZooKeeper helm chart. Must be false if you use Kraft mode.                                                                              | `false`             |
 | `zookeeper.replicaCount`                | Number of ZooKeeper nodes                                                                                                                                               | `1`                 |
 | `zookeeper.auth.client.enabled`         | Enable ZooKeeper auth                                                                                                                                                   | `false`             |
 | `zookeeper.auth.client.clientUser`      | User that will use ZooKeeper clients to auth                                                                                                                            | `""`                |
@@ -499,7 +498,7 @@ The command removes all the Kubernetes components associated with the chart and 
 ```console
 helm install my-release \
   --set replicaCount=3 \
-  my-repo/kafka
+  oci://registry-1.docker.io/bitnamicharts/kafka
 ```
 
 The above command deploys Kafka with 3 brokers (replicas).
@@ -507,7 +506,7 @@ The above command deploys Kafka with 3 brokers (replicas).
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml my-repo/kafka
+helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/kafka
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -864,6 +863,13 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 22.0.0
+
+This major updates the Kafka's configuration to use Kraft by default. You can learn more about this configuration [here](https://developer.confluent.io/learn/kraft). Apart from seting the `kraft.enabled` parameter to `true`, we also made the following changes:
+
+- Renamed `minBrokerId` parameter to `minId` to set the minimum ID to use when configuring the node.id or broker.id parameter depending on the Kafka's configuration. This parameter sets the `KAFKA_CFG_NODE_ID` env var in the container.
+- Updated the `containerPorts` and `service.ports` parameters to include the new controller port.
+
 ### To 21.0.0
 
 This major updates Kafka to its newest version, 3.4.x. For more information, please refer to [kafka upgrade notes](https://kafka.apache.org/34/documentation.html#upgrade).
@@ -1026,8 +1032,8 @@ Backwards compatibility is not guaranteed when Kafka metrics are enabled, unless
 Use the workaround below to upgrade from versions previous to 7.0.0. The following example assumes that the release name is kafka:
 
 ```console
-helm upgrade kafka my-repo/kafka --version 6.1.8 --set metrics.kafka.enabled=false
-helm upgrade kafka my-repo/kafka --version 7.0.0 --set metrics.kafka.enabled=true
+helm upgrade kafka oci://registry-1.docker.io/bitnamicharts/kafka --version 6.1.8 --set metrics.kafka.enabled=false
+helm upgrade kafka oci://registry-1.docker.io/bitnamicharts/kafka --version 7.0.0 --set metrics.kafka.enabled=true
 ```
 
 ### To 2.0.0

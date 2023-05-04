@@ -239,6 +239,9 @@ spec:
               {{- if .Values.infoblox.domainFilter }}
             - --domain-filter={{ .Values.infoblox.domainFilter }}
               {{- end }}
+              {{- if .Values.infoblox.nameRegex }}
+            - --infoblox-name-regex={{ .Values.infoblox.nameRegex }}
+              {{- end }}
               {{- if .Values.infoblox.wapiPort }}
             - --infoblox-wapi-port={{ .Values.infoblox.wapiPort }}
               {{- end }}

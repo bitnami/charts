@@ -1,4 +1,4 @@
-{{- if and .Values.rbac.create .Values.speaker.rbac.create -}}
+{{- if and .Values.speaker.enabled .Values.rbac.create .Values.speaker.rbac.create -}}
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
 metadata:

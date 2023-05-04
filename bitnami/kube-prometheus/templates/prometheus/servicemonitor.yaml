@@ -12,6 +12,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
+  jobLabel: {{ .Values.prometheus.serviceMonitor.jobLabel | quote }}
   selector:
     matchLabels: {{- include "kube-prometheus.prometheus.matchLabels" . | nindent 6 }}
   namespaceSelector:

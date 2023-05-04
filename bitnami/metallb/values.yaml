@@ -49,6 +49,9 @@ diagnosticMode:
   ##
   args:
     - infinity
+## @param installCRDs Flag to install metallb CRDs
+##
+installCRDs: true
 ## @section MetalLB parameters
 
 ## RBAC creation for controller and speaker
@@ -98,7 +101,7 @@ controller:
   image:
     registry: docker.io
     repository: bitnami/metallb-controller
-    tag: 0.13.9-debian-11-r12
+    tag: 0.13.9-debian-11-r21
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -445,6 +448,11 @@ controller:
 ## ref: https://hub.docker.com/r/bitnami/metallb-speaker/tags
 ##
 speaker:
+  ## @param speaker.enabled Whether to enable BGP speakers or not
+  ## ref: https://metallb.universe.tf/configuration/calico/#the-easy-way
+  ## Some CNI implementations (e.g. Calico) does not require speakers
+  ##
+  enabled: true
   ## @param speaker.image.registry MetalLB Speaker image registry
   ## @param speaker.image.repository MetalLB Speaker image repository
   ## @param speaker.image.tag MetalLB Speaker  image tag (immutable tags are recommended)
@@ -455,7 +463,7 @@ speaker:
   image:
     registry: docker.io
     repository: bitnami/metallb-speaker
-    tag: 0.13.9-debian-11-r11
+    tag: 0.13.9-debian-11-r21
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

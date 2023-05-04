@@ -57,16 +57,18 @@ host. To configure JasperReports to use and external database host:
 
 1. Complete your JasperReports deployment by running:
 
-  helm upgrade --namespace {{ .Release.Namespace }} {{ .Release.Name }} --set service.type={{ .Values.service.type }},mariadb.enabled=false,externalDatabase.host=YOUR_EXTERNAL_DATABASE_HOST my-repo/jasperreports
+  helm upgrade --namespace {{ .Release.Namespace }} {{ .Release.Name }} --set service.type={{ .Values.service.type }},mariadb.enabled=false,externalDatabase.host=YOUR_EXTERNAL_DATABASE_HOST oci://registry-1.docker.io/bitnamicharts/jasperreports
 
 {{- end }}
 
 {{- include "jasperreports.checkRollingTags" . }}
 {{- $passwordValidationErrors := list -}}
 {{- $secretName := include "common.names.fullname" . -}}
-{{- $requiredJasperReportsPassword := dict "valueKey" "jasperreportsPassword" "secret" $secretName "field" "jasperreports-password" "context" $ -}}
-{{- $requiredJasperReportsPasswordError := include "common.validations.values.single.empty" $requiredJasperReportsPassword -}}
-{{- $passwordValidationErrors = append $passwordValidationErrors $requiredJasperReportsPasswordError -}}
+{{- if not .Values.jasperreportsExistingSecret -}}
+  {{- $requiredJasperReportsPassword := dict "valueKey" "jasperreportsPassword" "secret" $secretName "field" "jasperreports-password" "context" $ -}}
+  {{- $requiredJasperReportsPasswordError := include "common.validations.values.single.empty" $requiredJasperReportsPassword -}}
+  {{- $passwordValidationErrors = append $passwordValidationErrors $requiredJasperReportsPasswordError -}}
+{{- end }}
 {{- $mariadbSecretName := include "jasperreports.databaseSecretName" . -}}
 {{- $mariadbPasswordValidationErrors := include "common.validations.values.mariadb.passwords" (dict "secret" $mariadbSecretName "subchart" true "context" $) -}}
 {{- $passwordValidationErrors = append $passwordValidationErrors $mariadbPasswordValidationErrors -}}

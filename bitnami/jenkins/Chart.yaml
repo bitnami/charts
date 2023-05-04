@@ -2,10 +2,10 @@ annotations:
   category: Infrastructure
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 2.387.1
+appVersion: 2.387.3
 dependencies:
   - name: common
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     tags:
       - bitnami-common
     version: 2.x.x
@@ -26,4 +26,4 @@ name: jenkins
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/jenkins
   - https://jenkins.io/
-version: 12.0.3
+version: 12.1.1

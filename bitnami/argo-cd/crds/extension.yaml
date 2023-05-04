@@ -1,0 +1,95 @@
+# CRDs source: https://github.com/argoproj/argo-helm/blob/main/charts/argo-cd/templates/crds/crd-extension.yaml (2.6.6)
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  labels:
+    app.kubernetes.io/name: argocdextensions.argoproj.io
+    app.kubernetes.io/part-of: argocd
+  name: argocdextensions.argoproj.io
+spec:
+  group: argoproj.io
+  names:
+    kind: ArgoCDExtension
+    listKind: ArgoCDExtensionList
+    plural: argocdextensions
+    singular: argocdextension
+  scope: Namespaced
+  versions:
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: ArgoCDExtension is the Schema for the argocdextensions API
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: ArgoCDExtensionSpec defines the desired state of ArgoCDExtension
+            properties:
+              sources:
+                description: Sources specifies where the extension should come from
+                items:
+                  description: ExtensionSource specifies where the extension should
+                    be sourced from
+                  properties:
+                    git:
+                      description: Git is specified if the extension should be sourced
+                        from a git repository
+                      properties:
+                        revision:
+                          description: Revision specifies the revision of the Repository
+                            to fetch
+                          type: string
+                        url:
+                          description: URL specifies the Git repository URL to fetch
+                          type: string
+                      type: object
+                    web:
+                      description: Web is specified if the extension should be sourced
+                        from a web file
+                      properties:
+                        url:
+                          description: URK specifies the remote file URL
+                          type: string
+                      type: object
+                  type: object
+                type: array
+            required:
+            - sources
+            type: object
+          status:
+            description: ArgoCDExtensionStatus defines the observed state of ArgoCDExtension
+            properties:
+              conditions:
+                items:
+                  properties:
+                    message:
+                      description: Message contains human-readable message indicating
+                        details about condition
+                      type: string
+                    status:
+                      description: Boolean status describing if the condition is currently
+                        true
+                      type: string
+                    type:
+                      description: Type is an ArgoCDExtension condition type
+                      type: string
+                  required:
+                  - message
+                  - status
+                  - type
+                  type: object
+                type: array
+            type: object
+        type: object
+    served: true
+    storage: true

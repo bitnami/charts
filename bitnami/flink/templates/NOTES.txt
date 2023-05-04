@@ -1,0 +1,44 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
+** Please be patient while the chart is being deployed **
+{{- if .Values.diagnosticMode.enabled }}
+The chart has been deployed in diagnostic mode. All probes have been disabled and the command has been overwritten with:
+
+  command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 4 }}
+  args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 4 }}
+
+Get the list of pods by executing:
+
+  kubectl get pods --namespace {{ .Release.Namespace }} -l app.kubernetes.io/instance={{ .Release.Name }}
+
+Access the pod you want to debug by executing
+
+  kubectl exec --namespace {{ .Release.Namespace }} -ti <NAME OF THE POD> -- bash
+
+In order to replicate the container startup scripts execute this command:
+
+    /opt/bitnami/scripts/flink/entrypoint.sh /opt/bitnami/scripts/flink/run.sh
+
+{{- else }}
+
+1. Get the jobmanager URL by running these commands:
+
+    {{- if contains "NodePort" .Values.jobmanager.service.type }}
+        export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "common.names.fullname" . }})
+        export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+        echo http://$NODE_IP:$NODE_PORT
+    {{- else if contains "LoadBalancer" .Values.jobmanager.service.type }}
+         NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+               You can watch the status of by running 'kubectl get --namespace {{ .Release.Namespace }} svc -w {{ include "common.names.fullname" . }}'
+        export SERVICE_IP=$(kubectl get svc --namespace {{ include "flink.jobmanager.fullname" . }} {{ include "common.names.fullname" . }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+        echo http://$SERVICE_IP:{{ .Values.jobmanager.service.ports.http }}
+    {{- else if contains "ClusterIP" .Values.jobmanager.service.type }}
+        echo "Browse to http://127.0.0.1:{{ .Values.jobmanager.service.ports.http }}"
+        kubectl port-forward svc/{{ include "flink.jobmanager.fullname" . }} {{ .Values.jobmanager.service.ports.http }}:{{ .Values.jobmanager.service.ports.http }} &
+    {{- end }}
+
+{{- end }}
+
+{{- include "common.warnings.rollingTag" .Values.image }}

@@ -59,6 +59,16 @@ Create the name of the service account to use
 {{- end -}}
 
 {{/*
+Return the path Keycloak is hosted on. This looks at httpRelativePath and returns it with a trailing slash. For example:
+    / -> / (the default httpRelativePath)
+    /auth -> /auth/ (trailing slash added)
+    /custom/ -> /custom/ (unchanged)
+*/}}
+{{- define "keycloak.httpPath" -}}
+{{ ternary .Values.httpRelativePath (printf "%s%s" .Values.httpRelativePath "/") (hasSuffix "/" .Values.httpRelativePath) }}
+{{- end -}}
+
+{{/*
 Return the Keycloak configuration configmap
 */}}
 {{- define "keycloak.configmapName" -}}
@@ -83,9 +93,9 @@ Return the Database hostname
 */}}
 {{- define "keycloak.databaseHost" -}}
 {{- if eq .Values.postgresql.architecture "replication" }}
-{{- ternary (include "keycloak.postgresql.fullname" .) .Values.externalDatabase.host .Values.postgresql.enabled -}}-primary
+{{- ternary (include "keycloak.postgresql.fullname" .) (tpl .Values.externalDatabase.host $) .Values.postgresql.enabled -}}-primary
 {{- else -}}
-{{- ternary (include "keycloak.postgresql.fullname" .) .Values.externalDatabase.host .Values.postgresql.enabled -}}
+{{- ternary (include "keycloak.postgresql.fullname" .) (tpl .Values.externalDatabase.host $) .Values.postgresql.enabled -}}
 {{- end -}}
 {{- end -}}
 
