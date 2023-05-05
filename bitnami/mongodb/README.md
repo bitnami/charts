@@ -509,6 +509,17 @@ Refer to the [chart documentation for more information on each of these architec
 | `metrics.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                      | `[]`                       |
 | `metrics.username`                           | String with username for the metrics exporter                                                                         | `""`                       |
 | `metrics.password`                           | String with password for the metrics exporter                                                                         | `""`                       |
+| `metrics.compatibleMode`                     | Enables old style mongodb-exporter metrics                                                                            | `true`                     |
+| `metrics.collector.all` | Enable all collectors. Same as specifying enabling all individual metrics. Note: Enabling all metrics will cause significant CPU load on mongod | `false` |
+| `metrics.collector.diagnosticdata` | Enable collecting metrics from getDiagnosticData | `true` |
+| `metrics.collector.replicasetstatus` | Enable collecting metrics from replSetGetStatus | `true` |
+| `metrics.collector.dbstats` | Enable collecting metrics from dbStats | `false` |
+| `metrics.collector.topmetrics` | Enable collecting metrics from top admin command | `false` |
+| `metrics.collector.indexstats` | Enable collecting metrics from $indexStats | `false` |
+| `metrics.collector.collstats` | Enable collecting metrics from $collStats | `false` |
+| `metrics.collector.collstatsColls` | List of \<databases\>.\<collections\> to get $collStats | `[]` |
+| `metrics.collector.indexstatsColls` | List of \<databases\>.\<collections\> to get $indexStats | `[]` |
+| `metrics.collector.collstatsLimit` | Disable collstats, dbstats, topmetrics and indexstats collector if there are more than \<n\> collections. 0=No limit | `0` |
 | `metrics.extraFlags`                         | String with extra flags to the metrics exporter                                                                       | `""`                       |
 | `metrics.command`                            | Override default container command (useful when using custom images)                                                  | `[]`                       |
 | `metrics.args`                               | Override default container args (useful when using custom images)                                                     | `[]`                       |
@@ -720,8 +731,8 @@ From this version, the way of setting the ingress rules has changed. Instead of 
 ```yaml
 ingress:
   hosts:
-  - name: mongodb.local
-    path: /
+    - name: mongodb.local
+      path: /
 ```
 
 ### To 6.0.0
