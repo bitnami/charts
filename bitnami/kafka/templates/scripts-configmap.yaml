@@ -131,7 +131,6 @@ data:
     export EXTERNAL_ACCESS_HOST="${HOST_IP}"
     {{- else if and .Values.externalAccess.service.externalIPs (not .Values.externalAccess.autoDiscovery.enabled) }}
     export EXTERNAL_ACCESS_HOST=$(echo '{{ .Values.externalAccess.service.externalIPs }}' | tr -d '[]' | cut -d ' ' -f "$(($ID + 1))")
-
     {{- else }}
     export EXTERNAL_ACCESS_HOST=$(curl -s https://ipinfo.io/ip)
     {{- end }}
