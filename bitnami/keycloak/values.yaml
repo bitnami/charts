@@ -54,8 +54,7 @@ dnsPolicy: ""
 ##   options:
 ##   - name: ndots
 ##     value: "4"
-dnsConfig:
-  ndots: 1
+dnsConfig: {}
 ## @param clusterDomain Default Kubernetes cluster domain
 ##
 clusterDomain: cluster.local

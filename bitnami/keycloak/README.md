@@ -118,8 +118,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraEnvVars`                   | Extra environment variables to be set on Keycloak container                                                                  | `[]`                          |
 | `extraEnvVarsCM`                 | Name of existing ConfigMap containing extra env vars                                                                         | `""`                          |
 | `extraEnvVarsSecret`             | Name of existing Secret containing extra env vars                                                                            | `""`                          |
-| `dnsPolicy`                      | DNS Policy for pod                                                                                                           | `""`                          |
-| `dnsConfig`                      | DNS Configuration pod                                                                                                        | `{}`                          |
 
 ### Keycloak statefulset parameters
 
@@ -181,6 +179,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for Keycloak container(s)                                       | `[]`            |
 | `initContainers`                        | Add additional init containers to the Keycloak pods                                                                      | `[]`            |
 | `sidecars`                              | Add additional sidecar containers to the Keycloak pods                                                                   | `[]`            |
+| `dnsPolicy`                             | DNS Policy for pod                                                                                                       | `""`            |
+| `dnsConfig`                             | DNS Configuration pod                                                                                                    | `{}`            |
 
 ### Exposure parameters
 
