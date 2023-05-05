@@ -62,7 +62,7 @@ spec:
     {{- if and .Values.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.ingress.annotations )) .Values.ingress.selfSigned (not (empty .Values.ingress.secrets))) }}
     - hosts:
         - {{ .Values.ingress.hostname | quote }}
-      secretName: {{ regexReplaceAll "[^a-zA-Z0-9.-]+\W+" (printf "%s-tls" .Values.ingress.hostname) "" }}
+      secretName: {{ regexReplaceAll "[^a-zA-Z0-9.-]+\W*" (printf "%s-tls" .Values.ingress.hostname) "" }}
     {{- end }}
     {{- if .Values.ingress.extraTls }}
     {{- include "common.tplvalues.render" (dict "value" .Values.ingress.extraTls "context" $) | nindent 4 }}
