@@ -968,9 +968,8 @@ keycloakConfigCli:
   ##       "realm": "realm1",
   ##       "clients": []
   ##     }
-  ##   files/realm2.yaml:
-  ##   realm3.yaml: |
-  ##     realm: realm3
+  ##   realm2.yaml: |
+  ##     realm: realm2
   ##     clients: []
   ##
   configuration: {}
