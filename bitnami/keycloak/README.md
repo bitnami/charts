@@ -118,6 +118,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraEnvVars`                   | Extra environment variables to be set on Keycloak container                                                                  | `[]`                          |
 | `extraEnvVarsCM`                 | Name of existing ConfigMap containing extra env vars                                                                         | `""`                          |
 | `extraEnvVarsSecret`             | Name of existing Secret containing extra env vars                                                                            | `""`                          |
+| `dnsPolicy`                      | DNS Policy for pod                                                                                                           | `""`                          |
+| `dnsConfig`                      | DNS Configuration pod                                                                                                        | `{}`                          |
 
 ### Keycloak statefulset parameters
 
