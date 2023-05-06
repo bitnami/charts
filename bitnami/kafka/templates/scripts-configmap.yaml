@@ -123,10 +123,10 @@ data:
     {{- end }}
     export EXTERNAL_ACCESS_PORT={{ .Values.externalAccess.service.ports.external }}
     {{- else if eq .Values.externalAccess.service.type "NodePort" }}
-    {{- if and .Values.externalAccess.service.usePodIPs .Values.externalAccess.autoDiscovery.enabled }}
-    export EXTERNAL_ACCESS_HOST="${MY_POD_IP}"
     {{- else if .Values.externalAccess.service.domain }}
     export EXTERNAL_ACCESS_HOST={{ .Values.externalAccess.service.domain }}
+    {{- if and .Values.externalAccess.service.usePodIPs .Values.externalAccess.autoDiscovery.enabled }}
+    export EXTERNAL_ACCESS_HOST="${MY_POD_IP}"
     {{- else if or .Values.externalAccess.service.useHostIPs .Values.externalAccess.autoDiscovery.enabled }}
     export EXTERNAL_ACCESS_HOST="${HOST_IP}"
     {{- else if and .Values.externalAccess.service.externalIPs (not .Values.externalAccess.autoDiscovery.enabled) }}
