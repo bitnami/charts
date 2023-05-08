@@ -566,7 +566,7 @@ datasources:
         type: prometheus
         access: proxy
         orgId: 1
-        url: http://prometheus-alertmanager.monitoring.svc.cluster.local
+        url: http://prometheus.monitoring.svc.cluster.local
         version: 1
         editable: true
         isDefault: true
@@ -593,6 +593,85 @@ helm install grafana-mimir \
     --values values.yaml \
     --namespace monitoring \
     oci://registry-1.docker.io/bitnamicharts/grafana
+```
+
+### How to add new targets
+
+By default this helm chart will monitor its own targets: prometheus and alertmanager. Additional ones can be added setting a list with the [scrape_configs](https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config) in the value `server.extraScrapeConfigs`. Here there is a simple example for wordpress (deployed in the default namespace):
+
+```yaml
+server:
+  extraScrapeConfigs:
+    - job_name: wordpress
+      kubernetes_sd_configs:
+        - role: endpoints
+          namespaces:
+            names:
+            - default
+      metrics_path: /metrics
+      relabel_configs:
+        - source_labels:
+            - job
+          target_label: __tmp_wordpress_job_name
+        - action: keep
+          source_labels:
+            - __meta_kubernetes_service_label_app_kubernetes_io_instance
+            - __meta_kubernetes_service_labelpresent_app_kubernetes_io_instance
+          regex: (wordpress);true
+        - action: keep
+          source_labels:
+            - __meta_kubernetes_service_label_app_kubernetes_io_name
+            - __meta_kubernetes_service_labelpresent_app_kubernetes_io_name
+          regex: (wordpress);true
+        - action: keep
+          source_labels:
+            - __meta_kubernetes_endpoint_port_name
+          regex: metrics
+        - source_labels:
+            - __meta_kubernetes_endpoint_address_target_kind
+            - __meta_kubernetes_endpoint_address_target_name
+          separator: ;
+          regex: Node;(.*)
+          replacement: ${1}
+          target_label: node
+        - source_labels:
+            - __meta_kubernetes_endpoint_address_target_kind
+            - __meta_kubernetes_endpoint_address_target_name
+          separator: ;
+          regex: Pod;(.*)
+          replacement: ${1}
+          target_label: pod
+        - source_labels:
+            - __meta_kubernetes_namespace
+          target_label: namespace
+        - source_labels:
+            - __meta_kubernetes_service_name
+          target_label: service
+        - source_labels:
+            - __meta_kubernetes_pod_name
+          target_label: pod
+        - source_labels:
+            - __meta_kubernetes_pod_container_name
+          target_label: container
+        - action: drop
+          source_labels:
+            - __meta_kubernetes_pod_phase
+          regex: (Failed|Succeeded)
+        - source_labels:
+            - __meta_kubernetes_service_name
+          target_label: job
+          replacement: ${1}
+        - target_label: endpoint
+          replacement: metrics
+        - source_labels:
+            - __address__
+          target_label: __tmp_hash
+          modulus: 1
+          action: hashmod
+        - source_labels:
+            - __tmp_hash
+          regex: 0
+          action: keep
 ```
 
 ## Troubleshooting

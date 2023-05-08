@@ -594,6 +594,9 @@ server:
       - job_name: alertmanager
         {{- include "prometheus.scrape_config" (dict "component" "alertmanager" "context" $) | nindent 4 }}
     {{- end }}
+    {{- if .Values.server.extraScrapeConfigs}}
+    {{- include "common.tplvalues.render" (dict "value" .Values.server.extraScrapeConfigs "context" $) | nindent 2 }}
+    {{- end }}
     {{- if or .Values.alertmanager.enabled .Values.server.alertingEndpoints}}
     alerting:
       alertmanagers:
@@ -605,6 +608,10 @@ server:
             - targets: [ {{include "prometheus.alertmanager.fullname" . | quote }}]
     {{- end }}
 
+  ## @param server.extraScrapeConfigs Promethus configuration, useful to declare new scrape_configs. This content will be merged with the 'server.configuration' value and stored in the the prometheus.yaml file.
+  ## ref: <https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config>
+  ##
+  extraScrapeConfigs: []
   ## @param server.replicaCount Number of Prometheus replicas to deploy
   ##
   replicaCount: 1
@@ -1462,7 +1469,7 @@ volumePermissions:
 rbac:
   ## @param rbac.create Specifies whether RBAC resources should be created
   ##
-  create: false
+  create: true
   ## @param rbac.rules Custom RBAC rules to set
   ## e.g:
   ## rules:
