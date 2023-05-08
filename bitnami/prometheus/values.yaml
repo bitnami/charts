@@ -59,6 +59,10 @@ diagnosticMode:
   ##
   args:
     - infinity
+## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
+##
+ingress:
+  apiVersion: ""
 
 ## @section Alertmanager Parameters
 ##
@@ -244,20 +248,7 @@ alertmanager:
     create: false
     minAvailable: 1
     maxUnavailable: ""
-  ## Autoscaling configuration
-  ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
-  ## @param alertmanager.autoscaling.enabled Enable autoscaling for Alertmanager
-  ## @param alertmanager.autoscaling.minReplicas Minimum number of Alertmanager replicas
-  ## @param alertmanager.autoscaling.maxReplicas Maximum number of Alertmanager replicas
-  ## @param alertmanager.autoscaling.targetCPU Target CPU utilization percentage
-  ## @param alertmanager.autoscaling.targetMemory Target Memory utilization percentage
-  ##
-  autoscaling:
-    enabled: false
-    minReplicas: ""
-    maxReplicas: ""
-    targetCPU: ""
-    targetMemory: ""
+
   ## Node affinity preset
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
   ##
@@ -297,6 +288,10 @@ alertmanager:
     ##
     type: RollingUpdate
 
+  ## @param alertmanager.podManagementPolicy Statefulset Pod management policy, it needs to be Parallel to be able to complete the cluster join
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
+  ##
+  podManagementPolicy: OrderedReady
   ## @param alertmanager.priorityClassName Alertmanager pods' priorityClassName
   ##
   priorityClassName: ""
@@ -366,9 +361,7 @@ alertmanager:
     ## @param alertmanager.ingress.pathType Ingress path type
     ##
     pathType: ImplementationSpecific
-    ## @param alertmanager.ingress.apiVersion Force Ingress API version (automatically detected if not set)
-    ##
-    apiVersion: ""
+
     ## @param alertmanager.ingress.hostname Default host for the ingress record
     ##
     hostname: prometheus.local
@@ -1096,9 +1089,6 @@ server:
       ## @param server.thanos.ingress.pathType Ingress path type
       ##
       pathType: ImplementationSpecific
-      ## @param server.thanos.ingress.apiVersion Force Ingress API version (automatically detected if not set)
-      ##
-      apiVersion: ""
       ## @param server.thanos.ingress.hostname Default host for the ingress record
       ##
       hostname: thanos.prometheus.local
@@ -1193,9 +1183,6 @@ server:
     ## @param server.ingress.pathType Ingress path type
     ##
     pathType: ImplementationSpecific
-    ## @param server.ingress.apiVersion Force Ingress API version (automatically detected if not set)
-    ##
-    apiVersion: ""
     ## @param server.ingress.hostname Default host for the ingress record
     ##
     hostname: prometheus.local
@@ -1489,48 +1476,3 @@ metrics:
   ## @param metrics.enabled Enable the export of Prometheus metrics
   ##
   enabled: false
-  ## Prometheus ServiceMonitor configuration
-  ##
-  serviceMonitor:
-    ## @param metrics.serviceMonitor.enabled if `true`, creates a Prometheus ServiceMonitor (also requires `metrics.enabled` to be `true`)
-    ##
-    enabled: false
-    ## @param metrics.serviceMonitor.namespace Namespace in which Prometheus is running
-    ##
-    namespace: ""
-    ## @param metrics.serviceMonitor.annotations Additional custom annotations for the ServiceMonitor
-    ##
-    annotations: {}
-    ## @param metrics.serviceMonitor.labels Extra labels for the ServiceMonitor
-    ##
-    labels: {}
-    ## @param metrics.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in Prometheus
-    ##
-    jobLabel: ""
-    ## @param metrics.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
-    ##
-    honorLabels: false
-    ## @param metrics.serviceMonitor.interval Interval at which metrics should be scraped.
-    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
-    ## e.g:
-    ## interval: 10s
-    ##
-    interval: ""
-    ## @param metrics.serviceMonitor.scrapeTimeout Timeout after which the scrape is ended
-    ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
-    ## e.g:
-    ## scrapeTimeout: 10s
-    ##
-    scrapeTimeout: ""
-    ## @param metrics.serviceMonitor.metricRelabelings Specify additional relabeling of metrics
-    ##
-    metricRelabelings: []
-    ## @param metrics.serviceMonitor.relabelings Specify general relabeling
-    ##
-    relabelings: []
-    ## @param metrics.serviceMonitor.selector Prometheus instance selector labels
-    ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
-    ## selector:
-    ##   prometheus: my-prometheus
-    ##
-    selector: {}

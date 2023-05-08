@@ -22,7 +22,7 @@ Return the proper image name
 {{/*
 Return the proper image name (for the init container volume-permissions image)
 */}}
-{{- define "prometheus.server.volumePermissions.image" -}}
+{{- define "prometheus.volumePermissions.image" -}}
 {{- include "common.images.image" ( dict "imageRoot" .Values.volumePermissions.image "global" .Values.global ) -}}
 {{- end -}}
 
@@ -59,6 +59,7 @@ Compile all warnings into a single message.
 */}}
 {{- define "prometheus.server.validateValues" -}}
 {{- $messages := list -}}
+{{- $messages := append $messages (include "prometheus.server.validateValues.thanosObjectStorageConfig" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
@@ -66,6 +67,15 @@ Compile all warnings into a single message.
 {{-   printf "\nVALUES VALIDATION:\n%s" $message -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Validate thanos objectStorageConfig.
+*/}}
+{{- define "prometheus.server.validateValues.thanosObjectStorageConfig" -}}
+{{- if (and .Values.server.thanos.objectStorageConfig (or (not (hasKey .Values.server.thanos.objectStorageConfig "secretKey")) (not (hasKey .Values.server.thanos.objectStorageConfig "secretName")) ))}}
+    {{- printf "'server.thanos.objectStorageConfig.secretKey' and 'server.thanos.objectStorageConfi.secretName' are mandatory" }}
+{{- end }}
+{{- end }}
 
 {{/*
 Get the Prometheus configuration configmap.
