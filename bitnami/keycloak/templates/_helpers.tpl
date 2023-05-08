@@ -170,7 +170,7 @@ Return the Database encrypted password
 {{/*
 Add environment variables to configure database values
 */}}
-{{- define "keycloak.databaseSecretKey" -}}
+{{- define "keycloak.databaseSecretPasswordKey" -}}
 {{- if .Values.postgresql.enabled -}}
     {{- print "password" -}}
 {{- else -}}
@@ -184,6 +184,35 @@ Add environment variables to configure database values
         {{- print "db-password" -}}
     {{- end -}}
 {{- end -}}
+{{- end -}}
+
+{{- define "keycloak.databaseSecretHostKey" -}}
+    {{- if .Values.externalDatabase.existingSecretHostKey -}}
+        {{- printf "%s" .Values.externalDatabase.existingSecretHostKey -}}
+    {{- else -}}
+        {{- print "db-host" -}}
+    {{- end -}}
+{{- end -}}
+{{- define "keycloak.databaseSecretPortKey" -}}
+    {{- if .Values.externalDatabase.existingSecretPortKey -}}
+        {{- printf "%s" .Values.externalDatabase.existingSecretPortKey -}}
+    {{- else -}}
+        {{- print "db-port" -}}
+    {{- end -}}
+{{- end -}}
+{{- define "keycloak.databaseSecretUserKey" -}}
+    {{- if .Values.externalDatabase.existingSecretUserKey -}}
+        {{- printf "%s" .Values.externalDatabase.existingSecretUserKey -}}
+    {{- else -}}
+        {{- print "db-port" -}}
+    {{- end -}}
+{{- end -}}
+{{- define "keycloak.databaseSecretDatabaseKey" -}}
+    {{- if .Values.externalDatabase.existingSecretDatabaseKey -}}
+        {{- printf "%s" .Values.externalDatabase.existingSecretDatabaseKey -}}
+    {{- else -}}
+        {{- print "db-port" -}}
+    {{- end -}}
 {{- end -}}
 
 {{/*

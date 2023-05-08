@@ -119,7 +119,35 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ include "keycloak.databaseSecretName" . }}
-                  key: {{ include "keycloak.databaseSecretKey" . }}
+                  key: {{ include "keycloak.databaseSecretPasswordKey" . }}
+            {{- if .Values.externalDatabase.existingSecretHostKey }}
+            - name: KEYCLOAK_DATABASE_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "keycloak.databaseSecretName" . }}
+                  key: {{ include "keycloak.databaseSecretHostKey" . }}
+            {{- end }}
+            {{- if .Values.externalDatabase.existingSecretPortKey }}
+            - name: KEYCLOAK_DATABASE_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "keycloak.databaseSecretName" . }}
+                  key: {{ include "keycloak.databaseSecretPortKey" . }}
+            {{- end }}
+            {{- if .Values.externalDatabase.existingSecretUserKey }}
+            - name: KEYCLOAK_DATABASE_USER
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "keycloak.databaseSecretName" . }}
+                  key: {{ include "keycloak.databaseSecretUserKey" . }}
+            {{- end }}
+            {{- if .Values.externalDatabase.existingSecretDatabaseKey }}
+            - name: KEYCLOAK_DATABASE_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "keycloak.databaseSecretName" . }}
+                  key: {{ include "keycloak.databaseSecretDatabaseKey" . }}
+            {{- end }}
             {{- if and .Values.tls.enabled (or .Values.tls.keystorePassword .Values.tls.passwordsSecret) }}
             - name: KEYCLOAK_HTTPS_KEY_STORE_PASSWORD
               valueFrom:
