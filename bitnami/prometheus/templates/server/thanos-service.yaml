@@ -49,7 +49,7 @@ spec:
     {{- if .Values.server.thanos.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.server.thanos.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}
-  selector:
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/part-of: prometheus
     app.kubernetes.io/component: server
 {{- end }}

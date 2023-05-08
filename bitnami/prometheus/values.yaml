@@ -868,7 +868,7 @@ server:
   retention: 10d
   ## @param server.retentionSize Maximum size of metrics
   ##
-  retentionSize: ""
+  retentionSize: "0"
   ## @param server.alertingEndpoints Alertmanagers to which alerts will be sent
   ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#alertmanager_config
   ##
