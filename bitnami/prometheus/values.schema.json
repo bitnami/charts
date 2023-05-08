@@ -1225,7 +1225,7 @@
                 "retentionSize": {
                     "type": "string",
                     "description": "Maximum size of metrics",
-                    "default": ""
+                    "default": "0"
                 },
                 "alertingEndpoints": {
                     "type": "array",
