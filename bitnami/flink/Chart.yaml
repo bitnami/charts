@@ -23,4 +23,4 @@ name: flink
 sources:
   - https://github.com/apache/flink
   - https://flink.apache.org/
-version: 0.2.0
+version: 0.2.1
