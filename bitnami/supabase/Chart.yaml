@@ -30,4 +30,4 @@ name: supabase
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/supabase
   - https://github.com/supabaseorg/supabase/
-version: 0.2.2
+version: 0.2.3
