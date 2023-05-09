@@ -31,4 +31,4 @@ sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/fluxcd-image-automation-controller
   - https://github.com/bitnami/containers/tree/main/bitnami/fluxcd-image-reflector-controller
   - https://github.com/fluxcd
-version: 0.2.1
+version: 0.2.2
