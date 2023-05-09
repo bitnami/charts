@@ -27,4 +27,4 @@ sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/mariadb-galera
   - https://github.com/prometheus/mysqld_exporter
   - https://mariadb.org
-version: 8.1.1
+version: 8.1.2
