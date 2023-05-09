@@ -54,7 +54,16 @@ data:
         {{- if .Values.useHostnames }}
         echo "${full_hostname}"
         {{- else }}
-        getent hosts "${full_hostname}" | awk '{ print $1 ; exit }'
+        retry_count=0
+        until getent hosts "${full_hostname}" | awk '{ print $1; exit }' | grep .; do 
+            if [[ $retry_count -lt {{ .Values.nameResolutionThreshold }} ]]; then
+                sleep {{ .Values.nameResolutionTimeout }}
+            else
+                error "IP address for ${full_hostname} not found"
+                exit 1
+            fi
+            ((retry_count++))
+        done
         {{- end }}
     }
 
@@ -278,7 +287,16 @@ data:
         {{- if .Values.useHostnames }}
         echo "${full_hostname}"
         {{- else }}
-        getent hosts "${full_hostname}" | awk '{ print $1 ; exit }'
+        retry_count=0
+        until getent hosts "${full_hostname}" | awk '{ print $1; exit }' | grep .; do 
+            if [[ $retry_count -lt {{ .Values.nameResolutionThreshold }} ]]; then
+                sleep {{ .Values.nameResolutionTimeout }}
+            else
+                error "IP address for ${full_hostname} not found"
+                exit 1
+            fi
+            ((retry_count++))
+        done
         {{- end }}
     }
 
@@ -448,7 +466,16 @@ data:
         {{- if .Values.useHostnames }}
         echo "${full_hostname}"
         {{- else }}
-        getent hosts "${full_hostname}" | awk '{ print $1 ; exit }'
+        retry_count=0
+        until getent hosts "${full_hostname}" | awk '{ print $1; exit }' | grep .; do 
+            if [[ $retry_count -lt {{ .Values.nameResolutionThreshold }} ]]; then
+                sleep {{ .Values.nameResolutionTimeout }}
+            else
+                error "IP address for ${full_hostname} not found"
+                exit 1
+            fi
+            ((retry_count++))
+        done
         {{- end }}
     }
 
@@ -521,7 +548,16 @@ data:
         {{- if .Values.useHostnames }}
         echo "${full_hostname}"
         {{- else }}
-        getent hosts "${full_hostname}" | awk '{ print $1 ; exit }'
+        retry_count=0
+        until getent hosts "${full_hostname}" | awk '{ print $1; exit }' | grep .; do 
+            if [[ $retry_count -lt {{ .Values.nameResolutionThreshold }} ]]; then
+                sleep {{ .Values.nameResolutionTimeout }}
+            else
+                error "IP address for ${full_hostname} not found"
+                exit 1
+            fi
+            ((retry_count++))
+        done
         {{- end }}
     }
 
@@ -650,7 +686,16 @@ data:
         {{- if .Values.useHostnames }}
         echo "${full_hostname}"
         {{- else }}
-        getent hosts "${full_hostname}" | awk '{ print $1 ; exit }'
+        retry_count=0
+        until getent hosts "${full_hostname}" | awk '{ print $1; exit }' | grep .; do 
+            if [[ $retry_count -lt {{ .Values.nameResolutionThreshold }} ]]; then
+                sleep {{ .Values.nameResolutionTimeout }}
+            else
+                error "IP address for ${full_hostname} not found"
+                exit 1
+            fi
+            ((retry_count++))
+        done
         {{- end }}
     }
 

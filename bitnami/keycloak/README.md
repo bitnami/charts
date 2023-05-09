@@ -84,7 +84,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | ----------------------------- |
 | `image.registry`                 | Keycloak image registry                                                                                                      | `docker.io`                   |
 | `image.repository`               | Keycloak image repository                                                                                                    | `bitnami/keycloak`            |
-| `image.tag`                      | Keycloak image tag (immutable tags are recommended)                                                                          | `21.1.1-debian-11-r0`         |
+| `image.tag`                      | Keycloak image tag (immutable tags are recommended)                                                                          | `21.1.1-debian-11-r3`         |
 | `image.digest`                   | Keycloak image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                     | `""`                          |
 | `image.pullPolicy`               | Keycloak image pull policy                                                                                                   | `IfNotPresent`                |
 | `image.pullSecrets`              | Specify docker-registry secret names as an array                                                                             | `[]`                          |
@@ -278,7 +278,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `keycloakConfigCli.enabled`                               | Whether to enable keycloak-config-cli job                                                                                     | `false`                       |
 | `keycloakConfigCli.image.registry`                        | keycloak-config-cli container image registry                                                                                  | `docker.io`                   |
 | `keycloakConfigCli.image.repository`                      | keycloak-config-cli container image repository                                                                                | `bitnami/keycloak-config-cli` |
-| `keycloakConfigCli.image.tag`                             | keycloak-config-cli container image tag                                                                                       | `5.6.1-debian-11-r15`         |
+| `keycloakConfigCli.image.tag`                             | keycloak-config-cli container image tag                                                                                       | `5.6.1-debian-11-r17`         |
 | `keycloakConfigCli.image.digest`                          | keycloak-config-cli container image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                          |
 | `keycloakConfigCli.image.pullPolicy`                      | keycloak-config-cli container image pull policy                                                                               | `IfNotPresent`                |
 | `keycloakConfigCli.image.pullSecrets`                     | keycloak-config-cli container image pull secrets                                                                              | `[]`                          |
@@ -327,6 +327,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.password`                  | Password for the non-root username for Keycloak                                                                   | `""`               |
 | `externalDatabase.database`                  | Keycloak database name                                                                                            | `bitnami_keycloak` |
 | `externalDatabase.existingSecret`            | Name of an existing secret resource containing the database credentials                                           | `""`               |
+| `externalDatabase.existingSecretHostKey`     | Name of an existing secret key containing the database host name                                                  | `""`               |
+| `externalDatabase.existingSecretPortKey`     | Name of an existing secret key containing the database port                                                       | `""`               |
+| `externalDatabase.existingSecretUserKey`     | Name of an existing secret key containing the database user                                                       | `""`               |
+| `externalDatabase.existingSecretDatabaseKey` | Name of an existing secret key containing the database name                                                       | `""`               |
 | `externalDatabase.existingSecretPasswordKey` | Name of an existing secret key containing the database credentials                                                | `""`               |
 
 ### Keycloak Cache parameters

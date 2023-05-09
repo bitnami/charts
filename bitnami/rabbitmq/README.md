@@ -280,7 +280,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.ports.metrics`            | RabbitMQ Prometheues metrics service port                                                                                        | `9419`                   |
 | `service.ports.epmd`               | EPMD Discovery service port                                                                                                      | `4369`                   |
 | `service.portNames.amqp`           | Amqp service port name                                                                                                           | `amqp`                   |
-| `service.portNames.amqpTls`        | Amqp TLS service port name                                                                                                       | `amqp-ssl`               |
+| `service.portNames.amqpTls`        | Amqp TLS service port name                                                                                                       | `amqp-tls`               |
 | `service.portNames.dist`           | Erlang distribution service port name                                                                                            | `dist`                   |
 | `service.portNames.manager`        | RabbitMQ Manager service port name                                                                                               | `http-stats`             |
 | `service.portNames.metrics`        | RabbitMQ Prometheues metrics service port name                                                                                   | `metrics`                |
