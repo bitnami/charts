@@ -1,5 +1,10 @@
 rbac:
   create: true
+persistence:
+  enabled: true
+  mountPath: /bitnami/prometheus/data
+volumePermissions:
+  enabled: true
 server:
   replicaCount: 1
   serviceAccount:
@@ -24,6 +29,26 @@ server:
     ports:
       http: 80
   enableFeatures: [ "memory-snapshot-on-shutdown" ]
+  containerPorts:
+    http: 8080
+  existingConfigmapKey: test.yaml
+  extraScrapeConfigs:
+    - job_name: wordpress
+      kubernetes_sd_configs:
+        - role: endpoints
+          namespaces:
+            names:
+            - default
+      metrics_path: /metrics
+      relabel_configs:
+        - source_labels:
+            - job
+          target_label: __tmp_wordpress_job_name
+        - action: keep
+          source_labels:
+            - __meta_kubernetes_service_label_app_kubernetes_io_instance
+            - __meta_kubernetes_service_labelpresent_app_kubernetes_io_instance
+          regex: (wordpress);true
 alertmanager:
   enabled: true
   replicaCount: 2

@@ -116,11 +116,12 @@ spec:
           {{- else }}
           args:
             - "--config.file=/opt/bitnami/prometheus/conf/{{ include "prometheus.server.configmapKey" . }}"
-            - "--storage.tsdb.path=/opt/bitnami/prometheus/data"
+            - "--storage.tsdb.path={{ .Values.persistence.mountPath }}"
             - "--storage.tsdb.retention.time={{ .Values.server.retention }}"
             - "--storage.tsdb.retention.size={{ .Values.server.retentionSize }}"
             - "--log.level={{ .Values.server.logLevel }}"
             - "--log.format={{ .Values.server.logFormat }}"
+            - "--web.listen-address=:{{ .Values.server.containerPorts.http }}"
             - "--web.console.libraries=/opt/bitnami/prometheus/conf/console_libraries"
             - "--web.console.templates=/opt/bitnami/prometheus/conf/consoles"
             {{- if .Values.server.enableAdminAPI}}
@@ -158,8 +159,6 @@ spec:
           ports:
             - name: http
               containerPort: {{ .Values.server.containerPorts.http }}
-            - name: https
-              containerPort: {{ .Values.server.containerPorts.https }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.server.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.server.customLivenessProbe "context" $) | nindent 12 }}
@@ -194,7 +193,7 @@ spec:
               subPath: {{ include "prometheus.server.configmapKey" . }}
               readOnly: true
             - name: data
-              mountPath: /opt/bitnami/prometheus/data
+              mountPath: {{ .Values.persistence.mountPath }}
           {{- if .Values.server.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.server.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}

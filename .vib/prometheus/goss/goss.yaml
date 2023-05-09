@@ -22,3 +22,39 @@ command:
     stdout:
     - /serviceaccount.*name.*{{.Env.BITNAMI_APP_NAME }}/
   {{ end }}
+file:
+  /opt/bitnami/prometheus/conf/{{.Vars.server.existingConfigmapKey}}:
+    exists: true
+    contains:
+    - "job_name: alertmanager"
+    - "{{ (first .Vars.server.extraScrapeConfigs).job_name }}"
+  {{.Vars.persistence.mountPath}}:
+    exists: true
+    filetype: directory
+    mode: "0777"
+    owner: root
+  /proc/1/cmdline:
+    exists: true
+    contains:
+    - "--enable-feature={{ .Vars.server.enableFeatures | first }}"
+http:
+  http://localhost:{{.Vars.server.containerPorts.http}}/-/ready:
+    status: 200
+    body:
+    - "Prometheus Server is Ready."
+  http://localhost:{{.Vars.server.containerPorts.http}}/-/healthy:
+    status: 200
+    body:
+    - "Prometheus Server is Healthy."
+command:
+  check-config-files:
+    exec: promtool check config /opt/bitnami/prometheus/conf/{{.Vars.server.existingConfigmapKey}}
+    exit-status: 0
+    stdout:
+    - SUCCESS
+  check-metrics:
+    exec: promtool query instant http://localhost:{{.Vars.server.containerPorts.http}} prometheus_http_requests_total
+    exit-status: 0
+    stdout:
+    - "/-/healthy"
+    - "/-/ready"
