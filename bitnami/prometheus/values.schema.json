@@ -94,6 +94,16 @@
                 }
             }
         },
+        "ingress": {
+            "type": "object",
+            "properties": {
+                "apiVersion": {
+                    "type": "string",
+                    "description": "Force Ingress API version (automatically detected if not set)",
+                    "default": ""
+                }
+            }
+        },
         "alertmanager": {
             "type": "object",
             "properties": {
@@ -412,36 +422,6 @@
                         }
                     }
                 },
-                "autoscaling": {
-                    "type": "object",
-                    "properties": {
-                        "enabled": {
-                            "type": "boolean",
-                            "description": "Enable autoscaling for Alertmanager",
-                            "default": false
-                        },
-                        "minReplicas": {
-                            "type": "string",
-                            "description": "Minimum number of Alertmanager replicas",
-                            "default": ""
-                        },
-                        "maxReplicas": {
-                            "type": "string",
-                            "description": "Maximum number of Alertmanager replicas",
-                            "default": ""
-                        },
-                        "targetCPU": {
-                            "type": "string",
-                            "description": "Target CPU utilization percentage",
-                            "default": ""
-                        },
-                        "targetMemory": {
-                            "type": "string",
-                            "description": "Target Memory utilization percentage",
-                            "default": ""
-                        }
-                    }
-                },
                 "nodeAffinityPreset": {
                     "type": "object",
                     "properties": {
@@ -488,6 +468,11 @@
                             "default": "RollingUpdate"
                         }
                     }
+                },
+                "podManagementPolicy": {
+                    "type": "string",
+                    "description": "Statefulset Pod management policy, it needs to be Parallel to be able to complete the cluster join",
+                    "default": "OrderedReady"
                 },
                 "priorityClassName": {
                     "type": "string",
@@ -567,11 +552,6 @@
                             "type": "string",
                             "description": "Ingress path type",
                             "default": "ImplementationSpecific"
-                        },
-                        "apiVersion": {
-                            "type": "string",
-                            "description": "Force Ingress API version (automatically detected if not set)",
-                            "default": ""
                         },
                         "hostname": {
                             "type": "string",
@@ -781,7 +761,13 @@
                 "configuration": {
                     "type": "string",
                     "description": "Promethus configuration. This content will be stored in the the prometheus.yaml file and the content can be a template.",
-                    "default": "global:\n  scrape_interval: {{ .Values.server.scrapeInterval }}\n  scrape_timeout: {{ .Values.server.scrapeTimeout }}\n  evaluation_interval: {{ .Values.server.evaluationInterval }}\n  external_labels:\n    monitor: {{ template \"common.names.fullname\" . }}\n    {{- include \"common.tplvalues.render\" (dict \"value\" .Values.server.externalLabels \"context\" $) | nindent 4 }}\n{{- if .Values.server.remoteWrite }}\nremote_write: {{- include \"common.tplvalues.render\" (dict \"value\" .Values.server.remoteWrite \"context\" $) | nindent 4 }}\n{{- end }}\nscrape_configs:\n  - job_name: prometheus\n  {{ include \"prometheus.scrape_config\" (dict \"component\" \"server\" \"context\" $) | nindent 4 }}\n{{- if .Values.alertmanager.enabled }}\n  - job_name: alertmanager\n    {{ include \"prometheus.scrape_config\" (dict \"component\" \"alertmanager\" \"context\" $) | nindent 4 }}\n{{- end }}\n{{- if or .Values.alertmanager.enabled .Values.server.alertingEndpoints}}\nalerting:\n  alertmanagers:\n    {{- include \"common.tplvalues.render\" (dict \"value\" .Values.server.alertingEndpoints \"context\" $) | nindent 4 }}\n    - scheme: HTTP\n      static_configs:\n        - targets: [ {{include \"prometheus.alertmanager.fullname\" . | quote }}]\n{{- end }}\n"
+                    "default": "global:\n  {{- if .Values.server.scrapeInterval }}\n  scrape_interval: {{ .Values.server.scrapeInterval }}\n  {{- end }}\n  {{- if .Values.server.scrapeTimeout }}\n  scrape_timeout: {{ .Values.server.scrapeTimeout }}\n  {{- end }}\n  {{- if .Values.server.evaluationInterval }}\n  evaluation_interval: {{ .Values.server.evaluationInterval }}\n  {{- end }}\n  external_labels:\n    monitor: {{ template \"common.names.fullname\" . }}\n    {{- if .Values.server.externalLabels }}\n    {{- include \"common.tplvalues.render\" (dict \"value\" .Values.server.externalLabels \"context\" $) | nindent 4 }}\n    {{- end }}\n{{- if .Values.server.remoteWrite }}\nremote_write: {{- include \"common.tplvalues.render\" (dict \"value\" .Values.server.remoteWrite \"context\" $) | nindent 4 }}\n{{- end }}\nscrape_configs:\n  - job_name: prometheus\n  {{- include \"prometheus.scrape_config\" (dict \"component\" \"server\" \"context\" $) | nindent 4 }}\n{{- if .Values.alertmanager.enabled }}\n  - job_name: alertmanager\n    {{- include \"prometheus.scrape_config\" (dict \"component\" \"alertmanager\" \"context\" $) | nindent 4 }}\n{{- end }}\n{{- if .Values.server.extraScrapeConfigs}}\n{{- include \"common.tplvalues.render\" (dict \"value\" .Values.server.extraScrapeConfigs \"context\" $) | nindent 2 }}\n{{- end }}\n{{- if or .Values.alertmanager.enabled .Values.server.alertingEndpoints}}\nalerting:\n  alertmanagers:\n    {{- if .Values.server.alertingEndpoints }}\n    {{- include \"common.tplvalues.render\" (dict \"value\" .Values.server.alertingEndpoints \"context\" $) | nindent 4 }}\n    {{- end }}\n    - scheme: HTTP\n      static_configs:\n        - targets: [ {{include \"prometheus.alertmanager.fullname\" . | quote }}]\n{{- end }}\n"
+                },
+                "extraScrapeConfigs": {
+                    "type": "array",
+                    "description": "Promethus configuration, useful to declare new scrape_configs. This content will be merged with the 'server.configuration' value and stored in the the prometheus.yaml file.",
+                    "default": [],
+                    "items": {}
                 },
                 "replicaCount": {
                     "type": "number",
@@ -795,11 +781,6 @@
                             "type": "number",
                             "description": "Prometheus HTTP container port",
                             "default": 9090
-                        },
-                        "https": {
-                            "type": "number",
-                            "description": "Prometheus HTTPS container port",
-                            "default": 443
                         }
                     }
                 },
@@ -1094,7 +1075,7 @@
                     "properties": {
                         "type": {
                             "type": "string",
-                            "description": "Prometheus statefulset strategy type",
+                            "description": "Prometheus deployment strategy type. If persistence is enabled, strategy type should be set to Recreate to avoid dead locks.",
                             "default": "RollingUpdate"
                         }
                     }
@@ -1524,11 +1505,6 @@
                                     "description": "Ingress path type",
                                     "default": "ImplementationSpecific"
                                 },
-                                "apiVersion": {
-                                    "type": "string",
-                                    "description": "Force Ingress API version (automatically detected if not set)",
-                                    "default": ""
-                                },
                                 "hostname": {
                                     "type": "string",
                                     "description": "Default host for the ingress record",
@@ -1605,11 +1581,6 @@
                             "type": "string",
                             "description": "Ingress path type",
                             "default": "ImplementationSpecific"
-                        },
-                        "apiVersion": {
-                            "type": "string",
-                            "description": "Force Ingress API version (automatically detected if not set)",
-                            "default": ""
                         },
                         "hostname": {
                             "type": "string",
@@ -1793,7 +1764,7 @@
                 "mountPath": {
                     "type": "string",
                     "description": "Path to mount the volume at.",
-                    "default": "/bitnami/prometheus/data"
+                    "default": "/opt/bitnami/prometheus/data"
                 },
                 "subPath": {
                     "type": "string",
@@ -1914,7 +1885,7 @@
                 "create": {
                     "type": "boolean",
                     "description": "Specifies whether RBAC resources should be created",
-                    "default": false
+                    "default": true
                 },
                 "rules": {
                     "type": "array",
@@ -1931,68 +1902,6 @@
                     "type": "boolean",
                     "description": "Enable the export of Prometheus metrics",
                     "default": false
-                },
-                "serviceMonitor": {
-                    "type": "object",
-                    "properties": {
-                        "enabled": {
-                            "type": "boolean",
-                            "description": "if `true`, creates a Prometheus ServiceMonitor (also requires `metrics.enabled` to be `true`)",
-                            "default": false
-                        },
-                        "namespace": {
-                            "type": "string",
-                            "description": "Namespace in which Prometheus is running",
-                            "default": ""
-                        },
-                        "annotations": {
-                            "type": "object",
-                            "description": "Additional custom annotations for the ServiceMonitor",
-                            "default": {}
-                        },
-                        "labels": {
-                            "type": "object",
-                            "description": "Extra labels for the ServiceMonitor",
-                            "default": {}
-                        },
-                        "jobLabel": {
-                            "type": "string",
-                            "description": "The name of the label on the target service to use as the job name in Prometheus",
-                            "default": ""
-                        },
-                        "honorLabels": {
-                            "type": "boolean",
-                            "description": "honorLabels chooses the metric's labels on collisions with target labels",
-                            "default": false
-                        },
-                        "interval": {
-                            "type": "string",
-                            "description": "Interval at which metrics should be scraped.",
-                            "default": ""
-                        },
-                        "scrapeTimeout": {
-                            "type": "string",
-                            "description": "Timeout after which the scrape is ended",
-                            "default": ""
-                        },
-                        "metricRelabelings": {
-                            "type": "array",
-                            "description": "Specify additional relabeling of metrics",
-                            "default": [],
-                            "items": {}
-                        },
-                        "relabelings": {
-                            "type": "array",
-                            "description": "Specify general relabeling",
-                            "default": [],
-                            "items": {}
-                        },
-                        "selector": {
-                            "type": "object",
-                            "description": "Prometheus instance selector labels",
-                            "default": {}
-                        }
-                    }
                 }
             }
         }
