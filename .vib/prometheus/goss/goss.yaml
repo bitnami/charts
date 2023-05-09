@@ -31,7 +31,7 @@ file:
   {{.Vars.persistence.mountPath}}:
     exists: true
     filetype: directory
-    mode: "0777"
+    mode: "2775"
     owner: root
   /proc/1/cmdline:
     exists: true
