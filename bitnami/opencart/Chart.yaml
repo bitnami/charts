@@ -29,4 +29,4 @@ name: opencart
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/opencart
   - https://opencart.com/
-version: 14.0.2
+version: 14.0.3

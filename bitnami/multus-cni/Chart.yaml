@@ -24,4 +24,4 @@ name: multus-cni
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/multus-cni
   - https://github.com/k8snetworkplumbingwg/multus-cni/
-version: 0.2.1
+version: 0.2.2

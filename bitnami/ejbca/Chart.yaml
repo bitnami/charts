@@ -30,4 +30,4 @@ name: ejbca
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/ejbca
   - https://www.ejbca.org/
-version: 7.0.1
+version: 7.0.2
