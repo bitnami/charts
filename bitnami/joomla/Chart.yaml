@@ -2,7 +2,7 @@ annotations:
   category: CMS
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 4.3.0
+appVersion: 4.3.1
 dependencies:
   - condition: mariadb.enabled
     name: mariadb
@@ -29,4 +29,4 @@ name: joomla
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/joomla
   - https://www.joomla.org/
-version: 14.0.0
+version: 14.0.1

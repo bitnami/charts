@@ -1,0 +1,19 @@
+{{- if and .Values.csiProvider.enabled (not .Values.csiProvider.existingConfigMap) }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "vault.csi-provider.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/part-of: vault
+    app.kubernetes.io/component: csi-provider
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+data:
+  config.hcl: |
+    {{- include "common.tplvalues.render" (dict "value" .Values.csiProvider.config "context" $) | nindent 4 }}
+{{- end }}

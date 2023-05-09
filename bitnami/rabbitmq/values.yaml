@@ -995,7 +995,7 @@ service:
   ##
   portNames:
     amqp: "amqp"
-    amqpTls: "amqp-ssl"
+    amqpTls: "amqp-tls"
     dist: "dist"
     manager: "http-stats"
     metrics: "metrics"

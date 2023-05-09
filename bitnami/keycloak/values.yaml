@@ -78,7 +78,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/keycloak
-  tag: 21.1.1-debian-11-r0
+  tag: 21.1.1-debian-11-r3
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -456,7 +456,7 @@ sidecars: []
 service:
   ## @param service.type Kubernetes service type
   ##
-  type: LoadBalancer
+  type: ClusterIP
   ## @param service.http.enabled Enable http port on service
   ##
   http:
@@ -839,7 +839,7 @@ keycloakConfigCli:
   image:
     registry: docker.io
     repository: bitnami/keycloak-config-cli
-    tag: 5.6.1-debian-11-r15
+    tag: 5.6.1-debian-11-r17
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -968,9 +968,8 @@ keycloakConfigCli:
   ##       "realm": "realm1",
   ##       "clients": []
   ##     }
-  ##   files/realm2.yaml:
-  ##   realm3.yaml: |
-  ##     realm: realm3
+  ##   realm2.yaml: |
+  ##     realm: realm2
   ##     clients: []
   ##
   configuration: {}
@@ -1016,6 +1015,10 @@ postgresql:
 ## @param externalDatabase.password Password for the non-root username for Keycloak
 ## @param externalDatabase.database Keycloak database name
 ## @param externalDatabase.existingSecret Name of an existing secret resource containing the database credentials
+## @param externalDatabase.existingSecretHostKey Name of an existing secret key containing the database host name
+## @param externalDatabase.existingSecretPortKey Name of an existing secret key containing the database port
+## @param externalDatabase.existingSecretUserKey Name of an existing secret key containing the database user
+## @param externalDatabase.existingSecretDatabaseKey Name of an existing secret key containing the database name
 ## @param externalDatabase.existingSecretPasswordKey Name of an existing secret key containing the database credentials
 ##
 externalDatabase:
@@ -1025,6 +1028,10 @@ externalDatabase:
   database: bitnami_keycloak
   password: ""
   existingSecret: ""
+  existingSecretHostKey: ""
+  existingSecretPortKey: ""
+  existingSecretUserKey: ""
+  existingSecretDatabaseKey: ""
   existingSecretPasswordKey: ""
 
 ## @section Keycloak Cache parameters

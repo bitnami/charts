@@ -274,7 +274,7 @@ spec:
               containerPort: {{ .Values.containerPorts.metrics }}
             {{- end }}
             {{- if .Values.auth.tls.enabled }}
-            - name: amqp-ssl
+            - name: amqp-tls
               containerPort: {{ .Values.containerPorts.amqpTls }}
             {{- end }}
             {{- if .Values.extraContainerPorts }}
@@ -314,7 +314,7 @@ spec:
           {{- else if .Values.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.startupProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
-              port: {{ternary "amqp-ssl" "amqp" .Values.auth.tls.enabled }}
+              port: {{ternary "amqp-tls" "amqp" .Values.auth.tls.enabled }}
           {{- end }}
           {{- end }}
           {{- if .Values.resources }}

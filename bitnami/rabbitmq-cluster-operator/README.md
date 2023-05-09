@@ -489,7 +489,7 @@ No issues are expected during upgrades.
 
 ### To 1.0.0
 
-The CRD was updated according to the latest changes in the upstream project. Thanks to the improvements in the latest changes, the CRD is not templated anymore abd can be placed under the `crds` directory following [Helm best practices for CRDS](https://helm.sh/docs/chart_best_practices/custom_resource_definitions/).
+The CRD was updated according to the latest changes in the upstream project. Thanks to the improvements in the latest changes, the CRD is not templated anymore and can be placed under the `crds` directory following [Helm best practices for CRDS](https://helm.sh/docs/chart_best_practices/custom_resource_definitions/).
 
 You need to manually delete the old CRD before upgrading the release.
 

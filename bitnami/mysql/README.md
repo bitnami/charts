@@ -326,6 +326,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.containerSecurityContext.runAsUser`    | User ID for the MySQL metrics container                                                                                        | `1001`                    |
 | `metrics.containerSecurityContext.runAsNonRoot` | Set MySQL metrics container's Security Context runAsNonRoot                                                                    | `true`                    |
 | `metrics.service.type`                          | Kubernetes service type for MySQL Prometheus Exporter                                                                          | `ClusterIP`               |
+| `metrics.service.clusterIP`                     | Kubernetes service clusterIP for MySQL Prometheus Exporter                                                                     | `""`                      |
 | `metrics.service.port`                          | MySQL Prometheus Exporter service port                                                                                         | `9104`                    |
 | `metrics.service.annotations`                   | Prometheus exporter service annotations                                                                                        | `{}`                      |
 | `metrics.extraArgs.primary`                     | Extra args to be passed to mysqld_exporter on Primary pods                                                                     | `[]`                      |
