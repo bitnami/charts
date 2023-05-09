@@ -70,6 +70,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `commonLabels`           | Labels to add to all deployed objects                                                   | `{}`            |
 | `enableServiceLinks`     | If set to false, disable Kubernetes service links in the pod spec                       | `true`          |
 | `commonAnnotations`      | Annotations to add to all deployed objects                                              | `{}`            |
+| `dnsPolicy`              | DNS Policy for pod                                                                      | `""`            |
+| `dnsConfig`              | DNS Configuration pod                                                                   | `{}`            |
 | `clusterDomain`          | Default Kubernetes cluster domain                                                       | `cluster.local` |
 | `extraDeploy`            | Array of extra objects to deploy with the release                                       | `[]`            |
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
