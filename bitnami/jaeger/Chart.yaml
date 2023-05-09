@@ -14,17 +14,16 @@ dependencies:
     repository: oci://registry-1.docker.io/bitnamicharts
     version: 10.x.x
 description: Jaeger is a distributed tracing system. It is used for monitoring and troubleshooting microservices-based distributed systems.
-home: https://github.com/bitnami/charts/tree/main/bitnami/jaeger
+home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/jaeger/img/jaeger-stack-220x234.png
 keywords:
   - jaeger
   - tracing
   - monitoring
 maintainers:
-  - name: Bitnami
+  - name: VMware, Inc.
     url: https://github.com/bitnami/charts
 name: jaeger
 sources:
-  - https://github.com/jaegertracing/jaeger
-  - https://www.jaegertracing.io/
-version: 1.1.0
+  - https://github.com/bitnami/charts/tree/main/bitnami/jaeger
+version: 1.2.0

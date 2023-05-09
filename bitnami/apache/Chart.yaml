@@ -10,7 +10,7 @@ dependencies:
       - bitnami-common
     version: 2.x.x
 description: Apache HTTP Server is an open-source HTTP server. The goal of this project is to provide a secure, efficient and extensible server that provides HTTP services in sync with the current HTTP standards.
-home: https://github.com/bitnami/charts/tree/main/bitnami/apache
+home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/apache/img/apache-stack-220x234.png
 keywords:
   - apache
@@ -20,10 +20,9 @@ keywords:
   - web
   - reverse proxy
 maintainers:
-  - name: Bitnami
+  - name: VMware, Inc.
     url: https://github.com/bitnami/charts
 name: apache
 sources:
-  - https://github.com/bitnami/containers/tree/main/bitnami/apache
-  - https://httpd.apache.org
-version: 9.5.3
+  - https://github.com/bitnami/charts/tree/main/bitnami/apache
+version: 9.6.0

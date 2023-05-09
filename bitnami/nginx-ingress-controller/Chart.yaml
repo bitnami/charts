@@ -10,7 +10,7 @@ dependencies:
       - bitnami-common
     version: 2.x.x
 description: NGINX Ingress Controller is an Ingress controller that manages external access to HTTP services in a Kubernetes cluster using NGINX.
-home: https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller
+home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/nginx-ingress-controller/img/nginx-ingress-controller-stack-220x234.png
 keywords:
   - ingress
@@ -21,10 +21,9 @@ keywords:
   - reverse proxy
 kubeVersion: '>= 1.20.0-0'
 maintainers:
-  - name: Bitnami
+  - name: VMware, Inc.
     url: https://github.com/bitnami/charts
 name: nginx-ingress-controller
 sources:
-  - https://github.com/bitnami/containers/tree/main/bitnami/nginx-ingress-controller
-  - https://github.com/kubernetes/ingress-nginx
-version: 9.6.3
+  - https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller
+version: 9.7.0

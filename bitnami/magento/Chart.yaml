@@ -20,7 +20,7 @@ dependencies:
       - bitnami-common
     version: 2.x.x
 description: Magento is a powerful open source e-commerce platform. With easy customizations and rich features, it allows retailers to grow their online businesses in a cost-effective way.
-home: https://github.com/bitnami/charts/tree/main/bitnami/magento
+home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/magento/img/magento-stack-220x234.png
 keywords:
   - magento
@@ -29,10 +29,9 @@ keywords:
   - web
   - php
 maintainers:
-  - name: Bitnami
+  - name: VMware, Inc.
     url: https://github.com/bitnami/charts
 name: magento
 sources:
-  - https://github.com/bitnami/containers/tree/main/bitnami/magento
-  - https://magento.com/
-version: 22.0.2
+  - https://github.com/bitnami/charts/tree/main/bitnami/magento
+version: 22.1.0

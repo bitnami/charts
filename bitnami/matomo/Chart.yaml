@@ -14,7 +14,7 @@ dependencies:
       - bitnami-common
     version: 2.x.x
 description: Matomo, formerly known as Piwik, is a real time web analytics program. It provides detailed reports on website visitors.
-home: https://github.com/bitnami/charts/tree/main/bitnami/matomo
+home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/matomo/img/matomo-stack-220x234.png
 keywords:
   - matomo
@@ -24,10 +24,9 @@ keywords:
   - application
   - php
 maintainers:
-  - name: Bitnami
+  - name: VMware, Inc.
     url: https://github.com/bitnami/charts
 name: matomo
 sources:
-  - https://github.com/bitnami/containers/tree/main/bitnami/matomo
-  - https://www.matomo.org/
-version: 1.0.0
+  - https://github.com/bitnami/charts/tree/main/bitnami/matomo
+version: 1.1.0

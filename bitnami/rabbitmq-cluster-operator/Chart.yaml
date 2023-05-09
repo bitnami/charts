@@ -10,7 +10,7 @@ dependencies:
       - bitnami-common
     version: 2.x.x
 description: The RabbitMQ Cluster Kubernetes Operator automates provisioning, management, and operations of RabbitMQ clusters running on Kubernetes.
-home: https://github.com/rabbitmq/cluster-operator
+home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/rabbitmq-cluster-operator/img/rabbitmq-cluster-operator-stack-220x234.png
 keywords:
   - rabbitmq
@@ -20,10 +20,9 @@ keywords:
   - AMQP
 kubeVersion: '>= 1.19.0-0'
 maintainers:
-  - name: Bitnami
+  - name: VMware, Inc.
     url: https://github.com/bitnami/charts
 name: rabbitmq-cluster-operator
 sources:
-  - https://github.com/bitnami/containers/tree/main/bitnami/rabbitmq-cluster-operator
-  - https://github.com/rabbitmq/cluster-operator
-version: 3.3.2
+  - https://github.com/bitnami/charts/tree/main/bitnami/rabbitmq-cluster-operator
+version: 3.4.0
