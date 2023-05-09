@@ -372,6 +372,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `tootctlMediaManagement.cronSchedule`               | Cron job schedule to run tootctl media commands                                        | `14 3 * * *` |
 | `tootctlMediaManagement.failedJobsHistoryLimit`     | Number of failed jobs to keep                                                          | `3`          |
 | `tootctlMediaManagement.successfulJobsHistoryLimit` | Number of successful jobs to keep                                                      | `3`          |
+| `tootctlMediaManagement.concurrencyPolicy`          | Concurrency Policy.  Should be Allow, Forbid or Replace                                | `Allow`      |
 
 ### Mastodon Migration job Parameters
 

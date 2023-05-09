@@ -1086,7 +1086,9 @@ tootctlMediaManagement:
   failedJobsHistoryLimit: 3
   ## @param tootctlMediaManagement.successfulJobsHistoryLimit Number of successful jobs to keep
   successfulJobsHistoryLimit: 3
-
+  ## @param tootctlMediaManagement.concurrencyPolicy Concurrency Policy.  Should be Allow, Forbid or Replace
+  concurrencyPolicy: Allow
+  
 ## @section Mastodon Migration job Parameters
 ##
 

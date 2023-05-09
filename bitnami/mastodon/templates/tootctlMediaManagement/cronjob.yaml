@@ -12,7 +12,7 @@ metadata:
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
 spec:
-  concurrencyPolicy: Allow
+  concurrencyPolicy: {{ .Values.tootctlMediaManagement.concurrencyPolicy }}
   failedJobsHistoryLimit: {{ .Values.tootctlMediaManagement.failedJobsHistoryLimit }}
   successfulJobsHistoryLimit: {{ .Values.tootctlMediaManagement.successfulJobsHistoryLimit }}
   schedule: {{ .Values.tootctlMediaManagement.cronSchedule }}
