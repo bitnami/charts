@@ -10,18 +10,16 @@ dependencies:
       - bitnami-common
     version: 2.x.x
 description: Prometheus exporter for hardware and OS metrics exposed by UNIX kernels, with pluggable metric collectors.
-home: https://github.com/bitnami/charts/tree/main/bitnami/node-exporter
+home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/node-exporter/img/node-exporter-stack-220x234.png
 keywords:
   - prometheus
   - node-exporter
   - monitoring
 maintainers:
-  - name: Bitnami
+  - name: VMware, Inc.
     url: https://github.com/bitnami/charts
 name: node-exporter
 sources:
-  - https://github.com/bitnami/containers/tree/main/bitnami/node-exporter
-  - https://github.com/prometheus/node_exporter
-  - https://prometheus.io/
-version: 3.4.2
+  - https://github.com/bitnami/charts/tree/main/bitnami/node-exporter
+version: 3.5.0

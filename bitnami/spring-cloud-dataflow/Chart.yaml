@@ -24,7 +24,7 @@ dependencies:
       - bitnami-common
     version: 2.x.x
 description: Spring Cloud Data Flow is a microservices-based toolkit for building streaming and batch data processing pipelines in Cloud Foundry and Kubernetes.
-home: https://github.com/bitnami/charts/tree/main/bitnami/spring-cloud-dataflow
+home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/spring-cloud-dataflow/img/spring-cloud-dataflow-stack-220x234.png
 keywords:
   - spring-cloud
@@ -32,11 +32,9 @@ keywords:
   - skipper
   - spring
 maintainers:
-  - name: Bitnami
+  - name: VMware, Inc.
     url: https://github.com/bitnami/charts
 name: spring-cloud-dataflow
 sources:
-  - https://github.com/bitnami/containers/tree/main/bitnami/spring-cloud-dataflow
-  - https://github.com/bitnami/containers/tree/main/bitnami/spring-cloud-skipper
-  - https://dataflow.spring.io/
-version: 18.0.2
+  - https://github.com/bitnami/charts/tree/main/bitnami/spring-cloud-dataflow
+version: 18.1.0

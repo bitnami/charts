@@ -14,7 +14,7 @@ dependencies:
       - bitnami-common
     version: 2.x.x
 description: Drupal is one of the most versatile open source content management systems in the world. It is pre-configured with the Ctools and Views modules, Drush and Let's Encrypt auto-configuration support.
-home: https://github.com/bitnami/charts/tree/main/bitnami/drupal
+home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/drupal/img/drupal-stack-220x234.png
 keywords:
   - drupal
@@ -25,10 +25,9 @@ keywords:
   - application
   - php
 maintainers:
-  - name: Bitnami
+  - name: VMware, Inc.
     url: https://github.com/bitnami/charts
 name: drupal
 sources:
-  - https://github.com/bitnami/containers/tree/main/bitnami/drupal
-  - https://www.drupal.org/
-version: 14.0.3
+  - https://github.com/bitnami/charts/tree/main/bitnami/drupal
+version: 14.1.0

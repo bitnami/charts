@@ -10,7 +10,7 @@ dependencies:
       - bitnami-common
     version: 2.x.x
 description: Apache Tomcat is an open-source web server designed to host and run Java-based web applications. It is a lightweight server with a good performance for applications running in production environments.
-home: https://github.com/bitnami/charts/tree/main/bitnami/tomcat
+home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/tomcat/img/tomcat-stack-220x234.png
 keywords:
   - tomcat
@@ -20,10 +20,9 @@ keywords:
   - application server
   - jsp
 maintainers:
-  - name: Bitnami
+  - name: VMware, Inc.
     url: https://github.com/bitnami/charts
 name: tomcat
 sources:
-  - https://github.com/bitnami/containers/tree/main/bitnami/tomcat
-  - http://tomcat.apache.org
-version: 10.8.2
+  - https://github.com/bitnami/charts/tree/main/bitnami/tomcat
+version: 10.9.0

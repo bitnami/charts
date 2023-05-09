@@ -18,7 +18,7 @@ dependencies:
       - bitnami-common
     version: 2.x.x
 description: Prometheus Operator provides easy monitoring definitions for Kubernetes services and deployment and management of Prometheus instances.
-home: https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus
+home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/prometheus-operator/img/prometheus-operator-stack-220x234.png
 keywords:
   - prometheus
@@ -27,12 +27,9 @@ keywords:
   - monitoring
 kubeVersion: '>= 1.16.0-0'
 maintainers:
-  - name: Bitnami
+  - name: VMware, Inc.
     url: https://github.com/bitnami/charts
 name: kube-prometheus
 sources:
-  - https://github.com/bitnami/containers/tree/main/bitnami/prometheus-operator
-  - https://github.com/bitnami/containers/tree/main/bitnami/prometheus
-  - https://github.com/bitnami/containers/tree/main/bitnami/alertmanager
-  - https://github.com/prometheus-operator/kube-prometheus
-version: 8.9.3
+  - https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus
+version: 8.10.0

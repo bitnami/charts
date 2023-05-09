@@ -30,16 +30,15 @@ dependencies:
       - bitnami-common
     version: 2.x.x
 description: Mastodon is self-hosted social network server based on ActivityPub. Written in Ruby, features real-time updates, multimedia attachments and no vendor lock-in.
-home: https://joinmastodon.org/
+home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/mastodon/img/mastodon-stack-220x234.png
 keywords:
   - development
   - dashboards
 maintainers:
-  - name: Bitnami
+  - name: VMware, Inc.
     url: https://github.com/bitnami/charts
 name: mastodon
 sources:
-  - https://github.com/bitnami/containers/tree/main/bitnami/mastodon
-  - https://github.com/mastodon/mastodon/
-version: 1.3.2
+  - https://github.com/bitnami/charts/tree/main/bitnami/mastodon
+version: 1.4.0
