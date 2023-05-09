@@ -2,7 +2,7 @@ annotations:
   category: MachineLearning
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 2.0.0
+appVersion: 2.0.1
 dependencies:
   - name: common
     repository: oci://registry-1.docker.io/bitnamicharts
@@ -24,4 +24,4 @@ name: pytorch
 sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/pytorch
   - https://pytorch.org/
-version: 3.1.1
+version: 3.1.2
