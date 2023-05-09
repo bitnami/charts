@@ -9,6 +9,7 @@ mariadb:
   auth:
     database: test_moodle_database
     username: test_moodle_user
+    password: test_moodle_password
 podSecurityContext:
   enabled: true
   fsGroup: 1002
