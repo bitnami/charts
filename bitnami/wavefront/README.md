@@ -6,6 +6,8 @@ Wavefront is a high-performance streaming analytics platform for monitoring and 
 
 [Overview of Wavefront](https://github.com/wavefrontHQ/wavefront-collector-for-kubernetes)
 
+Looking to use Wavefront in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+
 ## TL;DR
 
 ```console
