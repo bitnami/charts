@@ -1,12 +1,12 @@
 dependencies:
 - name: redis
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 17.10.1
+  version: 17.10.3
 - name: mongodb
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 13.10.2
+  version: 13.10.3
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
   version: 2.2.5
-digest: sha256:bd939b03c65ba31c67776f65adda8ab9ba3b0953db95c6d2671a0174eb7dcaa5
-generated: "2023-05-08T03:31:34.464696889Z"
+digest: sha256:9d4f0065af2b260a4e733943a96fc3af56b2230c4b00709be5e89320e1fb2240
+generated: "2023-05-10T14:43:45.195959798Z"
