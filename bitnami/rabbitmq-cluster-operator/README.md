@@ -157,7 +157,7 @@ This solution allows to easily deploy multiple RabbitMQ instances compared to th
 | ----------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------- |
 | `rabbitmqImage.registry`                                          | RabbitMQ Image registry                                                                                                                  | `docker.io`                              |
 | `rabbitmqImage.repository`                                        | RabbitMQ Image repository                                                                                                                | `bitnami/rabbitmq`                       |
-| `rabbitmqImage.tag`                                               | RabbitMQ Image tag (immutable tags are recommended)                                                                                      | `3.11.15-debian-11-r0`                   |
+| `rabbitmqImage.tag`                                               | RabbitMQ Image tag (immutable tags are recommended)                                                                                      | `3.11.15-debian-11-r3`                   |
 | `rabbitmqImage.digest`                                            | RabbitMQ image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                 | `""`                                     |
 | `rabbitmqImage.pullSecrets`                                       | RabbitMQ Image pull secrets                                                                                                              | `[]`                                     |
 | `credentialUpdaterImage.registry`                                 | RabbitMQ Default User Credential Updater image registry                                                                                  | `docker.io`                              |
@@ -167,7 +167,7 @@ This solution allows to easily deploy multiple RabbitMQ instances compared to th
 | `credentialUpdaterImage.pullSecrets`                              | RabbitMQ Default User Credential Updater image pull secrets                                                                              | `[]`                                     |
 | `clusterOperator.image.registry`                                  | RabbitMQ Cluster Operator image registry                                                                                                 | `docker.io`                              |
 | `clusterOperator.image.repository`                                | RabbitMQ Cluster Operator image repository                                                                                               | `bitnami/rabbitmq-cluster-operator`      |
-| `clusterOperator.image.tag`                                       | RabbitMQ Cluster Operator image tag (immutable tags are recommended)                                                                     | `2.2.0-scratch-r4`                       |
+| `clusterOperator.image.tag`                                       | RabbitMQ Cluster Operator image tag (immutable tags are recommended)                                                                     | `2.2.0-scratch-r5`                       |
 | `clusterOperator.image.digest`                                    | RabbitMQ Cluster Operator image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                | `""`                                     |
 | `clusterOperator.image.pullPolicy`                                | RabbitMQ Cluster Operator image pull policy                                                                                              | `IfNotPresent`                           |
 | `clusterOperator.image.pullSecrets`                               | RabbitMQ Cluster Operator image pull secrets                                                                                             | `[]`                                     |
@@ -489,7 +489,7 @@ No issues are expected during upgrades.
 
 ### To 1.0.0
 
-The CRD was updated according to the latest changes in the upstream project. Thanks to the improvements in the latest changes, the CRD is not templated anymore abd can be placed under the `crds` directory following [Helm best practices for CRDS](https://helm.sh/docs/chart_best_practices/custom_resource_definitions/).
+The CRD was updated according to the latest changes in the upstream project. Thanks to the improvements in the latest changes, the CRD is not templated anymore and can be placed under the `crds` directory following [Helm best practices for CRDS](https://helm.sh/docs/chart_best_practices/custom_resource_definitions/).
 
 You need to manually delete the old CRD before upgrading the release.
 

@@ -2,7 +2,7 @@ annotations:
   category: Infrastructure
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 1.31.1
+appVersion: 1.13.1
 dependencies:
   - name: common
     repository: oci://registry-1.docker.io/bitnamicharts
@@ -10,7 +10,7 @@ dependencies:
       - bitnami-common
     version: 2.x.x
 description: Vault is a tool for securely managing and accessing secrets using a unified interface. Features secure storage, dynamic secrets, data encryption and revocation.
-home: https://www.vaultproject.io/
+home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/vault/img/vault-stack-220x234.png
 keywords:
   - security
@@ -18,11 +18,9 @@ keywords:
   - injection
   - vault
 maintainers:
-  - name: Bitnami
+  - name: VMware, Inc.
     url: https://github.com/bitnami/charts
 name: vault
 sources:
-  - https://github.com/bitnami/containers/tree/main/bitnami/vault
-  - https://github.com/bitnami/containers/tree/main/bitnami/vault-csi-provider
-  - https://github.com/bitnami/containers/tree/main/bitnami/vault-k8s
-version: 0.1.0
+  - https://github.com/bitnami/charts/tree/main/bitnami/vault
+version: 0.2.0
