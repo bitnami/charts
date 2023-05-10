@@ -10,7 +10,7 @@ dependencies:
       - bitnami-common
     version: 2.x.x
 description: The Contour Operator extends the Kubernetes API to create, configure and manage instances of Contour on behalf of users.
-home: https://github.com/projectcontour/contour-operator
+home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/contour-operator/img/contour-operator-stack-220x234.png
 keywords:
   - contour
@@ -19,10 +19,9 @@ keywords:
   - envoy
 kubeVersion: '>= 1.21.0-0'
 maintainers:
-  - name: Bitnami
+  - name: VMware, Inc.
     url: https://github.com/bitnami/charts
 name: contour-operator
 sources:
-  - https://github.com/projectcontour/contour-operator
-  - https://github.com/bitnami/containers/tree/main/bitnami/contour-operator
-version: 4.1.1
+  - https://github.com/bitnami/charts/tree/main/bitnami/contour-operator
+version: 4.2.0
