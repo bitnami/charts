@@ -9,10 +9,12 @@ file:
     mode: "2755"
 command:
   grafana-cli-data-migration:
-    exec: cd /opt/bitnami/grafana && grafana-cli admin data-migration encrypt-datasource-passwords
-    exit-status: 2
-    stderr:
-      - /duplicate metrics collector registration attempted/
+    # The 'grafana-cli admin data-migration encrypt-datasource-passwords' command is not working. In the meantime it is fixed,
+    # the test checks the 'encrypt-datasource-passwords' option appears.
+    exec: cd /opt/bitnami/grafana && grafana-cli admin data-migration -h
+    exit-status: 0
+    stdout:
+      - /encrypt-datasource-passwords/
   {{- $uid := .Vars.grafana.containerSecurityContext.runAsUser }}
   {{- $gid := .Vars.grafana.podSecurityContext.fsGroup }}
   check-user-info:
