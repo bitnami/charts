@@ -10,7 +10,7 @@ dependencies:
       - bitnami-common
     version: 2.x.x
 description: Flux is a tool for keeping Kubernetes clusters in sync with sources of configuration
-home: https://fluxcd.io/
+home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/fluxcd-kustomize-controller/img/fluxcd-kustomize-controller-stack-220x234.png
 keywords:
   - deployment
@@ -20,15 +20,9 @@ keywords:
   - helm
   - kustomize
 maintainers:
-  - name: Bitnami
+  - name: VMware, Inc.
     url: https://github.com/bitnami/charts
 name: flux
 sources:
-  - https://github.com/bitnami/containers/tree/main/bitnami/fluxcd-kustomize-controller
-  - https://github.com/bitnami/containers/tree/main/bitnami/fluxcd-helm-controller
-  - https://github.com/bitnami/containers/tree/main/bitnami/fluxcd-source-controller
-  - https://github.com/bitnami/containers/tree/main/bitnami/fluxcd-notification-controller
-  - https://github.com/bitnami/containers/tree/main/bitnami/fluxcd-image-automation-controller
-  - https://github.com/bitnami/containers/tree/main/bitnami/fluxcd-image-reflector-controller
-  - https://github.com/fluxcd
-version: 0.2.1
+  - https://github.com/bitnami/charts/tree/main/bitnami/flux
+version: 0.3.0
