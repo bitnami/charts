@@ -34,7 +34,7 @@ dependencies:
       - bitnami-common
     version: 2.x.x
 description: Grafana Mimir is an open source, horizontally scalable, highly available, multi-tenant, long-term storage for Prometheus.
-home: https://grafana.com/oss/mimir/
+home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/grafana-mimir/img/grafana-mimir-stack-220x234.png
 keywords:
   - grafana
@@ -42,10 +42,9 @@ keywords:
   - metrics
   - infrastructure
 maintainers:
-  - name: Bitnami
+  - name: VMware, Inc.
     url: https://github.com/bitnami/charts
 name: grafana-mimir
 sources:
-  - https://github.com/bitnami/containers/tree/main/bitnami/grafana-mimir
-  - https://github.com/grafana/mimir
-version: 0.4.3
+  - https://github.com/bitnami/charts/tree/main/bitnami/grafana-mimir
+version: 0.5.0
