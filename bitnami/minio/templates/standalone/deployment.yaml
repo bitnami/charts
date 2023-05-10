@@ -215,8 +215,10 @@ spec:
             - name: minio-credentials
               mountPath: /opt/bitnami/minio/secrets/
             {{- end }}
+            {{- if .Values.persistence.enabled }}
             - name: data
               mountPath: {{ .Values.persistence.mountPath }}
+            {{- end }}
             {{- if .Values.tls.enabled }}
             - name: minio-certs
               mountPath: {{ default "/certs" .Values.tls.mountPath }}
