@@ -8,11 +8,6 @@ file:
     exists: true
     mode: "2755"
 command:
-  grafana-cli-data-migration:
-    exec: cd /opt/bitnami/grafana && grafana-cli admin data-migration encrypt-datasource-passwords
-    exit-status: 2
-    stderr:
-      - /duplicate metrics collector registration attempted/
   {{- $uid := .Vars.grafana.containerSecurityContext.runAsUser }}
   {{- $gid := .Vars.grafana.podSecurityContext.fsGroup }}
   check-user-info:
