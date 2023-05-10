@@ -274,7 +274,7 @@ spec:
               containerPort: {{ .Values.containerPorts.metrics }}
             {{- end }}
             {{- if .Values.auth.tls.enabled }}
-            - name: amqp-ssl
+            - name: amqp-tls
               containerPort: {{ .Values.containerPorts.amqpTls }}
             {{- end }}
             {{- if .Values.extraContainerPorts }}
@@ -287,9 +287,13 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.livenessProbe "enabled") "context" $) | nindent 12 }}
             exec:
               command:
-                - /bin/bash
+                - sh
                 - -ec
+                {{- if .Values.loadDefinition.enabled }}
                 - rabbitmq-diagnostics -q ping
+                {{- else }}
+                - curl -f --user {{ .Values.auth.username }}:$RABBITMQ_PASSWORD 127.0.0.1:{{ .Values.containerPorts.manager }}/api/health/checks/virtual-hosts
+                {{- end }}
           {{- end }}
           {{- if .Values.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
@@ -297,16 +301,20 @@ spec:
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.readinessProbe "enabled") "context" $) | nindent 12 }}
             exec:
               command:
-                - /bin/bash
+                - sh
                 - -ec
+                {{- if .Values.loadDefinition.enabled }}
                 - rabbitmq-diagnostics -q check_running && rabbitmq-diagnostics -q check_local_alarms
+                {{- else }}
+                - curl -f --user {{ .Values.auth.username }}:$RABBITMQ_PASSWORD 127.0.0.1:{{ .Values.containerPorts.manager }}/api/health/checks/local-alarms
+                {{- end }}
           {{- end }}
           {{- if .Values.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customStartupProbe "context" $) | nindent 12 }}
           {{- else if .Values.startupProbe.enabled }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.startupProbe "enabled") "context" $) | nindent 12 }}
             tcpSocket:
-              port: {{ternary "amqp-ssl" "amqp" .Values.auth.tls.enabled }}
+              port: {{ternary "amqp-tls" "amqp" .Values.auth.tls.enabled }}
           {{- end }}
           {{- end }}
           {{- if .Values.resources }}

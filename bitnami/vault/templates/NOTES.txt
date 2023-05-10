@@ -1,0 +1,51 @@
+CHART NAME: {{ .Chart.Name  }}
+CHART VERSION: {{ .Chart.Version  }}
+APP VERSION: {{ .Chart.AppVersion  }}
+
+** Please be patient while the chart is being deployed **
+
+{{- if .Values.diagnosticMode.enabled }}
+The chart has been deployed in diagnostic mode. All probes have been disabled and the command has been overwritten with:
+
+  command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 4 }}
+  args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 4 }}
+
+Get the list of pods by executing:
+
+  kubectl get pods --namespace {{ include "common.names.namespace" . | quote }} -l app.kubernetes.io/instance={{ .Release.Name }}
+
+Access the pod you want to debug by executing
+
+  kubectl exec --namespace {{ include "common.names.namespace" . | quote }} -ti <NAME OF THE POD> -- bash
+
+{{- else }}
+
+The following controllers have been deployed:
+
+  {{- if .Values.server.enabled }}
+  - server
+  {{- end }}
+  {{- if .Values.csiProvider.enabled }}
+  - csi-provider
+  {{- end }}
+  {{- if .Values.injector.enabled }}
+  - injector
+  {{- end }}
+
+{{- end }}
+
+Check the status of the pods by running this command:
+
+  kubectl get pods --namespace {{ include "common.names.namespace" . | quote }} -l app.kubernetes.io/instance={{ .Release.Name }}
+
+IMPORTANT: The chart is deploying a sealed Vault instance. The service will not be ready until the instance is unsealed.
+This is a manual process that must be performed with maximum precaution.
+
+Read the upstream vault documentation for unsealing and initializing the instance:
+
+  https://developer.hashicorp.com/vault/docs/platform/k8s/helm/run#initialize-and-unseal-vault
+
+{{- include "common.warnings.rollingTag" .Values.server.image }}
+{{- include "common.warnings.rollingTag" .Values.injector.image }}
+{{- include "common.warnings.rollingTag" .Values.csiProvider.image }}
+{{- include "vault.validateValues" . }}

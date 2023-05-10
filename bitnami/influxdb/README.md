@@ -80,7 +80,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------- |
 | `image.registry`                                 | InfluxDB&trade; image registry                                                                                                                                                                                                                                       | `docker.io`          |
 | `image.repository`                               | InfluxDB&trade; image repository                                                                                                                                                                                                                                     | `bitnami/influxdb`   |
-| `image.tag`                                      | InfluxDB&trade; image tag (immutable tags are recommended)                                                                                                                                                                                                           | `2.7.0-debian-11-r1` |
+| `image.tag`                                      | InfluxDB&trade; image tag (immutable tags are recommended)                                                                                                                                                                                                           | `2.7.1-debian-11-r3` |
 | `image.digest`                                   | InfluxDB&trade; image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                                                                      | `""`                 |
 | `image.pullPolicy`                               | InfluxDB&trade; image pull policy                                                                                                                                                                                                                                    | `IfNotPresent`       |
 | `image.pullSecrets`                              | Specify docker-registry secret names as an array                                                                                                                                                                                                                     | `[]`                 |
@@ -236,21 +236,29 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.serviceMonitor.metricRelabelings`    | MetricRelabelConfigs to apply to samples before ingestion                                                                                   | `[]`                |
 | `metrics.serviceMonitor.selector`             | Prometheus instance selector labels                                                                                                         | `{}`                |
 | `metrics.serviceMonitor.honorLabels`          | honorLabels chooses the metric's labels on collisions with target labels                                                                    | `false`             |
+| `networkPolicy.enabled`                       | Enable NetworkPolicy                                                                                                                        | `false`             |
+| `networkPolicy.allowExternal`                 | Don't require client label for connections                                                                                                  | `true`              |
+| `persistence.enabled`                         | Enable data persistence                                                                                                                     | `true`              |
+| `persistence.existingClaim`                   | Use a existing PVC which must be created manually before bound                                                                              | `""`                |
+| `persistence.storageClass`                    | Specify the `storageClass` used to provision the volume                                                                                     | `""`                |
+| `persistence.accessModes`                     | Access mode of data volume                                                                                                                  | `["ReadWriteOnce"]` |
+| `persistence.size`                            | Size of data volume                                                                                                                         | `8Gi`               |
+| `persistence.annotations`                     | Persistent Volume Claim annotations                                                                                                         | `{}`                |
+| `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                                                        | `true`              |
+| `serviceAccount.name`                         | Name of the service account to use. If not set and create is true, a name is generated using the fullname template.                         | `""`                |
+| `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                                              | `true`              |
+| `serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                                                  | `{}`                |
+| `psp.create`                                  | Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later | `false`             |
+| `rbac.create`                                 | Create Role and RoleBinding (required for PSP to work)                                                                                      | `false`             |
 
 ### Volume permissions parameters
 
 | Name                                          | Description                                                                                                                       | Value                   |
 | --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
-| `persistence.enabled`                         | Enable data persistence                                                                                                           | `true`                  |
-| `persistence.existingClaim`                   | Use a existing PVC which must be created manually before bound                                                                    | `""`                    |
-| `persistence.storageClass`                    | Specify the `storageClass` used to provision the volume                                                                           | `""`                    |
-| `persistence.accessModes`                     | Access mode of data volume                                                                                                        | `["ReadWriteOnce"]`     |
-| `persistence.size`                            | Size of data volume                                                                                                               | `8Gi`                   |
-| `persistence.annotations`                     | Persistent Volume Claim annotations                                                                                               | `{}`                    |
 | `volumePermissions.enabled`                   | Enable init container that changes the owner and group of the persistent volume mountpoint to `runAsUser:fsGroup`                 | `false`                 |
 | `volumePermissions.image.registry`            | Init container volume-permissions image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`          | Init container volume-permissions image name                                                                                      | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Init container volume-permissions image tag                                                                                       | `11-debian-11-r107`     |
+| `volumePermissions.image.tag`                 | Init container volume-permissions image tag                                                                                       | `11-debian-11-r113`     |
 | `volumePermissions.image.digest`              | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`          | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`         | Specify docker-registry secret names as an array                                                                                  | `[]`                    |
@@ -284,7 +292,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `backup.uploadProviders.google.bucketName`        | google storage bucket name name                                                                                  | `gs://bucket/influxdb`     |
 | `backup.uploadProviders.google.image.registry`    | Google Cloud SDK image registry                                                                                  | `docker.io`                |
 | `backup.uploadProviders.google.image.repository`  | Google Cloud SDK image name                                                                                      | `bitnami/google-cloud-sdk` |
-| `backup.uploadProviders.google.image.tag`         | Google Cloud SDK image tag                                                                                       | `0.426.0-debian-11-r2`     |
+| `backup.uploadProviders.google.image.tag`         | Google Cloud SDK image tag                                                                                       | `0.429.0-debian-11-r1`     |
 | `backup.uploadProviders.google.image.digest`      | Google Cloud SDK image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
 | `backup.uploadProviders.google.image.pullPolicy`  | Google Cloud SDK image pull policy                                                                               | `IfNotPresent`             |
 | `backup.uploadProviders.google.image.pullSecrets` | Specify docker-registry secret names as an array                                                                 | `[]`                       |
@@ -295,7 +303,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `backup.uploadProviders.azure.containerName`      | Destination container                                                                                            | `influxdb-container`       |
 | `backup.uploadProviders.azure.image.registry`     | Azure CLI image registry                                                                                         | `docker.io`                |
 | `backup.uploadProviders.azure.image.repository`   | Azure CLI image repository                                                                                       | `bitnami/azure-cli`        |
-| `backup.uploadProviders.azure.image.tag`          | Azure CLI image tag (immutable tags are recommended)                                                             | `2.47.0-debian-11-r4`      |
+| `backup.uploadProviders.azure.image.tag`          | Azure CLI image tag (immutable tags are recommended)                                                             | `2.48.1-debian-11-r3`      |
 | `backup.uploadProviders.azure.image.digest`       | Azure CLI image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag        | `""`                       |
 | `backup.uploadProviders.azure.image.pullPolicy`   | Azure CLI image pull policy                                                                                      | `IfNotPresent`             |
 | `backup.uploadProviders.azure.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                 | `[]`                       |
@@ -307,17 +315,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `backup.uploadProviders.aws.bucketName`           | aws s3 bucket name                                                                                               | `s3://bucket/influxdb`     |
 | `backup.uploadProviders.aws.image.registry`       | AWS CLI image registry                                                                                           | `docker.io`                |
 | `backup.uploadProviders.aws.image.repository`     | AWS CLI image repository                                                                                         | `bitnami/aws-cli`          |
-| `backup.uploadProviders.aws.image.tag`            | AWS CLI image tag (immutable tags are recommended)                                                               | `2.11.13-debian-11-r1`     |
+| `backup.uploadProviders.aws.image.tag`            | AWS CLI image tag (immutable tags are recommended)                                                               | `2.11.18-debian-11-r0`     |
 | `backup.uploadProviders.aws.image.digest`         | AWS CLI image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag          | `""`                       |
 | `backup.uploadProviders.aws.image.pullPolicy`     | AWS CLI image pull policy                                                                                        | `IfNotPresent`             |
 | `backup.uploadProviders.aws.image.pullSecrets`    | Specify docker-registry secret names as an array                                                                 | `[]`                       |
-
-### NetworkPolicy parameters
-
-| Name                                          | Description                                | Value   |
-| --------------------------------------------- | -------------------------------------------|---------|
-| `networkPolicy.enabled`                       | Enable NetworkPolicy                       | `false` |
-| `networkPolicy.allowExternal`                 | Don't require client label for connections | `true`  |
 
 ## RBAC Parameters
 

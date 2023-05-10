@@ -2,7 +2,7 @@
 
 # Multus CNI packaged by Bitnami
 
-Multus is a CNI plugin for Kubernetes clusters. Written in Go, features adding multiple network interfaces to pods.
+Multus is a CNI plugin for Kubernetes clusters. Written in Go, features adding multiple network interfaces to pods. 
 
 [Overview of Multus CNI](https://github.com/k8snetworkplumbingwg/multus-cni)
 
@@ -80,7 +80,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | -------------------------- |
 | `image.registry`                        | Multus CNI image registry                                                                                             | `docker.io`                |
 | `image.repository`                      | Multus CNI Image name                                                                                                 | `bitnami/multus-cni`       |
-| `image.tag`                             | Multus CNI Image tag                                                                                                  | `3.9.3-debian-11-r0`       |
+| `image.tag`                             | Multus CNI Image tag                                                                                                  | `3.9.3-debian-11-r19`      |
 | `image.digest`                          | Multus CNI image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag            | `""`                       |
 | `image.pullPolicy`                      | Multus CNI image pull policy                                                                                          | `IfNotPresent`             |
 | `image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                      | `[]`                       |

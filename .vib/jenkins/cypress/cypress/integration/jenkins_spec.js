@@ -39,7 +39,7 @@ it('should list the built-in node', () => {
   cy.login();
   cy.visit('/computer');
 
-  cy.contains('Manage nodes and clouds');
+  cy.contains('Nodes');
   cy.get('table#computers').within(() => {
     cy.contains('tr', 'Built-In Node');
   });

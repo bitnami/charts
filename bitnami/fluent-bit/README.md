@@ -11,7 +11,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
+helm repo add my-repo oci://registry-1.docker.io/bitnamicharts
 helm install my-release my-repo/fluent-bit
 ```
 
@@ -33,7 +33,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
+helm repo add my-repo oci://registry-1.docker.io/bitnamicharts
 helm install my-release my-repo/fluent-bit
 ```
 
@@ -76,15 +76,15 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Fluent Bit parameters
 
-| Name                | Description                                                                                                | Value                 |
-| ------------------- | ---------------------------------------------------------------------------------------------------------- | --------------------- |
-| `image.registry`    | Fluent Bit image registry                                                                                  | `docker.io`           |
-| `image.repository`  | Fluent Bit image repository                                                                                | `bitnami/fluent-bit`  |
-| `image.tag`         | Fluent Bit image tag (immutable tags are recommended)                                                      | `2.0.9-debian-11-r11` |
-| `image.digest`      | Fluent Bit image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
-| `image.pullPolicy`  | image pull policy                                                                                          | `IfNotPresent`        |
-| `image.pullSecrets` | Fluent Bit image pull secrets                                                                              | `[]`                  |
-| `image.debug`       | Enable image debug mode                                                                                    | `false`               |
+| Name                | Description                                                                                                | Value                |
+| ------------------- | ---------------------------------------------------------------------------------------------------------- | -------------------- |
+| `image.registry`    | Fluent Bit image registry                                                                                  | `docker.io`          |
+| `image.repository`  | Fluent Bit image repository                                                                                | `bitnami/fluent-bit` |
+| `image.tag`         | Fluent Bit image tag (immutable tags are recommended)                                                      | `2.1.2-debian-11-r6` |
+| `image.digest`      | Fluent Bit image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                 |
+| `image.pullPolicy`  | image pull policy                                                                                          | `IfNotPresent`       |
+| `image.pullSecrets` | Fluent Bit image pull secrets                                                                              | `[]`                 |
+| `image.debug`       | Enable image debug mode                                                                                    | `false`              |
 
 ### Fluent Bit daemonset configuration
 
