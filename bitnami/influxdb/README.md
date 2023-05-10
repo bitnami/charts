@@ -8,7 +8,7 @@ InfluxDB(TM) is an open source time-series database. It is a core component of t
 
 InfluxDB(TM) is a trademark owned by InfluxData, which is not affiliated with, and does not endorse, this site.
 
-Looking to use InfluxDB## TL;DRtrade; in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use InfluxDB&trade; in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## TL;DR
 
