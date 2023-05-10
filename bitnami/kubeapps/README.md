@@ -6,6 +6,8 @@ Kubeapps is a web-based UI for launching and managing applications on Kubernetes
 
 [Overview of Kubeapps](https://github.com/vmware-tanzu/kubeapps)
 
+Looking to use Kubeapps in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+
 ## TL;DR
 
 ```console

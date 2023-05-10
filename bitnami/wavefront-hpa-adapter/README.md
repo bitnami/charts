@@ -6,6 +6,8 @@ Wavefront HPA Adapter for Kubernetes is a Kubernetes Horizontal Pod Autoscaler a
 
 [Overview of Wavefront HPA Adapter for Kubernetes](https://github.com/wavefrontHQ/wavefront-kubernetes-adapter)
 
+Looking to use Wavefront HPA Adapter for Kubernetes in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+
 ## TL;DR
 
 ```console

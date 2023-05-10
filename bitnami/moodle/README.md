@@ -8,6 +8,8 @@ Moodle(TM) LMS is an open source online Learning Management System widely used a
 
 Disclaimer: The respective trademarks mentioned in the offering are owned by the respective companies. We do not provide commercial license of any of these products. This listing has an open source license. Moodle(TM) LMS is run and maintained by Moodle HQ, that is a completely and separate project from Bitnami.
 
+Looking to use Bitnami LMS powered by Moodle&trade; LMS in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+
 ## TL;DR
 
 ```console

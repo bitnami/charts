@@ -8,6 +8,8 @@ Grafana Loki is a horizontally scalable, highly available, and multi-tenant log 
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 
+Looking to use Grafana Loki in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+
 ## TL;DR
 
 ```console
