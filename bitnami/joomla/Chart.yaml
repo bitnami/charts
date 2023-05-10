@@ -27,5 +27,5 @@ maintainers:
     url: https://github.com/bitnami/charts
 name: joomla
 sources:
-  - https://github.com/bitnami/containers/tree/main/bitnami/joomla
+  - https://github.com/bitnami/charts/tree/main/bitnami/joomla
 version: 14.1.1
