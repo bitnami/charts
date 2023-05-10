@@ -28,5 +28,5 @@ maintainers:
     url: https://github.com/bitnami/charts
 name: matomo
 sources:
-  - https://github.com/bitnami/containers/tree/main/bitnami/matomo
+  - https://github.com/bitnami/charts/tree/main/bitnami/matomo
 version: 1.1.1
