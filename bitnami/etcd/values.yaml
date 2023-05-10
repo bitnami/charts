@@ -215,7 +215,7 @@ logLevel: "info"
 ##
 maxProcs: ""
 ## @param removeMemberOnContainerTermination Use a PreStop hook to remove the etcd members from the etcd cluster on container termination
-## they the containers are terminated
+## they the containers are terminated. Set to 'false' if appears an error-related member ID wasn't properly stored.
 ## NOTE: Ignored if lifecycleHooks is set or replicaCount=1
 ##
 removeMemberOnContainerTermination: true
