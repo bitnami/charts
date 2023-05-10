@@ -495,7 +495,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.service.loadBalancerIP`             | Redis&reg; exporter service Load Balancer IP                                                                        | `""`                     |
 | `metrics.service.loadBalancerSourceRanges`   | Redis&reg; exporter service Load Balancer sources                                                                   | `[]`                     |
 | `metrics.service.annotations`                | Additional custom annotations for Redis&reg; exporter service                                                       | `{}`                     |
-| `metrics.service.clusterIP`                  | Redis&reg; exporter service Cluster IP                                                            | `""`                     |
+| `metrics.service.clusterIP`                  | Redis&reg; exporter service Cluster IP                                                                              | `""`                     |
 | `metrics.serviceMonitor.enabled`             | Create ServiceMonitor resource(s) for scraping metrics using PrometheusOperator                                     | `false`                  |
 | `metrics.serviceMonitor.namespace`           | The namespace in which the ServiceMonitor will be created                                                           | `""`                     |
 | `metrics.serviceMonitor.interval`            | The interval at which metrics should be scraped                                                                     | `30s`                    |
