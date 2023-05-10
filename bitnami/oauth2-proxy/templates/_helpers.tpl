@@ -24,7 +24,7 @@ Create the name of the service account to use
 {{- end -}}
 
 {{- define "oauth2-proxy.redis.fullname" -}}
-{{- printf "%s-redis" .Release.Name -}}
+{{- printf "%s-redis" (default .Release.Name .Values.redis.nameOverride) -}}
 {{- end -}}
 
 {{- define "oauth2-proxy.configmapName" -}}
