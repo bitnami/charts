@@ -63,7 +63,7 @@ spec:
           command:
             - java
             - -jar
-            - {{ printf "/opt/bitnami/keycloak-config-cli/keycloak-config-cli-%s.jar" .Chart.AppVersion }}
+            - /opt/bitnami/keycloak-config-cli/keycloak-config-cli.jar
           {{- end }}
           {{- if .Values.keycloakConfigCli.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.keycloakConfigCli.args "context" $) | nindent 12 }}
