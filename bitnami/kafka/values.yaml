@@ -1742,7 +1742,7 @@ provisioning:
 kraft:
   ## @param kraft.enabled Switch to enable or disable the Kraft mode for Kafka
   ##
-  enabled: true
+  enabled: false
   ## @param kraft.processRoles Roles of your Kafka nodes. Nodes can have 'broker', 'controller' roles or both of them.
   ##
   processRoles: broker,controller
@@ -1768,7 +1768,7 @@ kraft:
 zookeeper:
   ## @param zookeeper.enabled Switch to enable or disable the ZooKeeper helm chart. Must be false if you use Kraft mode.
   ##
-  enabled: false
+  enabled: true
   ## @param zookeeper.replicaCount Number of ZooKeeper nodes
   ##
   replicaCount: 1
