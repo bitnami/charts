@@ -14,7 +14,7 @@ dependencies:
       - bitnami-common
     version: 2.x.x
 description: Apache Kafka is a distributed streaming platform designed to build real-time pipelines and can be used as a message broker or as a replacement for a log aggregation solution for big data applications.
-home: https://github.com/bitnami/charts/tree/main/bitnami/kafka
+home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/kafka/img/kafka-stack-220x234.png
 keywords:
   - kafka
@@ -23,10 +23,9 @@ keywords:
   - producer
   - consumer
 maintainers:
-  - name: Bitnami
+  - name: VMware, Inc.
     url: https://github.com/bitnami/charts
 name: kafka
 sources:
-  - https://github.com/bitnami/containers/tree/main/bitnami/kafka
-  - https://kafka.apache.org/
-version: 22.0.2
+  - https://github.com/bitnami/charts/tree/main/bitnami/kafka
+version: 22.1.0
