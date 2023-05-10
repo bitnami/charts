@@ -9,6 +9,8 @@ file:
     mode: "2755"
 command:
   grafana-cli-data-migration:
+    # The 'grafana-cli admin data-migration encrypt-datasource-passwords' it's not working meanwhile this will be fixed
+    # the test checks the 'grafana-cli admin data-migration' is working and appear the option encrypt-datasource-passwords
     exec: cd /opt/bitnami/grafana && grafana-cli admin data-migration -h
     exit-status: 0
     stdout:
