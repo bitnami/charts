@@ -289,7 +289,7 @@ spec:
               command:
                 - sh
                 - -ec
-                {{- if .Values.loadDefinition.enabled }}
+                {{- if or (.Values.loadDefinition.enabled) (not (contains "rabbitmq_management" .Values.plugins )) }}
                 - rabbitmq-diagnostics -q ping
                 {{- else }}
                 - curl -f --user {{ .Values.auth.username }}:$RABBITMQ_PASSWORD 127.0.0.1:{{ .Values.containerPorts.manager }}/api/health/checks/virtual-hosts
@@ -303,7 +303,7 @@ spec:
               command:
                 - sh
                 - -ec
-                {{- if .Values.loadDefinition.enabled }}
+                {{- if or (.Values.loadDefinition.enabled) (not (contains "rabbitmq_management" .Values.plugins )) }}
                 - rabbitmq-diagnostics -q check_running && rabbitmq-diagnostics -q check_local_alarms
                 {{- else }}
                 - curl -f --user {{ .Values.auth.username }}:$RABBITMQ_PASSWORD 127.0.0.1:{{ .Values.containerPorts.manager }}/api/health/checks/local-alarms
