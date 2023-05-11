@@ -90,9 +90,8 @@ image:
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
 hostAliases: []
-## @param config.kubeQPS Queries per second limit
-## @param config.kubeBurst Up to x number of queries allowed. Burst to roughly match your events per minute QPS to be 1/5 of the burst
-## @param config.maxEventAgeSeconds maximum age of an event that can be processed
+## Kubernetes event exporter configuration, rendered as a template
+## ref: https://github.com/resmoio/kubernetes-event-exporter#configuration
 ## @param config.logLevel Verbosity of the logs (options: `fatal`, `error`, `warn`, `info` or `debug`)
 ## @param config.logFormat How the logs are formatted. Allowed values: `pretty` or `json`
 ## @param config.receivers [array] Array containing event receivers
