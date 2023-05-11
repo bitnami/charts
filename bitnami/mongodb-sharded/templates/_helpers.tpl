@@ -18,7 +18,7 @@ Usage:
 
 {{- define "mongodb-sharded.secret" -}}
   {{- if .Values.auth.existingSecret -}}
-    {{- .Values.auth.existingSecret -}}
+    {{- printf "%s" (tpl .Values.auth.existingSecret $) -}}
   {{- else }}
     {{- include "common.names.fullname" . -}}
   {{- end }}
