@@ -1051,6 +1051,44 @@ streaming:
     ##
     sessionAffinityConfig: {}
 
+## @section Mastodon Media Management Cronjob Parameters
+##
+
+tootctlMediaManagement:
+  ## @param tootctlMediaManagement.enabled Enable Cronjob to manage all media caches
+  ##
+  enabled: false
+  ## @param tootctlMediaManagement.removeAttachments Enable removing attachements
+  removeAttachments: true
+  ## @param tootctlMediaManagement.removeAttachmentsDays Number of days old media attachments must be for removal
+  removeAttachmentsDays: 30
+  ## @param tootctlMediaManagement.removeCustomEmoji Enable removal of cached remote emoji files
+  removeCustomEmoji: false
+  ## @param tootctlMediaManagement.removePreviewCards Enable removal of cached preview cards
+  removePreviewCards: false
+  ## @param tootctlMediaManagement.removePreviewCardsDays Number of days old preview cards must be for removal
+  removePreviewCardsDays: 30
+  ## @param tootctlMediaManagement.removeAvatars Enable removal of cached remote avatar images
+  removeAvatars: false
+  ## @param tootctlMediaManagement.removeAvatarsDays Number of days old avatar images must be for removal
+  removeAvatarsDays: 30
+  ## @param tootctlMediaManagement.removeHeaders Enable removal of cached profile header images
+  removeHeaders: false
+  ## @param tootctlMediaManagement.removeHeadersDays Number of days old header images must be for removal
+  removeHeadersDays: 30
+  ## @param tootctlMediaManagement.removeOrphans Enable removal of cached orphan files
+  removeOrphans: false
+  ## @param tootctlMediaManagement.includeFollows Enable removal of cached avatar and header when local users are following the accounts
+  includeFollows: false
+  ## @param tootctlMediaManagement.cronSchedule Cron job schedule to run tootctl media commands
+  cronSchedule: '14 3 * * *'
+  ## @param tootctlMediaManagement.failedJobsHistoryLimit Number of failed jobs to keep
+  failedJobsHistoryLimit: 3
+  ## @param tootctlMediaManagement.successfulJobsHistoryLimit Number of successful jobs to keep
+  successfulJobsHistoryLimit: 3
+  ## @param tootctlMediaManagement.concurrencyPolicy Concurrency Policy.  Should be Allow, Forbid or Replace
+  concurrencyPolicy: Allow
+  
 ## @section Mastodon Migration job Parameters
 ##
 

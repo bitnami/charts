@@ -41,7 +41,7 @@ spec:
     {{- if .Values.externalAccess.enabled }}
     - ports:
         - port: {{ .Values.containerPorts.external }}
-    {{- if .Values.externalAccess.from }}
+    {{- if .Values.networkPolicy.externalAccess.from }}
       from: {{- include "common.tplvalues.render" ( dict "value" .Values.networkPolicy.externalAccess.from "context" $ ) | nindent 8 }}
     {{- end }}
     {{- end }}
