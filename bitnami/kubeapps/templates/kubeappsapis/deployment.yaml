@@ -191,7 +191,7 @@ spec:
           {{- else if .Values.kubeappsapis.readinessProbe.enabled }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.kubeappsapis.readinessProbe "enabled") "context" $) | nindent 12 }}
             exec:
-              command: ["/bin/grpc_health_probe", "-addr=:{{ .Values.kubeappsapis.containerPorts.http }}"]
+              command: ["grpc_health_probe", "-addr=:{{ .Values.kubeappsapis.containerPorts.http }}"]
             initialDelaySeconds: 5
           {{- end }}
           {{- if .Values.kubeappsapis.customStartupProbe }}
