@@ -2,7 +2,7 @@ annotations:
   category: Database
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 3.5.8
+appVersion: 3.5.9
 dependencies:
   - name: common
     repository: oci://registry-1.docker.io/bitnamicharts
@@ -24,4 +24,4 @@ maintainers:
 name: etcd
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/etcd
-version: 8.11.1
+version: 8.11.2
