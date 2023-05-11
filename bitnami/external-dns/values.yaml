@@ -916,7 +916,7 @@ rbac:
 ## @param containerSecurityContext Security context for the container
 ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
 ## Example:
-## securityContext:
+## containerSecurityContext:
 ##   allowPrivilegeEscalation: false
 ##   readOnlyRootFilesystem: true
 ##   capabilities:
