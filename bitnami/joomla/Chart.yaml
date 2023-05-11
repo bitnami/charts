@@ -28,4 +28,4 @@ maintainers:
 name: joomla
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/joomla
-version: 14.1.0
+version: 14.1.1
