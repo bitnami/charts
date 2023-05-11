@@ -8,6 +8,8 @@ phpMyAdmin is a free software tool written in PHP, intended to handle the admini
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 
+Looking to use phpMyAdmin in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+
 ## TL;DR
 
 ```console

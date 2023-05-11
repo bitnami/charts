@@ -6,6 +6,8 @@ Wavefront Storage Adapter is a Prometheus integration to transfer metrics from P
 
 [Overview of Wavefront Prometheus Adapter](https://github.com/wavefrontHQ/prometheus-storage-adapter)
 
+Looking to use Wavefront Prometheus Adapter in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+
 ## TL;DR
 
 ```console
