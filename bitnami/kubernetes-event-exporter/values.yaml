@@ -100,9 +100,6 @@ hostAliases: []
 config:
   logLevel: debug
   logFormat: pretty
-  kubeQPS: 60
-  kubeBurst: 60
-  maxEventAgeSeconds: 10
   receivers:
     - name: "dump"
       file:
