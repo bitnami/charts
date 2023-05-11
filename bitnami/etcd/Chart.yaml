@@ -10,7 +10,7 @@ dependencies:
       - bitnami-common
     version: 2.x.x
 description: etcd is a distributed key-value store designed to securely store data across a cluster. etcd is widely used in production on account of its reliability, fault-tolerance and ease of use.
-home: https://github.com/bitnami/charts/tree/main/bitnami/etcd
+home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/etcd/img/etcd-stack-220x234.png
 keywords:
   - etcd
@@ -19,10 +19,9 @@ keywords:
   - cache
   - key-value
 maintainers:
-  - name: Bitnami
+  - name: VMware, Inc.
     url: https://github.com/bitnami/charts
 name: etcd
 sources:
-  - https://github.com/bitnami/containers/tree/main/bitnami/etcd
-  - https://coreos.com/etcd/
-version: 8.10.2
+  - https://github.com/bitnami/charts/tree/main/bitnami/etcd
+version: 8.11.1

@@ -10,7 +10,7 @@ dependencies:
       - bitnami-common
     version: 2.x.x
 description: NGINX Open Source is a web server that can be also used as a reverse proxy, load balancer, and HTTP cache. Recommended for high-demanding sites due to its ability to provide faster content.
-home: https://github.com/bitnami/charts/tree/main/bitnami/nginx
+home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/nginx/img/nginx-stack-220x234.png
 keywords:
   - nginx
@@ -19,10 +19,9 @@ keywords:
   - www
   - reverse proxy
 maintainers:
-  - name: Bitnami
+  - name: VMware, Inc.
     url: https://github.com/bitnami/charts
 name: nginx
 sources:
-  - https://github.com/bitnami/containers/tree/main/bitnami/nginx
-  - https://www.nginx.org
-version: 14.1.1
+  - https://github.com/bitnami/charts/tree/main/bitnami/nginx
+version: 14.2.0

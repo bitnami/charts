@@ -16,7 +16,7 @@ dependencies:
       - bitnami-common
     version: 2.x.x
 description: EJBCA is an enterprise class PKI Certificate Authority software, built using Java (JEE) technology.
-home: https://github.com/bitnami/charts/tree/main/bitnami/ejbca
+home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/ejbca/img/ejbca-stack-220x234.png
 keywords:
   - ejbca
@@ -24,10 +24,9 @@ keywords:
   - pki
   - certificate
 maintainers:
-  - name: Bitnami
+  - name: VMware, Inc.
     url: https://github.com/bitnami/charts
 name: ejbca
 sources:
-  - https://github.com/bitnami/containers/tree/main/bitnami/ejbca
-  - https://www.ejbca.org/
-version: 7.0.2
+  - https://github.com/bitnami/charts/tree/main/bitnami/ejbca
+version: 7.1.0

@@ -14,7 +14,7 @@ dependencies:
       - bitnami-common
     version: 2.x.x
 description: Thanos is a highly available metrics system that can be added on top of existing Prometheus deployments, providing a global query view across all Prometheus installations.
-home: https://github.com/bitnami/charts/tree/main/bitnami/thanos
+home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/thanos/img/thanos-stack-220x234.png
 keywords:
   - analytics
@@ -22,10 +22,9 @@ keywords:
   - prometheus
   - thanos
 maintainers:
-  - name: Bitnami
+  - name: VMware, Inc.
     url: https://github.com/bitnami/charts
 name: thanos
 sources:
-  - https://github.com/bitnami/containers/tree/main/bitnami/thanos
-  - https://thanos.io
-version: 12.5.2
+  - https://github.com/bitnami/charts/tree/main/bitnami/thanos
+version: 12.6.0

@@ -14,7 +14,7 @@ dependencies:
       - bitnami-common
     version: 2.x.x
 description: phpBB is a popular bulletin board that features robust messaging capabilities such as flat message structure, subforums, topic split/merge/lock, user groups, full-text search, and attachments.
-home: https://github.com/bitnami/charts/tree/main/bitnami/phpbb
+home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/phpbb/img/phpbb-stack-220x234.png
 keywords:
   - phpbb
@@ -22,10 +22,9 @@ keywords:
   - http
   - php
 maintainers:
-  - name: Bitnami
+  - name: VMware, Inc.
     url: https://github.com/bitnami/charts
 name: phpbb
 sources:
-  - https://github.com/bitnami/containers/tree/main/bitnami/phpbb
-  - https://www.phpbb.com/
-version: 13.0.0
+  - https://github.com/bitnami/charts/tree/main/bitnami/phpbb
+version: 13.1.0

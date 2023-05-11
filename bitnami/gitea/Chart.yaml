@@ -14,7 +14,7 @@ dependencies:
       - bitnami-common
     version: 2.x.x
 description: Gitea is a lightweight code hosting solution. Written in Go, features low resource consumption, easy upgrades and multiple databases.
-home: https://github.com/bitnami/charts/tree/main/bitnami/gitea
+home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/gitea/img/gitea-stack-220x234.png
 keywords:
   - gitea
@@ -24,10 +24,9 @@ keywords:
   - application
   - php
 maintainers:
-  - name: Bitnami
+  - name: VMware, Inc.
     url: https://github.com/bitnami/charts
 name: gitea
 sources:
-  - https://github.com/bitnami/containers/tree/main/bitnami/gitea
-  - https://gitea.io/
-version: 0.2.3
+  - https://github.com/bitnami/charts/tree/main/bitnami/gitea
+version: 0.3.0

@@ -10,7 +10,7 @@ dependencies:
       - bitnami-common
     version: 2.x.x
 description: Kibana is an open source, browser based analytics and search dashboard for Elasticsearch. Kibana strives to be easy to get started with, while also being flexible and powerful.
-home: https://github.com/bitnami/charts/tree/main/bitnami/kibana
+home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/kibana/img/kibana-stack-220x234.png
 keywords:
   - kibana
@@ -19,10 +19,9 @@ keywords:
   - metrics
   - logs
 maintainers:
-  - name: Bitnami
+  - name: VMware, Inc.
     url: https://github.com/bitnami/charts
 name: kibana
 sources:
-  - https://github.com/bitnami/containers/tree/main/bitnami/kibana
-  - https://www.elastic.co/products/kibana
-version: 10.3.3
+  - https://github.com/bitnami/charts/tree/main/bitnami/kibana
+version: 10.4.0

@@ -30,7 +30,7 @@ dependencies:
       - bitnami-common
     version: 2.x.x
 description: Grafana Loki is a horizontally scalable, highly available, and multi-tenant log aggregation system. It provides real-time long tailing and full persistence to object storage.
-home: https://github.com/grafana/loki/
+home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/grafana-loki/img/grafana-loki-stack-220x234.png
 keywords:
   - grafana
@@ -38,10 +38,9 @@ keywords:
   - metrics
   - infrastructure
 maintainers:
-  - name: Bitnami
+  - name: VMware, Inc.
     url: https://github.com/bitnami/charts
 name: grafana-loki
 sources:
-  - https://github.com/bitnami/containers/tree/main/bitnami/grafana-loki
-  - https://github.com/grafana/loki/
-version: 2.8.1
+  - https://github.com/bitnami/charts/tree/main/bitnami/grafana-loki
+version: 2.9.0

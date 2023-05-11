@@ -18,7 +18,7 @@ dependencies:
       - bitnami-common
     version: 2.x.x
 description: Redmine is an open source management application. It includes a tracking issue system, Gantt charts for a visual view of projects and deadlines, and supports SCM integration for version control.
-home: https://github.com/bitnami/charts/tree/main/bitnami/redmine
+home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/redmine/img/redmine-stack-220x234.png
 keywords:
   - redmine
@@ -30,10 +30,9 @@ keywords:
   - ruby
   - rails
 maintainers:
-  - name: Bitnami
+  - name: VMware, Inc.
     url: https://github.com/bitnami/charts
 name: redmine
 sources:
-  - https://github.com/bitnami/containers/tree/main/bitnami/redmine
-  - https://www.redmine.org/
-version: 22.0.2
+  - https://github.com/bitnami/charts/tree/main/bitnami/redmine
+version: 22.1.0

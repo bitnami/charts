@@ -10,17 +10,16 @@ dependencies:
       - bitnami-common
     version: 2.x.x
 description: Sealed Secrets are "one-way" encrypted K8s Secrets that can be created by anyone, but can only be decrypted by the controller running in the target cluster recovering the original object.
-home: https://github.com/bitnami-labs/sealed-secrets
+home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/sealed-secrets/img/sealed-secrets-stack-220x234.png
 keywords:
   - secrets
   - sealed-secrets
 kubeVersion: '>=1.16.0-0'
 maintainers:
-  - name: Bitnami
+  - name: VMware, Inc.
     url: https://github.com/bitnami/charts
 name: sealed-secrets
 sources:
-  - https://github.com/bitnami/containers/tree/main/bitnami/sealed-secrets
-  - https://github.com/bitnami-labs/sealed-secrets
-version: 1.3.1
+  - https://github.com/bitnami/charts/tree/main/bitnami/sealed-secrets
+version: 1.4.0
