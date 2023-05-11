@@ -6,8 +6,6 @@ WordPress is the world's most popular blogging and content management platform. 
 
 [Overview of WordPress](http://www.wordpress.org)
 
-Looking to use WordPress in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
-
 ## TL;DR
 
 ```console
