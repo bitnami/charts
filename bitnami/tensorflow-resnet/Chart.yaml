@@ -10,7 +10,7 @@ dependencies:
       - bitnami-common
     version: 2.x.x
 description: TensorFlow ResNet is a client utility for use with TensorFlow Serving and ResNet models.
-home: https://github.com/bitnami/charts/tree/main/bitnami/tensorflow-resnet
+home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/tensorflow-inception/img/tensorflow-inception-stack-220x234.png
 keywords:
   - tensorflow
@@ -20,11 +20,9 @@ keywords:
   - learning
   - library
 maintainers:
-  - name: Bitnami
+  - name: VMware, Inc.
     url: https://github.com/bitnami/charts
 name: tensorflow-resnet
 sources:
-  - https://github.com/bitnami/containers/tree/main/bitnami/tensorflow-serving
-  - https://github.com/bitnami/containers/tree/main/bitnami/tensorflow-resnet
-  - https://www.tensorflow.org/serving/
-version: 3.7.1
+  - https://github.com/bitnami/charts/tree/main/bitnami/tensorflow-resnet
+version: 3.8.0

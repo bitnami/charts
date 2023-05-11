@@ -8,6 +8,8 @@ Fluent Bit is a Fast and Lightweight Log Processor and Forwarder. It has been ma
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 
+Looking to use Fluent Bit in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+
 ## TL;DR
 
 ```console
@@ -76,15 +78,15 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Fluent Bit parameters
 
-| Name                | Description                                                                                                | Value                 |
-| ------------------- | ---------------------------------------------------------------------------------------------------------- | --------------------- |
-| `image.registry`    | Fluent Bit image registry                                                                                  | `docker.io`           |
-| `image.repository`  | Fluent Bit image repository                                                                                | `bitnami/fluent-bit`  |
-| `image.tag`         | Fluent Bit image tag (immutable tags are recommended)                                                      | `2.0.9-debian-11-r11` |
-| `image.digest`      | Fluent Bit image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
-| `image.pullPolicy`  | image pull policy                                                                                          | `IfNotPresent`        |
-| `image.pullSecrets` | Fluent Bit image pull secrets                                                                              | `[]`                  |
-| `image.debug`       | Enable image debug mode                                                                                    | `false`               |
+| Name                | Description                                                                                                | Value                |
+| ------------------- | ---------------------------------------------------------------------------------------------------------- | -------------------- |
+| `image.registry`    | Fluent Bit image registry                                                                                  | `docker.io`          |
+| `image.repository`  | Fluent Bit image repository                                                                                | `bitnami/fluent-bit` |
+| `image.tag`         | Fluent Bit image tag (immutable tags are recommended)                                                      | `2.1.2-debian-11-r6` |
+| `image.digest`      | Fluent Bit image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                 |
+| `image.pullPolicy`  | image pull policy                                                                                          | `IfNotPresent`       |
+| `image.pullSecrets` | Fluent Bit image pull secrets                                                                              | `[]`                 |
+| `image.debug`       | Enable image debug mode                                                                                    | `false`              |
 
 ### Fluent Bit daemonset configuration
 
