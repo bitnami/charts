@@ -6,8 +6,6 @@ Harbor is an open source trusted cloud-native registry to store, sign, and scan 
 
 [Overview of Harbor](https://goharbor.io/)
 
-Looking to use Harbor in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
-
 ## TL;DR
 
 ```console
