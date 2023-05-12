@@ -16,4 +16,6 @@ metadata:
 data:
   {{ include "prometheus.server.configmapKey" . }}:
     {{- include "common.tplvalues.render" (dict "value" .Values.server.configuration "context" $) | toYaml | nindent 4 }}
+  rules.yaml:
+    {{- include "common.tplvalues.render" (dict "value" .Values.server.alertingRules "context" $) | toYaml | nindent 4 }}
 {{- end }}

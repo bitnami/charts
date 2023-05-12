@@ -49,6 +49,17 @@ server:
             - __meta_kubernetes_service_label_app_kubernetes_io_instance
             - __meta_kubernetes_service_labelpresent_app_kubernetes_io_instance
           regex: (wordpress);true
+  alertingRules:
+    groups:
+    - name: example
+      rules:
+      - alert: Example
+        expr: count(prometheus_http_requests_total) > 2
+        for: 10m
+        labels:
+          severity: page
+        annotations:
+          summary: High number of requests to prometheus
 alertmanager:
   enabled: true
   replicaCount: 2

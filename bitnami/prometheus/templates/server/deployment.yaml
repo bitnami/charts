@@ -189,8 +189,7 @@ spec:
           {{- end }}
           volumeMounts:
             - name: config
-              mountPath: /opt/bitnami/prometheus/conf/{{ include "prometheus.server.configmapKey" . }}
-              subPath: {{ include "prometheus.server.configmapKey" . }}
+              mountPath: /opt/bitnami/prometheus/conf
               readOnly: true
             - name: data
               mountPath: {{ .Values.persistence.mountPath }}

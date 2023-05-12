@@ -599,8 +599,15 @@ server:
         - scheme: HTTP
           static_configs:
             - targets: [ {{include "prometheus.alertmanager.fullname" . | quote }}]
+    rule_files:
+      - rules.yaml
     {{- end }}
 
+
+  ## @param server.alertingRules Prometheus alerting rules. This content will be stored in the the rules.yaml file and the content can be a template.
+  ## ref: <https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/>
+  ##
+  alertingRules: {}
   ## @param server.extraScrapeConfigs Promethus configuration, useful to declare new scrape_configs. This content will be merged with the 'server.configuration' value and stored in the the prometheus.yaml file.
   ## ref: <https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config>
   ##

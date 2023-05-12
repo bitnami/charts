@@ -23,11 +23,15 @@ command:
     - /serviceaccount.*name.*{{.Env.BITNAMI_APP_NAME }}/
   {{ end }}
 file:
-  /opt/bitnami/prometheus/conf/{{.Vars.server.existingConfigmapKey}}:
+  /opt/bitnami/prometheus/conf/{{ .Vars.server.existingConfigmapKey }}:
     exists: true
     contains:
     - "job_name: alertmanager"
     - "{{ (first .Vars.server.extraScrapeConfigs).job_name }}"
+  /opt/bitnami/prometheus/conf/rules.yaml:
+    exists: true
+    contains:
+    - "{{ (first .Vars.server.alertingRules.groups).name }}"
   {{.Vars.persistence.mountPath}}:
     exists: true
     filetype: directory
@@ -38,22 +42,32 @@ file:
     contains:
     - "--enable-feature={{ .Vars.server.enableFeatures | first }}"
 http:
-  http://localhost:{{.Vars.server.containerPorts.http}}/-/ready:
+  http://localhost:{{ .Vars.server.containerPorts.http }}/-/ready:
     status: 200
     body:
     - "Prometheus Server is Ready."
-  http://localhost:{{.Vars.server.containerPorts.http}}/-/healthy:
+  http://localhost:{{ .Vars.server.containerPorts.http }}/-/healthy:
     status: 200
     body:
     - "Prometheus Server is Healthy."
+  {{- if .Vars.alertmanager.enabled }}
+  http://prometheus-alertmanager:{{ .Vars.alertmanager.service.ports.http }}/-/healthy:
+    status: 200
+    body:
+    - "OK"
+  http://localhost:{{ .Vars.server.containerPorts.http }}/api/v1/rules?name={{ (first .Vars.server.alertingRules.groups).name }}:
+    status: 200
+    body:
+    - "{{ (first (first .Vars.server.alertingRules.groups).rules).annotations.summary }}"
+  {{- end }}
 command:
   check-config-files:
-    exec: promtool check config /opt/bitnami/prometheus/conf/{{.Vars.server.existingConfigmapKey}}
+    exec: promtool check config /opt/bitnami/prometheus/conf/{{ .Vars.server.existingConfigmapKey }}
     exit-status: 0
     stdout:
     - SUCCESS
   check-metrics:
-    exec: promtool query instant http://localhost:{{.Vars.server.containerPorts.http}} prometheus_http_requests_total
+    exec: promtool query instant http://localhost:{{ .Vars.server.containerPorts.http }} prometheus_http_requests_total
     exit-status: 0
     stdout:
     - "/-/healthy"
