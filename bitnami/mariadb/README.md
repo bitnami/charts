@@ -8,8 +8,6 @@ MariaDB is an open source, community-developed SQL database server that is widel
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 
-Looking to use MariaDB in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
-
 ## TL;DR
 
 ```console
@@ -86,7 +84,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
 | `image.registry`           | MariaDB image registry                                                                                                                                                                                                                                                        | `docker.io`            |
 | `image.repository`         | MariaDB image repository                                                                                                                                                                                                                                                      | `bitnami/mariadb`      |
-| `image.tag`                | MariaDB image tag (immutable tags are recommended)                                                                                                                                                                                                                            | `10.11.3-debian-11-r0` |
+| `image.tag`                | MariaDB image tag (immutable tags are recommended)                                                                                                                                                                                                                            | `10.11.3-debian-11-r1` |
 | `image.digest`             | MariaDB image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                                                                                       | `""`                   |
 | `image.pullPolicy`         | MariaDB image pull policy                                                                                                                                                                                                                                                     | `IfNotPresent`         |
 | `image.pullSecrets`        | Specify docker-registry secret names as an array                                                                                                                                                                                                                              | `[]`                   |
