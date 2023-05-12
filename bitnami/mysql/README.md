@@ -333,6 +333,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.service.annotations`                   | Prometheus exporter service annotations                                                                                        | `{}`                      |
 | `metrics.extraArgs.primary`                     | Extra args to be passed to mysqld_exporter on Primary pods                                                                     | `[]`                      |
 | `metrics.extraArgs.secondary`                   | Extra args to be passed to mysqld_exporter on Secondary pods                                                                   | `[]`                      |
+| `metrics.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the MySQL metrics container(s)                                    | `[]`                      |
 | `metrics.resources.limits`                      | The resources limits for MySQL prometheus exporter containers                                                                  | `{}`                      |
 | `metrics.resources.requests`                    | The requested resources for MySQL prometheus exporter containers                                                               | `{}`                      |
 | `metrics.livenessProbe.enabled`                 | Enable livenessProbe                                                                                                           | `true`                    |
