@@ -25,4 +25,4 @@ maintainers:
 name: keycloak
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/keycloak
-version: 15.1.0
+version: 15.1.1
