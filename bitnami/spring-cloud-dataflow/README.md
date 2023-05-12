@@ -6,8 +6,6 @@ Spring Cloud Data Flow is a microservices-based toolkit for building streaming a
 
 [Overview of Spring Cloud Data Flow](https://github.com/spring-cloud/spring-cloud-dataflow)
 
-Looking to use Spring Cloud Data Flow in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
-
 ## TL;DR
 
 ```console
