@@ -598,7 +598,7 @@ server:
         {{- end }}
         - scheme: HTTP
           static_configs:
-            - targets: [ {{include "prometheus.alertmanager.fullname" . | quote }}]
+            - targets: [ {{ printf "%s:%d" (include "prometheus.alertmanager.fullname" .) (int .Values.alertmanager.service.ports.http) }}]
     rule_files:
       - rules.yaml
     {{- end }}
