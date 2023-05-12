@@ -2,7 +2,7 @@ annotations:
   category: Database
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 15.2.0
+appVersion: 15.3.0
 dependencies:
   - name: common
     repository: oci://registry-1.docker.io/bitnamicharts
@@ -25,4 +25,4 @@ maintainers:
 name: postgresql
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/postgresql
-version: 12.5.0
+version: 12.5.1
