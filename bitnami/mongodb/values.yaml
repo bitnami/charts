@@ -1934,6 +1934,32 @@ metrics:
   ## If undefined but metrics.username is defined, a random password will be generated
   ##
   password: ""
+  ## @param metrics.compatibleMode Enables old style mongodb-exporter metrics
+  compatibleMode: true
+
+  collector:
+    ## @param metrics.collector.all Enable all collectors. Same as enabling all individual metrics
+    ## Enabling all metrics will cause significant CPU load on mongod
+    all: false
+    ## @param metrics.collector.diagnosticdata Boolean Enable collecting metrics from getDiagnosticData
+    diagnosticdata: true
+    ## @param metrics.collector.replicasetstatus Boolean Enable collecting metrics from replSetGetStatus
+    replicasetstatus: true
+    ## @param metrics.collector.dbstats Boolean Enable collecting metrics from dbStats
+    dbstats: false
+    ## @param metrics.collector.topmetrics Boolean Enable collecting metrics from top admin command
+    topmetrics: false
+    ## @param metrics.collector.indexstats Boolean Enable collecting metrics from $indexStats
+    indexstats: false
+    ## @param metrics.collector.collstats Boolean Enable collecting metrics from $collStats
+    collstats: false
+    ## @param metrics.collector.collstatsColls List of \<databases\>.\<collections\> to get $collStats
+    collstatsColls: []
+    ## @param metrics.collector.indexstatsColls List - List of \<databases\>.\<collections\> to get $indexStats
+    indexstatsColls: []
+    ## @param metrics.collector.collstatsLimit Number - Disable collstats, dbstats, topmetrics and indexstats collector if there are more than \<n\> collections. 0=No limit
+    collstatsLimit: 0
+
   ## @param metrics.extraFlags String with extra flags to the metrics exporter
   ## ref: https://github.com/percona/mongodb_exporter/blob/main/main.go
   ##

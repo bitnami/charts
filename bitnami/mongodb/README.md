@@ -500,62 +500,73 @@ Refer to the [chart documentation for more information on each of these architec
 
 ### Metrics parameters
 
-| Name                                         | Description                                                                                                           | Value                      |
-| -------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | -------------------------- |
-| `metrics.enabled`                            | Enable using a sidecar Prometheus exporter                                                                            | `false`                    |
-| `metrics.image.registry`                     | MongoDB(&reg;) Prometheus exporter image registry                                                                     | `docker.io`                |
-| `metrics.image.repository`                   | MongoDB(&reg;) Prometheus exporter image repository                                                                   | `bitnami/mongodb-exporter` |
-| `metrics.image.tag`                          | MongoDB(&reg;) Prometheus exporter image tag (immutable tags are recommended)                                         | `0.37.0-debian-11-r26`     |
-| `metrics.image.digest`                       | MongoDB(&reg;) image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag        | `""`                       |
-| `metrics.image.pullPolicy`                   | MongoDB(&reg;) Prometheus exporter image pull policy                                                                  | `IfNotPresent`             |
-| `metrics.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                      | `[]`                       |
-| `metrics.username`                           | String with username for the metrics exporter                                                                         | `""`                       |
-| `metrics.password`                           | String with password for the metrics exporter                                                                         | `""`                       |
-| `metrics.extraFlags`                         | String with extra flags to the metrics exporter                                                                       | `""`                       |
-| `metrics.command`                            | Override default container command (useful when using custom images)                                                  | `[]`                       |
-| `metrics.args`                               | Override default container args (useful when using custom images)                                                     | `[]`                       |
-| `metrics.resources.limits`                   | The resources limits for Prometheus exporter containers                                                               | `{}`                       |
-| `metrics.resources.requests`                 | The requested resources for Prometheus exporter containers                                                            | `{}`                       |
-| `metrics.containerPort`                      | Port of the Prometheus metrics container                                                                              | `9216`                     |
-| `metrics.service.annotations`                | Annotations for Prometheus Exporter pods. Evaluated as a template.                                                    | `{}`                       |
-| `metrics.service.type`                       | Type of the Prometheus metrics service                                                                                | `ClusterIP`                |
-| `metrics.service.ports.metrics`              | Port of the Prometheus metrics service                                                                                | `9216`                     |
-| `metrics.service.extraPorts`                 | Extra ports to expose (normally used with the `sidecar` value)                                                        | `[]`                       |
-| `metrics.livenessProbe.enabled`              | Enable livenessProbe                                                                                                  | `true`                     |
-| `metrics.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                                               | `15`                       |
-| `metrics.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                                      | `5`                        |
-| `metrics.livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                                                     | `10`                       |
-| `metrics.livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                                                   | `3`                        |
-| `metrics.livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                                                   | `1`                        |
-| `metrics.readinessProbe.enabled`             | Enable readinessProbe                                                                                                 | `true`                     |
-| `metrics.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                                              | `5`                        |
-| `metrics.readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                                                     | `5`                        |
-| `metrics.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                                    | `10`                       |
-| `metrics.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                                                  | `3`                        |
-| `metrics.readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                                                  | `1`                        |
-| `metrics.startupProbe.enabled`               | Enable startupProbe                                                                                                   | `false`                    |
-| `metrics.startupProbe.initialDelaySeconds`   | Initial delay seconds for startupProbe                                                                                | `5`                        |
-| `metrics.startupProbe.periodSeconds`         | Period seconds for startupProbe                                                                                       | `10`                       |
-| `metrics.startupProbe.timeoutSeconds`        | Timeout seconds for startupProbe                                                                                      | `5`                        |
-| `metrics.startupProbe.failureThreshold`      | Failure threshold for startupProbe                                                                                    | `30`                       |
-| `metrics.startupProbe.successThreshold`      | Success threshold for startupProbe                                                                                    | `1`                        |
-| `metrics.customLivenessProbe`                | Override default liveness probe for MongoDB(&reg;) containers                                                         | `{}`                       |
-| `metrics.customReadinessProbe`               | Override default readiness probe for MongoDB(&reg;) containers                                                        | `{}`                       |
-| `metrics.customStartupProbe`                 | Override default startup probe for MongoDB(&reg;) containers                                                          | `{}`                       |
-| `metrics.serviceMonitor.enabled`             | Create ServiceMonitor Resource for scraping metrics using Prometheus Operator                                         | `false`                    |
-| `metrics.serviceMonitor.namespace`           | Namespace which Prometheus is running in                                                                              | `""`                       |
-| `metrics.serviceMonitor.interval`            | Interval at which metrics should be scraped                                                                           | `30s`                      |
-| `metrics.serviceMonitor.scrapeTimeout`       | Specify the timeout after which the scrape is ended                                                                   | `""`                       |
-| `metrics.serviceMonitor.relabelings`         | RelabelConfigs to apply to samples before scraping.                                                                   | `[]`                       |
-| `metrics.serviceMonitor.metricRelabelings`   | MetricsRelabelConfigs to apply to samples before ingestion.                                                           | `[]`                       |
-| `metrics.serviceMonitor.labels`              | Used to pass Labels that are used by the Prometheus installed in your cluster to select Service Monitors to work with | `{}`                       |
-| `metrics.serviceMonitor.selector`            | Prometheus instance selector labels                                                                                   | `{}`                       |
-| `metrics.serviceMonitor.honorLabels`         | Specify honorLabels parameter to add the scrape endpoint                                                              | `false`                    |
-| `metrics.serviceMonitor.jobLabel`            | The name of the label on the target service to use as the job name in prometheus.                                     | `""`                       |
-| `metrics.prometheusRule.enabled`             | Set this to true to create prometheusRules for Prometheus operator                                                    | `false`                    |
-| `metrics.prometheusRule.additionalLabels`    | Additional labels that can be used so prometheusRules will be discovered by Prometheus                                | `{}`                       |
-| `metrics.prometheusRule.namespace`           | Namespace where prometheusRules resource should be created                                                            | `""`                       |
-| `metrics.prometheusRule.rules`               | Rules to be created, check values for an example                                                                      | `[]`                       |
+| Name                                         | Description                                                                                                                   | Value                      |
+| -------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
+| `metrics.enabled`                            | Enable using a sidecar Prometheus exporter                                                                                    | `false`                    |
+| `metrics.image.registry`                     | MongoDB(&reg;) Prometheus exporter image registry                                                                             | `docker.io`                |
+| `metrics.image.repository`                   | MongoDB(&reg;) Prometheus exporter image repository                                                                           | `bitnami/mongodb-exporter` |
+| `metrics.image.tag`                          | MongoDB(&reg;) Prometheus exporter image tag (immutable tags are recommended)                                                 | `0.37.0-debian-11-r26`     |
+| `metrics.image.digest`                       | MongoDB(&reg;) image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                | `""`                       |
+| `metrics.image.pullPolicy`                   | MongoDB(&reg;) Prometheus exporter image pull policy                                                                          | `IfNotPresent`             |
+| `metrics.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                              | `[]`                       |
+| `metrics.username`                           | String with username for the metrics exporter                                                                                 | `""`                       |
+| `metrics.password`                           | String with password for the metrics exporter                                                                                 | `""`                       |
+| `metrics.compatibleMode`                     | Enables old style mongodb-exporter metrics                                                                                    | `true`                     |
+| `metrics.collector.all`                      | Enable all collectors. Same as enabling all individual metrics                                                                | `false`                    |
+| `metrics.collector.diagnosticdata`           | Boolean Enable collecting metrics from getDiagnosticData                                                                      | `true`                     |
+| `metrics.collector.replicasetstatus`         | Boolean Enable collecting metrics from replSetGetStatus                                                                       | `true`                     |
+| `metrics.collector.dbstats`                  | Boolean Enable collecting metrics from dbStats                                                                                | `false`                    |
+| `metrics.collector.topmetrics`               | Boolean Enable collecting metrics from top admin command                                                                      | `false`                    |
+| `metrics.collector.indexstats`               | Boolean Enable collecting metrics from $indexStats                                                                            | `false`                    |
+| `metrics.collector.collstats`                | Boolean Enable collecting metrics from $collStats                                                                             | `false`                    |
+| `metrics.collector.collstatsColls`           | List of \<databases\>.\<collections\> to get $collStats                                                                       | `[]`                       |
+| `metrics.collector.indexstatsColls`          | List - List of \<databases\>.\<collections\> to get $indexStats                                                               | `[]`                       |
+| `metrics.collector.collstatsLimit`           | Number - Disable collstats, dbstats, topmetrics and indexstats collector if there are more than \<n\> collections. 0=No limit | `0`                        |
+| `metrics.extraFlags`                         | String with extra flags to the metrics exporter                                                                               | `""`                       |
+| `metrics.command`                            | Override default container command (useful when using custom images)                                                          | `[]`                       |
+| `metrics.args`                               | Override default container args (useful when using custom images)                                                             | `[]`                       |
+| `metrics.resources.limits`                   | The resources limits for Prometheus exporter containers                                                                       | `{}`                       |
+| `metrics.resources.requests`                 | The requested resources for Prometheus exporter containers                                                                    | `{}`                       |
+| `metrics.containerPort`                      | Port of the Prometheus metrics container                                                                                      | `9216`                     |
+| `metrics.service.annotations`                | Annotations for Prometheus Exporter pods. Evaluated as a template.                                                            | `{}`                       |
+| `metrics.service.type`                       | Type of the Prometheus metrics service                                                                                        | `ClusterIP`                |
+| `metrics.service.ports.metrics`              | Port of the Prometheus metrics service                                                                                        | `9216`                     |
+| `metrics.service.extraPorts`                 | Extra ports to expose (normally used with the `sidecar` value)                                                                | `[]`                       |
+| `metrics.livenessProbe.enabled`              | Enable livenessProbe                                                                                                          | `true`                     |
+| `metrics.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                                                       | `15`                       |
+| `metrics.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                                              | `5`                        |
+| `metrics.livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                                                             | `10`                       |
+| `metrics.livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                                                           | `3`                        |
+| `metrics.livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                                                           | `1`                        |
+| `metrics.readinessProbe.enabled`             | Enable readinessProbe                                                                                                         | `true`                     |
+| `metrics.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                                                      | `5`                        |
+| `metrics.readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                                                             | `5`                        |
+| `metrics.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                                            | `10`                       |
+| `metrics.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                                                          | `3`                        |
+| `metrics.readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                                                          | `1`                        |
+| `metrics.startupProbe.enabled`               | Enable startupProbe                                                                                                           | `false`                    |
+| `metrics.startupProbe.initialDelaySeconds`   | Initial delay seconds for startupProbe                                                                                        | `5`                        |
+| `metrics.startupProbe.periodSeconds`         | Period seconds for startupProbe                                                                                               | `10`                       |
+| `metrics.startupProbe.timeoutSeconds`        | Timeout seconds for startupProbe                                                                                              | `5`                        |
+| `metrics.startupProbe.failureThreshold`      | Failure threshold for startupProbe                                                                                            | `30`                       |
+| `metrics.startupProbe.successThreshold`      | Success threshold for startupProbe                                                                                            | `1`                        |
+| `metrics.customLivenessProbe`                | Override default liveness probe for MongoDB(&reg;) containers                                                                 | `{}`                       |
+| `metrics.customReadinessProbe`               | Override default readiness probe for MongoDB(&reg;) containers                                                                | `{}`                       |
+| `metrics.customStartupProbe`                 | Override default startup probe for MongoDB(&reg;) containers                                                                  | `{}`                       |
+| `metrics.serviceMonitor.enabled`             | Create ServiceMonitor Resource for scraping metrics using Prometheus Operator                                                 | `false`                    |
+| `metrics.serviceMonitor.namespace`           | Namespace which Prometheus is running in                                                                                      | `""`                       |
+| `metrics.serviceMonitor.interval`            | Interval at which metrics should be scraped                                                                                   | `30s`                      |
+| `metrics.serviceMonitor.scrapeTimeout`       | Specify the timeout after which the scrape is ended                                                                           | `""`                       |
+| `metrics.serviceMonitor.relabelings`         | RelabelConfigs to apply to samples before scraping.                                                                           | `[]`                       |
+| `metrics.serviceMonitor.metricRelabelings`   | MetricsRelabelConfigs to apply to samples before ingestion.                                                                   | `[]`                       |
+| `metrics.serviceMonitor.labels`              | Used to pass Labels that are used by the Prometheus installed in your cluster to select Service Monitors to work with         | `{}`                       |
+| `metrics.serviceMonitor.selector`            | Prometheus instance selector labels                                                                                           | `{}`                       |
+| `metrics.serviceMonitor.honorLabels`         | Specify honorLabels parameter to add the scrape endpoint                                                                      | `false`                    |
+| `metrics.serviceMonitor.jobLabel`            | The name of the label on the target service to use as the job name in prometheus.                                             | `""`                       |
+| `metrics.prometheusRule.enabled`             | Set this to true to create prometheusRules for Prometheus operator                                                            | `false`                    |
+| `metrics.prometheusRule.additionalLabels`    | Additional labels that can be used so prometheusRules will be discovered by Prometheus                                        | `{}`                       |
+| `metrics.prometheusRule.namespace`           | Namespace where prometheusRules resource should be created                                                                    | `""`                       |
+| `metrics.prometheusRule.rules`               | Rules to be created, check values for an example                                                                              | `[]`                       |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -722,8 +733,8 @@ From this version, the way of setting the ingress rules has changed. Instead of 
 ```yaml
 ingress:
   hosts:
-  - name: mongodb.local
-    path: /
+    - name: mongodb.local
+      path: /
 ```
 
 ### To 6.0.0

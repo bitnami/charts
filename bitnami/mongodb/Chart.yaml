@@ -25,4 +25,4 @@ maintainers:
 name: mongodb
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/mongodb
-version: 13.11.0
+version: 13.12.0
