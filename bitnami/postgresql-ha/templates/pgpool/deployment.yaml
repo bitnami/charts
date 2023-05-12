@@ -335,7 +335,6 @@ spec:
           {{- end }}
           {{- if or .Values.pgpool.configuration .Values.pgpool.configurationCM .Values.pgpool.initdbScripts .Values.pgpool.initdbScriptsCM .Values.pgpool.initdbScriptsSecret .Values.postgresql.usePasswordFile .Values.pgpool.usePasswordFile .Values.pgpool.tls.enabled .Values.pgpool.extraVolumeMounts }}
           volumeMounts:
-          {{- end }}
             {{- if or .Values.pgpool.configuration .Values.pgpool.configurationCM }}
             - name: pgpool-config
               mountPath: /opt/bitnami/pgpool/user_config/
@@ -368,6 +367,7 @@ spec:
             {{- if .Values.pgpool.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.pgpool.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
+          {{- end }}
         {{- if .Values.pgpool.sidecars }}
         {{- include "common.tplvalues.render" (dict "value" .Values.pgpool.sidecars "context" $) | nindent 8 }}
         {{- end }}
