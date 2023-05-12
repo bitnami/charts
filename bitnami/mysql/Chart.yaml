@@ -24,4 +24,4 @@ maintainers:
 name: mysql
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/mysql
-version: 9.10.0
+version: 9.11.0

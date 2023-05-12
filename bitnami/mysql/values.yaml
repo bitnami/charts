@@ -1120,6 +1120,10 @@ metrics:
   extraArgs:
     primary: []
     secondary: []
+  ## @param metrics.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the MySQL metrics container(s)
+  ## The volumes referenced by these volume mounts must be defined in both the primary and secondary (if used) values.
+  ##
+  extraVolumeMounts: []
   ## Mysqld Prometheus exporter resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
