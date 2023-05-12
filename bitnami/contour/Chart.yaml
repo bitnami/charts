@@ -2,7 +2,7 @@ annotations:
   category: Infrastructure
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 1.24.4
+appVersion: 1.25.0
 dependencies:
   - name: common
     repository: oci://registry-1.docker.io/bitnamicharts
@@ -22,4 +22,4 @@ maintainers:
 name: contour
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/contour
-version: 11.4.0
+version: 12.0.0
