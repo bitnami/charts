@@ -2,8 +2,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.11.2
-  creationTimestamp: null
+    controller-gen.kubebuilder.io/version: v0.11.4
   name: httpproxies.projectcontour.io
 spec:
   preserveUnknownFields: false
@@ -72,8 +71,13 @@ spec:
                         include invalid.'
                       items:
                         description: MatchCondition are a general holder for matching
-                          rules for HTTPProxies. One of Prefix or Header must be provided.
+                          rules for HTTPProxies. One of Prefix, Exact, Header or QueryParameter
+                          must be provided.
                         properties:
+                          exact:
+                            description: Exact defines a exact match for a request.
+                              This field is not allowed in include match conditions.
+                            type: string
                           header:
                             description: Header specifies the header condition to
                               match.
@@ -119,6 +123,50 @@ spec:
                           prefix:
                             description: Prefix defines a prefix match for a request.
                             type: string
+                          queryParameter:
+                            description: QueryParameter specifies the query parameter
+                              condition to match.
+                            properties:
+                              contains:
+                                description: Contains specifies a substring that must
+                                  be present in the query parameter value.
+                                type: string
+                              exact:
+                                description: Exact specifies a string that the query
+                                  parameter value must be equal to.
+                                type: string
+                              ignoreCase:
+                                description: IgnoreCase specifies that string matching
+                                  should be case insensitive. Note that this has no
+                                  effect on the Regex parameter.
+                                type: boolean
+                              name:
+                                description: Name is the name of the query parameter
+                                  to match against. Name is required. Query parameter
+                                  names are case insensitive.
+                                type: string
+                              prefix:
+                                description: Prefix defines a prefix match for the
+                                  query parameter value.
+                                type: string
+                              present:
+                                description: Present specifies that condition is true
+                                  when the named query parameter is present, regardless
+                                  of its value. Note that setting Present to false
+                                  does not make the condition true if the named query
+                                  parameter is absent.
+                                type: boolean
+                              regex:
+                                description: Regex specifies a regular expression
+                                  pattern that must match the query parameter value.
+                                type: string
+                              suffix:
+                                description: Suffix defines a suffix match for a query
+                                  parameter value.
+                                type: string
+                            required:
+                            - name
+                            type: object
                         type: object
                       type: array
                     name:
@@ -171,8 +219,13 @@ spec:
                         Conditions, will make the route invalid.'
                       items:
                         description: MatchCondition are a general holder for matching
-                          rules for HTTPProxies. One of Prefix or Header must be provided.
+                          rules for HTTPProxies. One of Prefix, Exact, Header or QueryParameter
+                          must be provided.
                         properties:
+                          exact:
+                            description: Exact defines a exact match for a request.
+                              This field is not allowed in include match conditions.
+                            type: string
                           header:
                             description: Header specifies the header condition to
                               match.
@@ -218,6 +271,50 @@ spec:
                           prefix:
                             description: Prefix defines a prefix match for a request.
                             type: string
+                          queryParameter:
+                            description: QueryParameter specifies the query parameter
+                              condition to match.
+                            properties:
+                              contains:
+                                description: Contains specifies a substring that must
+                                  be present in the query parameter value.
+                                type: string
+                              exact:
+                                description: Exact specifies a string that the query
+                                  parameter value must be equal to.
+                                type: string
+                              ignoreCase:
+                                description: IgnoreCase specifies that string matching
+                                  should be case insensitive. Note that this has no
+                                  effect on the Regex parameter.
+                                type: boolean
+                              name:
+                                description: Name is the name of the query parameter
+                                  to match against. Name is required. Query parameter
+                                  names are case insensitive.
+                                type: string
+                              prefix:
+                                description: Prefix defines a prefix match for the
+                                  query parameter value.
+                                type: string
+                              present:
+                                description: Present specifies that condition is true
+                                  when the named query parameter is present, regardless
+                                  of its value. Note that setting Present to false
+                                  does not make the condition true if the named query
+                                  parameter is absent.
+                                type: boolean
+                              regex:
+                                description: Regex specifies a regular expression
+                                  pattern that must match the query parameter value.
+                                type: string
+                              suffix:
+                                description: Suffix defines a suffix match for a query
+                                  parameter value.
+                                type: string
+                            required:
+                            - name
+                            type: object
                         type: object
                       type: array
                     cookieRewritePolicies:
@@ -337,6 +434,112 @@ spec:
                       required:
                       - path
                       type: object
+                    internalRedirectPolicy:
+                      description: The policy to define when to handle redirects responses
+                        internally.
+                      properties:
+                        allowCrossSchemeRedirect:
+                          default: Never
+                          description: AllowCrossSchemeRedirect Allow internal redirect
+                            to follow a target URI with a different scheme than the
+                            value of x-forwarded-proto. SafeOnly allows same scheme
+                            redirect and safe cross scheme redirect, which means if
+                            the downstream scheme is HTTPS, both HTTPS and HTTP redirect
+                            targets are allowed, but if the downstream scheme is HTTP,
+                            only HTTP redirect targets are allowed.
+                          enum:
+                          - Always
+                          - Never
+                          - SafeOnly
+                          type: string
+                        denyRepeatedRouteRedirect:
+                          description: If DenyRepeatedRouteRedirect is true, rejects
+                            redirect targets that are pointing to a route that has
+                            been followed by a previous redirect from the current
+                            route.
+                          type: boolean
+                        maxInternalRedirects:
+                          description: MaxInternalRedirects An internal redirect is
+                            not handled, unless the number of previous internal redirects
+                            that a downstream request has encountered is lower than
+                            this value.
+                          format: int32
+                          type: integer
+                        redirectResponseCodes:
+                          description: RedirectResponseCodes If unspecified, only
+                            302 will be treated as internal redirect. Only 301, 302,
+                            303, 307 and 308 are valid values.
+                          items:
+                            description: RedirectResponseCode is a uint32 type alias
+                              with validation to ensure that the value is valid.
+                            enum:
+                            - 301
+                            - 302
+                            - 303
+                            - 307
+                            - 308
+                            format: int32
+                            type: integer
+                          type: array
+                      type: object
+                    ipAllowPolicy:
+                      description: IPAllowFilterPolicy is a list of ipv4/6 filter
+                        rules for which matching requests should be allowed. All other
+                        requests will be denied. Only one of IPAllowFilterPolicy and
+                        IPDenyFilterPolicy can be defined. The rules defined here
+                        override any rules set on the root HTTPProxy.
+                      items:
+                        properties:
+                          cidr:
+                            description: CIDR is a CIDR block of ipv4 or ipv6 addresses
+                              to filter on. This can also be a bare IP address (without
+                              a mask) to filter on exactly one address.
+                            type: string
+                          source:
+                            description: 'Source indicates how to determine the ip
+                              address to filter on, and can be one of two values:
+                              - `Remote` filters on the ip address of the client,
+                              accounting for PROXY and X-Forwarded-For as needed.
+                              - `Peer` filters on the ip of the network request, ignoring
+                              PROXY and X-Forwarded-For.'
+                            enum:
+                            - Peer
+                            - Remote
+                            type: string
+                        required:
+                        - cidr
+                        - source
+                        type: object
+                      type: array
+                    ipDenyPolicy:
+                      description: IPDenyFilterPolicy is a list of ipv4/6 filter rules
+                        for which matching requests should be denied. All other requests
+                        will be allowed. Only one of IPAllowFilterPolicy and IPDenyFilterPolicy
+                        can be defined. The rules defined here override any rules
+                        set on the root HTTPProxy.
+                      items:
+                        properties:
+                          cidr:
+                            description: CIDR is a CIDR block of ipv4 or ipv6 addresses
+                              to filter on. This can also be a bare IP address (without
+                              a mask) to filter on exactly one address.
+                            type: string
+                          source:
+                            description: 'Source indicates how to determine the ip
+                              address to filter on, and can be one of two values:
+                              - `Remote` filters on the ip address of the client,
+                              accounting for PROXY and X-Forwarded-For as needed.
+                              - `Peer` filters on the ip of the network request, ignoring
+                              PROXY and X-Forwarded-For.'
+                            enum:
+                            - Peer
+                            - Remote
+                            type: string
+                        required:
+                        - cidr
+                        - source
+                        type: object
+                      type: array
                     jwtVerificationPolicy:
                       description: The policy for verifying JWTs for requests to this
                         route.
@@ -366,7 +569,7 @@ spec:
                             strategy is chosen. If an element of the supplied list
                             of hash policies is invalid, it will be ignored. If the
                             list of hash policies is empty after validation, the load
-                            balancing strategy will fall back the the default `RoundRobin`.
+                            balancing strategy will fall back to the default `RoundRobin`.
                           items:
                             description: RequestHashPolicy contains configuration
                               for an individual hash policy on a request attribute.
@@ -960,7 +1163,7 @@ spec:
                             type: string
                           requestHeadersPolicy:
                             description: The policy for managing request headers during
-                              proxying. Rewriting the 'Host' header is not supported.
+                              proxying.
                             properties:
                               remove:
                                 description: Remove specifies a list of HTTP header
@@ -1190,7 +1393,7 @@ spec:
                           is chosen. If an element of the supplied list of hash policies
                           is invalid, it will be ignored. If the list of hash policies
                           is empty after validation, the load balancing strategy will
-                          fall back the the default `RoundRobin`.
+                          fall back to the default `RoundRobin`.
                         items:
                           description: RequestHashPolicy contains configuration for
                             an individual hash policy on a request attribute.
@@ -1346,7 +1549,7 @@ spec:
                           type: string
                         requestHeadersPolicy:
                           description: The policy for managing request headers during
-                            proxying. Rewriting the 'Host' header is not supported.
+                            proxying.
                           properties:
                             remove:
                               description: Remove specifies a list of HTTP header
@@ -1567,8 +1770,6 @@ spec:
                               Authorization Server is in raw bytes.
                             type: boolean
                         type: object
-                    required:
-                    - extensionRef
                     type: object
                   corsPolicy:
                     description: Specifies the cross-origin policy to apply to the
@@ -1609,6 +1810,10 @@ spec:
                           type: string
                         minItems: 1
                         type: array
+                      allowPrivateNetwork:
+                        description: AllowPrivateNetwork specifies whether to allow
+                          private network requests. See https://developer.chrome.com/blog/private-network-access-preflight.
+                        type: boolean
                       exposeHeaders:
                         description: ExposeHeaders Specifies the content for the *access-control-expose-headers*
                           header.
@@ -1639,6 +1844,62 @@ spec:
                       to the fqdn.
                     pattern: ^(\*\.)?[a-z0-9]([-a-z0-9]*[a-z0-9])?(\.[a-z0-9]([-a-z0-9]*[a-z0-9])?)*$
                     type: string
+                  ipAllowPolicy:
+                    description: IPAllowFilterPolicy is a list of ipv4/6 filter rules
+                      for which matching requests should be allowed. All other requests
+                      will be denied. Only one of IPAllowFilterPolicy and IPDenyFilterPolicy
+                      can be defined. The rules defined here may be overridden in
+                      a Route.
+                    items:
+                      properties:
+                        cidr:
+                          description: CIDR is a CIDR block of ipv4 or ipv6 addresses
+                            to filter on. This can also be a bare IP address (without
+                            a mask) to filter on exactly one address.
+                          type: string
+                        source:
+                          description: 'Source indicates how to determine the ip address
+                            to filter on, and can be one of two values: - `Remote`
+                            filters on the ip address of the client, accounting for
+                            PROXY and X-Forwarded-For as needed. - `Peer` filters
+                            on the ip of the network request, ignoring PROXY and X-Forwarded-For.'
+                          enum:
+                          - Peer
+                          - Remote
+                          type: string
+                      required:
+                      - cidr
+                      - source
+                      type: object
+                    type: array
+                  ipDenyPolicy:
+                    description: IPDenyFilterPolicy is a list of ipv4/6 filter rules
+                      for which matching requests should be denied. All other requests
+                      will be allowed. Only one of IPAllowFilterPolicy and IPDenyFilterPolicy
+                      can be defined. The rules defined here may be overridden in
+                      a Route.
+                    items:
+                      properties:
+                        cidr:
+                          description: CIDR is a CIDR block of ipv4 or ipv6 addresses
+                            to filter on. This can also be a bare IP address (without
+                            a mask) to filter on exactly one address.
+                          type: string
+                        source:
+                          description: 'Source indicates how to determine the ip address
+                            to filter on, and can be one of two values: - `Remote`
+                            filters on the ip address of the client, accounting for
+                            PROXY and X-Forwarded-For as needed. - `Peer` filters
+                            on the ip of the network request, ignoring PROXY and X-Forwarded-For.'
+                          enum:
+                          - Peer
+                          - Remote
+                          type: string
+                      required:
+                      - cidr
+                      - source
+                      type: object
+                    type: array
                   jwtProviders:
                     description: Providers to use for verifying JSON Web Tokens (JWTs)
                       on the virtual host.
