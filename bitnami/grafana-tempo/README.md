@@ -121,13 +121,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `compactor.args`                                  | Override default container args (useful when using custom images)                                   | `[]`            |
 | `compactor.replicaCount`                          | Number of Compactor replicas to deploy                                                              | `1`             |
 | `compactor.livenessProbe.enabled`                 | Enable livenessProbe on Compactor nodes                                                             | `true`          |
-| `compactor.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                             | `60`            |
+| `compactor.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                             | `80`            |
 | `compactor.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                    | `10`            |
 | `compactor.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                   | `1`             |
 | `compactor.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                 | `3`             |
 | `compactor.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                 | `1`             |
 | `compactor.readinessProbe.enabled`                | Enable readinessProbe on Compactor nodes                                                            | `true`          |
-| `compactor.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                            | `60`            |
+| `compactor.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                            | `80`            |
 | `compactor.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                   | `10`            |
 | `compactor.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                  | `1`             |
 | `compactor.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                | `3`             |
