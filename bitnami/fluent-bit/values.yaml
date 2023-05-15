@@ -431,12 +431,6 @@ config:
     [INPUT]
         Name cpu
 
-    [INPUT]
-        Name systemd
-        Tag host.*
-        Systemd_Filter _SYSTEMD_UNIT=kubelet.service
-        Read_From_Tail On
-
   ## @param config.filters [string] Set of plugins that can be used to filter, modify, or enrich log data that is processed by Fluent Bit.
   ## https://docs.fluentbit.io/manual/pipeline/filters
   ## Example:
