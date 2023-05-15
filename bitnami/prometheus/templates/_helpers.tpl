@@ -20,6 +20,20 @@ Return the proper image name
 {{- end -}}
 
 {{/*
+Return Prometheus server name
+*/}}
+{{- define "prometheus.server.fullname" -}}
+    {{- printf "%s-server" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-"  }}
+{{- end -}}
+
+{{/*
+Return Prometheus server name
+*/}}
+{{- define "prometheus.server.fullname.namespace" -}}
+    {{- printf "%s-server" (include "common.names.fullname.namespace" .)  | trunc 63 | trimSuffix "-"  }}
+{{- end -}}
+
+{{/*
 Return the proper image name (for the init container volume-permissions image)
 */}}
 {{- define "prometheus.volumePermissions.image" -}}
@@ -38,19 +52,9 @@ Create the name of the service account to use
 */}}
 {{- define "prometheus.server.serviceAccountName" -}}
 {{- if .Values.server.serviceAccount.create -}}
-    {{ default (include "common.names.fullname" .) .Values.server.serviceAccount.name }}
+    {{ default (include "prometheus.server.fullname" .) .Values.server.serviceAccount.name }}
 {{- else -}}
     {{ default "default" .Values.server.serviceAccount.name }}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Return true if cert-manager required annotations for TLS signed certificates are set in the Ingress annotations
-Ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
-*/}}
-{{- define "prometheus.server.ingress.certManagerRequest" -}}
-{{ if or (hasKey . "cert-manager.io/cluster-issuer") (hasKey . "cert-manager.io/issuer") }}
-    {{- true -}}
 {{- end -}}
 {{- end -}}
 
@@ -84,7 +88,7 @@ Get the Prometheus configuration configmap.
 {{- if .Values.server.existingConfigmap -}}
     {{- include "common.tplvalues.render" (dict "value" .Values.server.existingConfigmap "context" .) -}}
 {{- else }}
-    {{- printf "%s" (include "common.names.fullname" . ) -}}
+    {{- include "prometheus.server.fullname" . -}}
 {{- end -}}
 {{- end -}}
 
@@ -95,7 +99,7 @@ Get the Prometheus configuration configmap key.
 {{- if .Values.server.existingConfigmapKey -}}
     {{- include "common.tplvalues.render" (dict "value" .Values.server.existingConfigmapKey "context" .) -}}
 {{- else }}
-    {{- printf "prometheus.server.yaml" -}}
+    {{- printf "prometheus.yaml" -}}
 {{- end -}}
 {{- end -}}
 
@@ -132,7 +136,7 @@ Return Thanos sidecar service/ingress name
 Return Alertmanager name
 */}}
 {{- define "prometheus.alertmanager.fullname" -}}
-    {{- printf "%s-alertmanager" (include "common.names.fullname" .) }}
+    {{- printf "%s-alertmanager" (include "common.names.fullname" .)  | trunc 63 | trimSuffix "-" }}
 {{- end -}}
 
 {{/*
@@ -142,6 +146,6 @@ Get the Alertmanager configuration configmap.
 {{- if .Values.alertmanager.existingConfigmap -}}
     {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.existingConfigmap "context" .) -}}
 {{- else }}
-    {{- printf "%s" (include "prometheus.alertmanager.fullname" . ) -}}
+    {{- include "prometheus.alertmanager.fullname" . -}}
 {{- end -}}
 {{- end -}}

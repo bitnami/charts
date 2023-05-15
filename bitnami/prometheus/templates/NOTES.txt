@@ -69,7 +69,7 @@ Thanos Sidecar can be accessed via port "{{ .Values.server.thanos.service.ports.
 
   You should be able to access your new Thanos Sidecar installation through
 
-  {{ ternary "https" "http" .Values.prometheus.thanos.ingress.tls }}://{{ .Values.server.thanos.ingress.hostname }}
+  {{ ternary "https" "http" .Values.server.thanos.ingress.tls }}://{{ .Values.server.thanos.ingress.hostname }}
 
 {{- end }}
 {{- end }}

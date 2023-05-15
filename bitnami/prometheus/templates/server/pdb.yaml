@@ -1,9 +1,9 @@
 {{- $replicaCount := int .Values.replicaCount }}
-{{- if and .Values.server.pdb.create (or (gt $replicaCount 1) .Values.autoscaling.enabled) }}
+{{- if and .Values.server.pdb.create (gt $replicaCount 1) }}
 apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
 kind: PodDisruptionBudget
 metadata:
-  name: {{ include "common.names.fullname" . }}
+  name: {{ include "prometheus.server.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/part-of: prometheus

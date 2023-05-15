@@ -1,7 +1,7 @@
 kind: ClusterRoleBinding
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 metadata:
-  name: {{ template "common.names.fullname" . }}
+  name: {{ template "prometheus.server.fullname" . }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/part-of: prometheus
     app.kubernetes.io/component: server
@@ -14,7 +14,7 @@ metadata:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: {{ template "common.names.fullname" . }}
+  name: {{ template "prometheus.server.fullname.namespace" . }}
 subjects:
   - kind: ServiceAccount
     name: {{ template "prometheus.server.serviceAccountName" . }}
