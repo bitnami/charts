@@ -412,6 +412,7 @@ podSecurityContext:
 ## @param containerSecurityContext.runAsUser Set WordPress container's Security Context runAsUser
 ## @param containerSecurityContext.runAsNonRoot Set WordPress container's Security Context runAsNonRoot
 ## @param containerSecurityContext.allowPrivilegeEscalation Set WordPress container's privilege escalation
+## @param containerSecurityContext.readOnlyRootFilesystem Set WordPress container's Security Context readOnlyRootFilesystem
 ## @param containerSecurityContext.capabilities.drop Set WordPress container's Security Context runAsNonRoot
 ##
 containerSecurityContext:
@@ -419,6 +420,7 @@ containerSecurityContext:
   runAsUser: 1001
   runAsNonRoot: true
   allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: false
   capabilities:
     drop: ["ALL"]
 ## Configure extra options for WordPress containers' liveness, readiness and startup probes
