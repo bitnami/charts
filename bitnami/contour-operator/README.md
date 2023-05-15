@@ -2,6 +2,10 @@
 
 # Contour Operator packaged by Bitnami
 
+## This Helm chart is deprecated
+
+The upstream project has been discontinued and no new features.
+
 The Contour Operator extends the Kubernetes API to create, configure and manage instances of Contour on behalf of users.
 
 [Overview of Contour Operator](https://github.com/projectcontour/contour-operator)
