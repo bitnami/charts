@@ -240,6 +240,14 @@ spec:
             description: AlertSpec defines an alerting rule for events involving a
               list of objects.
             properties:
+              eventMetadata:
+                additionalProperties:
+                  type: string
+                description: EventMetadata is an optional field for adding metadata
+                  to events emitted by the controller. Metadata fields added by the
+                  controller have priority over the fields added here, and the fields
+                  added here have priority over fields originally present in the event.
+                type: object
               eventSeverity:
                 default: info
                 description: EventSeverity specifies how to filter events based on
@@ -256,10 +264,10 @@ spec:
                     to let you locate the typed referenced object at cluster level
                   properties:
                     apiVersion:
-                      description: API version of the referent.
+                      description: API version of the referent
                       type: string
                     kind:
-                      description: Kind of the referent.
+                      description: Kind of the referent
                       enum:
                       - Bucket
                       - GitRepository
@@ -282,23 +290,30 @@ spec:
                         are ANDed. MatchLabels requires the name to be set to `*`.
                       type: object
                     name:
-                      description: Name of the referent. If multiple resources are
+                      description: Name of the referent If multiple resources are
                         targeted `*` may be set.
                       maxLength: 53
                       minLength: 1
                       type: string
                     namespace:
-                      description: Namespace of the referent.
+                      description: Namespace of the referent
                       maxLength: 53
                       minLength: 1
                       type: string
                   required:
+                  - kind
                   - name
                   type: object
                 type: array
               exclusionList:
                 description: ExclusionList specifies a list of Golang regular expressions
                   to be used for excluding messages.
+                items:
+                  type: string
+                type: array
+              inclusionList:
+                description: InclusionList specifies a list of Golang regular expressions
+                  to be used for including messages.
                 items:
                   type: string
                 type: array
