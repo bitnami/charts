@@ -1,7 +1,7 @@
 kind: ClusterRoleBinding
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 metadata:
-  name: {{ template "prometheus.server.fullname" . }}
+  name: {{ template "prometheus.server.fullname.namespace" . }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/part-of: prometheus
     app.kubernetes.io/component: server
