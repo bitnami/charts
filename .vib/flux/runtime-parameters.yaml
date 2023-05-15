@@ -81,7 +81,7 @@ imageReflectorController:
 extraDeploy:
   # This is for kustomize-controller and source-controller
   # Source: https://fluxcd.io/flux/components/kustomize/kustomization/
-  - apiVersion: source.toolkit.fluxcd.io/v1
+  - apiVersion: source.toolkit.fluxcd.io/v1beta1
     kind: GitRepository
     metadata:
       name: vib-podinfo
