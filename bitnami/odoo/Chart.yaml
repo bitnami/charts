@@ -2,7 +2,7 @@ annotations:
   category: CRM
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 16.0.20230415
+appVersion: 16.0.20230515
 dependencies:
   - condition: postgresql.enabled
     name: postgresql
@@ -28,4 +28,4 @@ maintainers:
 name: odoo
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/odoo
-version: 23.2.0
+version: 23.2.1
