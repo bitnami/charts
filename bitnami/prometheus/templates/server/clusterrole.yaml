@@ -1,4 +1,4 @@
-{{- if .Values.rbac.create }}
+{{- if .Values.server.rbac.create }}
 kind: ClusterRole
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 metadata:
@@ -43,7 +43,7 @@ rules:
       - "/metrics"
     verbs:
       - get
-  {{- if .Values.rbac.rules }}
-  {{- include "common.tplvalues.render" ( dict "value" .Values.rbac.rules "context" $ ) | nindent 2 }}
+  {{- if .Values.server.rbac.rules }}
+  {{- include "common.tplvalues.render" ( dict "value" .Values.server.rbac.rules "context" $ ) | nindent 2 }}
   {{- end }}
 {{- end }}

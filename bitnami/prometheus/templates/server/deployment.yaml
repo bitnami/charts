@@ -73,7 +73,7 @@ spec:
       terminationGracePeriodSeconds: {{ .Values.server.terminationGracePeriodSeconds }}
       {{- end }}
       initContainers:
-        {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
+        {{- if and .Values.volumePermissions.enabled .Values.server.persistence.enabled }}
         - name: volume-permissions
           image: {{ include "prometheus.volumePermissions.image" . }}
           imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
@@ -81,17 +81,17 @@ spec:
             - sh
             - -ec
             - |
-              mkdir -p {{ .Values.persistence.mountPath }}
-              find {{ .Values.persistence.mountPath }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs -r chown -R {{ .Values.server.containerSecurityContext.runAsUser }}:{{ .Values.server.podSecurityContext.fsGroup }}
+              mkdir -p {{ .Values.server.persistence.mountPath }}
+              find {{ .Values.server.persistence.mountPath }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs -r chown -R {{ .Values.server.containerSecurityContext.runAsUser }}:{{ .Values.server.podSecurityContext.fsGroup }}
           securityContext: {{- include "common.tplvalues.render" (dict "value" .Values.volumePermissions.containerSecurityContext "context" $) | nindent 12 }}
           {{- if .Values.volumePermissions.resources }}
           resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: data
-              mountPath: {{ .Values.persistence.mountPath }}
-              {{- if .Values.persistence.subPath }}
-              subPath: {{ .Values.persistence.subPath }}
+              mountPath: {{ .Values.server.persistence.mountPath }}
+              {{- if .Values.server.persistence.subPath }}
+              subPath: {{ .Values.server.persistence.subPath }}
               {{- end }}
         {{- end }}
         {{- if .Values.server.initContainers }}
@@ -116,7 +116,7 @@ spec:
           {{- else }}
           args:
             - "--config.file=/opt/bitnami/prometheus/conf/{{ include "prometheus.server.configmapKey" . }}"
-            - "--storage.tsdb.path={{ .Values.persistence.mountPath }}"
+            - "--storage.tsdb.path={{ .Values.server.persistence.mountPath }}"
             - "--storage.tsdb.retention.time={{ .Values.server.retention }}"
             - "--storage.tsdb.retention.size={{ .Values.server.retentionSize }}"
             - "--log.level={{ .Values.server.logLevel }}"
@@ -192,7 +192,7 @@ spec:
               mountPath: /opt/bitnami/prometheus/conf
               readOnly: true
             - name: data
-              mountPath: {{ .Values.persistence.mountPath }}
+              mountPath: {{ .Values.server.persistence.mountPath }}
           {{- if .Values.server.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.server.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -266,9 +266,9 @@ spec:
           configMap:
             name: {{ include "prometheus.server.configmapName" . }}
         - name: data
-        {{- if .Values.persistence.enabled }}
+        {{- if .Values.server.persistence.enabled }}
           persistentVolumeClaim:
-            claimName: {{ default (include "prometheus.server.fullname" .) .Values.persistence.existingClaim }}
+            claimName: {{ default (include "prometheus.server.fullname" .) .Values.server.persistence.existingClaim }}
         {{- else }}
           emptyDir: {}
         {{- end }}

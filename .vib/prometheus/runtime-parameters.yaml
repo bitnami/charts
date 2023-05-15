@@ -1,8 +1,3 @@
-rbac:
-  create: true
-persistence:
-  enabled: true
-  mountPath: /bitnami/prometheus/data
 volumePermissions:
   enabled: true
 server:
@@ -22,8 +17,11 @@ server:
     runAsNonRoot: true
     readOnlyRootFilesystem: false
     runAsUser: 1002
-  serviceMonitor:
+  rbac:
+    create: true
+  persistence:
     enabled: true
+    mountPath: /opt/bitnami/prometheus/data
   service:
     type: LoadBalancer
     ports:

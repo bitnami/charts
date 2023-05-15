@@ -716,6 +716,56 @@
                             "default": {}
                         }
                     }
+                },
+                "persistence": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable Alertmanager data persistence using VolumeClaimTemplates",
+                            "default": false
+                        },
+                        "mountPath": {
+                            "type": "string",
+                            "description": "Path to mount the volume at.",
+                            "default": "/bitnami/alertmanager/data"
+                        },
+                        "subPath": {
+                            "type": "string",
+                            "description": "The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services",
+                            "default": ""
+                        },
+                        "storageClass": {
+                            "type": "string",
+                            "description": "PVC Storage Class for Concourse worker data volume",
+                            "default": ""
+                        },
+                        "accessModes": {
+                            "type": "array",
+                            "description": "PVC Access Mode for Concourse worker volume",
+                            "default": [
+                                "ReadWriteOnce"
+                            ],
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "size": {
+                            "type": "string",
+                            "description": "PVC Storage Request for Concourse worker volume",
+                            "default": "8Gi"
+                        },
+                        "annotations": {
+                            "type": "object",
+                            "description": "Annotations for the PVC",
+                            "default": {}
+                        },
+                        "selector": {
+                            "type": "object",
+                            "description": "Selector to match an existing Persistent Volume (this value is evaluated as a template)",
+                            "default": {}
+                        }
+                    }
                 }
             }
         },
@@ -1248,7 +1298,7 @@
                                 "tag": {
                                     "type": "string",
                                     "description": "Thanos image tag",
-                                    "default": "0.30.2-scratch-r4"
+                                    "default": "0.31.0-scratch-r3"
                                 },
                                 "digest": {
                                     "type": "string",
@@ -1689,11 +1739,6 @@
                                     "type": "number",
                                     "description": "Prometheus service HTTP port",
                                     "default": 80
-                                },
-                                "https": {
-                                    "type": "number",
-                                    "description": "Prometheus service HTTPS port",
-                                    "default": 443
                                 }
                             }
                         },
@@ -1703,11 +1748,6 @@
                                 "http": {
                                     "type": "string",
                                     "description": "Node port for HTTP",
-                                    "default": ""
-                                },
-                                "https": {
-                                    "type": "string",
-                                    "description": "Node port for HTTPS",
                                     "default": ""
                                 }
                             }
@@ -1755,66 +1795,82 @@
                             "default": {}
                         }
                     }
-                }
-            }
-        },
-        "persistence": {
-            "type": "object",
-            "properties": {
-                "enabled": {
-                    "type": "boolean",
-                    "description": "Enable persistence using Persistent Volume Claims. If you have multiple instances (server.repicacount > 1), please considere using an external storage service like Thanos or Grafana Mimir",
-                    "default": false
                 },
-                "mountPath": {
-                    "type": "string",
-                    "description": "Path to mount the volume at.",
-                    "default": "/opt/bitnami/prometheus/data"
-                },
-                "subPath": {
-                    "type": "string",
-                    "description": "The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services",
-                    "default": ""
-                },
-                "storageClass": {
-                    "type": "string",
-                    "description": "Storage class of backing PVC",
-                    "default": ""
-                },
-                "annotations": {
+                "persistence": {
                     "type": "object",
-                    "description": "Persistent Volume Claim annotations",
-                    "default": {}
-                },
-                "accessModes": {
-                    "type": "array",
-                    "description": "Persistent Volume Access Modes",
-                    "default": [
-                        "ReadWriteOnce"
-                    ],
-                    "items": {
-                        "type": "string"
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable persistence using Persistent Volume Claims. If you have multiple instances (server.repicacount > 1), please considere using an external storage service like Thanos or Grafana Mimir",
+                            "default": false
+                        },
+                        "mountPath": {
+                            "type": "string",
+                            "description": "Path to mount the volume at.",
+                            "default": "/bitnami/prometheus/data"
+                        },
+                        "subPath": {
+                            "type": "string",
+                            "description": "The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services",
+                            "default": ""
+                        },
+                        "storageClass": {
+                            "type": "string",
+                            "description": "Storage class of backing PVC",
+                            "default": ""
+                        },
+                        "annotations": {
+                            "type": "object",
+                            "description": "Persistent Volume Claim annotations",
+                            "default": {}
+                        },
+                        "accessModes": {
+                            "type": "array",
+                            "description": "Persistent Volume Access Modes",
+                            "default": [
+                                "ReadWriteOnce"
+                            ],
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "size": {
+                            "type": "string",
+                            "description": "Size of data volume",
+                            "default": "8Gi"
+                        },
+                        "existingClaim": {
+                            "type": "string",
+                            "description": "The name of an existing PVC to use for persistence",
+                            "default": ""
+                        },
+                        "selector": {
+                            "type": "object",
+                            "description": "Selector to match an existing Persistent Volume for WordPress data PVC",
+                            "default": {}
+                        },
+                        "dataSource": {
+                            "type": "object",
+                            "description": "Custom PVC data source",
+                            "default": {}
+                        }
                     }
                 },
-                "size": {
-                    "type": "string",
-                    "description": "Size of data volume",
-                    "default": "8Gi"
-                },
-                "existingClaim": {
-                    "type": "string",
-                    "description": "The name of an existing PVC to use for persistence",
-                    "default": ""
-                },
-                "selector": {
+                "rbac": {
                     "type": "object",
-                    "description": "Selector to match an existing Persistent Volume for WordPress data PVC",
-                    "default": {}
-                },
-                "dataSource": {
-                    "type": "object",
-                    "description": "Custom PVC data source",
-                    "default": {}
+                    "properties": {
+                        "create": {
+                            "type": "boolean",
+                            "description": "Specifies whether RBAC resources should be created",
+                            "default": true
+                        },
+                        "rules": {
+                            "type": "array",
+                            "description": "Custom RBAC rules to set",
+                            "default": [],
+                            "items": {}
+                        }
+                    }
                 }
             }
         },
@@ -1881,32 +1937,6 @@
                             "default": 0
                         }
                     }
-                }
-            }
-        },
-        "rbac": {
-            "type": "object",
-            "properties": {
-                "create": {
-                    "type": "boolean",
-                    "description": "Specifies whether RBAC resources should be created",
-                    "default": true
-                },
-                "rules": {
-                    "type": "array",
-                    "description": "Custom RBAC rules to set",
-                    "default": [],
-                    "items": {}
-                }
-            }
-        },
-        "metrics": {
-            "type": "object",
-            "properties": {
-                "enabled": {
-                    "type": "boolean",
-                    "description": "Enable the export of Prometheus metrics",
-                    "default": false
                 }
             }
         }

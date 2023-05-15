@@ -75,7 +75,7 @@ spec:
       terminationGracePeriodSeconds: {{ .Values.alertmanager.terminationGracePeriodSeconds }}
       {{- end }}
       initContainers:
-        {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
+        {{- if and .Values.volumePermissions.enabled .Values.alertmanager.persistence.enabled }}
         - name: volume-permissions
           image: {{ include "prometheus.volumePermissions.image" . }}
           imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
@@ -83,8 +83,8 @@ spec:
             - sh
             - -ec
             - |
-              mkdir -p {{ .Values.persistence.mountPath }}
-              find {{ .Values.persistence.mountPath }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs -r chown -R {{ .Values.alertmanager.containerSecurityContext.runAsUser }}:{{ .Values.alertmanager.podSecurityContext.fsGroup }}
+              mkdir -p {{ .Values.alertmanager.persistence.mountPath }}
+              find {{ .Values.alertmanager.persistence.mountPath }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs -r chown -R {{ .Values.alertmanager.containerSecurityContext.runAsUser }}:{{ .Values.alertmanager.podSecurityContext.fsGroup }}
           {{- if .Values.alertmanager.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.alertmanager.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
@@ -93,9 +93,9 @@ spec:
           {{- end }}
           volumeMounts:
             - name: data
-              mountPath: {{ .Values.persistence.mountPath }}
-              {{- if .Values.persistence.subPath }}
-              subPath: {{ .Values.persistence.subPath }}
+              mountPath: {{ .Values.alertmanager.persistence.mountPath }}
+              {{- if .Values.alertmanager.persistence.subPath }}
+              subPath: {{ .Values.alertmanager.persistence.subPath }}
               {{- end }}
         {{- end }}
         {{- if .Values.alertmanager.initContainers }}
@@ -194,11 +194,10 @@ spec:
           {{- end }}
           volumeMounts:
             - name: config
-              mountPath: /opt/bitnami/alertmanager/conf/{{ include "prometheus.alertmanager.configmapKey" . }}
-              subPath: {{ include "prometheus.alertmanager.configmapKey" . }}
+              mountPath: /opt/bitnami/alertmanager/conf
               readOnly: true
             - name: data
-              mountPath: /opt/bitnami/alertmanager/data
+              mountPath: {{ .Values.alertmanager.persistence.mountPath }}
           {{- if .Values.alertmanager.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -209,20 +208,20 @@ spec:
         - name: config
           configMap:
             name: {{ include "prometheus.alertmanager.configmapName" . }}
-        {{- if not .Values.persistence.enabled }}
+        {{- if not .Values.alertmanager.persistence.enabled }}
         - name: data
           emptyDir: {}
         {{- end}}
         {{- if .Values.alertmanager.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
-  {{- if .Values.persistence.enabled }}
+  {{- if .Values.alertmanager.persistence.enabled }}
   volumeClaimTemplates:
     - metadata:
         name: data
         annotations:
-          {{- if .Values.persistence.annotations }}
-          {{- include "common.tplvalues.render" (dict "value" .Values.persistence.annotations "context" $) | nindent 10 }}
+          {{- if .Values.alertmanager.persistence.annotations }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.persistence.annotations "context" $) | nindent 10 }}
           {{- end }}
           {{- if .Values.commonAnnotations }}
           {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 10 }}
@@ -232,15 +231,15 @@ spec:
         {{- end }}
       spec:
         accessModes:
-        {{- range .Values.persistence.accessModes }}
+        {{- range .Values.alertmanager.persistence.accessModes }}
           - {{ . | quote }}
         {{- end }}
         resources:
           requests:
-            storage: {{ .Values.persistence.size | quote }}
-        {{- if .Values.persistence.selector }}
-        selector: {{- include "common.tplvalues.render" (dict "value" .Values.persistence.selector "context" $) | nindent 10 }}
+            storage: {{ .Values.alertmanager.persistence.size | quote }}
+        {{- if .Values.alertmanager.persistence.selector }}
+        selector: {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.persistence.selector "context" $) | nindent 10 }}
         {{- end }}
-        {{- include "common.storage.class" (dict "persistence" .Values.persistence "global" .Values.global) | nindent 8 }}
+        {{- include "common.storage.class" (dict "persistence" .Values.alertmanager.persistence "global" .Values.global) | nindent 8 }}
   {{- end }}
 {{- end }}

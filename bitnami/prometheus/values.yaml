@@ -527,6 +527,41 @@ alertmanager:
     ##
     sessionAffinityConfig: {}
 
+  persistence:
+    ## @param alertmanager.persistence.enabled Enable Alertmanager data persistence using VolumeClaimTemplates
+    ##
+    enabled: false
+    ## @param alertmanager.persistence.mountPath Path to mount the volume at.
+    ##
+    mountPath: /bitnami/alertmanager/data
+    ## @param alertmanager.persistence.subPath The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services
+    ##
+    subPath: ""
+    ## @param alertmanager.persistence.storageClass PVC Storage Class for Concourse worker data volume
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    ##
+    storageClass: ""
+    ## @param alertmanager.persistence.accessModes PVC Access Mode for Concourse worker volume
+    ##
+    accessModes:
+      - ReadWriteOnce
+    ## @param alertmanager.persistence.size PVC Storage Request for Concourse worker volume
+    ##
+    size: 8Gi
+    ## @param alertmanager.persistence.annotations Annotations for the PVC
+    ##
+    annotations: {}
+    ## @param alertmanager.persistence.selector Selector to match an existing Persistent Volume (this value is evaluated as a template)
+    ## selector:
+    ##   matchLabels:
+    ##     app: my-app
+    ##
+    selector: {}
+
 ## @section Prometheus server Parameters
 ##
 ## Bitnami Prometheus image
@@ -910,7 +945,7 @@ server:
     image:
       registry: docker.io
       repository: bitnami/thanos
-      tag: 0.30.2-scratch-r4
+      tag: 0.31.0-scratch-r3
       digest: ""
       ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1304,19 +1339,15 @@ server:
     ##
     type: LoadBalancer
     ## @param server.service.ports.http Prometheus service HTTP port
-    ## @param server.service.ports.https Prometheus service HTTPS port
     ##
     ports:
       http: 80
-      https: 443
     ## Node ports to expose
     ## @param server.service.nodePorts.http Node port for HTTP
-    ## @param server.service.nodePorts.https Node port for HTTPS
     ## NOTE: choose port between <30000-32767>
     ##
     nodePorts:
       http: ""
-      https: ""
     ## @param server.service.clusterIP Prometheus service Cluster IP
     ## e.g.:
     ## clusterIP: None
@@ -1355,54 +1386,74 @@ server:
     ##
     sessionAffinityConfig: {}
 
-## @section Persistence Parameters
-##
+  ## Persistence Parameters
+  ##
 
-## Enable persistence using Persistent Volume Claims
-## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
-##
-persistence:
-  ## @param persistence.enabled Enable persistence using Persistent Volume Claims. If you have multiple instances (server.repicacount > 1), please considere using an external storage service like Thanos or Grafana Mimir
+  ## Enable persistence using Persistent Volume Claims
+  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
-  enabled: false
-  ## @param persistence.mountPath Path to mount the volume at.
+  persistence:
+    ## @param server.persistence.enabled Enable persistence using Persistent Volume Claims. If you have multiple instances (server.repicacount > 1), please considere using an external storage service like Thanos or Grafana Mimir
+    ##
+    enabled: false
+    ## @param server.persistence.mountPath Path to mount the volume at.
+    ##
+    mountPath: /bitnami/prometheus/data
+    ## @param server.persistence.subPath The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services
+    ##
+    subPath: ""
+    ## @param server.persistence.storageClass Storage class of backing PVC
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    ##
+    storageClass: ""
+    ## @param server.persistence.annotations Persistent Volume Claim annotations
+    ##
+    annotations: {}
+    ## @param server.persistence.accessModes Persistent Volume Access Modes
+    ##
+    accessModes:
+      - ReadWriteOnce
+    ## @param server.persistence.size Size of data volume
+    ##
+    size: 8Gi
+    ## @param server.persistence.existingClaim The name of an existing PVC to use for persistence
+    ##
+    existingClaim: ""
+    ## @param server.persistence.selector Selector to match an existing Persistent Volume for WordPress data PVC
+    ## If set, the PVC can't have a PV dynamically provisioned for it
+    ## E.g.
+    ## selector:
+    ##   matchLabels:
+    ##     app: my-app
+    ##
+    selector: {}
+    ## @param server.persistence.dataSource Custom PVC data source
+    ##
+    dataSource: {}
+
+  # RBAC configuration
   ##
-  mountPath: /opt/bitnami/prometheus/data
-  ## @param persistence.subPath The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services
-  ##
-  subPath: ""
-  ## @param persistence.storageClass Storage class of backing PVC
-  ## If defined, storageClassName: <storageClass>
-  ## If set to "-", storageClassName: "", which disables dynamic provisioning
-  ## If undefined (the default) or set to null, no storageClassName spec is
-  ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
-  ##   GKE, AWS & OpenStack)
-  ##
-  storageClass: ""
-  ## @param persistence.annotations Persistent Volume Claim annotations
-  ##
-  annotations: {}
-  ## @param persistence.accessModes Persistent Volume Access Modes
-  ##
-  accessModes:
-    - ReadWriteOnce
-  ## @param persistence.size Size of data volume
-  ##
-  size: 8Gi
-  ## @param persistence.existingClaim The name of an existing PVC to use for persistence
-  ##
-  existingClaim: ""
-  ## @param persistence.selector Selector to match an existing Persistent Volume for WordPress data PVC
-  ## If set, the PVC can't have a PV dynamically provisioned for it
-  ## E.g.
-  ## selector:
-  ##   matchLabels:
-  ##     app: my-app
-  ##
-  selector: {}
-  ## @param persistence.dataSource Custom PVC data source
-  ##
-  dataSource: {}
+  rbac:
+    ## @param server.rbac.create Specifies whether RBAC resources should be created
+    ##
+    create: true
+    ## @param server.rbac.rules Custom RBAC rules to set
+    ## e.g:
+    ## rules:
+    ##   - apiGroups:
+    ##       - ""
+    ##     resources:
+    ##       - pods
+    ##     verbs:
+    ##       - get
+    ##       - list
+    ##
+    rules: []
+
 ## @section Init Container Parameters
 ##
 
@@ -1452,32 +1503,3 @@ volumePermissions:
   ##
   containerSecurityContext:
     runAsUser: 0
-
-## @section Other Parameters
-##
-
-## RBAC configuration
-##
-rbac:
-  ## @param rbac.create Specifies whether RBAC resources should be created
-  ##
-  create: true
-  ## @param rbac.rules Custom RBAC rules to set
-  ## e.g:
-  ## rules:
-  ##   - apiGroups:
-  ##       - ""
-  ##     resources:
-  ##       - pods
-  ##     verbs:
-  ##       - get
-  ##       - list
-  ##
-  rules: []
-
-## Prometheus metrics
-##
-metrics:
-  ## @param metrics.enabled Enable the export of Prometheus metrics
-  ##
-  enabled: false
