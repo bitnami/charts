@@ -1,4 +1,4 @@
-{{- if and .Values.alertmanager.enabled (gt (int .Values.replicaCount) 1) }}
+{{- if and .Values.alertmanager.enabled (gt (int .Values.alertmanager.replicaCount) 1) }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -27,7 +27,7 @@ spec:
       port: {{ .Values.alertmanager.service.ports.cluster }}
       protocol: TCP
       targetPort: tcp-cluster
-    - name: upd-cluster
+    - name: udp-cluster
       port: {{ .Values.alertmanager.service.ports.cluster }}
       protocol: UDP
       targetPort: udp-cluster

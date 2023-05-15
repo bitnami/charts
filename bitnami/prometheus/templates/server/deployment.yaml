@@ -268,7 +268,7 @@ spec:
         - name: data
         {{- if .Values.persistence.enabled }}
           persistentVolumeClaim:
-            claimName: {{ default (include "common.names.fullname" .) .Values.persistence.existingClaim }}
+            claimName: {{ default (include "prometheus.server.fullname" .) .Values.persistence.existingClaim }}
         {{- else }}
           emptyDir: {}
         {{- end }}
