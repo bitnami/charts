@@ -106,7 +106,7 @@ extraDeploy:
       prune: false
   # This is for helm-controller and source-controller
   # We use bitnami charts for not causing conflicts with the deployment above
-  - apiVersion: source.toolkit.fluxcd.io/v1
+  - apiVersion: source.toolkit.fluxcd.io/v1beta1
     kind: GitRepository
     metadata:
       name: vib-bitnami-charts
