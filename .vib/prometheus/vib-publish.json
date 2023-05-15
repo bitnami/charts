@@ -33,7 +33,7 @@
         {
           "action_id": "health-check",
           "params": {
-            "endpoint": "lb-prometheus-http",
+            "endpoint": "lb-prometheus-server-http",
             "app_protocol": "HTTP"
           }
         },
@@ -43,7 +43,7 @@
             "resources": {
               "path": "/.vib/prometheus/cypress"
             },
-            "endpoint": "lb-prometheus-http",
+            "endpoint": "lb-prometheus-server-http",
             "app_protocol": "HTTP"
           }
         },
