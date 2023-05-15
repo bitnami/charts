@@ -80,7 +80,7 @@ spec:
       {{- end }}
       hostNetwork: {{ .Values.postgresql.hostNetwork }}
       hostIPC: {{ .Values.postgresql.hostIPC }}
-{{- if or .Values.postgresql.tls.enabled .Values.postgresql.initContainers .Values.postgresql.extraInitContainers (and .Values.volumePermissions.enabled (or (or (not (empty .Values.postgresql.extendedConf)) (not (empty .Values.postgresql.extendedConfCM))) .Values.persistence.enabled)) }}
+      {{- if or .Values.postgresql.tls.enabled .Values.postgresql.initContainers .Values.postgresql.extraInitContainers (and .Values.volumePermissions.enabled (or (or (not (empty .Values.postgresql.extendedConf)) (not (empty .Values.postgresql.extendedConfCM))) .Values.persistence.enabled)) }}
       initContainers:
       {{- if .Values.postgresql.tls.enabled }}
         - name: init-chmod-tls
