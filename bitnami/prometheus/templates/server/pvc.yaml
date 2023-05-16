@@ -1,0 +1,37 @@
+{{- if and .Values.server.persistence.enabled (not .Values.server.persistence.existingClaim) -}}
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ include "prometheus.server.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/part-of: prometheus
+    app.kubernetes.io/component: server
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if or .Values.server.persistence.annotations .Values.commonAnnotations }}
+  annotations:
+    {{- if .Values.server.persistence.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.server.persistence.annotations "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+spec:
+  accessModes:
+  {{- range .Values.server.persistence.accessModes }}
+    - {{ . | quote }}
+  {{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.server.persistence.size | quote }}
+  {{- if .Values.server.persistence.selector }}
+  selector: {{- include "common.tplvalues.render" (dict "value" .Values.server.persistence.selector "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.server.persistence.dataSource }}
+  dataSource: {{- include "common.tplvalues.render" (dict "value" .Values.server.persistence.dataSource "context" $) | nindent 4 }}
+  {{- end }}
+  {{- include "common.storage.class" (dict "persistence" .Values.server.persistence "global" .Values.global) | nindent 2 }}
+{{- end -}}
