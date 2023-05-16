@@ -1371,8 +1371,18 @@
                         },
                         "objectStorageConfig": {
                             "type": "object",
-                            "description": "Support mounting a Secret for the objectStorageConfig of the sideCar container.",
-                            "default": {}
+                            "properties": {
+                                "secretName": {
+                                    "type": "string",
+                                    "description": "Support mounting a Secret for the objectStorageConfig of the sideCar container.",
+                                    "default": ""
+                                },
+                                "secretKey": {
+                                    "type": "string",
+                                    "description": "Secret key with the configuration file.",
+                                    "default": "thanos.yaml"
+                                }
+                            }
                         },
                         "extraVolumeMounts": {
                             "type": "array",

@@ -984,13 +984,16 @@ server:
     ## - --tsdb.path=/data/
     ##
     extraArgs: []
-    ## @param server.thanos.objectStorageConfig Support mounting a Secret for the objectStorageConfig of the sideCar container.
+    ## @param server.thanos.objectStorageConfig.secretName Support mounting a Secret for the objectStorageConfig of the sideCar container.
+    ## @param server.thanos.objectStorageConfig.secretKey Secret key with the configuration file.
     ## ref: https://github.com/thanos-io/thanos/blob/main/docs/storage.md
     ## objectStorageConfig:
     ##    secretName: thanos-objstore-config
     ##    secretKey: thanos.yaml
     ##
-    objectStorageConfig: {}
+    objectStorageConfig:
+      secretName: ""
+      secretKey: thanos.yaml
     ## ref: https://github.com/thanos-io/thanos/blob/main/docs/components/sidecar.md
     ## @param server.thanos.extraVolumeMounts Additional volumeMounts from `server.volumes` for thanos sidecar container
     ## extraVolumeMounts:
