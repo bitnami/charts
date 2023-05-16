@@ -57,7 +57,7 @@
             "vars_file": "prometheus/runtime-parameters.yaml",
             "remote": {
               "pod": {
-                "workload": "deploy-prometheus"
+                "workload": "deploy-prometheus-server"
               }
             }
           }
