@@ -1,0 +1,1 @@
+## Aerospike Stateful set

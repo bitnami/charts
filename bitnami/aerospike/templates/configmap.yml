@@ -1,0 +1,102 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "aerospike.configmapName" . }}
+  namespace: {{ .Release.Namespace }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+data:
+  aerospike.conf: |
+    service {
+      user root
+      group root
+      paxos-single-replica-limit 1
+      pidfile /var/run/aerospike/asd.pid
+      proto-fd-max 15000
+      {{- if .Values.aerospike.features.content }}
+      feature-key-file /etc/aerospike/features.conf
+      {{- end }}
+    }
+    logging {
+    # Log file must be an absolute path.
+      file /dev/null {
+        context any info
+      }
+      console {
+        context any info 
+      }
+    }
+    network {
+      service {
+        address any
+        port 3000
+      }
+      heartbeat {
+        address any
+        mode mesh
+        port 3002
+        {{- range split "," (include "aerospike.hosts" .) }}
+        mesh-seed-address-port {{ . }}  3002
+        {{ end }}
+        interval 150
+        timeout 10
+      }
+      fabric {
+        address any
+        port 3001
+      }
+      info {
+        address any
+        port 3003
+      }
+    }
+    {{- range .Values.aerospike.namespaces }}
+    namespace {{ .name }} {
+      {{- range $k, $v := .config }}
+      {{ $k }} {{ $v }}
+      {{- end }}
+      
+      {{- if eq (default "device" .storageEngine.type) "device" }}
+      storage-engine {{ default "device" .storageEngine.type }} {
+        file /opt/aerospike/data/{{ .name }}.dat
+        {{- range $k, $v := .storageEngine.config }}
+        {{ $k }} {{ $v }}
+        {{- end }}
+      }
+      {{ else if eq (default "device" .storageEngine.type) "memory" }}
+      storage-engine memory
+      {{ else }}
+      {{- fail "Invalid storage-engine .storageEngine.type" }}
+      {{- end }}
+    }
+    {{- end }}
+    
+    {{- if .Values.aerospike.xdr.enabled }}
+    xdr {
+      {{- range .Values.aerospike.xdr.dcs }}
+      dc {{ .name }} {
+        connector true
+        {{- range .nodeAddressPorts }}
+        node-address-port {{ .address }} {{ .port }}
+        {{- end }}
+        {{- range $k, $v := .config }}
+        {{ $k }} {{ $v }}
+        {{- end }}
+        {{- range .namespaces }}
+        namespace {{ .name }} {
+          {{- range $k, $v := .config }}
+          {{ $k }} {{ $v }}
+          {{- end }}
+        }
+        {{- end }}
+      }
+      {{- end }}
+    }
+    {{- end }}
+
+  {{- if .Values.aerospike.features.content }}
+  features.conf: |
+{{ .Values.aerospike.features.content | indent 4 }}
+  {{- end }}
