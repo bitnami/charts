@@ -255,13 +255,13 @@ spec:
         - --grpc-address=0.0.0.0:10901
         - --http-address=0.0.0.0:10902
         - --tsdb.path=/prometheus/
-        {{- if .Values.prometheus.thanos.objectStorageConfig }}
+        {{- if .Values.prometheus.thanos.objectStorageConfig.secretName }}
         - --objstore.config=$(OBJSTORE_CONFIG)
         {{- end }}
         {{- if .Values.prometheus.thanos.extraArgs }}
         {{ toYaml .Values.prometheus.thanos.extraArgs | indent 8  | trim }}
         {{- end }}
-      {{- if .Values.prometheus.thanos.objectStorageConfig }}
+      {{- if .Values.prometheus.thanos.objectStorageConfig.secretName }}
       env:
         - name: OBJSTORE_CONFIG
           valueFrom:

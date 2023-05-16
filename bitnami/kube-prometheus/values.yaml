@@ -1208,13 +1208,16 @@ prometheus:
     ## - --tsdb.path=/data/
     ##
     extraArgs: []
-    ## @param prometheus.thanos.objectStorageConfig Support mounting a Secret for the objectStorageConfig of the sideCar container.
+    ## @param prometheus.thanos.objectStorageConfig.secretName Support mounting a Secret for the objectStorageConfig of the sideCar container.
+    ## @param prometheus.thanos.objectStorageConfig.secretKey Secret key with the configuration file.
     ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/thanos.md
     ## objectStorageConfig:
     ##    secretName: thanos-objstore-config
     ##    secretKey: thanos.yaml
     ##
-    objectStorageConfig: {}
+    objectStorageConfig:
+      secretName: ""
+      secretKey: thanos.yaml
     ## ref: https://github.com/thanos-io/thanos/blob/main/docs/components/sidecar.md
     ## @param prometheus.thanos.extraVolumeMounts Additional volumeMounts from `prometheus.volumes` for thanos sidecar container
     ## extraVolumeMounts:
