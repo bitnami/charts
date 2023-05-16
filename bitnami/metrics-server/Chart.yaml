@@ -10,17 +10,16 @@ dependencies:
       - bitnami-common
     version: 2.x.x
 description: Metrics Server aggregates resource usage data, such as container CPU and memory usage, in a Kubernetes cluster and makes it available via the Metrics API.
-home: https://github.com/bitnami/charts/tree/main/bitnami/metrics-server
+home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/metrics-server/img/metrics-server-stack-220x234.png
 keywords:
   - metrics-server
   - cluster
   - metrics
 maintainers:
-  - name: Bitnami
+  - name: VMware, Inc.
     url: https://github.com/bitnami/charts
 name: metrics-server
 sources:
-  - https://github.com/bitnami/containers/tree/main/bitnami/metrics-server
-  - https://github.com/kubernetes-incubator/metrics-server
-version: 6.3.0
+  - https://github.com/bitnami/charts/tree/main/bitnami/metrics-server
+version: 6.4.0

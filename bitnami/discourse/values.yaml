@@ -69,7 +69,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/discourse
-  tag: 3.0.3-debian-11-r0
+  tag: 3.0.3-debian-11-r7
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -254,6 +254,14 @@ discourse:
   ## Use only in case you are importing an existing database.
   ##
   skipInstall: false
+  ## @param discourse.plugins List of plugins to be installed before the container initialization
+  ## NOTE: This will be ignored if the values 'discourse.command' or 'discourse.args' are provided.
+  ## Additionally, consider increasing the value discourse.livenessProbe.initialDelaySeconds if the container restarts before the initialization finishes.
+  ## e.g:
+  ## plugins:
+  ##   - https://github.com/discourse/discourse-oauth2-basic
+  ##
+  plugins: []
   ## @param discourse.command Custom command to override image cmd
   ##
   command: []
@@ -666,7 +674,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r107
+    tag: 11-debian-11-r114
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

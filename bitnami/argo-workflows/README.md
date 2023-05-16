@@ -8,6 +8,8 @@ Argo Workflows is meant to orchestrate Kubernetes jobs in parallel. It uses DAG 
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 
+Looking to use Argo Workflows in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+
 ## TL;DR
 
 ```console
@@ -79,7 +81,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | --------------------------- |
 | `server.image.registry`                                  | server image registry                                                                                               | `docker.io`                 |
 | `server.image.repository`                                | server image repository                                                                                             | `bitnami/argo-workflow-cli` |
-| `server.image.tag`                                       | server image tag (immutable tags are recommended)                                                                   | `3.4.7-scratch-r0`          |
+| `server.image.tag`                                       | server image tag (immutable tags are recommended)                                                                   | `3.4.7-scratch-r1`          |
 | `server.image.digest`                                    | server image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag              | `""`                        |
 | `server.image.pullPolicy`                                | server image pull policy                                                                                            | `IfNotPresent`              |
 | `server.image.pullSecrets`                               | server image pull secrets                                                                                           | `[]`                        |
@@ -288,7 +290,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ---------------------------------------------------------- | -------------------------------------------------------------------------------------------------------- | ---------------------------- |
 | `executor.image.registry`                                  | executor image registry                                                                                  | `docker.io`                  |
 | `executor.image.repository`                                | executor image repository                                                                                | `bitnami/argo-workflow-exec` |
-| `executor.image.tag`                                       | executor image tag (immutable tags are recommended)                                                      | `3.4.6-debian-11-r4`         |
+| `executor.image.tag`                                       | executor image tag (immutable tags are recommended)                                                      | `3.4.7-debian-11-r8`         |
 | `executor.image.digest`                                    | executor image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                         |
 | `executor.image.pullPolicy`                                | executor image pull policy                                                                               | `IfNotPresent`               |
 | `executor.image.pullSecrets`                               | executor image pull secrets                                                                              | `[]`                         |

@@ -18,7 +18,7 @@ dependencies:
     repository: oci://registry-1.docker.io/bitnamicharts
     version: 10.x.x
 description: Kong is an open source Microservice API gateway and platform designed for managing microservices requests of high-availability, fault-tolerance, and distributed systems.
-home: https://github.com/bitnami/charts/tree/main/bitnami/kong
+home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/kong/img/kong-stack-220x234.png
 keywords:
   - kong
@@ -30,10 +30,9 @@ keywords:
   - www
   - reverse proxy
 maintainers:
-  - name: Bitnami
+  - name: VMware, Inc.
     url: https://github.com/bitnami/charts
 name: kong
 sources:
-  - https://github.com/bitnami/containers/tree/main/bitnami/kong
-  - https://konghq.com/
-version: 9.2.0
+  - https://github.com/bitnami/charts/tree/main/bitnami/kong
+version: 9.3.1

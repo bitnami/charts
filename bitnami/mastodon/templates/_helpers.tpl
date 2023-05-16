@@ -27,6 +27,22 @@ Return the proper Mastodon web fullname
 {{- end -}}
 
 {{/*
+Return the proper Mastodon tootctlMediaManagement fullname
+*/}}
+{{- define "mastodon.tootctlMediaManagement.fullname" -}}
+{{- printf "%s-%s" (include "common.names.fullname" .) "tootctl-media" | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
+Return the proper Mastodon tootctl media option to include follows
+*/}}
+{{- define "mastodon.tootctlMediaManagement.includeFollows" -}}
+    {{- if .Values.tootctlMediaManagement.includeFollows -}}
+    	{{- print "--include-follows" -}}	
+    {{- end -}}
+{{- end -}}
+
+{{/*
 Return the proper Mastodon web domain
 */}}
 {{- define "mastodon.web.domain" -}}

@@ -82,7 +82,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mysql
-  tag: 8.0.33-debian-11-r0
+  tag: 8.0.33-debian-11-r7
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1008,7 +1008,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r108
+    tag: 11-debian-11-r113
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1042,7 +1042,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mysqld-exporter
-    tag: 0.14.0-debian-11-r109
+    tag: 0.14.0-debian-11-r116
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1067,12 +1067,14 @@ metrics:
   ## Mysqld Prometheus exporter liveness and readiness probes
   ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ## @param metrics.service.type Kubernetes service type for MySQL Prometheus Exporter
+  ## @param metrics.service.clusterIP Kubernetes service clusterIP for MySQL Prometheus Exporter
   ## @param metrics.service.port MySQL Prometheus Exporter service port
   ## @param metrics.service.annotations [object] Prometheus exporter service annotations
   ##
   service:
     type: ClusterIP
     port: 9104
+    clusterIP: ""
     annotations:
       prometheus.io/scrape: "true"
       prometheus.io/port: "{{ .Values.metrics.service.port }}"

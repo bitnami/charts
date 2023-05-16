@@ -2,7 +2,7 @@ annotations:
   category: E-Commerce
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 4.0.1-1
+appVersion: 4.0.2-1
 dependencies:
   - condition: mariadb.enabled
     name: mariadb
@@ -14,7 +14,7 @@ dependencies:
       - bitnami-common
     version: 2.x.x
 description: OpenCart is free open source ecommerce platform for online merchants. OpenCart provides a professional and reliable foundation from which to build a successful online store.
-home: https://github.com/bitnami/charts/tree/main/bitnami/opencart
+home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/opencart/img/opencart-stack-220x234.png
 keywords:
   - opencart
@@ -23,10 +23,9 @@ keywords:
   - web
   - php
 maintainers:
-  - name: Bitnami
+  - name: VMware, Inc.
     url: https://github.com/bitnami/charts
 name: opencart
 sources:
-  - https://github.com/bitnami/containers/tree/main/bitnami/opencart
-  - https://opencart.com/
-version: 14.0.0
+  - https://github.com/bitnami/charts/tree/main/bitnami/opencart
+version: 14.1.1

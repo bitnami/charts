@@ -2,7 +2,7 @@ annotations:
   category: Infrastructure
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 3.11.13
+appVersion: 3.11.16
 dependencies:
   - name: common
     repository: oci://registry-1.docker.io/bitnamicharts
@@ -10,17 +10,16 @@ dependencies:
       - bitnami-common
     version: 2.x.x
 description: RabbitMQ is an open source general-purpose message broker that is designed for consistent, highly-available messaging scenarios (both synchronous and asynchronous).
-home: https://github.com/bitnami/charts/tree/main/bitnami/rabbitmq
+home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/rabbitmq/img/rabbitmq-stack-220x234.png
 keywords:
   - rabbitmq
   - message queue
   - AMQP
 maintainers:
-  - name: Bitnami
+  - name: VMware, Inc.
     url: https://github.com/bitnami/charts
 name: rabbitmq
 sources:
-  - https://github.com/bitnami/containers/tree/main/bitnami/rabbitmq
-  - https://www.rabbitmq.com
-version: 11.14.0
+  - https://github.com/bitnami/charts/tree/main/bitnami/rabbitmq
+version: 11.15.2

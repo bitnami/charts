@@ -63,7 +63,7 @@ spec:
           command:
             - java
             - -jar
-            - {{ printf "/opt/bitnami/keycloak-config-cli/keycloak-config-cli-%s.jar" .Chart.AppVersion }}
+            - /opt/bitnami/keycloak-config-cli/keycloak-config-cli.jar
           {{- end }}
           {{- if .Values.keycloakConfigCli.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.keycloakConfigCli.args "context" $) | nindent 12 }}
@@ -94,11 +94,11 @@ spec:
           envFrom:
             {{- if .Values.keycloakConfigCli.extraEnvVarsCM }}
             - configMapRef:
-                name: {{ .Values.keycloakConfigCli.extraEnvVarsCM }}
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.keycloakConfigCli.extraEnvVarsCM "context" $) }}
             {{- end }}
             {{- if .Values.keycloakConfigCli.extraEnvVarsSecret }}
             - secretRef:
-                name: {{ .Values.keycloakConfigCli.extraEnvVarsSecret }}
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.keycloakConfigCli.extraEnvVarsSecret "context" $) }}
             {{- end }}
           {{- end }}
           {{- if or .Values.keycloakConfigCli.configuration .Values.keycloakConfigCli.existingConfigmap .Values.keycloakConfigCli.extraVolumeMounts }}

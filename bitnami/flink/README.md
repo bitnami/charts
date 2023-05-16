@@ -8,6 +8,8 @@ Apache Flink is a framework and distributed processing engine for stateful compu
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 
+Looking to use Apache Flink in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+
 ## TL;DR
 
 ```console
@@ -75,15 +77,15 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Apache Flink parameters
 
-| Name                | Description                                                                                                  | Value                 |
-| ------------------- | ------------------------------------------------------------------------------------------------------------ | --------------------- |
-| `image.registry`    | Apache Flink image registry                                                                                  | `docker.io`           |
-| `image.repository`  | Apache Flink image repository                                                                                | `bitnami/flink`       |
-| `image.tag`         | Apache Flink image tag (immutable tags are recommended)                                                      | `1.16.1-debian-11-r0` |
-| `image.digest`      | Apache Flink image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
-| `image.pullPolicy`  | image pull policy                                                                                            | `IfNotPresent`        |
-| `image.pullSecrets` | Apache Flink image pull secrets                                                                              | `[]`                  |
-| `image.debug`       | Enable image debug mode                                                                                      | `false`               |
+| Name                | Description                                                                                                  | Value                  |
+| ------------------- | ------------------------------------------------------------------------------------------------------------ | ---------------------- |
+| `image.registry`    | Apache Flink image registry                                                                                  | `docker.io`            |
+| `image.repository`  | Apache Flink image repository                                                                                | `bitnami/flink`        |
+| `image.tag`         | Apache Flink image tag (immutable tags are recommended)                                                      | `1.16.1-debian-11-r17` |
+| `image.digest`      | Apache Flink image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
+| `image.pullPolicy`  | image pull policy                                                                                            | `IfNotPresent`         |
+| `image.pullSecrets` | Apache Flink image pull secrets                                                                              | `[]`                   |
+| `image.debug`       | Enable image debug mode                                                                                      | `false`                |
 
 ### Jobmanager deployment parameters
 

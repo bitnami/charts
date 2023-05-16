@@ -64,7 +64,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | -------------------------------------------------------------------------------------------------------- | ---------------------- |
 | `image.registry`    | RabbitMQ image registry                                                                                  | `docker.io`            |
 | `image.repository`  | RabbitMQ image repository                                                                                | `bitnami/rabbitmq`     |
-| `image.tag`         | RabbitMQ image tag (immutable tags are recommended)                                                      | `3.11.13-debian-11-r0` |
+| `image.tag`         | RabbitMQ image tag (immutable tags are recommended)                                                      | `3.11.16-debian-11-r0` |
 | `image.digest`      | RabbitMQ image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
 | `image.pullPolicy`  | RabbitMQ image pull policy                                                                               | `IfNotPresent`         |
 | `image.pullSecrets` | Specify docker-registry secret names as an array                                                         | `[]`                   |
@@ -280,7 +280,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.ports.metrics`            | RabbitMQ Prometheues metrics service port                                                                                        | `9419`                   |
 | `service.ports.epmd`               | EPMD Discovery service port                                                                                                      | `4369`                   |
 | `service.portNames.amqp`           | Amqp service port name                                                                                                           | `amqp`                   |
-| `service.portNames.amqpTls`        | Amqp TLS service port name                                                                                                       | `amqp-ssl`               |
+| `service.portNames.amqpTls`        | Amqp TLS service port name                                                                                                       | `amqp-tls`               |
 | `service.portNames.dist`           | Erlang distribution service port name                                                                                            | `dist`                   |
 | `service.portNames.manager`        | RabbitMQ Manager service port name                                                                                               | `http-stats`             |
 | `service.portNames.metrics`        | RabbitMQ Prometheues metrics service port name                                                                                   | `metrics`                |
@@ -354,7 +354,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup`              | `false`                 |
 | `volumePermissions.image.registry`                     | Init container volume-permissions image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`                   | Init container volume-permissions image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Init container volume-permissions image tag                                                                                       | `11-debian-11-r102`     |
+| `volumePermissions.image.tag`                          | Init container volume-permissions image tag                                                                                       | `11-debian-11-r115`     |
 | `volumePermissions.image.digest`                       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                                  | `[]`                    |

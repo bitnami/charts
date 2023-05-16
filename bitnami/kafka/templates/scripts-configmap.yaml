@@ -78,7 +78,7 @@ data:
     ID="${MY_POD_NAME#"{{ $fullname }}-"}"
     # If process.roles is not set at all, it is assumed to be in ZooKeeper mode.
     # https://kafka.apache.org/documentation/#kraft_role
-    
+
     if [[ -f "{{ .Values.logsDirs | splitList "," | first }}/meta.properties" ]]; then
         if [[ $KAFKA_CFG_PROCESS_ROLES == "" ]]; then
             export KAFKA_CFG_BROKER_ID="$(grep "broker.id" "{{ .Values.logsDirs | splitList "," | first }}/meta.properties" | awk -F '=' '{print $2}')"
@@ -93,12 +93,12 @@ data:
         fi
     fi
 
-    if [[ $KAFKA_CFG_PROCESS_ROLES == *"controller"* ]]; then
+    if [[ $KAFKA_CFG_PROCESS_ROLES == *"controller"* && -z $KAFKA_CFG_CONTROLLER_QUORUM_VOTERS ]]; then
         node_id={{ .Values.minId }}
         pod_id=0
         while :
-        do 
-            VOTERS="${VOTERS}$node_id@{{  include "common.names.fullname" . }}-$pod_id.{{ include "common.names.fullname" . }}-headless.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ .Values.containerPorts.controller }}"
+        do
+            VOTERS="${VOTERS}$node_id@{{  include "common.names.fullname" . }}-$pod_id.{{ include "common.names.fullname" . }}-headless.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ .Values.service.ports.controller }}"
             node_id=$(( $node_id + 1 ))
             pod_id=$(( $pod_id + 1 ))
             if [[ $pod_id -ge {{ .Values.replicaCount }} ]]; then
