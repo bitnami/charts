@@ -1051,7 +1051,7 @@ networkPolicy:
     ## @param networkPolicy.ingressRules.primaryAccessOnlyFrom.enabled Enable ingress rule that makes PostgreSQL primary node only accessible from a particular origin.
     ## @param networkPolicy.ingressRules.primaryAccessOnlyFrom.namespaceSelector [object] Namespace selector label that is allowed to access the PostgreSQL primary node. This label will be used to identified the allowed namespace(s).
     ## @param networkPolicy.ingressRules.primaryAccessOnlyFrom.podSelector [object] Pods selector label that is allowed to access the PostgreSQL primary node. This label will be used to identified the allowed pod(s).
-    ## @param networkPolicy.ingressRules.primaryAccessOnlyFrom.customRules [object] Custom network policy for the PostgreSQL primary node.
+    ## @param networkPolicy.ingressRules.primaryAccessOnlyFrom.customRules Custom network policy for the PostgreSQL primary node.
     ##
     primaryAccessOnlyFrom:
       enabled: false
@@ -1073,11 +1073,11 @@ networkPolicy:
       ##           matchLabels:
       ##             label: example
       ##
-      customRules: {}
+      customRules: []
     ## @param networkPolicy.ingressRules.readReplicasAccessOnlyFrom.enabled Enable ingress rule that makes PostgreSQL read-only nodes only accessible from a particular origin.
     ## @param networkPolicy.ingressRules.readReplicasAccessOnlyFrom.namespaceSelector [object] Namespace selector label that is allowed to access the PostgreSQL read-only nodes. This label will be used to identified the allowed namespace(s).
     ## @param networkPolicy.ingressRules.readReplicasAccessOnlyFrom.podSelector [object] Pods selector label that is allowed to access the PostgreSQL read-only nodes. This label will be used to identified the allowed pod(s).
-    ## @param networkPolicy.ingressRules.readReplicasAccessOnlyFrom.customRules [object] Custom network policy for the PostgreSQL read-only nodes.
+    ## @param networkPolicy.ingressRules.readReplicasAccessOnlyFrom.customRules Custom network policy for the PostgreSQL read-only nodes.
     ##
     readReplicasAccessOnlyFrom:
       enabled: false
@@ -1099,9 +1099,9 @@ networkPolicy:
       ##           matchLabels:
       ##             label: example
       ##
-      customRules: {}
+      customRules: []
   ## @param networkPolicy.egressRules.denyConnectionsToExternal Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).
-  ## @param networkPolicy.egressRules.customRules [object] Custom network policy rule
+  ## @param networkPolicy.egressRules.customRules Custom network policy rule
   ##
   egressRules:
     # Deny connections to external. This is not compatible with an external database.
@@ -1114,7 +1114,7 @@ networkPolicy:
     ##           matchLabels:
     ##             label: example
     ##
-    customRules: {}
+    customRules: []
 
 ## @section Volume Permissions parameters
 ##

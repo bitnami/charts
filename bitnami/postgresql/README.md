@@ -360,13 +360,13 @@ kubectl delete pvc -l release=my-release
 | `networkPolicy.ingressRules.primaryAccessOnlyFrom.enabled`                | Enable ingress rule that makes PostgreSQL primary node only accessible from a particular origin.                                                   | `false` |
 | `networkPolicy.ingressRules.primaryAccessOnlyFrom.namespaceSelector`      | Namespace selector label that is allowed to access the PostgreSQL primary node. This label will be used to identified the allowed namespace(s).    | `{}`    |
 | `networkPolicy.ingressRules.primaryAccessOnlyFrom.podSelector`            | Pods selector label that is allowed to access the PostgreSQL primary node. This label will be used to identified the allowed pod(s).               | `{}`    |
-| `networkPolicy.ingressRules.primaryAccessOnlyFrom.customRules`            | Custom network policy for the PostgreSQL primary node.                                                                                             | `{}`    |
+| `networkPolicy.ingressRules.primaryAccessOnlyFrom.customRules`            | Custom network policy for the PostgreSQL primary node.                                                                                             | `[]`    |
 | `networkPolicy.ingressRules.readReplicasAccessOnlyFrom.enabled`           | Enable ingress rule that makes PostgreSQL read-only nodes only accessible from a particular origin.                                                | `false` |
 | `networkPolicy.ingressRules.readReplicasAccessOnlyFrom.namespaceSelector` | Namespace selector label that is allowed to access the PostgreSQL read-only nodes. This label will be used to identified the allowed namespace(s). | `{}`    |
 | `networkPolicy.ingressRules.readReplicasAccessOnlyFrom.podSelector`       | Pods selector label that is allowed to access the PostgreSQL read-only nodes. This label will be used to identified the allowed pod(s).            | `{}`    |
-| `networkPolicy.ingressRules.readReplicasAccessOnlyFrom.customRules`       | Custom network policy for the PostgreSQL read-only nodes.                                                                                          | `{}`    |
+| `networkPolicy.ingressRules.readReplicasAccessOnlyFrom.customRules`       | Custom network policy for the PostgreSQL read-only nodes.                                                                                          | `[]`    |
 | `networkPolicy.egressRules.denyConnectionsToExternal`                     | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).                                                     | `false` |
-| `networkPolicy.egressRules.customRules`                                   | Custom network policy rule                                                                                                                         | `{}`    |
+| `networkPolicy.egressRules.customRules`                                   | Custom network policy rule                                                                                                                         | `[]`    |
 
 ### Volume Permissions parameters
 
