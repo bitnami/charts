@@ -215,6 +215,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                             | Description                                                                                                                                          | Value                |
 | -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------- |
 | `persistence.enabled`            | Enable Cassandra data persistence using PVC, use a Persistent Volume Claim, If false, use emptyDir                                                   | `true`               |
+| `persistence.existingClaim`      | Name of an existing PVC to use                                                                                                                       | `""`                 |
 | `persistence.storageClass`       | PVC Storage Class for Cassandra data volume                                                                                                          | `""`                 |
 | `persistence.commitStorageClass` | PVC Storage Class for Cassandra Commit Log volume                                                                                                    | `""`                 |
 | `persistence.annotations`        | Persistent Volume Claim annotations                                                                                                                  | `{}`                 |
@@ -338,7 +339,7 @@ Refer to the chart documentation for more [information on customizing an Apache 
 
 ### Initialize the database
 
-The [Bitnami Apache Cassandra image](https://github.com/bitnami/containers/tree/main/bitnami/cassandra) image supports the use of custom scripts to initialize a fresh instance. This may be done by creating a Kubernetes ConfigMap that includes the necessary *sh* or *cql* scripts and passing this ConfigMap to the chart via the *initDBConfigMap* parameter.
+The [Bitnami Apache Cassandra image](https://github.com/bitnami/containers/tree/main/bitnami/cassandra) image supports the use of custom scripts to initialize a fresh instance. This may be done by creating a Kubernetes ConfigMap that includes the necessary _sh_ or _cql_ scripts and passing this ConfigMap to the chart via the _initDBConfigMap_ parameter.
 
 Refer to the chart documentation for more [information on customizing an Apache Cassandra deployment](https://docs.bitnami.com/kubernetes/infrastructure/cassandra/configuration/customize-new-instance/).
 
@@ -380,7 +381,7 @@ It's necessary to set the `dbUser.password` parameter when upgrading for readine
 helm upgrade my-release oci://registry-1.docker.io/bitnamicharts/cassandra --set dbUser.password=[PASSWORD]
 ```
 
-| Note: you need to substitute the placeholder *[PASSWORD]* with the value obtained in the installation notes.
+| Note: you need to substitute the placeholder _[PASSWORD]_ with the value obtained in the installation notes.
 
 ### To 9.0.0
 
