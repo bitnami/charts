@@ -2,7 +2,7 @@ annotations:
   category: Infrastructure
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 2.6.7
+appVersion: 2.7.2
 dependencies:
   - condition: redis.enabled
     name: redis
@@ -27,4 +27,4 @@ maintainers:
 name: argo-cd
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/argo-cd
-version: 4.7.2
+version: 4.7.3
