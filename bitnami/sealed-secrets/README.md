@@ -6,8 +6,6 @@ Sealed Secrets are "one-way" encrypted K8s Secrets that can be created by anyone
 
 [Overview of Sealed Secrets](https://github.com/bitnami-labs/sealed-secrets)
 
-Looking to use Sealed Secrets in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
-
 ## TL;DR
 
 ```console
@@ -78,7 +76,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ------------------------ |
 | `image.registry`                                    | Sealed Secrets image registry                                                                                            | `docker.io`              |
 | `image.repository`                                  | Sealed Secrets image repository                                                                                          | `bitnami/sealed-secrets` |
-| `image.tag`                                         | Sealed Secrets image tag (immutable tags are recommended)                                                                | `0.20.5-scratch-r1`      |
+| `image.tag`                                         | Sealed Secrets image tag (immutable tags are recommended)                                                                | `0.21.0-scratch-r0`      |
 | `image.digest`                                      | Sealed Secrets image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag           | `""`                     |
 | `image.pullPolicy`                                  | Sealed Secrets image pull policy                                                                                         | `IfNotPresent`           |
 | `image.pullSecrets`                                 | Sealed Secrets image pull secrets                                                                                        | `[]`                     |
