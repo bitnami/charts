@@ -6,8 +6,6 @@ Sealed Secrets are "one-way" encrypted K8s Secrets that can be created by anyone
 
 [Overview of Sealed Secrets](https://github.com/bitnami-labs/sealed-secrets)
 
-Looking to use Sealed Secrets in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
-
 ## TL;DR
 
 ```console
