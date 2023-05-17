@@ -564,10 +564,14 @@ envoy:
   ##
   args: []
   ## @param envoy.shutdownManager.enabled Contour shutdownManager sidecar
+  ## @param envoy.shutdownManager.extraArgs [array] Extra arguments passed to shutdown container
+  ## @param envoy.shutdownManager.port Specify Port for shutdown container
   ## @param envoy.shutdownManager.resources.limits [object] Specify resource limits which the container is not allowed to succeed.
   ## @param envoy.shutdownManager.resources.requests [object] Specify resource requests which the container needs to spawn.
   ##
   shutdownManager:
+    extraArgs: []
+    port: "8090"
     enabled: true
     resources:
       ## Example:
@@ -710,6 +714,7 @@ envoy:
     automountServiceAccountToken: false
     annotations: {}
   ## @param envoy.livenessProbe.enabled Enable livenessProbe
+  ## @param envoy.livenessProbe.port LivenessProbe port
   ## @param envoy.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
   ## @param envoy.livenessProbe.periodSeconds Period seconds for livenessProbe
   ## @param envoy.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
@@ -718,12 +723,14 @@ envoy:
   ##
   livenessProbe:
     enabled: true
+    port: 8002
     initialDelaySeconds: 120
     periodSeconds: 20
     timeoutSeconds: 5
     failureThreshold: 6
     successThreshold: 1
   ## @param envoy.readinessProbe.enabled Enable/disable the readiness probe
+  ## @param envoy.readinessProbe.port ReadinessProbe port
   ## @param envoy.readinessProbe.initialDelaySeconds Delay before readiness probe is initiated
   ## @param envoy.readinessProbe.periodSeconds How often to perform the probe
   ## @param envoy.readinessProbe.timeoutSeconds When the probe times out
@@ -732,12 +739,14 @@ envoy:
   ##
   readinessProbe:
     enabled: true
+    port: 8002
     initialDelaySeconds: 10
     periodSeconds: 3
     timeoutSeconds: 1
     failureThreshold: 3
     successThreshold: 1
   ## @param envoy.startupProbe.enabled Enable/disable the startup probe
+  ## @param envoy.startupProbe.port StartupProbe port
   ## @param envoy.startupProbe.initialDelaySeconds Delay before startup probe is initiated
   ## @param envoy.startupProbe.periodSeconds How often to perform the probe
   ## @param envoy.startupProbe.timeoutSeconds When the probe times out
@@ -746,6 +755,7 @@ envoy:
   ##
   startupProbe:
     enabled: false
+    port: 8002
     initialDelaySeconds: 15
     periodSeconds: 10
     timeoutSeconds: 5
@@ -848,23 +858,29 @@ envoy:
   useHostIP: false
   ## @param envoy.hostPorts.http Sets `hostPort` http port
   ## @param envoy.hostPorts.https Sets `hostPort` https port
+  ## @param envoy.hostPorts.metrics Sets `hostPort` metrics port
   ##
   hostPorts:
     http: 80
     https: 443
+    metrics: 8002
   ## @param envoy.hostIPs.http Sets `hostIP` http IP
   ## @param envoy.hostIPs.https Sets `hostIP` https IP
+  ## @param envoy.hostIPs.metrics Sets `hostIP` metrics IP
   ##
   hostIPs:
     http: 127.0.0.1
     https: 127.0.0.1
+    metrics: 127.0.0.1
   ## Configures the ports the Envoy proxy listens on
   ## @param envoy.containerPorts.http Sets http port inside Envoy pod  (change this to >1024 to run envoy as a non-root user)
   ## @param envoy.containerPorts.https Sets https port inside Envoy pod  (change this to >1024 to run envoy as a non-root user)
+  ## @param envoy.containerPorts.metrics Sets metrics port inside Envoy pod (change this to >1024 to run envoy as a non-root user)
   ##
   containerPorts:
     http: 8080
     https: 8443
+    metrics: 8002
   ## @param envoy.initContainers [array] Attach additional init containers to Envoy pods
   ## For example:
   ## initContainers:
