@@ -8,8 +8,6 @@ Apache MXNet (Incubating) is a flexible and efficient library for deep learning 
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 
-Looking to use Apache MXNet (Incubating) in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
-
 ## TL;DR
 
 ```console
@@ -83,7 +81,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
 | `image.registry`                      | Apache MXNet (Incubating) image registry                                                                                  | `docker.io`            |
 | `image.repository`                    | Apache MXNet (Incubating) image repository                                                                                | `bitnami/mxnet`        |
-| `image.tag`                           | Apache MXNet (Incubating) image tag (immutable tags are recommended)                                                      | `1.9.1-debian-11-r116` |
+| `image.tag`                           | Apache MXNet (Incubating) image tag (immutable tags are recommended)                                                      | `1.9.1-debian-11-r120` |
 | `image.digest`                        | Apache MXNet (Incubating) image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
 | `image.pullPolicy`                    | Apache MXNet (Incubating) image pull policy                                                                               | `IfNotPresent`         |
 | `image.pullSecrets`                   | Specify docker-registry secret names as an array                                                                          | `[]`                   |
@@ -370,14 +368,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
 | `git.registry`                         | Git image registry                                                                                                                | `docker.io`             |
 | `git.repository`                       | Git image repository                                                                                                              | `bitnami/git`           |
-| `git.tag`                              | Git image tag (immutable tags are recommended)                                                                                    | `2.40.1-debian-11-r4`   |
+| `git.tag`                              | Git image tag (immutable tags are recommended)                                                                                    | `2.40.1-debian-11-r6`   |
 | `git.digest`                           | Git image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                               | `""`                    |
 | `git.pullPolicy`                       | Git image pull policy                                                                                                             | `IfNotPresent`          |
 | `git.pullSecrets`                      | Specify docker-registry secret names as an array                                                                                  | `[]`                    |
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory                                                       | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r114`     |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r116`     |
 | `volumePermissions.image.digest`       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                  | `[]`                    |
