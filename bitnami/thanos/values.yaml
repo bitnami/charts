@@ -2762,9 +2762,9 @@ ruler:
   ##
   dnsDiscovery:
     enabled: true
-  ## @param ruler.queryUrl Thanos query/query-frontend URL to link in Ruler UI.
+  ## @param ruler.queryURL Thanos query/query-frontend URL to link in Ruler UI.
   ##
-  queryUrl: ""
+  queryURL: ""
   ## @param ruler.alertmanagers Alert managers URLs array
   ## NOTE: This is only used when ruler.alertmanagersConfig is not set
   ##
