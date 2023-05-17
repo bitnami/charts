@@ -7,6 +7,7 @@ metadata:
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: ruler
+    # kratik: "{{- printf "http://%s-query.%s.svc.%s:%d" (include "common.names.fullname" . ) .Release.Namespace .Values.clusterDomain (int  $query.service.ports.http) -}}"
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
@@ -135,7 +136,7 @@ spec:
             {{- if and $query.enabled .Values.ruler.dnsDiscovery.enabled }}
             - --query=dnssrv+_http._tcp.{{ include "common.names.fullname" . }}-query.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
             {{- end }}
-            - --alert.query-url={{ .Values.ruler.queryUrl }}
+            - --alert.query-url={{- template "thanos.ruler.queryUrl" .}}
             - --label={{ .Values.ruler.replicaLabel }}="$(POD_NAME)"
             - --label=ruler_cluster="{{ .Values.ruler.clusterName }}"
             - --alert.label-drop={{ .Values.ruler.replicaLabel }}
