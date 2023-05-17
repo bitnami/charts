@@ -587,6 +587,27 @@ By default `cluster.init` will be set to `true` in order to initialize the Redis
 
 By default, the chart mounts a [Persistent Volume](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) at the `/bitnami` path. The volume is created using dynamic volume provisioning.
 
+If persistence is disabled, an emptyDir volume is used. **This is only recommended for testing environments** because the required information included in the nodes.conf file is missing. This file contains the relationship between the nodes and the cluster. For example, if any node is down or faulty, when it starts again, it is a self-proclaimed master and also acts as an independent node outside the main cluster as it doesn't have the necessary information to connect to it.
+
+To reconnect the failed node, run the following:
+
+See nodes.sh
+
+```console
+$ cat /bitnami/redis/data/nodes.sh
+declare -A host_2_ip_array=([redis-node-0]="192.168.192.6" [redis-node-1]="192.168.192.2" [redis-node-2]="192.168.192.4" [redis-node-3]="192.168.192.5" [redis-node-4]="192.168.192.3" [redis-node-5]="192.168.192.7" )
+```
+
+Run redis-cli and run [CLUSTER MEET](https://redis.io/commands/cluster-meet/) to any other node in the cluster. Now the node has connected to the main cluster.
+
+```console
+$ REDISCLI_AUTH=bitnami redis-cli
+127.0.0.1:6379> cluster meet 192.168.192.7 6379
+OK
+```
+
+See [#15075](https://github.com/bitnami/charts/issues/15075)
+
 ## NetworkPolicy
 
 To enable network policy for Redis&reg;, install
