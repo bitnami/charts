@@ -568,6 +568,8 @@ envoy:
   ## @param envoy.shutdownManager.resources.requests [object] Specify resource requests which the container needs to spawn.
   ##
   shutdownManager:
+    extraArgs: []
+    port: "8090"
     enabled: true
     resources:
       ## Example:
