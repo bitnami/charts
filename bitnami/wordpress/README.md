@@ -172,6 +172,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `containerSecurityContext.runAsUser`                | Set WordPress container's Security Context runAsUser                                                                     | `1001`           |
 | `containerSecurityContext.runAsNonRoot`             | Set WordPress container's Security Context runAsNonRoot                                                                  | `true`           |
 | `containerSecurityContext.allowPrivilegeEscalation` | Set WordPress container's privilege escalation                                                                           | `false`          |
+| `containerSecurityContext.readOnlyRootFilesystem`   | Set WordPress container's Security Context readOnlyRootFilesystem                                                        | `false`          |
 | `containerSecurityContext.capabilities.drop`        | Set WordPress container's Security Context runAsNonRoot                                                                  | `["ALL"]`        |
 | `livenessProbe.enabled`                             | Enable livenessProbe on WordPress containers                                                                             | `true`           |
 | `livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                  | `120`            |
