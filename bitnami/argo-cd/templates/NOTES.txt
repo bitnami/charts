@@ -55,5 +55,6 @@ WARNING: config.createExtraKnownHosts is disabled, a secret called "argocd-ssh-k
 {{- include "common.warnings.rollingTag" .Values.image }}
 {{- include "common.warnings.rollingTag" .Values.dex.image }}
 {{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
+{{- include "common.warnings.rollingTag" .Values.redis.image }}
 
 {{- include "argocd.validateValues" . }}

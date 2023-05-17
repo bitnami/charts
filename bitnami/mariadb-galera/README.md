@@ -11,8 +11,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/mariadb-galera
+helm install my-release oci://registry-1.docker.io/bitnamicharts/mariadb-galera
 ```
 
 ## Introduction
@@ -32,8 +31,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/mariadb-galera
+helm install my-release oci://registry-1.docker.io/bitnamicharts/mariadb-galera
 ```
 
 The command deploys MariaDB Galera on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -89,7 +87,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
 | `image.registry`                              | MariaDB Galera image registry                                                                                                                                                                 | `docker.io`               |
 | `image.repository`                            | MariaDB Galera image repository                                                                                                                                                               | `bitnami/mariadb-galera`  |
-| `image.tag`                                   | MariaDB Galera image tag (immutable tags are recommended)                                                                                                                                     | `10.6.12-debian-11-r16`   |
+| `image.tag`                                   | MariaDB Galera image tag (immutable tags are recommended)                                                                                                                                     | `10.11.3-debian-11-r4`    |
 | `image.digest`                                | MariaDB Galera image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                | `""`                      |
 | `image.pullPolicy`                            | MariaDB Galera image pull policy                                                                                                                                                              | `IfNotPresent`            |
 | `image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                                                                                              | `[]`                      |
@@ -227,7 +225,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                             | Start a side-car prometheus exporter                                                                                                                                                          | `false`                   |
 | `metrics.image.registry`                      | MariaDB Prometheus exporter image registry                                                                                                                                                    | `docker.io`               |
 | `metrics.image.repository`                    | MariaDB Prometheus exporter image repository                                                                                                                                                  | `bitnami/mysqld-exporter` |
-| `metrics.image.tag`                           | MariaDB Prometheus exporter image tag (immutable tags are recommended)                                                                                                                        | `0.14.0-debian-11-r103`   |
+| `metrics.image.tag`                           | MariaDB Prometheus exporter image tag (immutable tags are recommended)                                                                                                                        | `0.14.0-debian-11-r118`   |
 | `metrics.image.digest`                        | MariaDB Prometheus exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                   | `""`                      |
 | `metrics.image.pullPolicy`                    | MariaDB Prometheus exporter image pull policy                                                                                                                                                 | `IfNotPresent`            |
 | `metrics.image.pullSecrets`                   | MariaDB Prometheus exporter image pull secrets                                                                                                                                                | `[]`                      |
@@ -264,7 +262,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 helm install my-release \
   --set rootUser.password=secretpassword,
   --set db.user=app_database \
-    my-repo/mariadb-galera
+    oci://registry-1.docker.io/bitnamicharts/mariadb-galera
 ```
 
 The above command sets the MariaDB `root` account password to `secretpassword`. Additionally it creates a database named `my_database`.
@@ -274,7 +272,7 @@ The above command sets the MariaDB `root` account password to `secretpassword`. 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml my-repo/mariadb-galera
+helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/mariadb-galera
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -288,7 +286,7 @@ For example, if you want to enable the PAM cleartext plugin, specify the command
 ```console
 helm install my-release \
   --set extraFlags="--pam-use-cleartext-plugin=ON" \
-  my-repo/mariadb-galera
+  oci://registry-1.docker.io/bitnamicharts/mariadb-galera
 ```
 
 ## Configuration and installation details
@@ -512,7 +510,7 @@ There are two possible scenarios:
 In this case you will need the node number `N` and run:
 
 ```console
-helm install my-release my-repo/mariadb-galera \
+helm install my-release oci://registry-1.docker.io/bitnamicharts/mariadb-galera \
 --set rootUser.password=XXXX \
 --set galera.mariabackup.password=YYYY \
 --set galera.bootstrap.forceBootstrap=true \
@@ -525,7 +523,7 @@ helm install my-release my-repo/mariadb-galera \
 In this case the cluster was not stopped cleanly and you need to pick one to force the bootstrap from. The one to be chosen in the one with the highest `seqno` in `/bitnami/mariadb/data/grastate.dat`. The following example shows how to force bootstrap from node 3.
 
 ```console
-helm install my-release my-repo/mariadb-galera \
+helm install my-release oci://registry-1.docker.io/bitnamicharts/mariadb-galera \
 --set rootUser.password=XXXX \
 --set galera.mariabackup.password=YYYY \
 --set galera.bootstrap.forceBootstrap=true \
@@ -539,7 +537,7 @@ helm install my-release my-repo/mariadb-galera \
 After you have started the cluster by forcing the bootstraping on one of the nodes, you will need to remove the forcing so the node can restart with normality.
 
 ```console
-helm upgrade my-release my-repo/mariadb-galera \
+helm upgrade my-release oci://registry-1.docker.io/bitnamicharts/mariadb-galera \
 --set rootUser.password=XXXX \
 --set galera.mariabackup.password=YYYY \
 --set podManagementPolicy=Parallel
@@ -566,7 +564,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 It's necessary to specify the existing passwords while performing a upgrade to ensure the secrets are not updated with invalid randomly generated passwords. Remember to specify the existing values of the `rootUser.password`, `db.password` and `galera.mariabackup.password` parameters when upgrading the chart:
 
 ```console
-helm upgrade my-release my-repo/mariadb-galera \
+helm upgrade my-release oci://registry-1.docker.io/bitnamicharts/mariadb-galera \
     --set rootUser.password=[ROOT_PASSWORD] \
     --set db.password=[MARIADB_PASSWORD] \
     --set galera.mariabackup.password=[GALERA_MARIABACKUP_PASSWORD]

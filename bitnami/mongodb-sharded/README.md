@@ -11,8 +11,7 @@ Disclaimer: The respective trademarks mentioned in the offering are owned by the
 ## TL;DR
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/mongodb-sharded
+helm install my-release oci://registry-1.docker.io/bitnamicharts/mongodb-sharded
 ```
 
 ## Introduction
@@ -37,8 +36,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/mongodb-sharded
+helm install my-release oci://registry-1.docker.io/bitnamicharts/mongodb-sharded
 ```
 
 The command deploys MongoDB&reg; on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -87,7 +85,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ---------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
 | `image.registry`                                     | MongoDB(&reg;) Sharded image registry                                                                                                                     | `docker.io`               |
 | `image.repository`                                   | MongoDB(&reg;) Sharded Image name                                                                                                                         | `bitnami/mongodb-sharded` |
-| `image.tag`                                          | MongoDB(&reg;) Sharded image tag (immutable tags are recommended)                                                                                         | `6.0.5-debian-11-r4`      |
+| `image.tag`                                          | MongoDB(&reg;) Sharded image tag (immutable tags are recommended)                                                                                         | `6.0.6-debian-11-r0`      |
 | `image.digest`                                       | MongoDB(&reg;) Sharded image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                    | `""`                      |
 | `image.pullPolicy`                                   | MongoDB(&reg;) Sharded image pull policy                                                                                                                  | `IfNotPresent`            |
 | `image.pullSecrets`                                  | Specify docker-registry secret names as an array                                                                                                          | `[]`                      |
@@ -125,7 +123,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                          | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                   |
 | `volumePermissions.image.registry`                   | Init container volume-permissions image registry                                                                                                          | `docker.io`               |
 | `volumePermissions.image.repository`                 | Init container volume-permissions image name                                                                                                              | `bitnami/bitnami-shell`   |
-| `volumePermissions.image.tag`                        | Init container volume-permissions image tag                                                                                                               | `11-debian-11-r102`       |
+| `volumePermissions.image.tag`                        | Init container volume-permissions image tag                                                                                                               | `11-debian-11-r115`       |
 | `volumePermissions.image.digest`                     | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                         | `""`                      |
 | `volumePermissions.image.pullPolicy`                 | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`            |
 | `volumePermissions.image.pullSecrets`                | Init container volume-permissions image pull secrets                                                                                                      | `[]`                      |
@@ -472,7 +470,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                                         | Start a side-car prometheus exporter                                                                                  | `false`                    |
 | `metrics.image.registry`                                  | MongoDB&reg; exporter image registry                                                                                  | `docker.io`                |
 | `metrics.image.repository`                                | MongoDB&reg; exporter image name                                                                                      | `bitnami/mongodb-exporter` |
-| `metrics.image.tag`                                       | MongoDB&reg; exporter image tag                                                                                       | `0.37.0-debian-11-r14`     |
+| `metrics.image.tag`                                       | MongoDB&reg; exporter image tag                                                                                       | `0.37.0-debian-11-r28`     |
 | `metrics.image.digest`                                    | MongoDB&reg; exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
 | `metrics.image.pullPolicy`                                | MongoDB&reg; exporter image pull policy                                                                               | `Always`                   |
 | `metrics.image.pullSecrets`                               | MongoDB&reg; exporter image pull secrets                                                                              | `[]`                       |
@@ -517,7 +515,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 helm install my-release \
   --set shards=4,configsvr.replicaCount=3,shardsvr.dataNode.replicaCount=2 \
-    my-repo/mongodb-sharded
+    oci://registry-1.docker.io/bitnamicharts/mongodb-sharded
 ```
 
 The above command sets the number of shards to 4, the number of replicas for the config servers to 3 and number of replicas for data nodes to 2.
@@ -525,7 +523,7 @@ The above command sets the number of shards to 4, the number of replicas for the
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml my-repo/mongodb-sharded
+helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/mongodb-sharded
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -631,7 +629,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 If authentication is enabled, it's necessary to set the `auth.rootPassword` and `auth.replicaSetKey` when upgrading for readiness/liveness probes to work properly. When you install this chart for the first time, some notes will be displayed providing the credentials you must use. Please note down the password, and run the command below to upgrade your chart:
 
 ```console
-helm upgrade my-release my-repo/mongodb-sharded --set auth.rootPassword=[PASSWORD] (--set auth.replicaSetKey=[auth.replicaSetKey])
+helm upgrade my-release oci://registry-1.docker.io/bitnamicharts/mongodb-sharded --set auth.rootPassword=[PASSWORD] (--set auth.replicaSetKey=[auth.replicaSetKey])
 ```
 
 > Note: you need to substitute the placeholders [PASSWORD] and [auth.replicaSetKey] with the values obtained in the installation notes.

@@ -2,29 +2,29 @@ annotations:
   category: Forum
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 3.0.2
+appVersion: 3.0.3
 dependencies:
   - condition: redis.enabled
     name: redis
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     version: 17.X.X
   - condition: postgresql.enabled
     name: postgresql
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     version: 12.X.X
   - name: common
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     tags:
       - bitnami-common
     version: 2.x.x
 description: Discourse is an open source discussion platform with built-in moderation and governance systems that let discussion communities protect themselves from bad actors even without official moderators.
-home: https://github.com/bitnami/charts/tree/main/bitnami/discourse
+home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/discourse/img/discourse-stack-220x234.png
 keywords:
   - community
   - forum
 maintainers:
-  - name: Bitnami
+  - name: VMware, Inc.
     url: https://github.com/bitnami/charts
   - email: username.taken@gmail.com
     name: paulczar
@@ -32,7 +32,5 @@ maintainers:
     name: lucaprete
 name: discourse
 sources:
-  - https://github.com/bitnami/containers/tree/main/bitnami/discourse
-  - https://github.com/spinnaker
-  - https://www.discourse.org/
-version: 10.0.5
+  - https://github.com/bitnami/charts/tree/main/bitnami/discourse
+version: 10.3.1

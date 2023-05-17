@@ -64,7 +64,7 @@ operator:
   image:
     registry: docker.io
     repository: bitnami/prometheus-operator
-    tag: 0.64.0-debian-11-r1
+    tag: 0.65.1-debian-11-r3
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -290,6 +290,11 @@ operator:
     ## @param operator.serviceMonitor.annotations Extra annotations for the ServiceMonitor
     ##
     annotations: {}
+    ## @param operator.serviceMonitor.extraParameters Any extra parameter to be added to the endpoint configured in the ServiceMonitor
+    ## (e.g. tlsConfig for further customization of the HTTPS behavior)
+    ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#monitoring.coreos.com/v1.Endpoint
+    ##
+    extraParameters: {}
   ## @param operator.resources Configure resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ##
@@ -510,7 +515,7 @@ prometheus:
   image:
     registry: docker.io
     repository: bitnami/prometheus
-    tag: 2.43.0-debian-11-r2
+    tag: 2.43.1-debian-11-r2
     digest: ""
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1136,6 +1141,16 @@ prometheus:
     enabled: false
     name: ""
     key: ""
+  ## Enable additional Prometheus AlertManager configs that are managed externally to this chart
+  ## Note that the prometheus will fail to provision if the correct secret does not exist.
+  ## @param prometheus.additionalAlertManagerExternal.enabled Enable additional Prometheus AlertManager configs that are managed externally to this chart
+  ## @param prometheus.additionalAlertManagerExternal.name Name of the secret that Prometheus should use for the additional Prometheus AlertManager configuration
+  ## @param prometheus.additionalAlertManagerExternal.key Name of the key inside the secret to be used for the additional Prometheus AlertManager configuration
+  ##
+  additionalAlertManagerExternal:
+    enabled: false
+    name: ""
+    key: ""
   ## Thanos sidecar container configuration
   ##
   thanos:
@@ -1154,7 +1169,7 @@ prometheus:
     image:
       registry: docker.io
       repository: bitnami/thanos
-      tag: 0.31.0-scratch-r0
+      tag: 0.31.0-scratch-r3
       digest: ""
       ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1421,6 +1436,98 @@ prometheus:
       ## Useful when looking for additional customization, such as using different backend
       ##
       extraRules: []
+  ## config-reloader sidecar container configuration
+  ##
+  configReloader:
+    ## config-reloader sidecar Service
+    ##
+    service:
+      ## @param prometheus.configReloader.service.enabled Enable config-reloader sidecar service
+      ##
+      enabled: false
+      ## @param prometheus.configReloader.service.type Kubernetes service type
+      ##
+      type: ClusterIP
+      ## @param prometheus.configReloader.service.ports.http config-reloader sidecar container service port
+      ##
+      ports:
+        http: 8080
+      ## @param prometheus.configReloader.service.clusterIP Specific cluster IP when service type is cluster IP. Use `None` to create headless service by default.
+      ## Use a "headless" service by default so it returns every pod's IP instead of loadbalancing requests.
+      ##
+      clusterIP: None
+      ## @param prometheus.configReloader.service.nodePorts.http Specify the nodePort value for the LoadBalancer and NodePort service types.
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
+      ## e.g:
+      ## nodePort: 30901
+      ##
+      nodePorts:
+        http: ""
+      ## @param prometheus.configReloader.service.loadBalancerIP `loadBalancerIP` if service type is `LoadBalancer`
+      ## Set the LoadBalancer service type to internal only
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
+      ##
+      loadBalancerIP: ""
+      ## @param prometheus.configReloader.service.loadBalancerSourceRanges Address that are allowed when svc is `LoadBalancer`
+      ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+      ## e.g:
+      ## loadBalancerSourceRanges:
+      ## - 10.10.10.0/24
+      ##
+      loadBalancerSourceRanges: []
+      ## @param prometheus.configReloader.service.labels Additional labels for Prometheus service
+      ##
+      labels: {}
+      ## @param prometheus.configReloader.service.annotations Additional annotations for Prometheus service
+      ##
+      annotations: {}
+      ## @param prometheus.configReloader.service.extraPorts Additional ports to expose from the config-reloader sidecar container
+      ## extraPorts:
+      ##   - name: http
+      ##     port: 10902
+      ##     targetPort: http
+      ##     protocol: TCP
+      ##
+      extraPorts: []
+      ## @param prometheus.configReloader.service.externalTrafficPolicy Prometheus service external traffic policy
+      ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+      ##
+      externalTrafficPolicy: Cluster
+      ## @param prometheus.configReloader.service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+      ## If "ClientIP", consecutive client requests will be directed to the same Pod
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+      ##
+      sessionAffinity: None
+      ## @param prometheus.configReloader.service.sessionAffinityConfig Additional settings for the sessionAffinity
+      ## sessionAffinityConfig:
+      ##   clientIP:
+      ##     timeoutSeconds: 300
+      ##
+      sessionAffinityConfig: {}
+    ## Create a ServiceMonitor to monitor Prometheus config-reloader sidecar
+    ##
+    serviceMonitor:
+      ## @param prometheus.configReloader.serviceMonitor.enabled Creates a ServiceMonitor to monitor Prometheus config-reloader sidecar
+      ##
+      enabled: false
+      ## @param prometheus.configReloader.serviceMonitor.interval Scrape interval (use by default, falling back to Prometheus' default)
+      ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#endpoint
+      ##
+      interval: ""
+      ## @param prometheus.configReloader.serviceMonitor.path HTTP path to scrape for metrics
+      ##
+      path: /metrics
+      ## @param prometheus.configReloader.serviceMonitor.jobLabel The name of the label on the target service to use as the job name in prometheus.
+      ##
+      jobLabel: ""
+      ## @param prometheus.configReloader.serviceMonitor.metricRelabelings Metric relabeling
+      ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#metric_relabel_configs
+      ##
+      metricRelabelings: []
+      ## @param prometheus.configReloader.serviceMonitor.relabelings Relabel configs
+      ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config
+      ##
+      relabelings: []
   ## @param prometheus.portName Port name used for the pods and governing service. This defaults to web
   ##
   portName: web
@@ -1446,7 +1553,7 @@ alertmanager:
   image:
     registry: docker.io
     repository: bitnami/alertmanager
-    tag: 0.25.0-debian-11-r34
+    tag: 0.25.0-debian-11-r47
     digest: ""
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1610,6 +1717,11 @@ alertmanager:
     ## @param alertmanager.serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
     ##
     honorLabels: false
+    ## @param alertmanager.serviceMonitor.extraParameters Any extra parameter to be added to the endpoint configured in the ServiceMonitor
+    ## (e.g. tlsConfig for further customization of the HTTPS behavior)
+    ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#monitoring.coreos.com/v1.Endpoint
+    ##
+    extraParameters: {}
   ## Configure the ingress resource that allows you to access the
   ## Alertmanager installation. Set up the URL
   ## ref: https://kubernetes.io/docs/user-guide/ingress/
@@ -2028,7 +2140,7 @@ blackboxExporter:
   image:
     registry: docker.io
     repository: bitnami/blackbox-exporter
-    tag: 0.23.0-debian-11-r40
+    tag: 0.23.0-debian-11-r53
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

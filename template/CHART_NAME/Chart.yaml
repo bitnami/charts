@@ -6,22 +6,22 @@ appVersion: %%UPSTREAM_PROJECT_VERSION%%
 dependencies:
   - condition: SUBCHART_NAME.enabled
     name: SUBCHART_NAME
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     version: %%MAJOR_SUBCHART_VERSION_(A.X.X)%%
   - name: common
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     tags:
       - bitnami-common
     version: 2.x.x
 description: %%DESCRIPTION%%
-home: %%UPSTREAM_PROJECT_URL%%
+home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/%%IMAGE_NAME%%/img/%%IMAGE_NAME%%-stack-220x234.png
 keywords:
   - %%UPSTREAM_PROJECT_KEYWORD%%
   - %%UPSTREAM_PROJECT_KEYWORD%%
   - ...
 maintainers:
-  - name: Bitnami
+  - name: VMware, Inc.
     url: https://github.com/bitnami/charts
 name: %%CHART_NAME%%
 sources:

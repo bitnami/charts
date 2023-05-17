@@ -11,8 +11,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/tensorflow-resnet
+helm install my-release oci://registry-1.docker.io/bitnamicharts/tensorflow-resnet
 ```
 
 ## Introduction
@@ -31,8 +30,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/tensorflow-resnet
+helm install my-release oci://registry-1.docker.io/bitnamicharts/tensorflow-resnet
 ```
 
 These commands deploy Tensorflow Serving ResNet model on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -84,13 +82,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | ---------------------------- |
 | `server.image.registry`                 | TensorFlow Serving image registry                                                                                  | `docker.io`                  |
 | `server.image.repository`               | TensorFlow Serving image repository                                                                                | `bitnami/tensorflow-serving` |
-| `server.image.tag`                      | TensorFlow Serving Image tag (immutable tags are recommended)                                                      | `2.11.1-debian-11-r1`        |
+| `server.image.tag`                      | TensorFlow Serving Image tag (immutable tags are recommended)                                                      | `2.12.1-debian-11-r5`        |
 | `server.image.digest`                   | TensorFlow Serving image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                         |
 | `server.image.pullPolicy`               | TensorFlow Serving image pull policy                                                                               | `IfNotPresent`               |
 | `server.image.pullSecrets`              | Specify docker-registry secret names as an array                                                                   | `[]`                         |
 | `client.image.registry`                 | TensorFlow ResNet image registry                                                                                   | `docker.io`                  |
 | `client.image.repository`               | TensorFlow ResNet image repository                                                                                 | `bitnami/tensorflow-resnet`  |
-| `client.image.tag`                      | TensorFlow ResNet image tag (immutable tags are recommended)                                                       | `2.11.1-debian-11-r2`        |
+| `client.image.tag`                      | TensorFlow ResNet image tag (immutable tags are recommended)                                                       | `2.12.1-debian-11-r0`        |
 | `client.image.digest`                   | TensorFlow ResNet image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag  | `""`                         |
 | `client.image.pullPolicy`               | TensorFlow ResNet image pull policy                                                                                | `IfNotPresent`               |
 | `client.image.pullSecrets`              | Specify docker-registry secret names as an array                                                                   | `[]`                         |
@@ -169,13 +167,13 @@ The command removes all the Kubernetes components associated with the chart and 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-helm install my-release my-repo/tensorflow-resnet --set imagePullPolicy=Always
+helm install my-release oci://registry-1.docker.io/bitnamicharts/tensorflow-resnet --set imagePullPolicy=Always
 ```
 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml my-repo/tensorflow-resnet
+helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/tensorflow-resnet
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -223,7 +221,7 @@ Use the workaround below to upgrade from versions previous to 2.0.0. The followi
 
 ```console
 kubectl delete deployment  tensorflow-resnet --cascade=false
-helm upgrade tensorflow-resnet my-repo/tensorflow-resnet
+helm upgrade tensorflow-resnet oci://registry-1.docker.io/bitnamicharts/tensorflow-resnet
 kubectl delete rs "$(kubectl get rs -l app=tensorflow-resnet -o jsonpath='{.items[0].metadata.name}')"
 ```
 

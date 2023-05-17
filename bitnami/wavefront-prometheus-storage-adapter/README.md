@@ -6,11 +6,12 @@ Wavefront Storage Adapter is a Prometheus integration to transfer metrics from P
 
 [Overview of Wavefront Prometheus Adapter](https://github.com/wavefrontHQ/prometheus-storage-adapter)
 
+Looking to use Wavefront Prometheus Adapter in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+
 ## TL;DR
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/wavefront-prometheus-storage-adapter
+helm install my-release oci://registry-1.docker.io/bitnamicharts/wavefront-prometheus-storage-adapter
 ```
 
 ## Introduction
@@ -33,8 +34,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/wavefront-prometheus-storage-adapter
+helm install my-release oci://registry-1.docker.io/bitnamicharts/wavefront-prometheus-storage-adapter
 ```
 
 These commands deploy wavefront-prometheus-storage-adapter on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -82,7 +82,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------- |
 | `image.registry`                        | Adapter image registry                                                                                                   | `docker.io`                                    |
 | `image.repository`                      | Adapter image repository                                                                                                 | `bitnami/wavefront-prometheus-storage-adapter` |
-| `image.tag`                             | Adapter image tag (immutable tags are recommended)                                                                       | `1.0.7-debian-11-r2`                           |
+| `image.tag`                             | Adapter image tag (immutable tags are recommended)                                                                       | `1.0.7-debian-11-r14`                          |
 | `image.digest`                          | Adapter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                  | `""`                                           |
 | `image.pullPolicy`                      | Adapter image pull policy                                                                                                | `IfNotPresent`                                 |
 | `image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                         | `[]`                                           |
@@ -182,7 +182,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 helm install my-release \
   --set livenessProbe.successThreshold=5 \
-    my-repo/wavefront-prometheus-storage-adapter
+    oci://registry-1.docker.io/bitnamicharts/wavefront-prometheus-storage-adapter
 ```
 
 The above command sets the `livenessProbe.successThreshold` to `5`.
@@ -190,7 +190,7 @@ The above command sets the `livenessProbe.successThreshold` to `5`.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml my-repo/wavefront-prometheus-storage-adapter
+helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/wavefront-prometheus-storage-adapter
 ```
 
 ## Configuration and installation details
@@ -225,7 +225,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 ## Upgrading
 
 ```console
-helm upgrade my-release my-repo/wavefront-prometheus-storage-adapter
+helm upgrade my-release oci://registry-1.docker.io/bitnamicharts/wavefront-prometheus-storage-adapter
 ```
 
 ### To 2.0.0

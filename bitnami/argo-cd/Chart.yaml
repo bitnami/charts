@@ -2,19 +2,19 @@ annotations:
   category: Infrastructure
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 2.6.7
+appVersion: 2.7.2
 dependencies:
   - condition: redis.enabled
     name: redis
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     version: 17.x.x
   - name: common
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     tags:
       - bitnami-common
     version: 2.x.x
 description: Argo CD is a continuous delivery tool for Kubernetes based on GitOps.
-home: https://argoproj.github.io/argo-cd/
+home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/argo-cd/img/argo-cd-stack-220x234.png
 keywords:
   - Continuous delivery
@@ -22,12 +22,9 @@ keywords:
   - Devops
   - Kubernetes
 maintainers:
-  - name: Bitnami
+  - name: VMware, Inc.
     url: https://github.com/bitnami/charts
 name: argo-cd
 sources:
-  - https://github.com/bitnami/containers/tree/main/bitnami/argo-cd
-  - https://github.com/argoproj/argo-cd/
-  - https://github.com/bitnami/containers/tree/main/bitnami/dex
-  - https://github.com/dexidp/dex
-version: 4.5.7
+  - https://github.com/bitnami/charts/tree/main/bitnami/argo-cd
+version: 4.7.3

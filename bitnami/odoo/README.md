@@ -11,8 +11,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/odoo
+helm install my-release oci://registry-1.docker.io/bitnamicharts/odoo
 ```
 
 ## Introduction
@@ -35,8 +34,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/odoo
+helm install my-release oci://registry-1.docker.io/bitnamicharts/odoo
 ```
 
 The command deploys Odoo on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -80,7 +78,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.args`    | Args to override all containers in the the statefulset                                               | `["infinity"]`               |
 | `image.registry`         | Odoo image registry                                                                                  | `docker.io`                  |
 | `image.repository`       | Odoo image repository                                                                                | `bitnami/odoo`               |
-| `image.tag`              | Odoo image tag (immutable tags are recommended)                                                      | `16.0.20230415-debian-11-r0` |
+| `image.tag`              | Odoo image tag (immutable tags are recommended)                                                      | `16.0.20230515-debian-11-r2` |
 | `image.digest`           | Odoo image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                         |
 | `image.pullPolicy`       | Odoo image pull policy                                                                               | `IfNotPresent`               |
 | `image.pullSecrets`      | Odoo image pull secrets                                                                              | `[]`                         |
@@ -287,7 +285,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 helm install my-release \
   --set odooPassword=password,postgresql.postgresPassword=secretpassword \
-    my-repo/odoo
+    oci://registry-1.docker.io/bitnamicharts/odoo
 ```
 
 The above command sets the Odoo administrator account password to `password` and the PostgreSQL `postgres` user password to `secretpassword`.
@@ -297,7 +295,7 @@ The above command sets the Odoo administrator account password to `password` and
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml my-repo/odoo
+helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/odoo
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)

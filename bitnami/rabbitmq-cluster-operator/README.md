@@ -8,11 +8,12 @@ The RabbitMQ Cluster Kubernetes Operator automates provisioning, management, and
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 
+Looking to use RabbitMQ Cluster Operator in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+
 ## TL;DR
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/rabbitmq-cluster-operator
+helm install my-release oci://registry-1.docker.io/bitnamicharts/rabbitmq-cluster-operator
 ```
 
 ## Introduction
@@ -34,8 +35,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/rabbitmq-cluster-operator
+helm install my-release oci://registry-1.docker.io/bitnamicharts/rabbitmq-cluster-operator
 ```
 
 The command deploy the RabbitMQ Cluster Kubernetes Operator on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -159,17 +159,17 @@ This solution allows to easily deploy multiple RabbitMQ instances compared to th
 | ----------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------- |
 | `rabbitmqImage.registry`                                          | RabbitMQ Image registry                                                                                                                  | `docker.io`                              |
 | `rabbitmqImage.repository`                                        | RabbitMQ Image repository                                                                                                                | `bitnami/rabbitmq`                       |
-| `rabbitmqImage.tag`                                               | RabbitMQ Image tag (immutable tags are recommended)                                                                                      | `3.11.11-debian-11-r2`                   |
+| `rabbitmqImage.tag`                                               | RabbitMQ Image tag (immutable tags are recommended)                                                                                      | `3.11.15-debian-11-r3`                   |
 | `rabbitmqImage.digest`                                            | RabbitMQ image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                 | `""`                                     |
 | `rabbitmqImage.pullSecrets`                                       | RabbitMQ Image pull secrets                                                                                                              | `[]`                                     |
 | `credentialUpdaterImage.registry`                                 | RabbitMQ Default User Credential Updater image registry                                                                                  | `docker.io`                              |
 | `credentialUpdaterImage.repository`                               | RabbitMQ Default User Credential Updater image repository                                                                                | `bitnami/rmq-default-credential-updater` |
-| `credentialUpdaterImage.tag`                                      | RabbitMQ Default User Credential Updater image tag (immutable tags are recommended)                                                      | `1.0.2-scratch-r19`                      |
+| `credentialUpdaterImage.tag`                                      | RabbitMQ Default User Credential Updater image tag (immutable tags are recommended)                                                      | `1.0.2-scratch-r20`                      |
 | `credentialUpdaterImage.digest`                                   | RabbitMQ Default User Credential Updater image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                                     |
 | `credentialUpdaterImage.pullSecrets`                              | RabbitMQ Default User Credential Updater image pull secrets                                                                              | `[]`                                     |
 | `clusterOperator.image.registry`                                  | RabbitMQ Cluster Operator image registry                                                                                                 | `docker.io`                              |
 | `clusterOperator.image.repository`                                | RabbitMQ Cluster Operator image repository                                                                                               | `bitnami/rabbitmq-cluster-operator`      |
-| `clusterOperator.image.tag`                                       | RabbitMQ Cluster Operator image tag (immutable tags are recommended)                                                                     | `2.2.0-scratch-r3`                       |
+| `clusterOperator.image.tag`                                       | RabbitMQ Cluster Operator image tag (immutable tags are recommended)                                                                     | `2.2.0-scratch-r5`                       |
 | `clusterOperator.image.digest`                                    | RabbitMQ Cluster Operator image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                | `""`                                     |
 | `clusterOperator.image.pullPolicy`                                | RabbitMQ Cluster Operator image pull policy                                                                                              | `IfNotPresent`                           |
 | `clusterOperator.image.pullSecrets`                               | RabbitMQ Cluster Operator image pull secrets                                                                                             | `[]`                                     |
@@ -269,7 +269,7 @@ This solution allows to easily deploy multiple RabbitMQ instances compared to th
 | --------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------- |
 | `msgTopologyOperator.image.registry`                                  | RabbitMQ Messaging Topology Operator image registry                                                                                  | `docker.io`                               |
 | `msgTopologyOperator.image.repository`                                | RabbitMQ Messaging Topology Operator image repository                                                                                | `bitnami/rmq-messaging-topology-operator` |
-| `msgTopologyOperator.image.tag`                                       | RabbitMQ Messaging Topology Operator image tag (immutable tags are recommended)                                                      | `1.10.2-scratch-r0`                       |
+| `msgTopologyOperator.image.tag`                                       | RabbitMQ Messaging Topology Operator image tag (immutable tags are recommended)                                                      | `1.10.3-scratch-r0`                       |
 | `msgTopologyOperator.image.digest`                                    | RabbitMQ Messaging Topology Operator image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                                      |
 | `msgTopologyOperator.image.pullPolicy`                                | RabbitMQ Messaging Topology Operator image pull policy                                                                               | `IfNotPresent`                            |
 | `msgTopologyOperator.image.pullSecrets`                               | RabbitMQ Messaging Topology Operator image pull secrets                                                                              | `[]`                                      |
@@ -392,7 +392,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 helm install my-release \
   --set livenessProbe.enabled=false \
-    my-repo/rabbitmq-cluster-operator
+    oci://registry-1.docker.io/bitnamicharts/rabbitmq-cluster-operator
 ```
 
 The above command disables the Operator liveness probes.
@@ -400,7 +400,7 @@ The above command disables the Operator liveness probes.
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml my-repo/rabbitmq-cluster-operator
+helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/rabbitmq-cluster-operator
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -491,13 +491,13 @@ No issues are expected during upgrades.
 
 ### To 1.0.0
 
-The CRD was updated according to the latest changes in the upstream project. Thanks to the improvements in the latest changes, the CRD is not templated anymore abd can be placed under the `crds` directory following [Helm best practices for CRDS](https://helm.sh/docs/chart_best_practices/custom_resource_definitions/).
+The CRD was updated according to the latest changes in the upstream project. Thanks to the improvements in the latest changes, the CRD is not templated anymore and can be placed under the `crds` directory following [Helm best practices for CRDS](https://helm.sh/docs/chart_best_practices/custom_resource_definitions/).
 
 You need to manually delete the old CRD before upgrading the release.
 
 ```console
 kubectl delete crd rabbitmqclusters.rabbitmq.com
-helm upgrade my-release my-repo/rabbitmq-cluster-operator
+helm upgrade my-release oci://registry-1.docker.io/bitnamicharts/rabbitmq-cluster-operator
 ```
 
 ## License

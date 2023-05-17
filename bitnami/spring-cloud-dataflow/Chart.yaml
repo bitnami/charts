@@ -2,29 +2,29 @@ annotations:
   category: DeveloperTools
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 2.10.2
+appVersion: 2.10.3
 dependencies:
   - condition: rabbitmq.enabled
     name: rabbitmq
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     version: 11.x.x
   - condition: mariadb.enabled
     name: mariadb
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     tags:
       - dataflow-database
-    version: 11.x.x
+    version: 12.x.x
   - condition: kafka.enabled
     name: kafka
-    repository: https://charts.bitnami.com/bitnami
-    version: 21.x.x
+    repository: oci://registry-1.docker.io/bitnamicharts
+    version: 22.x.x
   - name: common
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     tags:
       - bitnami-common
     version: 2.x.x
 description: Spring Cloud Data Flow is a microservices-based toolkit for building streaming and batch data processing pipelines in Cloud Foundry and Kubernetes.
-home: https://github.com/bitnami/charts/tree/main/bitnami/spring-cloud-dataflow
+home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/spring-cloud-dataflow/img/spring-cloud-dataflow-stack-220x234.png
 keywords:
   - spring-cloud
@@ -32,11 +32,9 @@ keywords:
   - skipper
   - spring
 maintainers:
-  - name: Bitnami
+  - name: VMware, Inc.
     url: https://github.com/bitnami/charts
 name: spring-cloud-dataflow
 sources:
-  - https://github.com/bitnami/containers/tree/main/bitnami/spring-cloud-dataflow
-  - https://github.com/bitnami/containers/tree/main/bitnami/spring-cloud-skipper
-  - https://dataflow.spring.io/
-version: 16.0.2
+  - https://github.com/bitnami/charts/tree/main/bitnami/spring-cloud-dataflow
+version: 18.1.1

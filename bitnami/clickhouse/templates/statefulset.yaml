@@ -82,8 +82,8 @@ spec:
           {{- if $.Values.resources }}
           resources: {{- toYaml $.Values.resources | nindent 12 }}
           {{- end }}
-          # We don't require a privileged container in this case
           {{- if $.Values.containerSecurityContext.enabled }}
+          # We don't require a privileged container in this case
           securityContext: {{- omit $.Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           command:
@@ -101,36 +101,35 @@ spec:
         - name: volume-permissions
           image: {{ include "clickhouse.volumePermissions.image" $ }}
           imagePullPolicy: {{ $.Values.volumePermissions.image.pullPolicy | quote }}
-          command: |
-            mkdir -p /bitnami/clickhouse/data
-            chmod 700 /bitnami/clickhouse/data
-            {{- if $.Values.keeper.enabled }}
-            mkdir -p /bitnami/clickhouse/keeper
-            chmod 700 /bitnami/clickhouse/keeper
-            {{- end }}
-            chown {{ $.Values.containerSecurityContext.runAsUser }}:{{ $.Values.podSecurityContext.fsGroup }} /bitnami/clickhouse
-            find /bitnami/clickhouse -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | \
-            xargs -r chown -R {{ $.Values.containerSecurityContext.runAsUser }}:{{ $.Values.podSecurityContext.fsGroup }}
-            {{- if $.Values.tls.enabled }}
-            cp /tmp/certs/* /opt/bitnami/clickhouse/certs/
-            {{- if eq ( toString ( $.Values.volumePermissions.containerSecurityContext.runAsUser )) "auto" }}
-            chown -R `id -u`:`id -G | cut -d " " -f2` /opt/bitnami/clickhouse/certs/
-            {{- else }}
-            chown -R {{ $.Values.containerSecurityContext.runAsUser }}:{{ $.Values.podSecurityContext.fsGroup }} /opt/bitnami/clickhouse/certs/
-            {{- end }}
-            chmod 600 {{ include "clickhouse.tlsCertKey" $ }}
-            {{- end }}
-          {{- if $.Values.containerSecurityContext.enabled }}
-          securityContext: {{- omit $.Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
-          {{- end }}
+          command:
+            - /bin/sh
+            - -ec
+            - |
+              mkdir -p /bitnami/clickhouse/data
+              chmod 700 /bitnami/clickhouse/data
+              {{- if $.Values.keeper.enabled }}
+              mkdir -p /bitnami/clickhouse/keeper
+              chmod 700 /bitnami/clickhouse/keeper
+              {{- end }}
+              chown {{ $.Values.containerSecurityContext.runAsUser }}:{{ $.Values.podSecurityContext.fsGroup }} /bitnami/clickhouse
+              find /bitnami/clickhouse -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | \
+              xargs -r chown -R {{ $.Values.containerSecurityContext.runAsUser }}:{{ $.Values.podSecurityContext.fsGroup }}
+              {{- if $.Values.tls.enabled }}
+              cp /tmp/certs/* /opt/bitnami/clickhouse/certs/
+              {{- if eq ( toString ( $.Values.volumePermissions.containerSecurityContext.runAsUser )) "auto" }}
+              chown -R `id -u`:`id -G | cut -d " " -f2` /opt/bitnami/clickhouse/certs/
+              {{- else }}
+              chown -R {{ $.Values.containerSecurityContext.runAsUser }}:{{ $.Values.podSecurityContext.fsGroup }} /opt/bitnami/clickhouse/certs/
+              {{- end }}
+              chmod 600 {{ include "clickhouse.tlsCertKey" $ }}
+              {{- end }}
+          securityContext: {{- include "common.tplvalues.render" (dict "value" $.Values.volumePermissions.containerSecurityContext "context" $) | nindent 12 }}
           {{- if $.Values.volumePermissions.resources }}
           resources: {{- toYaml $.Values.volumePermissions.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
             - name: data
               mountPath: /bitnami/clickhouse
-            - name: config
-              mountPath: /bitnami/clickhouse/conf/default
             {{- if $.Values.tls.enabled }}
             - name: raw-certificates
               mountPath: /tmp/certs

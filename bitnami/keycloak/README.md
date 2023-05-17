@@ -8,11 +8,12 @@ Keycloak is a high performance Java-based identity and access management solutio
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 
+Looking to use Keycloak in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+
 ## TL;DR
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/keycloak
+helm install my-release oci://registry-1.docker.io/bitnamicharts/keycloak
 ```
 
 ## Introduction
@@ -33,8 +34,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/keycloak
+helm install my-release oci://registry-1.docker.io/bitnamicharts/keycloak
 ```
 
 These commands deploy a Keycloak application on the Kubernetes cluster in the default configuration.
@@ -72,6 +72,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `commonLabels`           | Labels to add to all deployed objects                                                   | `{}`            |
 | `enableServiceLinks`     | If set to false, disable Kubernetes service links in the pod spec                       | `true`          |
 | `commonAnnotations`      | Annotations to add to all deployed objects                                              | `{}`            |
+| `dnsPolicy`              | DNS Policy for pod                                                                      | `""`            |
+| `dnsConfig`              | DNS Configuration pod                                                                   | `{}`            |
 | `clusterDomain`          | Default Kubernetes cluster domain                                                       | `cluster.local` |
 | `extraDeploy`            | Array of extra objects to deploy with the release                                       | `[]`            |
 | `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden) | `false`         |
@@ -84,7 +86,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | ----------------------------- |
 | `image.registry`                 | Keycloak image registry                                                                                                      | `docker.io`                   |
 | `image.repository`               | Keycloak image repository                                                                                                    | `bitnami/keycloak`            |
-| `image.tag`                      | Keycloak image tag (immutable tags are recommended)                                                                          | `21.0.2-debian-11-r0`         |
+| `image.tag`                      | Keycloak image tag (immutable tags are recommended)                                                                          | `21.1.1-debian-11-r4`         |
 | `image.digest`                   | Keycloak image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                     | `""`                          |
 | `image.pullPolicy`               | Keycloak image pull policy                                                                                                   | `IfNotPresent`                |
 | `image.pullSecrets`              | Specify docker-registry secret names as an array                                                                             | `[]`                          |
@@ -186,7 +188,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                               | Description                                                                                                                      | Value                    |
 | ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `service.type`                     | Kubernetes service type                                                                                                          | `LoadBalancer`           |
+| `service.type`                     | Kubernetes service type                                                                                                          | `ClusterIP`              |
 | `service.http.enabled`             | Enable http port on service                                                                                                      | `true`                   |
 | `service.ports.http`               | Keycloak service HTTP port                                                                                                       | `80`                     |
 | `service.ports.https`              | Keycloak service HTTPS port                                                                                                      | `443`                    |
@@ -207,7 +209,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
 | `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
 | `ingress.hostname`                 | Default host for the ingress record (evaluated as template)                                                                      | `keycloak.local`         |
-| `ingress.path`                     | Default path for the ingress record                                                                                              | `/`                      |
+| `ingress.path`                     | Default path for the ingress record (evaluated as template)                                                                      | `""`                     |
 | `ingress.servicePort`              | Backend service port to use                                                                                                      | `http`                   |
 | `ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
 | `ingress.tls`                      | Enable TLS configuration for the host defined at `ingress.hostname` parameter                                                    | `false`                  |
@@ -278,7 +280,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `keycloakConfigCli.enabled`                               | Whether to enable keycloak-config-cli job                                                                                     | `false`                       |
 | `keycloakConfigCli.image.registry`                        | keycloak-config-cli container image registry                                                                                  | `docker.io`                   |
 | `keycloakConfigCli.image.repository`                      | keycloak-config-cli container image repository                                                                                | `bitnami/keycloak-config-cli` |
-| `keycloakConfigCli.image.tag`                             | keycloak-config-cli container image tag                                                                                       | `5.6.1-debian-11-r5`          |
+| `keycloakConfigCli.image.tag`                             | keycloak-config-cli container image tag                                                                                       | `5.6.1-debian-11-r18`         |
 | `keycloakConfigCli.image.digest`                          | keycloak-config-cli container image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                          |
 | `keycloakConfigCli.image.pullPolicy`                      | keycloak-config-cli container image pull policy                                                                               | `IfNotPresent`                |
 | `keycloakConfigCli.image.pullSecrets`                     | keycloak-config-cli container image pull secrets                                                                              | `[]`                          |
@@ -327,6 +329,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.password`                  | Password for the non-root username for Keycloak                                                                   | `""`               |
 | `externalDatabase.database`                  | Keycloak database name                                                                                            | `bitnami_keycloak` |
 | `externalDatabase.existingSecret`            | Name of an existing secret resource containing the database credentials                                           | `""`               |
+| `externalDatabase.existingSecretHostKey`     | Name of an existing secret key containing the database host name                                                  | `""`               |
+| `externalDatabase.existingSecretPortKey`     | Name of an existing secret key containing the database port                                                       | `""`               |
+| `externalDatabase.existingSecretUserKey`     | Name of an existing secret key containing the database user                                                       | `""`               |
+| `externalDatabase.existingSecretDatabaseKey` | Name of an existing secret key containing the database name                                                       | `""`               |
 | `externalDatabase.existingSecretPasswordKey` | Name of an existing secret key containing the database credentials                                                | `""`               |
 
 ### Keycloak Cache parameters
@@ -347,7 +353,7 @@ The command removes all the Kubernetes components associated with the chart and 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-helm install my-release --set auth.adminPassword=secretpassword my-repo/keycloak
+helm install my-release --set auth.adminPassword=secretpassword oci://registry-1.docker.io/bitnamicharts/keycloak
 ```
 
 The above command sets the Keycloak administrator password to `secretpassword`.
@@ -357,7 +363,7 @@ The above command sets the Keycloak administrator password to `secretpassword`.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml my-repo/keycloak
+helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/keycloak
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -461,6 +467,10 @@ Refer to the [chart documentation on managing passwords](https://docs.bitnami.co
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 15.0.0
+
+This major updates the default serviceType from `LoadBalancer` to `ClusterIP` to avoid inadvertently exposing Keycloak directly to the internet without an Ingress.
 
 ### To 12.0.0
 

@@ -11,8 +11,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/phpmyadmin
+helm install my-release oci://registry-1.docker.io/bitnamicharts/phpmyadmin
 ```
 
 ## Introduction
@@ -33,8 +32,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/phpmyadmin
+helm install my-release oci://registry-1.docker.io/bitnamicharts/phpmyadmin
 ```
 
 The command deploys phpMyAdmin on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -78,7 +76,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------- | ---------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`     | phpMyAdmin image registry                                                                                  | `docker.io`           |
 | `image.repository`   | phpMyAdmin image repository                                                                                | `bitnami/phpmyadmin`  |
-| `image.tag`          | phpMyAdmin image tag (immutable tags are recommended)                                                      | `5.2.1-debian-11-r15` |
+| `image.tag`          | phpMyAdmin image tag (immutable tags are recommended)                                                      | `5.2.1-debian-11-r28` |
 | `image.digest`       | phpMyAdmin image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
 | `image.pullPolicy`   | Image pull policy                                                                                          | `IfNotPresent`        |
 | `image.pullSecrets`  | Specify docker-registry secret names as an array                                                           | `[]`                  |
@@ -215,7 +213,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                          | Start a side-car prometheus exporter                                                                            | `false`                   |
 | `metrics.image.registry`                   | Apache exporter image registry                                                                                  | `docker.io`               |
 | `metrics.image.repository`                 | Apache exporter image repository                                                                                | `bitnami/apache-exporter` |
-| `metrics.image.tag`                        | Apache exporter image tag (immutable tags are recommended)                                                      | `0.13.1-debian-11-r1`     |
+| `metrics.image.tag`                        | Apache exporter image tag (immutable tags are recommended)                                                      | `0.13.3-debian-11-r5`     |
 | `metrics.image.digest`                     | Apache exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
 | `metrics.image.pullPolicy`                 | Image pull policy                                                                                               | `IfNotPresent`            |
 | `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                                                                | `[]`                      |
@@ -266,7 +264,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```console
 helm install my-release \
-  --set db.host=mymariadb,db.port=3306 my-repo/phpmyadmin
+  --set db.host=mymariadb,db.port=3306 oci://registry-1.docker.io/bitnamicharts/phpmyadmin
 ```
 
 The above command sets the phpMyAdmin to connect to a database in `mymariadb` host and `3306` port respectively.
@@ -274,7 +272,7 @@ The above command sets the phpMyAdmin to connect to a database in `mymariadb` ho
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml my-repo/phpmyadmin
+helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/phpmyadmin
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -392,6 +390,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 11.0.0
+
+This major release bumps the MariaDB version to 10.11. Follow the [upstream instructions](https://mariadb.com/kb/en/upgrading-from-mariadb-10-6-to-mariadb-10-11/) for upgrading from MariaDB 10.6 to 10.11. No major issues are expected during the upgrade.
+
 ### To 10.0.0
 
 This major release bumps the MariaDB version to 10.6. Follow the [upstream instructions](https://mariadb.com/kb/en/upgrading-from-mariadb-105-to-mariadb-106/) for upgrading from MariaDB 10.5 to 10.6. No major issues are expected during the upgrade.
@@ -420,7 +422,7 @@ Consequences:
 export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default phpmyadmin-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 -d)
 export MARIADB_PASSWORD=$(kubectl get secret --namespace default phpmyadmin-mariadb -o jsonpath="{.data.mariadb-password}" | base64 -d)
 kubectl delete deployments.apps phpmyadmin
-helm upgrade phpmyadmin my-repo/phpmyadmin --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD,mariadb.auth.password=$MARIADB_PASSWORD
+helm upgrade phpmyadmin oci://registry-1.docker.io/bitnamicharts/phpmyadmin --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD,mariadb.auth.password=$MARIADB_PASSWORD
 ```
 
 ### To 7.0.0
@@ -485,7 +487,7 @@ Delete the phpMyAdmin deployment and delete the MariaDB statefulsets:
 Now the upgrade works:
 
 ```console
-helm upgrade phpmyadmin my-repo/phpmyadmin --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set db.bundleTestDB=true
+helm upgrade phpmyadmin oci://registry-1.docker.io/bitnamicharts/phpmyadmin --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set db.bundleTestDB=true
 ```
 
 Finally, you should see the lines below in MariaDB container logs:

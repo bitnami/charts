@@ -11,8 +11,7 @@ Disclaimer: The respective trademarks mentioned in the offering are owned by the
 ## TL;DR
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/mongodb
+helm install my-release oci://registry-1.docker.io/bitnamicharts/mongodb
 ```
 
 ## Introduction
@@ -32,8 +31,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/mongodb
+helm install my-release oci://registry-1.docker.io/bitnamicharts/mongodb
 ```
 
 The command deploys MongoDB(&reg;) on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -92,58 +90,58 @@ Refer to the [chart documentation for more information on each of these architec
 
 ### MongoDB(&reg;) parameters
 
-| Name                             | Description                                                                                                                                                 | Value                 |
-| -------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
-| `image.registry`                 | MongoDB(&reg;) image registry                                                                                                                               | `docker.io`           |
-| `image.repository`               | MongoDB(&reg;) image registry                                                                                                                               | `bitnami/mongodb`     |
-| `image.tag`                      | MongoDB(&reg;) image tag (immutable tags are recommended)                                                                                                   | `6.0.5-debian-11-r4`  |
-| `image.digest`                   | MongoDB(&reg;) image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                              | `""`                  |
-| `image.pullPolicy`               | MongoDB(&reg;) image pull policy                                                                                                                            | `IfNotPresent`        |
-| `image.pullSecrets`              | Specify docker-registry secret names as an array                                                                                                            | `[]`                  |
-| `image.debug`                    | Set to true if you would like to see extra information on logs                                                                                              | `false`               |
-| `schedulerName`                  | Name of the scheduler (other than default) to dispatch pods                                                                                                 | `""`                  |
-| `architecture`                   | MongoDB(&reg;) architecture (`standalone` or `replicaset`)                                                                                                  | `standalone`          |
-| `useStatefulSet`                 | Set to true to use a StatefulSet instead of a Deployment (only when `architecture=standalone`)                                                              | `false`               |
-| `auth.enabled`                   | Enable authentication                                                                                                                                       | `true`                |
-| `auth.rootUser`                  | MongoDB(&reg;) root user                                                                                                                                    | `root`                |
-| `auth.rootPassword`              | MongoDB(&reg;) root password                                                                                                                                | `""`                  |
-| `auth.usernames`                 | List of custom users to be created during the initialization                                                                                                | `[]`                  |
-| `auth.passwords`                 | List of passwords for the custom users set at `auth.usernames`                                                                                              | `[]`                  |
-| `auth.databases`                 | List of custom databases to be created during the initialization                                                                                            | `[]`                  |
-| `auth.username`                  | DEPRECATED: use `auth.usernames` instead                                                                                                                    | `""`                  |
-| `auth.password`                  | DEPRECATED: use `auth.passwords` instead                                                                                                                    | `""`                  |
-| `auth.database`                  | DEPRECATED: use `auth.databases` instead                                                                                                                    | `""`                  |
-| `auth.replicaSetKey`             | Key used for authentication in the replicaset (only when `architecture=replicaset`)                                                                         | `""`                  |
-| `auth.existingSecret`            | Existing secret with MongoDB(&reg;) credentials (keys: `mongodb-passwords`, `mongodb-root-password`, `mongodb-metrics-password`, `mongodb-replica-set-key`) | `""`                  |
-| `tls.enabled`                    | Enable MongoDB(&reg;) TLS support between nodes in the cluster as well as between mongo clients and nodes                                                   | `false`               |
-| `tls.autoGenerated`              | Generate a custom CA and self-signed certificates                                                                                                           | `true`                |
-| `tls.existingSecret`             | Existing secret with TLS certificates (keys: `mongodb-ca-cert`, `mongodb-ca-key`)                                                                           | `""`                  |
-| `tls.caCert`                     | Custom CA certificated (base64 encoded)                                                                                                                     | `""`                  |
-| `tls.caKey`                      | CA certificate private key (base64 encoded)                                                                                                                 | `""`                  |
-| `tls.standalone.existingSecret`  | Existing secret with TLS certificates (`tls.key`, `tls.crt`, `ca.crt`).                                                                                     | `""`                  |
-| `tls.replicaset.existingSecrets` | Array of existing secrets with TLS certificates (`tls.key`, `tls.crt`, `ca.crt`).                                                                           | `[]`                  |
-| `tls.hidden.existingSecrets`     | Array of existing secrets with TLS certificates (`tls.key`, `tls.crt`, `ca.crt`).                                                                           | `[]`                  |
-| `tls.arbiter.existingSecret`     | Existing secret with TLS certificates (`tls.key`, `tls.crt`, `ca.crt`).                                                                                     | `""`                  |
-| `tls.image.registry`             | Init container TLS certs setup image registry                                                                                                               | `docker.io`           |
-| `tls.image.repository`           | Init container TLS certs setup image repository                                                                                                             | `bitnami/nginx`       |
-| `tls.image.tag`                  | Init container TLS certs setup image tag (immutable tags are recommended)                                                                                   | `1.23.4-debian-11-r0` |
-| `tls.image.digest`               | Init container TLS certs setup image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                              | `""`                  |
-| `tls.image.pullPolicy`           | Init container TLS certs setup image pull policy                                                                                                            | `IfNotPresent`        |
-| `tls.image.pullSecrets`          | Init container TLS certs specify docker-registry secret names as an array                                                                                   | `[]`                  |
-| `tls.extraDnsNames`              | Add extra dns names to the CA, can solve x509 auth issue for pod clients                                                                                    | `[]`                  |
-| `tls.mode`                       | Allows to set the tls mode which should be used when tls is enabled (options: `allowTLS`, `preferTLS`, `requireTLS`)                                        | `requireTLS`          |
-| `tls.resources.limits`           | Init container generate-tls-certs resource limits                                                                                                           | `{}`                  |
-| `tls.resources.requests`         | Init container generate-tls-certs resource requests                                                                                                         | `{}`                  |
-| `hostAliases`                    | Add deployment host aliases                                                                                                                                 | `[]`                  |
-| `replicaSetName`                 | Name of the replica set (only when `architecture=replicaset`)                                                                                               | `rs0`                 |
-| `replicaSetHostnames`            | Enable DNS hostnames in the replicaset config (only when `architecture=replicaset`)                                                                         | `true`                |
-| `enableIPv6`                     | Switch to enable/disable IPv6 on MongoDB(&reg;)                                                                                                             | `false`               |
-| `directoryPerDB`                 | Switch to enable/disable DirectoryPerDB on MongoDB(&reg;)                                                                                                   | `false`               |
-| `systemLogVerbosity`             | MongoDB(&reg;) system log verbosity level                                                                                                                   | `0`                   |
-| `disableSystemLog`               | Switch to enable/disable MongoDB(&reg;) system log                                                                                                          | `false`               |
-| `disableJavascript`              | Switch to enable/disable MongoDB(&reg;) server-side JavaScript execution                                                                                    | `false`               |
-| `enableJournal`                  | Switch to enable/disable MongoDB(&reg;) Journaling                                                                                                          | `true`                |
-| `configuration`                  | MongoDB(&reg;) configuration file to be used for Primary and Secondary nodes                                                                                | `""`                  |
+| Name                             | Description                                                                                                                                                 | Value                  |
+| -------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
+| `image.registry`                 | MongoDB(&reg;) image registry                                                                                                                               | `docker.io`            |
+| `image.repository`               | MongoDB(&reg;) image registry                                                                                                                               | `bitnami/mongodb`      |
+| `image.tag`                      | MongoDB(&reg;) image tag (immutable tags are recommended)                                                                                                   | `6.0.6-debian-11-r0`   |
+| `image.digest`                   | MongoDB(&reg;) image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                              | `""`                   |
+| `image.pullPolicy`               | MongoDB(&reg;) image pull policy                                                                                                                            | `IfNotPresent`         |
+| `image.pullSecrets`              | Specify docker-registry secret names as an array                                                                                                            | `[]`                   |
+| `image.debug`                    | Set to true if you would like to see extra information on logs                                                                                              | `false`                |
+| `schedulerName`                  | Name of the scheduler (other than default) to dispatch pods                                                                                                 | `""`                   |
+| `architecture`                   | MongoDB(&reg;) architecture (`standalone` or `replicaset`)                                                                                                  | `standalone`           |
+| `useStatefulSet`                 | Set to true to use a StatefulSet instead of a Deployment (only when `architecture=standalone`)                                                              | `false`                |
+| `auth.enabled`                   | Enable authentication                                                                                                                                       | `true`                 |
+| `auth.rootUser`                  | MongoDB(&reg;) root user                                                                                                                                    | `root`                 |
+| `auth.rootPassword`              | MongoDB(&reg;) root password                                                                                                                                | `""`                   |
+| `auth.usernames`                 | List of custom users to be created during the initialization                                                                                                | `[]`                   |
+| `auth.passwords`                 | List of passwords for the custom users set at `auth.usernames`                                                                                              | `[]`                   |
+| `auth.databases`                 | List of custom databases to be created during the initialization                                                                                            | `[]`                   |
+| `auth.username`                  | DEPRECATED: use `auth.usernames` instead                                                                                                                    | `""`                   |
+| `auth.password`                  | DEPRECATED: use `auth.passwords` instead                                                                                                                    | `""`                   |
+| `auth.database`                  | DEPRECATED: use `auth.databases` instead                                                                                                                    | `""`                   |
+| `auth.replicaSetKey`             | Key used for authentication in the replicaset (only when `architecture=replicaset`)                                                                         | `""`                   |
+| `auth.existingSecret`            | Existing secret with MongoDB(&reg;) credentials (keys: `mongodb-passwords`, `mongodb-root-password`, `mongodb-metrics-password`, `mongodb-replica-set-key`) | `""`                   |
+| `tls.enabled`                    | Enable MongoDB(&reg;) TLS support between nodes in the cluster as well as between mongo clients and nodes                                                   | `false`                |
+| `tls.autoGenerated`              | Generate a custom CA and self-signed certificates                                                                                                           | `true`                 |
+| `tls.existingSecret`             | Existing secret with TLS certificates (keys: `mongodb-ca-cert`, `mongodb-ca-key`)                                                                           | `""`                   |
+| `tls.caCert`                     | Custom CA certificated (base64 encoded)                                                                                                                     | `""`                   |
+| `tls.caKey`                      | CA certificate private key (base64 encoded)                                                                                                                 | `""`                   |
+| `tls.standalone.existingSecret`  | Existing secret with TLS certificates (`tls.key`, `tls.crt`, `ca.crt`).                                                                                     | `""`                   |
+| `tls.replicaset.existingSecrets` | Array of existing secrets with TLS certificates (`tls.key`, `tls.crt`, `ca.crt`).                                                                           | `[]`                   |
+| `tls.hidden.existingSecrets`     | Array of existing secrets with TLS certificates (`tls.key`, `tls.crt`, `ca.crt`).                                                                           | `[]`                   |
+| `tls.arbiter.existingSecret`     | Existing secret with TLS certificates (`tls.key`, `tls.crt`, `ca.crt`).                                                                                     | `""`                   |
+| `tls.image.registry`             | Init container TLS certs setup image registry                                                                                                               | `docker.io`            |
+| `tls.image.repository`           | Init container TLS certs setup image repository                                                                                                             | `bitnami/nginx`        |
+| `tls.image.tag`                  | Init container TLS certs setup image tag (immutable tags are recommended)                                                                                   | `1.23.4-debian-11-r15` |
+| `tls.image.digest`               | Init container TLS certs setup image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                              | `""`                   |
+| `tls.image.pullPolicy`           | Init container TLS certs setup image pull policy                                                                                                            | `IfNotPresent`         |
+| `tls.image.pullSecrets`          | Init container TLS certs specify docker-registry secret names as an array                                                                                   | `[]`                   |
+| `tls.extraDnsNames`              | Add extra dns names to the CA, can solve x509 auth issue for pod clients                                                                                    | `[]`                   |
+| `tls.mode`                       | Allows to set the tls mode which should be used when tls is enabled (options: `allowTLS`, `preferTLS`, `requireTLS`)                                        | `requireTLS`           |
+| `tls.resources.limits`           | Init container generate-tls-certs resource limits                                                                                                           | `{}`                   |
+| `tls.resources.requests`         | Init container generate-tls-certs resource requests                                                                                                         | `{}`                   |
+| `hostAliases`                    | Add deployment host aliases                                                                                                                                 | `[]`                   |
+| `replicaSetName`                 | Name of the replica set (only when `architecture=replicaset`)                                                                                               | `rs0`                  |
+| `replicaSetHostnames`            | Enable DNS hostnames in the replicaset config (only when `architecture=replicaset`)                                                                         | `true`                 |
+| `enableIPv6`                     | Switch to enable/disable IPv6 on MongoDB(&reg;)                                                                                                             | `false`                |
+| `directoryPerDB`                 | Switch to enable/disable DirectoryPerDB on MongoDB(&reg;)                                                                                                   | `false`                |
+| `systemLogVerbosity`             | MongoDB(&reg;) system log verbosity level                                                                                                                   | `0`                    |
+| `disableSystemLog`               | Switch to enable/disable MongoDB(&reg;) system log                                                                                                          | `false`                |
+| `disableJavascript`              | Switch to enable/disable MongoDB(&reg;) server-side JavaScript execution                                                                                    | `false`                |
+| `enableJournal`                  | Switch to enable/disable MongoDB(&reg;) Journaling                                                                                                          | `true`                 |
+| `configuration`                  | MongoDB(&reg;) configuration file to be used for Primary and Secondary nodes                                                                                | `""`                   |
 
 ### replicaSetConfigurationSettings settings applied during runtime (not via configuration file)
 
@@ -248,7 +246,7 @@ Refer to the [chart documentation for more information on each of these architec
 | `externalAccess.autoDiscovery.enabled`                        | Enable using an init container to auto-detect external IPs by querying the K8s API                                                              | `false`               |
 | `externalAccess.autoDiscovery.image.registry`                 | Init container auto-discovery image registry                                                                                                    | `docker.io`           |
 | `externalAccess.autoDiscovery.image.repository`               | Init container auto-discovery image repository                                                                                                  | `bitnami/kubectl`     |
-| `externalAccess.autoDiscovery.image.tag`                      | Init container auto-discovery image tag (immutable tags are recommended)                                                                        | `1.25.8-debian-11-r3` |
+| `externalAccess.autoDiscovery.image.tag`                      | Init container auto-discovery image tag (immutable tags are recommended)                                                                        | `1.25.9-debian-11-r9` |
 | `externalAccess.autoDiscovery.image.digest`                   | Init container auto-discovery image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                   | `""`                  |
 | `externalAccess.autoDiscovery.image.pullPolicy`               | Init container auto-discovery image pull policy                                                                                                 | `IfNotPresent`        |
 | `externalAccess.autoDiscovery.image.pullSecrets`              | Init container auto-discovery image pull secrets                                                                                                | `[]`                  |
@@ -324,7 +322,7 @@ Refer to the [chart documentation for more information on each of these architec
 | `volumePermissions.enabled`                   | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup`              | `false`                 |
 | `volumePermissions.image.registry`            | Init container volume-permissions image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`          | Init container volume-permissions image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r102`     |
+| `volumePermissions.image.tag`                 | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r115`     |
 | `volumePermissions.image.digest`              | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`          | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`         | Specify docker-registry secret names as an array                                                                                  | `[]`                    |
@@ -500,69 +498,81 @@ Refer to the [chart documentation for more information on each of these architec
 
 ### Metrics parameters
 
-| Name                                         | Description                                                                                                           | Value                      |
-| -------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | -------------------------- |
-| `metrics.enabled`                            | Enable using a sidecar Prometheus exporter                                                                            | `false`                    |
-| `metrics.image.registry`                     | MongoDB(&reg;) Prometheus exporter image registry                                                                     | `docker.io`                |
-| `metrics.image.repository`                   | MongoDB(&reg;) Prometheus exporter image repository                                                                   | `bitnami/mongodb-exporter` |
-| `metrics.image.tag`                          | MongoDB(&reg;) Prometheus exporter image tag (immutable tags are recommended)                                         | `0.37.0-debian-11-r15`     |
-| `metrics.image.digest`                       | MongoDB(&reg;) image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag        | `""`                       |
-| `metrics.image.pullPolicy`                   | MongoDB(&reg;) Prometheus exporter image pull policy                                                                  | `IfNotPresent`             |
-| `metrics.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                      | `[]`                       |
-| `metrics.username`                           | String with username for the metrics exporter                                                                         | `""`                       |
-| `metrics.password`                           | String with password for the metrics exporter                                                                         | `""`                       |
-| `metrics.extraFlags`                         | String with extra flags to the metrics exporter                                                                       | `""`                       |
-| `metrics.command`                            | Override default container command (useful when using custom images)                                                  | `[]`                       |
-| `metrics.args`                               | Override default container args (useful when using custom images)                                                     | `[]`                       |
-| `metrics.resources.limits`                   | The resources limits for Prometheus exporter containers                                                               | `{}`                       |
-| `metrics.resources.requests`                 | The requested resources for Prometheus exporter containers                                                            | `{}`                       |
-| `metrics.containerPort`                      | Port of the Prometheus metrics container                                                                              | `9216`                     |
-| `metrics.service.annotations`                | Annotations for Prometheus Exporter pods. Evaluated as a template.                                                    | `{}`                       |
-| `metrics.service.type`                       | Type of the Prometheus metrics service                                                                                | `ClusterIP`                |
-| `metrics.service.ports.metrics`              | Port of the Prometheus metrics service                                                                                | `9216`                     |
-| `metrics.service.extraPorts`                 | Extra ports to expose (normally used with the `sidecar` value)                                                        | `[]`                       |
-| `metrics.livenessProbe.enabled`              | Enable livenessProbe                                                                                                  | `true`                     |
-| `metrics.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                                               | `15`                       |
-| `metrics.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                                      | `5`                        |
-| `metrics.livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                                                     | `10`                       |
-| `metrics.livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                                                   | `3`                        |
-| `metrics.livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                                                   | `1`                        |
-| `metrics.readinessProbe.enabled`             | Enable readinessProbe                                                                                                 | `true`                     |
-| `metrics.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                                              | `5`                        |
-| `metrics.readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                                                     | `5`                        |
-| `metrics.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                                    | `10`                       |
-| `metrics.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                                                  | `3`                        |
-| `metrics.readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                                                  | `1`                        |
-| `metrics.startupProbe.enabled`               | Enable startupProbe                                                                                                   | `false`                    |
-| `metrics.startupProbe.initialDelaySeconds`   | Initial delay seconds for startupProbe                                                                                | `5`                        |
-| `metrics.startupProbe.periodSeconds`         | Period seconds for startupProbe                                                                                       | `10`                       |
-| `metrics.startupProbe.timeoutSeconds`        | Timeout seconds for startupProbe                                                                                      | `5`                        |
-| `metrics.startupProbe.failureThreshold`      | Failure threshold for startupProbe                                                                                    | `30`                       |
-| `metrics.startupProbe.successThreshold`      | Success threshold for startupProbe                                                                                    | `1`                        |
-| `metrics.customLivenessProbe`                | Override default liveness probe for MongoDB(&reg;) containers                                                         | `{}`                       |
-| `metrics.customReadinessProbe`               | Override default readiness probe for MongoDB(&reg;) containers                                                        | `{}`                       |
-| `metrics.customStartupProbe`                 | Override default startup probe for MongoDB(&reg;) containers                                                          | `{}`                       |
-| `metrics.serviceMonitor.enabled`             | Create ServiceMonitor Resource for scraping metrics using Prometheus Operator                                         | `false`                    |
-| `metrics.serviceMonitor.namespace`           | Namespace which Prometheus is running in                                                                              | `""`                       |
-| `metrics.serviceMonitor.interval`            | Interval at which metrics should be scraped                                                                           | `30s`                      |
-| `metrics.serviceMonitor.scrapeTimeout`       | Specify the timeout after which the scrape is ended                                                                   | `""`                       |
-| `metrics.serviceMonitor.relabelings`         | RelabelConfigs to apply to samples before scraping.                                                                   | `[]`                       |
-| `metrics.serviceMonitor.metricRelabelings`   | MetricsRelabelConfigs to apply to samples before ingestion.                                                           | `[]`                       |
-| `metrics.serviceMonitor.labels`              | Used to pass Labels that are used by the Prometheus installed in your cluster to select Service Monitors to work with | `{}`                       |
-| `metrics.serviceMonitor.selector`            | Prometheus instance selector labels                                                                                   | `{}`                       |
-| `metrics.serviceMonitor.honorLabels`         | Specify honorLabels parameter to add the scrape endpoint                                                              | `false`                    |
-| `metrics.serviceMonitor.jobLabel`            | The name of the label on the target service to use as the job name in prometheus.                                     | `""`                       |
-| `metrics.prometheusRule.enabled`             | Set this to true to create prometheusRules for Prometheus operator                                                    | `false`                    |
-| `metrics.prometheusRule.additionalLabels`    | Additional labels that can be used so prometheusRules will be discovered by Prometheus                                | `{}`                       |
-| `metrics.prometheusRule.namespace`           | Namespace where prometheusRules resource should be created                                                            | `""`                       |
-| `metrics.prometheusRule.rules`               | Rules to be created, check values for an example                                                                      | `[]`                       |
+| Name                                         | Description                                                                                                                   | Value                      |
+| -------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
+| `metrics.enabled`                            | Enable using a sidecar Prometheus exporter                                                                                    | `false`                    |
+| `metrics.image.registry`                     | MongoDB(&reg;) Prometheus exporter image registry                                                                             | `docker.io`                |
+| `metrics.image.repository`                   | MongoDB(&reg;) Prometheus exporter image repository                                                                           | `bitnami/mongodb-exporter` |
+| `metrics.image.tag`                          | MongoDB(&reg;) Prometheus exporter image tag (immutable tags are recommended)                                                 | `0.37.0-debian-11-r28`     |
+| `metrics.image.digest`                       | MongoDB(&reg;) image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                | `""`                       |
+| `metrics.image.pullPolicy`                   | MongoDB(&reg;) Prometheus exporter image pull policy                                                                          | `IfNotPresent`             |
+| `metrics.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                              | `[]`                       |
+| `metrics.username`                           | String with username for the metrics exporter                                                                                 | `""`                       |
+| `metrics.password`                           | String with password for the metrics exporter                                                                                 | `""`                       |
+| `metrics.compatibleMode`                     | Enables old style mongodb-exporter metrics                                                                                    | `true`                     |
+| `metrics.collector.all`                      | Enable all collectors. Same as enabling all individual metrics                                                                | `false`                    |
+| `metrics.collector.diagnosticdata`           | Boolean Enable collecting metrics from getDiagnosticData                                                                      | `true`                     |
+| `metrics.collector.replicasetstatus`         | Boolean Enable collecting metrics from replSetGetStatus                                                                       | `true`                     |
+| `metrics.collector.dbstats`                  | Boolean Enable collecting metrics from dbStats                                                                                | `false`                    |
+| `metrics.collector.topmetrics`               | Boolean Enable collecting metrics from top admin command                                                                      | `false`                    |
+| `metrics.collector.indexstats`               | Boolean Enable collecting metrics from $indexStats                                                                            | `false`                    |
+| `metrics.collector.collstats`                | Boolean Enable collecting metrics from $collStats                                                                             | `false`                    |
+| `metrics.collector.collstatsColls`           | List of \<databases\>.\<collections\> to get $collStats                                                                       | `[]`                       |
+| `metrics.collector.indexstatsColls`          | List - List of \<databases\>.\<collections\> to get $indexStats                                                               | `[]`                       |
+| `metrics.collector.collstatsLimit`           | Number - Disable collstats, dbstats, topmetrics and indexstats collector if there are more than \<n\> collections. 0=No limit | `0`                        |
+| `metrics.extraFlags`                         | String with extra flags to the metrics exporter                                                                               | `""`                       |
+| `metrics.command`                            | Override default container command (useful when using custom images)                                                          | `[]`                       |
+| `metrics.args`                               | Override default container args (useful when using custom images)                                                             | `[]`                       |
+| `metrics.resources.limits`                   | The resources limits for Prometheus exporter containers                                                                       | `{}`                       |
+| `metrics.resources.requests`                 | The requested resources for Prometheus exporter containers                                                                    | `{}`                       |
+| `metrics.containerPort`                      | Port of the Prometheus metrics container                                                                                      | `9216`                     |
+| `metrics.service.annotations`                | Annotations for Prometheus Exporter pods. Evaluated as a template.                                                            | `{}`                       |
+| `metrics.service.type`                       | Type of the Prometheus metrics service                                                                                        | `ClusterIP`                |
+| `metrics.service.ports.metrics`              | Port of the Prometheus metrics service                                                                                        | `9216`                     |
+| `metrics.service.extraPorts`                 | Extra ports to expose (normally used with the `sidecar` value)                                                                | `[]`                       |
+| `metrics.livenessProbe.enabled`              | Enable livenessProbe                                                                                                          | `true`                     |
+| `metrics.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                                                       | `15`                       |
+| `metrics.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                                              | `5`                        |
+| `metrics.livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                                                             | `10`                       |
+| `metrics.livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                                                           | `3`                        |
+| `metrics.livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                                                           | `1`                        |
+| `metrics.readinessProbe.enabled`             | Enable readinessProbe                                                                                                         | `true`                     |
+| `metrics.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                                                      | `5`                        |
+| `metrics.readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                                                             | `5`                        |
+| `metrics.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                                            | `10`                       |
+| `metrics.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                                                          | `3`                        |
+| `metrics.readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                                                          | `1`                        |
+| `metrics.startupProbe.enabled`               | Enable startupProbe                                                                                                           | `false`                    |
+| `metrics.startupProbe.initialDelaySeconds`   | Initial delay seconds for startupProbe                                                                                        | `5`                        |
+| `metrics.startupProbe.periodSeconds`         | Period seconds for startupProbe                                                                                               | `10`                       |
+| `metrics.startupProbe.timeoutSeconds`        | Timeout seconds for startupProbe                                                                                              | `5`                        |
+| `metrics.startupProbe.failureThreshold`      | Failure threshold for startupProbe                                                                                            | `30`                       |
+| `metrics.startupProbe.successThreshold`      | Success threshold for startupProbe                                                                                            | `1`                        |
+| `metrics.customLivenessProbe`                | Override default liveness probe for MongoDB(&reg;) containers                                                                 | `{}`                       |
+| `metrics.customReadinessProbe`               | Override default readiness probe for MongoDB(&reg;) containers                                                                | `{}`                       |
+| `metrics.customStartupProbe`                 | Override default startup probe for MongoDB(&reg;) containers                                                                  | `{}`                       |
+| `metrics.extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for the metrics container(s)                                         | `[]`                       |
+| `metrics.serviceMonitor.enabled`             | Create ServiceMonitor Resource for scraping metrics using Prometheus Operator                                                 | `false`                    |
+| `metrics.serviceMonitor.namespace`           | Namespace which Prometheus is running in                                                                                      | `""`                       |
+| `metrics.serviceMonitor.interval`            | Interval at which metrics should be scraped                                                                                   | `30s`                      |
+| `metrics.serviceMonitor.scrapeTimeout`       | Specify the timeout after which the scrape is ended                                                                           | `""`                       |
+| `metrics.serviceMonitor.relabelings`         | RelabelConfigs to apply to samples before scraping.                                                                           | `[]`                       |
+| `metrics.serviceMonitor.metricRelabelings`   | MetricsRelabelConfigs to apply to samples before ingestion.                                                                   | `[]`                       |
+| `metrics.serviceMonitor.labels`              | Used to pass Labels that are used by the Prometheus installed in your cluster to select Service Monitors to work with         | `{}`                       |
+| `metrics.serviceMonitor.selector`            | Prometheus instance selector labels                                                                                           | `{}`                       |
+| `metrics.serviceMonitor.honorLabels`         | Specify honorLabels parameter to add the scrape endpoint                                                                      | `false`                    |
+| `metrics.serviceMonitor.jobLabel`            | The name of the label on the target service to use as the job name in prometheus.                                             | `""`                       |
+| `metrics.prometheusRule.enabled`             | Set this to true to create prometheusRules for Prometheus operator                                                            | `false`                    |
+| `metrics.prometheusRule.additionalLabels`    | Additional labels that can be used so prometheusRules will be discovered by Prometheus                                        | `{}`                       |
+| `metrics.prometheusRule.namespace`           | Namespace where prometheusRules resource should be created                                                                    | `""`                       |
+| `metrics.prometheusRule.rules`               | Rules to be created, check values for an example                                                                              | `[]`                       |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
 helm install my-release \
     --set auth.rootPassword=secretpassword,auth.username=my-user,auth.password=my-password,auth.database=my-database \
-    my-repo/mongodb
+    oci://registry-1.docker.io/bitnamicharts/mongodb
 ```
 
 The above command sets the MongoDB(&reg;) `root` account password to `secretpassword`. Additionally, it creates a standard database user named `my-user`, with the password `my-password`, who has access to a database named `my-database`.
@@ -572,7 +582,7 @@ The above command sets the MongoDB(&reg;) `root` account password to `secretpass
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml my-repo/mongodb
+helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/mongodb
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -656,7 +666,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 If authentication is enabled, it's necessary to set the `auth.rootPassword` (also `auth.replicaSetKey` when using a replicaset architecture) when upgrading for readiness/liveness probes to work properly. When you install this chart for the first time, some notes will be displayed providing the credentials you must use under the 'Credentials' section. Please note down the password, and run the command below to upgrade your chart:
 
 ```console
-helm upgrade my-release my-repo/mongodb --set auth.rootPassword=[PASSWORD] (--set auth.replicaSetKey=[REPLICASETKEY])
+helm upgrade my-release oci://registry-1.docker.io/bitnamicharts/mongodb --set auth.rootPassword=[PASSWORD] (--set auth.replicaSetKey=[REPLICASETKEY])
 ```
 
 > Note: you need to substitute the placeholders [PASSWORD] and [REPLICASETKEY] with the values obtained in the installation notes.
@@ -722,8 +732,8 @@ From this version, the way of setting the ingress rules has changed. Instead of 
 ```yaml
 ingress:
   hosts:
-  - name: mongodb.local
-    path: /
+    - name: mongodb.local
+      path: /
 ```
 
 ### To 6.0.0

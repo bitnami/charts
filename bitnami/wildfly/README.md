@@ -8,11 +8,12 @@ Wildfly is a lightweight, open source application server, formerly known as JBos
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 
+Looking to use WildFly in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+
 ## TL;DR
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/wildfly
+helm install my-release oci://registry-1.docker.io/bitnamicharts/wildfly
 ```
 
 ## Introduction
@@ -35,8 +36,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/wildfly
+helm install my-release oci://registry-1.docker.io/bitnamicharts/wildfly
 ```
 
 These commands deploy WildFly on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -80,15 +80,15 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### WildFly Image parameters
 
-| Name                | Description                                                                                             | Value                  |
-| ------------------- | ------------------------------------------------------------------------------------------------------- | ---------------------- |
-| `image.registry`    | WildFly image registry                                                                                  | `docker.io`            |
-| `image.repository`  | WildFly image repository                                                                                | `bitnami/wildfly`      |
-| `image.tag`         | WildFly image tag (immutable tags are recommended)                                                      | `27.0.1-debian-11-r35` |
-| `image.digest`      | WildFly image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
-| `image.pullPolicy`  | WildFly image pull policy                                                                               | `IfNotPresent`         |
-| `image.pullSecrets` | WildFly image pull secrets                                                                              | `[]`                   |
-| `image.debug`       | Enable image debug mode                                                                                 | `false`                |
+| Name                | Description                                                                                             | Value                 |
+| ------------------- | ------------------------------------------------------------------------------------------------------- | --------------------- |
+| `image.registry`    | WildFly image registry                                                                                  | `docker.io`           |
+| `image.repository`  | WildFly image repository                                                                                | `bitnami/wildfly`     |
+| `image.tag`         | WildFly image tag (immutable tags are recommended)                                                      | `28.0.0-debian-11-r4` |
+| `image.digest`      | WildFly image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
+| `image.pullPolicy`  | WildFly image pull policy                                                                               | `IfNotPresent`        |
+| `image.pullSecrets` | WildFly image pull secrets                                                                              | `[]`                  |
+| `image.debug`       | Enable image debug mode                                                                                 | `false`               |
 
 ### WildFly Configuration parameters
 
@@ -215,7 +215,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                   | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`               | `false`                 |
 | `volumePermissions.image.registry`            | Bitnami Shell image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`          | Bitnami Shell image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r102`     |
+| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r113`     |
 | `volumePermissions.image.digest`              | Bitnami Shell image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`          | Bitnami Shell image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`         | Bitnami Shell image pull secrets                                                                              | `[]`                    |
@@ -230,7 +230,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 helm install my-release \
   --set wildflyUser=manager,wildflyPassword=password \
-    my-repo/wildfly
+    oci://registry-1.docker.io/bitnamicharts/wildfly
 ```
 
 The above command sets the WildFly management username and password to `manager` and `password` respectively.
@@ -240,7 +240,7 @@ The above command sets the WildFly management username and password to `manager`
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml my-repo/wildfly
+helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/wildfly
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -318,7 +318,7 @@ Consequences:
 ```console
 export WILDFLY_PASSWORD=$(kubectl get secret --namespace default wildfly -o jsonpath="{.data.wildfly-password}" | base64 -d)
 kubectl delete deployments.apps wildfly
-helm upgrade wildfly my-repo/wildfly --set wildflyPassword=$WILDFLY_PASSWORD
+helm upgrade wildfly oci://registry-1.docker.io/bitnamicharts/wildfly --set wildflyPassword=$WILDFLY_PASSWORD
 ```
 
 ### To 6.0.0
@@ -332,13 +332,13 @@ helm upgrade wildfly my-repo/wildfly --set wildflyPassword=$WILDFLY_PASSWORD
 WildFly container was moved to a non-root approach. There shouldn't be any issue when upgrading since the corresponding `securityContext` is enabled by default. Both the container image and the chart can be upgraded by running the command below:
 
 ```console
-helm upgrade my-release my-repo/wildfly
+helm upgrade my-release oci://registry-1.docker.io/bitnamicharts/wildfly
 ```
 
 If you use a previous container image (previous to **14.0.1-r75**) disable the `securityContext` by running the command below:
 
 ```console
-helm upgrade my-release my-repo/wildfly --set securityContext.enabled=false,image.tag=XXX
+helm upgrade my-release oci://registry-1.docker.io/bitnamicharts/wildfly --set securityContext.enabled=false,image.tag=XXX
 ```
 
 ### To 1.0.0

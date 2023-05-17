@@ -1,21 +1,17 @@
 <!-- markdownlint-disable-next-line -->
-[![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/bitnami)](https://artifacthub.io/packages/search?repo=bitnami)
-<!-- markdownlint-disable-next-line -->
-[![CD Pipeline](https://github.com/bitnami/charts/actions/workflows/cd-pipeline.yml/badge.svg)](https://github.com/bitnami/charts/actions/workflows/cd-pipeline.yml)
+[![Artifact Hub](https://img.shields.io/endpoint?url=https://artifacthub.io/badge/repository/bitnami)](https://artifacthub.io/packages/search?repo=bitnami) [![CD Pipeline](https://github.com/bitnami/charts/actions/workflows/cd-pipeline.yml/badge.svg)](https://github.com/bitnami/charts/actions/workflows/cd-pipeline.yml)
 
 # The Bitnami Library for Kubernetes
 
 Popular applications, provided by [Bitnami](https://bitnami.com), ready to launch on Kubernetes using [Kubernetes Helm](https://github.com/helm/helm).
 
+Looking to use our applications in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+
 ## TL;DR
 
 ```bash
-helm repo add bitnami https://charts.bitnami.com/bitnami
-helm search repo bitnami
-helm install my-release bitnami/<chart>
+helm install my-release oci://registry-1.docker.io/bitnamicharts/<chart>
 ```
-
-![Installing a chart](demo.gif)
 
 ## Vulnerabilities scanner
 
@@ -50,20 +46,6 @@ Helm is a tool for managing Kubernetes charts. Charts are packages of pre-config
 
 To install Helm, refer to the [Helm install guide](https://github.com/helm/helm#install) and ensure that the `helm` binary is in the `PATH` of your shell.
 
-### Add Repo
-
-The following command allows you to download and install all the charts from this repository:
-
-```bash
-helm repo add bitnami https://charts.bitnami.com/bitnami
-```
-
-> **_NOTE:_** It is important to note that the above mentioned repo is truncated so it only contains entries for the releases produced in the last 6 months. In case you need a full index, you can use it from the [archive-full-index branch](https://raw.githubusercontent.com/bitnami/charts/archive-full-index/bitnami/index.yaml) in the bitnami/charts Github repository.
->
-> This full index is updated every time the [truncated index file](https://raw.githubusercontent.com/bitnami/charts/index/bitnami/index.yaml) is updated. Take into account that this full index is under the [Github's rate limits](https://docs.github.com/en/developers/apps/building-github-apps/rate-limits-for-github-apps).
->
-> You can find more information in the [Bitnami index FAQ](https://github.com/bitnami/charts/issues/10833) pinned issue.
-
 ### Using Helm
 
 Once you have installed the Helm client, you can deploy a Bitnami Helm Chart into a Kubernetes cluster.
@@ -72,9 +54,8 @@ Please refer to the [Quick Start guide](https://helm.sh/docs/intro/quickstart/) 
 
 Useful Helm Client Commands:
 
-- View available charts: `helm search repo`
-- Install a chart: `helm install my-release bitnami/<package-name>`
-- Upgrade your application: `helm upgrade`
+- Install a chart: `helm install my-release oci://registry-1.docker.io/bitnamicharts/<chart>`
+- Upgrade your application: `helm upgrade my-release oci://registry-1.docker.io/bitnamicharts/<chart>`
 
 ## License
 

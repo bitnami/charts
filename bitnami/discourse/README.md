@@ -8,11 +8,12 @@ Discourse is an open source discussion platform with built-in moderation and gov
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 
+Looking to use Discourse&reg; in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+
 ## TL;DR
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/discourse
+helm install my-release oci://registry-1.docker.io/bitnamicharts/discourse
 ```
 
 ## Introduction
@@ -35,8 +36,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/discourse
+helm install my-release oci://registry-1.docker.io/bitnamicharts/discourse
 ```
 
 The command deploys Discourse on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -84,7 +84,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | -------------------- |
 | `image.registry`                | Discourse image registry                                                                                                 | `docker.io`          |
 | `image.repository`              | Discourse image repository                                                                                               | `bitnami/discourse`  |
-| `image.tag`                     | Discourse image tag                                                                                                      | `3.0.2-debian-11-r3` |
+| `image.tag`                     | Discourse image tag                                                                                                      | `3.0.3-debian-11-r7` |
 | `image.digest`                  | Discourse image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                | `""`                 |
 | `image.pullPolicy`              | Discourse image pull policy                                                                                              | `IfNotPresent`       |
 | `image.pullSecrets`             | Discourse image pull secrets                                                                                             | `[]`                 |
@@ -133,6 +133,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                              | Description                                                                                  | Value           |
 | ------------------------------------------------- | -------------------------------------------------------------------------------------------- | --------------- |
 | `discourse.skipInstall`                           | Do not run the Discourse installation wizard                                                 | `false`         |
+| `discourse.plugins`                               | List of plugins to be installed before the container initialization                          | `[]`            |
 | `discourse.command`                               | Custom command to override image cmd                                                         | `[]`            |
 | `discourse.args`                                  | Custom args for the custom command                                                           | `[]`            |
 | `discourse.extraEnvVars`                          | Array with extra environment variables to add Discourse pods                                 | `[]`            |
@@ -251,7 +252,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner and group of the persistent volume                                                   | `false`                 |
 | `volumePermissions.image.registry`                     | Init container volume-permissions image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`                   | Init container volume-permissions image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r102`     |
+| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r114`     |
 | `volumePermissions.image.digest`                       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Init container volume-permissions image pull secrets                                                                              | `[]`                    |
@@ -331,7 +332,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 helm install my-release \
   --set auth.username=admin,auth.password=password \
-    my-repo/discourse
+    oci://registry-1.docker.io/bitnamicharts/discourse
 ```
 
 The above command sets the Discourse administrator account username and password to `admin` and `password` respectively.
@@ -341,7 +342,7 @@ The above command sets the Discourse administrator account username and password
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml my-repo/discourse
+helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/discourse
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -363,7 +364,7 @@ By default, this Chart only deploys a single pod running Discourse. Should you w
 1. Create a conventional release, that will be scaled later:
 
     ```console
-    helm install my-release my-repo/discourse
+    helm install my-release oci://registry-1.docker.io/bitnamicharts/discourse
     ...
     ```
 
@@ -380,7 +381,7 @@ By default, this Chart only deploys a single pod running Discourse. Should you w
 3. Perform an upgrade specifying the number of replicas and the credentials used.
 
     ```console
-    helm upgrade my-release --set replicaCount=2,discourse.skipInstall=true my-repo/discourse
+    helm upgrade my-release --set replicaCount=2,discourse.skipInstall=true oci://registry-1.docker.io/bitnamicharts/discourse
     ```
 
     Note that for this to work properly, you need to provide ReadWriteMany PVCs. If you don't have a provisioner for this type of storage, we recommend that you install the NFS provisioner chart (with the correct parameters, such as `persistence.enabled=true` and `persistence.size=10Gi`) and map it to a RWO volume.

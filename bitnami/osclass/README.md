@@ -8,11 +8,12 @@ Osclass allows you to easily create a classifieds site without any technical kno
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 
+Looking to use Osclass in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+
 ## TL;DR
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/osclass
+helm install my-release oci://registry-1.docker.io/bitnamicharts/osclass
 ```
 
 ## Introduction
@@ -35,8 +36,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/osclass
+helm install my-release oci://registry-1.docker.io/bitnamicharts/osclass
 ```
 
 The command deploys Osclass on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -76,15 +76,15 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Osclass Image parameters
 
-| Name                | Description                                                                                             | Value                 |
-| ------------------- | ------------------------------------------------------------------------------------------------------- | --------------------- |
-| `image.registry`    | Osclass image registry                                                                                  | `docker.io`           |
-| `image.repository`  | Osclass image repository                                                                                | `bitnami/osclass`     |
-| `image.tag`         | Osclass image tag (immutable tags are recommended)                                                      | `8.1.1-debian-11-r12` |
-| `image.digest`      | Osclass image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
-| `image.pullPolicy`  | Osclass image pull policy                                                                               | `IfNotPresent`        |
-| `image.pullSecrets` | Osclass image pull secrets                                                                              | `[]`                  |
-| `image.debug`       | Enable Bitnami debug mode in Osclass image                                                              | `false`               |
+| Name                | Description                                                                                             | Value                |
+| ------------------- | ------------------------------------------------------------------------------------------------------- | -------------------- |
+| `image.registry`    | Osclass image registry                                                                                  | `docker.io`          |
+| `image.repository`  | Osclass image repository                                                                                | `bitnami/osclass`    |
+| `image.tag`         | Osclass image tag (immutable tags are recommended)                                                      | `8.1.2-debian-11-r2` |
+| `image.digest`      | Osclass image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                 |
+| `image.pullPolicy`  | Osclass image pull policy                                                                               | `IfNotPresent`       |
+| `image.pullSecrets` | Osclass image pull secrets                                                                              | `[]`                 |
+| `image.debug`       | Enable Bitnami debug mode in Osclass image                                                              | `false`              |
 
 ### Osclass Configuration parameters
 
@@ -151,7 +151,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `certificates.extraEnvVarsSecret`                    | Secret with extra environment variables                                                                         | `""`                                     |
 | `certificates.image.registry`                        | Apache Exporter image registry                                                                                  | `docker.io`                              |
 | `certificates.image.repository`                      | Apache Exporter image repository                                                                                | `bitnami/bitnami-shell`                  |
-| `certificates.image.tag`                             | Apache Exporter image tag (immutable tags are recommended)                                                      | `11-debian-11-r105`                      |
+| `certificates.image.tag`                             | Apache Exporter image tag (immutable tags are recommended)                                                      | `11-debian-11-r113`                      |
 | `certificates.image.digest`                          | Apache Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                                     |
 | `certificates.image.pullPolicy`                      | Apache Exporter image pull policy                                                                               | `IfNotPresent`                           |
 | `certificates.image.pullSecrets`                     | Apache Exporter image pull secrets                                                                              | `[]`                                     |
@@ -247,7 +247,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`               | `false`                 |
 | `volumePermissions.image.registry`         | Bitnami Shell image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`       | Bitnami Shell image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`              | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r105`     |
+| `volumePermissions.image.tag`              | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r113`     |
 | `volumePermissions.image.digest`           | Bitnami Shell image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`       | Bitnami Shell image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`      | Bitnami Shell image pull secrets                                                                              | `[]`                    |
@@ -274,7 +274,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                          | Start a sidecar prometheus exporter to expose metrics                                                           | `false`                   |
 | `metrics.image.registry`                   | Apache Exporter image registry                                                                                  | `docker.io`               |
 | `metrics.image.repository`                 | Apache Exporter image repository                                                                                | `bitnami/apache-exporter` |
-| `metrics.image.tag`                        | Apache Exporter image tag (immutable tags are recommended)                                                      | `0.13.1-debian-11-r4`     |
+| `metrics.image.tag`                        | Apache Exporter image tag (immutable tags are recommended)                                                      | `0.13.3-debian-11-r4`     |
 | `metrics.image.digest`                     | Apache Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
 | `metrics.image.pullPolicy`                 | Apache Exporter image pull policy                                                                               | `IfNotPresent`            |
 | `metrics.image.pullSecrets`                | Apache Exporter image pull secrets                                                                              | `[]`                      |
@@ -322,7 +322,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 helm install my-release \
   --set osclassUsername=admin,osclassPassword=password,mariadb.auth.rootPassword=secretpassword \
-    my-repo/osclass
+    oci://registry-1.docker.io/bitnamicharts/osclass
 ```
 
 The above command sets the Osclass administrator account username and password to `admin` and `password` respectively. Additionally, it sets the MariaDB `root` user password to `secretpassword`.
@@ -332,7 +332,7 @@ The above command sets the Osclass administrator account username and password t
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml my-repo/osclass
+helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/osclass
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -411,6 +411,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 15.0.0
+
+This major release bumps the MariaDB version to 10.11. Follow the [upstream instructions](https://mariadb.com/kb/en/upgrading-from-mariadb-10-6-to-mariadb-10-11/) for upgrading from MariaDB 10.6 to 10.11. No major issues are expected during the upgrade.
+
 ### To 14.0.0
 
 This major release bumps the MariaDB version to 10.6. Follow the [upstream instructions](https://mariadb.com/kb/en/upgrading-from-mariadb-105-to-mariadb-106/) for upgrading from MariaDB 10.5 to 10.6. No major issues are expected during the upgrade.
@@ -457,7 +461,7 @@ export APP_PASSWORD=$(kubectl get secret --namespace default osclass -o jsonpath
 export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default osclass-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 -d)
 export MARIADB_PASSWORD=$(kubectl get secret --namespace default osclass-mariadb -o jsonpath="{.data.mariadb-password}" | base64 -d)
 kubectl delete deployments.apps osclass
-helm upgrade osclass my-repo/osclass --set osclassHost=$APP_HOST,osclassPassword=$APP_PASSWORD,mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD,mariadb.auth.password=$MARIADB_PASSWORD
+helm upgrade osclass oci://registry-1.docker.io/bitnamicharts/osclass --set osclassHost=$APP_HOST,osclassPassword=$APP_PASSWORD,mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD,mariadb.auth.password=$MARIADB_PASSWORD
 ```
 
 ### To 8.0.0
@@ -521,7 +525,7 @@ Delete the Osclass deployment and delete the MariaDB statefulset. Notice the opt
 Now the upgrade works:
 
 ```console
-helm upgrade osclass my-repo/osclass --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set osclassPassword=$OSCLASS_PASSWORD --set osclassHost=$OSCLASS_HOST
+helm upgrade osclass oci://registry-1.docker.io/bitnamicharts/osclass --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set osclassPassword=$OSCLASS_PASSWORD --set osclassHost=$OSCLASS_HOST
 ```
 
 You will have to delete the existing MariaDB pod and the new statefulset is going to create a new one

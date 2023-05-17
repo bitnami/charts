@@ -5,22 +5,21 @@ apiVersion: v2
 appVersion: 1.15.2
 dependencies:
   - name: common
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     tags:
       - bitnami-common
     version: 2.x.x
 description: HashiCorp Consul is a tool for discovering and configuring services in your infrastructure.
-home: https://github.com/bitnami/charts/tree/main/bitnami/consul
+home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/consul/img/consul-stack-220x234.png
 keywords:
   - discovering
   - configuring
   - services
 maintainers:
-  - name: Bitnami
+  - name: VMware, Inc.
     url: https://github.com/bitnami/charts
 name: consul
 sources:
-  - https://github.com/bitnami/containers/tree/main/bitnami/consul
-  - https://www.consul.io/
-version: 10.10.2
+  - https://github.com/bitnami/charts/tree/main/bitnami/consul
+version: 10.12.0

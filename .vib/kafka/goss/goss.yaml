@@ -9,7 +9,7 @@ file:
     filetype: directory
     mode: "2777"
     owner: root
-  /opt/bitnami/kafka/config/server.properties:
+  /opt/bitnami/kafka/config/kraft/server.properties:
     exists: true
     filetype: file
     mode: "0664"
@@ -17,7 +17,7 @@ file:
     group: root
     contains:
     - super.users={{ .Vars.superUsers }}
-    - listeners=INTERNAL://:{{ .Vars.containerPorts.internal }},CLIENT://:{{ .Vars.containerPorts.client }},EXTERNAL://:{{ .Vars.containerPorts.external }}
+    - listeners=INTERNAL://:{{ .Vars.containerPorts.internal }},CLIENT://:{{ .Vars.containerPorts.client }},CONTROLLER://:{{ .Vars.containerPorts.controller }},EXTERNAL://:{{ .Vars.containerPorts.external }}
 command:
   create-kafka-topic:
     exec: kafka-topics.sh --create --topic quickstart-events{{randAlpha 5}} --bootstrap-server kafka:{{ .Vars.externalAccess.service.ports.client }}

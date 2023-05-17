@@ -28,7 +28,7 @@ host. To configure Mastodon with the URL of your service:
   {{- end }}
 2. Complete your Mastodon deployment by running:
 
-  helm upgrade --namespace {{ include "common.names.namespace" . }} {{ .Release.Name }} my-repo/{{ .Chart.Name }} \
+  helm upgrade --namespace {{ include "common.names.namespace" . }} {{ .Release.Name }} oci://registry-1.docker.io/bitnamicharts/{{ .Chart.Name }} \
     --set webDomain=$APP_HOST{{- if .Values.global }}{{- if .Values.global.imagePullSecrets }},global.imagePullSecrets={{ .Values.global.imagePullSecrets }}{{- end }}{{- end }}
 
 {{- else if .Values.diagnosticMode.enabled }}

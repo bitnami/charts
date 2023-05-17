@@ -11,8 +11,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/postgresql-ha
+helm install my-release oci://registry-1.docker.io/bitnamicharts/postgresql-ha
 ```
 
 ## Introduction
@@ -36,8 +35,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/postgresql-ha
+helm install my-release oci://registry-1.docker.io/bitnamicharts/postgresql-ha
 ```
 
 ## Uninstalling the Chart
@@ -94,7 +92,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | ------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
 | `postgresql.image.registry`                                  | PostgreSQL with Repmgr image registry                                                                                                                                                                         | `docker.io`                 |
 | `postgresql.image.repository`                                | PostgreSQL with Repmgr image repository                                                                                                                                                                       | `bitnami/postgresql-repmgr` |
-| `postgresql.image.tag`                                       | PostgreSQL with Repmgr image tag                                                                                                                                                                              | `15.2.0-debian-11-r16`      |
+| `postgresql.image.tag`                                       | PostgreSQL with Repmgr image tag                                                                                                                                                                              | `15.3.0-debian-11-r0`       |
 | `postgresql.image.digest`                                    | PostgreSQL image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                    | `""`                        |
 | `postgresql.image.pullPolicy`                                | PostgreSQL with Repmgr image pull policy                                                                                                                                                                      | `IfNotPresent`              |
 | `postgresql.image.pullSecrets`                               | Specify docker-registry secret names as an array                                                                                                                                                              | `[]`                        |
@@ -218,6 +216,8 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `postgresql.tls.certificatesSecret`                          | Name of an existing secret that contains the certificates                                                                                                                                                     | `""`                        |
 | `postgresql.tls.certFilename`                                | Certificate filename                                                                                                                                                                                          | `""`                        |
 | `postgresql.tls.certKeyFilename`                             | Certificate key filename                                                                                                                                                                                      | `""`                        |
+| `postgresql.preStopDelayAfterPgStopSeconds`                  | Minimal number of seconds preStop hook waits after postgres instance is stopped                                                                                                                               | `25`                        |
+| `postgresql.headlessWithNotReadyAddresses`                   | set postgres headless service into publishNotReadyAddresses mode                                                                                                                                              | `false`                     |
 | `witness.create`                                             | Create PostgreSQL witness nodes                                                                                                                                                                               | `false`                     |
 | `witness.labels`                                             | Labels to add to the StatefulSet. Evaluated as template                                                                                                                                                       | `{}`                        |
 | `witness.podLabels`                                          | Labels to add to the StatefulSet pods. Evaluated as template                                                                                                                                                  | `{}`                        |
@@ -321,7 +321,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | -------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
 | `pgpool.image.registry`                                  | Pgpool image registry                                                                                                                    | `docker.io`           |
 | `pgpool.image.repository`                                | Pgpool image repository                                                                                                                  | `bitnami/pgpool`      |
-| `pgpool.image.tag`                                       | Pgpool image tag                                                                                                                         | `4.4.2-debian-11-r18` |
+| `pgpool.image.tag`                                       | Pgpool image tag                                                                                                                         | `4.4.2-debian-11-r32` |
 | `pgpool.image.digest`                                    | Pgpool image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                   | `""`                  |
 | `pgpool.image.pullPolicy`                                | Pgpool image pull policy                                                                                                                 | `IfNotPresent`        |
 | `pgpool.image.pullSecrets`                               | Specify docker-registry secret names as an array                                                                                         | `[]`                  |
@@ -461,7 +461,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `metrics.enabled`                            | Enable PostgreSQL Prometheus exporter                                                                                                                     | `false`                     |
 | `metrics.image.registry`                     | PostgreSQL Prometheus exporter image registry                                                                                                             | `docker.io`                 |
 | `metrics.image.repository`                   | PostgreSQL Prometheus exporter image repository                                                                                                           | `bitnami/postgres-exporter` |
-| `metrics.image.tag`                          | PostgreSQL Prometheus exporter image tag                                                                                                                  | `0.12.0-debian-11-r72`      |
+| `metrics.image.tag`                          | PostgreSQL Prometheus exporter image tag                                                                                                                  | `0.12.0-debian-11-r86`      |
 | `metrics.image.digest`                       | PostgreSQL Prometheus exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                            | `""`                        |
 | `metrics.image.pullPolicy`                   | PostgreSQL Prometheus exporter image pull policy                                                                                                          | `IfNotPresent`              |
 | `metrics.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                                                          | `[]`                        |
@@ -523,7 +523,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `volumePermissions.enabled`                      | Enable init container to adapt volume permissions                                                                                 | `false`                 |
 | `volumePermissions.image.registry`               | Init container volume-permissions image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`             | Init container volume-permissions image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                    | Init container volume-permissions image tag                                                                                       | `11-debian-11-r102`     |
+| `volumePermissions.image.tag`                    | Init container volume-permissions image tag                                                                                       | `11-debian-11-r115`     |
 | `volumePermissions.image.digest`                 | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`             | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`            | Specify docker-registry secret names as an array                                                                                  | `[]`                    |
@@ -573,7 +573,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 helm install my-release \
     --set postgresql.password=password \
-    my-repo/postgresql-ha
+    oci://registry-1.docker.io/bitnamicharts/postgresql-ha
 ```
 
 The above command sets the password for user `postgres` to `password`.
@@ -755,7 +755,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 It's necessary to specify the existing passwords while performing a upgrade to ensure the secrets are not updated with invalid randomly generated passwords. Remember to specify the existing values of the `postgresql.password` and `postgresql.repmgrPassword` parameters when upgrading the chart:
 
 ```console
-helm upgrade my-release my-repo/postgresql-ha \
+helm upgrade my-release oci://registry-1.docker.io/bitnamicharts/postgresql-ha \
     --set postgresql.password=[POSTGRES_PASSWORD] \
     --set postgresql.repmgrPassword=[REPMGR_PASSWORD]
 ```
@@ -796,7 +796,7 @@ A new major version of repmgr (5.3) was included. To upgrade to this major versi
 - Reduce your PostgreSQL setup to one replica (primary node) and upgrade to `8.0.0`, enabling the repmgr extension upgrade:
 
 ```console
-helm upgrade my-release --version 8.0.0 my-repo/postgresql-ha \
+helm upgrade my-release --version 8.0.0 oci://registry-1.docker.io/bitnamicharts/postgresql-ha \
     --set postgresql.password=[POSTGRESQL_PASSWORD] \
     --set postgresql.repmgrPassword=[REPMGR_PASSWORD] \
     --set postgresql.replicaCount=1 \
@@ -806,7 +806,7 @@ helm upgrade my-release --version 8.0.0 my-repo/postgresql-ha \
 - Scale your PostgreSQL setup to the original number of replicas:
 
 ```console
-helm upgrade my-release --version 8.0.0 my-repo/postgresql-ha \
+helm upgrade my-release --version 8.0.0 oci://registry-1.docker.io/bitnamicharts/postgresql-ha \
     --set postgresql.password=[POSTGRESQL_PASSWORD] \
     --set postgresql.repmgrPassword=[REPMGR_PASSWORD] \
     --set postgresql.replicaCount=[NUMBER_OF_REPLICAS]
@@ -849,7 +849,7 @@ A new  version of repmgr (5.2.0) was included. To upgrade to this version, it's 
 - Reduce your PostgreSQL setup to one replica (primary node) and upgrade to `5.2.0`, enabling the repmgr extension upgrade:
 
 ```console
-helm upgrade my-release --version 5.2.0 my-repo/postgresql-ha \
+helm upgrade my-release --version 5.2.0 oci://registry-1.docker.io/bitnamicharts/postgresql-ha \
     --set postgresql.password=[POSTGRESQL_PASSWORD] \
     --set postgresql.repmgrPassword=[REPMGR_PASSWORD] \
     --set postgresql.replicaCount=1 \
@@ -859,7 +859,7 @@ helm upgrade my-release --version 5.2.0 my-repo/postgresql-ha \
 - Scale your PostgreSQL setup to the original number of replicas:
 
 ```console
-helm upgrade my-release --version 5.2.0 my-repo/postgresql-ha \
+helm upgrade my-release --version 5.2.0 oci://registry-1.docker.io/bitnamicharts/postgresql-ha \
     --set postgresql.password=[POSTGRESQL_PASSWORD] \
     --set postgresql.repmgrPassword=[REPMGR_PASSWORD] \
     --set postgresql.replicaCount=[NUMBER_OF_REPLICAS]
@@ -879,7 +879,7 @@ $ # e.g. Previous deployment v3.9.1
 helm install my-release \
     --set postgresql.password=[POSTGRESQL_PASSWORD] \
     --set postgresql.repmgrPassword=[REPMGR_PASSWORD] \
-    my-repo/postgresql-ha --version 3.9.1
+    oci://registry-1.docker.io/bitnamicharts/postgresql-ha --version 3.9.1
 
 $ # Update repository information
 helm repo update
@@ -889,7 +889,7 @@ helm delete my-release
 helm install my-release \
     --set postgresql.password=[POSTGRESQL_PASSWORD] \
     --set postgresql.repmgrPassword=[REPMGR_PASSWORD] \
-    my-repo/postgresql-ha --version 5.0.0
+    oci://registry-1.docker.io/bitnamicharts/postgresql-ha --version 5.0.0
 ```
 
 ### To 4.0.x
@@ -903,7 +903,7 @@ A new major version of repmgr (5.1.0) was included. To upgrade to this major ver
 - Reduce your PostgreSQL setup to one replica (primary node) and upgrade to `3.0.0`, enabling the repmgr extension upgrade:
 
 ```console
-helm upgrade my-release --version 3.0.0 my-repo/postgresql-ha \
+helm upgrade my-release --version 3.0.0 oci://registry-1.docker.io/bitnamicharts/postgresql-ha \
     --set postgresql.password=[POSTGRESQL_PASSWORD] \
     --set postgresql.repmgrPassword=[REPMGR_PASSWORD] \
     --set postgresql.replicaCount=1 \
@@ -913,7 +913,7 @@ helm upgrade my-release --version 3.0.0 my-repo/postgresql-ha \
 - Scale your PostgreSQL setup to the original number of replicas:
 
 ```console
-helm upgrade my-release --version 3.0.0 my-repo/postgresql-ha \
+helm upgrade my-release --version 3.0.0 oci://registry-1.docker.io/bitnamicharts/postgresql-ha \
     --set postgresql.password=[POSTGRESQL_PASSWORD] \
     --set postgresql.repmgrPassword=[REPMGR_PASSWORD] \
     --set postgresql.replicaCount=[NUMBER_OF_REPLICAS]
@@ -937,7 +937,7 @@ A new major version of repmgr (5.0.0) was included. To upgrade to this major ver
 - Reduce your PostgreSQL setup to one replica (primary node) and upgrade to `1.0.0`, enabling the repmgr extension upgrade:
 
 ```console
-helm upgrade my-release --version 1.0.0 my-repo/postgresql-ha \
+helm upgrade my-release --version 1.0.0 oci://registry-1.docker.io/bitnamicharts/postgresql-ha \
     --set postgresql.password=[POSTGRESQL_PASSWORD] \
     --set postgresql.repmgrPassword=[REPMGR_PASSWORD] \
     --set postgresql.replicaCount=1 \
@@ -947,7 +947,7 @@ helm upgrade my-release --version 1.0.0 my-repo/postgresql-ha \
 - Scale your PostgreSQL setup to the original number of replicas:
 
 ```console
-helm upgrade my-release --version 1.0.0 my-repo/postgresql-ha \
+helm upgrade my-release --version 1.0.0 oci://registry-1.docker.io/bitnamicharts/postgresql-ha \
     --set postgresql.password=[POSTGRESQL_PASSWORD] \
     --set postgresql.repmgrPassword=[REPMGR_PASSWORD] \
     --set postgresql.replicaCount=[NUMBER_OF_REPLICAS]

@@ -11,8 +11,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/jaeger
+helm install my-release oci://registry-1.docker.io/bitnamicharts/jaeger
 ```
 
 ## Introduction
@@ -33,8 +32,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/jaeger
+helm install my-release oci://registry-1.docker.io/bitnamicharts/jaeger
 ```
 
 These commands deploy jaeger on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -80,7 +78,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | ------------------------------------------------------------------------------------------------------ | --------------------- |
 | `image.registry`    | Jaeger image registry                                                                                  | `docker.io`           |
 | `image.repository`  | Jaeger image repository                                                                                | `bitnami/jaeger`      |
-| `image.tag`         | Jaeger image tag (immutable tags are recommended)                                                      | `1.44.0-debian-11-r0` |
+| `image.tag`         | Jaeger image tag (immutable tags are recommended)                                                      | `1.45.0-debian-11-r5` |
 | `image.digest`      | Jaeger image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
 | `image.pullPolicy`  | image pull policy                                                                                      | `IfNotPresent`        |
 | `image.pullSecrets` | Jaeger image pull secrets                                                                              | `[]`                  |
@@ -356,7 +354,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------------- | --------------------------------------------------------------------------------------------------------- | --------------------- |
 | `cqlshImage.registry`                        | Cassandra image registry                                                                                  | `docker.io`           |
 | `cqlshImage.repository`                      | Cassandra image repository                                                                                | `bitnami/cassandra`   |
-| `cqlshImage.tag`                             | Cassandra image tag (immutable tags are recommended)                                                      | `4.0.8-debian-11-r13` |
+| `cqlshImage.tag`                             | Cassandra image tag (immutable tags are recommended)                                                      | `4.0.9-debian-11-r10` |
 | `cqlshImage.digest`                          | Cassandra image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
 | `cqlshImage.pullPolicy`                      | image pull policy                                                                                         | `IfNotPresent`        |
 | `cqlshImage.pullSecrets`                     | Cassandra image pull secrets                                                                              | `[]`                  |

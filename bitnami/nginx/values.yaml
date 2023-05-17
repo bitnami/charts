@@ -71,7 +71,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/nginx
-  tag: 1.23.4-debian-11-r1
+  tag: 1.24.0-debian-11-r6
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -255,7 +255,6 @@ resources:
   ##    cpu: 100m
   ##    memory: 128Mi
   requests: {}
-
 ## NGINX containers' lifecycleHooks
 ## ref: https://kubernetes.io/docs/concepts/containers/container-lifecycle-hooks/
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/attach-handler-lifecycle-event/
@@ -393,10 +392,12 @@ pdb:
   ## @param pdb.create Created a PodDisruptionBudget
   ##
   create: false
-  ## @param pdb.minAvailable Min number of pods that must still be available after the eviction
+  ## @param pdb.minAvailable Min number of pods that must still be available after the eviction.
+  ## You can specify an integer or a percentage by setting the value to a string representation of a percentage (eg. "50%"). It will be disabled if set to 0
   ##
   minAvailable: 1
-  ## @param pdb.maxUnavailable Max number of pods that can be unavailable after the eviction
+  ## @param pdb.maxUnavailable Max number of pods that can be unavailable after the eviction.
+  ## You can specify an integer or a percentage by setting the value to a string representation of a percentage (eg. "50%"). It will be disabled if set to 0
   ##
   maxUnavailable: 0
 
@@ -421,7 +422,7 @@ cloneStaticSiteFromGit:
   image:
     registry: docker.io
     repository: bitnami/git
-    tag: 2.40.0-debian-11-r5
+    tag: 2.40.1-debian-11-r4
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -463,6 +464,14 @@ cloneStaticSiteFromGit:
     ## @param cloneStaticSiteFromGit.gitSync.args Override default container args for git-repo-syncer
     ##
     args: []
+    ## git-repo-syncer resource requests and limits
+    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+    ## @param cloneStaticSiteFromGit.gitSync.resources.limits The resources limits for the git-repo-syncer container
+    ## @param cloneStaticSiteFromGit.gitSync.resources.requests The requested resources for the git-repo-syncer container
+    ##
+    resources:
+      limits: {}
+      requests: {}
   ## @param cloneStaticSiteFromGit.extraEnvVars Additional environment variables to set for the in the containers that clone static site from git
   ## E.g:
   ## extraEnvVars:
@@ -773,7 +782,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/nginx-exporter
-    tag: 0.11.0-debian-11-r66
+    tag: 0.11.0-debian-11-r79
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

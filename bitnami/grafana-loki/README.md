@@ -8,11 +8,12 @@ Grafana Loki is a horizontally scalable, highly available, and multi-tenant log 
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 
+Looking to use Grafana Loki in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+
 ## TL;DR
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/grafana-loki
+helm install my-release oci://registry-1.docker.io/bitnamicharts/grafana-loki
 ```
 
 ## Introduction
@@ -36,8 +37,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/grafana-loki
+helm install my-release oci://registry-1.docker.io/bitnamicharts/grafana-loki
 ```
 
 The command deploys grafana-loki on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -85,7 +85,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------- | ------------------------------------------------------------------------------------------------------------ | ----------------------- |
 | `loki.image.registry`                 | Grafana Loki image registry                                                                                  | `docker.io`             |
 | `loki.image.repository`               | Grafana Loki image repository                                                                                | `bitnami/grafana-loki`  |
-| `loki.image.tag`                      | Grafana Loki image tag (immutable tags are recommended)                                                      | `2.8.0-debian-11-r0`    |
+| `loki.image.tag`                      | Grafana Loki image tag (immutable tags are recommended)                                                      | `2.8.2-debian-11-r1`    |
 | `loki.image.digest`                   | Grafana Loki image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `loki.image.pullPolicy`               | Grafana Loki image pull policy                                                                               | `IfNotPresent`          |
 | `loki.image.pullSecrets`              | Grafana Loki image pull secrets                                                                              | `[]`                    |
@@ -186,77 +186,77 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Gateway Deployment Parameters
 
-| Name                                            | Description                                                                                           | Value                 |
-| ----------------------------------------------- | ----------------------------------------------------------------------------------------------------- | --------------------- |
-| `gateway.enabled`                               | Enable Gateway deployment                                                                             | `true`                |
-| `gateway.image.registry`                        | Nginx image registry                                                                                  | `docker.io`           |
-| `gateway.image.repository`                      | Nginx image repository                                                                                | `bitnami/nginx`       |
-| `gateway.image.tag`                             | Nginx image tag (immutable tags are recommended)                                                      | `1.23.4-debian-11-r5` |
-| `gateway.image.digest`                          | Nginx image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
-| `gateway.image.pullPolicy`                      | Nginx image pull policy                                                                               | `IfNotPresent`        |
-| `gateway.image.pullSecrets`                     | Nginx image pull secrets                                                                              | `[]`                  |
-| `gateway.image.debug`                           | Enable debugging in the initialization process                                                        | `false`               |
-| `gateway.extraEnvVars`                          | Array with extra environment variables to add to gateway nodes                                        | `[]`                  |
-| `gateway.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars for gateway nodes                                | `""`                  |
-| `gateway.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for gateway nodes                                   | `""`                  |
-| `gateway.command`                               | Override default container command (useful when using custom images)                                  | `[]`                  |
-| `gateway.args`                                  | Override default container args (useful when using custom images)                                     | `[]`                  |
-| `gateway.verboseLogging`                        | Show the gateway access_log                                                                           | `false`               |
-| `gateway.replicaCount`                          | Number of Gateway replicas to deploy                                                                  | `1`                   |
-| `gateway.auth.enabled`                          | Enable basic auth                                                                                     | `false`               |
-| `gateway.auth.username`                         | Basic auth username                                                                                   | `user`                |
-| `gateway.auth.password`                         | Basic auth password                                                                                   | `""`                  |
-| `gateway.auth.existingSecret`                   | Name of a secret containing the Basic auth password                                                   | `""`                  |
-| `gateway.livenessProbe.enabled`                 | Enable livenessProbe on Gateway nodes                                                                 | `true`                |
-| `gateway.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                               | `10`                  |
-| `gateway.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                      | `10`                  |
-| `gateway.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                     | `1`                   |
-| `gateway.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                   | `3`                   |
-| `gateway.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                   | `1`                   |
-| `gateway.readinessProbe.enabled`                | Enable readinessProbe on Gateway nodes                                                                | `true`                |
-| `gateway.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                              | `10`                  |
-| `gateway.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                     | `10`                  |
-| `gateway.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                    | `1`                   |
-| `gateway.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                  | `3`                   |
-| `gateway.readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                  | `1`                   |
-| `gateway.startupProbe.enabled`                  | Enable startupProbe on Gateway containers                                                             | `false`               |
-| `gateway.startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                | `10`                  |
-| `gateway.startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                       | `10`                  |
-| `gateway.startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                      | `1`                   |
-| `gateway.startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                    | `15`                  |
-| `gateway.startupProbe.successThreshold`         | Success threshold for startupProbe                                                                    | `1`                   |
-| `gateway.customLivenessProbe`                   | Custom livenessProbe that overrides the default one                                                   | `{}`                  |
-| `gateway.customReadinessProbe`                  | Custom readinessProbe that overrides the default one                                                  | `{}`                  |
-| `gateway.customStartupProbe`                    | Custom startupProbe that overrides the default one                                                    | `{}`                  |
-| `gateway.containerPorts.http`                   | Gateway HTTP port                                                                                     | `8080`                |
-| `gateway.resources.limits`                      | The resources limits for the gateway containers                                                       | `{}`                  |
-| `gateway.resources.requests`                    | The requested resources for the gateway containers                                                    | `{}`                  |
-| `gateway.podSecurityContext.enabled`            | Enabled Gateway pods' Security Context                                                                | `true`                |
-| `gateway.podSecurityContext.fsGroup`            | Set Gateway pod's Security Context fsGroup                                                            | `1001`                |
-| `gateway.containerSecurityContext.enabled`      | Enabled Gateway containers' Security Context                                                          | `true`                |
-| `gateway.containerSecurityContext.runAsUser`    | Set Gateway containers' Security Context runAsUser                                                    | `1001`                |
-| `gateway.containerSecurityContext.runAsNonRoot` | Set Gateway containers' Security Context runAsNonRoot                                                 | `true`                |
-| `gateway.lifecycleHooks`                        | for the gateway container(s) to automate configuration before or after startup                        | `{}`                  |
-| `gateway.hostAliases`                           | gateway pods host aliases                                                                             | `[]`                  |
-| `gateway.podLabels`                             | Extra labels for gateway pods                                                                         | `{}`                  |
-| `gateway.podAnnotations`                        | Annotations for gateway pods                                                                          | `{}`                  |
-| `gateway.podAffinityPreset`                     | Pod affinity preset. Ignored if `gateway.affinity` is set. Allowed values: `soft` or `hard`           | `""`                  |
-| `gateway.podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `gateway.affinity` is set. Allowed values: `soft` or `hard`      | `soft`                |
-| `gateway.nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `gateway.affinity` is set. Allowed values: `soft` or `hard`     | `""`                  |
-| `gateway.nodeAffinityPreset.key`                | Node label key to match. Ignored if `gateway.affinity` is set                                         | `""`                  |
-| `gateway.nodeAffinityPreset.values`             | Node label values to match. Ignored if `gateway.affinity` is set                                      | `[]`                  |
-| `gateway.affinity`                              | Affinity for Gateway pods assignment                                                                  | `{}`                  |
-| `gateway.nodeSelector`                          | Node labels for Gateway pods assignment                                                               | `{}`                  |
-| `gateway.tolerations`                           | Tolerations for Gateway pods assignment                                                               | `[]`                  |
-| `gateway.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains       | `[]`                  |
-| `gateway.priorityClassName`                     | Gateway pods' priorityClassName                                                                       | `""`                  |
-| `gateway.schedulerName`                         | Kubernetes pod scheduler registry                                                                     | `""`                  |
-| `gateway.updateStrategy.type`                   | Gateway statefulset strategy type                                                                     | `RollingUpdate`       |
-| `gateway.updateStrategy.rollingUpdate`          | Gateway statefulset rolling update configuration parameters                                           | `{}`                  |
-| `gateway.extraVolumes`                          | Optionally specify extra list of additional volumes for the Gateway pod(s)                            | `[]`                  |
-| `gateway.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the Gateway container(s)                 | `[]`                  |
-| `gateway.sidecars`                              | Add additional sidecar containers to the Gateway pod(s)                                               | `[]`                  |
-| `gateway.initContainers`                        | Add additional init containers to the Gateway pod(s)                                                  | `[]`                  |
+| Name                                            | Description                                                                                           | Value                  |
+| ----------------------------------------------- | ----------------------------------------------------------------------------------------------------- | ---------------------- |
+| `gateway.enabled`                               | Enable Gateway deployment                                                                             | `true`                 |
+| `gateway.image.registry`                        | Nginx image registry                                                                                  | `docker.io`            |
+| `gateway.image.repository`                      | Nginx image repository                                                                                | `bitnami/nginx`        |
+| `gateway.image.tag`                             | Nginx image tag (immutable tags are recommended)                                                      | `1.23.4-debian-11-r13` |
+| `gateway.image.digest`                          | Nginx image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
+| `gateway.image.pullPolicy`                      | Nginx image pull policy                                                                               | `IfNotPresent`         |
+| `gateway.image.pullSecrets`                     | Nginx image pull secrets                                                                              | `[]`                   |
+| `gateway.image.debug`                           | Enable debugging in the initialization process                                                        | `false`                |
+| `gateway.extraEnvVars`                          | Array with extra environment variables to add to gateway nodes                                        | `[]`                   |
+| `gateway.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars for gateway nodes                                | `""`                   |
+| `gateway.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for gateway nodes                                   | `""`                   |
+| `gateway.command`                               | Override default container command (useful when using custom images)                                  | `[]`                   |
+| `gateway.args`                                  | Override default container args (useful when using custom images)                                     | `[]`                   |
+| `gateway.verboseLogging`                        | Show the gateway access_log                                                                           | `false`                |
+| `gateway.replicaCount`                          | Number of Gateway replicas to deploy                                                                  | `1`                    |
+| `gateway.auth.enabled`                          | Enable basic auth                                                                                     | `false`                |
+| `gateway.auth.username`                         | Basic auth username                                                                                   | `user`                 |
+| `gateway.auth.password`                         | Basic auth password                                                                                   | `""`                   |
+| `gateway.auth.existingSecret`                   | Name of a secret containing the Basic auth password                                                   | `""`                   |
+| `gateway.livenessProbe.enabled`                 | Enable livenessProbe on Gateway nodes                                                                 | `true`                 |
+| `gateway.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                               | `10`                   |
+| `gateway.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                      | `10`                   |
+| `gateway.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                     | `1`                    |
+| `gateway.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                   | `3`                    |
+| `gateway.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                   | `1`                    |
+| `gateway.readinessProbe.enabled`                | Enable readinessProbe on Gateway nodes                                                                | `true`                 |
+| `gateway.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                              | `10`                   |
+| `gateway.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                     | `10`                   |
+| `gateway.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                    | `1`                    |
+| `gateway.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                  | `3`                    |
+| `gateway.readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                  | `1`                    |
+| `gateway.startupProbe.enabled`                  | Enable startupProbe on Gateway containers                                                             | `false`                |
+| `gateway.startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                | `10`                   |
+| `gateway.startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                       | `10`                   |
+| `gateway.startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                      | `1`                    |
+| `gateway.startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                    | `15`                   |
+| `gateway.startupProbe.successThreshold`         | Success threshold for startupProbe                                                                    | `1`                    |
+| `gateway.customLivenessProbe`                   | Custom livenessProbe that overrides the default one                                                   | `{}`                   |
+| `gateway.customReadinessProbe`                  | Custom readinessProbe that overrides the default one                                                  | `{}`                   |
+| `gateway.customStartupProbe`                    | Custom startupProbe that overrides the default one                                                    | `{}`                   |
+| `gateway.containerPorts.http`                   | Gateway HTTP port                                                                                     | `8080`                 |
+| `gateway.resources.limits`                      | The resources limits for the gateway containers                                                       | `{}`                   |
+| `gateway.resources.requests`                    | The requested resources for the gateway containers                                                    | `{}`                   |
+| `gateway.podSecurityContext.enabled`            | Enabled Gateway pods' Security Context                                                                | `true`                 |
+| `gateway.podSecurityContext.fsGroup`            | Set Gateway pod's Security Context fsGroup                                                            | `1001`                 |
+| `gateway.containerSecurityContext.enabled`      | Enabled Gateway containers' Security Context                                                          | `true`                 |
+| `gateway.containerSecurityContext.runAsUser`    | Set Gateway containers' Security Context runAsUser                                                    | `1001`                 |
+| `gateway.containerSecurityContext.runAsNonRoot` | Set Gateway containers' Security Context runAsNonRoot                                                 | `true`                 |
+| `gateway.lifecycleHooks`                        | for the gateway container(s) to automate configuration before or after startup                        | `{}`                   |
+| `gateway.hostAliases`                           | gateway pods host aliases                                                                             | `[]`                   |
+| `gateway.podLabels`                             | Extra labels for gateway pods                                                                         | `{}`                   |
+| `gateway.podAnnotations`                        | Annotations for gateway pods                                                                          | `{}`                   |
+| `gateway.podAffinityPreset`                     | Pod affinity preset. Ignored if `gateway.affinity` is set. Allowed values: `soft` or `hard`           | `""`                   |
+| `gateway.podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `gateway.affinity` is set. Allowed values: `soft` or `hard`      | `soft`                 |
+| `gateway.nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `gateway.affinity` is set. Allowed values: `soft` or `hard`     | `""`                   |
+| `gateway.nodeAffinityPreset.key`                | Node label key to match. Ignored if `gateway.affinity` is set                                         | `""`                   |
+| `gateway.nodeAffinityPreset.values`             | Node label values to match. Ignored if `gateway.affinity` is set                                      | `[]`                   |
+| `gateway.affinity`                              | Affinity for Gateway pods assignment                                                                  | `{}`                   |
+| `gateway.nodeSelector`                          | Node labels for Gateway pods assignment                                                               | `{}`                   |
+| `gateway.tolerations`                           | Tolerations for Gateway pods assignment                                                               | `[]`                   |
+| `gateway.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains       | `[]`                   |
+| `gateway.priorityClassName`                     | Gateway pods' priorityClassName                                                                       | `""`                   |
+| `gateway.schedulerName`                         | Kubernetes pod scheduler registry                                                                     | `""`                   |
+| `gateway.updateStrategy.type`                   | Gateway statefulset strategy type                                                                     | `RollingUpdate`        |
+| `gateway.updateStrategy.rollingUpdate`          | Gateway statefulset rolling update configuration parameters                                           | `{}`                   |
+| `gateway.extraVolumes`                          | Optionally specify extra list of additional volumes for the Gateway pod(s)                            | `[]`                   |
+| `gateway.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the Gateway container(s)                 | `[]`                   |
+| `gateway.sidecars`                              | Add additional sidecar containers to the Gateway pod(s)                                               | `[]`                   |
+| `gateway.initContainers`                        | Add additional init containers to the Gateway pod(s)                                                  | `[]`                   |
 
 ### Gateway Traffic Exposure Parameters
 
@@ -963,7 +963,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `promtail.enabled`                               | Deploy promtail                                                                                                  | `true`               |
 | `promtail.image.registry`                        | Grafana Promtail image registry                                                                                  | `docker.io`          |
 | `promtail.image.repository`                      | Grafana Promtail image repository                                                                                | `bitnami/promtail`   |
-| `promtail.image.tag`                             | Grafana Promtail image tag (immutable tags are recommended)                                                      | `2.8.0-debian-11-r3` |
+| `promtail.image.tag`                             | Grafana Promtail image tag (immutable tags are recommended)                                                      | `2.8.2-debian-11-r0` |
 | `promtail.image.digest`                          | Grafana Promtail image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                 |
 | `promtail.image.pullPolicy`                      | Grafana Promtail image pull policy                                                                               | `IfNotPresent`       |
 | `promtail.image.pullSecrets`                     | Grafana Promtail image pull secrets                                                                              | `[]`                 |
@@ -1054,7 +1054,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`               | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r106`     |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r113`     |
 | `volumePermissions.image.digest`                       | Bitnami Shell image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                              | `[]`                    |
@@ -1101,7 +1101,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `memcachedchunks.enabled`                 | Deploy memcached sub-chart                                                                                | `true`                 |
 | `memcachedchunks.image.registry`          | Memcached image registry                                                                                  | `docker.io`            |
 | `memcachedchunks.image.repository`        | Memcached image repository                                                                                | `bitnami/memcached`    |
-| `memcachedchunks.image.tag`               | Memcached image tag (immutable tags are recommended)                                                      | `1.6.19-debian-11-r11` |
+| `memcachedchunks.image.tag`               | Memcached image tag (immutable tags are recommended)                                                      | `1.6.19-debian-11-r18` |
 | `memcachedchunks.image.digest`            | Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
 | `memcachedchunks.nameOverride`            | override the subchart name                                                                                | `""`                   |
 | `memcachedchunks.architecture`            | Memcached architecture                                                                                    | `high-availability`    |
@@ -1121,7 +1121,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `memcachedfrontend.enabled`                 | Deploy memcached sub-chart                                                                                | `true`                 |
 | `memcachedfrontend.image.registry`          | Memcached image registry                                                                                  | `docker.io`            |
 | `memcachedfrontend.image.repository`        | Memcached image repository                                                                                | `bitnami/memcached`    |
-| `memcachedfrontend.image.tag`               | Memcached image tag (immutable tags are recommended)                                                      | `1.6.19-debian-11-r11` |
+| `memcachedfrontend.image.tag`               | Memcached image tag (immutable tags are recommended)                                                      | `1.6.19-debian-11-r18` |
 | `memcachedfrontend.image.digest`            | Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
 | `memcachedfrontend.architecture`            | Memcached architecture                                                                                    | `high-availability`    |
 | `memcachedfrontend.nameOverride`            | override the subchart name                                                                                | `""`                   |
@@ -1141,7 +1141,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `memcachedindexqueries.enabled`                 | Deploy memcached sub-chart                                                                                | `true`                 |
 | `memcachedindexqueries.image.registry`          | Memcached image registry                                                                                  | `docker.io`            |
 | `memcachedindexqueries.image.repository`        | Memcached image repository                                                                                | `bitnami/memcached`    |
-| `memcachedindexqueries.image.tag`               | Memcached image tag (immutable tags are recommended)                                                      | `1.6.19-debian-11-r11` |
+| `memcachedindexqueries.image.tag`               | Memcached image tag (immutable tags are recommended)                                                      | `1.6.19-debian-11-r18` |
 | `memcachedindexqueries.image.digest`            | Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
 | `memcachedindexqueries.architecture`            | Memcached architecture                                                                                    | `high-availability`    |
 | `memcachedindexqueries.nameOverride`            | override the subchart name                                                                                | `""`                   |
@@ -1161,7 +1161,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `memcachedindexwrites.enabled`                 | Deploy memcached sub-chart                                                                                | `false`                |
 | `memcachedindexwrites.image.registry`          | Memcached image registry                                                                                  | `docker.io`            |
 | `memcachedindexwrites.image.repository`        | Memcached image repository                                                                                | `bitnami/memcached`    |
-| `memcachedindexwrites.image.tag`               | Memcached image tag (immutable tags are recommended)                                                      | `1.6.19-debian-11-r11` |
+| `memcachedindexwrites.image.tag`               | Memcached image tag (immutable tags are recommended)                                                      | `1.6.19-debian-11-r18` |
 | `memcachedindexwrites.image.digest`            | Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
 | `memcachedindexwrites.architecture`            | Memcached architecture                                                                                    | `high-availability`    |
 | `memcachedindexwrites.nameOverride`            | override the subchart name                                                                                | `""`                   |
@@ -1176,7 +1176,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 helm install my-release \
   --set loki.traces.jaeger.grpc=true \
-  my-repo/grafana-loki
+  oci://registry-1.docker.io/bitnamicharts/grafana-loki
 ```
 
 The above command enables the Jaeger GRPC traces.
@@ -1184,7 +1184,7 @@ The above command enables the Jaeger GRPC traces.
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml my-repo/grafana-loki
+helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/grafana-loki
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)

@@ -1,0 +1,23 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
+** Please be patient while the chart is being deployed **
+
+1. Get the application URL by running these commands:
+
+{{- if contains "NodePort" .Values.service.type }}
+    export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "common.names.fullname" . }})
+    export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
+    echo "HTTP port at $NODE_IP:$NODE_PORT"
+{{- else if contains "LoadBalancer" .Values.service.type }}
+     NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+           You can watch the status of by running 'kubectl get --namespace {{ .Release.Namespace }} svc -w {{ include "common.names.fullname" . }}'
+    export SERVICE_IP=$(kubectl get svc --namespace {{ include "fluent-bit.fullname" . }} {{ include "common.names.fullname" . }} -o jsonpath='{.status.loadBalancer.ingress[0].ip}')
+    echo "HTTP port at $SERVICE_IP:{{ .Values.service.ports.http }}"
+{{- else if contains "ClusterIP" .Values.service.type }}
+    echo "HTTP port at 127.0.0.1:2020"
+    kubectl port-forward svc/{{ include "common.names.fullname" . }} 2020:{{ .Values.service.ports.http }} &
+{{- end }}
+
+{{- include "common.warnings.rollingTag" .Values.image }}

@@ -8,11 +8,12 @@ Whereabouts is a CNI plugin for Kubernetes clusters. It dynamically assigns IP a
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 
+Looking to use Whereabouts in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+
 ## TL;DR
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/whereabouts
+helm install my-release oci://registry-1.docker.io/bitnamicharts/whereabouts
 ```
 
 ## Introduction
@@ -33,8 +34,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/whereabouts
+helm install my-release oci://registry-1.docker.io/bitnamicharts/whereabouts
 ```
 
 The command deploys Whereabouts on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -82,7 +82,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | --------------------------- |
 | `image.registry`                        | Whereabouts image registry                                                                                            | `docker.io`                 |
 | `image.repository`                      | Whereabouts Image name                                                                                                | `bitnami/whereabouts`       |
-| `image.tag`                             | Whereabouts Image tag                                                                                                 | `0.6.1-debian-11-r0`        |
+| `image.tag`                             | Whereabouts Image tag                                                                                                 | `0.6.1-debian-11-r20`       |
 | `image.digest`                          | Whereabouts image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag           | `""`                        |
 | `image.pullPolicy`                      | Whereabouts image pull policy                                                                                         | `IfNotPresent`              |
 | `image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                      | `[]`                        |
@@ -160,7 +160,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 helm install my-release \
   --set schedulerName=high-priority \
-    my-repo/whereabouts
+    oci://registry-1.docker.io/bitnamicharts/whereabouts
 ```
 
 The above command sets the Whereabouts scheduler to high-priority.
@@ -168,7 +168,7 @@ The above command sets the Whereabouts scheduler to high-priority.
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml my-repo/whereabouts
+helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/whereabouts
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)

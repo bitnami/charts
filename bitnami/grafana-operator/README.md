@@ -8,11 +8,12 @@ Grafana Operator is a Kubernetes operator that enables the installation and mana
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 
+Looking to use Grafana Operator in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+
 ## TL;DR
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/grafana-operator
+helm install my-release oci://registry-1.docker.io/bitnamicharts/grafana-operator
 ```
 
 ## Introduction
@@ -33,8 +34,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/grafana-operator
+helm install my-release oci://registry-1.docker.io/bitnamicharts/grafana-operator
 ```
 
 These commands deploy grafana-operator on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -109,7 +109,7 @@ For more information, refer to the [documentation on the differences between the
 | `operator.updateStrategy.type`                               | Set up update strategy for Grafana Operator installation.                                                                                 | `Recreate`                 |
 | `operator.image.registry`                                    | Grafana Operator image registry                                                                                                           | `docker.io`                |
 | `operator.image.repository`                                  | Grafana Operator image name                                                                                                               | `bitnami/grafana-operator` |
-| `operator.image.tag`                                         | Grafana Operator image tag                                                                                                                | `4.10.0-debian-11-r5`      |
+| `operator.image.tag`                                         | Grafana Operator image tag                                                                                                                | `4.10.0-debian-11-r17`     |
 | `operator.image.digest`                                      | Grafana Operator image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                          | `""`                       |
 | `operator.image.pullPolicy`                                  | Grafana Operator image pull policy                                                                                                        | `IfNotPresent`             |
 | `operator.image.pullSecrets`                                 | Grafana Operator image pull secrets                                                                                                       | `[]`                       |
@@ -193,7 +193,7 @@ For more information, refer to the [documentation on the differences between the
 | `grafana.enabled`                                           | Enabled the deployment of the Grafana CRD object into the cluster                                          | `true`                   |
 | `grafana.image.registry`                                    | Grafana image registry                                                                                     | `docker.io`              |
 | `grafana.image.repository`                                  | Grafana image name                                                                                         | `bitnami/grafana`        |
-| `grafana.image.tag`                                         | Grafana image tag                                                                                          | `9.4.7-debian-11-r2`     |
+| `grafana.image.tag`                                         | Grafana image tag                                                                                          | `9.5.1-debian-11-r4`     |
 | `grafana.image.digest`                                      | Grafana image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag    | `""`                     |
 | `grafana.image.pullSecrets`                                 | Grafana image pull secrets                                                                                 | `[]`                     |
 | `grafana.pluginsInitContainerImage.registry`                | Grafana Plugins image registry                                                                             | `""`                     |
@@ -275,7 +275,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 helm install my-release \
   --set livenessProbe.successThreshold=5 \
-    my-repo/grafana-operator
+    oci://registry-1.docker.io/bitnamicharts/grafana-operator
 ```
 
 The above command sets the `livenessProbe.successThreshold` to `5`.
@@ -283,7 +283,7 @@ The above command sets the `livenessProbe.successThreshold` to `5`.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml my-repo/grafana-operator
+helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/grafana-operator
 ```
 
 ## Configuration and installation details
@@ -313,7 +313,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 ## Upgrading
 
 ```console
-helm upgrade my-release my-repo/grafana-operator
+helm upgrade my-release oci://registry-1.docker.io/bitnamicharts/grafana-operator
 ```
 
 ### To 2.0.0

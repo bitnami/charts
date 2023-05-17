@@ -177,7 +177,11 @@ spec:
               {{- end }}
 
               {{- with $bucket.quota }}
-              mc admin bucket quota {{ $minioAlias }}/{{ $bucket.name }} --{{ .type }} {{ .size }};
+              {{- if eq .type "hard" }}
+              mc quota set {{ $minioAlias }}/{{ $bucket.name }} {{ if .size }}--size {{ .size }}{{ end }};
+              {{- else }}
+              mc quota {{ .type }} {{ $minioAlias }}/{{ $bucket.name }} {{ if .size }}--size {{ .size }}{{ end }};
+              {{- end }}
               {{- end }}
 
               {{- if $isDistributedMode }}

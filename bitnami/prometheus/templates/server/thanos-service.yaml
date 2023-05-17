@@ -1,0 +1,55 @@
+{{- if .Values.server.thanos.create }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "prometheus.thanos-sidecar.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/part-of: prometheus
+    app.kubernetes.io/component: server
+    app.kubernetes.io/subcomponent: thanos
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  annotations:
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.server.thanos.service.annotations }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.server.thanos.service.annotations "context" $) | nindent 4 }}
+    {{- end }}
+spec:
+  type: {{ .Values.server.thanos.service.type }}
+  {{- if and (eq .Values.server.thanos.service.type "LoadBalancer") (not (empty .Values.server.thanos.service.loadBalancerIP)) }}
+  loadBalancerIP: {{ .Values.server.thanos.service.loadBalancerIP }}
+  {{- end }}
+  {{- if and (eq .Values.server.thanos.service.type "LoadBalancer") (not (empty .Values.server.thanos.service.loadBalancerSourceRanges)) }}
+  loadBalancerSourceRanges: {{ .Values.server.thanos.service.loadBalancerSourceRanges }}
+  {{- end }}
+  {{- if and .Values.server.thanos.service.clusterIP (eq .Values.server.thanos.service.type "ClusterIP") }}
+  clusterIP: {{ .Values.server.thanos.service.clusterIP }}
+  {{- end }}
+  {{- if .Values.server.thanos.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.server.thanos.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.server.thanos.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.server.thanos.service.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if or (eq .Values.server.thanos.service.type "LoadBalancer") (eq .Values.server.thanos.service.type "NodePort") }}
+  externalTrafficPolicy: {{ .Values.server.thanos.service.externalTrafficPolicy | quote }}
+  {{- end }}
+  ports:
+    - name: grpc
+      port: {{ .Values.server.thanos.service.ports.grpc }}
+      targetPort: grpc
+      protocol: TCP
+      {{- if and .Values.server.thanos.service.nodePorts.grpc (or (eq .Values.server.thanos.service.type "NodePort") (eq .Values.server.thanos.service.type "LoadBalancer")) }}
+      nodePort: {{ .Values.server.thanos.service.nodePorts.grpc }}
+      {{- end }}
+    {{- if .Values.server.thanos.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.server.thanos.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
+    app.kubernetes.io/part-of: prometheus
+    app.kubernetes.io/component: server
+{{- end }}

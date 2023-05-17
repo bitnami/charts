@@ -70,7 +70,7 @@ spec:
       initContainers:
         {{- if .Values.redisWait.enabled }}
         - name: wait-for-redis
-          image: {{ include "common.images.image" (dict "imageRoot" .Values.redis.image "global" .Values.global) }}
+          image: {{ include "argocd.redis.image" . }}
           imagePullPolicy: {{ .Values.redis.image.pullPolicy | quote }}
           {{- with .Values.redisWait.securityContext }}
           securityContext: {{ . | toYaml }}

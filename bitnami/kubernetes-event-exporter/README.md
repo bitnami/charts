@@ -8,11 +8,12 @@ Kubernetes Event Exporter makes it easy to export Kubernetes events to other too
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 
+Looking to use Kubernetes Event Exporter in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+
 ## TL;DR
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/kubernetes-event-exporter
+helm install my-release oci://registry-1.docker.io/bitnamicharts/kubernetes-event-exporter
 ```
 
 ## Introduction
@@ -31,8 +32,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/kubernetes-event-exporter
+helm install my-release oci://registry-1.docker.io/bitnamicharts/kubernetes-event-exporter
 ```
 
 These commands deploy Kubernetes Event Exporter on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -81,7 +81,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraContainerPorts`                             | Optionally specify extra list of additional port-mappings for the container                                               | `[]`                                |
 | `image.registry`                                  | Container image registry                                                                                                  | `docker.io`                         |
 | `image.repository`                                | Container image name                                                                                                      | `bitnami/kubernetes-event-exporter` |
-| `image.tag`                                       | Container image tag                                                                                                       | `1.1.0-debian-11-r34`               |
+| `image.tag`                                       | Container image tag                                                                                                       | `1.1.0-debian-11-r46`               |
 | `image.digest`                                    | Container image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                 | `""`                                |
 | `image.pullPolicy`                                | Container image pull policy                                                                                               | `IfNotPresent`                      |
 | `image.pullSecrets`                               | Specify docker-registry secret names as an array                                                                          | `[]`                                |

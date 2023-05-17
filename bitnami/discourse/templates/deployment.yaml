@@ -99,11 +99,26 @@ spec:
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
           {{- else if .Values.discourse.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.discourse.command "context" $) | nindent 12 }}
+          {{- else }}
+          command:
+            - /bin/bash
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
           {{- else if .Values.discourse.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.discourse.args "context" $) | nindent 12 }}
+          {{- else }}
+          args:
+            - -c
+            - |
+              {{- if .Values.discourse.plugins }}
+              pushd "/opt/bitnami/discourse" >/dev/null || exit 1
+              {{- range $plugin := .Values.discourse.plugins }}
+              RAILS_ENV=production bundle exec rake plugin:install repo={{ $plugin }}
+              {{- end }}
+              popd >/dev/null || exit 1
+              {{- end }}
+              /opt/bitnami/scripts/discourse/entrypoint.sh /opt/bitnami/scripts/discourse/run.sh
           {{- end }}
           env:
             - name: BITNAMI_DEBUG

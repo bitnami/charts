@@ -70,7 +70,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/etcd
-  tag: 3.5.8-debian-11-r0
+  tag: 3.5.9-debian-11-r0
   digest: ""
   ## @param image.pullPolicy etcd image pull policy
   ## Specify a imagePullPolicy
@@ -215,7 +215,7 @@ logLevel: "info"
 ##
 maxProcs: ""
 ## @param removeMemberOnContainerTermination Use a PreStop hook to remove the etcd members from the etcd cluster on container termination
-## they the containers are terminated
+## they the containers are terminated. Set to 'false' if appears an error-related member ID wasn't properly stored.
 ## NOTE: Ignored if lifecycleHooks is set or replicaCount=1
 ##
 removeMemberOnContainerTermination: true
@@ -621,7 +621,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r105
+    tag: 11-debian-11-r114
     digest: ""
     ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
     ##

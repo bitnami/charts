@@ -233,6 +233,11 @@ spec:
     name: {{ .Values.prometheus.additionalAlertRelabelConfigsExternal.name }}
     key: {{ .Values.prometheus.additionalAlertRelabelConfigsExternal.key }}
   {{- end }}
+  {{- if .Values.prometheus.additionalAlertManagerExternal.enabled }}
+  additionalAlertManagerConfigs:
+    name: {{ .Values.prometheus.additionalAlertManagerExternal.name }}
+    key: {{ .Values.prometheus.additionalAlertManagerExternal.key }}
+  {{- end -}}
 {{- include "kube-prometheus.imagePullSecrets" . | indent 2 }}
   {{- if or .Values.prometheus.containers .Values.prometheus.thanos.create .Values.prometheus.containerSecurityContext.enabled .Values.prometheus.containerSecurityContext.enabled .Values.operator.prometheusConfigReloader.containerSecurityContext.enabled }}
   {{- if .Values.prometheus.initContainers }}

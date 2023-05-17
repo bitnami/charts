@@ -8,11 +8,12 @@ kiam is a proxy that captures AWS Metadata API requests. It allows AWS IAM roles
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 
+Looking to use Kiam in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+
 ## TL;DR
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/kiam
+helm install my-release oci://registry-1.docker.io/bitnamicharts/kiam
 ```
 
 > NOTE: KIAM has been designed to work on a Kubernetes cluster deployed on top of AWS, although it is possible to deploy it in other environments.
@@ -35,8 +36,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/kiam
+helm install my-release oci://registry-1.docker.io/bitnamicharts/kiam
 ```
 
 These commands deploy a kiam application on the Kubernetes cluster in the default configuration.
@@ -83,7 +83,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | ---------------------------------------------------------------------------------------------------- | ---------------------- |
 | `image.registry`    | kiam image registry                                                                                  | `docker.io`            |
 | `image.repository`  | kiam image name                                                                                      | `bitnami/kiam`         |
-| `image.tag`         | kiam image tag                                                                                       | `4.2.0-debian-11-r102` |
+| `image.tag`         | kiam image tag                                                                                       | `4.2.0-debian-11-r114` |
 | `image.digest`      | kiam image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
 | `image.pullPolicy`  | kiam image pull policy                                                                               | `IfNotPresent`         |
 | `image.pullSecrets` | Specify docker-registry secret names as an array                                                     | `[]`                   |
@@ -345,7 +345,7 @@ The command removes all the Kubernetes components associated with the chart and 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-helm install my-release --set server.resourceType=deployment my-repo/kiam
+helm install my-release --set server.resourceType=deployment oci://registry-1.docker.io/bitnamicharts/kiam
 ```
 
 The above command sets the server nodes to be deployed as Deployment objects.
@@ -353,7 +353,7 @@ The above command sets the server nodes to be deployed as Deployment objects.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml my-repo/kiam
+helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/kiam
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)

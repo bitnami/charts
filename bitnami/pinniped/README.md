@@ -8,11 +8,12 @@ Pinniped is an identity service provider for Kubernetes. It supplies a consisten
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 
+Looking to use Pinniped in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+
 ## TL;DR
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/pinniped
+helm install my-release oci://registry-1.docker.io/bitnamicharts/pinniped
 ```
 
 ## Introduction
@@ -35,8 +36,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/pinniped
+helm install my-release oci://registry-1.docker.io/bitnamicharts/pinniped
 ```
 
 The command deploys pinniped on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -77,7 +77,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraDeploy`       | Array of extra objects to deploy with the release                                                        | `[]`                |
 | `image.registry`    | Pinniped image registry                                                                                  | `docker.io`         |
 | `image.repository`  | Pinniped image repository                                                                                | `bitnami/pinniped`  |
-| `image.tag`         | Pinniped image tag (immutable tags are recommended)                                                      | `0.23.0-scratch-r0` |
+| `image.tag`         | Pinniped image tag (immutable tags are recommended)                                                      | `0.23.0-scratch-r2` |
 | `image.digest`      | Pinniped image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                |
 | `image.pullPolicy`  | Pinniped image pull policy                                                                               | `IfNotPresent`      |
 | `image.pullSecrets` | Pinniped image pull secrets                                                                              | `[]`                |
@@ -318,7 +318,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 helm install my-release \
   --set supervisor.enabled=false \
-    my-repo/pinniped
+    oci://registry-1.docker.io/bitnamicharts/pinniped
 ```
 
 The above command sets disables the supervisor compoment deployment.
@@ -326,7 +326,7 @@ The above command sets disables the supervisor compoment deployment.
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml my-repo/pinniped
+helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/pinniped
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)

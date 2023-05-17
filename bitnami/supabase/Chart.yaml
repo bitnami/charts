@@ -2,32 +2,31 @@ annotations:
   category: CMS
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 0.23.2
+appVersion: 0.23.4
 dependencies:
   - condition: postgresql.enabled
     name: postgresql
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     version: 12.x.x
   - condition: kong.enabled
     name: kong
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     version: 9.x.x
   - name: common
-    repository: https://charts.bitnami.com/bitnami
+    repository: oci://registry-1.docker.io/bitnamicharts
     tags:
       - bitnami-common
     version: 2.x.x
 description: Supabase is an open source Firebase alternative. Provides all the necessary backend features to build your application in a scalable way. Uses PostgreSQL as datastore.
-home: https://www.supabase.com/
+home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/supabase/img/supabase-stack-220x234.png
 keywords:
   - development
   - dashboards
 maintainers:
-  - name: Bitnami
+  - name: VMware, Inc.
     url: https://github.com/bitnami/charts
 name: supabase
 sources:
-  - https://github.com/bitnami/containers/tree/main/bitnami/supabase
-  - https://github.com/supabaseorg/supabase/
-version: 0.1.5
+  - https://github.com/bitnami/charts/tree/main/bitnami/supabase
+version: 0.3.4

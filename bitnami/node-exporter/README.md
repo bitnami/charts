@@ -11,8 +11,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/node-exporter
+helm install my-release oci://registry-1.docker.io/bitnamicharts/node-exporter
 ```
 
 ## Introduction
@@ -31,8 +30,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/node-exporter
+helm install my-release oci://registry-1.docker.io/bitnamicharts/node-exporter
 ```
 
 The command deploys Node Exporter on the Kubernetes cluster in the default configuration. The [configuration](#configuration-and-installation-details) section lists the parameters that can be configured during installation.
@@ -86,7 +84,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                                                                         | `{}`                    |
 | `image.registry`                              | Node Exporter image registry                                                                                                                                       | `docker.io`             |
 | `image.repository`                            | Node Exporter image repository                                                                                                                                     | `bitnami/node-exporter` |
-| `image.tag`                                   | Node Exporter image tag (immutable tags are recommended)                                                                                                           | `1.5.0-debian-11-r40`   |
+| `image.tag`                                   | Node Exporter image tag (immutable tags are recommended)                                                                                                           | `1.5.0-debian-11-r56`   |
 | `image.digest`                                | Node Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                      | `""`                    |
 | `image.pullPolicy`                            | Node Exporter image pull policy                                                                                                                                    | `IfNotPresent`          |
 | `image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                                                                   | `[]`                    |
@@ -175,13 +173,13 @@ The command removes all the Kubernetes components associated with the chart and 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example the following command sets the `minReadySeconds` of the Node Exporter Pods to `120` seconds.
 
 ```console
-helm install my-release --set minReadySeconds=120 my-repo/node-exporter
+helm install my-release --set minReadySeconds=120 oci://registry-1.docker.io/bitnamicharts/node-exporter
 ```
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml my-repo/node-exporter
+helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/node-exporter
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -207,7 +205,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 ## Upgrading
 
 ```console
-helm upgrade my-release my-repo/node-exporter
+helm upgrade my-release oci://registry-1.docker.io/bitnamicharts/node-exporter
 ```
 
 ### To 3.0.0

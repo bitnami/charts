@@ -11,8 +11,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/jasperreports
+helm install my-release oci://registry-1.docker.io/bitnamicharts/jasperreports
 ```
 
 ## Introduction
@@ -35,8 +34,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-helm repo add my-repo https://charts.bitnami.com/bitnami
-helm install my-release my-repo/jasperreports
+helm install my-release oci://registry-1.docker.io/bitnamicharts/jasperreports
 ```
 
 The command deploys JasperReports on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -81,7 +79,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------------- | ------------------------------------------------------------------------------------------------------------- | ----------------------- |
 | `image.registry`              | JasperReports image registry                                                                                  | `docker.io`             |
 | `image.repository`            | JasperReports image repository                                                                                | `bitnami/jasperreports` |
-| `image.tag`                   | JasperReports image tag (immutable tags are recommended)                                                      | `8.1.0-debian-11-r67`   |
+| `image.tag`                   | JasperReports image tag (immutable tags are recommended)                                                      | `8.2.0-debian-11-r2`    |
 | `image.digest`                | JasperReports image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `image.pullPolicy`            | JasperReports image pull policy                                                                               | `IfNotPresent`          |
 | `image.pullSecrets`           | Specify docker-registry secret names as an array                                                              | `[]`                    |
@@ -243,7 +241,7 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 helm install my-release \
   --set jasperreportsUsername=admin,jasperreportsPassword=password,mariadb.auth.rootPassword=secretpassword \
-    my-repo/jasperreports
+    oci://registry-1.docker.io/bitnamicharts/jasperreports
 ```
 
 The above command sets the JasperReports administrator account username and password to `admin` and `password` respectively. Additionally, it sets the MariaDB `root` user password to `secretpassword`.
@@ -253,7 +251,7 @@ The above command sets the JasperReports administrator account username and pass
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml my-repo/jasperreports
+helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/jasperreports
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml)
@@ -323,6 +321,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 15.0.0
+
+This major release bumps the MariaDB version to 10.11. Follow the [upstream instructions](https://mariadb.com/kb/en/upgrading-from-mariadb-10-6-to-mariadb-10-11/) for upgrading from MariaDB 10.6 to 10.11. No major issues are expected during the upgrade.
+
 ### To 14.0.0
 
 This major release bumps the MariaDB version to 10.6. Follow the [upstream instructions](https://mariadb.com/kb/en/upgrading-from-mariadb-105-to-mariadb-106/) for upgrading from MariaDB 10.5 to 10.6. No major issues are expected during the upgrade.
@@ -368,7 +370,7 @@ export JASPER_PASSWORD=$(kubectl get secret --namespace default jasperreports -o
 export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default jasperreports-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 -d)
 export MARIADB_PASSWORD=$(kubectl get secret --namespace default jasperreports-mariadb -o jsonpath="{.data.mariadb-password}" | base64 -d)
 kubectl delete deployments.apps jasperreports
-helm upgrade jasperreports my-repo/jasperreports --set jasperreportsPassword=$JASPER_PASSWORD,mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD,mariadb.auth.password=$MARIADB_PASSWORD
+helm upgrade jasperreports oci://registry-1.docker.io/bitnamicharts/jasperreports --set jasperreportsPassword=$JASPER_PASSWORD,mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD,mariadb.auth.password=$MARIADB_PASSWORD
 ```
 
 ### To 9.0.0
@@ -431,7 +433,7 @@ Delete the JasperReports deployment and delete the MariaDB statefulset. Notice t
 Now the upgrade works:
 
 ```console
-helm upgrade jasperreports my-repo/jasperreports --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set jasperreportsPassword=$JASPERREPORTS_PASSWORD --set allowEmptyPasswords=false
+helm upgrade jasperreports oci://registry-1.docker.io/bitnamicharts/jasperreports --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set jasperreportsPassword=$JASPERREPORTS_PASSWORD --set allowEmptyPasswords=false
 ```
 
 You will have to delete the existing MariaDB pod and the new statefulset is going to create a new one

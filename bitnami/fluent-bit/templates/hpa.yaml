@@ -1,0 +1,50 @@
+{{- if and  (not .Values.daemonset.enable)  .Values.autoscaling.hpa.enabled  }}
+apiVersion: {{ include "common.capabilities.hpa.apiVersion" . }}
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "common.names.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/part-of: fluent-bit
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  annotations:
+  {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.autoscaling.hpa.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.autoscaling.hpa.annotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if .Values.autoscaling.hpa.behavior }}
+  behavior:
+    {{- toYaml .Values.autoscaling.hpa.behavior | nindent 4 }}
+  {{- end }}
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: {{ include "fluent-bit.fullname" . }}
+  minReplicas: {{ .Values.autoscaling.hpa.minReplicas }}
+  maxReplicas: {{ .Values.autoscaling.hpa.maxReplicas }}
+  metrics:
+  {{- if .Values.autoscaling.hpa.targetCPUUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: cpu
+        target:
+          averageUtilization: {{ .Values.autoscaling.hpa.targetCPUUtilizationPercentage }}
+          type: Utilization
+  {{- end }}
+  {{- if .Values.autoscaling.hpa.targetMemoryUtilizationPercentage }}
+    - type: Resource
+      resource:
+        name: memory
+        target:
+          averageUtilization: {{ .Values.autoscaling.hpa.targetMemoryUtilizationPercentage }}
+          type: Utilization
+  {{- end }}
+  {{- if .Values.autoscaling.hpa.customRules -}}
+    {{- toYaml .Values.autoscaling.hpa.customRules | nindent 4}}
+  {{- end -}}
+{{- end }}
