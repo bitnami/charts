@@ -519,8 +519,8 @@ kafka: .Values.auth.tls.existingSecrets
 
 {{/* Validate values of Kafka provisioning - keyPasswordSecretKey, keystorePasswordSecretKey or truststorePasswordSecretKey must not be used without passwordsSecret */}}
 {{- define "kafka.validateValues.tlsPasswords" -}}
-{{- if and (include "kafka.client.tlsEncryption" .) (not .Values.auth.tls.passwordsSecret) }}
-{{- if or .Values.auth.tls.keyPasswordSecretKey .Values.auth.tls.keystorePasswordSecretKey .Values.auth.tls.truststorePasswordSecretKey }}
+{{- if and (include "kafka.client.tlsEncryption" .) (not .Values.provisioning.auth.tls.passwordsSecret) }}
+{{- if or .Values.provisioning.auth.tls.keyPasswordSecretKey .Values.provisioning.auth.tls.keystorePasswordSecretKey .Values.provisioning.auth.tls.truststorePasswordSecretKey }}
 kafka: auth.tls.keyPasswordSecretKey,auth.tls.keystorePasswordSecretKey,auth.tls.truststorePasswordSecretKey
     auth.tls.keyPasswordSecretKey,auth.tls.keystorePasswordSecretKey,auth.tls.truststorePasswordSecretKey
     must not be used without passwordsSecret setted.

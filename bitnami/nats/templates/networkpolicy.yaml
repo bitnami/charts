@@ -27,4 +27,8 @@ spec:
         - port: {{ .Values.service.ports.cluster }}
     - ports:
         - port: {{ .Values.service.ports.monitoring }}
+    {{- if .Values.metrics.enabled }}
+    - ports:
+        - port: {{ .Values.metrics.service.port }}
+    {{- end }}
 {{- end }}

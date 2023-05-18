@@ -90,6 +90,8 @@ image:
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
 hostAliases: []
+## Kubernetes event exporter configuration, rendered as a template
+## ref: https://github.com/resmoio/kubernetes-event-exporter#configuration
 ## @param config.logLevel Verbosity of the logs (options: `fatal`, `error`, `warn`, `info` or `debug`)
 ## @param config.logFormat How the logs are formatted. Allowed values: `pretty` or `json`
 ## @param config.receivers [array] Array containing event receivers

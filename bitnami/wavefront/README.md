@@ -6,6 +6,8 @@ Wavefront is a high-performance streaming analytics platform for monitoring and 
 
 [Overview of Wavefront](https://github.com/wavefrontHQ/wavefront-collector-for-kubernetes)
 
+Looking to use Wavefront in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+
 ## TL;DR
 
 ```console
@@ -105,7 +107,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `collector.enabled`                                         | Setup and enable the Wavefront collector to gather metrics                                                              | `true`                                   |
 | `collector.image.registry`                                  | Wavefront collector image registry                                                                                      | `docker.io`                              |
 | `collector.image.repository`                                | Wavefront collector image repository                                                                                    | `bitnami/wavefront-kubernetes-collector` |
-| `collector.image.tag`                                       | Wavefront collector image tag (immutable tags are recommended)                                                          | `1.13.0-scratch-r12`                     |
+| `collector.image.tag`                                       | Wavefront collector image tag (immutable tags are recommended)                                                          | `1.13.0-scratch-r14`                     |
 | `collector.image.digest`                                    | Wavefront collector image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag     | `""`                                     |
 | `collector.image.pullPolicy`                                | image pull policy                                                                                                       | `IfNotPresent`                           |
 | `collector.image.pullSecrets`                               | Specify docker-registry secret names as an array                                                                        | `[]`                                     |
@@ -179,7 +181,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `proxy.enabled`                                         | Setup and enable Wavefront proxy to send metrics through                                                                                | `true`                    |
 | `proxy.image.registry`                                  | Wavefront proxy image registry                                                                                                          | `docker.io`               |
 | `proxy.image.repository`                                | Wavefront proxy image repository                                                                                                        | `bitnami/wavefront-proxy` |
-| `proxy.image.tag`                                       | Wavefront proxy image tag (immutable tags are recommended)                                                                              | `11.4.0-debian-11-r80`    |
+| `proxy.image.tag`                                       | Wavefront proxy image tag (immutable tags are recommended)                                                                              | `12.4.0-debian-11-r2`     |
 | `proxy.image.digest`                                    | Wavefront proxy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                         | `""`                      |
 | `proxy.image.pullPolicy`                                | Wavefront proxy image pull policy                                                                                                       | `IfNotPresent`            |
 | `proxy.image.pullSecrets`                               | Specify docker-registry secret names as an array                                                                                        | `[]`                      |

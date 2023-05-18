@@ -82,6 +82,15 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 rules:
+  {{- if or .Values.operator.scanAllNamespaces .Values.operator.scanNamespaces }}
+  - apiGroups:
+      - ""
+    resources:
+      - namespaces
+    verbs:
+      - list
+      - watch
+  {{- end }}
   - apiGroups:
       - ""
     resources:

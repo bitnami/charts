@@ -358,6 +358,10 @@ spec:
             - name: POSTGRESQL_NUM_SYNCHRONOUS_REPLICAS
               value: {{ sub (int .Values.postgresql.replicaCount) 1 | quote }}
             {{- end }}
+            {{- if .Values.postgresql.syncReplicationMode }}
+            - name: POSTGRESQL_SYNCHRONOUS_REPLICAS_MODE
+              value: {{ .Values.postgresql.syncReplicationMode | quote }}
+            {{- end }}
             {{- if .Values.postgresql.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.postgresql.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}

@@ -18,7 +18,7 @@ dependencies:
       - bitnami-common
     version: 2.x.x
 description: Kubeapps is a web-based UI for launching and managing applications on Kubernetes. It allows users to deploy trusted applications and operators to control users access to the cluster.
-home: https://kubeapps.dev
+home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/kubeapps/img/kubeapps-stack-220x234.png
 keywords:
   - helm
@@ -27,9 +27,9 @@ keywords:
   - deployment
 kubeVersion: '>=1.21.0-0'
 maintainers:
-  - name: Bitnami
+  - name: VMware, Inc.
     url: https://github.com/bitnami/charts
 name: kubeapps
 sources:
-  - https://github.com/vmware-tanzu/kubeapps
-version: 12.3.3
+  - https://github.com/bitnami/charts/tree/main/bitnami/kubeapps
+version: 12.4.2

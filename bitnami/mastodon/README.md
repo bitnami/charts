@@ -79,7 +79,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                                                                                   | `["infinity"]`        |
 | `image.registry`         | Mastodon image registry                                                                                                                             | `docker.io`           |
 | `image.repository`       | Mastodon image repository                                                                                                                           | `bitnami/mastodon`    |
-| `image.tag`              | Mastodon image tag (immutable tags are recommended)                                                                                                 | `4.1.2-debian-11-r12` |
+| `image.tag`              | Mastodon image tag (immutable tags are recommended)                                                                                                 | `4.1.2-debian-11-r17` |
 | `image.digest`           | Mastodon image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended) | `""`                  |
 | `image.pullPolicy`       | Mastodon image pull policy                                                                                                                          | `IfNotPresent`        |
 | `image.pullSecrets`      | Mastodon image pull secrets                                                                                                                         | `[]`                  |
@@ -353,6 +353,27 @@ The command removes all the Kubernetes components associated with the chart and 
 | `streaming.service.sessionAffinity`          | Control where streaming requests go, to the same pod or round-robin                           | `None`      |
 | `streaming.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                   | `{}`        |
 
+### Mastodon Media Management Cronjob Parameters
+
+| Name                                                | Description                                                                            | Value        |
+| --------------------------------------------------- | -------------------------------------------------------------------------------------- | ------------ |
+| `tootctlMediaManagement.enabled`                    | Enable Cronjob to manage all media caches                                              | `false`      |
+| `tootctlMediaManagement.removeAttachments`          | Enable removing attachements                                                           | `true`       |
+| `tootctlMediaManagement.removeAttachmentsDays`      | Number of days old media attachments must be for removal                               | `30`         |
+| `tootctlMediaManagement.removeCustomEmoji`          | Enable removal of cached remote emoji files                                            | `false`      |
+| `tootctlMediaManagement.removePreviewCards`         | Enable removal of cached preview cards                                                 | `false`      |
+| `tootctlMediaManagement.removePreviewCardsDays`     | Number of days old preview cards must be for removal                                   | `30`         |
+| `tootctlMediaManagement.removeAvatars`              | Enable removal of cached remote avatar images                                          | `false`      |
+| `tootctlMediaManagement.removeAvatarsDays`          | Number of days old avatar images must be for removal                                   | `30`         |
+| `tootctlMediaManagement.removeHeaders`              | Enable removal of cached profile header images                                         | `false`      |
+| `tootctlMediaManagement.removeHeadersDays`          | Number of days old header images must be for removal                                   | `30`         |
+| `tootctlMediaManagement.removeOrphans`              | Enable removal of cached orphan files                                                  | `false`      |
+| `tootctlMediaManagement.includeFollows`             | Enable removal of cached avatar and header when local users are following the accounts | `false`      |
+| `tootctlMediaManagement.cronSchedule`               | Cron job schedule to run tootctl media commands                                        | `14 3 * * *` |
+| `tootctlMediaManagement.failedJobsHistoryLimit`     | Number of failed jobs to keep                                                          | `3`          |
+| `tootctlMediaManagement.successfulJobsHistoryLimit` | Number of successful jobs to keep                                                      | `3`          |
+| `tootctlMediaManagement.concurrencyPolicy`          | Concurrency Policy.  Should be Allow, Forbid or Replace                                | `Allow`      |
+
 ### Mastodon Migration job Parameters
 
 | Name                                                        | Description                                                                                                                    | Value            |
@@ -405,7 +426,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `11-debian-11-r114`     |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `11-debian-11-r116`     |
 | `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                    |

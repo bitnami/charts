@@ -87,6 +87,7 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/postgresql/**'
       - 'bitnami/postgresql-ha/**'
       - 'bitnami/prestashop/**'
+      - 'bitnami/prometheus/**'
       - 'bitnami/pytorch/**'
       - 'bitnami/rabbitmq-cluster-operator/**'
       - 'bitnami/rabbitmq/**'
