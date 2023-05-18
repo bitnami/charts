@@ -8,8 +8,6 @@ NATS is an open source, lightweight and high-performance messaging system. It is
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 
-Looking to use NATS in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
-
 ## TL;DR
 
 ```console
@@ -79,7 +77,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------ | ----------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`         | NATS image registry                                                                                   | `docker.io`           |
 | `image.repository`       | NATS image repository                                                                                 | `bitnami/nats`        |
-| `image.tag`              | NATS image tag (immutable tags are recommended)                                                       | `2.9.16-debian-11-r7` |
+| `image.tag`              | NATS image tag (immutable tags are recommended)                                                       | `2.9.17-debian-11-r0` |
 | `image.digest`           | NATS image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag  | `""`                  |
 | `image.pullPolicy`       | NATS image pull policy                                                                                | `IfNotPresent`        |
 | `image.pullSecrets`      | NATS image pull secrets                                                                               | `[]`                  |
@@ -217,7 +215,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                          | Enable Prometheus metrics via exporter side-car                                                               | `false`                 |
 | `metrics.image.registry`                   | Prometheus metrics exporter image registry                                                                    | `docker.io`             |
 | `metrics.image.repository`                 | Prometheus metrics exporter image repository                                                                  | `bitnami/nats-exporter` |
-| `metrics.image.tag`                        | Prometheus metrics exporter image tag (immutable tags are recommended)                                        | `0.11.0-debian-11-r4`   |
+| `metrics.image.tag`                        | Prometheus metrics exporter image tag (immutable tags are recommended)                                        | `0.11.0-debian-11-r7`   |
 | `metrics.image.digest`                     | NATS Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `metrics.image.pullPolicy`                 | Prometheus metrics image pull policy                                                                          | `IfNotPresent`          |
 | `metrics.image.pullSecrets`                | Prometheus metrics image pull secrets                                                                         | `[]`                    |
