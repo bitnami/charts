@@ -11,8 +11,7 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm repo add my-repo oci://registry-1.docker.io/bitnamicharts
-helm install my-release my-repo/fluent-bit
+helm install my-release oci://registry-1.docker.io/bitnamicharts/fluent-bit
 ```
 
 ## Introduction
@@ -33,8 +32,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-helm repo add my-repo oci://registry-1.docker.io/bitnamicharts
-helm install my-release my-repo/fluent-bit
+helm install my-release oci://registry-1.docker.io/bitnamicharts/fluent-bit
 ```
 
 These commands deploy fluent-bit on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -49,7 +47,7 @@ To uninstall/delete the `my-release` statefulset:
 helm delete my-release
 ```
 
-The command removes all the Kubernetes components associated with the chart and deletes the release. Use the option `--purge` to delete all history too.
+The command removes all the Kubernetes components assated with the chart and deletes the release. Use the option `--purge` to delete all history too.
 
 ## Parameters
 
