@@ -469,7 +469,7 @@ spec:
               value: {{ printf "127.0.0.1:%d/%s?sslmode=disable" (.Values.postgresql.containerPorts.postgresql | int64) (include "postgresql-ha.postgresqlDatabase" .) | quote }}
             {{- if .Values.postgresql.usePasswordFile }}
             - name: DATA_SOURCE_PASS_FILE
-              value: {{ printf "/opt/bitnami/postgresql/secrets/%s" (include "postgresql.userPasswordKey" .) }}
+              value: "/opt/bitnami/postgresql/secrets/password"
             {{- else }}
             - name: DATA_SOURCE_PASS
               valueFrom:
