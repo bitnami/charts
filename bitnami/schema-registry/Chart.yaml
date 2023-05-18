@@ -2,7 +2,7 @@ annotations:
   category: Infrastructure
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 7.3.3
+appVersion: 7.4.0
 dependencies:
   - condition: kafka.enabled
     name: kafka
@@ -28,4 +28,4 @@ maintainers:
 name: schema-registry
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/schema-registry
-version: 10.1.0
+version: 11.0.0

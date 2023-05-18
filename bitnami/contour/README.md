@@ -210,6 +210,8 @@ helm uninstall my-release
 | `envoy.command`                                     | Override default command                                                                                              | `[]`                  |
 | `envoy.args`                                        | Override default args                                                                                                 | `[]`                  |
 | `envoy.shutdownManager.enabled`                     | Contour shutdownManager sidecar                                                                                       | `true`                |
+| `envoy.shutdownManager.extraArgs`                   | Extra arguments passed to shutdown container                                                                          | `[]`                  |
+| `envoy.shutdownManager.port`                        | Specify Port for shutdown container                                                                                   | `8090`                |
 | `envoy.shutdownManager.resources.limits`            | Specify resource limits which the container is not allowed to succeed.                                                | `{}`                  |
 | `envoy.shutdownManager.resources.requests`          | Specify resource requests which the container needs to spawn.                                                         | `{}`                  |
 | `envoy.kind`                                        | Install as deployment or daemonset                                                                                    | `daemonset`           |
@@ -247,18 +249,21 @@ helm uninstall my-release
 | `envoy.serviceAccount.automountServiceAccountToken` | Whether to auto mount API credentials for a service account                                                           | `false`               |
 | `envoy.serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                            | `{}`                  |
 | `envoy.livenessProbe.enabled`                       | Enable livenessProbe                                                                                                  | `true`                |
+| `envoy.livenessProbe.port`                          | LivenessProbe port                                                                                                    | `8002`                |
 | `envoy.livenessProbe.initialDelaySeconds`           | Initial delay seconds for livenessProbe                                                                               | `120`                 |
 | `envoy.livenessProbe.periodSeconds`                 | Period seconds for livenessProbe                                                                                      | `20`                  |
 | `envoy.livenessProbe.timeoutSeconds`                | Timeout seconds for livenessProbe                                                                                     | `5`                   |
 | `envoy.livenessProbe.failureThreshold`              | Failure threshold for livenessProbe                                                                                   | `6`                   |
 | `envoy.livenessProbe.successThreshold`              | Success threshold for livenessProbe                                                                                   | `1`                   |
 | `envoy.readinessProbe.enabled`                      | Enable/disable the readiness probe                                                                                    | `true`                |
+| `envoy.readinessProbe.port`                         | ReadinessProbe port                                                                                                   | `8002`                |
 | `envoy.readinessProbe.initialDelaySeconds`          | Delay before readiness probe is initiated                                                                             | `10`                  |
 | `envoy.readinessProbe.periodSeconds`                | How often to perform the probe                                                                                        | `3`                   |
 | `envoy.readinessProbe.timeoutSeconds`               | When the probe times out                                                                                              | `1`                   |
 | `envoy.readinessProbe.failureThreshold`             | Minimum consecutive failures for the probe to be considered failed after having succeeded.                            | `3`                   |
 | `envoy.readinessProbe.successThreshold`             | Minimum consecutive successes for the probe to be considered successful after having failed.                          | `1`                   |
 | `envoy.startupProbe.enabled`                        | Enable/disable the startup probe                                                                                      | `false`               |
+| `envoy.startupProbe.port`                           | StartupProbe port                                                                                                     | `8002`                |
 | `envoy.startupProbe.initialDelaySeconds`            | Delay before startup probe is initiated                                                                               | `15`                  |
 | `envoy.startupProbe.periodSeconds`                  | How often to perform the probe                                                                                        | `10`                  |
 | `envoy.startupProbe.timeoutSeconds`                 | When the probe times out                                                                                              | `5`                   |
@@ -292,10 +297,13 @@ helm uninstall my-release
 | `envoy.useHostIP`                                   | Enable/disable `hostIP`                                                                                               | `false`               |
 | `envoy.hostPorts.http`                              | Sets `hostPort` http port                                                                                             | `80`                  |
 | `envoy.hostPorts.https`                             | Sets `hostPort` https port                                                                                            | `443`                 |
+| `envoy.hostPorts.metrics`                           | Sets `hostPort` metrics port                                                                                          | `8002`                |
 | `envoy.hostIPs.http`                                | Sets `hostIP` http IP                                                                                                 | `127.0.0.1`           |
 | `envoy.hostIPs.https`                               | Sets `hostIP` https IP                                                                                                | `127.0.0.1`           |
+| `envoy.hostIPs.metrics`                             | Sets `hostIP` metrics IP                                                                                              | `127.0.0.1`           |
 | `envoy.containerPorts.http`                         | Sets http port inside Envoy pod  (change this to >1024 to run envoy as a non-root user)                               | `8080`                |
 | `envoy.containerPorts.https`                        | Sets https port inside Envoy pod  (change this to >1024 to run envoy as a non-root user)                              | `8443`                |
+| `envoy.containerPorts.metrics`                      | Sets metrics port inside Envoy pod (change this to >1024 to run envoy as a non-root user)                             | `8002`                |
 | `envoy.initContainers`                              | Attach additional init containers to Envoy pods                                                                       | `[]`                  |
 | `envoy.sidecars`                                    | Add additional sidecar containers to the Envoy pods                                                                   | `[]`                  |
 | `envoy.extraVolumes`                                | Array to add extra volumes                                                                                            | `[]`                  |

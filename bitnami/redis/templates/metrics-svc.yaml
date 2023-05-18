@@ -20,6 +20,9 @@ metadata:
   {{- end }}
 spec:
   type: {{ .Values.metrics.service.type }}
+  {{- if and .Values.metrics.service.clusterIP (eq .Values.metrics.service.type "ClusterIP") }}
+  clusterIP: {{ .Values.metrics.service.clusterIP }}
+  {{- end }}
   {{- if eq .Values.metrics.service.type "LoadBalancer" }}
   externalTrafficPolicy: {{ .Values.metrics.service.externalTrafficPolicy }}
   {{- end }}
