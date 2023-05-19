@@ -120,8 +120,6 @@ data:
     fi
     {{- end }}
 
-    cat "/certs-${ID}/tls.crt" "/certs-${ID}/tls.key" > "/certs/mongodb.pem"
-
     {{- if .Values.tls.pemChainIncluded }}
     #Split the pem chain by the END CERTIFICATE string and store in files /certs/xx00, /certs/xx01 etc.
     cat /certs-${ID}/tls.crt | csplit - -s -z '/\-*END CERTIFICATE\-*/+1' '{*}' -f /certs/xx

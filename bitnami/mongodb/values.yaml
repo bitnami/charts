@@ -95,11 +95,11 @@ diagnosticMode:
   ## @param diagnosticMode.command Command to override all containers in the deployment
   ##
   command:
-  - sleep
+    - sleep
   ## @param diagnosticMode.args Args to override all containers in the deployment
   ##
   args:
-  - infinity
+    - infinity
 
 ## @section MongoDB(&reg;) parameters
 ##
@@ -1009,7 +1009,7 @@ persistence:
   ## @param persistence.accessModes PV Access Mode
   ##
   accessModes:
-  - ReadWriteOnce
+    - ReadWriteOnce
   ## @param persistence.size PVC Storage Request for MongoDB(&reg;) data volume
   ##
   size: 8Gi
@@ -1849,7 +1849,7 @@ hidden:
     ## @param hidden.persistence.accessModes PV Access Mode
     ##
     accessModes:
-    - ReadWriteOnce
+      - ReadWriteOnce
     ## @param hidden.persistence.size PVC Storage Request for hidden node data volume
     ##
     size: 8Gi
