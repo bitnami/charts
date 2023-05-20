@@ -1355,6 +1355,7 @@ metrics:
     additionalLabels: {}
     ## @param metrics.prometheusRule.rules Prometheus Rule definitions
     ##
+    rules: []
 
 ## @section Other parameters
 ##
