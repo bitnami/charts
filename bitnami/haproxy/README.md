@@ -8,8 +8,6 @@ HAProxy is a TCP proxy and a HTTP reverse proxy. It supports SSL termination and
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 
-Looking to use HAProxy in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
-
 ## TL;DR
 
 ```console
