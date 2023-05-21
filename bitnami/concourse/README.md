@@ -6,8 +6,6 @@ Concourse is an automation system written in Go. It is most commonly used for CI
 
 [Overview of Concourse](https://concourse-ci.org/)
 
-Looking to use Concourse in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
-
 ## TL;DR
 
 ```console
