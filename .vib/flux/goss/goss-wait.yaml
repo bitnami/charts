@@ -2,4 +2,4 @@ command:
   wait-to-be-available:
     exec: "sleep 180"
     exit-status: 0
-    timeout: 130000
+    timeout: 190000
