@@ -641,8 +641,6 @@ dataPlane:
       ## cpu: 200m
       ## memory: 100Mi
       minAllowed: {}
-      ## @section VPA update policy
-      ##
       updatePolicy:
         ## @param dataPlane.autoscaling.vpa.updatePolicy.updateMode Autoscaling update policy Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod
         ## Possible values are "Off", "Initial", "Recreate", and "Auto".
@@ -1365,8 +1363,6 @@ controlPlane:
       ## cpu: 200m
       ## memory: 100Mi
       minAllowed: {}
-      ## @section VPA update policy
-      ##
       updatePolicy:
         ## @param controlPlane.autoscaling.vpa.updatePolicy.updateMode Autoscaling update policy Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod
         ## Possible values are "Off", "Initial", "Recreate", and "Auto".
@@ -2038,8 +2034,6 @@ dashboard:
       ## cpu: 200m
       ## memory: 100Mi
       minAllowed: {}
-      ## @section VPA update policy
-      ##
       updatePolicy:
         ## @param dashboard.autoscaling.vpa.updatePolicy.updateMode Autoscaling update policy Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod
         ## Possible values are "Off", "Initial", "Recreate", and "Auto".
@@ -2611,8 +2605,6 @@ ingressController:
       ## cpu: 200m
       ## memory: 100Mi
       minAllowed: {}
-      ## @section VPA update policy
-      ##
       updatePolicy:
         ## @param ingressController.autoscaling.vpa.updatePolicy.updateMode Autoscaling update policy Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod
         ## Possible values are "Off", "Initial", "Recreate", and "Auto".

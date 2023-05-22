@@ -905,7 +905,6 @@ externalEtcd:
     - externalhost
 ```
 
-
 ### Additional environment variables
 
 In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` property inside the `dataPlane`, `controlPlane`, `dashboard` and `ingressController` sections.
