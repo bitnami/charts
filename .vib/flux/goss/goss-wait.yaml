@@ -1,5 +1,8 @@
-command:
-  wait-to-be-available:
-    exec: "sleep 180"
-    exit-status: 0
-    timeout: 190000
+addr:
+  {{- $chartReleaseName := (index .Vars.extraDeploy 3).metadata.name }}
+  tcp://{{ $chartReleaseName }}:80:
+    reachable: true
+    timeout: 2000
+  tcp://podinfo:9898:
+    reachable: true
+    timeout: 2000
