@@ -213,6 +213,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                             | Description                                                                                                                                          | Value                |
 | -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------- |
 | `persistence.enabled`            | Enable Cassandra data persistence using PVC, use a Persistent Volume Claim, If false, use emptyDir                                                   | `true`               |
+| `persistence.existingClaim`      | Name of an existing PVC to use                                                                                                                       | `""`                 |
 | `persistence.storageClass`       | PVC Storage Class for Cassandra data volume                                                                                                          | `""`                 |
 | `persistence.commitStorageClass` | PVC Storage Class for Cassandra Commit Log volume                                                                                                    | `""`                 |
 | `persistence.annotations`        | Persistent Volume Claim annotations                                                                                                                  | `{}`                 |

@@ -552,6 +552,9 @@ persistence:
   ## @param persistence.enabled Enable Cassandra data persistence using PVC, use a Persistent Volume Claim, If false, use emptyDir
   ##
   enabled: true
+  ## @param persistence.existingClaim Name of an existing PVC to use
+  ##
+  existingClaim: ""
   ## @param persistence.storageClass PVC Storage Class for Cassandra data volume
   ## If defined, storageClassName: <storageClass>
   ## If set to "-", storageClassName: "", which disables dynamic provisioning
