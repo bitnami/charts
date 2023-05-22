@@ -24,9 +24,7 @@ it('allows to upload and view a new Report', () => {
     cy.get('#fromLocal').click();
     cy.get('[type="file"]').selectFile(reportFile, { force: true });
     cy.contains('Submit').click();
-    cy.get('#resultsContainer').within(() => {
-      cy.contains(`${reports.newReport.name}_${random}`).click();
-    });
+    cy.contains('#resultsContainer p.resourceName', `${reports.newReport.name}_${random}`).click();
     cy.contains(`${reports.newReport.textToRandomize}${random}`);
   });
 });
