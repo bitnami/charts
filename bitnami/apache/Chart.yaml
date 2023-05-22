@@ -25,4 +25,4 @@ maintainers:
 name: apache
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/apache
-version: 9.6.0
+version: 9.6.1

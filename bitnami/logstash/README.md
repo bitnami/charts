@@ -8,8 +8,6 @@ Logstash is an open source data processing engine. It ingests data from multiple
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 
-Looking to use Logstash in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
-
 ## TL;DR
 
 ```console
@@ -80,7 +78,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
 | `image.registry`                              | Logstash image registry                                                                                                           | `docker.io`              |
 | `image.repository`                            | Logstash image repository                                                                                                         | `bitnami/logstash`       |
-| `image.tag`                                   | Logstash image tag (immutable tags are recommended)                                                                               | `8.7.1-debian-11-r2`     |
+| `image.tag`                                   | Logstash image tag (immutable tags are recommended)                                                                               | `8.7.1-debian-11-r7`     |
 | `image.digest`                                | Logstash image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                          | `""`                     |
 | `image.pullPolicy`                            | Logstash image pull policy                                                                                                        | `IfNotPresent`           |
 | `image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                                  | `[]`                     |
@@ -176,7 +174,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.securityContext.runAsUser` | User ID for the volumePermissions init container                                                                                  | `0`                      |
 | `volumePermissions.image.registry`            | Init container volume-permissions image registry                                                                                  | `docker.io`              |
 | `volumePermissions.image.repository`          | Init container volume-permissions image repository                                                                                | `bitnami/bitnami-shell`  |
-| `volumePermissions.image.tag`                 | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r113`      |
+| `volumePermissions.image.tag`                 | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r118`      |
 | `volumePermissions.image.digest`              | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                     |
 | `volumePermissions.image.pullPolicy`          | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`           |
 | `volumePermissions.image.pullSecrets`         | Specify docker-registry secret names as an array                                                                                  | `[]`                     |
