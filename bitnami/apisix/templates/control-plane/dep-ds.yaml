@@ -45,8 +45,8 @@ spec:
         {{- end }}
     spec:
       serviceAccountName: {{ template "apisix.control-plane.serviceAccountName" . }}
-      {{- if .Values.dataPlane.hostNetwork }}
-      hostNetwork: {{ .Values.dataPlane.hostNetwork }}
+      {{- if .Values.controlPlane.hostNetwork }}
+      hostNetwork: {{ .Values.controlPlane.hostNetwork }}
       {{- end }}
       {{- include "apisix.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.controlPlane.hostAliases }}
