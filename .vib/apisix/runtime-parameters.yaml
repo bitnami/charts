@@ -22,7 +22,8 @@ dataPlane:
     runAsUser: 1002
   service:
     ports:
-      http: 8001
+      # We need port 80 or the deployment check will fail
+      http: 80
       https: 8002
       metrics: 8003
   serviceAccount:
