@@ -25,4 +25,4 @@ maintainers:
 name: wavefront-hpa-adapter
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/wavefront-hpa-adapter
-version: 1.5.0
+version: 1.5.1
