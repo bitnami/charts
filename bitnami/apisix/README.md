@@ -202,18 +202,13 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### APISIX Data Plane Autoscaling configuration
 
-| Name                                            | Description                                                                                    | Value   |
-| ----------------------------------------------- | ---------------------------------------------------------------------------------------------- | ------- |
-| `dataPlane.autoscaling.vpa.enabled`             | Enable VPA                                                                                     | `false` |
-| `dataPlane.autoscaling.vpa.annotations`         | Annotations for VPA resource                                                                   | `{}`    |
-| `dataPlane.autoscaling.vpa.controlledResources` | VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory | `[]`    |
-| `dataPlane.autoscaling.vpa.maxAllowed`          | VPA Max allowed resources for the pod                                                          | `{}`    |
-| `dataPlane.autoscaling.vpa.minAllowed`          | VPA Min allowed resources for the pod                                                          | `{}`    |
-
-### VPA update policy
-
 | Name                                                | Description                                                                                                                                                            | Value   |
 | --------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `dataPlane.autoscaling.vpa.enabled`                 | Enable VPA                                                                                                                                                             | `false` |
+| `dataPlane.autoscaling.vpa.annotations`             | Annotations for VPA resource                                                                                                                                           | `{}`    |
+| `dataPlane.autoscaling.vpa.controlledResources`     | VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory                                                                         | `[]`    |
+| `dataPlane.autoscaling.vpa.maxAllowed`              | VPA Max allowed resources for the pod                                                                                                                                  | `{}`    |
+| `dataPlane.autoscaling.vpa.minAllowed`              | VPA Min allowed resources for the pod                                                                                                                                  | `{}`    |
 | `dataPlane.autoscaling.vpa.updatePolicy.updateMode` | Autoscaling update policy Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod | `Auto`  |
 | `dataPlane.autoscaling.hpa.enabled`                 | Enable HPA for APISIX Data Plane                                                                                                                                       | `false` |
 | `dataPlane.autoscaling.hpa.minReplicas`             | Minimum number of APISIX Data Plane replicas                                                                                                                           | `""`    |
@@ -378,18 +373,13 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### APISIX Data Plane Autoscaling configuration
 
-| Name                                               | Description                                                                                    | Value   |
-| -------------------------------------------------- | ---------------------------------------------------------------------------------------------- | ------- |
-| `controlPlane.autoscaling.vpa.enabled`             | Enable VPA                                                                                     | `false` |
-| `controlPlane.autoscaling.vpa.annotations`         | Annotations for VPA resource                                                                   | `{}`    |
-| `controlPlane.autoscaling.vpa.controlledResources` | VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory | `[]`    |
-| `controlPlane.autoscaling.vpa.maxAllowed`          | VPA Max allowed resources for the pod                                                          | `{}`    |
-| `controlPlane.autoscaling.vpa.minAllowed`          | VPA Min allowed resources for the pod                                                          | `{}`    |
-
-### VPA update policy
-
 | Name                                                   | Description                                                                                                                                                            | Value   |
 | ------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `controlPlane.autoscaling.vpa.enabled`                 | Enable VPA                                                                                                                                                             | `false` |
+| `controlPlane.autoscaling.vpa.annotations`             | Annotations for VPA resource                                                                                                                                           | `{}`    |
+| `controlPlane.autoscaling.vpa.controlledResources`     | VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory                                                                         | `[]`    |
+| `controlPlane.autoscaling.vpa.maxAllowed`              | VPA Max allowed resources for the pod                                                                                                                                  | `{}`    |
+| `controlPlane.autoscaling.vpa.minAllowed`              | VPA Min allowed resources for the pod                                                                                                                                  | `{}`    |
 | `controlPlane.autoscaling.vpa.updatePolicy.updateMode` | Autoscaling update policy Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod | `Auto`  |
 | `controlPlane.autoscaling.hpa.enabled`                 | Enable HPA for APISIX Data Plane                                                                                                                                       | `false` |
 | `controlPlane.autoscaling.hpa.minReplicas`             | Minimum number of APISIX Data Plane replicas                                                                                                                           | `""`    |
@@ -551,18 +541,13 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### APISIX Dashboard Autoscaling configuration
 
-| Name                                            | Description                                                                                    | Value   |
-| ----------------------------------------------- | ---------------------------------------------------------------------------------------------- | ------- |
-| `dashboard.autoscaling.vpa.enabled`             | Enable VPA                                                                                     | `false` |
-| `dashboard.autoscaling.vpa.annotations`         | Annotations for VPA resource                                                                   | `{}`    |
-| `dashboard.autoscaling.vpa.controlledResources` | VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory | `[]`    |
-| `dashboard.autoscaling.vpa.maxAllowed`          | VPA Max allowed resources for the pod                                                          | `{}`    |
-| `dashboard.autoscaling.vpa.minAllowed`          | VPA Min allowed resources for the pod                                                          | `{}`    |
-
-### VPA update policy
-
 | Name                                                | Description                                                                                                                                                            | Value   |
 | --------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `dashboard.autoscaling.vpa.enabled`                 | Enable VPA                                                                                                                                                             | `false` |
+| `dashboard.autoscaling.vpa.annotations`             | Annotations for VPA resource                                                                                                                                           | `{}`    |
+| `dashboard.autoscaling.vpa.controlledResources`     | VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory                                                                         | `[]`    |
+| `dashboard.autoscaling.vpa.maxAllowed`              | VPA Max allowed resources for the pod                                                                                                                                  | `{}`    |
+| `dashboard.autoscaling.vpa.minAllowed`              | VPA Min allowed resources for the pod                                                                                                                                  | `{}`    |
 | `dashboard.autoscaling.vpa.updatePolicy.updateMode` | Autoscaling update policy Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod | `Auto`  |
 | `dashboard.autoscaling.hpa.enabled`                 | Enable HPA for APISIX Dashboard                                                                                                                                        | `false` |
 | `dashboard.autoscaling.hpa.minReplicas`             | Minimum number of APISIX Dashboard replicas                                                                                                                            | `""`    |
@@ -703,18 +688,13 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### APISIX Ingress Controller Autoscaling configuration
 
-| Name                                                    | Description                                                                                    | Value   |
-| ------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | ------- |
-| `ingressController.autoscaling.vpa.enabled`             | Enable VPA                                                                                     | `false` |
-| `ingressController.autoscaling.vpa.annotations`         | Annotations for VPA resource                                                                   | `{}`    |
-| `ingressController.autoscaling.vpa.controlledResources` | VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory | `[]`    |
-| `ingressController.autoscaling.vpa.maxAllowed`          | VPA Max allowed resources for the pod                                                          | `{}`    |
-| `ingressController.autoscaling.vpa.minAllowed`          | VPA Min allowed resources for the pod                                                          | `{}`    |
-
-### VPA update policy
-
 | Name                                                        | Description                                                                                                                                                            | Value   |
 | ----------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `ingressController.autoscaling.vpa.enabled`                 | Enable VPA                                                                                                                                                             | `false` |
+| `ingressController.autoscaling.vpa.annotations`             | Annotations for VPA resource                                                                                                                                           | `{}`    |
+| `ingressController.autoscaling.vpa.controlledResources`     | VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory                                                                         | `[]`    |
+| `ingressController.autoscaling.vpa.maxAllowed`              | VPA Max allowed resources for the pod                                                                                                                                  | `{}`    |
+| `ingressController.autoscaling.vpa.minAllowed`              | VPA Min allowed resources for the pod                                                                                                                                  | `{}`    |
 | `ingressController.autoscaling.vpa.updatePolicy.updateMode` | Autoscaling update policy Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod | `Auto`  |
 | `ingressController.autoscaling.hpa.enabled`                 | Enable HPA for APISIX Ingress Controller                                                                                                                               | `false` |
 | `ingressController.autoscaling.hpa.minReplicas`             | Minimum number of APISIX Ingress Controller replicas                                                                                                                   | `""`    |
