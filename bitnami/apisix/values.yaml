@@ -1341,7 +1341,7 @@ controlPlane:
     ##
     extraRules: []
 
-  ## @section APISIX Data Plane Autoscaling configuration
+  ## @section APISIX Control Plane Autoscaling configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
   ##
   autoscaling:

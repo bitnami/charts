@@ -371,7 +371,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controlPlane.ingress.secrets`                  | Custom TLS certificates as secrets                                                                                               | `[]`                         |
 | `controlPlane.ingress.extraRules`               | Additional rules to be covered with this ingress record                                                                          | `[]`                         |
 
-### APISIX Data Plane Autoscaling configuration
+### APISIX Control Plane Autoscaling configuration
 
 | Name                                                   | Description                                                                                                                                                            | Value   |
 | ------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
