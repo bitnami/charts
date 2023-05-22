@@ -21,8 +21,8 @@ spec:
   resourcePolicy:
     containerPolicies:
     - containerName: apisix
-      {{- with .Values.dataPlane.autoscaling.vpa.dataledResources }}
-      dataledResources:
+      {{- with .Values.dataPlane.autoscaling.vpa.controlledResources }}
+      controlledResources:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       {{- with .Values.dataPlane.autoscaling.vpa.maxAllowed }}
