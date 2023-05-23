@@ -756,7 +756,7 @@
                         },
                         "tls": {
                             "type": "boolean",
-                            "description": "Enable TLS configuration for the host defined at `client.ingress.hostname` parameter",
+                            "description": "Enable TLS configuration for the host defined at `dataPlane.ingress.hostname` parameter",
                             "default": false
                         },
                         "selfSigned": {
@@ -1658,7 +1658,7 @@
                         },
                         "tls": {
                             "type": "boolean",
-                            "description": "Enable TLS configuration for the host defined at `client.ingress.hostname` parameter",
+                            "description": "Enable TLS configuration for the host defined at `controlPlane.ingress.hostname` parameter",
                             "default": false
                         },
                         "selfSigned": {
@@ -2551,7 +2551,7 @@
                         },
                         "tls": {
                             "type": "boolean",
-                            "description": "Enable TLS configuration for the host defined at `client.ingress.hostname` parameter",
+                            "description": "Enable TLS configuration for the host defined at `dashboard.ingress.hostname` parameter",
                             "default": false
                         },
                         "selfSigned": {
@@ -3331,7 +3331,7 @@
                         },
                         "tls": {
                             "type": "boolean",
-                            "description": "Enable TLS configuration for the host defined at `client.ingress.hostname` parameter",
+                            "description": "Enable TLS configuration for the host defined at `ingressController.ingress.hostname` parameter",
                             "default": false
                         },
                         "selfSigned": {
