@@ -223,7 +223,7 @@ data:
     SLEEP_PERIOD=10
 
     {{- if and .Values.auth.enabled .Values.auth.rootPassword }}
-    usernameAndPassword="-u root -p ${MONGODB_ROOT_PASSWORD}"
+    usernameAndPassword="-u ${$MONGODB_ROOT_USER} -p ${MONGODB_ROOT_PASSWORD}"
     {{- else }}
     usernameAndPassword=""
     {{- end }}

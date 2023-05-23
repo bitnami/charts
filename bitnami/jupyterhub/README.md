@@ -83,7 +83,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | -------------------- |
 | `hub.image.registry`                        | Hub image registry                                                                                                       | `docker.io`          |
 | `hub.image.repository`                      | Hub image repository                                                                                                     | `bitnami/jupyterhub` |
-| `hub.image.tag`                             | Hub image tag (immutable tags are recommended)                                                                           | `4.0.0-debian-11-r6` |
+| `hub.image.tag`                             | Hub image tag (immutable tags are recommended)                                                                           | `4.0.0-debian-11-r7` |
 | `hub.image.digest`                          | Hub image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                      | `""`                 |
 | `hub.image.pullPolicy`                      | Hub image pull policy                                                                                                    | `IfNotPresent`       |
 | `hub.image.pullSecrets`                     | Hub image pull secrets                                                                                                   | `[]`                 |
@@ -396,7 +396,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------- | ------------------------------------ |
 | `singleuser.image.registry`                     | Single User image registry                                                                                  | `docker.io`                          |
 | `singleuser.image.repository`                   | Single User image repository                                                                                | `bitnami/jupyter-base-notebook`      |
-| `singleuser.image.tag`                          | Single User image tag (immutabe tags are recommended)                                                       | `4.0.0-debian-11-r4`                 |
+| `singleuser.image.tag`                          | Single User image tag (immutabe tags are recommended)                                                       | `4.0.0-debian-11-r5`                 |
 | `singleuser.image.digest`                       | Single User image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                                 |
 | `singleuser.image.pullPolicy`                   | Single User image pull policy                                                                               | `IfNotPresent`                       |
 | `singleuser.image.pullSecrets`                  | Single User image pull secrets                                                                              | `[]`                                 |

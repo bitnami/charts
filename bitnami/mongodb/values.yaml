@@ -199,13 +199,17 @@ tls:
   ##
   caCert: ""
   caKey: ""
+  ## @param tls.pemChainIncluded Flag to denote that the Certificate Authority (CA) certificates are bundled with the endpoint cert.
+  ## Certificates must be in proper order, where the top certificate is the leaf and the bottom certificate is the top-most intermediate CA.
+  ##
+  pemChainIncluded: false
   standalone:
-    ## @param tls.standalone.existingSecret Existing secret with TLS certificates (`tls.key`, `tls.crt`, `ca.crt`).
+    ## @param tls.standalone.existingSecret Existing secret with TLS certificates (`tls.key`, `tls.crt`, `ca.crt`) or (`tls.key`, `tls.crt`) with tls.pemChainIncluded set as enabled.
     ## NOTE: When it's set it will disable certificate self-generation from existing CA.
     ##
     existingSecret: ""
   replicaset:
-    ## @param tls.replicaset.existingSecrets Array of existing secrets with TLS certificates (`tls.key`, `tls.crt`, `ca.crt`).
+    ## @param tls.replicaset.existingSecrets Array of existing secrets with TLS certificates (`tls.key`, `tls.crt`, `ca.crt`) or (`tls.key`, `tls.crt`) with tls.pemChainIncluded set as enabled.
     ## existingSecrets:
     ##  - "mySecret-0"
     ##  - "mySecret-1"
@@ -213,7 +217,7 @@ tls:
     ##
     existingSecrets: []
   hidden:
-    ## @param tls.hidden.existingSecrets Array of existing secrets with TLS certificates (`tls.key`, `tls.crt`, `ca.crt`).
+    ## @param tls.hidden.existingSecrets Array of existing secrets with TLS certificates (`tls.key`, `tls.crt`, `ca.crt`) or (`tls.key`, `tls.crt`) with tls.pemChainIncluded set as enabled.
     ## existingSecrets:
     ##  - "mySecret-0"
     ##  - "mySecret-1"
@@ -221,7 +225,7 @@ tls:
     ##
     existingSecrets: []
   arbiter:
-    ## @param tls.arbiter.existingSecret Existing secret with TLS certificates (`tls.key`, `tls.crt`, `ca.crt`).
+    ## @param tls.arbiter.existingSecret Existing secret with TLS certificates (`tls.key`, `tls.crt`, `ca.crt`) or (`tls.key`, `tls.crt`) with tls.pemChainIncluded set as enabled.
     ## NOTE: When it's set it will disable certificate self-generation from existing CA.
     ##
     existingSecret: ""
