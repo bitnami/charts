@@ -6,7 +6,7 @@ import {
 it('allows to create a service in the dashboard', () => {
   cy.login();
   cy.visit('/service/list');
-  // Go to the secrets page
+  // Go to the services page
   cy.get('button').contains('Create').click();
   // Create a service
   cy.fixture('service').then((svc) => {
