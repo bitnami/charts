@@ -1,0 +1,6 @@
+{
+    "service": {
+        "name": "vib-svc",
+        "host": "bitnami.com"
+    }
+}
