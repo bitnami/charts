@@ -74,7 +74,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                                                                                 | `["infinity"]`       |
 | `image.registry`         | APISIX image registry                                                                                                                             | `docker.io`          |
 | `image.repository`       | APISIX image repository                                                                                                                           | `bitnami/apisix`     |
-| `image.tag`              | APISIX image tag (immutable tags are recommended)                                                                                                 | `3.3.0-debian-11-r6` |
+| `image.tag`              | APISIX image tag (immutable tags are recommended)                                                                                                 | `3.3.0-debian-11-r7` |
 | `image.digest`           | APISIX image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended) | `""`                 |
 | `image.pullPolicy`       | APISIX image pull policy                                                                                                                          | `IfNotPresent`       |
 | `image.pullSecrets`      | APISIX image pull secrets                                                                                                                         | `[]`                 |
