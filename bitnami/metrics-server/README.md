@@ -8,8 +8,6 @@ Metrics Server aggregates resource usage data, such as container CPU and memory 
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 
-Looking to use Metrics Server in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
-
 ## TL;DR
 
 ```console
@@ -79,7 +77,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------ |
 | `image.registry`                                  | Metrics Server image registry                                                                                                                                            | `docker.io`              |
 | `image.repository`                                | Metrics Server image repository                                                                                                                                          | `bitnami/metrics-server` |
-| `image.tag`                                       | Metrics Server image tag (immutable tags are recommended)                                                                                                                | `0.6.3-debian-11-r16`    |
+| `image.tag`                                       | Metrics Server image tag (immutable tags are recommended)                                                                                                                | `0.6.3-debian-11-r21`    |
 | `image.digest`                                    | Metrics Server image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                           | `""`                     |
 | `image.pullPolicy`                                | Metrics Server image pull policy                                                                                                                                         | `IfNotPresent`           |
 | `image.pullSecrets`                               | Metrics Server image pull secrets                                                                                                                                        | `[]`                     |
