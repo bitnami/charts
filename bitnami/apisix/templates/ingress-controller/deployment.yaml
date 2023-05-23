@@ -170,7 +170,7 @@ spec:
               mountPath: /bitnami/certs
             {{- end }}
             {{- if .Values.controlPlane.tls.enabled}}
-            - name: data-plane-certs
+            - name: control-plane-certs
               mountPath: /etc/ssl/certs/{{ .Values.controlPlane.tls.certCAFilename }}
               subPath: {{ .Values.controlPlane.tls.certCAFilename }}
             {{- end }}
@@ -199,7 +199,7 @@ spec:
             secretName: {{ template "apisix.ingress-controller.tlsSecretName" . }}
         {{- end }}
         {{- if .Values.controlPlane.tls.enabled }}
-        - name: data-plane-certs
+        - name: control-plane-certs
           secret:
             secretName: {{ template "apisix.control-plane.tlsSecretName" . }}
         {{- end }}
