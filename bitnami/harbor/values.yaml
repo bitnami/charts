@@ -3530,6 +3530,12 @@ exporter:
   ## @param exporter.extraEnvVarsCM ConfigMap containing extra env vars
   ##
   extraEnvVarsCM: ""
+  ## @param exporter.existingSecret Existing secret for exporter
+  ## The secret must contain the keys:
+  ## `POSTGRESQL_PASSWORD` (required),
+  ## `HARBOR_ADMIN_PASSWORD` (required),
+  ##
+  existingSecret: ""
   ## @param exporter.extraEnvVarsSecret Secret containing extra env vars (in case of sensitive data)
   ##
   extraEnvVarsSecret: ""

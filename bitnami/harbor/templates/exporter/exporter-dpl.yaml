@@ -99,14 +99,27 @@ spec:
               value: {{ ternary "true" "false" .Values.exporter.image.debug | quote }}
             - name: HARBOR_DATABASE_PASSWORD
               valueFrom:
+              valueFrom:
+                {{- if .Values.exporter.existingSecret }}
+                secretKeyRef:
+                  name: {{ .Values.exporter.existingSecret }}
+                  key: POSTGRESQL_PASSWORD
+                {{- else }}
                 secretKeyRef:
                   name: {{ include "harbor.core" . }}-envvars
                   key: POSTGRESQL_PASSWORD
+                {{- end }}
             - name: HARBOR_ADMIN_PASSWORD
               valueFrom:
+                {{- if .Values.exporter.existingSecret }}
+                secretKeyRef:
+                  name: {{ .Values.exporter.existingSecret }}
+                  key: HARBOR_ADMIN_PASSWORD
+                {{- else }}
                 secretKeyRef:
                   name: {{ include "harbor.core" . }}-envvars
                   key: HARBOR_ADMIN_PASSWORD
+                {{- end }}
             {{- if .Values.exporter.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.exporter.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
