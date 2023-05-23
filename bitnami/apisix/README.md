@@ -128,6 +128,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dataPlane.args`                                              | Override default container args (useful when using custom images)                                                        | `[]`             |
 | `dataPlane.hostAliases`                                       | APISIX pods host aliases                                                                                                 | `[]`             |
 | `dataPlane.defaultConfig`                                     | Apisix apisix configuration (evaluated as a template)                                                                    | `""`             |
+| `dataPlane.extraConfig`                                       | extra configuration parameters to add to the config.yaml file in APISIX Data plane                                       | `{}`             |
 | `dataPlane.existingConfigMap`                                 | name of a ConfigMap with existing configuration for the apisix                                                           | `""`             |
 | `dataPlane.extraConfigExistingConfigMap`                      | name of a ConfigMap with existing configuration for the data plane                                                       | `""`             |
 | `dataPlane.tls.enabled`                                       | Enable TLS transport in Data Plane                                                                                       | `true`           |

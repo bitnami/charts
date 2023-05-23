@@ -28,11 +28,13 @@ spec:
     metadata:
       annotations:
         checksum/config: {{ include (print $.Template.BasePath "/data-plane/configmap.yaml") . | sha256sum }}
-        {{- if .Values.podAnnotations }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
-        {{- end }}
+        checksum/config-extra: {{ include (print $.Template.BasePath "/data-plane/extra-configmap.yaml") . | sha256sum }}
+        checksum/secret: {{ include (print $.Template.BasePath "/control-plane/api-token-secret.yaml") . | sha256sum }}
         {{- if .Values.dataPlane.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.dataPlane.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.commonAnnotations }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
         {{- end }}
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/part-of: apisix

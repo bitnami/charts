@@ -292,6 +292,10 @@ dataPlane:
 
         default_weight: 50 # weight assigned to each discovered endpoint. default 50, minimum 0
 
+  ## @param dataPlane.extraConfig [object] extra configuration parameters to add to the config.yaml file in APISIX Data plane
+  ##
+  extraConfig: {}
+
   ## @param dataPlane.existingConfigMap name of a ConfigMap with existing configuration for the apisix
   ##
   existingConfigMap: ""

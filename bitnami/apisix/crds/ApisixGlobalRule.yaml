@@ -1,4 +1,4 @@
-# Taken from https://github.com/apache/apisix-helm-chart/blob/master/charts/apisix-ingress-controller/crds/ApisixGlobalRule.yaml
+# Taken from https://github.com/apache/apisix-helm-chart/blob/apisix-ingress-controller-0.11.6/charts/apisix-ingress-controller/crds/ApisixGlobalRule.yaml
 #
 # Licensed to the Apache Software Foundation (ASF) under one or more
 # contributor license agreements.  See the NOTICE file distributed with

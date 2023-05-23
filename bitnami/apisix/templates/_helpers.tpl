@@ -265,7 +265,7 @@ Name of the dashboard ConfigMap
 Name of the control-plane ConfigMap
 */}}
 {{- define "apisix.dashboard.extraConfigmapName" -}}
-{{- if .Values.dashboard.extraConfigexistingConfigMap -}}
+{{- if .Values.dashboard.extraConfigExistingConfigMap -}}
     {{- include "common.tplvalues.render" (dict "value" .Values.dashboard.extraConfigExistingConfigMap "context" $) -}}
 {{- else -}}
     {{- printf "%s-extra" (include "apisix.dashboard.fullname" .) | trunc 63 | trimSuffix "-" -}}
@@ -514,7 +514,7 @@ Init container definition for waiting for the database to be ready
     {{- if .Values.etcd.auth.rbac.create -}}
         {{- true -}}
     {{- end -}}
-{{- else if .Values.externalEtcd.hosts -}}
+{{- else if .Values.externalEtcd.servers -}}
     {{- if or .Values.externalEtcd.existingSecret .Values.externalEtcd.password -}}
         {{- true -}}
     {{- end -}}
