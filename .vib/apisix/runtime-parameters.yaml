@@ -22,8 +22,9 @@ dataPlane:
     runAsUser: 1002
   service:
     ports:
-      http: 8001
-      https: 8002
+      # We need port 80 or the deployment check will fail
+      http: 80
+      https: 443
       metrics: 8003
   serviceAccount:
     automountServiceAccountToken: true
