@@ -450,7 +450,7 @@ spec:
             {{- end }}
             {{- if or .Values.primary.extendedConfiguration .Values.primary.existingExtendedConfigmap }}
             - name: postgresql-extended-config
-              mountPath: /bitnami/postgresql/conf/conf.d/
+              mountPath: {{ .Values.primary.persistence.mountPath }}/conf/conf.d/
             {{- end }}
             {{- if .Values.auth.usePasswordFiles }}
             - name: postgresql-password
@@ -474,7 +474,7 @@ spec:
             {{- end }}
             {{- if or .Values.primary.configuration .Values.primary.pgHbaConfiguration .Values.primary.existingConfigmap }}
             - name: postgresql-config
-              mountPath: /bitnami/postgresql/conf
+              mountPath: {{ .Values.primary.persistence.mountPath }}/conf
             {{- end }}
             {{- if .Values.primary.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.primary.extraVolumeMounts "context" $) | nindent 12 }}
