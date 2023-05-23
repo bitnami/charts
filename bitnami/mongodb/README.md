@@ -627,6 +627,7 @@ externalAccess:
     enabled: true
     host: external-mongodb-0.internal
 ```
+
 :warning: To bootstrap MongoDB(&reg;) with an external master that lies outside of Kubernetes, be sure to set up external access using any of the suggested methods in this chart to have connectivity between the MongoDB(&reg;) members. :warning:
 
 ### Add extra environment variables
