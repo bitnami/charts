@@ -47,6 +47,10 @@ dashboard:
       http: 80
       https: 443
 ingressController:
+  extraConfig:
+    kubernetes:
+      namespace_selector:
+        - 'kubernetes.io/metadata.name={{ include "common.names.namespace" . }}'
   metrics:
     enabled: true
   service:
