@@ -1,26 +1,26 @@
-# https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.65.1/example/prometheus-operator-crd/monitoring.coreos.com_alertmanagers.yaml
+# https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.65.1/example/prometheus-operator-crd/monitoring.coreos.com_thanosrulers.yaml
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
     controller-gen.kubebuilder.io/version: v0.11.1
   creationTimestamp: null
-  name: alertmanagers.monitoring.coreos.com
+  name: thanosrulers.monitoring.coreos.com
 spec:
   group: monitoring.coreos.com
   names:
     categories:
     - prometheus-operator
-    kind: Alertmanager
-    listKind: AlertmanagerList
-    plural: alertmanagers
+    kind: ThanosRuler
+    listKind: ThanosRulerList
+    plural: thanosrulers
     shortNames:
-    - am
-    singular: alertmanager
+    - ruler
+    singular: thanosruler
   scope: Namespaced
   versions:
   - additionalPrinterColumns:
-    - description: The version of Alertmanager
+    - description: The version of Thanos Ruler
       jsonPath: .spec.version
       name: Version
       type: string
@@ -49,7 +49,7 @@ spec:
     name: v1
     schema:
       openAPIV3Schema:
-        description: Alertmanager describes an Alertmanager cluster.
+        description: ThanosRuler defines a ThanosRuler deployment.
         properties:
           apiVersion:
             description: 'APIVersion defines the versioned schema of this representation
@@ -64,14 +64,33 @@ spec:
           metadata:
             type: object
           spec:
-            description: 'Specification of the desired behavior of the Alertmanager
+            description: 'Specification of the desired behavior of the ThanosRuler
               cluster. More info: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#spec-and-status'
             properties:
-              additionalPeers:
-                description: AdditionalPeers allows injecting a set of additional
-                  Alertmanagers to peer with to form a highly available cluster.
+              additionalArgs:
+                description: AdditionalArgs allows setting additional arguments for
+                  the ThanosRuler container. It is intended for e.g. activating hidden
+                  flags which are not supported by the dedicated configuration options
+                  yet. The arguments are passed as-is to the ThanosRuler container
+                  which may cause issues if they are invalid or not supported by the
+                  given ThanosRuler version. In case of an argument conflict (e.g.
+                  an argument which is already set by the operator itself) or when
+                  providing an invalid argument the reconciliation will fail and an
+                  error will be logged.
                 items:
-                  type: string
+                  description: Argument as part of the AdditionalArgs list.
+                  properties:
+                    name:
+                      description: Name of the argument, e.g. "scrape.discovery-reload-interval".
+                      minLength: 1
+                      type: string
+                    value:
+                      description: Argument value, e.g. 30s. Can be empty for name-only
+                        arguments (e.g. --storage.tsdb.no-lockfile)
+                      type: string
+                  required:
+                  - name
+                  type: object
                 type: array
               affinity:
                 description: If specified, the pod's scheduling constraints.
@@ -901,635 +920,83 @@ spec:
                         type: array
                     type: object
                 type: object
-              alertmanagerConfigMatcherStrategy:
-                description: The AlertmanagerConfigMatcherStrategy defines how AlertmanagerConfig
-                  objects match the alerts. In the future more options may be added.
-                properties:
-                  type:
-                    default: OnNamespace
-                    description: If set to `OnNamespace`, the operator injects a label
-                      matcher matching the namespace of the AlertmanagerConfig object
-                      for all its routes and inhibition rules. `None` will not add
-                      any additional matchers other than the ones specified in the
-                      AlertmanagerConfig. Default is `OnNamespace`.
-                    enum:
-                    - OnNamespace
-                    - None
-                    type: string
-                type: object
-              alertmanagerConfigNamespaceSelector:
-                description: Namespaces to be selected for AlertmanagerConfig discovery.
-                  If nil, only check own namespace.
-                properties:
-                  matchExpressions:
-                    description: matchExpressions is a list of label selector requirements.
-                      The requirements are ANDed.
-                    items:
-                      description: A label selector requirement is a selector that
-                        contains values, a key, and an operator that relates the key
-                        and values.
-                      properties:
-                        key:
-                          description: key is the label key that the selector applies
-                            to.
-                          type: string
-                        operator:
-                          description: operator represents a key's relationship to
-                            a set of values. Valid operators are In, NotIn, Exists
-                            and DoesNotExist.
-                          type: string
-                        values:
-                          description: values is an array of string values. If the
-                            operator is In or NotIn, the values array must be non-empty.
-                            If the operator is Exists or DoesNotExist, the values
-                            array must be empty. This array is replaced during a strategic
-                            merge patch.
-                          items:
-                            type: string
-                          type: array
-                      required:
-                      - key
-                      - operator
-                      type: object
-                    type: array
-                  matchLabels:
-                    additionalProperties:
-                      type: string
-                    description: matchLabels is a map of {key,value} pairs. A single
-                      {key,value} in the matchLabels map is equivalent to an element
-                      of matchExpressions, whose key field is "key", the operator
-                      is "In", and the values array contains only "value". The requirements
-                      are ANDed.
-                    type: object
-                type: object
-                x-kubernetes-map-type: atomic
-              alertmanagerConfigSelector:
-                description: AlertmanagerConfigs to be selected for to merge and configure
-                  Alertmanager with.
-                properties:
-                  matchExpressions:
-                    description: matchExpressions is a list of label selector requirements.
-                      The requirements are ANDed.
-                    items:
-                      description: A label selector requirement is a selector that
-                        contains values, a key, and an operator that relates the key
-                        and values.
-                      properties:
-                        key:
-                          description: key is the label key that the selector applies
-                            to.
-                          type: string
-                        operator:
-                          description: operator represents a key's relationship to
-                            a set of values. Valid operators are In, NotIn, Exists
-                            and DoesNotExist.
-                          type: string
-                        values:
-                          description: values is an array of string values. If the
-                            operator is In or NotIn, the values array must be non-empty.
-                            If the operator is Exists or DoesNotExist, the values
-                            array must be empty. This array is replaced during a strategic
-                            merge patch.
-                          items:
-                            type: string
-                          type: array
-                      required:
-                      - key
-                      - operator
-                      type: object
-                    type: array
-                  matchLabels:
-                    additionalProperties:
-                      type: string
-                    description: matchLabels is a map of {key,value} pairs. A single
-                      {key,value} in the matchLabels map is equivalent to an element
-                      of matchExpressions, whose key field is "key", the operator
-                      is "In", and the values array contains only "value". The requirements
-                      are ANDed.
-                    type: object
-                type: object
-                x-kubernetes-map-type: atomic
-              alertmanagerConfiguration:
-                description: 'EXPERIMENTAL: alertmanagerConfiguration specifies the
-                  configuration of Alertmanager. If defined, it takes precedence over
-                  the `configSecret` field. This field may change in future releases.'
-                properties:
-                  global:
-                    description: Defines the global parameters of the Alertmanager
-                      configuration.
-                    properties:
-                      httpConfig:
-                        description: HTTP client configuration.
-                        properties:
-                          authorization:
-                            description: Authorization header configuration for the
-                              client. This is mutually exclusive with BasicAuth and
-                              is only available starting from Alertmanager v0.22+.
-                            properties:
-                              credentials:
-                                description: The secret's key that contains the credentials
-                                  of the request
-                                properties:
-                                  key:
-                                    description: The key of the secret to select from.  Must
-                                      be a valid secret key.
-                                    type: string
-                                  name:
-                                    description: 'Name of the referent. More info:
-                                      https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
-                                      TODO: Add other useful fields. apiVersion, kind,
-                                      uid?'
-                                    type: string
-                                  optional:
-                                    description: Specify whether the Secret or its
-                                      key must be defined
-                                    type: boolean
-                                required:
-                                - key
-                                type: object
-                                x-kubernetes-map-type: atomic
-                              type:
-                                description: Set the authentication type. Defaults
-                                  to Bearer, Basic will cause an error
-                                type: string
-                            type: object
-                          basicAuth:
-                            description: BasicAuth for the client. This is mutually
-                              exclusive with Authorization. If both are defined, BasicAuth
-                              takes precedence.
-                            properties:
-                              password:
-                                description: The secret in the service monitor namespace
-                                  that contains the password for authentication.
-                                properties:
-                                  key:
-                                    description: The key of the secret to select from.  Must
-                                      be a valid secret key.
-                                    type: string
-                                  name:
-                                    description: 'Name of the referent. More info:
-                                      https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
-                                      TODO: Add other useful fields. apiVersion, kind,
-                                      uid?'
-                                    type: string
-                                  optional:
-                                    description: Specify whether the Secret or its
-                                      key must be defined
-                                    type: boolean
-                                required:
-                                - key
-                                type: object
-                                x-kubernetes-map-type: atomic
-                              username:
-                                description: The secret in the service monitor namespace
-                                  that contains the username for authentication.
-                                properties:
-                                  key:
-                                    description: The key of the secret to select from.  Must
-                                      be a valid secret key.
-                                    type: string
-                                  name:
-                                    description: 'Name of the referent. More info:
-                                      https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
-                                      TODO: Add other useful fields. apiVersion, kind,
-                                      uid?'
-                                    type: string
-                                  optional:
-                                    description: Specify whether the Secret or its
-                                      key must be defined
-                                    type: boolean
-                                required:
-                                - key
-                                type: object
-                                x-kubernetes-map-type: atomic
-                            type: object
-                          bearerTokenSecret:
-                            description: The secret's key that contains the bearer
-                              token to be used by the client for authentication. The
-                              secret needs to be in the same namespace as the Alertmanager
-                              object and accessible by the Prometheus Operator.
-                            properties:
-                              key:
-                                description: The key of the secret to select from.  Must
-                                  be a valid secret key.
-                                type: string
-                              name:
-                                description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
-                                  TODO: Add other useful fields. apiVersion, kind,
-                                  uid?'
-                                type: string
-                              optional:
-                                description: Specify whether the Secret or its key
-                                  must be defined
-                                type: boolean
-                            required:
-                            - key
-                            type: object
-                            x-kubernetes-map-type: atomic
-                          followRedirects:
-                            description: FollowRedirects specifies whether the client
-                              should follow HTTP 3xx redirects.
-                            type: boolean
-                          oauth2:
-                            description: OAuth2 client credentials used to fetch a
-                              token for the targets.
-                            properties:
-                              clientId:
-                                description: The secret or configmap containing the
-                                  OAuth2 client id
-                                properties:
-                                  configMap:
-                                    description: ConfigMap containing data to use
-                                      for the targets.
-                                    properties:
-                                      key:
-                                        description: The key to select.
-                                        type: string
-                                      name:
-                                        description: 'Name of the referent. More info:
-                                          https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
-                                          TODO: Add other useful fields. apiVersion,
-                                          kind, uid?'
-                                        type: string
-                                      optional:
-                                        description: Specify whether the ConfigMap
-                                          or its key must be defined
-                                        type: boolean
-                                    required:
-                                    - key
-                                    type: object
-                                    x-kubernetes-map-type: atomic
-                                  secret:
-                                    description: Secret containing data to use for
-                                      the targets.
-                                    properties:
-                                      key:
-                                        description: The key of the secret to select
-                                          from.  Must be a valid secret key.
-                                        type: string
-                                      name:
-                                        description: 'Name of the referent. More info:
-                                          https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
-                                          TODO: Add other useful fields. apiVersion,
-                                          kind, uid?'
-                                        type: string
-                                      optional:
-                                        description: Specify whether the Secret or
-                                          its key must be defined
-                                        type: boolean
-                                    required:
-                                    - key
-                                    type: object
-                                    x-kubernetes-map-type: atomic
-                                type: object
-                              clientSecret:
-                                description: The secret containing the OAuth2 client
-                                  secret
-                                properties:
-                                  key:
-                                    description: The key of the secret to select from.  Must
-                                      be a valid secret key.
-                                    type: string
-                                  name:
-                                    description: 'Name of the referent. More info:
-                                      https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
-                                      TODO: Add other useful fields. apiVersion, kind,
-                                      uid?'
-                                    type: string
-                                  optional:
-                                    description: Specify whether the Secret or its
-                                      key must be defined
-                                    type: boolean
-                                required:
-                                - key
-                                type: object
-                                x-kubernetes-map-type: atomic
-                              endpointParams:
-                                additionalProperties:
-                                  type: string
-                                description: Parameters to append to the token URL
-                                type: object
-                              scopes:
-                                description: OAuth2 scopes used for the token request
-                                items:
-                                  type: string
-                                type: array
-                              tokenUrl:
-                                description: The URL to fetch the token from
-                                minLength: 1
-                                type: string
-                            required:
-                            - clientId
-                            - clientSecret
-                            - tokenUrl
-                            type: object
-                          proxyURL:
-                            description: Optional proxy URL.
-                            type: string
-                          tlsConfig:
-                            description: TLS configuration for the client.
-                            properties:
-                              ca:
-                                description: Certificate authority used when verifying
-                                  server certificates.
-                                properties:
-                                  configMap:
-                                    description: ConfigMap containing data to use
-                                      for the targets.
-                                    properties:
-                                      key:
-                                        description: The key to select.
-                                        type: string
-                                      name:
-                                        description: 'Name of the referent. More info:
-                                          https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
-                                          TODO: Add other useful fields. apiVersion,
-                                          kind, uid?'
-                                        type: string
-                                      optional:
-                                        description: Specify whether the ConfigMap
-                                          or its key must be defined
-                                        type: boolean
-                                    required:
-                                    - key
-                                    type: object
-                                    x-kubernetes-map-type: atomic
-                                  secret:
-                                    description: Secret containing data to use for
-                                      the targets.
-                                    properties:
-                                      key:
-                                        description: The key of the secret to select
-                                          from.  Must be a valid secret key.
-                                        type: string
-                                      name:
-                                        description: 'Name of the referent. More info:
-                                          https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
-                                          TODO: Add other useful fields. apiVersion,
-                                          kind, uid?'
-                                        type: string
-                                      optional:
-                                        description: Specify whether the Secret or
-                                          its key must be defined
-                                        type: boolean
-                                    required:
-                                    - key
-                                    type: object
-                                    x-kubernetes-map-type: atomic
-                                type: object
-                              cert:
-                                description: Client certificate to present when doing
-                                  client-authentication.
-                                properties:
-                                  configMap:
-                                    description: ConfigMap containing data to use
-                                      for the targets.
-                                    properties:
-                                      key:
-                                        description: The key to select.
-                                        type: string
-                                      name:
-                                        description: 'Name of the referent. More info:
-                                          https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
-                                          TODO: Add other useful fields. apiVersion,
-                                          kind, uid?'
-                                        type: string
-                                      optional:
-                                        description: Specify whether the ConfigMap
-                                          or its key must be defined
-                                        type: boolean
-                                    required:
-                                    - key
-                                    type: object
-                                    x-kubernetes-map-type: atomic
-                                  secret:
-                                    description: Secret containing data to use for
-                                      the targets.
-                                    properties:
-                                      key:
-                                        description: The key of the secret to select
-                                          from.  Must be a valid secret key.
-                                        type: string
-                                      name:
-                                        description: 'Name of the referent. More info:
-                                          https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
-                                          TODO: Add other useful fields. apiVersion,
-                                          kind, uid?'
-                                        type: string
-                                      optional:
-                                        description: Specify whether the Secret or
-                                          its key must be defined
-                                        type: boolean
-                                    required:
-                                    - key
-                                    type: object
-                                    x-kubernetes-map-type: atomic
-                                type: object
-                              insecureSkipVerify:
-                                description: Disable target certificate validation.
-                                type: boolean
-                              keySecret:
-                                description: Secret containing the client key file
-                                  for the targets.
-                                properties:
-                                  key:
-                                    description: The key of the secret to select from.  Must
-                                      be a valid secret key.
-                                    type: string
-                                  name:
-                                    description: 'Name of the referent. More info:
-                                      https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
-                                      TODO: Add other useful fields. apiVersion, kind,
-                                      uid?'
-                                    type: string
-                                  optional:
-                                    description: Specify whether the Secret or its
-                                      key must be defined
-                                    type: boolean
-                                required:
-                                - key
-                                type: object
-                                x-kubernetes-map-type: atomic
-                              serverName:
-                                description: Used to verify the hostname for the targets.
-                                type: string
-                            type: object
-                        type: object
-                      opsGenieApiKey:
-                        description: The default OpsGenie API Key.
-                        properties:
-                          key:
-                            description: The key of the secret to select from.  Must
-                              be a valid secret key.
-                            type: string
-                          name:
-                            description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
-                              TODO: Add other useful fields. apiVersion, kind, uid?'
-                            type: string
-                          optional:
-                            description: Specify whether the Secret or its key must
-                              be defined
-                            type: boolean
-                        required:
-                        - key
-                        type: object
-                        x-kubernetes-map-type: atomic
-                      opsGenieApiUrl:
-                        description: The default OpsGenie API URL.
-                        properties:
-                          key:
-                            description: The key of the secret to select from.  Must
-                              be a valid secret key.
-                            type: string
-                          name:
-                            description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
-                              TODO: Add other useful fields. apiVersion, kind, uid?'
-                            type: string
-                          optional:
-                            description: Specify whether the Secret or its key must
-                              be defined
-                            type: boolean
-                        required:
-                        - key
-                        type: object
-                        x-kubernetes-map-type: atomic
-                      pagerdutyUrl:
-                        description: The default Pagerduty URL.
-                        type: string
-                      resolveTimeout:
-                        description: ResolveTimeout is the default value used by alertmanager
-                          if the alert does not include EndsAt, after this time passes
-                          it can declare the alert as resolved if it has not been
-                          updated. This has no impact on alerts from Prometheus, as
-                          they always include EndsAt.
-                        pattern: ^(0|(([0-9]+)y)?(([0-9]+)w)?(([0-9]+)d)?(([0-9]+)h)?(([0-9]+)m)?(([0-9]+)s)?(([0-9]+)ms)?)$
-                        type: string
-                      slackApiUrl:
-                        description: The default Slack API URL.
-                        properties:
-                          key:
-                            description: The key of the secret to select from.  Must
-                              be a valid secret key.
-                            type: string
-                          name:
-                            description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
-                              TODO: Add other useful fields. apiVersion, kind, uid?'
-                            type: string
-                          optional:
-                            description: Specify whether the Secret or its key must
-                              be defined
-                            type: boolean
-                        required:
-                        - key
-                        type: object
-                        x-kubernetes-map-type: atomic
-                    type: object
-                  name:
-                    description: The name of the AlertmanagerConfig resource which
-                      is used to generate the Alertmanager configuration. It must
-                      be defined in the same namespace as the Alertmanager object.
-                      The operator will not enforce a `namespace` label for routes
-                      and inhibition rules.
-                    minLength: 1
-                    type: string
-                  templates:
-                    description: Custom notification templates.
-                    items:
-                      description: SecretOrConfigMap allows to specify data as a Secret
-                        or ConfigMap. Fields are mutually exclusive.
-                      properties:
-                        configMap:
-                          description: ConfigMap containing data to use for the targets.
-                          properties:
-                            key:
-                              description: The key to select.
-                              type: string
-                            name:
-                              description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
-                                TODO: Add other useful fields. apiVersion, kind, uid?'
-                              type: string
-                            optional:
-                              description: Specify whether the ConfigMap or its key
-                                must be defined
-                              type: boolean
-                          required:
-                          - key
-                          type: object
-                          x-kubernetes-map-type: atomic
-                        secret:
-                          description: Secret containing data to use for the targets.
-                          properties:
-                            key:
-                              description: The key of the secret to select from.  Must
-                                be a valid secret key.
-                              type: string
-                            name:
-                              description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
-                                TODO: Add other useful fields. apiVersion, kind, uid?'
-                              type: string
-                            optional:
-                              description: Specify whether the Secret or its key must
-                                be defined
-                              type: boolean
-                          required:
-                          - key
-                          type: object
-                          x-kubernetes-map-type: atomic
-                      type: object
-                    type: array
-                type: object
-              baseImage:
-                description: 'Base image that is used to deploy pods, without tag.
-                  Deprecated: use ''image'' instead'
-                type: string
-              clusterAdvertiseAddress:
-                description: 'ClusterAdvertiseAddress is the explicit address to advertise
-                  in cluster. Needs to be provided for non RFC1918 [1] (public) addresses.
-                  [1] RFC1918: https://tools.ietf.org/html/rfc1918'
-                type: string
-              clusterGossipInterval:
-                description: Interval between gossip attempts.
-                pattern: ^(0|(([0-9]+)h)?(([0-9]+)m)?(([0-9]+)s)?(([0-9]+)ms)?)$
-                type: string
-              clusterPeerTimeout:
-                description: Timeout for cluster peering.
-                pattern: ^(0|(([0-9]+)h)?(([0-9]+)m)?(([0-9]+)s)?(([0-9]+)ms)?)$
-                type: string
-              clusterPushpullInterval:
-                description: Interval between pushpull attempts.
-                pattern: ^(0|(([0-9]+)h)?(([0-9]+)m)?(([0-9]+)s)?(([0-9]+)ms)?)$
-                type: string
-              configMaps:
-                description: ConfigMaps is a list of ConfigMaps in the same namespace
-                  as the Alertmanager object, which shall be mounted into the Alertmanager
-                  Pods. Each ConfigMap is added to the StatefulSet definition as a
-                  volume named `configmap-<configmap-name>`. The ConfigMaps are mounted
-                  into `/etc/alertmanager/configmaps/<configmap-name>` in the 'alertmanager'
-                  container.
+              alertDropLabels:
+                description: AlertDropLabels configure the label names which should
+                  be dropped in ThanosRuler alerts. The replica label `thanos_ruler_replica`
+                  will always be dropped in alerts.
                 items:
                   type: string
                 type: array
-              configSecret:
-                description: "ConfigSecret is the name of a Kubernetes Secret in the
-                  same namespace as the Alertmanager object, which contains the configuration
-                  for this Alertmanager instance. If empty, it defaults to `alertmanager-<alertmanager-name>`.
-                  \n The Alertmanager configuration should be available under the
-                  `alertmanager.yaml` key. Additional keys from the original secret
-                  are copied to the generated secret and mounted into the `/etc/alertmanager/config`
-                  directory in the `alertmanager` container. \n If either the secret
-                  or the `alertmanager.yaml` key is missing, the operator provisions
-                  a minimal Alertmanager configuration with one empty receiver (effectively
-                  dropping alert notifications)."
+              alertQueryUrl:
+                description: The external Query URL the Thanos Ruler will set in the
+                  'Source' field of all alerts. Maps to the '--alert.query-url' CLI
+                  arg.
                 type: string
+              alertRelabelConfigFile:
+                description: AlertRelabelConfigFile specifies the path of the alert
+                  relabeling configuration file. When used alongside with AlertRelabelConfigs,
+                  alertRelabelConfigFile takes precedence.
+                type: string
+              alertRelabelConfigs:
+                description: 'AlertRelabelConfigs configures alert relabeling in ThanosRuler.
+                  Alert relabel configurations must have the form as specified in
+                  the official Prometheus documentation: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#alert_relabel_configs
+                  Alternative to AlertRelabelConfigFile, and lower order priority.'
+                properties:
+                  key:
+                    description: The key of the secret to select from.  Must be a
+                      valid secret key.
+                    type: string
+                  name:
+                    description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                      TODO: Add other useful fields. apiVersion, kind, uid?'
+                    type: string
+                  optional:
+                    description: Specify whether the Secret or its key must be defined
+                    type: boolean
+                required:
+                - key
+                type: object
+                x-kubernetes-map-type: atomic
+              alertmanagersConfig:
+                description: Define configuration for connecting to alertmanager.  Only
+                  available with thanos v0.10.0 and higher.  Maps to the `alertmanagers.config`
+                  arg.
+                properties:
+                  key:
+                    description: The key of the secret to select from.  Must be a
+                      valid secret key.
+                    type: string
+                  name:
+                    description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                      TODO: Add other useful fields. apiVersion, kind, uid?'
+                    type: string
+                  optional:
+                    description: Specify whether the Secret or its key must be defined
+                    type: boolean
+                required:
+                - key
+                type: object
+                x-kubernetes-map-type: atomic
+              alertmanagersUrl:
+                description: 'Define URLs to send alerts to Alertmanager.  For Thanos
+                  v0.10.0 and higher, AlertManagersConfig should be used instead.  Note:
+                  this field will be ignored if AlertManagersConfig is specified.
+                  Maps to the `alertmanagers.url` arg.'
+                items:
+                  type: string
+                type: array
               containers:
-                description: 'Containers allows injecting additional containers. This
-                  is meant to allow adding an authentication proxy to an Alertmanager
-                  pod. Containers described here modify an operator generated container
-                  if they share the same name and modifications are done via a strategic
-                  merge patch. The current container names are: `alertmanager` and
-                  `config-reloader`. Overriding containers is entirely outside the
-                  scope of what the maintainers will support and by doing so, you
-                  accept that this behaviour may break at any time without notice.'
+                description: 'Containers allows injecting additional containers or
+                  modifying operator generated containers. This can be used to allow
+                  adding an authentication proxy to a ThanosRuler pod or to change
+                  the behavior of an operator generated container. Containers described
+                  here modify an operator generated container if they share the same
+                  name and modifications are done via a strategic merge patch. The
+                  current container names are: `thanos-ruler` and `config-reloader`.
+                  Overriding containers is entirely outside the scope of what the
+                  maintainers will support and by doing so, you accept that this behaviour
+                  may break at any time without notice.'
                 items:
                   description: A single application container that you want to run
                     within a pod.
@@ -2787,17 +2254,184 @@ spec:
                   - name
                   type: object
                 type: array
-              externalUrl:
-                description: The external URL the Alertmanager instances will be available
-                  under. This is necessary to generate correct URLs. This is necessary
-                  if Alertmanager is not served from root of a DNS name.
+              enforcedNamespaceLabel:
+                description: EnforcedNamespaceLabel enforces adding a namespace label
+                  of origin for each alert and metric that is user created. The label
+                  value will always be the namespace of the object that is being created.
                 type: string
-              forceEnableClusterMode:
-                description: ForceEnableClusterMode ensures Alertmanager does not
-                  deactivate the cluster mode when running with a single replica.
-                  Use case is e.g. spanning an Alertmanager cluster across Kubernetes
-                  clusters with a single replica in each.
-                type: boolean
+              evaluationInterval:
+                default: 15s
+                description: Interval between consecutive evaluations.
+                pattern: ^(0|(([0-9]+)y)?(([0-9]+)w)?(([0-9]+)d)?(([0-9]+)h)?(([0-9]+)m)?(([0-9]+)s)?(([0-9]+)ms)?)$
+                type: string
+              excludedFromEnforcement:
+                description: List of references to PrometheusRule objects to be excluded
+                  from enforcing a namespace label of origin. Applies only if enforcedNamespaceLabel
+                  set to true.
+                items:
+                  description: ObjectReference references a PodMonitor, ServiceMonitor,
+                    Probe or PrometheusRule object.
+                  properties:
+                    group:
+                      default: monitoring.coreos.com
+                      description: Group of the referent. When not specified, it defaults
+                        to `monitoring.coreos.com`
+                      enum:
+                      - monitoring.coreos.com
+                      type: string
+                    name:
+                      description: Name of the referent. When not set, all resources
+                        are matched.
+                      type: string
+                    namespace:
+                      description: 'Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/'
+                      minLength: 1
+                      type: string
+                    resource:
+                      description: Resource of the referent.
+                      enum:
+                      - prometheusrules
+                      - servicemonitors
+                      - podmonitors
+                      - probes
+                      type: string
+                  required:
+                  - namespace
+                  - resource
+                  type: object
+                type: array
+              externalPrefix:
+                description: The external URL the Thanos Ruler instances will be available
+                  under. This is necessary to generate correct URLs. This is necessary
+                  if Thanos Ruler is not served from root of a DNS name.
+                type: string
+              grpcServerTlsConfig:
+                description: 'GRPCServerTLSConfig configures the gRPC server from
+                  which Thanos Querier reads recorded rule data. Note: Currently only
+                  the CAFile, CertFile, and KeyFile fields are supported. Maps to
+                  the ''--grpc-server-tls-*'' CLI args.'
+                properties:
+                  ca:
+                    description: Certificate authority used when verifying server
+                      certificates.
+                    properties:
+                      configMap:
+                        description: ConfigMap containing data to use for the targets.
+                        properties:
+                          key:
+                            description: The key to select.
+                            type: string
+                          name:
+                            description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                              TODO: Add other useful fields. apiVersion, kind, uid?'
+                            type: string
+                          optional:
+                            description: Specify whether the ConfigMap or its key
+                              must be defined
+                            type: boolean
+                        required:
+                        - key
+                        type: object
+                        x-kubernetes-map-type: atomic
+                      secret:
+                        description: Secret containing data to use for the targets.
+                        properties:
+                          key:
+                            description: The key of the secret to select from.  Must
+                              be a valid secret key.
+                            type: string
+                          name:
+                            description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                              TODO: Add other useful fields. apiVersion, kind, uid?'
+                            type: string
+                          optional:
+                            description: Specify whether the Secret or its key must
+                              be defined
+                            type: boolean
+                        required:
+                        - key
+                        type: object
+                        x-kubernetes-map-type: atomic
+                    type: object
+                  caFile:
+                    description: Path to the CA cert in the Prometheus container to
+                      use for the targets.
+                    type: string
+                  cert:
+                    description: Client certificate to present when doing client-authentication.
+                    properties:
+                      configMap:
+                        description: ConfigMap containing data to use for the targets.
+                        properties:
+                          key:
+                            description: The key to select.
+                            type: string
+                          name:
+                            description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                              TODO: Add other useful fields. apiVersion, kind, uid?'
+                            type: string
+                          optional:
+                            description: Specify whether the ConfigMap or its key
+                              must be defined
+                            type: boolean
+                        required:
+                        - key
+                        type: object
+                        x-kubernetes-map-type: atomic
+                      secret:
+                        description: Secret containing data to use for the targets.
+                        properties:
+                          key:
+                            description: The key of the secret to select from.  Must
+                              be a valid secret key.
+                            type: string
+                          name:
+                            description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                              TODO: Add other useful fields. apiVersion, kind, uid?'
+                            type: string
+                          optional:
+                            description: Specify whether the Secret or its key must
+                              be defined
+                            type: boolean
+                        required:
+                        - key
+                        type: object
+                        x-kubernetes-map-type: atomic
+                    type: object
+                  certFile:
+                    description: Path to the client cert file in the Prometheus container
+                      for the targets.
+                    type: string
+                  insecureSkipVerify:
+                    description: Disable target certificate validation.
+                    type: boolean
+                  keyFile:
+                    description: Path to the client key file in the Prometheus container
+                      for the targets.
+                    type: string
+                  keySecret:
+                    description: Secret containing the client key file for the targets.
+                    properties:
+                      key:
+                        description: The key of the secret to select from.  Must be
+                          a valid secret key.
+                        type: string
+                      name:
+                        description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                          TODO: Add other useful fields. apiVersion, kind, uid?'
+                        type: string
+                      optional:
+                        description: Specify whether the Secret or its key must be
+                          defined
+                        type: boolean
+                    required:
+                    - key
+                    type: object
+                    x-kubernetes-map-type: atomic
+                  serverName:
+                    description: Used to verify the hostname for the targets.
+                    type: string
+                type: object
               hostAliases:
                 description: Pods' hostAliases configuration
                 items:
@@ -2821,13 +2455,10 @@ spec:
                 - ip
                 x-kubernetes-list-type: map
               image:
-                description: Image if specified has precedence over baseImage, tag
-                  and sha combinations. Specifying the version is still necessary
-                  to ensure the Prometheus Operator knows what version of Alertmanager
-                  is being configured.
+                description: Thanos container image URL.
                 type: string
               imagePullPolicy:
-                description: Image pull policy for the 'alertmanager', 'init-config-reloader'
+                description: Image pull policy for the 'thanos', 'init-config-reloader'
                   and 'config-reloader' containers. See https://kubernetes.io/docs/concepts/containers/images/#image-pull-policy
                   for more details.
                 enum:
@@ -2838,8 +2469,7 @@ spec:
                 type: string
               imagePullSecrets:
                 description: An optional list of references to secrets in the same
-                  namespace to use for pulling prometheus and alertmanager images
-                  from registries see http://kubernetes.io/docs/user-guide/images#specifying-imagepullsecrets-on-a-pod
+                  namespace to use for pulling thanos images from registries see http://kubernetes.io/docs/user-guide/images#specifying-imagepullsecrets-on-a-pod
                 items:
                   description: LocalObjectReference contains enough information to
                     let you locate the referenced object inside the same namespace.
@@ -2854,15 +2484,13 @@ spec:
               initContainers:
                 description: 'InitContainers allows adding initContainers to the pod
                   definition. Those can be used to e.g. fetch secrets for injection
-                  into the Alertmanager configuration from external sources. Any errors
+                  into the ThanosRuler configuration from external sources. Any errors
                   during the execution of an initContainer will lead to a restart
                   of the Pod. More info: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
-                  InitContainers described here modify an operator generated init
-                  containers if they share the same name and modifications are done
-                  via a strategic merge patch. The current init container name is:
-                  `init-config-reloader`. Overriding init containers is entirely outside
-                  the scope of what the maintainers will support and by doing so,
-                  you accept that this behaviour may break at any time without notice.'
+                  Using initContainers for any use case other then secret fetching
+                  is entirely outside the scope of what the maintainers will support
+                  and by doing so, you accept that this behaviour may break at any
+                  time without notice.'
                 items:
                   description: A single application container that you want to run
                     within a pod.
@@ -4120,20 +3748,27 @@ spec:
                   - name
                   type: object
                 type: array
+              labels:
+                additionalProperties:
+                  type: string
+                description: Labels configure the external label pairs to ThanosRuler.
+                  A default replica label `thanos_ruler_replica` will be always added  as
+                  a label with the value of the pod's name and it will be dropped
+                  in the alerts.
+                type: object
               listenLocal:
-                description: ListenLocal makes the Alertmanager server listen on loopback,
-                  so that it does not bind against the Pod IP. Note this is only for
-                  the Alertmanager UI, not the gossip communication.
+                description: ListenLocal makes the Thanos ruler listen on loopback,
+                  so that it does not bind against the Pod IP.
                 type: boolean
               logFormat:
-                description: Log format for Alertmanager to be configured with.
+                description: Log format for ThanosRuler to be configured with.
                 enum:
                 - ""
                 - logfmt
                 - json
                 type: string
               logLevel:
-                description: Log level for Alertmanager to be configured with.
+                description: Log level for ThanosRuler to be configured with.
                 enum:
                 - ""
                 - debug
@@ -4155,13 +3790,37 @@ spec:
                   type: string
                 description: Define which Nodes the Pods are scheduled on.
                 type: object
+              objectStorageConfig:
+                description: ObjectStorageConfig configures object storage in Thanos.
+                  Alternative to ObjectStorageConfigFile, and lower order priority.
+                properties:
+                  key:
+                    description: The key of the secret to select from.  Must be a
+                      valid secret key.
+                    type: string
+                  name:
+                    description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                      TODO: Add other useful fields. apiVersion, kind, uid?'
+                    type: string
+                  optional:
+                    description: Specify whether the Secret or its key must be defined
+                    type: boolean
+                required:
+                - key
+                type: object
+                x-kubernetes-map-type: atomic
+              objectStorageConfigFile:
+                description: ObjectStorageConfigFile specifies the path of the object
+                  storage configuration file. When used alongside with ObjectStorageConfig,
+                  ObjectStorageConfigFile takes precedence.
+                type: string
               paused:
-                description: If set to true all actions on the underlying managed
-                  objects are not goint to be performed, except for delete actions.
+                description: When a ThanosRuler deployment is paused, no actions except
+                  for deletion will be performed on the underlying objects.
                 type: boolean
               podMetadata:
-                description: PodMetadata configures Labels and Annotations which are
-                  propagated to the alertmanager pods.
+                description: PodMetadata contains Labels and Annotations gets propagated
+                  to the thanos ruler pods.
                 properties:
                   annotations:
                     additionalProperties:
@@ -4195,14 +3854,62 @@ spec:
               priorityClassName:
                 description: Priority class assigned to the Pods
                 type: string
+              prometheusRulesExcludedFromEnforce:
+                description: 'PrometheusRulesExcludedFromEnforce - list of Prometheus
+                  rules to be excluded from enforcing of adding namespace labels.
+                  Works only if enforcedNamespaceLabel set to true. Make sure both
+                  ruleNamespace and ruleName are set for each pair Deprecated: use
+                  excludedFromEnforcement instead.'
+                items:
+                  description: PrometheusRuleExcludeConfig enables users to configure
+                    excluded PrometheusRule names and their namespaces to be ignored
+                    while enforcing namespace label for alerts and metrics.
+                  properties:
+                    ruleName:
+                      description: RuleNamespace - name of excluded rule
+                      type: string
+                    ruleNamespace:
+                      description: RuleNamespace - namespace of excluded rule
+                      type: string
+                  required:
+                  - ruleName
+                  - ruleNamespace
+                  type: object
+                type: array
+              queryConfig:
+                description: Define configuration for connecting to thanos query instances.
+                  If this is defined, the QueryEndpoints field will be ignored. Maps
+                  to the `query.config` CLI argument. Only available with thanos v0.11.0
+                  and higher.
+                properties:
+                  key:
+                    description: The key of the secret to select from.  Must be a
+                      valid secret key.
+                    type: string
+                  name:
+                    description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                      TODO: Add other useful fields. apiVersion, kind, uid?'
+                    type: string
+                  optional:
+                    description: Specify whether the Secret or its key must be defined
+                    type: boolean
+                required:
+                - key
+                type: object
+                x-kubernetes-map-type: atomic
+              queryEndpoints:
+                description: QueryEndpoints defines Thanos querier endpoints from
+                  which to query metrics. Maps to the --query flag of thanos ruler.
+                items:
+                  type: string
+                type: array
               replicas:
-                description: Size is the expected size of the alertmanager cluster.
-                  The controller will eventually make the size of the running cluster
-                  equal to the expected size.
+                description: Number of thanos ruler instances to deploy.
                 format: int32
                 type: integer
               resources:
-                description: Define resources requests and limits for single Pods.
+                description: Resources defines the resource requirements for single
+                  Pods. If not provided, no requests/limits will be set
                 properties:
                   claims:
                     description: "Claims lists the names of resources, defined in
@@ -4250,28 +3957,108 @@ spec:
                     type: object
                 type: object
               retention:
-                default: 120h
-                description: Time duration Alertmanager shall retain data for. Default
-                  is '120h', and must match the regular expression `[0-9]+(ms|s|m|h)`
-                  (milliseconds seconds minutes hours).
-                pattern: ^(0|(([0-9]+)h)?(([0-9]+)m)?(([0-9]+)s)?(([0-9]+)ms)?)$
+                default: 24h
+                description: Time duration ThanosRuler shall retain data for. Default
+                  is '24h', and must match the regular expression `[0-9]+(ms|s|m|h|d|w|y)`
+                  (milliseconds seconds minutes hours days weeks years).
+                pattern: ^(0|(([0-9]+)y)?(([0-9]+)w)?(([0-9]+)d)?(([0-9]+)h)?(([0-9]+)m)?(([0-9]+)s)?(([0-9]+)ms)?)$
                 type: string
               routePrefix:
-                description: The route prefix Alertmanager registers HTTP handlers
-                  for. This is useful, if using ExternalURL and a proxy is rewriting
-                  HTTP routes of a request, and the actual ExternalURL is still true,
-                  but the server serves requests under a different route prefix. For
-                  example for use with `kubectl proxy`.
+                description: The route prefix ThanosRuler registers HTTP handlers
+                  for. This allows thanos UI to be served on a sub-path.
                 type: string
-              secrets:
-                description: Secrets is a list of Secrets in the same namespace as
-                  the Alertmanager object, which shall be mounted into the Alertmanager
-                  Pods. Each Secret is added to the StatefulSet definition as a volume
-                  named `secret-<secret-name>`. The Secrets are mounted into `/etc/alertmanager/secrets/<secret-name>`
-                  in the 'alertmanager' container.
-                items:
-                  type: string
-                type: array
+              ruleNamespaceSelector:
+                description: Namespaces to be selected for Rules discovery. If unspecified,
+                  only the same namespace as the ThanosRuler object is in is used.
+                properties:
+                  matchExpressions:
+                    description: matchExpressions is a list of label selector requirements.
+                      The requirements are ANDed.
+                    items:
+                      description: A label selector requirement is a selector that
+                        contains values, a key, and an operator that relates the key
+                        and values.
+                      properties:
+                        key:
+                          description: key is the label key that the selector applies
+                            to.
+                          type: string
+                        operator:
+                          description: operator represents a key's relationship to
+                            a set of values. Valid operators are In, NotIn, Exists
+                            and DoesNotExist.
+                          type: string
+                        values:
+                          description: values is an array of string values. If the
+                            operator is In or NotIn, the values array must be non-empty.
+                            If the operator is Exists or DoesNotExist, the values
+                            array must be empty. This array is replaced during a strategic
+                            merge patch.
+                          items:
+                            type: string
+                          type: array
+                      required:
+                      - key
+                      - operator
+                      type: object
+                    type: array
+                  matchLabels:
+                    additionalProperties:
+                      type: string
+                    description: matchLabels is a map of {key,value} pairs. A single
+                      {key,value} in the matchLabels map is equivalent to an element
+                      of matchExpressions, whose key field is "key", the operator
+                      is "In", and the values array contains only "value". The requirements
+                      are ANDed.
+                    type: object
+                type: object
+                x-kubernetes-map-type: atomic
+              ruleSelector:
+                description: A label selector to select which PrometheusRules to mount
+                  for alerting and recording.
+                properties:
+                  matchExpressions:
+                    description: matchExpressions is a list of label selector requirements.
+                      The requirements are ANDed.
+                    items:
+                      description: A label selector requirement is a selector that
+                        contains values, a key, and an operator that relates the key
+                        and values.
+                      properties:
+                        key:
+                          description: key is the label key that the selector applies
+                            to.
+                          type: string
+                        operator:
+                          description: operator represents a key's relationship to
+                            a set of values. Valid operators are In, NotIn, Exists
+                            and DoesNotExist.
+                          type: string
+                        values:
+                          description: values is an array of string values. If the
+                            operator is In or NotIn, the values array must be non-empty.
+                            If the operator is Exists or DoesNotExist, the values
+                            array must be empty. This array is replaced during a strategic
+                            merge patch.
+                          items:
+                            type: string
+                          type: array
+                      required:
+                      - key
+                      - operator
+                      type: object
+                    type: array
+                  matchLabels:
+                    additionalProperties:
+                      type: string
+                    description: matchLabels is a map of {key,value} pairs. A single
+                      {key,value} in the matchLabels map is equivalent to an element
+                      of matchExpressions, whose key field is "key", the operator
+                      is "In", and the values array contains only "value". The requirements
+                      are ANDed.
+                    type: object
+                type: object
+                x-kubernetes-map-type: atomic
               securityContext:
                 description: SecurityContext holds pod-level security attributes and
                   common container settings. This defaults to the default PodSecurityContext.
@@ -4443,18 +4230,10 @@ spec:
                 type: object
               serviceAccountName:
                 description: ServiceAccountName is the name of the ServiceAccount
-                  to use to run the Prometheus Pods.
-                type: string
-              sha:
-                description: 'SHA of Alertmanager container image to be deployed.
-                  Defaults to the value of `version`. Similar to a tag, but the SHA
-                  explicitly deploys an immutable container image. Version and Tag
-                  are ignored if SHA is set. Deprecated: use ''image'' instead.  The
-                  image digest can be specified as part of the image URL.'
+                  to use to run the Thanos Ruler Pods.
                 type: string
               storage:
-                description: Storage is the definition of how storage will be used
-                  by the Alertmanager instances.
+                description: Storage spec to specify how storage shall be used.
                 properties:
                   disableMountSubPath:
                     description: 'Deprecated: subPath usage will be disabled by default
@@ -5104,12 +4883,6 @@ spec:
                         type: object
                     type: object
                 type: object
-              tag:
-                description: 'Tag of Alertmanager container image to be deployed.
-                  Defaults to the value of `version`. Version is ignored if Tag is
-                  set. Deprecated: use ''image'' instead.  The image tag can be specified
-                  as part of the image URL.'
-                type: string
               tolerations:
                 description: If specified, the pod's tolerations.
                 items:
@@ -5322,14 +5095,39 @@ spec:
                   - whenUnsatisfiable
                   type: object
                 type: array
+              tracingConfig:
+                description: TracingConfig configures tracing in Thanos. This is an
+                  experimental feature, it may change in any upcoming release in a
+                  breaking way.
+                properties:
+                  key:
+                    description: The key of the secret to select from.  Must be a
+                      valid secret key.
+                    type: string
+                  name:
+                    description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                      TODO: Add other useful fields. apiVersion, kind, uid?'
+                    type: string
+                  optional:
+                    description: Specify whether the Secret or its key must be defined
+                    type: boolean
+                required:
+                - key
+                type: object
+                x-kubernetes-map-type: atomic
+              tracingConfigFile:
+                description: TracingConfig specifies the path of the tracing configuration
+                  file. When used alongside with TracingConfig, TracingConfigFile
+                  takes precedence.
+                type: string
               version:
-                description: Version the cluster should be on.
+                description: Version of Thanos to be deployed.
                 type: string
               volumeMounts:
                 description: VolumeMounts allows configuration of additional VolumeMounts
                   on the output StatefulSet definition. VolumeMounts specified will
-                  be appended to other VolumeMounts in the alertmanager container,
-                  that are generated as a result of StorageSpec objects.
+                  be appended to other VolumeMounts in the ruler container, that are
+                  generated as a result of StorageSpec objects.
                 items:
                   description: VolumeMount describes a mounting of a Volume within
                     a container.
@@ -6928,225 +6726,14 @@ spec:
                   - name
                   type: object
                 type: array
-              web:
-                description: Defines the web command line flags when starting Alertmanager.
-                properties:
-                  getConcurrency:
-                    description: Maximum number of GET requests processed concurrently.
-                      This corresponds to the Alertmanager's `--web.get-concurrency`
-                      flag.
-                    format: int32
-                    type: integer
-                  httpConfig:
-                    description: Defines HTTP parameters for web server.
-                    properties:
-                      headers:
-                        description: List of headers that can be added to HTTP responses.
-                        properties:
-                          contentSecurityPolicy:
-                            description: Set the Content-Security-Policy header to
-                              HTTP responses. Unset if blank.
-                            type: string
-                          strictTransportSecurity:
-                            description: Set the Strict-Transport-Security header
-                              to HTTP responses. Unset if blank. Please make sure
-                              that you use this with care as this header might force
-                              browsers to load Prometheus and the other applications
-                              hosted on the same domain and subdomains over HTTPS.
-                              https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Strict-Transport-Security
-                            type: string
-                          xContentTypeOptions:
-                            description: Set the X-Content-Type-Options header to
-                              HTTP responses. Unset if blank. Accepted value is nosniff.
-                              https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Content-Type-Options
-                            enum:
-                            - ""
-                            - NoSniff
-                            type: string
-                          xFrameOptions:
-                            description: Set the X-Frame-Options header to HTTP responses.
-                              Unset if blank. Accepted values are deny and sameorigin.
-                              https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-Frame-Options
-                            enum:
-                            - ""
-                            - Deny
-                            - SameOrigin
-                            type: string
-                          xXSSProtection:
-                            description: Set the X-XSS-Protection header to all responses.
-                              Unset if blank. https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/X-XSS-Protection
-                            type: string
-                        type: object
-                      http2:
-                        description: Enable HTTP/2 support. Note that HTTP/2 is only
-                          supported with TLS. When TLSConfig is not configured, HTTP/2
-                          will be disabled. Whenever the value of the field changes,
-                          a rolling update will be triggered.
-                        type: boolean
-                    type: object
-                  timeout:
-                    description: Timeout for HTTP requests. This corresponds to the
-                      Alertmanager's `--web.timeout` flag.
-                    format: int32
-                    type: integer
-                  tlsConfig:
-                    description: Defines the TLS parameters for HTTPS.
-                    properties:
-                      cert:
-                        description: Contains the TLS certificate for the server.
-                        properties:
-                          configMap:
-                            description: ConfigMap containing data to use for the
-                              targets.
-                            properties:
-                              key:
-                                description: The key to select.
-                                type: string
-                              name:
-                                description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
-                                  TODO: Add other useful fields. apiVersion, kind,
-                                  uid?'
-                                type: string
-                              optional:
-                                description: Specify whether the ConfigMap or its
-                                  key must be defined
-                                type: boolean
-                            required:
-                            - key
-                            type: object
-                            x-kubernetes-map-type: atomic
-                          secret:
-                            description: Secret containing data to use for the targets.
-                            properties:
-                              key:
-                                description: The key of the secret to select from.  Must
-                                  be a valid secret key.
-                                type: string
-                              name:
-                                description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
-                                  TODO: Add other useful fields. apiVersion, kind,
-                                  uid?'
-                                type: string
-                              optional:
-                                description: Specify whether the Secret or its key
-                                  must be defined
-                                type: boolean
-                            required:
-                            - key
-                            type: object
-                            x-kubernetes-map-type: atomic
-                        type: object
-                      cipherSuites:
-                        description: 'List of supported cipher suites for TLS versions
-                          up to TLS 1.2. If empty, Go default cipher suites are used.
-                          Available cipher suites are documented in the go documentation:
-                          https://golang.org/pkg/crypto/tls/#pkg-constants'
-                        items:
-                          type: string
-                        type: array
-                      client_ca:
-                        description: Contains the CA certificate for client certificate
-                          authentication to the server.
-                        properties:
-                          configMap:
-                            description: ConfigMap containing data to use for the
-                              targets.
-                            properties:
-                              key:
-                                description: The key to select.
-                                type: string
-                              name:
-                                description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
-                                  TODO: Add other useful fields. apiVersion, kind,
-                                  uid?'
-                                type: string
-                              optional:
-                                description: Specify whether the ConfigMap or its
-                                  key must be defined
-                                type: boolean
-                            required:
-                            - key
-                            type: object
-                            x-kubernetes-map-type: atomic
-                          secret:
-                            description: Secret containing data to use for the targets.
-                            properties:
-                              key:
-                                description: The key of the secret to select from.  Must
-                                  be a valid secret key.
-                                type: string
-                              name:
-                                description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
-                                  TODO: Add other useful fields. apiVersion, kind,
-                                  uid?'
-                                type: string
-                              optional:
-                                description: Specify whether the Secret or its key
-                                  must be defined
-                                type: boolean
-                            required:
-                            - key
-                            type: object
-                            x-kubernetes-map-type: atomic
-                        type: object
-                      clientAuthType:
-                        description: 'Server policy for client authentication. Maps
-                          to ClientAuth Policies. For more detail on clientAuth options:
-                          https://golang.org/pkg/crypto/tls/#ClientAuthType'
-                        type: string
-                      curvePreferences:
-                        description: 'Elliptic curves that will be used in an ECDHE
-                          handshake, in preference order. Available curves are documented
-                          in the go documentation: https://golang.org/pkg/crypto/tls/#CurveID'
-                        items:
-                          type: string
-                        type: array
-                      keySecret:
-                        description: Secret containing the TLS key for the server.
-                        properties:
-                          key:
-                            description: The key of the secret to select from.  Must
-                              be a valid secret key.
-                            type: string
-                          name:
-                            description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
-                              TODO: Add other useful fields. apiVersion, kind, uid?'
-                            type: string
-                          optional:
-                            description: Specify whether the Secret or its key must
-                              be defined
-                            type: boolean
-                        required:
-                        - key
-                        type: object
-                        x-kubernetes-map-type: atomic
-                      maxVersion:
-                        description: Maximum TLS version that is acceptable. Defaults
-                          to TLS13.
-                        type: string
-                      minVersion:
-                        description: Minimum TLS version that is acceptable. Defaults
-                          to TLS12.
-                        type: string
-                      preferServerCipherSuites:
-                        description: Controls whether the server selects the client's
-                          most preferred cipher suite, or the server's most preferred
-                          cipher suite. If true then the server's preference, as expressed
-                          in the order of elements in cipherSuites, is used.
-                        type: boolean
-                    required:
-                    - cert
-                    - keySecret
-                    type: object
-                type: object
             type: object
           status:
-            description: 'Most recent observed status of the Alertmanager cluster.
+            description: 'Most recent observed status of the ThanosRuler cluster.
               Read-only. More info: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#spec-and-status'
             properties:
               availableReplicas:
                 description: Total number of available pods (ready for at least minReadySeconds)
-                  targeted by this Alertmanager cluster.
+                  targeted by this ThanosRuler deployment.
                 format: int32
                 type: integer
               conditions:
@@ -7196,17 +6783,17 @@ spec:
                 type: boolean
               replicas:
                 description: Total number of non-terminated pods targeted by this
-                  Alertmanager object (their labels match the selector).
+                  ThanosRuler deployment (their labels match the selector).
                 format: int32
                 type: integer
               unavailableReplicas:
-                description: Total number of unavailable pods targeted by this Alertmanager
-                  object.
+                description: Total number of unavailable pods targeted by this ThanosRuler
+                  deployment.
                 format: int32
                 type: integer
               updatedReplicas:
                 description: Total number of non-terminated pods targeted by this
-                  Alertmanager object that have the desired version spec.
+                  ThanosRuler deployment that have the desired version spec.
                 format: int32
                 type: integer
             required:

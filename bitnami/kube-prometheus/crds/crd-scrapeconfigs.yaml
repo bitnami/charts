@@ -1,0 +1,210 @@
+# https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.65.1/example/prometheus-operator-crd/monitoring.coreos.com_scrapeconfigs.yaml
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  annotations:
+    controller-gen.kubebuilder.io/version: v0.11.1
+  creationTimestamp: null
+  name: scrapeconfigs.monitoring.coreos.com
+spec:
+  group: monitoring.coreos.com
+  names:
+    categories:
+    - prometheus-operator
+    kind: ScrapeConfig
+    listKind: ScrapeConfigList
+    plural: scrapeconfigs
+    shortNames:
+    - scfg
+    singular: scrapeconfig
+  scope: Namespaced
+  versions:
+  - name: v1alpha1
+    schema:
+      openAPIV3Schema:
+        description: ScrapeConfig defines a namespaced Prometheus scrape_config to
+          be aggregated across multiple namespaces into the Prometheus configuration.
+        properties:
+          apiVersion:
+            description: 'APIVersion defines the versioned schema of this representation
+              of an object. Servers should convert recognized schemas to the latest
+              internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
+            type: string
+          kind:
+            description: 'Kind is a string value representing the REST resource this
+              object represents. Servers may infer this from the endpoint the client
+              submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
+            type: string
+          metadata:
+            type: object
+          spec:
+            description: ScrapeConfigSpec is a specification of the desired configuration
+              for a scrape configuration.
+            properties:
+              fileSDConfigs:
+                description: FileSDConfigs defines a list of file service discovery
+                  configurations.
+                items:
+                  description: FileSDConfig defines a Prometheus file service discovery
+                    configuration See https://prometheus.io/docs/prometheus/latest/configuration/configuration/#file_sd_config
+                  properties:
+                    files:
+                      description: 'List of files to be used for file discovery. Recommendation:
+                        use absolute paths. While relative paths work, the prometheus-operator
+                        project makes no guarantees about the working directory where
+                        the configuration file is stored. Files must be mounted using
+                        Prometheus.ConfigMaps or Prometheus.Secrets.'
+                      items:
+                        description: SDFile represents a file used for service discovery
+                        pattern: ^[^*]*(\*[^/]*)?\.(json|yml|yaml|JSON|YML|YAML)$
+                        type: string
+                      minItems: 1
+                      type: array
+                    refreshInterval:
+                      description: RefreshInterval configures the refresh interval
+                        at which Prometheus will reload the content of the files.
+                      pattern: ^(0|(([0-9]+)y)?(([0-9]+)w)?(([0-9]+)d)?(([0-9]+)h)?(([0-9]+)m)?(([0-9]+)s)?(([0-9]+)ms)?)$
+                      type: string
+                  required:
+                  - files
+                  type: object
+                type: array
+              honorLabels:
+                description: HonorLabels chooses the metric's labels on collisions
+                  with target labels.
+                type: boolean
+              honorTimestamps:
+                description: HonorTimestamps controls whether Prometheus respects
+                  the timestamps present in scraped data.
+                type: boolean
+              httpSDConfigs:
+                description: HTTPSDConfigs defines a list of HTTP service discovery
+                  configurations.
+                items:
+                  description: HTTPSDConfig defines a prometheus HTTP service discovery
+                    configuration See https://prometheus.io/docs/prometheus/latest/configuration/configuration/#http_sd_config
+                  properties:
+                    refreshInterval:
+                      description: RefreshInterval configures the refresh interval
+                        at which Prometheus will re-query the endpoint to update the
+                        target list.
+                      pattern: ^(0|(([0-9]+)y)?(([0-9]+)w)?(([0-9]+)d)?(([0-9]+)h)?(([0-9]+)m)?(([0-9]+)s)?(([0-9]+)ms)?)$
+                      type: string
+                    url:
+                      description: URL from which the targets are fetched.
+                      minLength: 1
+                      pattern: ^http(s)?://.+$
+                      type: string
+                  required:
+                  - url
+                  type: object
+                type: array
+              metricsPath:
+                description: MetricsPath HTTP path to scrape for metrics. If empty,
+                  Prometheus uses the default value (e.g. /metrics).
+                type: string
+              relabelings:
+                description: 'RelabelConfigs defines how to rewrite the target''s
+                  labels before scraping. Prometheus Operator automatically adds relabelings
+                  for a few standard Kubernetes fields. The original scrape job''s
+                  name is available via the `__tmp_prometheus_job_name` label. More
+                  info: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config'
+                items:
+                  description: 'RelabelConfig allows dynamic rewriting of the label
+                    set, being applied to samples before ingestion. It defines `<metric_relabel_configs>`-section
+                    of Prometheus configuration. More info: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#metric_relabel_configs'
+                  properties:
+                    action:
+                      default: replace
+                      description: Action to perform based on regex matching. Default
+                        is 'replace'. uppercase and lowercase actions require Prometheus
+                        >= 2.36.
+                      enum:
+                      - replace
+                      - Replace
+                      - keep
+                      - Keep
+                      - drop
+                      - Drop
+                      - hashmod
+                      - HashMod
+                      - labelmap
+                      - LabelMap
+                      - labeldrop
+                      - LabelDrop
+                      - labelkeep
+                      - LabelKeep
+                      - lowercase
+                      - Lowercase
+                      - uppercase
+                      - Uppercase
+                      - keepequal
+                      - KeepEqual
+                      - dropequal
+                      - DropEqual
+                      type: string
+                    modulus:
+                      description: Modulus to take of the hash of the source label
+                        values.
+                      format: int64
+                      type: integer
+                    regex:
+                      description: Regular expression against which the extracted
+                        value is matched. Default is '(.*)'
+                      type: string
+                    replacement:
+                      description: Replacement value against which a regex replace
+                        is performed if the regular expression matches. Regex capture
+                        groups are available. Default is '$1'
+                      type: string
+                    separator:
+                      description: Separator placed between concatenated source label
+                        values. default is ';'.
+                      type: string
+                    sourceLabels:
+                      description: The source labels select values from existing labels.
+                        Their content is concatenated using the configured separator
+                        and matched against the configured regular expression for
+                        the replace, keep, and drop actions.
+                      items:
+                        description: LabelName is a valid Prometheus label name which
+                          may only contain ASCII letters, numbers, as well as underscores.
+                        pattern: ^[a-zA-Z_][a-zA-Z0-9_]*$
+                        type: string
+                      type: array
+                    targetLabel:
+                      description: Label to which the resulting value is written in
+                        a replace action. It is mandatory for replace actions. Regex
+                        capture groups are available.
+                      type: string
+                  type: object
+                type: array
+              staticConfigs:
+                description: StaticConfigs defines a list of static targets with a
+                  common label set.
+                items:
+                  description: StaticConfig defines a Prometheus static configuration.
+                    See https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config
+                  properties:
+                    labels:
+                      additionalProperties:
+                        type: string
+                      description: Labels assigned to all metrics scraped from the
+                        targets.
+                      type: object
+                      x-kubernetes-map-type: atomic
+                    targets:
+                      description: List of targets for this static configuration.
+                      items:
+                        description: Target represents a target for Prometheus to
+                          scrape
+                        type: string
+                      type: array
+                  type: object
+                type: array
+            type: object
+        required:
+        - spec
+        type: object
+    served: true
+    storage: true
