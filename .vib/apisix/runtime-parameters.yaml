@@ -3,7 +3,7 @@ dataPlane:
   hostAliases:
     - ip: 127.0.0.1
       hostnames:
-        - local.example.com
+        - www.example.com
   metrics:
     enabled: true
   extraConfig:
@@ -97,7 +97,7 @@ extraDeploy:
   spec:
     ingressClassName: apisix
     rules:
-    - host: local.example.com
+    - host: www.example.com
       http:
         paths:
         - path: /
