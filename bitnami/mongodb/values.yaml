@@ -831,6 +831,15 @@ externalAccess:
       ##    memory: 128Mi
       ##
       requests: {}
+  ## Parameters to configure a set of Pods that connect to an existing MongoDB(&reg;) deployment that lies outside of Kubernetes.
+  ## @param externalAccess.externalMaster.enabled Use external master for bootstrapping
+  ## @param externalAccess.externalMaster.host External master host to bootstrap from
+  ## @param externalAccess.externalMaster.port Port for MongoDB(&reg;) service external master host
+  ##
+  externalMaster:
+    enabled: false
+    host: ""
+    port: 27017
   ## Parameters to configure K8s service(s) used to externally access MongoDB(&reg;)
   ## A new service per broker will be created
   ##
