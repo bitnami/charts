@@ -339,6 +339,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.serviceMonitor.targetLabels`      | Used to keep given service's labels in target                                          | `{}`                  |
 | `metrics.serviceMonitor.podTargetLabels`   | Used to keep given pod's labels in target                                              | `{}`                  |
 | `metrics.serviceMonitor.path`              | Define the path used by ServiceMonitor to scrap metrics                                | `""`                  |
+| `metrics.serviceMonitor.params`            | Define the HTTP URL parameters used by ServiceMonitor                                  | `{}`                  |
 | `metrics.serviceMonitor.selector`          | ServiceMonitor selector labels                                                         | `{}`                  |
 | `metrics.serviceMonitor.labels`            | Extra labels for the ServiceMonitor                                                    | `{}`                  |
 | `metrics.serviceMonitor.annotations`       | Extra annotations for the ServiceMonitor                                               | `{}`                  |
