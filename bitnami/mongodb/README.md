@@ -253,6 +253,9 @@ Refer to the [chart documentation for more information on each of these architec
 | `externalAccess.autoDiscovery.image.pullSecrets`              | Init container auto-discovery image pull secrets                                                                                                | `[]`                   |
 | `externalAccess.autoDiscovery.resources.limits`               | Init container auto-discovery resource limits                                                                                                   | `{}`                   |
 | `externalAccess.autoDiscovery.resources.requests`             | Init container auto-discovery resource requests                                                                                                 | `{}`                   |
+| `externalAccess.externalMaster.enabled`                       | Use external master for bootstrapping                                                                                                           | `false`                |
+| `externalAccess.externalMaster.host`                          | External master host to bootstrap from                                                                                                          | `""`                   |
+| `externalAccess.externalMaster.port`                          | Port for MongoDB(&reg;) service external master host                                                                                            | `27017`                |
 | `externalAccess.service.type`                                 | Kubernetes Service type for external access. Allowed values: NodePort, LoadBalancer or ClusterIP                                                | `LoadBalancer`         |
 | `externalAccess.service.portName`                             | MongoDB(&reg;) port name used for external access when service type is LoadBalancer                                                             | `mongodb`              |
 | `externalAccess.service.ports.mongodb`                        | MongoDB(&reg;) port used for external access when service type is LoadBalancer                                                                  | `27017`                |
@@ -613,6 +616,19 @@ In order to access MongoDB(&reg;) nodes from outside the cluster when using a re
 - Using NodePort services.
 
 Refer to the [chart documentation for more details and configuration examples](https://docs.bitnami.com/kubernetes/infrastructure/mongodb/configuration/configure-external-access-replicaset/).
+
+### Bootstrapping with an External Cluster
+
+This chart is equipped with the ability to bring online a set of Pods that connect to an existing MongoDB(&reg;) deployment that lies outside of Kubernetes. This effectively creates a hybrid MongoDB(&reg;) Deployment where both Pods in Kubernetes and Instances such as Virtual Machines can partake in a single MongoDB(&reg;) Deployment. This is helpful in situations where one may be migrating MongoDB(&reg;) from Virtual Machines into Kubernetes, for example. To take advantage of this, use the following as an example configuration:
+
+```yaml
+externalAccess:
+  externalMaster:
+    enabled: true
+    host: external-mongodb-0.internal
+```
+
+:warning: To bootstrap MongoDB(&reg;) with an external master that lies outside of Kubernetes, be sure to set up external access using any of the suggested methods in this chart to have connectivity between the MongoDB(&reg;) members. :warning:
 
 ### Add extra environment variables
 
