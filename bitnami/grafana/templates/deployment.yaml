@@ -299,9 +299,9 @@ spec:
             {{- end }}
         {{- end }}
         {{- range .Values.dashboardsConfigMaps }}
-        - name: {{ .configMapName }}
+        - name: {{ include "common.tplvalues.render" ( dict "value" .configMapName "context" $ ) }}
           configMap:
-            name: {{ .configMapName }}
+            name: {{ include "common.tplvalues.render" ( dict "value" .configMapName "context" $ ) }}
         {{- end }}
         {{- if .Values.datasources.secretName }}
         - name: datasources
