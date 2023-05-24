@@ -54,7 +54,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/thanos
-  tag: 0.31.0-scratch-r3
+  tag: 0.31.0-scratch-r5
   digest: ""
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -2762,6 +2762,9 @@ ruler:
   ##
   dnsDiscovery:
     enabled: true
+  ## @param ruler.queryURL Thanos query/query-frontend URL to link in Ruler UI.
+  ##
+  queryURL: ""
   ## @param ruler.alertmanagers Alert managers URLs array
   ## NOTE: This is only used when ruler.alertmanagersConfig is not set
   ##
@@ -4171,7 +4174,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r114
+    tag: 11-debian-11-r118
     digest: ""
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -4205,7 +4208,7 @@ minio:
     rootPassword: ""
   ## @param minio.defaultBuckets Comma, semi-colon or space separated list of MinIO&reg; buckets to create
   ##
-  defaultBuckets: 'thanos'
+  defaultBuckets: "thanos"
 
 ## @section NetWorkPolicy parameters
 
