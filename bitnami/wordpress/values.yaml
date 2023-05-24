@@ -73,7 +73,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/wordpress
-  tag: 6.2.0-debian-11-r22
+  tag: 6.2.2-debian-11-r2
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -412,6 +412,7 @@ podSecurityContext:
 ## @param containerSecurityContext.runAsUser Set WordPress container's Security Context runAsUser
 ## @param containerSecurityContext.runAsNonRoot Set WordPress container's Security Context runAsNonRoot
 ## @param containerSecurityContext.allowPrivilegeEscalation Set WordPress container's privilege escalation
+## @param containerSecurityContext.readOnlyRootFilesystem Set WordPress container's Security Context readOnlyRootFilesystem
 ## @param containerSecurityContext.capabilities.drop Set WordPress container's Security Context runAsNonRoot
 ##
 containerSecurityContext:
@@ -419,6 +420,7 @@ containerSecurityContext:
   runAsUser: 1001
   runAsNonRoot: true
   allowPrivilegeEscalation: false
+  readOnlyRootFilesystem: false
   capabilities:
     drop: ["ALL"]
 ## Configure extra options for WordPress containers' liveness, readiness and startup probes
@@ -761,7 +763,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r115
+    tag: 11-debian-11-r118
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -855,7 +857,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.13.3-debian-11-r5
+    tag: 0.13.3-debian-11-r9
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

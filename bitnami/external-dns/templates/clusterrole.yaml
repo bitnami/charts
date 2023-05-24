@@ -19,6 +19,7 @@ rules:
       - pods
       - nodes
       - endpoints
+      - namespaces
     verbs:
       - get
       - list
@@ -100,6 +101,7 @@ rules:
       - tlsroutes
       - tcproutes
       - udproutes
+      - grpcroutes
     verbs:
       - get
       - list

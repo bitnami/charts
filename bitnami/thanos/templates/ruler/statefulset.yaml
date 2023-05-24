@@ -135,6 +135,7 @@ spec:
             {{- if and $query.enabled .Values.ruler.dnsDiscovery.enabled }}
             - --query=dnssrv+_http._tcp.{{ include "common.names.fullname" . }}-query.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}
             {{- end }}
+            - --alert.query-url={{- template "thanos.ruler.queryURL" .}}
             - --label={{ .Values.ruler.replicaLabel }}="$(POD_NAME)"
             - --label=ruler_cluster="{{ .Values.ruler.clusterName }}"
             - --alert.label-drop={{ .Values.ruler.replicaLabel }}

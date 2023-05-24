@@ -78,6 +78,9 @@ spec:
           args:
             - envoy
             - shutdown-manager
+            {{- if .Values.envoy.shutdownManager.extraArgs }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.envoy.shutdownManager.extraArgs "context" $) | nindent 12 }}
+            {{- end }}
           image: {{ include "common.images.image" ( dict "imageRoot" .Values.contour.image "global" .Values.global) }}
           imagePullPolicy: {{ .Values.contour.image.pullPolicy }}
           {{- if .Values.contour.extraEnvVars }}
@@ -183,14 +186,20 @@ spec:
               {{- end }}
               name: https
               protocol: TCP
-            - containerPort: 8002
+            - containerPort: {{ .Values.envoy.containerPorts.metrics }}
+              {{- if .Values.envoy.useHostPort }}
+              hostPort: {{ .Values.envoy.hostPorts.metrics }}
+              {{- end }}
+              {{- if .Values.envoy.useHostIP }}
+              hostIP: {{ .Values.envoy.hostIPs.metrics }}
+              {{- end }}
               name: metrics
               protocol: TCP
           {{- if .Values.envoy.readinessProbe.enabled }}
           readinessProbe:
             httpGet:
               path: /ready
-              port: 8002
+              port: {{ .Values.envoy.containerPorts.metrics }}
             initialDelaySeconds: {{ .Values.envoy.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.envoy.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.envoy.readinessProbe.timeoutSeconds }}
@@ -203,7 +212,7 @@ spec:
           livenessProbe:
             httpGet:
               path: /ready
-              port: 8002
+              port: {{ .Values.envoy.containerPorts.metrics }}
             initialDelaySeconds: {{ .Values.envoy.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.envoy.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.envoy.livenessProbe.timeoutSeconds }}
@@ -216,7 +225,7 @@ spec:
           startupProbe:
             httpGet:
               path: /ready
-              port: 8002
+              port: {{ .Values.envoy.containerPorts.metrics }}
             initialDelaySeconds: {{ .Values.envoy.startupProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.envoy.startupProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.envoy.startupProbe.timeoutSeconds }}
@@ -239,7 +248,7 @@ spec:
               {{- if .Values.envoy.shutdownManager.enabled }}
               httpGet:
                 path: /shutdown
-                port: 8090
+                port: {{ .Values.envoy.shutdownManager.port }}
                 scheme: HTTP
               {{- else }}
               exec:

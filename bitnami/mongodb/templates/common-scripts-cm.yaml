@@ -119,8 +119,23 @@ data:
       ID="${MY_POD_NAME#"{{ $fullname }}-"}"
     fi
     {{- end }}
+
+    {{- if .Values.tls.pemChainIncluded }}
+    #Split the pem chain by the END CERTIFICATE string and store in files /certs/xx00, /certs/xx01 etc.
+    cat /certs-${ID}/tls.crt | csplit - -s -z '/\-*END CERTIFICATE\-*/+1' '{*}' -f /certs/xx
+
+    #Use first certificate as leaf node and combine with key to store in pem file
+    cat "/certs/xx00" "/certs-${ID}/tls.key" > "/certs/mongodb.pem"
+
+    #Use remaining intermediate certificates for ca.crt
+    echo $(find /certs/ -not -name 'xx00' -name 'xx*') | sort | xargs cat > "/certs/mongodb-ca-cert"
+
+    rm -rf /certs/xx*
+    {{- else }}
     cat "/certs-${ID}/tls.crt" "/certs-${ID}/tls.key" > "/certs/mongodb.pem"
     cp "/certs-${ID}/ca.crt" "/certs/mongodb-ca-cert"
+    {{- end }}
+
     chmod 0600 /certs/mongodb-ca-cert /certs/mongodb.pem
     {{- end }}
   {{- end }}

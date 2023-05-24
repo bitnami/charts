@@ -150,6 +150,18 @@ Return the Thanos Ruler configuration configmap.
 {{- end -}}
 
 {{/*
+Return the queryURL used by Thanos Ruler.
+*/}}
+{{- define "thanos.ruler.queryURL" -}}
+{{- $query := (include "thanos.query.values" . | fromYaml) -}}
+{{- if .Values.ruler.queryURL -}}
+    {{- printf "%s" (tpl .Values.ruler.queryURL $) -}}
+{{- else -}}
+    {{- printf "http://%s-query.%s.svc.%s:%d" (include "common.names.fullname" . ) .Release.Namespace .Values.clusterDomain (int  $query.service.ports.http) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return true if a configmap object should be created
 */}}
 {{- define "thanos.ruler.createConfigmap" -}}

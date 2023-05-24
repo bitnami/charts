@@ -116,7 +116,7 @@ data:
       {{- range $e, $i := until $replicaCount }}
       {{- $mongoList = append $mongoList (printf "%s-%d.%s-headless.%s.svc.%s:%d" $fullname $i $fullname $releaseNamespace $clusterDomain $portNumber) }}
       {{- end }}
-      current_primary=$(mongosh admin --host "{{ join "," $mongoList }}" {{- if .Values.auth.enabled }} --authenticationDatabase admin -u root -p $MONGODB_ROOT_PASSWORD{{- end }}{{- if .Values.tls.enabled}} --tls --tlsCertificateKeyFile=/certs/mongodb.pem --tlsCAFile=/certs/mongodb-ca-cert{{- end }} --eval 'db.runCommand("ismaster")' | awk -F\' '/primary/ {print $2}')
+      current_primary=$(mongosh admin --host "{{ join "," $mongoList }}" {{- if .Values.auth.enabled }} --authenticationDatabase admin -u $MONGODB_ROOT_USER -p $MONGODB_ROOT_PASSWORD{{- end }}{{- if .Values.tls.enabled}} --tls --tlsCertificateKeyFile=/certs/mongodb.pem --tlsCAFile=/certs/mongodb-ca-cert{{- end }} --eval 'db.runCommand("ismaster")' | awk -F\' '/primary/ {print $2}')
 
       if ! is_empty_value "$current_primary"; then
         info "Detected existing primary: ${current_primary}"
@@ -219,7 +219,7 @@ data:
     SLEEP_PERIOD=10
 
     {{- if and .Values.auth.enabled .Values.auth.rootPassword }}
-    usernameAndPassword="-u root -p ${MONGODB_ROOT_PASSWORD}"
+    usernameAndPassword="-u ${$MONGODB_ROOT_USER} -p ${MONGODB_ROOT_PASSWORD}"
     {{- else }}
     usernameAndPassword=""
     {{- end }}
