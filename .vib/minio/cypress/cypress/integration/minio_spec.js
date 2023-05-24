@@ -13,7 +13,8 @@ it('allows creating a bucket, uploading and retrieving a file', () => {
 
   const fileToUpload = 'example.json';
   cy.get('#upload-main').click();
-  cy.contains('Upload File').click();
+  // Once the main button is clicked a tooltip overlaps with 'Upload File' button
+  cy.contains('Upload File').click({ force: true });
   cy.get('#object-list-wrapper').within(() => {
     cy.get('[type="file"]')
       .should('not.be.disabled')
