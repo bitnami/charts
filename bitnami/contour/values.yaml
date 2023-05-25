@@ -1306,30 +1306,56 @@ ingress:
 ## @section Metrics parameters
 ##
 
-## Prometheus Operator service monitors
-## @param metrics.serviceMonitor.namespace Specify if the servicemonitors will be deployed into a different namespace (blank deploys into same namespace as chart)
-## @param metrics.serviceMonitor.enabled Specify if a servicemonitor will be deployed for prometheus-operator.
-## @param metrics.serviceMonitor.jobLabel Specify the jobLabel to use for the prometheus-operator
-## @param metrics.serviceMonitor.interval Specify the scrape interval if not specified use default prometheus scrapeIntervall, the Prometheus default scrape interval is used.
-## @param metrics.serviceMonitor.metricRelabelings [array] Specify additional relabeling of metrics.
-## @param metrics.serviceMonitor.relabelings [array] Specify general relabeling.
-## @param metrics.serviceMonitor.honorLabels Specify honorLabels parameter to add the scrape endpoint
-## @param metrics.serviceMonitor.scrapeTimeout The timeout after which the scrape is ended
-## @param metrics.serviceMonitor.selector Specify honorLabels parameter to add the scrape endpoint
-## @param metrics.serviceMonitor.labels Extra labels for the ServiceMonitor
-##
 metrics:
+  ## Prometheus Operator service monitors
+  ##
   serviceMonitor:
+    ## @param metrics.serviceMonitor.namespace Specify if the servicemonitors will be deployed into a different namespace (blank deploys into same namespace as chart)
+    ##
     namespace: ""
+    ## @param metrics.serviceMonitor.enabled Specify if a servicemonitor will be deployed for prometheus-operator.
+    ##
     enabled: false
+    ## @param metrics.serviceMonitor.jobLabel Specify the jobLabel to use for the prometheus-operator
+    ##
     jobLabel: "app.kubernetes.io/name"
+    ## @param metrics.serviceMonitor.interval Specify the scrape interval if not specified use default prometheus scrapeIntervall, the Prometheus default scrape interval is used.
+    ##
     interval: ""
+    ## @param metrics.serviceMonitor.metricRelabelings [array] Specify additional relabeling of metrics.
+    ##
     metricRelabelings: []
+    ## @param metrics.serviceMonitor.relabelings [array] Specify general relabeling.
+    ##
     relabelings: []
+    ## @param metrics.serviceMonitor.honorLabels Specify honorLabels parameter to add the scrape endpoint
+    ##
     honorLabels: false
+    ## @param metrics.serviceMonitor.scrapeTimeout The timeout after which the scrape is ended
+    ##
     scrapeTimeout: ""
+    ## @param metrics.serviceMonitor.selector Specify honorLabels parameter to add the scrape endpoint
+    ##
     selector: {}
+    ## @param metrics.serviceMonitor.labels Extra labels for the ServiceMonitor
+    ##
     labels: {}
+
+  ## Prometheus Operator prometheusRules
+  ##
+  prometheusRule:
+    ## @param metrics.prometheusRule.enabled Creates a Prometheus Operator prometheusRule
+    ##
+    enabled: false
+    ## @param metrics.prometheusRule.namespace Namespace for the prometheusRule Resource (defaults to the Release Namespace)
+    ##
+    namespace: ""
+    ## @param metrics.prometheusRule.additionalLabels Additional labels that can be used so prometheusRule will be discovered by Prometheus
+    ##
+    additionalLabels: {}
+    ## @param metrics.prometheusRule.rules Prometheus Rule definitions
+    ##
+    rules: []
 
 ## @section Other parameters
 ##
