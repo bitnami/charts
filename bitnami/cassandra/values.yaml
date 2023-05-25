@@ -73,7 +73,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/cassandra
-  tag: 4.1.1-debian-11-r12
+  tag: 4.1.1-debian-11-r13
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -552,6 +552,9 @@ persistence:
   ## @param persistence.enabled Enable Cassandra data persistence using PVC, use a Persistent Volume Claim, If false, use emptyDir
   ##
   enabled: true
+  ## @param persistence.existingClaim Name of an existing PVC to use
+  ##
+  existingClaim: ""
   ## @param persistence.storageClass PVC Storage Class for Cassandra data volume
   ## If defined, storageClassName: <storageClass>
   ## If set to "-", storageClassName: "", which disables dynamic provisioning
@@ -610,7 +613,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r116
+    tag: 11-debian-11-r117
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -679,7 +682,7 @@ metrics:
     registry: docker.io
     pullPolicy: IfNotPresent
     repository: bitnami/cassandra-exporter
-    tag: 2.3.8-debian-11-r119
+    tag: 2.3.8-debian-11-r120
     digest: ""
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
