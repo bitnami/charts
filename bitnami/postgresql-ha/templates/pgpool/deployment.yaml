@@ -371,7 +371,15 @@ spec:
         {{- if .Values.pgpool.sidecars }}
         {{- include "common.tplvalues.render" (dict "value" .Values.pgpool.sidecars "context" $) | nindent 8 }}
         {{- end }}
-      {{- if or .Values.pgpool.configuration .Values.pgpool.configurationCM .Values.pgpool.initdbScripts .Values.pgpool.initdbScriptsCM .Values.pgpool.initdbScriptsSecret .Values.postgresql.usePasswordFile .Values.pgpool.tls.enabled .Values.pgpool.extraVolumes }}
+      {{- if or
+        (or .Values.pgpool.configuration .Values.pgpool.configurationCM)
+        (or .Values.pgpool.initdbScripts .Values.pgpool.initdbScriptsCM)
+        (.Values.pgpool.initdbScriptsSecret)
+        (.Values.pgpool.usePasswordFile)
+        (.Values.postgresql.usePasswordFile)
+        (.Values.pgpool.tls.enabled)
+        (.Values.pgpool.extraVolumes)
+      }}
       volumes:
         {{- if or .Values.pgpool.configuration .Values.pgpool.configurationCM }}
         - name: pgpool-config
