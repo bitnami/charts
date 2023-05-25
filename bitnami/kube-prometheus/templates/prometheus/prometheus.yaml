@@ -30,6 +30,11 @@ spec:
   {{- else }}
   probeSelector: {}
   {{- end }}
+  {{- if .Values.prometheus.scrapeConfigSelector }}
+  scrapeConfigSelector: {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.scrapeConfigSelector "context" $) | nindent 4 }}
+  {{- else }}
+  scrapeConfigSelector: {}
+  {{- end }}
   alerting:
     alertmanagers:
     {{- if .Values.prometheus.alertingEndpoints }}
@@ -120,6 +125,11 @@ spec:
   probeNamespaceSelector: {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.probeNamespaceSelector "context" $) | nindent 4 }}
   {{- else }}
   probeNamespaceSelector: {}
+  {{- end }}
+  {{- if .Values.prometheus.scrapeConfigNamespaceSelector }}
+  scrapeConfigNamespaceSelector: {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.scrapeConfigNamespaceSelector "context" $) | nindent 4 }}
+  {{- else }}
+  scrapeConfigNamespaceSelector: {}
   {{- end }}
   enableRemoteWriteReceiver: {{ .Values.prometheus.enableRemoteWriteReceiver }}
   {{- if .Values.prometheus.remoteRead }}
