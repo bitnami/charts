@@ -1,11 +1,13 @@
 name: '[Support] Review based card movements'
 on:
-  pull_request_target:
+  pull_request:
     types:
       - review_requested
       - synchronize
 permissions:
   repository-projects: write
+  issues: read
+  pull-requests: read
 concurrency:
   group: card-movement-${{ github.event.number }}
 jobs:
