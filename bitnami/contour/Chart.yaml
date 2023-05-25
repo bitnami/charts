@@ -23,4 +23,3 @@ name: contour
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/contour
 version: 12.1.0
-
