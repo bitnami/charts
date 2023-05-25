@@ -52,6 +52,9 @@ spec:
   {{- if and .Values.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.ingress.annotations )) .Values.ingress.secrets .Values.ingress.selfSigned) }}
     - hosts:
         - {{ (tpl .Values.ingress.hostname .) | quote }}
+      {{- range .Values.ingress.extraHosts }}
+        - {{ (tpl .name $) | quote }}
+      {{- end }}
       secretName: {{ printf "%s-tls" (tpl .Values.ingress.hostname .) }}
     {{- end }}
     {{- if .Values.ingress.extraTls }}
