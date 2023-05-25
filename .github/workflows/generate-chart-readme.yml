@@ -1,7 +1,7 @@
 name: '[Support] Update README metadata'
 
 on:
-  pull_request_target:
+  pull_request:
     branches:
       - main
     paths:
@@ -11,15 +11,12 @@ permissions:
 jobs:
   update-readme-metadata:
     runs-on: ubuntu-latest
-
     steps:
       - name: Install readme-generator-for-helm
         run: npm install -g @bitnami/readme-generator-for-helm
       - name: Checkout bitnami/charts
         uses: actions/checkout@v3
         with:
-          ref: ${{github.event.pull_request.head.ref}}
-          repository: ${{github.event.pull_request.head.repo.full_name}}
           path: charts
           token: ${{ github.actor == 'bitnami-bot' && secrets.GITHUB_TOKEN || secrets.BITNAMI_BOT_TOKEN }}
       - name: Execute readme-generator-for-helm
