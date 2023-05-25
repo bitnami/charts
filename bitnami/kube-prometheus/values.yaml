@@ -1316,6 +1316,9 @@ prometheus:
       ## - 10.10.10.0/24
       ##
       loadBalancerSourceRanges: []
+      ## @param prometheus.thanos.service.labels Additional labels for Prometheus service
+      ##
+      labels: {}
       ## @param prometheus.thanos.service.annotations Additional annotations for Prometheus service
       ##
       annotations: {}
