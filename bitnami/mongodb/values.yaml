@@ -117,7 +117,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mongodb
-  tag: 6.0.5-debian-11-r16
+  tag: 6.0.6-debian-11-r3
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -199,13 +199,17 @@ tls:
   ##
   caCert: ""
   caKey: ""
+  ## @param tls.pemChainIncluded Flag to denote that the Certificate Authority (CA) certificates are bundled with the endpoint cert.
+  ## Certificates must be in proper order, where the top certificate is the leaf and the bottom certificate is the top-most intermediate CA.
+  ##
+  pemChainIncluded: false
   standalone:
-    ## @param tls.standalone.existingSecret Existing secret with TLS certificates (`tls.key`, `tls.crt`, `ca.crt`).
+    ## @param tls.standalone.existingSecret Existing secret with TLS certificates (`tls.key`, `tls.crt`, `ca.crt`) or (`tls.key`, `tls.crt`) with tls.pemChainIncluded set as enabled.
     ## NOTE: When it's set it will disable certificate self-generation from existing CA.
     ##
     existingSecret: ""
   replicaset:
-    ## @param tls.replicaset.existingSecrets Array of existing secrets with TLS certificates (`tls.key`, `tls.crt`, `ca.crt`).
+    ## @param tls.replicaset.existingSecrets Array of existing secrets with TLS certificates (`tls.key`, `tls.crt`, `ca.crt`) or (`tls.key`, `tls.crt`) with tls.pemChainIncluded set as enabled.
     ## existingSecrets:
     ##  - "mySecret-0"
     ##  - "mySecret-1"
@@ -213,7 +217,7 @@ tls:
     ##
     existingSecrets: []
   hidden:
-    ## @param tls.hidden.existingSecrets Array of existing secrets with TLS certificates (`tls.key`, `tls.crt`, `ca.crt`).
+    ## @param tls.hidden.existingSecrets Array of existing secrets with TLS certificates (`tls.key`, `tls.crt`, `ca.crt`) or (`tls.key`, `tls.crt`) with tls.pemChainIncluded set as enabled.
     ## existingSecrets:
     ##  - "mySecret-0"
     ##  - "mySecret-1"
@@ -221,7 +225,7 @@ tls:
     ##
     existingSecrets: []
   arbiter:
-    ## @param tls.arbiter.existingSecret Existing secret with TLS certificates (`tls.key`, `tls.crt`, `ca.crt`).
+    ## @param tls.arbiter.existingSecret Existing secret with TLS certificates (`tls.key`, `tls.crt`, `ca.crt`) or (`tls.key`, `tls.crt`) with tls.pemChainIncluded set as enabled.
     ## NOTE: When it's set it will disable certificate self-generation from existing CA.
     ##
     existingSecret: ""
@@ -237,7 +241,7 @@ tls:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.23.4-debian-11-r13
+    tag: 1.23.4-debian-11-r19
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -791,7 +795,7 @@ externalAccess:
     image:
       registry: docker.io
       repository: bitnami/kubectl
-      tag: 1.25.9-debian-11-r8
+      tag: 1.25.10-debian-11-r1
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -827,6 +831,15 @@ externalAccess:
       ##    memory: 128Mi
       ##
       requests: {}
+  ## Parameters to configure a set of Pods that connect to an existing MongoDB(&reg;) deployment that lies outside of Kubernetes.
+  ## @param externalAccess.externalMaster.enabled Use external master for bootstrapping
+  ## @param externalAccess.externalMaster.host External master host to bootstrap from
+  ## @param externalAccess.externalMaster.port Port for MongoDB(&reg;) service external master host
+  ##
+  externalMaster:
+    enabled: false
+    host: ""
+    port: 27017
   ## Parameters to configure K8s service(s) used to externally access MongoDB(&reg;)
   ## A new service per broker will be created
   ##
@@ -885,7 +898,7 @@ externalAccess:
     ## @param externalAccess.service.annotations Service annotations for external access
     ##
     annotations: {}
-      ## @param externalAccess.service.sessionAffinity Control where client requests go, to the same pod or round-robin
+    ## @param externalAccess.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
     ## ref: https://kubernetes.io/docs/user-guide/services/
     ##
@@ -1155,7 +1168,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r114
+    tag: 11-debian-11-r118
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1588,7 +1601,7 @@ hidden:
   ## @param hidden.terminationGracePeriodSeconds Hidden Termination Grace Period
   ##
   terminationGracePeriodSeconds: ""
- ## @param hidden.updateStrategy.type Strategy that will be employed to update Pods in the StatefulSet
+  ## @param hidden.updateStrategy.type Strategy that will be employed to update Pods in the StatefulSet
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ## updateStrategy:
   ##  type: RollingUpdate
@@ -1914,7 +1927,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mongodb-exporter
-    tag: 0.37.0-debian-11-r26
+    tag: 0.37.0-debian-11-r30
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1934,6 +1947,32 @@ metrics:
   ## If undefined but metrics.username is defined, a random password will be generated
   ##
   password: ""
+  ## @param metrics.compatibleMode Enables old style mongodb-exporter metrics
+  compatibleMode: true
+
+  collector:
+    ## @param metrics.collector.all Enable all collectors. Same as enabling all individual metrics
+    ## Enabling all metrics will cause significant CPU load on mongod
+    all: false
+    ## @param metrics.collector.diagnosticdata Boolean Enable collecting metrics from getDiagnosticData
+    diagnosticdata: true
+    ## @param metrics.collector.replicasetstatus Boolean Enable collecting metrics from replSetGetStatus
+    replicasetstatus: true
+    ## @param metrics.collector.dbstats Boolean Enable collecting metrics from dbStats
+    dbstats: false
+    ## @param metrics.collector.topmetrics Boolean Enable collecting metrics from top admin command
+    topmetrics: false
+    ## @param metrics.collector.indexstats Boolean Enable collecting metrics from $indexStats
+    indexstats: false
+    ## @param metrics.collector.collstats Boolean Enable collecting metrics from $collStats
+    collstats: false
+    ## @param metrics.collector.collstatsColls List of \<databases\>.\<collections\> to get $collStats
+    collstatsColls: []
+    ## @param metrics.collector.indexstatsColls List - List of \<databases\>.\<collections\> to get $indexStats
+    indexstatsColls: []
+    ## @param metrics.collector.collstatsLimit Number - Disable collstats, dbstats, topmetrics and indexstats collector if there are more than \<n\> collections. 0=No limit
+    collstatsLimit: 0
+
   ## @param metrics.extraFlags String with extra flags to the metrics exporter
   ## ref: https://github.com/percona/mongodb_exporter/blob/main/main.go
   ##
@@ -2050,6 +2089,14 @@ metrics:
   ## Ignored when startupProbe.enabled=true
   ##
   customStartupProbe: {}
+  ## @param metrics.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the metrics container(s)
+  ## Examples:
+  ## extraVolumeMounts:
+  ##   - name: extras
+  ##     mountPath: /usr/share/extras
+  ##     readOnly: true
+  ##
+  extraVolumeMounts: []
   ## Prometheus Service Monitor
   ## ref: https://github.com/coreos/prometheus-operator
   ##      https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md

@@ -179,5 +179,5 @@ extraDeploy:
       interval: 5m
       sourceRef:
         kind: GitRepository
-        name: bitnami-charts
-        namespace: '{{ include "common.names.namespace" . }}'
+        name: '{{ include "common.names.namespace" . }}'
+        namespace: bitnami-charts

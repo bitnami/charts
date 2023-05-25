@@ -94,7 +94,7 @@ Refer to the [chart documentation for more information on each of these architec
 | -------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
 | `image.registry`                 | MongoDB(&reg;) image registry                                                                                                                               | `docker.io`            |
 | `image.repository`               | MongoDB(&reg;) image registry                                                                                                                               | `bitnami/mongodb`      |
-| `image.tag`                      | MongoDB(&reg;) image tag (immutable tags are recommended)                                                                                                   | `6.0.5-debian-11-r16`  |
+| `image.tag`                      | MongoDB(&reg;) image tag (immutable tags are recommended)                                                                                                   | `6.0.6-debian-11-r3`   |
 | `image.digest`                   | MongoDB(&reg;) image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                              | `""`                   |
 | `image.pullPolicy`               | MongoDB(&reg;) image pull policy                                                                                                                            | `IfNotPresent`         |
 | `image.pullSecrets`              | Specify docker-registry secret names as an array                                                                                                            | `[]`                   |
@@ -118,13 +118,14 @@ Refer to the [chart documentation for more information on each of these architec
 | `tls.existingSecret`             | Existing secret with TLS certificates (keys: `mongodb-ca-cert`, `mongodb-ca-key`)                                                                           | `""`                   |
 | `tls.caCert`                     | Custom CA certificated (base64 encoded)                                                                                                                     | `""`                   |
 | `tls.caKey`                      | CA certificate private key (base64 encoded)                                                                                                                 | `""`                   |
-| `tls.standalone.existingSecret`  | Existing secret with TLS certificates (`tls.key`, `tls.crt`, `ca.crt`).                                                                                     | `""`                   |
-| `tls.replicaset.existingSecrets` | Array of existing secrets with TLS certificates (`tls.key`, `tls.crt`, `ca.crt`).                                                                           | `[]`                   |
-| `tls.hidden.existingSecrets`     | Array of existing secrets with TLS certificates (`tls.key`, `tls.crt`, `ca.crt`).                                                                           | `[]`                   |
-| `tls.arbiter.existingSecret`     | Existing secret with TLS certificates (`tls.key`, `tls.crt`, `ca.crt`).                                                                                     | `""`                   |
+| `tls.pemChainIncluded`           | Flag to denote that the Certificate Authority (CA) certificates are bundled with the endpoint cert.                                                         | `false`                |
+| `tls.standalone.existingSecret`  | Existing secret with TLS certificates (`tls.key`, `tls.crt`, `ca.crt`) or (`tls.key`, `tls.crt`) with tls.pemChainIncluded set as enabled.                  | `""`                   |
+| `tls.replicaset.existingSecrets` | Array of existing secrets with TLS certificates (`tls.key`, `tls.crt`, `ca.crt`) or (`tls.key`, `tls.crt`) with tls.pemChainIncluded set as enabled.        | `[]`                   |
+| `tls.hidden.existingSecrets`     | Array of existing secrets with TLS certificates (`tls.key`, `tls.crt`, `ca.crt`) or (`tls.key`, `tls.crt`) with tls.pemChainIncluded set as enabled.        | `[]`                   |
+| `tls.arbiter.existingSecret`     | Existing secret with TLS certificates (`tls.key`, `tls.crt`, `ca.crt`) or (`tls.key`, `tls.crt`) with tls.pemChainIncluded set as enabled.                  | `""`                   |
 | `tls.image.registry`             | Init container TLS certs setup image registry                                                                                                               | `docker.io`            |
 | `tls.image.repository`           | Init container TLS certs setup image repository                                                                                                             | `bitnami/nginx`        |
-| `tls.image.tag`                  | Init container TLS certs setup image tag (immutable tags are recommended)                                                                                   | `1.23.4-debian-11-r13` |
+| `tls.image.tag`                  | Init container TLS certs setup image tag (immutable tags are recommended)                                                                                   | `1.23.4-debian-11-r19` |
 | `tls.image.digest`               | Init container TLS certs setup image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                              | `""`                   |
 | `tls.image.pullPolicy`           | Init container TLS certs setup image pull policy                                                                                                            | `IfNotPresent`         |
 | `tls.image.pullSecrets`          | Init container TLS certs specify docker-registry secret names as an array                                                                                   | `[]`                   |
@@ -223,64 +224,67 @@ Refer to the [chart documentation for more information on each of these architec
 
 ### Traffic exposure parameters
 
-| Name                                                          | Description                                                                                                                                     | Value                 |
-| ------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
-| `service.nameOverride`                                        | MongoDB(&reg;) service name                                                                                                                     | `""`                  |
-| `service.type`                                                | Kubernetes Service type (only for standalone architecture)                                                                                      | `ClusterIP`           |
-| `service.portName`                                            | MongoDB(&reg;) service port name (only for standalone architecture)                                                                             | `mongodb`             |
-| `service.ports.mongodb`                                       | MongoDB(&reg;) service port.                                                                                                                    | `27017`               |
-| `service.nodePorts.mongodb`                                   | Port to bind to for NodePort and LoadBalancer service types (only for standalone architecture)                                                  | `""`                  |
-| `service.clusterIP`                                           | MongoDB(&reg;) service cluster IP (only for standalone architecture)                                                                            | `""`                  |
-| `service.externalIPs`                                         | Specify the externalIP value ClusterIP service type (only for standalone architecture)                                                          | `[]`                  |
-| `service.loadBalancerIP`                                      | loadBalancerIP for MongoDB(&reg;) Service (only for standalone architecture)                                                                    | `""`                  |
-| `service.loadBalancerClass`                                   | loadBalancerClass for MongoDB(&reg;) Service (only for standalone architecture)                                                                 | `""`                  |
-| `service.loadBalancerSourceRanges`                            | Address(es) that are allowed when service is LoadBalancer (only for standalone architecture)                                                    | `[]`                  |
-| `service.allocateLoadBalancerNodePorts`                       | Wheter to allocate node ports when service type is LoadBalancer                                                                                 | `true`                |
-| `service.extraPorts`                                          | Extra ports to expose (normally used with the `sidecar` value)                                                                                  | `[]`                  |
-| `service.annotations`                                         | Provide any additional annotations that may be required                                                                                         | `{}`                  |
-| `service.externalTrafficPolicy`                               | service external traffic policy (only for standalone architecture)                                                                              | `Local`               |
-| `service.sessionAffinity`                                     | Control where client requests go, to the same pod or round-robin                                                                                | `None`                |
-| `service.sessionAffinityConfig`                               | Additional settings for the sessionAffinity                                                                                                     | `{}`                  |
-| `service.headless.annotations`                                | Annotations for the headless service.                                                                                                           | `{}`                  |
-| `externalAccess.enabled`                                      | Enable Kubernetes external cluster access to MongoDB(&reg;) nodes (only for replicaset architecture)                                            | `false`               |
-| `externalAccess.autoDiscovery.enabled`                        | Enable using an init container to auto-detect external IPs by querying the K8s API                                                              | `false`               |
-| `externalAccess.autoDiscovery.image.registry`                 | Init container auto-discovery image registry                                                                                                    | `docker.io`           |
-| `externalAccess.autoDiscovery.image.repository`               | Init container auto-discovery image repository                                                                                                  | `bitnami/kubectl`     |
-| `externalAccess.autoDiscovery.image.tag`                      | Init container auto-discovery image tag (immutable tags are recommended)                                                                        | `1.25.9-debian-11-r8` |
-| `externalAccess.autoDiscovery.image.digest`                   | Init container auto-discovery image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                   | `""`                  |
-| `externalAccess.autoDiscovery.image.pullPolicy`               | Init container auto-discovery image pull policy                                                                                                 | `IfNotPresent`        |
-| `externalAccess.autoDiscovery.image.pullSecrets`              | Init container auto-discovery image pull secrets                                                                                                | `[]`                  |
-| `externalAccess.autoDiscovery.resources.limits`               | Init container auto-discovery resource limits                                                                                                   | `{}`                  |
-| `externalAccess.autoDiscovery.resources.requests`             | Init container auto-discovery resource requests                                                                                                 | `{}`                  |
-| `externalAccess.service.type`                                 | Kubernetes Service type for external access. Allowed values: NodePort, LoadBalancer or ClusterIP                                                | `LoadBalancer`        |
-| `externalAccess.service.portName`                             | MongoDB(&reg;) port name used for external access when service type is LoadBalancer                                                             | `mongodb`             |
-| `externalAccess.service.ports.mongodb`                        | MongoDB(&reg;) port used for external access when service type is LoadBalancer                                                                  | `27017`               |
-| `externalAccess.service.loadBalancerIPs`                      | Array of load balancer IPs for MongoDB(&reg;) nodes                                                                                             | `[]`                  |
-| `externalAccess.service.loadBalancerClass`                    | loadBalancerClass when service type is LoadBalancer                                                                                             | `""`                  |
-| `externalAccess.service.loadBalancerSourceRanges`             | Address(es) that are allowed when service is LoadBalancer                                                                                       | `[]`                  |
-| `externalAccess.service.allocateLoadBalancerNodePorts`        | Wheter to allocate node ports when service type is LoadBalancer                                                                                 | `true`                |
-| `externalAccess.service.externalTrafficPolicy`                | MongoDB(&reg;) service external traffic policy                                                                                                  | `Local`               |
-| `externalAccess.service.nodePorts`                            | Array of node ports used to configure MongoDB(&reg;) advertised hostname when service type is NodePort                                          | `[]`                  |
-| `externalAccess.service.domain`                               | Domain or external IP used to configure MongoDB(&reg;) advertised hostname when service type is NodePort                                        | `""`                  |
-| `externalAccess.service.extraPorts`                           | Extra ports to expose (normally used with the `sidecar` value)                                                                                  | `[]`                  |
-| `externalAccess.service.annotations`                          | Service annotations for external access                                                                                                         | `{}`                  |
-| `externalAccess.service.sessionAffinity`                      | Control where client requests go, to the same pod or round-robin                                                                                | `None`                |
-| `externalAccess.service.sessionAffinityConfig`                | Additional settings for the sessionAffinity                                                                                                     | `{}`                  |
-| `externalAccess.hidden.enabled`                               | Enable Kubernetes external cluster access to MongoDB(&reg;) hidden nodes                                                                        | `false`               |
-| `externalAccess.hidden.service.type`                          | Kubernetes Service type for external access. Allowed values: NodePort or LoadBalancer                                                           | `LoadBalancer`        |
-| `externalAccess.hidden.service.portName`                      | MongoDB(&reg;) port name used for external access when service type is LoadBalancer                                                             | `mongodb`             |
-| `externalAccess.hidden.service.ports.mongodb`                 | MongoDB(&reg;) port used for external access when service type is LoadBalancer                                                                  | `27017`               |
-| `externalAccess.hidden.service.loadBalancerIPs`               | Array of load balancer IPs for MongoDB(&reg;) nodes                                                                                             | `[]`                  |
-| `externalAccess.hidden.service.loadBalancerClass`             | loadBalancerClass when service type is LoadBalancer                                                                                             | `""`                  |
-| `externalAccess.hidden.service.loadBalancerSourceRanges`      | Address(es) that are allowed when service is LoadBalancer                                                                                       | `[]`                  |
-| `externalAccess.hidden.service.allocateLoadBalancerNodePorts` | Wheter to allocate node ports when service type is LoadBalancer                                                                                 | `true`                |
-| `externalAccess.hidden.service.externalTrafficPolicy`         | MongoDB(&reg;) service external traffic policy                                                                                                  | `Local`               |
-| `externalAccess.hidden.service.nodePorts`                     | Array of node ports used to configure MongoDB(&reg;) advertised hostname when service type is NodePort. Length must be the same as replicaCount | `[]`                  |
-| `externalAccess.hidden.service.domain`                        | Domain or external IP used to configure MongoDB(&reg;) advertised hostname when service type is NodePort                                        | `""`                  |
-| `externalAccess.hidden.service.extraPorts`                    | Extra ports to expose (normally used with the `sidecar` value)                                                                                  | `[]`                  |
-| `externalAccess.hidden.service.annotations`                   | Service annotations for external access                                                                                                         | `{}`                  |
-| `externalAccess.hidden.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin                                                                                | `None`                |
-| `externalAccess.hidden.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                                                                     | `{}`                  |
+| Name                                                          | Description                                                                                                                                     | Value                  |
+| ------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
+| `service.nameOverride`                                        | MongoDB(&reg;) service name                                                                                                                     | `""`                   |
+| `service.type`                                                | Kubernetes Service type (only for standalone architecture)                                                                                      | `ClusterIP`            |
+| `service.portName`                                            | MongoDB(&reg;) service port name (only for standalone architecture)                                                                             | `mongodb`              |
+| `service.ports.mongodb`                                       | MongoDB(&reg;) service port.                                                                                                                    | `27017`                |
+| `service.nodePorts.mongodb`                                   | Port to bind to for NodePort and LoadBalancer service types (only for standalone architecture)                                                  | `""`                   |
+| `service.clusterIP`                                           | MongoDB(&reg;) service cluster IP (only for standalone architecture)                                                                            | `""`                   |
+| `service.externalIPs`                                         | Specify the externalIP value ClusterIP service type (only for standalone architecture)                                                          | `[]`                   |
+| `service.loadBalancerIP`                                      | loadBalancerIP for MongoDB(&reg;) Service (only for standalone architecture)                                                                    | `""`                   |
+| `service.loadBalancerClass`                                   | loadBalancerClass for MongoDB(&reg;) Service (only for standalone architecture)                                                                 | `""`                   |
+| `service.loadBalancerSourceRanges`                            | Address(es) that are allowed when service is LoadBalancer (only for standalone architecture)                                                    | `[]`                   |
+| `service.allocateLoadBalancerNodePorts`                       | Wheter to allocate node ports when service type is LoadBalancer                                                                                 | `true`                 |
+| `service.extraPorts`                                          | Extra ports to expose (normally used with the `sidecar` value)                                                                                  | `[]`                   |
+| `service.annotations`                                         | Provide any additional annotations that may be required                                                                                         | `{}`                   |
+| `service.externalTrafficPolicy`                               | service external traffic policy (only for standalone architecture)                                                                              | `Local`                |
+| `service.sessionAffinity`                                     | Control where client requests go, to the same pod or round-robin                                                                                | `None`                 |
+| `service.sessionAffinityConfig`                               | Additional settings for the sessionAffinity                                                                                                     | `{}`                   |
+| `service.headless.annotations`                                | Annotations for the headless service.                                                                                                           | `{}`                   |
+| `externalAccess.enabled`                                      | Enable Kubernetes external cluster access to MongoDB(&reg;) nodes (only for replicaset architecture)                                            | `false`                |
+| `externalAccess.autoDiscovery.enabled`                        | Enable using an init container to auto-detect external IPs by querying the K8s API                                                              | `false`                |
+| `externalAccess.autoDiscovery.image.registry`                 | Init container auto-discovery image registry                                                                                                    | `docker.io`            |
+| `externalAccess.autoDiscovery.image.repository`               | Init container auto-discovery image repository                                                                                                  | `bitnami/kubectl`      |
+| `externalAccess.autoDiscovery.image.tag`                      | Init container auto-discovery image tag (immutable tags are recommended)                                                                        | `1.25.10-debian-11-r1` |
+| `externalAccess.autoDiscovery.image.digest`                   | Init container auto-discovery image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                   | `""`                   |
+| `externalAccess.autoDiscovery.image.pullPolicy`               | Init container auto-discovery image pull policy                                                                                                 | `IfNotPresent`         |
+| `externalAccess.autoDiscovery.image.pullSecrets`              | Init container auto-discovery image pull secrets                                                                                                | `[]`                   |
+| `externalAccess.autoDiscovery.resources.limits`               | Init container auto-discovery resource limits                                                                                                   | `{}`                   |
+| `externalAccess.autoDiscovery.resources.requests`             | Init container auto-discovery resource requests                                                                                                 | `{}`                   |
+| `externalAccess.externalMaster.enabled`                       | Use external master for bootstrapping                                                                                                           | `false`                |
+| `externalAccess.externalMaster.host`                          | External master host to bootstrap from                                                                                                          | `""`                   |
+| `externalAccess.externalMaster.port`                          | Port for MongoDB(&reg;) service external master host                                                                                            | `27017`                |
+| `externalAccess.service.type`                                 | Kubernetes Service type for external access. Allowed values: NodePort, LoadBalancer or ClusterIP                                                | `LoadBalancer`         |
+| `externalAccess.service.portName`                             | MongoDB(&reg;) port name used for external access when service type is LoadBalancer                                                             | `mongodb`              |
+| `externalAccess.service.ports.mongodb`                        | MongoDB(&reg;) port used for external access when service type is LoadBalancer                                                                  | `27017`                |
+| `externalAccess.service.loadBalancerIPs`                      | Array of load balancer IPs for MongoDB(&reg;) nodes                                                                                             | `[]`                   |
+| `externalAccess.service.loadBalancerClass`                    | loadBalancerClass when service type is LoadBalancer                                                                                             | `""`                   |
+| `externalAccess.service.loadBalancerSourceRanges`             | Address(es) that are allowed when service is LoadBalancer                                                                                       | `[]`                   |
+| `externalAccess.service.allocateLoadBalancerNodePorts`        | Wheter to allocate node ports when service type is LoadBalancer                                                                                 | `true`                 |
+| `externalAccess.service.externalTrafficPolicy`                | MongoDB(&reg;) service external traffic policy                                                                                                  | `Local`                |
+| `externalAccess.service.nodePorts`                            | Array of node ports used to configure MongoDB(&reg;) advertised hostname when service type is NodePort                                          | `[]`                   |
+| `externalAccess.service.domain`                               | Domain or external IP used to configure MongoDB(&reg;) advertised hostname when service type is NodePort                                        | `""`                   |
+| `externalAccess.service.extraPorts`                           | Extra ports to expose (normally used with the `sidecar` value)                                                                                  | `[]`                   |
+| `externalAccess.service.annotations`                          | Service annotations for external access                                                                                                         | `{}`                   |
+| `externalAccess.service.sessionAffinity`                      | Control where client requests go, to the same pod or round-robin                                                                                | `None`                 |
+| `externalAccess.service.sessionAffinityConfig`                | Additional settings for the sessionAffinity                                                                                                     | `{}`                   |
+| `externalAccess.hidden.enabled`                               | Enable Kubernetes external cluster access to MongoDB(&reg;) hidden nodes                                                                        | `false`                |
+| `externalAccess.hidden.service.type`                          | Kubernetes Service type for external access. Allowed values: NodePort or LoadBalancer                                                           | `LoadBalancer`         |
+| `externalAccess.hidden.service.portName`                      | MongoDB(&reg;) port name used for external access when service type is LoadBalancer                                                             | `mongodb`              |
+| `externalAccess.hidden.service.ports.mongodb`                 | MongoDB(&reg;) port used for external access when service type is LoadBalancer                                                                  | `27017`                |
+| `externalAccess.hidden.service.loadBalancerIPs`               | Array of load balancer IPs for MongoDB(&reg;) nodes                                                                                             | `[]`                   |
+| `externalAccess.hidden.service.loadBalancerClass`             | loadBalancerClass when service type is LoadBalancer                                                                                             | `""`                   |
+| `externalAccess.hidden.service.loadBalancerSourceRanges`      | Address(es) that are allowed when service is LoadBalancer                                                                                       | `[]`                   |
+| `externalAccess.hidden.service.allocateLoadBalancerNodePorts` | Wheter to allocate node ports when service type is LoadBalancer                                                                                 | `true`                 |
+| `externalAccess.hidden.service.externalTrafficPolicy`         | MongoDB(&reg;) service external traffic policy                                                                                                  | `Local`                |
+| `externalAccess.hidden.service.nodePorts`                     | Array of node ports used to configure MongoDB(&reg;) advertised hostname when service type is NodePort. Length must be the same as replicaCount | `[]`                   |
+| `externalAccess.hidden.service.domain`                        | Domain or external IP used to configure MongoDB(&reg;) advertised hostname when service type is NodePort                                        | `""`                   |
+| `externalAccess.hidden.service.extraPorts`                    | Extra ports to expose (normally used with the `sidecar` value)                                                                                  | `[]`                   |
+| `externalAccess.hidden.service.annotations`                   | Service annotations for external access                                                                                                         | `{}`                   |
+| `externalAccess.hidden.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin                                                                                | `None`                 |
+| `externalAccess.hidden.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                                                                     | `{}`                   |
 
 ### Persistence parameters
 
@@ -322,7 +326,7 @@ Refer to the [chart documentation for more information on each of these architec
 | `volumePermissions.enabled`                   | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup`              | `false`                 |
 | `volumePermissions.image.registry`            | Init container volume-permissions image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`          | Init container volume-permissions image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r114`     |
+| `volumePermissions.image.tag`                 | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r118`     |
 | `volumePermissions.image.digest`              | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`          | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`         | Specify docker-registry secret names as an array                                                                                  | `[]`                    |
@@ -498,62 +502,74 @@ Refer to the [chart documentation for more information on each of these architec
 
 ### Metrics parameters
 
-| Name                                         | Description                                                                                                           | Value                      |
-| -------------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | -------------------------- |
-| `metrics.enabled`                            | Enable using a sidecar Prometheus exporter                                                                            | `false`                    |
-| `metrics.image.registry`                     | MongoDB(&reg;) Prometheus exporter image registry                                                                     | `docker.io`                |
-| `metrics.image.repository`                   | MongoDB(&reg;) Prometheus exporter image repository                                                                   | `bitnami/mongodb-exporter` |
-| `metrics.image.tag`                          | MongoDB(&reg;) Prometheus exporter image tag (immutable tags are recommended)                                         | `0.37.0-debian-11-r26`     |
-| `metrics.image.digest`                       | MongoDB(&reg;) image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag        | `""`                       |
-| `metrics.image.pullPolicy`                   | MongoDB(&reg;) Prometheus exporter image pull policy                                                                  | `IfNotPresent`             |
-| `metrics.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                      | `[]`                       |
-| `metrics.username`                           | String with username for the metrics exporter                                                                         | `""`                       |
-| `metrics.password`                           | String with password for the metrics exporter                                                                         | `""`                       |
-| `metrics.extraFlags`                         | String with extra flags to the metrics exporter                                                                       | `""`                       |
-| `metrics.command`                            | Override default container command (useful when using custom images)                                                  | `[]`                       |
-| `metrics.args`                               | Override default container args (useful when using custom images)                                                     | `[]`                       |
-| `metrics.resources.limits`                   | The resources limits for Prometheus exporter containers                                                               | `{}`                       |
-| `metrics.resources.requests`                 | The requested resources for Prometheus exporter containers                                                            | `{}`                       |
-| `metrics.containerPort`                      | Port of the Prometheus metrics container                                                                              | `9216`                     |
-| `metrics.service.annotations`                | Annotations for Prometheus Exporter pods. Evaluated as a template.                                                    | `{}`                       |
-| `metrics.service.type`                       | Type of the Prometheus metrics service                                                                                | `ClusterIP`                |
-| `metrics.service.ports.metrics`              | Port of the Prometheus metrics service                                                                                | `9216`                     |
-| `metrics.service.extraPorts`                 | Extra ports to expose (normally used with the `sidecar` value)                                                        | `[]`                       |
-| `metrics.livenessProbe.enabled`              | Enable livenessProbe                                                                                                  | `true`                     |
-| `metrics.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                                               | `15`                       |
-| `metrics.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                                      | `5`                        |
-| `metrics.livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                                                     | `10`                       |
-| `metrics.livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                                                   | `3`                        |
-| `metrics.livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                                                   | `1`                        |
-| `metrics.readinessProbe.enabled`             | Enable readinessProbe                                                                                                 | `true`                     |
-| `metrics.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                                              | `5`                        |
-| `metrics.readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                                                     | `5`                        |
-| `metrics.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                                    | `10`                       |
-| `metrics.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                                                  | `3`                        |
-| `metrics.readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                                                  | `1`                        |
-| `metrics.startupProbe.enabled`               | Enable startupProbe                                                                                                   | `false`                    |
-| `metrics.startupProbe.initialDelaySeconds`   | Initial delay seconds for startupProbe                                                                                | `5`                        |
-| `metrics.startupProbe.periodSeconds`         | Period seconds for startupProbe                                                                                       | `10`                       |
-| `metrics.startupProbe.timeoutSeconds`        | Timeout seconds for startupProbe                                                                                      | `5`                        |
-| `metrics.startupProbe.failureThreshold`      | Failure threshold for startupProbe                                                                                    | `30`                       |
-| `metrics.startupProbe.successThreshold`      | Success threshold for startupProbe                                                                                    | `1`                        |
-| `metrics.customLivenessProbe`                | Override default liveness probe for MongoDB(&reg;) containers                                                         | `{}`                       |
-| `metrics.customReadinessProbe`               | Override default readiness probe for MongoDB(&reg;) containers                                                        | `{}`                       |
-| `metrics.customStartupProbe`                 | Override default startup probe for MongoDB(&reg;) containers                                                          | `{}`                       |
-| `metrics.serviceMonitor.enabled`             | Create ServiceMonitor Resource for scraping metrics using Prometheus Operator                                         | `false`                    |
-| `metrics.serviceMonitor.namespace`           | Namespace which Prometheus is running in                                                                              | `""`                       |
-| `metrics.serviceMonitor.interval`            | Interval at which metrics should be scraped                                                                           | `30s`                      |
-| `metrics.serviceMonitor.scrapeTimeout`       | Specify the timeout after which the scrape is ended                                                                   | `""`                       |
-| `metrics.serviceMonitor.relabelings`         | RelabelConfigs to apply to samples before scraping.                                                                   | `[]`                       |
-| `metrics.serviceMonitor.metricRelabelings`   | MetricsRelabelConfigs to apply to samples before ingestion.                                                           | `[]`                       |
-| `metrics.serviceMonitor.labels`              | Used to pass Labels that are used by the Prometheus installed in your cluster to select Service Monitors to work with | `{}`                       |
-| `metrics.serviceMonitor.selector`            | Prometheus instance selector labels                                                                                   | `{}`                       |
-| `metrics.serviceMonitor.honorLabels`         | Specify honorLabels parameter to add the scrape endpoint                                                              | `false`                    |
-| `metrics.serviceMonitor.jobLabel`            | The name of the label on the target service to use as the job name in prometheus.                                     | `""`                       |
-| `metrics.prometheusRule.enabled`             | Set this to true to create prometheusRules for Prometheus operator                                                    | `false`                    |
-| `metrics.prometheusRule.additionalLabels`    | Additional labels that can be used so prometheusRules will be discovered by Prometheus                                | `{}`                       |
-| `metrics.prometheusRule.namespace`           | Namespace where prometheusRules resource should be created                                                            | `""`                       |
-| `metrics.prometheusRule.rules`               | Rules to be created, check values for an example                                                                      | `[]`                       |
+| Name                                         | Description                                                                                                                   | Value                      |
+| -------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
+| `metrics.enabled`                            | Enable using a sidecar Prometheus exporter                                                                                    | `false`                    |
+| `metrics.image.registry`                     | MongoDB(&reg;) Prometheus exporter image registry                                                                             | `docker.io`                |
+| `metrics.image.repository`                   | MongoDB(&reg;) Prometheus exporter image repository                                                                           | `bitnami/mongodb-exporter` |
+| `metrics.image.tag`                          | MongoDB(&reg;) Prometheus exporter image tag (immutable tags are recommended)                                                 | `0.37.0-debian-11-r30`     |
+| `metrics.image.digest`                       | MongoDB(&reg;) image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                | `""`                       |
+| `metrics.image.pullPolicy`                   | MongoDB(&reg;) Prometheus exporter image pull policy                                                                          | `IfNotPresent`             |
+| `metrics.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                              | `[]`                       |
+| `metrics.username`                           | String with username for the metrics exporter                                                                                 | `""`                       |
+| `metrics.password`                           | String with password for the metrics exporter                                                                                 | `""`                       |
+| `metrics.compatibleMode`                     | Enables old style mongodb-exporter metrics                                                                                    | `true`                     |
+| `metrics.collector.all`                      | Enable all collectors. Same as enabling all individual metrics                                                                | `false`                    |
+| `metrics.collector.diagnosticdata`           | Boolean Enable collecting metrics from getDiagnosticData                                                                      | `true`                     |
+| `metrics.collector.replicasetstatus`         | Boolean Enable collecting metrics from replSetGetStatus                                                                       | `true`                     |
+| `metrics.collector.dbstats`                  | Boolean Enable collecting metrics from dbStats                                                                                | `false`                    |
+| `metrics.collector.topmetrics`               | Boolean Enable collecting metrics from top admin command                                                                      | `false`                    |
+| `metrics.collector.indexstats`               | Boolean Enable collecting metrics from $indexStats                                                                            | `false`                    |
+| `metrics.collector.collstats`                | Boolean Enable collecting metrics from $collStats                                                                             | `false`                    |
+| `metrics.collector.collstatsColls`           | List of \<databases\>.\<collections\> to get $collStats                                                                       | `[]`                       |
+| `metrics.collector.indexstatsColls`          | List - List of \<databases\>.\<collections\> to get $indexStats                                                               | `[]`                       |
+| `metrics.collector.collstatsLimit`           | Number - Disable collstats, dbstats, topmetrics and indexstats collector if there are more than \<n\> collections. 0=No limit | `0`                        |
+| `metrics.extraFlags`                         | String with extra flags to the metrics exporter                                                                               | `""`                       |
+| `metrics.command`                            | Override default container command (useful when using custom images)                                                          | `[]`                       |
+| `metrics.args`                               | Override default container args (useful when using custom images)                                                             | `[]`                       |
+| `metrics.resources.limits`                   | The resources limits for Prometheus exporter containers                                                                       | `{}`                       |
+| `metrics.resources.requests`                 | The requested resources for Prometheus exporter containers                                                                    | `{}`                       |
+| `metrics.containerPort`                      | Port of the Prometheus metrics container                                                                                      | `9216`                     |
+| `metrics.service.annotations`                | Annotations for Prometheus Exporter pods. Evaluated as a template.                                                            | `{}`                       |
+| `metrics.service.type`                       | Type of the Prometheus metrics service                                                                                        | `ClusterIP`                |
+| `metrics.service.ports.metrics`              | Port of the Prometheus metrics service                                                                                        | `9216`                     |
+| `metrics.service.extraPorts`                 | Extra ports to expose (normally used with the `sidecar` value)                                                                | `[]`                       |
+| `metrics.livenessProbe.enabled`              | Enable livenessProbe                                                                                                          | `true`                     |
+| `metrics.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                                                       | `15`                       |
+| `metrics.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                                              | `5`                        |
+| `metrics.livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                                                             | `10`                       |
+| `metrics.livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                                                           | `3`                        |
+| `metrics.livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                                                           | `1`                        |
+| `metrics.readinessProbe.enabled`             | Enable readinessProbe                                                                                                         | `true`                     |
+| `metrics.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                                                      | `5`                        |
+| `metrics.readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                                                             | `5`                        |
+| `metrics.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                                            | `10`                       |
+| `metrics.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                                                          | `3`                        |
+| `metrics.readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                                                          | `1`                        |
+| `metrics.startupProbe.enabled`               | Enable startupProbe                                                                                                           | `false`                    |
+| `metrics.startupProbe.initialDelaySeconds`   | Initial delay seconds for startupProbe                                                                                        | `5`                        |
+| `metrics.startupProbe.periodSeconds`         | Period seconds for startupProbe                                                                                               | `10`                       |
+| `metrics.startupProbe.timeoutSeconds`        | Timeout seconds for startupProbe                                                                                              | `5`                        |
+| `metrics.startupProbe.failureThreshold`      | Failure threshold for startupProbe                                                                                            | `30`                       |
+| `metrics.startupProbe.successThreshold`      | Success threshold for startupProbe                                                                                            | `1`                        |
+| `metrics.customLivenessProbe`                | Override default liveness probe for MongoDB(&reg;) containers                                                                 | `{}`                       |
+| `metrics.customReadinessProbe`               | Override default readiness probe for MongoDB(&reg;) containers                                                                | `{}`                       |
+| `metrics.customStartupProbe`                 | Override default startup probe for MongoDB(&reg;) containers                                                                  | `{}`                       |
+| `metrics.extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for the metrics container(s)                                         | `[]`                       |
+| `metrics.serviceMonitor.enabled`             | Create ServiceMonitor Resource for scraping metrics using Prometheus Operator                                                 | `false`                    |
+| `metrics.serviceMonitor.namespace`           | Namespace which Prometheus is running in                                                                                      | `""`                       |
+| `metrics.serviceMonitor.interval`            | Interval at which metrics should be scraped                                                                                   | `30s`                      |
+| `metrics.serviceMonitor.scrapeTimeout`       | Specify the timeout after which the scrape is ended                                                                           | `""`                       |
+| `metrics.serviceMonitor.relabelings`         | RelabelConfigs to apply to samples before scraping.                                                                           | `[]`                       |
+| `metrics.serviceMonitor.metricRelabelings`   | MetricsRelabelConfigs to apply to samples before ingestion.                                                                   | `[]`                       |
+| `metrics.serviceMonitor.labels`              | Used to pass Labels that are used by the Prometheus installed in your cluster to select Service Monitors to work with         | `{}`                       |
+| `metrics.serviceMonitor.selector`            | Prometheus instance selector labels                                                                                           | `{}`                       |
+| `metrics.serviceMonitor.honorLabels`         | Specify honorLabels parameter to add the scrape endpoint                                                                      | `false`                    |
+| `metrics.serviceMonitor.jobLabel`            | The name of the label on the target service to use as the job name in prometheus.                                             | `""`                       |
+| `metrics.prometheusRule.enabled`             | Set this to true to create prometheusRules for Prometheus operator                                                            | `false`                    |
+| `metrics.prometheusRule.additionalLabels`    | Additional labels that can be used so prometheusRules will be discovered by Prometheus                                        | `{}`                       |
+| `metrics.prometheusRule.namespace`           | Namespace where prometheusRules resource should be created                                                                    | `""`                       |
+| `metrics.prometheusRule.rules`               | Rules to be created, check values for an example                                                                              | `[]`                       |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -600,6 +616,19 @@ In order to access MongoDB(&reg;) nodes from outside the cluster when using a re
 - Using NodePort services.
 
 Refer to the [chart documentation for more details and configuration examples](https://docs.bitnami.com/kubernetes/infrastructure/mongodb/configuration/configure-external-access-replicaset/).
+
+### Bootstrapping with an External Cluster
+
+This chart is equipped with the ability to bring online a set of Pods that connect to an existing MongoDB(&reg;) deployment that lies outside of Kubernetes. This effectively creates a hybrid MongoDB(&reg;) Deployment where both Pods in Kubernetes and Instances such as Virtual Machines can partake in a single MongoDB(&reg;) Deployment. This is helpful in situations where one may be migrating MongoDB(&reg;) from Virtual Machines into Kubernetes, for example. To take advantage of this, use the following as an example configuration:
+
+```yaml
+externalAccess:
+  externalMaster:
+    enabled: true
+    host: external-mongodb-0.internal
+```
+
+:warning: To bootstrap MongoDB(&reg;) with an external master that lies outside of Kubernetes, be sure to set up external access using any of the suggested methods in this chart to have connectivity between the MongoDB(&reg;) members. :warning:
 
 ### Add extra environment variables
 
@@ -720,8 +749,8 @@ From this version, the way of setting the ingress rules has changed. Instead of 
 ```yaml
 ingress:
   hosts:
-  - name: mongodb.local
-    path: /
+    - name: mongodb.local
+      path: /
 ```
 
 ### To 6.0.0

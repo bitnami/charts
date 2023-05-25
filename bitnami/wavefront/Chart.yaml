@@ -27,4 +27,4 @@ maintainers:
 name: wavefront
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/wavefront
-version: 4.4.1
+version: 4.4.2

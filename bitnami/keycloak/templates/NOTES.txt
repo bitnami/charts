@@ -56,8 +56,10 @@ To access Keycloak from outside the cluster execute the following commands:
     export HTTP_SERVICE_PORT=$(kubectl get --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.spec.ports[?(@.name=='http')].port}" services {{ include "common.names.fullname" . }})
     {{- if .Values.tls.enabled }}
     export HTTPS_SERVICE_PORT=$(kubectl get --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.spec.ports[?(@.name=='https')].port}" services {{ include "common.names.fullname" . }})
-    {{- end }}
     kubectl port-forward --namespace {{ include "common.names.namespace" . }} svc/{{ include "common.names.fullname" . }} ${HTTP_SERVICE_PORT}:${HTTP_SERVICE_PORT} ${HTTPS_SERVICE_PORT}:${HTTPS_SERVICE_PORT} &
+    {{- else }}
+    kubectl port-forward --namespace {{ include "common.names.namespace" . }} svc/{{ include "common.names.fullname" . }} ${HTTP_SERVICE_PORT}:${HTTP_SERVICE_PORT} &
+    {{- end }}
 
     echo "http://127.0.0.1:${HTTP_SERVICE_PORT}/"
     {{- if .Values.tls.enabled }}

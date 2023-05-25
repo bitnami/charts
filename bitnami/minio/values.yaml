@@ -55,7 +55,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/minio
-  tag: 2023.5.4-debian-11-r1
+  tag: 2023.5.18-debian-11-r2
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -83,7 +83,7 @@ image:
 clientImage:
   registry: docker.io
   repository: bitnami/minio-client
-  tag: 2023.5.4-debian-11-r0
+  tag: 2023.5.18-debian-11-r2
   digest: ""
 ## @param mode MinIO&reg; server mode (`standalone` or `distributed`)
 ## ref: https://docs.minio.io/docs/distributed-minio-quickstart-guide
@@ -362,8 +362,8 @@ provisioning:
   ##     # Only when mode is 'distributed'
   ##     # ref: https://docs.minio.io/docs/distributed-minio-quickstart-guide
   ##     quota:
-  ##       # hard or clear(+ omit size)
-  ##       type: hard
+  ##       # set (hard still works as an alias but is deprecated) or clear(+ omit size)
+  ##       type: set
   ##       size: 10GiB
   ##     tags:
   ##       key1: value1
@@ -931,7 +931,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r113
+    tag: 11-debian-11-r119
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

@@ -81,6 +81,7 @@ rules:
     resources:
       - gatewayclasses
       - gateways
+      - grpcroutes
       - httproutes
       - tcproutes
       - tlsroutes
@@ -97,6 +98,7 @@ rules:
     resources:
       - gatewayclasses/status
       - gateways/status
+      - grpcroutes/status
       - httproutes/status
       - tcproutes/status
       - tlsroutes/status
