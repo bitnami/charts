@@ -25,4 +25,4 @@ maintainers:
 name: kubernetes-event-exporter
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/kubernetes-event-exporter
-version: 2.4.1
+version: 2.4.2
