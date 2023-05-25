@@ -191,7 +191,7 @@ operator:
     enabled: true
     capabilities:
       drop:
-      - ALL
+        - ALL
     runAsNonRoot: true
     allowPrivilegeEscalation: false
     readOnlyRootFilesystem: false
@@ -1316,10 +1316,10 @@ prometheus:
       ## - 10.10.10.0/24
       ##
       loadBalancerSourceRanges: []
-      ## @param prometheus.thanos.service.labels Additional labels for Prometheus service
+      ## @param prometheus.thanos.service.labels Additional labels for Thanos service
       ##
       labels: {}
-      ## @param prometheus.thanos.service.annotations Additional annotations for Prometheus service
+      ## @param prometheus.thanos.service.annotations Additional annotations for Thanos service
       ##
       annotations: {}
       ## @param prometheus.thanos.service.extraPorts Additional ports to expose from the Thanos sidecar container
@@ -1886,17 +1886,17 @@ alertmanager:
     global:
       resolve_timeout: 5m
     route:
-      group_by: ['job']
+      group_by: ["job"]
       group_wait: 30s
       group_interval: 5m
       repeat_interval: 12h
-      receiver: 'null'
+      receiver: "null"
       routes:
         - match:
             alertname: Watchdog
-          receiver: 'null'
+          receiver: "null"
     receivers:
-      - name: 'null'
+      - name: "null"
   ## @param alertmanager.templateFiles Extra files to be added inside the `alertmanager-{{ template "kube-prometheus.alertmanager.fullname" . }}` secret.
   ##
   templateFiles: {}
@@ -2235,7 +2235,7 @@ blackboxExporter:
   customStartupProbe: {}
   ## @param blackboxExporter.configuration [object] Blackbox Exporter configuration
   ##
-  configuration:  |
+  configuration: |
     "modules":
       "http_2xx":
         "http":
