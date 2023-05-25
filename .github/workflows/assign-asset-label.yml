@@ -4,7 +4,7 @@ on:
     types:
       - opened
 permissions:
-  # Labeler action uses only the
+  # Labeler action uses only the issues API to label issues and PRs.
   issues: write
 jobs:
   assign-label:

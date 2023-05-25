@@ -6,6 +6,7 @@ on:
       - synchronize
 permissions:
   repository-projects: write
+  contents: read
   issues: read
   pull-requests: read
 concurrency:
@@ -21,7 +22,19 @@ jobs:
       github.actor != 'bitnami-bot' && github.event.pull_request.user.login != 'bitnami-bot' &&
       (!contains(github.event.pull_request.labels.*.name, 'bitnami')) && (!contains(github.event.pull_request.labels.*.name, 'triage'))
     steps:
+      - name: Repo checkout
+        uses: actions/checkout@v3
+        with:
+          # Checkout from base to try to get latest information from the main branch.
+          ref: ${{ github.event.pull_request.base.ref }}
+          repository: ${{ github.event.pull_request.base.repo.full_name }}
+      - name: Load .env file
+        uses: xom9ikk/dotenv@v2
+        with:
+          path: .github/workflows/
       - name: Move into In Progress
+        # Move the card only if the actor is not a Bitnami member
+        if: ${{ !contains(fromJson(env.BITNAMI_TEAM), github.actor) }}
         uses: peter-evans/create-or-update-project-card@v2
         with:
           project-name: Support
