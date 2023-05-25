@@ -34,7 +34,7 @@ data:
     VERSION_PATCH="$(get_sematic_version "$VERSION" 3)"
     readiness_test='db.isMaster().ismaster || db.isMaster().secondary'
     if [[ ( "$VERSION_MAJOR" -ge 5 ) || ( "$VERSION_MAJOR" -ge 4 && "$VERSION_MINOR" -ge 4 && "$VERSION_PATCH" -ge 2 ) ]]; then
-        readiness_test="'db.hello().isWritablePrimary || db.hello().secondary'"
+        readiness_test='db.hello().isWritablePrimary || db.hello().secondary'
     fi
     mongosh  $TLS_OPTIONS --port $MONGODB_PORT_NUMBER --eval "${readiness_test}" | grep 'true'
   ping-mongodb.sh: |
