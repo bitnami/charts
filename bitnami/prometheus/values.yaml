@@ -633,7 +633,7 @@ server:
         {{- end }}
         - scheme: HTTP
           static_configs:
-            - targets: [ {{ printf "%s:%d" (include "prometheus.alertmanager.fullname" .) (int .Values.alertmanager.service.ports.http) }}]
+            - targets: [ "{{ printf "%s.%s.svc.%s:%d" (include "prometheus.alertmanager.fullname" .) (include "common.names.namespace" .) .Values.clusterDomain (int .Values.alertmanager.service.ports.http) }}" ]
     rule_files:
       - rules.yaml
     {{- end }}
