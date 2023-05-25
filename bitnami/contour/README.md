@@ -419,6 +419,10 @@ helm uninstall my-release
 | `metrics.serviceMonitor.scrapeTimeout`     | The timeout after which the scrape is ended                                                                                          | `""`                     |
 | `metrics.serviceMonitor.selector`          | Specify honorLabels parameter to add the scrape endpoint                                                                             | `{}`                     |
 | `metrics.serviceMonitor.labels`            | Extra labels for the ServiceMonitor                                                                                                  | `{}`                     |
+| `metrics.prometheusRule.enabled`           | Creates a Prometheus Operator prometheusRule                                                                                         | `false`                  |
+| `metrics.prometheusRule.namespace`         | Namespace for the prometheusRule Resource (defaults to the Release Namespace)                                                        | `""`                     |
+| `metrics.prometheusRule.additionalLabels`  | Additional labels that can be used so prometheusRule will be discovered by Prometheus                                                | `{}`                     |
+| `metrics.prometheusRule.rules`             | Prometheus Rule definitions                                                                                                          | `[]`                     |
 
 ### Other parameters
 
