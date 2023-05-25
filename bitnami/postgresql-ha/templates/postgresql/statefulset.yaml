@@ -527,6 +527,7 @@ spec:
           {{- if .Values.metrics.resources }}
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
           {{- end }}
+          {{- if or .Values.postgresql.usePasswordFile .Values.metrics.customMetrics }}
           volumeMounts:
             {{- if .Values.postgresql.usePasswordFile }}
             - name: password
@@ -536,6 +537,7 @@ spec:
             - name: custom-metrics
               mountPath: /conf
               readOnly: true
+          {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
           {{- end }}
