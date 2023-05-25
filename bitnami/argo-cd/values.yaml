@@ -55,7 +55,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/argo-cd
-  tag: 2.7.2-debian-11-r1
+  tag: 2.7.3-debian-11-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2698,7 +2698,7 @@ dex:
   image:
     registry: docker.io
     repository: bitnami/dex
-    tag: 2.36.0-debian-11-r18
+    tag: 2.36.0-debian-11-r20
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -3311,7 +3311,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r117
+    tag: 11-debian-11-r119
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -3364,7 +3364,7 @@ redis:
   image:
     registry: docker.io
     repository: bitnami/redis
-    tag: 7.0.11-debian-11-r11
+    tag: 7.0.11-debian-11-r13
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
