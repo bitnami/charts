@@ -17,6 +17,7 @@ jobs:
       - name: Checkout bitnami/charts
         uses: actions/checkout@v3
         with:
+          ref: ${{ github.event.pull_request.head.sha }}
           path: charts
       - name: Execute readme-generator-for-helm
         env:
@@ -37,7 +38,7 @@ jobs:
           # Push all the changes
           cd charts
           if git status -s | grep bitnami; then
-            git config user.name "Bitnami Containers"
-            git config user.email "bitnami-bot@vmware.com"
+          git config user.name github-actions
+          git config user.email github-actions@github.com
             git add . && git commit -am "Update README.md with readme-generator-for-helm" --signoff && git push
           fi
