@@ -4,8 +4,8 @@ on:
     # Daily
     - cron: '0 5 * * *'
 permissions:
-  repository-projects: write
-
+  # All write actions are executed with BITNAMI_BOT
+  contents: write
 jobs:
   sync-support-teams:
     runs-on: ubuntu-latest
@@ -32,7 +32,7 @@ jobs:
             sed -i "s|BITNAMI_TEAM=.*$|BITNAMI_TEAM='${TEAM_MEMBERS}'|g" .github/workflows/.env
             git config user.name "bitnami-bot"
             git config user.email "bitnami-bot@vmware.com"
-            git commit -s -m"[bitnami-bot] Updating Bitnami team members" .github/workflows/.env 
+            git commit -s -m"[bitnami-bot] Updating Bitnami team members" .github/workflows/.env
             git push
           else
             echo "BITNAMI_TEAM is updated and nothing should be done"
