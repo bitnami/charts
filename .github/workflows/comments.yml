@@ -7,7 +7,7 @@ permissions:
   contents: read
   repository-projects: write
   issues: read
-  pull_requests: read
+  pull-requests: read
 # Avoid concurrency over the same issue
 concurrency:
   group: card-movement-${{ github.event.issue.number }}
