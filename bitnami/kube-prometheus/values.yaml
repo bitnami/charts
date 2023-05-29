@@ -1316,7 +1316,10 @@ prometheus:
       ## - 10.10.10.0/24
       ##
       loadBalancerSourceRanges: []
-      ## @param prometheus.thanos.service.annotations Additional annotations for Prometheus service
+      ## @param prometheus.thanos.service.labels Additional labels for Thanos service
+      ##
+      labels: {}
+      ## @param prometheus.thanos.service.annotations Additional annotations for Thanos service
       ##
       annotations: {}
       ## @param prometheus.thanos.service.extraPorts Additional ports to expose from the Thanos sidecar container

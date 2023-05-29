@@ -32,4 +32,4 @@ maintainers:
 name: kube-prometheus
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus
-version: 8.10.4
+version: 8.11.0
