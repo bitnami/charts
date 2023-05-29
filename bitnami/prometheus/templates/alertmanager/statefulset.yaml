@@ -127,7 +127,7 @@ spec:
             - "--cluster.listen-address=0.0.0.0:{{ $clusterPort }}"
             {{- $fullName := include "prometheus.alertmanager.fullname" . }}
             {{- range $i := until (int .Values.alertmanager.replicaCount) }}
-            - "--cluster.peer={{ $fullName }}-{{ $i }}.{{ $fullName }}-headless:{{ $clusterPort }}"
+            - "--cluster.peer={{ $fullName }}-{{ $i }}.{{ $fullName }}-headless.{{ include "common.names.namespace" $ }}.svc.{{ $.Values.clusterDomain }}:{{ $clusterPort }}"
             {{- end }}
             {{- end }}
             {{- if .Values.alertmanager.extraArgs }}
