@@ -2,7 +2,7 @@ annotations:
   category: Analytics
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 2.9.0
+appVersion: 2.9.1
 dependencies:
   - name: common
     repository: oci://registry-1.docker.io/bitnamicharts
@@ -22,4 +22,4 @@ maintainers:
 name: kube-state-metrics
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/kube-state-metrics
-version: 3.5.2
+version: 3.5.3
