@@ -80,13 +80,24 @@ spec:
               set -e;
               echo "Start Minio provisioning";
 
-              function addPolicy() {
+              function attachPolicy() {
                 local tmp=$(mc admin $1 info {{ $minioAlias }} $2 | sed -n -e 's/^Policy.*: \(.*\)$/\1/p');
                 IFS=',' read -r -a CURRENT_POLICIES <<< "$tmp";
                 if [[ ! "${CURRENT_POLICIES[*]}" =~ "$3" ]]; then
                   mc admin policy attach {{ $minioAlias }} $3 --$1=$2;
                 fi;
               };
+
+              function detachDanglingPolicies() {
+                local tmp=$(mc admin $1 info {{ $minioAlias }} $2 | sed -n -e 's/^Policy.*: \(.*\)$/\1/p');
+                IFS=',' read -r -a CURRENT_POLICIES <<< "$tmp";
+                IFS=',' read -r -a DESIRED_POLICIES <<< "$3";
+                for current in "${CURRENT_POLICIES[@]}"; do
+                  if [[ ! "${DESIRED_POLICIES[*]}" =~ "${current}" ]]; then
+                    mc admin policy detach {{ $minioAlias }} $current --$1=$2;
+                  fi;
+                done;
+              }
 
               function addUsersFromFile() {
                 local username=$(grep -oP '^username=\K.+' $1);
@@ -97,13 +108,12 @@ spec:
 
                 mc admin user add {{ $minioAlias }} "${username}" "${password}";
 
+                IFS=',' read -r -a POLICIES <<< "${policies_list}";
+                for policy in "${POLICIES[@]}"; do
+                  attachPolicy user "${username}" "${policy}";
+                done;
                 if [ "${set_policies}" == "true" ]; then
-                  mc admin policy attach {{ $minioAlias }} "${policies_list}" --user="${username}";
-                else
-                  IFS=',' read -r -a POLICIES <<< "${policies_list}";
-                  for policy in "${POLICIES[@]}"; do
-                    addPolicy user "${username}" "${policy}";
-                  done
+                  detachDanglingPolicies user "${username}" "${policies_list}";
                 fi;
 
                 local user_status="enable";
@@ -136,12 +146,11 @@ spec:
 
               {{- range $user := .Values.provisioning.users }}
               mc admin user add {{ $minioAlias }} {{ $user.username }} {{ $user.password }};
-              {{- if $user.setPolicies }}
-              mc admin policy attach {{ $minioAlias }} "{{ join "," $user.policies }}" --user={{ $user.username }};
-              {{- else }}
               {{- range $policy := $user.policies }}
-              addPolicy user {{ $user.username }} {{ $policy }};
+              attachPolicy user {{ $user.username }} {{ $policy }};
               {{- end }}
+              {{- if $user.setPolicies }}
+              detachDanglingPolicies user {{ $user.username }} "{{ join "," $user.policies }}";
               {{- end }}
               {{- $userStatus := ternary ("disable") ("enable") (and (not (empty $user.disabled)) $user.disabled) }}
               mc admin user {{ $userStatus }} {{ $minioAlias }} {{ $user.username }};
@@ -154,12 +163,11 @@ spec:
 
               {{- range $group := .Values.provisioning.groups }}
               mc admin group add {{ $minioAlias }} {{ $group.name }} {{ join " " $group.members }};
-              {{- if $group.setPolicies }}
-              mc admin policy attach {{ $minioAlias }} "{{ join "," $group.policies }}" --group={{ $group.name }};
-              {{- else }}
               {{- range $policy := $group.policies }}
-              addPolicy group {{ $group.name }} {{ $policy }};
+              attachPolicy group {{ $group.name }} {{ $policy }};
               {{- end }}
+              {{- if $group.setPolicies }}
+              detachDanglingPolicies group {{ $group.name }} "{{ join "," $group.policies }}";
               {{- end }}
               {{- $groupStatus := ternary ("disable") ("enable") (and (not (empty $group.disabled)) $group.disabled) }}
               mc admin group {{ $groupStatus }} {{ $minioAlias }} {{ $group.name }};
