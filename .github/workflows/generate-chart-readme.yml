@@ -41,5 +41,8 @@ jobs:
           if git status -s | grep bitnami; then
           git config user.name github-actions
           git config user.email github-actions@github.com
-          git add . && git commit -am $'Update README.md with readme-generator-for-helm\n\n\nrequest-checks: true' --signoff && git push
+          git add . && git commit -am "Update README.md with readme-generator-for-helm
+          
+          
+          request-checks: true" --signoff && git push
           fi
