@@ -26,7 +26,8 @@ data:
         port_var=$(echo "${hostname^^}_SERVICE_PORT_$type" | sed "s/-/_/g")
         port=${!port_var}
 
-        if [ -z "$port" ]; then
+        if [[ -z "$port" ]] || [[ {{ .Values.sentinel.service.type | quote }} == "ClusterIP" ]]
+        then
             case $type in
                 "SENTINEL")
                     echo {{ .Values.sentinel.containerPorts.sentinel }}
@@ -71,13 +72,14 @@ data:
 
     HEADLESS_SERVICE="{{ template "common.names.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
 
-    if [ -n "$REDIS_EXTERNAL_MASTER_HOST" ]; then
-        REDIS_SERVICE="$REDIS_EXTERNAL_MASTER_HOST"
-    else
+    {{- if .Values.sentinel.externalMaster.enabled }}
+        REDIS_SERVICE={{ .Values.sentinel.externalMaster.host | quote }}
+        SENTINEL_SERVICE_PORT={{ .Values.sentinel.externalMaster.port | quote }}
+    {{- else }}
         REDIS_SERVICE="{{ template "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
-    fi
+        SENTINEL_SERVICE_PORT=$(get_port "{{ include "common.names.fullname" . }}" "SENTINEL")
+    {{- end }}
 
-    SENTINEL_SERVICE_PORT=$(get_port "{{ include "common.names.fullname" . }}" "SENTINEL")
     validate_quorum() {
         if is_boolean_yes "$REDIS_TLS_ENABLED"; then
             quorum_info_command="{{- if and .Values.auth.enabled .Values.auth.sentinel }}REDISCLI_AUTH="\$REDIS_PASSWORD" {{ end }}redis-cli -h $REDIS_SERVICE -p $SENTINEL_SERVICE_PORT --tls --cert ${REDIS_TLS_CERT_FILE} --key ${REDIS_TLS_KEY_FILE} --cacert ${REDIS_TLS_CA_FILE} sentinel master {{ .Values.sentinel.masterSet }}"
@@ -153,7 +155,7 @@ data:
         REDIS_MASTER_HOST=${REDIS_SENTINEL_INFO[0]}
         REDIS_MASTER_PORT_NUMBER=${REDIS_SENTINEL_INFO[1]}
 
-        if [[ "$REDIS_MASTER_HOST" == "$(get_full_hostname "$HOSTNAME")" ]]; then
+        if [[ "$REDIS_MASTER_HOST" == "$(get_full_hostname "$HOSTNAME")" ]] && [[ "$REDIS_MASTER_PORT_NUMBER" == "$REDISPORT" ]]; then
             # Case 3: Active sentinel and master it is this node --> MASTER
             info "Configuring the node as master"
             export REDIS_REPLICATION_MODE="master"
@@ -182,10 +184,10 @@ data:
         fi
     fi
 
-    if [[ -n "$REDIS_EXTERNAL_MASTER_HOST" ]]; then
-      REDIS_MASTER_HOST="$REDIS_EXTERNAL_MASTER_HOST"
-      REDIS_MASTER_PORT_NUMBER="${REDIS_EXTERNAL_MASTER_PORT}"
-    fi
+    {{- if .Values.replica.externalMaster.enabled }}
+      REDIS_MASTER_HOST={{ .Values.replica.externalMaster.host | quote }}
+      REDIS_MASTER_PORT_NUMBER={{ .Values.replica.externalMaster.port | quote }}
+    {{- end }}
 
     if [[ -f /opt/bitnami/redis/mounted-etc/replica.conf ]];then
         cp /opt/bitnami/redis/mounted-etc/replica.conf /opt/bitnami/redis/etc/replica.conf
@@ -249,9 +251,6 @@ data:
     . /opt/bitnami/scripts/libvalidations.sh
     . /opt/bitnami/scripts/libfile.sh
 
-    HEADLESS_SERVICE="{{ template "common.names.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
-    REDIS_SERVICE="{{ template "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
-
     get_port() {
         hostname="$1"
         type="$2"
@@ -259,7 +258,8 @@ data:
         port_var=$(echo "${hostname^^}_SERVICE_PORT_$type" | sed "s/-/_/g")
         port=${!port_var}
 
-        if [ -z "$port" ]; then
+        if [[ -z "$port" ]] || [[ {{ .Values.sentinel.service.type | quote }} == "ClusterIP" ]]
+        then
             case $type in
                 "SENTINEL")
                     echo {{ .Values.sentinel.containerPorts.sentinel }}
@@ -300,10 +300,6 @@ data:
         {{- end }}
     }
 
-    SERVPORT=$(get_port "$HOSTNAME" "SENTINEL")
-    REDISPORT=$(get_port "$HOSTNAME" "REDIS")
-    SENTINEL_SERVICE_PORT=$(get_port "{{ include "common.names.fullname" . }}" "SENTINEL")
-
     sentinel_conf_set() {
         local -r key="${1:?missing key}"
         local value="${2:-}"
@@ -331,6 +327,18 @@ data:
         info "about to run the command: $sentinel_info_command"
         eval $sentinel_info_command
     }
+
+    HEADLESS_SERVICE="{{ template "common.names.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
+    SERVPORT=$(get_port "$HOSTNAME" "SENTINEL")
+    REDISPORT=$(get_port "$HOSTNAME" "REDIS")
+
+    {{- if .Values.sentinel.externalMaster.enabled }}
+        REDIS_SERVICE={{ .Values.sentinel.externalMaster.host | quote }}
+        SENTINEL_SERVICE_PORT={{ .Values.sentinel.externalMaster.port | quote }}
+    {{- else }}
+        REDIS_SERVICE="{{ template "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
+        SENTINEL_SERVICE_PORT=$(get_port "{{ include "common.names.fullname" . }}" "SENTINEL")
+    {{- end }}
 
     [[ -f $REDIS_PASSWORD_FILE ]] && export REDIS_PASSWORD="$(< "${REDIS_PASSWORD_FILE}")"
 
@@ -362,11 +370,6 @@ data:
         info "printing REDIS_SENTINEL_INFO=(${REDIS_SENTINEL_INFO[0]},${REDIS_SENTINEL_INFO[1]})"
         REDIS_MASTER_HOST=${REDIS_SENTINEL_INFO[0]}
         REDIS_MASTER_PORT_NUMBER=${REDIS_SENTINEL_INFO[1]}
-    fi
-
-    if [[ -n "$REDIS_EXTERNAL_MASTER_HOST" ]]; then
-      REDIS_MASTER_HOST="$REDIS_EXTERNAL_MASTER_HOST"
-      REDIS_MASTER_PORT_NUMBER="${REDIS_EXTERNAL_MASTER_PORT}"
     fi
 
     cp /opt/bitnami/redis-sentinel/mounted-etc/sentinel.conf /opt/bitnami/redis-sentinel/etc/sentinel.conf
@@ -654,7 +657,8 @@ data:
         port_var=$(echo "${hostname^^}_SERVICE_PORT_$type" | sed "s/-/_/g")
         port=${!port_var}
 
-        if [ -z "$port" ]; then
+        if [[ -z "$port" ]] || [[ {{ .Values.sentinel.service.type | quote }} == "ClusterIP" ]]
+        then
             case $type in
                 "SENTINEL")
                     echo {{ .Values.sentinel.containerPorts.sentinel }}

@@ -1082,7 +1082,7 @@ sentinel:
   externalMaster:
     enabled: false
     host: ""
-    port: 6379
+    port: 26379
   ## @param sentinel.containerPorts.sentinel Container port to open on Redis&reg; Sentinel nodes
   ##
   containerPorts:
