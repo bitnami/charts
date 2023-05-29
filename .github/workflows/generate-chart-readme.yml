@@ -44,5 +44,5 @@ jobs:
           git add . && git commit -am "Update README.md with readme-generator-for-helm
           
           
-          request-checks: true" && git push
+          skip-checks: true" && git push
           fi
