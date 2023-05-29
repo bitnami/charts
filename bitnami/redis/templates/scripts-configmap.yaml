@@ -26,7 +26,11 @@ data:
         port_var=$(echo "${hostname^^}_SERVICE_PORT_$type" | sed "s/-/_/g")
         port=${!port_var}
 
+        {{- if and (eq .Values.architecture "replication") .Values.sentinel.enabled }}
         if [[ -z "$port" ]] || [[ {{ .Values.sentinel.service.type | quote }} == "ClusterIP" ]]
+        {{- else }}
+        if [[ -z "$port" ]]
+        {{- end }}
         then
             case $type in
                 "SENTINEL")
@@ -657,7 +661,11 @@ data:
         port_var=$(echo "${hostname^^}_SERVICE_PORT_$type" | sed "s/-/_/g")
         port=${!port_var}
 
+        {{- if and (eq .Values.architecture "replication") .Values.sentinel.enabled }}
         if [[ -z "$port" ]] || [[ {{ .Values.sentinel.service.type | quote }} == "ClusterIP" ]]
+        {{- else }}
+        if [[ -z "$port" ]]
+        {{- end }}
         then
             case $type in
                 "SENTINEL")
