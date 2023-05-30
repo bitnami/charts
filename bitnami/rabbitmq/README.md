@@ -362,7 +362,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.resources.requests`                 | Init container volume-permissions resource requests                                                                               | `{}`                    |
 | `volumePermissions.containerSecurityContext.runAsUser` | User ID for the init container                                                                                                    | `0`                     |
 
-
 The above parameters map to the env variables defined in [bitnami/rabbitmq](https://github.com/bitnami/containers/tree/main/bitnami/rabbitmq). For more information please refer to the [bitnami/rabbitmq](https://github.com/bitnami/containers/tree/main/bitnami/rabbitmq) image documentation.
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
