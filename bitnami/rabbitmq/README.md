@@ -58,6 +58,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 | `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 
+
 ### RabbitMQ Image parameters
 
 | Name                | Description                                                                                              | Value                  |
@@ -69,6 +70,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `image.pullPolicy`  | RabbitMQ image pull policy                                                                               | `IfNotPresent`         |
 | `image.pullSecrets` | Specify docker-registry secret names as an array                                                         | `[]`                   |
 | `image.debug`       | Set to true if you would like to see extra information on logs                                           | `false`                |
+
 
 ### Common parameters
 
@@ -94,7 +96,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `auth.password`                              | RabbitMQ application password                                                                                                                                           | `""`                                              |
 | `auth.securePassword`                        | Whether to set the RabbitMQ password securely. This is incompatible with loading external RabbitMQ definitions and 'true' when not setting the auth.password parameter. | `true`                                            |
 | `auth.existingPasswordSecret`                | Existing secret with RabbitMQ credentials (must contain a value for `rabbitmq-password` key)                                                                            | `""`                                              |
-| `auth.enableLoopbackUser`                    | Enable Loopback user access? Be advised, that enabling the loopback user is a possible security risk!                                                                   | `false`                                           |
+| `auth.enableLoopbackUser`                    | If enabled, the user `auth.username` can only connect from localhost                                                                                                    | `false`                                           |
 | `auth.erlangCookie`                          | Erlang cookie to determine whether different nodes are allowed to communicate with each other                                                                           | `""`                                              |
 | `auth.existingErlangSecret`                  | Existing secret with RabbitMQ Erlang cookie (must contain a value for `rabbitmq-erlang-cookie` key)                                                                     | `""`                                              |
 | `auth.tls.enabled`                           | Enable TLS support on RabbitMQ                                                                                                                                          | `false`                                           |
@@ -183,6 +185,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraSecrets`                               | Optionally specify extra secrets to be created by the chart.                                                                                                            | `{}`                                              |
 | `extraSecretsPrependReleaseName`             | Set this flag to true if extraSecrets should be created with <release-name> prepended.                                                                                  | `false`                                           |
 
+
 ### Statefulset parameters
 
 | Name                                    | Description                                                                                                              | Value           |
@@ -239,6 +242,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `pdb.minAvailable`                      | Minimum number/percentage of pods that should remain scheduled                                                           | `1`             |
 | `pdb.maxUnavailable`                    | Maximum number/percentage of pods that may be made unavailable                                                           | `""`            |
 
+
 ### RBAC parameters
 
 | Name                                          | Description                                                                                | Value  |
@@ -248,6 +252,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.automountServiceAccountToken` | Auto-mount the service account token in the pod                                            | `true` |
 | `serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`. | `{}`   |
 | `rbac.create`                                 | Whether RBAC rules should be created                                                       | `true` |
+
 
 ### Persistence parameters
 
@@ -263,6 +268,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.size`          | PVC Storage Request for RabbitMQ data volume     | `8Gi`                      |
 | `persistence.annotations`   | Persistence annotations. Evaluated as a template | `{}`                       |
 | `persistence.labels`        | Persistence labels. Evaluated as a template      | `{}`                       |
+
 
 ### Exposure parameters
 
@@ -321,6 +327,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.allowExternal`      | Don't require client label for connections                                                                                       | `true`                   |
 | `networkPolicy.additionalRules`    | Additional NetworkPolicy Ingress "from" rules to set. Note that all rules are OR-ed.                                             | `[]`                     |
 
+
 ### Metrics Parameters
 
 | Name                                       | Description                                                                            | Value                 |
@@ -347,6 +354,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.prometheusRule.namespace`         | namespace where prometheusRules resource should be created                             | `""`                  |
 | `metrics.prometheusRule.rules`             | List of rules, used as template by Helm.                                               | `[]`                  |
 
+
 ### Init Container Parameters
 
 | Name                                                   | Description                                                                                                                       | Value                   |
@@ -361,6 +369,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.resources.limits`                   | Init container volume-permissions resource limits                                                                                 | `{}`                    |
 | `volumePermissions.resources.requests`                 | Init container volume-permissions resource requests                                                                               | `{}`                    |
 | `volumePermissions.containerSecurityContext.runAsUser` | User ID for the init container                                                                                                    | `0`                     |
+
 
 The above parameters map to the env variables defined in [bitnami/rabbitmq](https://github.com/bitnami/containers/tree/main/bitnami/rabbitmq). For more information please refer to the [bitnami/rabbitmq](https://github.com/bitnami/containers/tree/main/bitnami/rabbitmq) image documentation.
 
