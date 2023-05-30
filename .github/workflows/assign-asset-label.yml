@@ -1,11 +1,11 @@
 name: '[Support] Assign asset label'
 on:
-  pull_request:
+  pull_request_target:
     types:
       - opened
 permissions:
-  issues: write
-  pull-requests: write
+  # Remove all permissions by default
+  contents: none
 jobs:
   assign-label:
     name: Assign label
@@ -42,6 +42,9 @@ jobs:
               core.info("${{ steps.get-asset.outputs.message }}")
             }
       - name: Labeling
+        permissions:
+          # The workflow is listening for pull_request_target events but this action only uses the issues API to retrieve and update the labels
+          issues: write
         if: ${{ steps.get-asset.outputs.result == 'ok' }}
         uses: fmulero/labeler@1.1.0
         with:
