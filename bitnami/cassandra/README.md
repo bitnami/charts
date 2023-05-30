@@ -75,40 +75,40 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Cassandra parameters
 
-| Name                          | Description                                                                                                            | Value                 |
-| ----------------------------- | ---------------------------------------------------------------------------------------------------------------------- | --------------------- |
-| `image.registry`              | Cassandra image registry                                                                                               | `docker.io`           |
-| `image.repository`            | Cassandra image repository                                                                                             | `bitnami/cassandra`   |
-| `image.tag`                   | Cassandra image tag (immutable tags are recommended)                                                                   | `4.1.1-debian-11-r13` |
-| `image.digest`                | Cassandra image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag              | `""`                  |
-| `image.pullPolicy`            | image pull policy                                                                                                      | `IfNotPresent`        |
-| `image.pullSecrets`           | Cassandra image pull secrets                                                                                           | `[]`                  |
-| `image.debug`                 | Enable image debug mode                                                                                                | `false`               |
-| `dbUser.user`                 | Cassandra admin user                                                                                                   | `cassandra`           |
-| `dbUser.forcePassword`        | Force the user to provide a non                                                                                        | `false`               |
-| `dbUser.password`             | Password for `dbUser.user`. Randomly generated if empty                                                                | `""`                  |
-| `dbUser.existingSecret`       | Use an existing secret object for `dbUser.user` password (will ignore `dbUser.password`)                               | `""`                  |
-| `initDBConfigMap`             | ConfigMap with cql scripts. Useful for creating a keyspace and pre-populating data                                     | `""`                  |
-| `initDBSecret`                | Secret with cql script (with sensitive data). Useful for creating a keyspace and pre-populating data                   | `""`                  |
-| `existingConfiguration`       | ConfigMap with custom cassandra configuration files. This overrides any other Cassandra configuration set in the chart | `""`                  |
-| `cluster.name`                | Cassandra cluster name                                                                                                 | `cassandra`           |
-| `cluster.seedCount`           | Number of seed nodes                                                                                                   | `1`                   |
-| `cluster.numTokens`           | Number of tokens for each node                                                                                         | `256`                 |
-| `cluster.datacenter`          | Datacenter name                                                                                                        | `dc1`                 |
-| `cluster.rack`                | Rack name                                                                                                              | `rack1`               |
-| `cluster.endpointSnitch`      | Endpoint Snitch                                                                                                        | `SimpleSnitch`        |
-| `cluster.internodeEncryption` | DEPRECATED: use tls.internode and tls.client instead. Encryption values.                                               | `none`                |
-| `cluster.clientEncryption`    | Client Encryption                                                                                                      | `false`               |
-| `cluster.extraSeeds`          | For an external/second cassandra ring.                                                                                 | `[]`                  |
-| `cluster.enableUDF`           | Enable User defined functions                                                                                          | `false`               |
-| `jvm.extraOpts`               | Set the value for Java Virtual Machine extra options                                                                   | `""`                  |
-| `jvm.maxHeapSize`             | Set Java Virtual Machine maximum heap size (MAX_HEAP_SIZE). Calculated automatically if `nil`                          | `""`                  |
-| `jvm.newHeapSize`             | Set Java Virtual Machine new heap size (HEAP_NEWSIZE). Calculated automatically if `nil`                               | `""`                  |
-| `command`                     | Command for running the container (set to default if not set). Use array form                                          | `[]`                  |
-| `args`                        | Args for running the container (set to default if not set). Use array form                                             | `[]`                  |
-| `extraEnvVars`                | Extra environment variables to be set on cassandra container                                                           | `[]`                  |
-| `extraEnvVarsCM`              | Name of existing ConfigMap containing extra env vars                                                                   | `""`                  |
-| `extraEnvVarsSecret`          | Name of existing Secret containing extra env vars                                                                      | `""`                  |
+| Name                          | Description                                                                                                            | Value                |
+| ----------------------------- | ---------------------------------------------------------------------------------------------------------------------- | -------------------- |
+| `image.registry`              | Cassandra image registry                                                                                               | `docker.io`          |
+| `image.repository`            | Cassandra image repository                                                                                             | `bitnami/cassandra`  |
+| `image.tag`                   | Cassandra image tag (immutable tags are recommended)                                                                   | `4.1.2-debian-11-r0` |
+| `image.digest`                | Cassandra image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag              | `""`                 |
+| `image.pullPolicy`            | image pull policy                                                                                                      | `IfNotPresent`       |
+| `image.pullSecrets`           | Cassandra image pull secrets                                                                                           | `[]`                 |
+| `image.debug`                 | Enable image debug mode                                                                                                | `false`              |
+| `dbUser.user`                 | Cassandra admin user                                                                                                   | `cassandra`          |
+| `dbUser.forcePassword`        | Force the user to provide a non                                                                                        | `false`              |
+| `dbUser.password`             | Password for `dbUser.user`. Randomly generated if empty                                                                | `""`                 |
+| `dbUser.existingSecret`       | Use an existing secret object for `dbUser.user` password (will ignore `dbUser.password`)                               | `""`                 |
+| `initDBConfigMap`             | ConfigMap with cql scripts. Useful for creating a keyspace and pre-populating data                                     | `""`                 |
+| `initDBSecret`                | Secret with cql script (with sensitive data). Useful for creating a keyspace and pre-populating data                   | `""`                 |
+| `existingConfiguration`       | ConfigMap with custom cassandra configuration files. This overrides any other Cassandra configuration set in the chart | `""`                 |
+| `cluster.name`                | Cassandra cluster name                                                                                                 | `cassandra`          |
+| `cluster.seedCount`           | Number of seed nodes                                                                                                   | `1`                  |
+| `cluster.numTokens`           | Number of tokens for each node                                                                                         | `256`                |
+| `cluster.datacenter`          | Datacenter name                                                                                                        | `dc1`                |
+| `cluster.rack`                | Rack name                                                                                                              | `rack1`              |
+| `cluster.endpointSnitch`      | Endpoint Snitch                                                                                                        | `SimpleSnitch`       |
+| `cluster.internodeEncryption` | DEPRECATED: use tls.internode and tls.client instead. Encryption values.                                               | `none`               |
+| `cluster.clientEncryption`    | Client Encryption                                                                                                      | `false`              |
+| `cluster.extraSeeds`          | For an external/second cassandra ring.                                                                                 | `[]`                 |
+| `cluster.enableUDF`           | Enable User defined functions                                                                                          | `false`              |
+| `jvm.extraOpts`               | Set the value for Java Virtual Machine extra options                                                                   | `""`                 |
+| `jvm.maxHeapSize`             | Set Java Virtual Machine maximum heap size (MAX_HEAP_SIZE). Calculated automatically if `nil`                          | `""`                 |
+| `jvm.newHeapSize`             | Set Java Virtual Machine new heap size (HEAP_NEWSIZE). Calculated automatically if `nil`                               | `""`                 |
+| `command`                     | Command for running the container (set to default if not set). Use array form                                          | `[]`                 |
+| `args`                        | Args for running the container (set to default if not set). Use array form                                             | `[]`                 |
+| `extraEnvVars`                | Extra environment variables to be set on cassandra container                                                           | `[]`                 |
+| `extraEnvVarsCM`              | Name of existing ConfigMap containing extra env vars                                                                   | `""`                 |
+| `extraEnvVarsSecret`          | Name of existing Secret containing extra env vars                                                                      | `""`                 |
 
 ### Statefulset parameters
 
@@ -230,7 +230,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                   | Enable init container that changes the owner and group of the persistent volume                                       | `false`                 |
 | `volumePermissions.image.registry`            | Init container volume image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`          | Init container volume image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Init container volume image tag (immutable tags are recommended)                                                      | `11-debian-11-r117`     |
+| `volumePermissions.image.tag`                 | Init container volume image tag (immutable tags are recommended)                                                      | `11-debian-11-r120`     |
 | `volumePermissions.image.digest`              | Init container volume image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`          | Init container volume pull policy                                                                                     | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`         | Specify docker-registry secret names as an array                                                                      | `[]`                    |
@@ -245,7 +245,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                            | Start a side-car prometheus exporter                                                                               | `false`                      |
 | `metrics.image.registry`                     | Cassandra exporter image registry                                                                                  | `docker.io`                  |
 | `metrics.image.repository`                   | Cassandra exporter image name                                                                                      | `bitnami/cassandra-exporter` |
-| `metrics.image.tag`                          | Cassandra exporter image tag                                                                                       | `2.3.8-debian-11-r120`       |
+| `metrics.image.tag`                          | Cassandra exporter image tag                                                                                       | `2.3.8-debian-11-r123`       |
 | `metrics.image.digest`                       | Cassandra exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                         |
 | `metrics.image.pullPolicy`                   | image pull policy                                                                                                  | `IfNotPresent`               |
 | `metrics.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                   | `[]`                         |
