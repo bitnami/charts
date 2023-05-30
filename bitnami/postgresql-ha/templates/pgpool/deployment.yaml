@@ -333,15 +333,7 @@ spec:
           {{- if .Values.pgpool.resources }}
           resources: {{- toYaml .Values.pgpool.resources | nindent 12 }}
           {{- end }}
-          {{- if or
-            (or .Values.pgpool.configuration .Values.pgpool.configurationCM)
-            (or .Values.pgpool.initdbScripts .Values.pgpool.initdbScriptsCM)
-            (.Values.pgpool.initdbScriptsSecret)
-            (.Values.postgresql.usePasswordFile)
-            (.Values.pgpool.usePasswordFile)
-            (.Values.pgpool.tls.enabled)
-            (.Values.pgpool.extraVolumeMounts)
-          }}
+          {{- if or .Values.pgpool.configuration .Values.pgpool.configurationCM .Values.pgpool.initdbScripts .Values.pgpool.initdbScriptsCM .Values.pgpool.initdbScriptsSecret .Values.postgresql.usePasswordFile .Values.pgpool.usePasswordFile .Values.pgpool.tls.enabled .Values.pgpool.extraVolumeMounts }}
           volumeMounts:
             {{- if or .Values.pgpool.configuration .Values.pgpool.configurationCM }}
             - name: pgpool-config
@@ -379,15 +371,7 @@ spec:
         {{- if .Values.pgpool.sidecars }}
         {{- include "common.tplvalues.render" (dict "value" .Values.pgpool.sidecars "context" $) | nindent 8 }}
         {{- end }}
-      {{- if or
-        (or .Values.pgpool.configuration .Values.pgpool.configurationCM)
-        (or .Values.pgpool.initdbScripts .Values.pgpool.initdbScriptsCM)
-        (.Values.pgpool.initdbScriptsSecret)
-        (.Values.pgpool.usePasswordFile)
-        (.Values.postgresql.usePasswordFile)
-        (.Values.pgpool.tls.enabled)
-        (.Values.pgpool.extraVolumes)
-      }}
+      {{- if or .Values.pgpool.configuration .Values.pgpool.configurationCM .Values.pgpool.initdbScripts .Values.pgpool.initdbScriptsCM .Values.pgpool.initdbScriptsSecret .Values.pgpool.usePasswordFile .Values.postgresql.usePasswordFile .Values.pgpool.tls.enabled .Values.pgpool.extraVolumes }}
       volumes:
         {{- if or .Values.pgpool.configuration .Values.pgpool.configurationCM }}
         - name: pgpool-config
