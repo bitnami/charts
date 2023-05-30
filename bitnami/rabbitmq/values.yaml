@@ -142,7 +142,7 @@ auth:
   ## existingPasswordSecret: name-of-existing-secret
   ##
   existingPasswordSecret: ""
-  ## @param auth.enableLoopbackUser Enable Loopback user access? Be advised, that enabling the loopback user is a possible security risk!
+  ## @param auth.enableLoopbackUser If enabled, the user `auth.username` can only connect from localhost
   ##
   enableLoopbackUser: false
   ## @param auth.erlangCookie Erlang cookie to determine whether different nodes are allowed to communicate with each other
