@@ -2,7 +2,7 @@ annotations:
   category: Infrastructure
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 3.11.16
+appVersion: 3.11.17
 dependencies:
   - name: common
     repository: oci://registry-1.docker.io/bitnamicharts
