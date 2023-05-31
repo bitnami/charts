@@ -31,7 +31,7 @@ global:
 image:
   registry: docker.io
   repository: bitnami/rabbitmq
-  tag: 3.11.16-debian-11-r3
+  tag: 3.11.17-debian-11-r1
   digest: ""
   ## set to true if you would like to see extra information on logs
   ## It turns BASH and/or NAMI debugging in the image
@@ -142,7 +142,7 @@ auth:
   ## existingPasswordSecret: name-of-existing-secret
   ##
   existingPasswordSecret: ""
-  ## @param auth.enableLoopbackUser Enable Loopback user access? Be advised, that enabling the loopback user is a possible security risk!
+  ## @param auth.enableLoopbackUser If enabled, the user `auth.username` can only connect from localhost
   ##
   enableLoopbackUser: false
   ## @param auth.erlangCookie Erlang cookie to determine whether different nodes are allowed to communicate with each other
@@ -1272,6 +1272,9 @@ metrics:
     ## Could be /metrics for aggregated metrics or /metrics/per-object for more details
     ##
     path: ""
+    ## @param metrics.serviceMonitor.params Define the HTTP URL parameters used by ServiceMonitor
+    ##
+    params: {}
     ## @param metrics.serviceMonitor.selector ServiceMonitor selector labels
     ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
     ##
@@ -1381,7 +1384,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r118
+    tag: 11-debian-11-r121
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

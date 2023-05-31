@@ -369,7 +369,7 @@ spec:
             {{- end }}
             {{- if .Values.readReplicas.extendedConfiguration }}
             - name: postgresql-extended-config
-              mountPath: /bitnami/postgresql/conf/conf.d/
+              mountPath: {{ .Values.readReplicas.persistence.mountPath }}/conf/conf.d/
             {{- end }}
             {{- if .Values.tls.enabled }}
             - name: postgresql-certificates

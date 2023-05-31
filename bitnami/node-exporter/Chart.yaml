@@ -2,7 +2,7 @@ annotations:
   category: Analytics
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 1.5.0
+appVersion: 1.6.0
 dependencies:
   - name: common
     repository: oci://registry-1.docker.io/bitnamicharts
@@ -22,4 +22,4 @@ maintainers:
 name: node-exporter
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/node-exporter
-version: 3.5.2
+version: 3.5.3

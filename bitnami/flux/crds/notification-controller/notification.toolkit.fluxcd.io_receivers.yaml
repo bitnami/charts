@@ -25,7 +25,7 @@ spec:
     - jsonPath: .status.conditions[?(@.type=="Ready")].message
       name: Status
       type: string
-    name: v1
+    name: v1beta1
     schema:
       openAPIV3Schema:
         description: Receiver is the Schema for the receivers API
