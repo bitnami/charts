@@ -1035,21 +1035,16 @@ pgpool:
     ## Set to true if you would like to see extra information on logs
     ##
     debug: false
-  ## @param pgpool.customUsers Additional users that will be performing connections to the database using
-  ## pgpool. Use this property in order to create new user/password entries that
-  ## will be appended to the "pgpool_passwd" file
-  ##
-  customUsers: {}
-  ## @param pgpool.usernames Comma or semicolon separated list of postgres usernames
+  ## @param pgpool.customUsers.usernames Comma or semicolon separated list of additional users that will be performing connections to the database using pgpool.
+  ## @param pgpool.customUsers.passwords Comma or semicolon separated list of the associated passwords for the users above. Must have the same number of elements as the usernames list.
+  ## Use this property in order to create new user/password entries that will be appended to the "pgpool_passwd" file.
   ## e.g:
-  ## usernames: 'user01;user02'
-  ##
-  usernames: ""
-  ## @param pgpool.passwords Comma or semicolon separated list of the associated passwords for the users above
-  ## e.g:
-  ## passwords: 'pass01;pass02'
-  ##
-  passwords: ""
+  ##    customUsers:
+  ##      usernames: "user01;user02"
+  ##      passwords: "pass01;pass02"
+  customUsers:
+    usernames: ""
+    passwords: ""
   ## @param pgpool.hostAliases Deployment pod host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
