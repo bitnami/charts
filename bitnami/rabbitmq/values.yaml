@@ -1272,6 +1272,9 @@ metrics:
     ## Could be /metrics for aggregated metrics or /metrics/per-object for more details
     ##
     path: ""
+    ## @param metrics.serviceMonitor.params Define the HTTP URL parameters used by ServiceMonitor
+    ##
+    params: {}
     ## @param metrics.serviceMonitor.selector ServiceMonitor selector labels
     ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
     ##
