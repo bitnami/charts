@@ -47,6 +47,7 @@ spec:
       nodePort: {{ .Values.storage.service.nodePorts.http }}
       {{- else if eq .Values.storage.service.type "ClusterIP" }}
       nodePort: null
+      targetPort: {{ .Values.storage.containerPorts.http }}
       {{- end }}
     {{- if .Values.storage.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.storage.service.extraPorts "context" $) | nindent 4 }}

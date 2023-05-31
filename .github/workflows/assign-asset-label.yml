@@ -4,12 +4,14 @@ on:
     types:
       - opened
 permissions:
-  pull-requests: write
-  issues: write
+  # Remove all permissions by default
+  contents: none
 jobs:
   assign-label:
     name: Assign label
     runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
     steps:
       - id: get-asset
         name: Get modified assets

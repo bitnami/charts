@@ -309,6 +309,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `prometheus.podMonitorNamespaceSelector`                              | Namespaces to be selected for PodMonitor discovery                                                                               | `{}`                      |
 | `prometheus.probeSelector`                                            | Probes to be selected for target discovery.                                                                                      | `{}`                      |
 | `prometheus.probeNamespaceSelector`                                   | Namespaces to be selected for Probe discovery                                                                                    | `{}`                      |
+| `prometheus.scrapeConfigSelector`                                     | ScrapeConfig to be selected for target discovery.                                                                                | `{}`                      |
+| `prometheus.scrapeConfigNamespaceSelector`                            | Namespaces to be selected for ScrapeConfig discovery                                                                             | `{}`                      |
 | `prometheus.retention`                                                | Metrics retention days                                                                                                           | `10d`                     |
 | `prometheus.retentionSize`                                            | Maximum size of metrics                                                                                                          | `""`                      |
 | `prometheus.disableCompaction`                                        | Disable the compaction of the Prometheus TSDB                                                                                    | `false`                   |
@@ -388,7 +390,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `prometheus.thanos.service.nodePorts.grpc`                            | Specify the nodePort value for the LoadBalancer and NodePort service types.                                                      | `""`                      |
 | `prometheus.thanos.service.loadBalancerIP`                            | `loadBalancerIP` if service type is `LoadBalancer`                                                                               | `""`                      |
 | `prometheus.thanos.service.loadBalancerSourceRanges`                  | Address that are allowed when svc is `LoadBalancer`                                                                              | `[]`                      |
-| `prometheus.thanos.service.annotations`                               | Additional annotations for Prometheus service                                                                                    | `{}`                      |
+| `prometheus.thanos.service.labels`                                    | Additional labels for Thanos service                                                                                             | `{}`                      |
+| `prometheus.thanos.service.annotations`                               | Additional annotations for Thanos service                                                                                        | `{}`                      |
 | `prometheus.thanos.service.extraPorts`                                | Additional ports to expose from the Thanos sidecar container                                                                     | `[]`                      |
 | `prometheus.thanos.service.externalTrafficPolicy`                     | Prometheus service external traffic policy                                                                                       | `Cluster`                 |
 | `prometheus.thanos.service.sessionAffinity`                           | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                             | `None`                    |
@@ -786,6 +789,8 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 ## Troubleshooting
 
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+
+While upgrading a chart, please note that there are certain limitations to upgrading CRDs. This limitation requires manual installation of the CRDs. Refer to the following [Helm documentation](https://helm.sh/docs/chart_best_practices/custom_resource_definitions/#some-caveats-and-explanations/).
 
 ## Upgrading
 
