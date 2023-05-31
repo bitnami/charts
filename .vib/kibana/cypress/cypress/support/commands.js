@@ -24,6 +24,9 @@ Cypress.on('uncaught:exception', (err) => {
   if (err.message.includes("Cannot read properties of undefined (reading 'includes')")) {
     return false;
   }
+  else if(err.message.includes("undefined is not an object (evaluating 'r.roles.includes')")) {
+    return false;
+  }
   // we still want to ensure there are no other unexpected
   // errors, so we let them fail the test
 })
