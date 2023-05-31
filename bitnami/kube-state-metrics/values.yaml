@@ -98,7 +98,7 @@ serviceAccount:
 image:
   registry: docker.io
   repository: bitnami/kube-state-metrics
-  tag: 2.9.1-debian-11-r0
+  tag: 2.9.2-debian-11-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
