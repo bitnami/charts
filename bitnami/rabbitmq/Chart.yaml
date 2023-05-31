@@ -23,4 +23,3 @@ name: rabbitmq
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/rabbitmq
 version: 11.15.7
-
