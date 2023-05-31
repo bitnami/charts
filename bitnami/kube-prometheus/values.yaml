@@ -952,6 +952,14 @@ prometheus:
   ## See https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#namespaceselector for usage
   ##
   probeNamespaceSelector: {}
+  ## @param prometheus.scrapeConfigSelector ScrapeConfig to be selected for target discovery.
+  ## If {}, select all ScrapeConfig
+  ##
+  scrapeConfigSelector: {}
+  ## @param prometheus.scrapeConfigNamespaceSelector Namespaces to be selected for ScrapeConfig discovery
+  ## See https://github.com/prometheus-operator/prometheus-operator/blob/master/Documentation/api.md#namespaceselector for usage
+  ##
+  scrapeConfigNamespaceSelector: {}
   ## @param prometheus.retention Metrics retention days
   ##
   retention: 10d
