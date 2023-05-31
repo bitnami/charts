@@ -150,7 +150,7 @@ spec:
             exec:
               command:
                 - pgrep
-                - multus-daemon
+                - thin_entrypoint
             initialDelaySeconds: {{ .Values.startupProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.startupProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.startupProbe.timeoutSeconds }}
@@ -164,7 +164,7 @@ spec:
             exec:
               command:
                 - pgrep
-                - multus-daemon
+                - thin_entrypoint
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
@@ -178,7 +178,7 @@ spec:
             exec:
               command:
                 - pgrep
-                - multus-daemon
+                - thin_entrypoint
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
