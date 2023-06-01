@@ -382,7 +382,7 @@ This version updates Pinniped to its newest version, 0.20.x. For more informatio
 
 ## License
 
-Copyright &copy; 2023 Bitnami
+Copyright &copy; 2023 VMware Inc
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
