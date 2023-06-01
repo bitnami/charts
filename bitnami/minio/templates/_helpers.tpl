@@ -70,18 +70,6 @@ Get the password to use to access MinIO&reg;
 {{- end -}}
 
 {{/*
-Get existing password to access MinIO&reg without generating a new password;
-*/}}
-{{- define "minio.secret.existingPassword" -}}
-{{- $obj := (lookup "v1" "Secret" .Release.Namespace (include "minio.secretName" .)).data -}}
-{{- if $obj }}
-{{- index $obj "root-password" | b64dec -}}
-{{- else -}}
-{{- "" -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
 Get the credentials secret.
 */}}
 {{- define "minio.secretName" -}}
