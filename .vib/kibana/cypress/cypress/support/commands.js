@@ -24,7 +24,7 @@ Cypress.on('uncaught:exception', (err) => {
   if (err.message.includes("Cannot read properties of undefined (reading 'includes')")) {
     return false;
   }
-cd  else if(err.message.includes("ResizeObserver loop limit exceeded")){
+  else if(err.message.includes("ResizeObserver loop limit exceeded")){
     return false;
   }
   // we still want to ensure there are no other unexpected
