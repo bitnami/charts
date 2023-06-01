@@ -64,7 +64,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | -------------------------------------------------------------------------------------------------------- | ---------------------- |
 | `image.registry`    | RabbitMQ image registry                                                                                  | `docker.io`            |
 | `image.repository`  | RabbitMQ image repository                                                                                | `bitnami/rabbitmq`     |
-| `image.tag`         | RabbitMQ image tag (immutable tags are recommended)                                                      | `3.11.17-debian-11-r1` |
+| `image.tag`         | RabbitMQ image tag (immutable tags are recommended)                                                      | `3.11.17-debian-11-r2` |
 | `image.digest`      | RabbitMQ image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
 | `image.pullPolicy`  | RabbitMQ image pull policy                                                                               | `IfNotPresent`         |
 | `image.pullSecrets` | Specify docker-registry secret names as an array                                                         | `[]`                   |
