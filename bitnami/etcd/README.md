@@ -286,6 +286,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `disasterRecovery.pvc.existingClaim`            | A manually managed Persistent Volume and Claim                          | `""`           |
 | `disasterRecovery.pvc.size`                     | PVC Storage Request                                                     | `2Gi`          |
 | `disasterRecovery.pvc.storageClassName`         | Storage Class for snapshots volume                                      | `nfs`          |
+| `disasterRecovery.pvc.subPath`                  | Path within the volume from which to mount                              | `""`           |
 
 ### Service account parameters
 
