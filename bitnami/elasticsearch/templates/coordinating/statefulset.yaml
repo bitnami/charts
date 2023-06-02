@@ -145,9 +145,8 @@ spec:
               value: {{ .Values.clusterName | quote }}
             - name: ELASTICSEARCH_IS_DEDICATED_NODE
               value: "yes"
-            {{- $roles := ternary "" (list "coordinating" .Values.coordinating.extraRoles) (empty .Values.coordinating.extraRoles) }}
             - name: ELASTICSEARCH_NODE_ROLES
-              value: {{ join "," $roles | quote }}
+              value: ""
             - name: ELASTICSEARCH_TRANSPORT_PORT_NUMBER
               value: {{ .Values.containerPorts.transport | quote }}
             - name: ELASTICSEARCH_HTTP_PORT_NUMBER

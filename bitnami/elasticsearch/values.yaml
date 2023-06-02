@@ -1090,9 +1090,6 @@ data:
 ## @section Coordinating-only nodes parameters
 
 coordinating:
-  ## @param coordinating.extraRoles Append extra roles to the node role
-  extraRoles: []
-  
   ## @param coordinating.replicaCount Number of coordinating-only replicas to deploy
   ##
   replicaCount: 2
