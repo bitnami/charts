@@ -822,6 +822,10 @@ prometheus:
   ## @param prometheus.evaluationInterval Interval between consecutive evaluations
   ##
   evaluationInterval: ""
+  ## @param prometheus.scrapeTimeout Timeout after which the global scrape is ended
+  ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config
+  ##
+  scrapeTimeout: ""
   ## @param prometheus.listenLocal ListenLocal makes the Prometheus server listen on loopback
   ##
   listenLocal: false
