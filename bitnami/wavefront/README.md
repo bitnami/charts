@@ -6,6 +6,10 @@ Wavefront is a high-performance streaming analytics platform for monitoring and 
 
 [Overview of Wavefront](https://github.com/wavefrontHQ/wavefront-collector-for-kubernetes)
 
+## This Helm chart is deprecated
+
+The upstream project has been discontinued and no new features.
+
 ## TL;DR
 
 ```console
