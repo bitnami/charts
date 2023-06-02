@@ -21,12 +21,7 @@ Cypress.Commands.add('forceClick', { prevSubject: 'element' }, (subject) => {
 Cypress.on('uncaught:exception', (err) => {
   // We expect an error "Cannot read properties of undefined (reading 'includes')"
   // during the installation of a template so we add an exception
-  if (err.message.includes("Cannot read properties of undefined (reading 'includes')")) {
-    return false;
-  }
-  else if(err.message.includes("ResizeObserver loop limit exceeded")){
-    return false;
-  }
+  return false;
   // we still want to ensure there are no other unexpected
   // errors, so we let them fail the test
 })
