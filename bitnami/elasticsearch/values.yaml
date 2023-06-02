@@ -457,15 +457,16 @@ ingress:
 ## @section Master-elegible nodes parameters
 
 master:
-  ## @param master.extraRoles Append extra roles to the node role
-  extraRoles: []
-
   ## @param master.masterOnly Deploy the Elasticsearch master-elegible nodes as master-only nodes. Recommended for high-demand deployments.
   ## If you are
   masterOnly: true
   ## @param master.replicaCount Number of master-elegible replicas to deploy
   ##
   replicaCount: 2
+
+  ## @param master.extraRoles Append extra roles to the node role
+  ##
+  extraRoles: []
 
   ## Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
@@ -780,12 +781,13 @@ master:
 ## @section Data-only nodes parameters
 
 data:
-  ## @param data.extraRoles Append extra roles to the node role
-  extraRoles: []
-
   ## @param data.replicaCount Number of data-only replicas to deploy
   ##
   replicaCount: 2
+
+  ## @param data.extraRoles Append extra roles to the node role
+  ##
+  extraRoles: []
 
   ## Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
@@ -1358,15 +1360,16 @@ coordinating:
 ## @section Ingest-only nodes parameters
 
 ingest:
-  ## @param ingest.extraRoles Append extra roles to the node role
-  extraRoles: []
-
   ## @param ingest.enabled Enable ingest nodes
   ##
   enabled: true
   ## @param ingest.replicaCount Number of ingest-only replicas to deploy
   ##
   replicaCount: 2
+
+  ## @param ingest.extraRoles Append extra roles to the node role
+  ##
+  extraRoles: []
 
   ## Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
