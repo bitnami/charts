@@ -143,8 +143,9 @@ spec:
                   fieldPath: metadata.name
             - name: ELASTICSEARCH_IS_DEDICATED_NODE
               value: "yes"
+            {{- $roles := ternary "ingest" (list "ingest" .Values.ingest.extraRoles) (empty .Values.ingest.extraRoles) }}
             - name: ELASTICSEARCH_NODE_ROLES
-              value: "ingest"
+              value: {{ join "," $roles | quote }}
             - name: ELASTICSEARCH_TRANSPORT_PORT_NUMBER
               value: {{ .Values.containerPorts.transport | quote }}
             - name: ELASTICSEARCH_HTTP_PORT_NUMBER

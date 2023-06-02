@@ -464,6 +464,10 @@ master:
   ##
   replicaCount: 2
 
+  ## @param master.extraRoles Append extra roles to the node role
+  ##
+  extraRoles: []
+
   ## Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
   ## @param master.pdb.create Enable/disable a Pod Disruption Budget creation
@@ -780,6 +784,10 @@ data:
   ## @param data.replicaCount Number of data-only replicas to deploy
   ##
   replicaCount: 2
+
+  ## @param data.extraRoles Append extra roles to the node role
+  ##
+  extraRoles: []
 
   ## Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
@@ -1358,6 +1366,10 @@ ingest:
   ## @param ingest.replicaCount Number of ingest-only replicas to deploy
   ##
   replicaCount: 2
+
+  ## @param ingest.extraRoles Append extra roles to the node role
+  ##
+  extraRoles: []
 
   ## Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
