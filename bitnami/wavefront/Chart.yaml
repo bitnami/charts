@@ -13,7 +13,8 @@ dependencies:
     tags:
       - bitnami-common
     version: 2.x.x
-description: Wavefront is a high-performance streaming analytics platform for monitoring and optimizing your environment and applications.
+deprecated: true
+description: DEPRECATED Wavefront is a high-performance streaming analytics platform for monitoring and optimizing your environment and applications.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/wavefront/img/wavefront-stack-220x234.png
 keywords:
@@ -21,10 +22,8 @@ keywords:
   - monitoring
   - observability
   - alerting
-maintainers:
-  - name: VMware, Inc.
-    url: https://github.com/bitnami/charts
+maintainers: []
 name: wavefront
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/wavefront
-version: 4.4.2
+version: 4.4.3
