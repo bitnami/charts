@@ -457,6 +457,9 @@ ingress:
 ## @section Master-elegible nodes parameters
 
 master:
+  ## @param master.extraRoles Append extra roles to the node role
+  extraRoles: []
+
   ## @param master.masterOnly Deploy the Elasticsearch master-elegible nodes as master-only nodes. Recommended for high-demand deployments.
   ## If you are
   masterOnly: true
@@ -777,6 +780,9 @@ master:
 ## @section Data-only nodes parameters
 
 data:
+  ## @param data.extraRoles Append extra roles to the node role
+  extraRoles: []
+
   ## @param data.replicaCount Number of data-only replicas to deploy
   ##
   replicaCount: 2
@@ -1084,6 +1090,9 @@ data:
 ## @section Coordinating-only nodes parameters
 
 coordinating:
+  ## @param coordinating.extraRoles Append extra roles to the node role
+  extraRoles: []
+  
   ## @param coordinating.replicaCount Number of coordinating-only replicas to deploy
   ##
   replicaCount: 2
@@ -1352,6 +1361,9 @@ coordinating:
 ## @section Ingest-only nodes parameters
 
 ingest:
+  ## @param ingest.extraRoles Append extra roles to the node role
+  extraRoles: []
+
   ## @param ingest.enabled Enable ingest nodes
   ##
   enabled: true
