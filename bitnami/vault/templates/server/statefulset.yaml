@@ -120,7 +120,6 @@ spec:
             {{- end }}
           {{- end }}
           env:
-          env:
             - name: HOST_IP
               valueFrom:
                 fieldRef:
