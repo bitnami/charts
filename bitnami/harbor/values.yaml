@@ -99,10 +99,10 @@ logLevel: debug
 ## Note: TLS cert files need to provided in each components in advance.
 ##
 internalTLS:
-  ## @param internalTLS.enabled Use TLS in all the supported containers: chartmuseum, core, jobservice, portal, registry and trivy
+  ## @param internalTLS.enabled Use TLS in all the supported containers: core, jobservice, portal, registry and trivy
   ##
   enabled: false
-  ## @param internalTLS.caBundleSecret Name of an existing secret with a custom CA that will be injected into the trust store for chartmuseum, core, jobservice, registry, trivy components
+  ## @param internalTLS.caBundleSecret Name of an existing secret with a custom CA that will be injected into the trust store for core, jobservice, registry, trivy components
   ## The secret must contain the key "ca.crt"
   ##
   caBundleSecret: ""
@@ -480,24 +480,6 @@ persistence:
         size: 1Gi
         annotations: {}
         selector: {}
-    ## @param persistence.persistentVolumeClaim.chartmuseum.existingClaim Name of an existing PVC to use
-    ## @param persistence.persistentVolumeClaim.chartmuseum.storageClass PVC Storage Class for Chartmuseum data volume
-    ## Note: The default StorageClass will be used if not defined. Set it to `-` to disable dynamic provisioning
-    ## @param persistence.persistentVolumeClaim.chartmuseum.subPath The sub path used in the volume
-    ## @param persistence.persistentVolumeClaim.chartmuseum.accessModes The access mode of the volume
-    ## @param persistence.persistentVolumeClaim.chartmuseum.size The size of the volume
-    ## @param persistence.persistentVolumeClaim.chartmuseum.annotations Annotations for the PVC
-    ## @param persistence.persistentVolumeClaim.chartmuseum.selector Selector to match an existing Persistent Volume
-    ##
-    chartmuseum:
-      existingClaim: ""
-      storageClass: ""
-      subPath: ""
-      accessModes:
-        - ReadWriteOnce
-      size: 5Gi
-      annotations: {}
-      selector: {}
     ## @param persistence.persistentVolumeClaim.trivy.storageClass PVC Storage Class for Trivy data volume
     ## Note: The default StorageClass will be used if not defined. Set it to `-` to disable dynamic provisioning
     ## @param persistence.persistentVolumeClaim.trivy.accessModes The access mode of the volume
@@ -512,18 +494,18 @@ persistence:
       size: 5Gi
       annotations: {}
       selector: {}
-  ## Define which storage backend is used for registry and chartmuseum to store
+  ## Define which storage backend is used for registry to store
   ## images and charts.
   ## ref: https://github.com/docker/distribution/blob/master/docs/configuration.md#storage
   ##
   imageChartStorage:
-    ## @param persistence.imageChartStorage.caBundleSecret Specify the `caBundleSecret` if the storage service uses a self-signed certificate. The secret must contain keys named `ca.crt` which will be injected into the trust store  of registry's and chartmuseum's containers.
+    ## @param persistence.imageChartStorage.caBundleSecret Specify the `caBundleSecret` if the storage service uses a self-signed certificate. The secret must contain keys named `ca.crt` which will be injected into the trust store  of registry's containers.
     ##
     caBundleSecret: ""
     ## @param persistence.imageChartStorage.disableredirect The configuration for managing redirects from content backends. For backends which do not supported it (such as using MinIO&reg; for `s3` storage type), please set it to `true` to disable redirects. Refer to the [guide](https://github.com/docker/distribution/blob/master/docs/configuration.md#redirect) for more information about the detail
     ##
     disableredirect: false
-    ## @param persistence.imageChartStorage.type The type of storage for images and charts: `filesystem`, `azure`, `gcs`, `s3`, `swift` or `oss`. The type must be `filesystem` if you want to use persistent volumes for registry and chartmuseum. Refer to the [guide](https://github.com/docker/distribution/blob/master/docs/configuration.md#storage) for more information about the detail
+    ## @param persistence.imageChartStorage.type The type of storage for images and charts: `filesystem`, `azure`, `gcs`, `s3`, `swift` or `oss`. The type must be `filesystem` if you want to use persistent volumes for registry. Refer to the [guide](https://github.com/docker/distribution/blob/master/docs/configuration.md#storage) for more information about the detail
     ##
     type: filesystem
     ## Images/charts storage parameters when type is "filesystem"
@@ -2361,319 +2343,6 @@ registry:
         http: 8080
         https: 8443
 
-## @section ChartMuseum Parameters
-##
-
-chartmuseum:
-  ## Bitnami ChartMuseum image
-  ## ref: https://hub.docker.com/r/bitnami/chartmuseum/tags/
-  ## @param chartmuseum.image.registry ChartMuseum image registry
-  ## @param chartmuseum.image.repository ChartMuseum image repository
-  ## @param chartmuseum.image.tag ChartMuseum image tag (immutable tags are recommended)
-  ## @param chartmuseum.image.digest ChartMuseum image image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
-  ## @param chartmuseum.image.pullPolicy ChartMuseum image pull policy
-  ## @param chartmuseum.image.pullSecrets ChartMuseum image pull secrets
-  ## @param chartmuseum.image.debug Enable ChartMuseum image debug mode
-  ##
-  image:
-    registry: docker.io
-    repository: bitnami/chartmuseum
-    tag: 0.15.0-debian-11-r102
-    digest: ""
-    ## Specify a imagePullPolicy
-    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
-    ##
-    pullPolicy: IfNotPresent
-    ## Optionally specify an array of imagePullSecrets.
-    ## Secrets must be manually created in the namespace.
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-    ## e.g:
-    ## pullSecrets:
-    ##   - myRegistryKeySecretName
-    ##
-    pullSecrets: []
-    ## Enable debug mode
-    ##
-    debug: false
-  ## @param chartmuseum.enabled Enable ChartMuseum
-  ##
-  enabled: true
-  ## @param chartmuseum.useRedisCache Specify if ChartMuseum will use redis cache
-  ##
-  useRedisCache: true
-  ## Set the absolute URL to access the chartmuseum repository and the endpoint where it will be available.
-  ## @param chartmuseum.absoluteUrl Specify an absolute URL for ChartMuseum registry
-  ## @param chartmuseum.chartRepoName Specify the endpoint for the chartmuseum registry. Only applicable if `chartmuseum.absoluteUrl` is `true`
-  ##
-  absoluteUrl: false
-  chartRepoName: 'chartsRepo'
-  ## @param chartmuseum.depth Support for multitenancy. More info [here](https://chartmuseum.com/docs/#multitenancy)
-  ##
-  depth: 1
-  ## @param chartmuseum.logJson Print logs on JSON format
-  ##
-  logJson: false
-  ## @param chartmuseum.disableMetrics Disable prometheus metrics exposure
-  ##
-  disableMetrics: false
-  ## @param chartmuseum.disableApi Disable all the routes prefixed with `/api`
-  ##
-  disableApi: false
-  ## @param chartmuseum.disableStatefiles Disable use of index-cache.yaml
-  ##
-  disableStatefiles: false
-  ## @param chartmuseum.allowOverwrite Allow chart versions to be re-uploaded without force querystring
-  ##
-  allowOverwrite: true
-  ## @param chartmuseum.anonymousGet Allow anonymous GET operations
-  ##
-  anonymousGet: false
-  ## Optional parameters for ChartMuseum not used by default.
-  ## ref: https://chartmuseum.com/docs/#other-cli-options
-  ## @param chartmuseum.contextPath Set the base context path for ChartMuseum
-  ## @param chartmuseum.indexLimit Limit the number of parallels indexes for ChartMuseum
-  ## @param chartmuseum.chartPostFormFieldName Form field which will be queried for the chart file content
-  ## @param chartmuseum.provPostFormFieldName Form field which will be queried for the provenance file content
-  ## @param chartmuseum.maxStorageObjects Maximum storage objects
-  ## @param chartmuseum.maxUploadSize Maximum upload size
-  ## @param chartmuseum.storageTimestampTolerance Timestamp tolerance size
-  ##
-  contextPath: ""
-  indexLimit: ""
-  chartPostFormFieldName: ""
-  provPostFormFieldName: ""
-  maxStorageObjects: ""
-  maxUploadSize: ""
-  storageTimestampTolerance: "1s"
-  ## Use TLS in the container
-  ##
-  tls:
-    ## @param chartmuseum.tls.existingSecret Name of an existing secret with the certificates for internal TLS access
-    ## Requires `internalTLS.enabled` to be set to `true``
-    ## Self-signed TLS certificates will be used otherwise
-    ##
-    existingSecret: ""
-  ## @param chartmuseum.command Override default container command (useful when using custom images)
-  ##
-  command: []
-  ## @param chartmuseum.args Override default container args (useful when using custom images)
-  ##
-  args: []
-  ## @param chartmuseum.extraEnvVars Array with extra environment variables to add Chartmuseum pods
-  ##
-  extraEnvVars: []
-  ## @param chartmuseum.extraEnvVarsCM ConfigMap containing extra environment variables for Chartmuseum pods
-  ##
-  extraEnvVarsCM: ""
-  ## @param chartmuseum.extraEnvVarsSecret Secret containing extra environment variables (in case of sensitive data) for Chartmuseum pods
-  ##
-  extraEnvVarsSecret: ""
-  ## @param chartmuseum.containerPorts.http Chartmuseum HTTP container port
-  ## @param chartmuseum.containerPorts.https Chartmuseum HTTPS container port
-  ##
-  containerPorts:
-    http: 9999
-    https: 9443
-  ## @param chartmuseum.replicaCount Number of Chartmuseum replicas
-  ##
-  replicaCount: 1
-  ## Configure extra options for Chartmuseum containers' liveness, readiness and startup probes
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
-  ## @param chartmuseum.livenessProbe.enabled Enable livenessProbe on Chartmuseum containers
-  ## @param chartmuseum.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
-  ## @param chartmuseum.livenessProbe.periodSeconds Period seconds for livenessProbe
-  ## @param chartmuseum.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
-  ## @param chartmuseum.livenessProbe.failureThreshold Failure threshold for livenessProbe
-  ## @param chartmuseum.livenessProbe.successThreshold Success threshold for livenessProbe
-  ##
-  livenessProbe:
-    enabled: true
-    initialDelaySeconds: 20
-    periodSeconds: 10
-    timeoutSeconds: 5
-    failureThreshold: 6
-    successThreshold: 1
-  ## @param chartmuseum.readinessProbe.enabled Enable readinessProbe on Chartmuseum containers
-  ## @param chartmuseum.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
-  ## @param chartmuseum.readinessProbe.periodSeconds Period seconds for readinessProbe
-  ## @param chartmuseum.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
-  ## @param chartmuseum.readinessProbe.failureThreshold Failure threshold for readinessProbe
-  ## @param chartmuseum.readinessProbe.successThreshold Success threshold for readinessProbe
-  ##
-  readinessProbe:
-    enabled: true
-    initialDelaySeconds: 20
-    periodSeconds: 10
-    timeoutSeconds: 5
-    failureThreshold: 6
-    successThreshold: 1
-  ## @param chartmuseum.startupProbe.enabled Enable startupProbe on Chartmuseum containers
-  ## @param chartmuseum.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
-  ## @param chartmuseum.startupProbe.periodSeconds Period seconds for startupProbe
-  ## @param chartmuseum.startupProbe.timeoutSeconds Timeout seconds for startupProbe
-  ## @param chartmuseum.startupProbe.failureThreshold Failure threshold for startupProbe
-  ## @param chartmuseum.startupProbe.successThreshold Success threshold for startupProbe
-  ##
-  startupProbe:
-    enabled: false
-    initialDelaySeconds: 5
-    periodSeconds: 10
-    timeoutSeconds: 1
-    failureThreshold: 15
-    successThreshold: 1
-  ## @param chartmuseum.customLivenessProbe Custom livenessProbe that overrides the default one
-  ##
-  customLivenessProbe: {}
-  ## @param chartmuseum.customReadinessProbe Custom readinessProbe that overrides the default one
-  ##
-  customReadinessProbe: {}
-  ## @param chartmuseum.customStartupProbe Custom startupProbe that overrides the default one
-  ##
-  customStartupProbe: {}
-  ## Chartmuseum resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
-  ## @param chartmuseum.resources.limits The resources limits for the Chartmuseum containers
-  ## @param chartmuseum.resources.requests The requested resources for the Chartmuseum containers
-  ##
-  resources:
-    limits: {}
-    requests: {}
-  ## Configure Chartmuseum pods Security Context
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-  ## @param chartmuseum.podSecurityContext.enabled Enabled Chartmuseum pods' Security Context
-  ## @param chartmuseum.podSecurityContext.fsGroup Set Chartmuseum pod's Security Context fsGroup
-  ##
-  podSecurityContext:
-    enabled: true
-    fsGroup: 1001
-  ## Configure Chartmuseum containers (only main one) Security Context
-  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
-  ## @param chartmuseum.containerSecurityContext.enabled Enabled Chartmuseum containers' Security Context
-  ## @param chartmuseum.containerSecurityContext.runAsUser Set Chartmuseum containers' Security Context runAsUser
-  ## @param chartmuseum.containerSecurityContext.runAsNonRoot Set Chartmuseum containers' Security Context runAsNonRoot
-  ##
-  containerSecurityContext:
-    enabled: true
-    runAsUser: 1001
-    runAsNonRoot: true
-  ## @param chartmuseum.updateStrategy.type Chartmuseum deployment strategy type - only really applicable for deployments with RWO PVs attached
-  ## If replicas = 1, an update can get "stuck", as the previous pod remains attached to the
-  ## PV, and the "incoming" pod can never start. Changing the strategy to "Recreate" will
-  ## terminate the single previous pod, so that the new, incoming pod can attach to the PV
-  ##
-  updateStrategy:
-    type: RollingUpdate
-  ## @param chartmuseum.lifecycleHooks LifecycleHook for the Chartmuseum container(s) to automate configuration before or after startup
-  ##
-  lifecycleHooks: {}
-  ## @param chartmuseum.hostAliases Chartmuseum pods host aliases
-  ##
-  hostAliases: []
-  ## @param chartmuseum.podLabels Add additional labels to the Chartmuseum pods (evaluated as a template)
-  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
-  ##
-  podLabels: {}
-  ## @param chartmuseum.podAnnotations Annotations to add to the Chartmuseum pods (evaluated as a template)
-  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
-  ##
-  podAnnotations: {}
-  ## @param chartmuseum.podAffinityPreset Chartmuseum Pod affinity preset. Ignored if `chartmuseum.affinity` is set. Allowed values: `soft` or `hard`
-  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ##
-  podAffinityPreset: ""
-  ## @param chartmuseum.podAntiAffinityPreset Chartmuseum Pod anti-affinity preset. Ignored if `chartmuseum.affinity` is set. Allowed values: `soft` or `hard`
-  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ##
-  podAntiAffinityPreset: soft
-  ## Node affinity preset
-  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
-  ##
-  nodeAffinityPreset:
-    ## @param chartmuseum.nodeAffinityPreset.type Chartmuseum Node affinity preset type. Ignored if `chartmuseum.affinity` is set. Allowed values: `soft` or `hard`
-    ##
-    type: ""
-    ## @param chartmuseum.nodeAffinityPreset.key Chartmuseum Node label key to match Ignored if `chartmuseum.affinity` is set.
-    ## E.g.
-    ## key: "kubernetes.io/e2e-az-name"
-    ##
-    key: ""
-    ## @param chartmuseum.nodeAffinityPreset.values Chartmuseum Node label values to match. Ignored if `chartmuseum.affinity` is set.
-    ## E.g.
-    ## values:
-    ##   - e2e-az1
-    ##   - e2e-az2
-    ##
-    values: []
-  ## @param chartmuseum.affinity Chartmuseum Affinity for pod assignment
-  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
-  ## Note: chartmuseum.podAffinityPreset, chartmuseum.podAntiAffinityPreset, and chartmuseum.nodeAffinityPreset will be ignored when it's set
-  ##
-  affinity: {}
-  ## @param chartmuseum.nodeSelector Chartmuseum Node labels for pod assignment
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
-  ##
-  nodeSelector: {}
-  ## @param chartmuseum.tolerations Chartmuseum Tolerations for pod assignment
-  ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
-  ##
-  tolerations: []
-  ## @param chartmuseum.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
-  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
-  ##
-  topologySpreadConstraints: []
-  ## @param chartmuseum.priorityClassName Priority Class Name
-  ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
-  ##
-  priorityClassName: ""
-  ## @param chartmuseum.schedulerName Use an alternate scheduler, e.g. "stork".
-  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
-  ##
-  schedulerName: ""
-  ## @param chartmuseum.sidecars Add additional sidecar containers to the Chartmuseum pods
-  ## Example:
-  ## sidecars:
-  ##   - name: your-image-name
-  ##     image: your-image
-  ##     imagePullPolicy: Always
-  ##     ports:
-  ##       - name: portname
-  ##         containerPort: 1234
-  ##
-  sidecars: []
-  ## @param chartmuseum.initContainers Add additional init containers to the Chartmuseum pods
-  ## Example:
-  ## initContainers:
-  ##   - name: your-image-name
-  ##     image: your-image
-  ##     imagePullPolicy: Always
-  ##     ports:
-  ##       - name: portname
-  ##         containerPort: 1234
-  ##
-  initContainers: []
-  ## @param chartmuseum.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Chartmuseum pods
-  ##
-  extraVolumeMounts: []
-  ## @param chartmuseum.extraVolumes Optionally specify extra list of additional volumes for the Chartmuseum pods
-  ##
-  extraVolumes: []
-  ## @param chartmuseum.automountServiceAccountToken Automount service account token
-  ##
-  automountServiceAccountToken: false
-  ## Chartmuseum service configuration
-  ##
-  service:
-    ## @param chartmuseum.service.ports.http Chartmuseum HTTP service port
-    ## @param chartmuseum.service.ports.https Chartmuseum HTTPS service port
-    ##
-    ports:
-      http: 80
-      https: 443
-
-## @section Notary Parameters
-##
-
 ## Notary Parameters
 ##
 notary:
@@ -3701,10 +3370,10 @@ exporter:
   ## @param exporter.initContainers Add additional init containers to the pod (evaluated as a template)
   ##
   initContainers: []
-  ## @param exporter.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the Chartmuseum pods
+  ## @param exporter.extraVolumeMounts
   ##
   extraVolumeMounts: []
-  ## @param exporter.extraVolumes Optionally specify extra list of additional volumes for the Chartmuseum pods
+  ## @param exporter.extraVolumes
   ##
   extraVolumes: []
   ## @param exporter.sidecars Attach additional containers to the pod (evaluated as a template)
@@ -3842,8 +3511,7 @@ redis:
 ## @param externalRedis.coreDatabaseIndex Index for core database
 ## @param externalRedis.jobserviceDatabaseIndex Index for jobservice database
 ## @param externalRedis.registryDatabaseIndex Index for registry database
-## @param externalRedis.chartmuseumDatabaseIndex Index for chartmuseum database
-## @param externalRedis.trivyAdapterDatabaseIndex Index for chartmuseum database
+## @param externalRedis.trivyAdapterDatabaseIndex Index for trivy adapter database
 ##
 externalRedis:
   host: localhost
@@ -3852,7 +3520,6 @@ externalRedis:
   coreDatabaseIndex: '0'
   jobserviceDatabaseIndex: '1'
   registryDatabaseIndex: '2'
-  chartmuseumDatabaseIndex: '3'
   trivyAdapterDatabaseIndex: '5'
   ## Redis&reg; sentinel configuration
   ## @param externalRedis.sentinel.enabled If external redis with sentinal is used, set it to `true`
