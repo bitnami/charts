@@ -9,9 +9,8 @@ on: # rebuild any PRs and main branch changes
     branches:
       - main
       - bitnami:main
-permissions:
-  issues: write
-  pull-requests: write
+# Remove all permissions by default
+permissions: {}
 env:
   CSP_API_URL: https://console.cloud.vmware.com
   CSP_API_TOKEN: ${{ secrets.CSP_API_TESTING_TOKEN }}
@@ -23,6 +22,8 @@ jobs:
   get-chart:
     runs-on: ubuntu-latest
     name: Get modified charts
+    permissions:
+      contents: read
     if: ${{ github.event.pull_request.state != 'closed' }}
     outputs:
       chart: ${{ steps.get-chart.outputs.chart }}
@@ -86,6 +87,8 @@ jobs:
   vib-verify:
     runs-on: ubuntu-latest
     needs: get-chart
+    permissions:
+      contents: read
     # Given performance issues of the action feature on GH's side, we need to be very restrictive in the job's triggers:
     # -> The 'Get modified charts' job suceededs AND
     #  ( ---> The pipeline was triggered due to a label addition and said label was the 'verify' one OR
@@ -135,6 +138,8 @@ jobs:
     runs-on: ubuntu-latest
     needs: vib-verify
     name: Reviewal for automated PRs
+    permissions:
+      pull-requests: write
     # Job to be run only when the triage for automated PRs did as well,
     # not taking into account whether 'VIB Verify' succeeded
     if: |

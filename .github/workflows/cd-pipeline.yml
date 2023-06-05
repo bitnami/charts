@@ -116,6 +116,8 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/wordpress-intel/**'
       - 'bitnami/zookeeper/**'
       - '!**.md'
+# Remove all permissions by default.
+permissions: {}
 env:
   CSP_API_URL: https://console.cloud.vmware.com
   CSP_API_TOKEN: ${{ secrets.CSP_API_TOKEN }}
@@ -124,6 +126,8 @@ jobs:
   get-chart:
     runs-on: ubuntu-latest
     name: 'Get modified charts'
+    permissions:
+      content: read
     outputs:
       chart: ${{ steps.get-chart.outputs.chart }}
       result: ${{ steps.get-chart.outputs.result }}
