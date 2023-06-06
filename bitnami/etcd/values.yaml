@@ -70,7 +70,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/etcd
-  tag: 3.5.9-debian-11-r0
+  tag: 3.5.9-debian-11-r4
   digest: ""
   ## @param image.pullPolicy etcd image pull policy
   ## Specify a imagePullPolicy
@@ -621,7 +621,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r114
+    tag: 11-debian-11-r118
     digest: ""
     ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
     ##
@@ -862,6 +862,10 @@ disasterRecovery:
     ## @param disasterRecovery.pvc.storageClassName Storage Class for snapshots volume
     ##
     storageClassName: nfs
+    ## @param disasterRecovery.pvc.subPath Path within the volume from which to mount
+    ## Useful if snapshots should only be stored in a subdirectory of the volume
+    ##
+    subPath: ""
 
 ## @section Service account parameters
 ##

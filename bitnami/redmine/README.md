@@ -8,8 +8,6 @@ Redmine is an open source management application. It includes a tracking issue s
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 
-Looking to use Redmine in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
-
 ## TL;DR
 
 ```console
@@ -92,7 +90,7 @@ helm install my-release oci://registry-1.docker.io/bitnamicharts/redmine --set d
 | ----------------------- | ------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`        | Redmine image registry                                                                                  | `docker.io`           |
 | `image.repository`      | Redmine image repository                                                                                | `bitnami/redmine`     |
-| `image.tag`             | Redmine image tag (immutable tags are recommended)                                                      | `5.0.5-debian-11-r19` |
+| `image.tag`             | Redmine image tag (immutable tags are recommended)                                                      | `5.0.5-debian-11-r23` |
 | `image.digest`          | Redmine image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
 | `image.pullPolicy`      | Redmine image pull policy                                                                               | `IfNotPresent`        |
 | `image.pullSecrets`     | Redmine image pull secrets                                                                              | `[]`                  |
@@ -338,7 +336,7 @@ helm install my-release oci://registry-1.docker.io/bitnamicharts/redmine --set d
 | `certificates.customCA`                              | Defines a list of secrets to import into the container trust store                                      | `[]`                                     |
 | `certificates.image.registry`                        | Redmine image registry                                                                                  | `docker.io`                              |
 | `certificates.image.repository`                      | Redmine image repository                                                                                | `bitnami/bitnami-shell`                  |
-| `certificates.image.tag`                             | Redmine image tag (immutable tags are recommended)                                                      | `11-debian-11-r114`                      |
+| `certificates.image.tag`                             | Redmine image tag (immutable tags are recommended)                                                      | `11-debian-11-r118`                      |
 | `certificates.image.digest`                          | Redmine image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                                     |
 | `certificates.image.pullPolicy`                      | Redmine image pull policy                                                                               | `IfNotPresent`                           |
 | `certificates.image.pullSecrets`                     | Redmine image pull secrets                                                                              | `[]`                                     |
@@ -578,7 +576,7 @@ New versions are not going to be affected. Once a new version is released in the
 
 ## License
 
-Copyright &copy; 2023 Bitnami
+Copyright &copy; 2023 VMware, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

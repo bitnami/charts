@@ -6,8 +6,6 @@ Spring Cloud Data Flow is a microservices-based toolkit for building streaming a
 
 [Overview of Spring Cloud Data Flow](https://github.com/spring-cloud/spring-cloud-dataflow)
 
-Looking to use Spring Cloud Data Flow in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
-
 ## TL;DR
 
 ```console
@@ -74,7 +72,7 @@ helm uninstall my-release
 | --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------- |
 | `server.image.registry`                             | Spring Cloud Dataflow image registry                                                                                                       | `docker.io`                                          |
 | `server.image.repository`                           | Spring Cloud Dataflow image repository                                                                                                     | `bitnami/spring-cloud-dataflow`                      |
-| `server.image.tag`                                  | Spring Cloud Dataflow image tag (immutable tags are recommended)                                                                           | `2.10.3-debian-11-r2`                                |
+| `server.image.tag`                                  | Spring Cloud Dataflow image tag (immutable tags are recommended)                                                                           | `2.10.3-debian-11-r4`                                |
 | `server.image.digest`                               | Spring Cloud Dataflow image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                      | `""`                                                 |
 | `server.image.pullPolicy`                           | Spring Cloud Dataflow image pull policy                                                                                                    | `IfNotPresent`                                       |
 | `server.image.pullSecrets`                          | Specify docker-registry secret names as an array                                                                                           | `[]`                                                 |
@@ -82,7 +80,7 @@ helm uninstall my-release
 | `server.hostAliases`                                | Deployment pod host aliases                                                                                                                | `[]`                                                 |
 | `server.composedTaskRunner.image.registry`          | Spring Cloud Dataflow Composed Task Runner image registry                                                                                  | `docker.io`                                          |
 | `server.composedTaskRunner.image.repository`        | Spring Cloud Dataflow Composed Task Runner image repository                                                                                | `bitnami/spring-cloud-dataflow-composed-task-runner` |
-| `server.composedTaskRunner.image.tag`               | Spring Cloud Dataflow Composed Task Runner image tag (immutable tags are recommended)                                                      | `2.10.3-debian-11-r0`                                |
+| `server.composedTaskRunner.image.tag`               | Spring Cloud Dataflow Composed Task Runner image tag (immutable tags are recommended)                                                      | `2.10.3-debian-11-r1`                                |
 | `server.composedTaskRunner.image.digest`            | Spring Cloud Dataflow Composed Task Runner image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                                                 |
 | `server.configuration.streamingEnabled`             | Enables or disables streaming data processing                                                                                              | `true`                                               |
 | `server.configuration.batchEnabled`                 | Enables or disables batch data (tasks and schedules) processing                                                                            | `true`                                               |
@@ -192,7 +190,7 @@ helm uninstall my-release
 | `skipper.hostAliases`                        | Deployment pod host aliases                                                                                          | `[]`                           |
 | `skipper.image.registry`                     | Spring Cloud Skipper image registry                                                                                  | `docker.io`                    |
 | `skipper.image.repository`                   | Spring Cloud Skipper image repository                                                                                | `bitnami/spring-cloud-skipper` |
-| `skipper.image.tag`                          | Spring Cloud Skipper image tag (immutable tags are recommended)                                                      | `2.9.3-debian-11-r1`           |
+| `skipper.image.tag`                          | Spring Cloud Skipper image tag (immutable tags are recommended)                                                      | `2.9.3-debian-11-r2`           |
 | `skipper.image.digest`                       | Spring Cloud Skipper image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                           |
 | `skipper.image.pullPolicy`                   | Spring Cloud Skipper image pull policy                                                                               | `IfNotPresent`                 |
 | `skipper.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                     | `[]`                           |
@@ -313,7 +311,7 @@ helm uninstall my-release
 | `metrics.enabled`                            | Enable Prometheus metrics                                                                                                  | `false`                            |
 | `metrics.image.registry`                     | Prometheus Rsocket Proxy image registry                                                                                    | `docker.io`                        |
 | `metrics.image.repository`                   | Prometheus Rsocket Proxy image repository                                                                                  | `bitnami/prometheus-rsocket-proxy` |
-| `metrics.image.tag`                          | Prometheus Rsocket Proxy image tag (immutable tags are recommended)                                                        | `1.5.0-debian-11-r86`              |
+| `metrics.image.tag`                          | Prometheus Rsocket Proxy image tag (immutable tags are recommended)                                                        | `1.5.0-debian-11-r87`              |
 | `metrics.image.digest`                       | Prometheus Rsocket Proxy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag   | `""`                               |
 | `metrics.image.pullPolicy`                   | Prometheus Rsocket Proxy image pull policy                                                                                 | `IfNotPresent`                     |
 | `metrics.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                           | `[]`                               |
@@ -390,7 +388,7 @@ helm uninstall my-release
 | `waitForBackends.enabled`            | Wait for the database and other services (such as Kafka or RabbitMQ) used when enabling streaming                               | `true`                |
 | `waitForBackends.image.registry`     | Init container wait-for-backend image registry                                                                                  | `docker.io`           |
 | `waitForBackends.image.repository`   | Init container wait-for-backend image name                                                                                      | `bitnami/kubectl`     |
-| `waitForBackends.image.tag`          | Init container wait-for-backend image tag                                                                                       | `1.25.9-debian-11-r8` |
+| `waitForBackends.image.tag`          | Init container wait-for-backend image tag                                                                                       | `1.25.9-debian-11-r9` |
 | `waitForBackends.image.digest`       | Init container wait-for-backend image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
 | `waitForBackends.image.pullPolicy`   | Init container wait-for-backend image pull policy                                                                               | `IfNotPresent`        |
 | `waitForBackends.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                | `[]`                  |
@@ -838,7 +836,7 @@ mariadb 12:13:25.01 INFO  ==> Running mysql_upgrade
 
 ## License
 
-Copyright &copy; 2023 Bitnami
+Copyright &copy; 2023 VMware, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

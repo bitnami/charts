@@ -58,10 +58,6 @@ Set the http prefix if the externalURl doesn't have it
   {{- printf "%s://%s:%d" (ternary "https" "http" .Values.internalTLS.enabled) (include "harbor.portal" .) (ternary .Values.portal.service.ports.https .Values.portal.service.ports.http .Values.internalTLS.enabled | int) -}}
 {{- end -}}
 
-{{- define "harbor.chartmuseum.url" -}}
-  {{- printf "%s://%s:%d" (ternary "https" "http" .Values.internalTLS.enabled) (include "harbor.chartmuseum" .) (ternary .Values.chartmuseum.service.ports.https .Values.chartmuseum.service.ports.http .Values.internalTLS.enabled | int) -}}
-{{- end -}}
-
 {{- define "harbor.registry.url" -}}
   {{- printf "%s://%s:%d" (ternary "https" "http" .Values.internalTLS.enabled) (include "harbor.registry" .) (ternary .Values.registry.server.service.ports.https .Values.registry.server.service.ports.http .Values.internalTLS.enabled | int ) -}}
 {{- end -}}
@@ -80,11 +76,6 @@ Set the http prefix if the externalURl doesn't have it
 
 {{- define "harbor.core.tls.secretName" -}}
 {{- printf "%s" (coalesce .Values.core.tls.existingSecret (printf "%s-crt" (include "harbor.core" .))) -}}
-{{- end -}}
-
-{{/* Chartmuseum TLS secret name */}}
-{{- define "harbor.chartmuseum.tls.secretName" -}}
-{{- printf "%s" (coalesce .Values.chartmuseum.tls.existingSecret (printf "%s-crt" (include "harbor.chartmuseum" .))) -}}
 {{- end -}}
 
 {{/* Jobservice TLS secret name */}}
@@ -227,10 +218,6 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- ternary "2" .Values.externalRedis.registryDatabaseIndex .Values.redis.enabled -}}
 {{- end -}}
 
-{{- define "harbor.redis.chartmuseumDatabaseIndex" -}}
-{{- ternary "3" .Values.externalRedis.chartmuseumDatabaseIndex .Values.redis.enabled -}}
-{{- end -}}
-
 {{- define "harbor.redis.trivyAdapterDatabaseIndex" -}}
 {{- ternary "5" .Values.externalRedis.trivyAdapterDatabaseIndex .Values.redis.enabled -}}
 {{- end -}}
@@ -349,10 +336,6 @@ Return whether Redis&reg; uses password authentication or not
   {{- printf "%s-registry" (include "common.names.fullname" .) -}}
 {{- end -}}
 
-{{- define "harbor.chartmuseum" -}}
-  {{- printf "%s-chartmuseum" (include "common.names.fullname" .) -}}
-{{- end -}}
-
 {{- define "harbor.database" -}}
   {{- printf "%s-database" (include "common.names.fullname" .) -}}
 {{- end -}}
@@ -386,7 +369,7 @@ Return whether Redis&reg; uses password authentication or not
 {{- end -}}
 
 {{- define "harbor.noProxy" -}}
-  {{- printf "%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s" (include "harbor.core" .) (include "harbor.jobservice" .) (include "harbor.database" .) (include "harbor.chartmuseum" .) (include "harbor.notary-server" .) (include "harbor.notary-signer" .) (include "harbor.registry" .) (include "harbor.portal" .) (include "harbor.trivy" .) .Values.proxy.noProxy -}}
+  {{- printf "%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s" (include "harbor.core" .) (include "harbor.jobservice" .) (include "harbor.database" .) (include "harbor.notary-server" .) (include "harbor.notary-signer" .) (include "harbor.registry" .) (include "harbor.portal" .) (include "harbor.trivy" .) .Values.proxy.noProxy -}}
 {{- end -}}
 
 {{/*
@@ -422,13 +405,6 @@ Return the proper Harbor Job Service image name
 */}}
 {{- define "harbor.jobservice.image" -}}
 {{- include "common.images.image" ( dict "imageRoot" .Values.jobservice.image "global" .Values.global ) -}}
-{{- end -}}
-
-{{/*
-Return the proper ChartMuseum image name
-*/}}
-{{- define "harbor.chartmuseum.image" -}}
-{{- include "common.images.image" ( dict "imageRoot" .Values.chartmuseum.image "global" .Values.global ) -}}
 {{- end -}}
 
 {{/*
@@ -477,7 +453,7 @@ Return the proper image name (for the init container volume-permissions image)
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "harbor.imagePullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.core.image .Values.exporter.image .Values.portal.image .Values.jobservice.image .Values.chartmuseum.image .Values.trivy.image .Values.notary.server.image .Values.notary.signer.image .Values.registry.server.image .Values.registry.controller.image .Values.nginx.image .Values.volumePermissions.image) "global" .Values.global) -}}
+{{- include "common.images.pullSecrets" (dict "images" (list .Values.core.image .Values.exporter.image .Values.portal.image .Values.jobservice.image .Values.trivy.image .Values.notary.server.image .Values.notary.signer.image .Values.registry.server.image .Values.registry.controller.image .Values.nginx.image .Values.volumePermissions.image) "global" .Values.global) -}}
 {{- end -}}
 
 {{/* Check if there are rolling tags in the images */}}
@@ -487,7 +463,6 @@ Return the proper Docker Image Registry Secret Names
 {{- include "common.warnings.rollingTag" .Values.jobservice.image -}}
 {{- include "common.warnings.rollingTag" .Values.registry.server.image -}}
 {{- include "common.warnings.rollingTag" .Values.registry.controller.image -}}
-{{- include "common.warnings.rollingTag" .Values.chartmuseum.image -}}
 {{- include "common.warnings.rollingTag" .Values.trivy.image -}}
 {{- include "common.warnings.rollingTag" .Values.volumePermissions.image -}}
 {{- end -}}

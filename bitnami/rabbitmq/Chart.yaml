@@ -2,7 +2,7 @@ annotations:
   category: Infrastructure
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 3.11.15
+appVersion: 3.11.18
 dependencies:
   - name: common
     repository: oci://registry-1.docker.io/bitnamicharts
@@ -22,4 +22,4 @@ maintainers:
 name: rabbitmq
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/rabbitmq
-version: 11.15.1
+version: 11.16.2

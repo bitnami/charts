@@ -1,4 +1,4 @@
-# https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.63.0/example/prometheus-operator-crd/monitoring.coreos.com_podmonitors.yaml
+# https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.65.1/example/prometheus-operator-crd/monitoring.coreos.com_podmonitors.yaml
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
@@ -240,6 +240,10 @@ spec:
                             - Lowercase
                             - uppercase
                             - Uppercase
+                            - keepequal
+                            - KeepEqual
+                            - dropequal
+                            - DropEqual
                             type: string
                           modulus:
                             description: Modulus to take of the hash of the source
@@ -420,6 +424,10 @@ spec:
                             - Lowercase
                             - uppercase
                             - Uppercase
+                            - keepequal
+                            - KeepEqual
+                            - dropequal
+                            - DropEqual
                             type: string
                           modulus:
                             description: Modulus to take of the hash of the source
@@ -459,7 +467,13 @@ spec:
                         type: object
                       type: array
                     scheme:
-                      description: HTTP scheme to use for scraping.
+                      description: HTTP scheme to use for scraping. `http` and `https`
+                        are the expected values unless you rewrite the `__scheme__`
+                        label via relabeling. If empty, Prometheus uses the default
+                        value `http`.
+                      enum:
+                      - http
+                      - https
                       type: string
                     scrapeTimeout:
                       description: Timeout after which the scrape is ended If not

@@ -213,7 +213,7 @@ spec:
           {{- if and (not (empty $customUser)) (ne $customUser "postgres") .Values.auth.enablePostgresUser }}
             {{- if .Values.auth.usePasswordFiles }}
             - name: POSTGRES_POSTGRES_PASSWORD_FILE
-              value: "/opt/bitnami/postgresql/secrets/postgres-password"
+              value: {{ printf "/opt/bitnami/postgresql/secrets/%s" (include "postgresql.adminPasswordKey" .) }}
             {{- else }}
             - name: POSTGRES_POSTGRES_PASSWORD
               valueFrom:
@@ -224,7 +224,7 @@ spec:
           {{- end }}
             {{- if .Values.auth.usePasswordFiles }}
             - name: POSTGRES_PASSWORD_FILE
-              value: {{ printf "/opt/bitnami/postgresql/secrets/%s" (ternary "password" "postgres-password" (and (not (empty $customUser)) (ne $customUser "postgres"))) }}
+              value: {{ printf "/opt/bitnami/postgresql/secrets/%s" (include "postgresql.userPasswordKey" .) }}
             {{- else }}
             - name: POSTGRES_PASSWORD
               valueFrom:
@@ -239,7 +239,7 @@ spec:
               value: {{ .Values.auth.replicationUsername | quote }}
             {{- if .Values.auth.usePasswordFiles }}
             - name: POSTGRES_REPLICATION_PASSWORD_FILE
-              value: "/opt/bitnami/postgresql/secrets/replication-password"
+              value: {{ printf "/opt/bitnami/postgresql/secrets/%s" (include "postgresql.replicationPasswordKey" .) }}
             {{- else }}
             - name: POSTGRES_REPLICATION_PASSWORD
               valueFrom:
@@ -369,7 +369,7 @@ spec:
             {{- end }}
             {{- if .Values.readReplicas.extendedConfiguration }}
             - name: postgresql-extended-config
-              mountPath: /bitnami/postgresql/conf/conf.d/
+              mountPath: {{ .Values.readReplicas.persistence.mountPath }}/conf/conf.d/
             {{- end }}
             {{- if .Values.tls.enabled }}
             - name: postgresql-certificates
@@ -409,7 +409,7 @@ spec:
                 value: {{ printf "127.0.0.1:%d/%s?sslmode=disable" (int (include "postgresql.service.port" .)) $database }}
               {{- if .Values.auth.usePasswordFiles }}
               - name: DATA_SOURCE_PASS_FILE
-                value: {{ printf "/opt/bitnami/postgresql/secrets/%s" (ternary "password" "postgres-password" (and (not (empty $customUser)) (ne $customUser "postgres"))) }}
+              value: {{ printf "/opt/bitnami/postgresql/secrets/%s" (include "postgresql.userPasswordKey" .) }}
               {{- else }}
               - name: DATA_SOURCE_PASS
                 valueFrom:

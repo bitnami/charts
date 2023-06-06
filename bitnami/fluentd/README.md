@@ -8,8 +8,6 @@ Fluentd collects events from various data sources and writes them to files, RDBM
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 
-Looking to use Fluentd in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
-
 ## TL;DR
 
 ```console
@@ -83,7 +81,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------- |
 | `image.registry`                                               | Fluentd image registry                                                                                                                                             | `docker.io`                                                |
 | `image.repository`                                             | Fluentd image repository                                                                                                                                           | `bitnami/fluentd`                                          |
-| `image.tag`                                                    | Fluentd image tag (immutable tags are recommended)                                                                                                                 | `1.16.1-debian-11-r7`                                      |
+| `image.tag`                                                    | Fluentd image tag (immutable tags are recommended)                                                                                                                 | `1.16.1-debian-11-r12`                                     |
 | `image.pullPolicy`                                             | Fluentd image pull policy                                                                                                                                          | `IfNotPresent`                                             |
 | `image.pullSecrets`                                            | Fluentd image pull secrets                                                                                                                                         | `[]`                                                       |
 | `image.debug`                                                  | Enable image debug mode                                                                                                                                            | `false`                                                    |
@@ -581,7 +579,7 @@ No issues are expected in the upgrade process. However, please ensure that you a
 
 ## License
 
-Copyright &copy; 2023 Bitnami
+Copyright &copy; 2023 VMware, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

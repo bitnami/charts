@@ -79,7 +79,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------- | ----------------------------------------------------------------------------------------------------------- | -------------------- |
 | `image.registry`                       | etcd image registry                                                                                         | `docker.io`          |
 | `image.repository`                     | etcd image name                                                                                             | `bitnami/etcd`       |
-| `image.tag`                            | etcd image tag                                                                                              | `3.5.9-debian-11-r0` |
+| `image.tag`                            | etcd image tag                                                                                              | `3.5.9-debian-11-r4` |
 | `image.digest`                         | etcd image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag        | `""`                 |
 | `image.pullPolicy`                     | etcd image pull policy                                                                                      | `IfNotPresent`       |
 | `image.pullSecrets`                    | etcd image pull secrets                                                                                     | `[]`                 |
@@ -229,7 +229,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup`              | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                                      | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                       | `11-debian-11-r114`     |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                       | `11-debian-11-r118`     |
 | `volumePermissions.image.digest`       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                  | `[]`                    |
@@ -286,6 +286,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `disasterRecovery.pvc.existingClaim`            | A manually managed Persistent Volume and Claim                          | `""`           |
 | `disasterRecovery.pvc.size`                     | PVC Storage Request                                                     | `2Gi`          |
 | `disasterRecovery.pvc.storageClassName`         | Storage Class for snapshots volume                                      | `nfs`          |
+| `disasterRecovery.pvc.subPath`                  | Path within the volume from which to mount                              | `""`           |
 
 ### Service account parameters
 
@@ -521,7 +522,7 @@ kubectl delete statefulset etcd --cascade=false
 
 ## License
 
-Copyright &copy; 2023 Bitnami
+Copyright &copy; 2023 VMware, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

@@ -2,8 +2,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.11.2
-  creationTimestamp: null
+    controller-gen.kubebuilder.io/version: v0.11.4
   name: contourconfigurations.projectcontour.io
 spec:
   preserveUnknownFields: false
@@ -410,6 +409,87 @@ spec:
                     - namespace
                     type: object
                 type: object
+              globalExtAuth:
+                description: GlobalExternalAuthorization allows envoys external authorization
+                  filter to be enabled for all virtual hosts.
+                properties:
+                  authPolicy:
+                    description: AuthPolicy sets a default authorization policy for
+                      client requests. This policy will be used unless overridden
+                      by individual routes.
+                    properties:
+                      context:
+                        additionalProperties:
+                          type: string
+                        description: Context is a set of key/value pairs that are
+                          sent to the authentication server in the check request.
+                          If a context is provided at an enclosing scope, the entries
+                          are merged such that the inner scope overrides matching
+                          keys from the outer scope.
+                        type: object
+                      disabled:
+                        description: When true, this field disables client request
+                          authentication for the scope of the policy.
+                        type: boolean
+                    type: object
+                  extensionRef:
+                    description: ExtensionServiceRef specifies the extension resource
+                      that will authorize client requests.
+                    properties:
+                      apiVersion:
+                        description: API version of the referent. If this field is
+                          not specified, the default "projectcontour.io/v1alpha1"
+                          will be used
+                        minLength: 1
+                        type: string
+                      name:
+                        description: "Name of the referent. \n More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names"
+                        minLength: 1
+                        type: string
+                      namespace:
+                        description: "Namespace of the referent. If this field is
+                          not specifies, the namespace of the resource that targets
+                          the referent will be used. \n More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/"
+                        minLength: 1
+                        type: string
+                    type: object
+                  failOpen:
+                    description: If FailOpen is true, the client request is forwarded
+                      to the upstream service even if the authorization server fails
+                      to respond. This field should not be set in most cases. It is
+                      intended for use only while migrating applications from internal
+                      authorization to Contour external authorization.
+                    type: boolean
+                  responseTimeout:
+                    description: ResponseTimeout configures maximum time to wait for
+                      a check response from the authorization server. Timeout durations
+                      are expressed in the Go [Duration format](https://godoc.org/time#ParseDuration).
+                      Valid time units are "ns", "us" (or "µs"), "ms", "s", "m", "h".
+                      The string "infinity" is also a valid input and specifies no
+                      timeout.
+                    pattern: ^(((\d*(\.\d*)?h)|(\d*(\.\d*)?m)|(\d*(\.\d*)?s)|(\d*(\.\d*)?ms)|(\d*(\.\d*)?us)|(\d*(\.\d*)?µs)|(\d*(\.\d*)?ns))+|infinity|infinite)$
+                    type: string
+                  withRequestBody:
+                    description: WithRequestBody specifies configuration for sending
+                      the client request's body to authorization server.
+                    properties:
+                      allowPartialMessage:
+                        description: If AllowPartialMessage is true, then Envoy will
+                          buffer the body until MaxRequestBytes are reached.
+                        type: boolean
+                      maxRequestBytes:
+                        default: 1024
+                        description: MaxRequestBytes sets the maximum size of message
+                          body ExtAuthz filter will hold in-memory.
+                        format: int32
+                        minimum: 1
+                        type: integer
+                      packAsBytes:
+                        description: If PackAsBytes is true, the body sent to Authorization
+                          Server is in raw bytes.
+                        type: boolean
+                    type: object
+                type: object
               health:
                 description: "Health defines the endpoints Contour uses to serve health
                   checks. \n Contour's default is { address: \"0.0.0.0\", port: 8000
@@ -561,6 +641,69 @@ spec:
                       when the Rate Limit Service fails to respond with a valid rate
                       limit decision within the timeout defined on the extension service.
                     type: boolean
+                required:
+                - extensionService
+                type: object
+              tracing:
+                description: Tracing defines properties for exporting trace data to
+                  OpenTelemetry.
+                properties:
+                  customTags:
+                    description: CustomTags defines a list of custom tags with unique
+                      tag name.
+                    items:
+                      description: CustomTag defines custom tags with unique tag name
+                        to create tags for the active span.
+                      properties:
+                        literal:
+                          description: Literal is a static custom tag value. Precisely
+                            one of Literal, RequestHeaderName must be set.
+                          type: string
+                        requestHeaderName:
+                          description: RequestHeaderName indicates which request header
+                            the label value is obtained from. Precisely one of Literal,
+                            RequestHeaderName must be set.
+                          type: string
+                        tagName:
+                          description: TagName is the unique name of the custom tag.
+                          type: string
+                      required:
+                      - tagName
+                      type: object
+                    type: array
+                  extensionService:
+                    description: ExtensionService identifies the extension service
+                      defining the otel-collector.
+                    properties:
+                      name:
+                        type: string
+                      namespace:
+                        type: string
+                    required:
+                    - name
+                    - namespace
+                    type: object
+                  includePodDetail:
+                    description: 'IncludePodDetail defines a flag. If it is true,
+                      contour will add the pod name and namespace to the span of the
+                      trace. the default is true. Note: The Envoy pods MUST have the
+                      HOSTNAME and CONTOUR_NAMESPACE environment variables set for
+                      this to work properly.'
+                    type: boolean
+                  maxPathTagLength:
+                    description: MaxPathTagLength defines maximum length of the request
+                      path to extract and include in the HttpUrl tag. contour's default
+                      is 256.
+                    format: int32
+                    type: integer
+                  overallSampling:
+                    description: OverallSampling defines the sampling rate of trace
+                      data. contour's default is 100.
+                    type: string
+                  serviceName:
+                    description: ServiceName defines the name for the service. contour's
+                      default is contour.
+                    type: string
                 required:
                 - extensionService
                 type: object

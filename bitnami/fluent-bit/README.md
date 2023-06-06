@@ -8,13 +8,10 @@ Fluent Bit is a Fast and Lightweight Log Processor and Forwarder. It has been ma
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 
-Looking to use Fluent Bit in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
-
 ## TL;DR
 
 ```console
-helm repo add my-repo oci://registry-1.docker.io/bitnamicharts
-helm install my-release my-repo/fluent-bit
+helm install my-release oci://registry-1.docker.io/bitnamicharts/fluent-bit
 ```
 
 ## Introduction
@@ -35,8 +32,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 To install the chart with the release name `my-release`:
 
 ```console
-helm repo add my-repo oci://registry-1.docker.io/bitnamicharts
-helm install my-release my-repo/fluent-bit
+helm install my-release oci://registry-1.docker.io/bitnamicharts/fluent-bit
 ```
 
 These commands deploy fluent-bit on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
@@ -82,7 +78,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | ---------------------------------------------------------------------------------------------------------- | -------------------- |
 | `image.registry`    | Fluent Bit image registry                                                                                  | `docker.io`          |
 | `image.repository`  | Fluent Bit image repository                                                                                | `bitnami/fluent-bit` |
-| `image.tag`         | Fluent Bit image tag (immutable tags are recommended)                                                      | `2.1.2-debian-11-r6` |
+| `image.tag`         | Fluent Bit image tag (immutable tags are recommended)                                                      | `2.1.3-debian-11-r2` |
 | `image.digest`      | Fluent Bit image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                 |
 | `image.pullPolicy`  | image pull policy                                                                                          | `IfNotPresent`       |
 | `image.pullSecrets` | Fluent Bit image pull secrets                                                                              | `[]`                 |
@@ -277,7 +273,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## License
 
-Copyright &copy; 2023 Bitnami
+Copyright &copy; 2023 VMware, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

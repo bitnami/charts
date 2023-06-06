@@ -28,4 +28,4 @@ maintainers:
 name: opencart
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/opencart
-version: 14.1.0
+version: 14.1.2
