@@ -4,11 +4,14 @@ on:
   schedule:
     # Every 2 hours
     - cron: '15 0/2 * * *'
-permissions:
-  repository-projects: write
+# Remove all permissions by default
+permissions: {}
 jobs:
   delete-cards:
     runs-on: ubuntu-latest
+    permissions:
+      repository-projects: write
+      contents: read
     steps:
       - name: Repo checkout
         uses: actions/checkout@v3
