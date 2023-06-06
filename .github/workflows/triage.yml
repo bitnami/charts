@@ -20,6 +20,8 @@ jobs:
     name: Organize triage
     runs-on: ubuntu-latest
     # Please note that projects cards are created/moved with Bitnami Bot
+    permissions:
+      contents: read
     steps:
       - name: Repo checkout
         uses: actions/checkout@v3
