@@ -34,8 +34,6 @@ data:
   WITH_TRIVY: {{ .Values.trivy.enabled | quote }}
   TRIVY_ADAPTER_URL: {{ include "harbor.trivy.url" . | quote }}
   REGISTRY_STORAGE_PROVIDER_NAME: {{ .Values.persistence.imageChartStorage.type | quote }}
-  WITH_CHARTMUSEUM: {{ .Values.chartmuseum.enabled | quote }}
-  CHART_REPOSITORY_URL: {{ include "harbor.chartmuseum.url" . | quote }}
   LOG_LEVEL: {{ .Values.logLevel | quote }}
   CONFIG_PATH: "/etc/core/app.conf"
   SYNC_REGISTRY: "false"
