@@ -3,7 +3,8 @@ on:
   schedule:
     - cron: '0 7 * * *'
   workflow_dispatch:
-
+# Remove all permissions by default
+permissions: {}
 env:
   BAC_SRP_ENDPOINT: https://apigw.vmware.com/v1/s1/api/helix-beta
   BAC_SRP_CLIENT_ID: ${{ secrets.BAC_SRP_CLIENT_ID }}
@@ -12,6 +13,9 @@ env:
 jobs:
   report:
     runs-on: ubuntu-latest
+    permissions:
+      actions: write
+      contents: read
     steps:
       - id: install-tool
         name: Install and configure SRP Tool
