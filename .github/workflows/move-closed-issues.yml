@@ -6,7 +6,7 @@ on:
   pull_request_target:
     types:
       - closed
-# Remove all permissions by default. Actions are done by Bitnami Bot
+# Remove all permissions by default. Actions are performed by Bitnami Bot
 permissions: {}
 # Avoid concurrency over the same issue
 concurrency:

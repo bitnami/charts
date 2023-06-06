@@ -3,12 +3,13 @@ on:
   schedule:
     # Daily
     - cron: '0 3 * * *'
-permissions:
-  issues: write
-
+# Remove all permissions by default
+permissions: {}
 jobs:
   sync-labels:
     runs-on: ubuntu-latest
+    permissions:
+      issues: write
     steps:
       - uses: EndBug/label-sync@v2
         with:

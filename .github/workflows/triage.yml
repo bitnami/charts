@@ -19,7 +19,7 @@ jobs:
   send_to_board:
     name: Organize triage
     runs-on: ubuntu-latest
-    # Please note that projects cards are created/moved with Bitnami Bot (that's reason to use pull_request_target)
+    # Please note that projects cards are created/moved with Bitnami Bot
     steps:
       - name: Repo checkout
         uses: actions/checkout@v3
@@ -52,7 +52,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
-    if: ${{github.event_name == 'pull_request' && github.event.pull_request.user.login == 'bitnami_bot'}}
+    if: ${{ github.event_name == 'pull_request' && github.event.pull_request.user.login == 'bitnami_bot' }}
     # The project API is not efficient and requires several requests to create the project card. For that reason we decided to create
     # a card for the automated PRs only when it is needed.
     steps:

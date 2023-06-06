@@ -127,7 +127,7 @@ jobs:
     runs-on: ubuntu-latest
     name: 'Get modified charts'
     permissions:
-      content: read
+      contents: read
     outputs:
       chart: ${{ steps.get-chart.outputs.chart }}
       result: ${{ steps.get-chart.outputs.result }}
@@ -175,6 +175,8 @@ jobs:
     needs: get-chart
     if: ${{ needs.get-chart.outputs.result == 'ok' }}
     name: VIB Publish
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v3
         name: Checkout Repository

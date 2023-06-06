@@ -11,6 +11,9 @@ jobs:
   get-issue:
     runs-on: ubuntu-latest
     name: Get issue info
+    permissions:
+      issues: read
+      pull-requests: read
     outputs:
       assignees: ${{ steps.get-issue-step.outputs.assignees }}
       author: ${{ steps.get-issue-step.outputs.author }}
