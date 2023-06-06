@@ -54,7 +54,7 @@ jobs:
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
-    if: ${{ github.event_name != 'issues' && github.event.pull_request.user.login == 'bitnami_bot' }}
+    if: ${{ github.event_name != 'issues' && github.event.pull_request.user.login == 'bitnami-bot' }}
     # The project API is not efficient and requires several requests to create the project card. For that reason we decided to create
     # a card for the automated PRs only when it is needed.
     steps:
