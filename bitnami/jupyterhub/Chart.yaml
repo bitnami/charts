@@ -5,7 +5,7 @@ annotations:
   category: MachineLearning
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 4.0.0
+appVersion: 4.0.1
 dependencies:
   - condition: postgresql.enabled
     name: postgresql
