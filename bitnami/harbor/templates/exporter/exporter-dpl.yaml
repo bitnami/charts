@@ -99,7 +99,6 @@ spec:
               value: {{ ternary "true" "false" .Values.exporter.image.debug | quote }}
             - name: HARBOR_DATABASE_PASSWORD
               valueFrom:
-              valueFrom:
                 {{- if .Values.exporter.existingSecret }}
                 secretKeyRef:
                   name: {{ .Values.exporter.existingSecret }}
