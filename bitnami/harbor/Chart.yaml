@@ -31,5 +31,5 @@ maintainers:
 name: harbor
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/harbor
-version: 16.7.5
+version: 16.7.0
 
