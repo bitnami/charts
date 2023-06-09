@@ -90,6 +90,9 @@ spec:
   {{- if .Values.prometheus.evaluationInterval }}
   evaluationInterval: {{ .Values.prometheus.evaluationInterval }}
   {{- end }}
+  {{- if .Values.prometheus.scrapeTimeout }}
+  scrapeTimeout: {{ .Values.prometheus.scrapeTimeout }}
+  {{- end }}
   {{- if .Values.prometheus.resources }}
   resources: {{- toYaml .Values.prometheus.resources | nindent 4 }}
   {{- end }}

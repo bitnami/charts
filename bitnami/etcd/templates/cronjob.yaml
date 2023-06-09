@@ -116,6 +116,9 @@ spec:
               volumeMounts:
                 - name: snapshot-volume
                   mountPath: /snapshots
+                  {{- if .Values.disasterRecovery.pvc.subPath }}
+                  subPath: {{ .Values.disasterRecovery.pvc.subPath }}
+                  {{- end }}
                 {{- if .Values.auth.client.secureTransport }}
                 - name: certs
                   mountPath: /opt/bitnami/etcd/certs/client

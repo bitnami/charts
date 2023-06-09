@@ -393,7 +393,7 @@ This major release bumps the MariaDB version to 10.11. Follow the [upstream inst
 
 ## License
 
-Copyright &copy; 2023 Bitnami
+Copyright &copy; 2023 VMware, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

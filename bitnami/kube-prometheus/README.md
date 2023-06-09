@@ -267,6 +267,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `prometheus.tolerations`                                              | Prometheus Tolerations for pod assignment                                                                                        | `[]`                      |
 | `prometheus.scrapeInterval`                                           | Interval between consecutive scrapes                                                                                             | `""`                      |
 | `prometheus.evaluationInterval`                                       | Interval between consecutive evaluations                                                                                         | `""`                      |
+| `prometheus.scrapeTimeout`                                            | Timeout after which the global scrape is ended                                                                                   | `""`                      |
 | `prometheus.listenLocal`                                              | ListenLocal makes the Prometheus server listen on loopback                                                                       | `false`                   |
 | `prometheus.livenessProbe.enabled`                                    | Turn on and off liveness probe                                                                                                   | `true`                    |
 | `prometheus.livenessProbe.path`                                       | Path of the HTTP service for checking the healthy state                                                                          | `/-/healthy`              |
@@ -937,7 +938,7 @@ helm upgrade my-release --set prometheus.thanos.create=true oci://registry-1.doc
 
 ## License
 
-Copyright &copy; 2023 Bitnami
+Copyright &copy; 2023 VMware, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

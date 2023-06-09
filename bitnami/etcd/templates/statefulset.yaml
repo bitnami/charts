@@ -333,6 +333,9 @@ spec:
             {{- if or .Values.disasterRecovery.enabled (and .Values.disasterRecovery.enabled .Values.startFromSnapshot.enabled) }}
             - name: snapshot-volume
               mountPath: /snapshots
+              {{- if .Values.disasterRecovery.pvc.subPath }}
+              subPath: {{ .Values.disasterRecovery.pvc.subPath }}
+              {{- end }}
             {{- end }}
             {{- if or .Values.configuration .Values.existingConfigmap }}
             - name: etcd-config

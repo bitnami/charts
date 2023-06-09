@@ -6,11 +6,13 @@ on:
       - main
     paths:
       - 'bitnami/*/values.yaml'
-permissions:
-  contents: write
+# Remove all permissions by default
+permissions: {}
 jobs:
   update-readme-metadata:
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
     steps:
       - name: Install readme-generator-for-helm
         run: npm install -g @bitnami/readme-generator-for-helm

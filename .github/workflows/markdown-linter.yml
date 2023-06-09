@@ -5,11 +5,13 @@ on:
       - main
     paths:
       - '**.md'
-permissions:
-  contents: read
+# Remove all permissions by default
+permissions: {}
 jobs:
   markdown-linter:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - name: Install mardownlint
         run: npm install -g markdownlint-cli@0.33.0

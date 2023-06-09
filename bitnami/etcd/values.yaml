@@ -862,6 +862,10 @@ disasterRecovery:
     ## @param disasterRecovery.pvc.storageClassName Storage Class for snapshots volume
     ##
     storageClassName: nfs
+    ## @param disasterRecovery.pvc.subPath Path within the volume from which to mount
+    ## Useful if snapshots should only be stored in a subdirectory of the volume
+    ##
+    subPath: ""
 
 ## @section Service account parameters
 ##

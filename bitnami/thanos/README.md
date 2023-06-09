@@ -1652,7 +1652,7 @@ ingress.secrets[0].key -> querier.ingress.secrets[0].key
 
 ## License
 
-Copyright &copy; 2023 Bitnami
+Copyright &copy; 2023 VMware, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

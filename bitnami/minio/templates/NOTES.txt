@@ -74,15 +74,3 @@ To access the MinIO&reg; web UI:
 {{- include "common.warnings.rollingTag" .Values.clientImage }}
 {{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
 {{- include "minio.validateValues" . }}
-
-{{- $requiredPasswords := list -}}
-{{- $secretName := include "minio.secretName" . -}}
-{{- $rootPassword := include "minio.secret.existingPassword" . -}}
-{{- if not $rootPassword }}
-  {{- $requiredRootUser := dict "valueKey" "auth.rootUser" "secret" $secretName "field" "root-user" -}}
-  {{- $requiredRootPassword := dict "valueKey" "auth.rootPassword" "secret" $secretName "field" "root-password" -}}
-  {{- $requiredPasswords = append $requiredPasswords $requiredRootUser -}}
-  {{- $requiredPasswords = append $requiredPasswords $requiredRootPassword -}}
-{{- end -}}
-{{- $requiredMinioPasswordErrors := include "common.validations.values.multiple.empty" (dict "required" $requiredPasswords "context" $) -}}
-{{- include "common.errors.upgrade.passwords.empty" (dict "validationErrors" (list $requiredMinioPasswordErrors) "context" $) -}}
