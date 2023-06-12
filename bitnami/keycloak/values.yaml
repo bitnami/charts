@@ -573,6 +573,12 @@ ingress:
   ##   cert-manager.io/cluster-issuer: cluster-issuer-name
   ##
   annotations: {}
+  ## @param ingress.labels Additional labels for the Ingress resource.
+  ## e.g:
+  ## labels:
+  ##   app: keycloak
+  ##
+  labels: {}
   ## @param ingress.tls Enable TLS configuration for the host defined at `ingress.hostname` parameter
   ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" (tpl .Values.ingress.hostname .) }}`
   ## You can:
