@@ -2,7 +2,7 @@ annotations:
   category: CMS
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 0.23.4
+appVersion: 0.23.5
 dependencies:
   - condition: postgresql.enabled
     name: postgresql
@@ -29,4 +29,4 @@ maintainers:
 name: supabase
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/supabase
-version: 0.3.6
+version: 0.3.7
