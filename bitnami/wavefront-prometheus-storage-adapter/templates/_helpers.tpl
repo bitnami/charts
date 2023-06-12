@@ -40,59 +40,8 @@ Compile all warnings into a single message.
 
 {{/* Validate values of Wavefront Prometheus Storage Adapter - Wavefront Proxy configuration */}}
 {{- define "wfpsa.validateValues.proxy" -}}
-{{- if and (not .Values.wavefront.enabled) (not .Values.externalProxy.host) -}}
+{{- if (not .Values.externalProxy.host) -}}
 wavefront-prometheus-storage-adaper: MissingProxy
-    The Storage Adapter must connect to a Wavefront Proxy instance. Use one of the following options:
-
-    1) Deploy the Wavefront subchart with the Wavefront Proxy. Recommended values:
-
-    wavefront:
-      enabled: true
-      collector:
-        enabled: false
-      rbac:
-        create: false
-      serviceAccount:
-        create: false
-      proxy:
-        enabled: true
-
-    2) Use an existing Wavefront Proxy instance. Set the externalProxy.host and externalProxy.port values
+    The Storage Adapter must connect to a Wavefront Proxy instance. Use an existing Wavefront Proxy instance. Set the externalProxy.host and externalProxy.port values.
 {{- end -}}
-
-{{- if and (.Values.wavefront.enabled) (not .Values.wavefront.proxy.enabled) -}}
-wavefront-prometheus-storage-adaper: SubchartProxyNotDeployed
-    The Wavefront subchart is being deployed without the mandatory Wavefront Proxy instance. Set wavefront.proxy.enabled=true. We recommend the following values:
-
-    wavefront:
-      enabled: true
-      collector:
-        enabled: false
-      rbac:
-        create: false
-      serviceAccount:
-        create: false
-      proxy:
-        enabled: true
-{{- end }}
-
-{{- if and .Values.wavefront.enabled .Values.externalProxy.host -}}
-wavefront-prometheus-storage-adaper: ConflictingProxies
-    The Wavefront subchart is being deployed and an external Wavefront Proxy is set. Select ONLY one of the following options:
-
-    1) Deploy the Wavefront subchart with the Wavefront Proxy. Recommended values:
-
-    wavefront:
-      enabled: true
-      collector:
-        enabled: false
-      rbac:
-        create: false
-      serviceAccount:
-        create: false
-      proxy:
-        enabled: true
-
-    2) Use an existing Wavefront Proxy instance. Set the externalProxy.host and externalProxy.port values
-{{- end }}
 {{- end -}}

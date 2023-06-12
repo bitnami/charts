@@ -350,10 +350,10 @@ sidecars: []
 ## Use an external wavefront-proxy host
 ##
 externalProxy:
-  ## @param externalProxy.host Host of a wavefront-proxy instance (required if wavefront.enabled = false)
+  ## @param externalProxy.host Host of a wavefront-proxy instance
   ##
   host: ""
-  ## @param externalProxy.port Host of a wavefront-proxy instance (required if wavefront.enabled = false)
+  ## @param externalProxy.port Host of a wavefront-proxy instance
   ##
   port: 2878
 ## Adapter prefix parameter
@@ -429,40 +429,3 @@ service:
   ## @param service.externalTrafficPolicy External traffic policy for the service
   ##
   externalTrafficPolicy: Cluster
-
-## @section Wavefront sub-chart parameters
-## Wavefront chart parameters
-## NOTE: This solution will currently work with wavefront-proxy, reason why we disable the rest of
-## the services by default
-##
-wavefront:
-  ## @param wavefront.enabled Deploy Wavefront chart (necessary if externalProxyHost is not set)
-  ##
-  enabled: true
-
-  ## @param wavefront.wavefront.url Wavefront SAAS service URL
-  ## @param wavefront.wavefront.token Wavefront SAAS token
-  ##
-  wavefront:
-    url: https://YOUR_CLUSTER.wavefront.com
-    token: YOUR_API_TOKEN
-
-  ## @param wavefront.collector.enabled Deploy Wavefront collector (not used by the Adapter pod)
-  ##
-  collector:
-    enabled: false
-  ## @param wavefront.rbac.create Create RBAC rules (not necessary as the Adapter only uses wavefront-proxy)
-  ##
-  rbac:
-    create: false
-  proxy:
-    ## @param wavefront.proxy.enabled Deploy Wavefront Proxy (required if externalProxyHost is not set)
-    ##
-    enabled: true
-    ## @param wavefront.proxy.port Deployed Wavefront Proxy port (required if externalProxyHost is not set)
-    ##
-    port: 2878
-  ## @param wavefront.serviceAccount.create Create Wavefront serivce account (not necessary as the Adapter only uses wavefront-proxy)
-  ##
-  serviceAccount:
-    create: false

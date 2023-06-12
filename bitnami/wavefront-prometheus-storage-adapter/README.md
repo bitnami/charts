@@ -203,9 +203,7 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 The Wavefront Prometheus Storage Adapter chart needs to be connected to a Wavefront Proxy instance. This can be done in two different ways:
 
-- Deploying the Wavefront subchart, using only the Wavefront Proxy component (default behavior): This is done by setting `wavefront.enabled=true` and `wavefront.proxy.enabled=true`, but leaving the `externalProxy.host` value unset. We recommend disabling the rest of the Wavefront sub-chart resources as they would not be used by the Prometheus Storage Adapter. You also need to configure the Wavefront SaaS URL and token using the `wavefont.wavefront.url` and `wavefront.wavefront.token` parameters.
-
-- Using an external Wavefront Proxy instance: This is done by setting the `externalProxy.host` and `externalProxy.port` values. In this case, you should set the `wavefront.enabled` value to `false`. You also need to configure the Wavefront SaaS URL and token using the `wavefront.wavefront.url` and `wavefront.wavefront.token` parameters.
+- Using an external Wavefront Proxy instance: This is done by setting the `externalProxy.host` and `externalProxy.port` values. 
 
 ### Configure Prometheus
 

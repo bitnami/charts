@@ -4,10 +4,6 @@ annotations:
 apiVersion: v2
 appVersion: 1.0.7
 dependencies:
-  - condition: wavefront.enabled
-    name: wavefront
-    repository: oci://registry-1.docker.io/bitnamicharts
-    version: 4.x.x
   - name: common
     repository: oci://registry-1.docker.io/bitnamicharts
     tags:
