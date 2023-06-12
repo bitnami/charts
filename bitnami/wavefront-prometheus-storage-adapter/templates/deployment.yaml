@@ -92,8 +92,8 @@ spec:
           {{- else }}
           args:
             - -listen={{ coalesce .Values.containerPorts.http .Values.containerPort}}
-            - -proxy={{ ternary (include "wfpsa.proxy.fullname" .) .Values.externalProxy.host .Values.wavefront.proxy.enabled }}
-            - -proxy-port={{ ternary .Values.wavefront.proxy.port .Values.externalProxy.port .Values.wavefront.proxy.enabled }}
+            - -proxy={{ .Values.externalProxy.host }}
+            - -proxy-port={{ .Values.externalProxy.port}}
             {{- if .Values.adapterPrefix }}
             - -prefix={{ .Values.adapterPrefix }}
             {{- end }}
