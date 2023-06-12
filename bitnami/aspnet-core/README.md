@@ -228,6 +228,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created | `true` |
 | `serviceAccount.name`                         | The name of the ServiceAccount to use.               | `""`   |
 | `serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount | `{}`   |
+| `serviceAccount.extraLabels`                  | Additional labels for the ServiceAccount             | `{}`   |
 | `serviceAccount.automountServiceAccountToken` | Automount service account token                      | `true` |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
