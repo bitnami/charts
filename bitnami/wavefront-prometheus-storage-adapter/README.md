@@ -141,8 +141,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for Adapter container(s)                                        | `[]`                                           |
 | `initContainers`                        | Add additional init containers to the Adapter pods                                                                       | `[]`                                           |
 | `sidecars`                              | Add additional sidecar containers to the Adapter pod                                                                     | `[]`                                           |
-| `externalProxy.host`                    | Host of a wavefront-proxy instance (required if wavefront.enabled = false)                                               | `""`                                           |
-| `externalProxy.port`                    | Host of a wavefront-proxy instance (required if wavefront.enabled = false)                                               | `2878`                                         |
+| `externalProxy.host`                    | Host of a wavefront-proxy instance                                                                                       | `""`                                           |
+| `externalProxy.port`                    | Host of a wavefront-proxy instance                                                                                       | `2878`                                         |
 | `adapterPrefix`                         | Adapter `prefix` parameter                                                                                               | `""`                                           |
 | `adapterTags`                           | Adapter `tags` parameter                                                                                                 | `""`                                           |
 
@@ -161,19 +161,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                      | `{}`        |
 | `service.nodePorts.http`           | NodePort for the HTTP endpoint                                   | `""`        |
 | `service.externalTrafficPolicy`    | External traffic policy for the service                          | `Cluster`   |
-
-### Wavefront sub-chart parameters
-
-| Name                              | Description                                                                               | Value                                |
-| --------------------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------ |
-| `wavefront.enabled`               | Deploy Wavefront chart (necessary if externalProxyHost is not set)                        | `true`                               |
-| `wavefront.wavefront.url`         | Wavefront SAAS service URL                                                                | `https://YOUR_CLUSTER.wavefront.com` |
-| `wavefront.wavefront.token`       | Wavefront SAAS token                                                                      | `YOUR_API_TOKEN`                     |
-| `wavefront.collector.enabled`     | Deploy Wavefront collector (not used by the Adapter pod)                                  | `false`                              |
-| `wavefront.rbac.create`           | Create RBAC rules (not necessary as the Adapter only uses wavefront-proxy)                | `false`                              |
-| `wavefront.proxy.enabled`         | Deploy Wavefront Proxy (required if externalProxyHost is not set)                         | `true`                               |
-| `wavefront.proxy.port`            | Deployed Wavefront Proxy port (required if externalProxyHost is not set)                  | `2878`                               |
-| `wavefront.serviceAccount.create` | Create Wavefront serivce account (not necessary as the Adapter only uses wavefront-proxy) | `false`                              |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
