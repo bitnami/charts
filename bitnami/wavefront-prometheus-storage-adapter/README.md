@@ -190,7 +190,7 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 The Wavefront Prometheus Storage Adapter chart needs to be connected to a Wavefront Proxy instance. This can be done in two different ways:
 
-- Using an external Wavefront Proxy instance: This is done by setting the `externalProxy.host` and `externalProxy.port` values. 
+- Using an external Wavefront Proxy instance: This is done by setting the `externalProxy.host` and `externalProxy.port` values.
 
 ### Configure Prometheus
 
@@ -210,9 +210,11 @@ Find more information about how to deal with common errors related to Bitnami's 
 ```console
 helm upgrade my-release oci://registry-1.docker.io/bitnamicharts/wavefront-prometheus-storage-adapter
 ```
+
 ### To 3.0.0
 
 This major release removes the Wavefront subchart since the Wavefront developers have deprecated the chart installation method for Wavefront, instead now using the Kubernetes Operator.
+
 ### To 2.0.0
 
 This major updates the Wavefront subchart to its newest major release, 4.0.0, which contains a new major version for kube-state-metrics. For more information on this subchart's major version, please refer to the [Wavefront upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/wavefront#to-400).
