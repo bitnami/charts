@@ -60,15 +60,15 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### RabbitMQ Image parameters
 
-| Name                | Description                                                                                              | Value                  |
-| ------------------- | -------------------------------------------------------------------------------------------------------- | ---------------------- |
-| `image.registry`    | RabbitMQ image registry                                                                                  | `docker.io`            |
-| `image.repository`  | RabbitMQ image repository                                                                                | `bitnami/rabbitmq`     |
-| `image.tag`         | RabbitMQ image tag (immutable tags are recommended)                                                      | `3.11.16-debian-11-r3` |
-| `image.digest`      | RabbitMQ image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
-| `image.pullPolicy`  | RabbitMQ image pull policy                                                                               | `IfNotPresent`         |
-| `image.pullSecrets` | Specify docker-registry secret names as an array                                                         | `[]`                   |
-| `image.debug`       | Set to true if you would like to see extra information on logs                                           | `false`                |
+| Name                | Description                                                                                              | Value                 |
+| ------------------- | -------------------------------------------------------------------------------------------------------- | --------------------- |
+| `image.registry`    | RabbitMQ image registry                                                                                  | `docker.io`           |
+| `image.repository`  | RabbitMQ image repository                                                                                | `bitnami/rabbitmq`    |
+| `image.tag`         | RabbitMQ image tag (immutable tags are recommended)                                                      | `3.12.0-debian-11-r0` |
+| `image.digest`      | RabbitMQ image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
+| `image.pullPolicy`  | RabbitMQ image pull policy                                                                               | `IfNotPresent`        |
+| `image.pullSecrets` | Specify docker-registry secret names as an array                                                         | `[]`                  |
+| `image.debug`       | Set to true if you would like to see extra information on logs                                           | `false`               |
 
 ### Common parameters
 
@@ -94,7 +94,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `auth.password`                              | RabbitMQ application password                                                                                                                                           | `""`                                              |
 | `auth.securePassword`                        | Whether to set the RabbitMQ password securely. This is incompatible with loading external RabbitMQ definitions and 'true' when not setting the auth.password parameter. | `true`                                            |
 | `auth.existingPasswordSecret`                | Existing secret with RabbitMQ credentials (must contain a value for `rabbitmq-password` key)                                                                            | `""`                                              |
-| `auth.enableLoopbackUser`                    | Enable Loopback user access? Be advised, that enabling the loopback user is a possible security risk!                                                                   | `false`                                           |
+| `auth.enableLoopbackUser`                    | If enabled, the user `auth.username` can only connect from localhost                                                                                                    | `false`                                           |
 | `auth.erlangCookie`                          | Erlang cookie to determine whether different nodes are allowed to communicate with each other                                                                           | `""`                                              |
 | `auth.existingErlangSecret`                  | Existing secret with RabbitMQ Erlang cookie (must contain a value for `rabbitmq-erlang-cookie` key)                                                                     | `""`                                              |
 | `auth.tls.enabled`                           | Enable TLS support on RabbitMQ                                                                                                                                          | `false`                                           |
@@ -339,6 +339,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.serviceMonitor.targetLabels`      | Used to keep given service's labels in target                                          | `{}`                  |
 | `metrics.serviceMonitor.podTargetLabels`   | Used to keep given pod's labels in target                                              | `{}`                  |
 | `metrics.serviceMonitor.path`              | Define the path used by ServiceMonitor to scrap metrics                                | `""`                  |
+| `metrics.serviceMonitor.params`            | Define the HTTP URL parameters used by ServiceMonitor                                  | `{}`                  |
 | `metrics.serviceMonitor.selector`          | ServiceMonitor selector labels                                                         | `{}`                  |
 | `metrics.serviceMonitor.labels`            | Extra labels for the ServiceMonitor                                                    | `{}`                  |
 | `metrics.serviceMonitor.annotations`       | Extra annotations for the ServiceMonitor                                               | `{}`                  |
@@ -354,7 +355,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup`              | `false`                 |
 | `volumePermissions.image.registry`                     | Init container volume-permissions image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`                   | Init container volume-permissions image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Init container volume-permissions image tag                                                                                       | `11-debian-11-r118`     |
+| `volumePermissions.image.tag`                          | Init container volume-permissions image tag                                                                                       | `11-debian-11-r123`     |
 | `volumePermissions.image.digest`                       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                                  | `[]`                    |
@@ -712,7 +713,7 @@ Bitnami Kubernetes documentation is available at [https://docs.bitnami.com/](htt
 
 ## License
 
-Copyright &copy; 2023 Bitnami
+Copyright &copy; 2023 VMware, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

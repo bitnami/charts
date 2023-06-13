@@ -80,16 +80,16 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Spark parameters
 
-| Name                | Description                                                                                           | Value                 |
-| ------------------- | ----------------------------------------------------------------------------------------------------- | --------------------- |
-| `image.registry`    | Spark image registry                                                                                  | `docker.io`           |
-| `image.repository`  | Spark image repository                                                                                | `bitnami/spark`       |
-| `image.tag`         | Spark image tag (immutable tags are recommended)                                                      | `3.3.2-debian-11-r30` |
-| `image.digest`      | Spark image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
-| `image.pullPolicy`  | Spark image pull policy                                                                               | `IfNotPresent`        |
-| `image.pullSecrets` | Specify docker-registry secret names as an array                                                      | `[]`                  |
-| `image.debug`       | Enable image debug mode                                                                               | `false`               |
-| `hostNetwork`       | Enable HOST Network                                                                                   | `false`               |
+| Name                | Description                                                                                           | Value                |
+| ------------------- | ----------------------------------------------------------------------------------------------------- | -------------------- |
+| `image.registry`    | Spark image registry                                                                                  | `docker.io`          |
+| `image.repository`  | Spark image repository                                                                                | `bitnami/spark`      |
+| `image.tag`         | Spark image tag (immutable tags are recommended)                                                      | `3.4.0-debian-11-r2` |
+| `image.digest`      | Spark image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                 |
+| `image.pullPolicy`  | Spark image pull policy                                                                               | `IfNotPresent`       |
+| `image.pullSecrets` | Specify docker-registry secret names as an array                                                      | `[]`                 |
+| `image.debug`       | Enable image debug mode                                                                               | `false`              |
+| `hostNetwork`       | Enable HOST Network                                                                                   | `false`              |
 
 ### Spark master parameters
 
@@ -464,7 +464,7 @@ This version standardizes the way of defining Ingress rules. When configuring a 
 
 ## License
 
-Copyright &copy; 2023 Bitnami
+Copyright &copy; 2023 VMware, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

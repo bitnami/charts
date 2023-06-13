@@ -87,7 +87,7 @@ serviceBindings:
 image:
   registry: docker.io
   repository: bitnami/mariadb
-  tag: 10.11.3-debian-11-r5
+  tag: 10.11.4-debian-11-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -194,6 +194,7 @@ primary:
     skip-name-resolve
     explicit_defaults_for_timestamp
     basedir=/opt/bitnami/mariadb
+    datadir=/bitnami/mariadb/data
     plugin_dir=/opt/bitnami/mariadb/plugin
     port=3306
     socket=/opt/bitnami/mariadb/tmp/mysql.sock
@@ -205,7 +206,6 @@ primary:
     character-set-server=UTF8
     collation-server=utf8_general_ci
     slow_query_log=0
-    slow_query_log_file=/opt/bitnami/mariadb/logs/mysqld.log
     long_query_time=10.0
 
     [client]
@@ -592,6 +592,7 @@ secondary:
     skip-name-resolve
     explicit_defaults_for_timestamp
     basedir=/opt/bitnami/mariadb
+    datadir=/bitnami/mariadb/data
     port=3306
     socket=/opt/bitnami/mariadb/tmp/mysql.sock
     tmpdir=/opt/bitnami/mariadb/tmp
@@ -602,7 +603,6 @@ secondary:
     character-set-server=UTF8
     collation-server=utf8_general_ci
     slow_query_log=0
-    slow_query_log_file=/opt/bitnami/mariadb/logs/mysqld.log
     long_query_time=10.0
 
     [client]
@@ -1001,7 +1001,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r118
+    tag: 11-debian-11-r123
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
@@ -1037,7 +1037,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mysqld-exporter
-    tag: 0.14.0-debian-11-r119
+    tag: 0.14.0-debian-11-r125
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)

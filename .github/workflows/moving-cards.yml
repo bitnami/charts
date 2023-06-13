@@ -5,13 +5,15 @@ on:
     types:
       - created
       - moved
-permissions:
-  issues: write
-  pull-requests: write
+# Remove all permissions by default
+permissions: {}
 jobs:
   get-issue:
     runs-on: ubuntu-latest
     name: Get issue info
+    permissions:
+      issues: read
+      pull-requests: read
     outputs:
       assignees: ${{ steps.get-issue-step.outputs.assignees }}
       author: ${{ steps.get-issue-step.outputs.author }}
@@ -39,6 +41,10 @@ jobs:
           echo "number=${number}" >> $GITHUB_OUTPUT
   label-card:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+      pull-requests: write
     needs:
       - get-issue
     steps:
@@ -107,6 +113,8 @@ jobs:
           remove-labels: in-progress, on-hold
   assign-assignee-if-needed:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     needs:
       - get-issue
     # The job shouldn't run for solved cards

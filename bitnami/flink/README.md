@@ -8,8 +8,6 @@ Apache Flink is a framework and distributed processing engine for stateful compu
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 
-Looking to use Apache Flink in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
-
 ## TL;DR
 
 ```console
@@ -297,7 +295,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## License
 
-Copyright &copy; 2023 Bitnami
+Copyright &copy; 2023 VMware, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

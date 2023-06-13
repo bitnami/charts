@@ -79,7 +79,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | -------------------- |
 | `image.registry`                        | Joomla! image registry                                                                                               | `docker.io`          |
 | `image.repository`                      | Joomla! Image name                                                                                                   | `bitnami/joomla`     |
-| `image.tag`                             | Joomla! Image tag                                                                                                    | `4.3.1-debian-11-r7` |
+| `image.tag`                             | Joomla! Image tag                                                                                                    | `4.3.2-debian-11-r0` |
 | `image.digest`                          | Joomla! image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag              | `""`                 |
 | `image.pullPolicy`                      | Joomla! image pull policy                                                                                            | `IfNotPresent`       |
 | `image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                     | `[]`                 |
@@ -219,7 +219,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`           | Start a side-car prometheus exporter                                                                            | `false`                   |
 | `metrics.image.registry`    | Apache exporter image registry                                                                                  | `docker.io`               |
 | `metrics.image.repository`  | Apache exporter image name                                                                                      | `bitnami/apache-exporter` |
-| `metrics.image.tag`         | Apache exporter image tag                                                                                       | `0.13.3-debian-11-r9`     |
+| `metrics.image.tag`         | Apache exporter image tag                                                                                       | `0.13.3-debian-11-r12`    |
 | `metrics.image.digest`      | Apache exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
 | `metrics.image.pullPolicy`  | Image pull policy                                                                                               | `IfNotPresent`            |
 | `metrics.image.pullSecrets` | Specify docker-registry secret names as an array                                                                | `[]`                      |
@@ -484,7 +484,7 @@ New versions are not going to be affected. Once a new version is released in the
 
 ## License
 
-Copyright &copy; 2023 Bitnami
+Copyright &copy; 2023 VMware, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

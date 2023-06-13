@@ -286,6 +286,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `disasterRecovery.pvc.existingClaim`            | A manually managed Persistent Volume and Claim                          | `""`           |
 | `disasterRecovery.pvc.size`                     | PVC Storage Request                                                     | `2Gi`          |
 | `disasterRecovery.pvc.storageClassName`         | Storage Class for snapshots volume                                      | `nfs`          |
+| `disasterRecovery.pvc.subPath`                  | Path within the volume from which to mount                              | `""`           |
 
 ### Service account parameters
 
@@ -521,7 +522,7 @@ kubectl delete statefulset etcd --cascade=false
 
 ## License
 
-Copyright &copy; 2023 Bitnami
+Copyright &copy; 2023 VMware, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

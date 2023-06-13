@@ -4,13 +4,18 @@ on:
     types:
       - review_requested
       - synchronize
-permissions:
-  repository-projects: write
+# Remove all permissions by default
+permissions: {}
 concurrency:
   group: card-movement-${{ github.event.number }}
 jobs:
   handler:
     runs-on: ubuntu-latest
+    permissions:
+      repository-projects: write
+      contents: read
+      issues: read
+      pull-requests: read
     # This job will ignore:
     # * Events triggered by bitnami-bot (README commits for example).
     # * Events triggered over automated PRs (They are managed in comments.yml workflow).
@@ -19,7 +24,15 @@ jobs:
       github.actor != 'bitnami-bot' && github.event.pull_request.user.login != 'bitnami-bot' &&
       (!contains(github.event.pull_request.labels.*.name, 'bitnami')) && (!contains(github.event.pull_request.labels.*.name, 'triage'))
     steps:
+      - name: Repo checkout
+        uses: actions/checkout@v3
+      - name: Load .env file
+        uses: xom9ikk/dotenv@v2
+        with:
+          path: .github/workflows/
       - name: Move into In Progress
+        # Move the card only if the actor is not a Bitnami member
+        if: ${{ !contains(fromJson(env.BITNAMI_TEAM), github.actor) }}
         uses: peter-evans/create-or-update-project-card@v2
         with:
           project-name: Support

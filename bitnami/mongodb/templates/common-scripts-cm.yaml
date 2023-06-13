@@ -16,13 +16,15 @@ data:
   startup-probe.sh: |
     #!/bin/bash
     {{- if .Values.tls.enabled }}
-    TLS_OPTIONS='--tls --tlsCertificateKeyFile=/certs/mongodb.pem --tlsCAFile=/certs/mongodb-ca-cert'
+    # Probes are using localhost/127.0.0.1 to tests if the service is up, ready or healthy. If TLS is enabled, we shouldn't validate the certificate hostname.
+    TLS_OPTIONS='--tls --tlsCertificateKeyFile=/certs/mongodb.pem --tlsCAFile=/certs/mongodb-ca-cert --tlsAllowInvalidHostnames'
     {{- end }}
     mongosh  $TLS_OPTIONS --port $MONGODB_PORT_NUMBER --eval 'db.hello().isWritablePrimary || db.hello().secondary' | grep 'true'
   readiness-probe.sh: |
     #!/bin/bash
     {{- if .Values.tls.enabled }}
-    TLS_OPTIONS='--tls --tlsCertificateKeyFile=/certs/mongodb.pem --tlsCAFile=/certs/mongodb-ca-cert'
+    # Probes are using localhost/127.0.0.1 to tests if the service is up, ready or healthy. If TLS is enabled, we shouldn't validate the certificate hostname.
+    TLS_OPTIONS='--tls --tlsCertificateKeyFile=/certs/mongodb.pem --tlsCAFile=/certs/mongodb-ca-cert --tlsAllowInvalidHostnames'
     {{- end }}
     # Run the proper check depending on the version
     [[ $(mongod -version | grep "db version") =~ ([0-9]+\.[0-9]+\.[0-9]+) ]] && VERSION=${BASH_REMATCH[1]}
@@ -30,15 +32,16 @@ data:
     VERSION_MAJOR="$(get_sematic_version "$VERSION" 1)"
     VERSION_MINOR="$(get_sematic_version "$VERSION" 2)"
     VERSION_PATCH="$(get_sematic_version "$VERSION" 3)"
+    readiness_test='db.isMaster().ismaster || db.isMaster().secondary'
     if [[ ( "$VERSION_MAJOR" -ge 5 ) || ( "$VERSION_MAJOR" -ge 4 && "$VERSION_MINOR" -ge 4 && "$VERSION_PATCH" -ge 2 ) ]]; then
-        mongosh $TLS_OPTIONS --port $MONGODB_PORT_NUMBER --eval 'db.hello().isWritablePrimary || db.hello().secondary' | grep 'true'
-    else
-        mongosh  $TLS_OPTIONS --port $MONGODB_PORT_NUMBER --eval 'db.isMaster().ismaster || db.isMaster().secondary' | grep 'true'
+        readiness_test='db.hello().isWritablePrimary || db.hello().secondary'
     fi
+    mongosh  $TLS_OPTIONS --port $MONGODB_PORT_NUMBER --eval "${readiness_test}" | grep 'true'
   ping-mongodb.sh: |
     #!/bin/bash
     {{- if .Values.tls.enabled }}
-    TLS_OPTIONS='--tls --tlsCertificateKeyFile=/certs/mongodb.pem --tlsCAFile=/certs/mongodb-ca-cert'
+    # Probes are using localhost/127.0.0.1 to tests if the service is up, ready or healthy. If TLS is enabled, we shouldn't validate the certificate hostname.
+    TLS_OPTIONS='--tls --tlsCertificateKeyFile=/certs/mongodb.pem --tlsCAFile=/certs/mongodb-ca-cert --tlsAllowInvalidHostnames'
     {{- end }}
     mongosh  $TLS_OPTIONS --port $MONGODB_PORT_NUMBER --eval "db.adminCommand('ping')"
   {{- if .Values.tls.enabled }}

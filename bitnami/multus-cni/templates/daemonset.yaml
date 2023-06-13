@@ -67,10 +67,11 @@ spec:
         - name: install-multus-binary
           image: {{ template "multus-cni.image" . }}
           command:
-            - cp
+            - cp 
+            - -r
             # Using /usr/src to allow compatibility with upstream multus container
             - "/usr/src/multus-cni/bin/multus"
-            - "{{ .Values.CNIMountPath }}/opt/cni/bin"
+            - "{{ .Values.CNIMountPath }}/opt/cni/bin/"
           {{- if .Values.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
@@ -81,17 +82,16 @@ spec:
         - name: generate-kubeconfig
           image: {{ template "multus-cni.image" . }}
           command:
-            - generate-kubeconfig
+            - install_multus
           args:
-            - "-k8s-service-host=$(KUBERNETES_SERVICE_HOST)"
-            - "-k8s-service-port=$(KUBERNETES_SERVICE_PORT)"
-            - "-cni-config-dir={{ .Values.CNIMountPath }}/etc/cni/net.d"
+            - "--type"
+            - "thin"
           {{- if .Values.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           volumeMounts:
-            - name: cni-net-dir
-              mountPath: {{ .Values.CNIMountPath }}/etc/cni/net.d
+            - name: cni-bin-dir
+              mountPath: {{ .Values.CNIMountPath }}/opt/cni/bin
               mountPropagation: Bidirectional
       containers:
         - name: multus-cni
@@ -103,7 +103,7 @@ spec:
           command: {{- include "common.tplvalues.render" (dict "value" .Values.command "context" $) | nindent 12 }}
           {{- else }}
           command:
-            - multus-daemon
+            - "/thin_entrypoint"
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
@@ -111,14 +111,14 @@ spec:
           args: {{- include "common.tplvalues.render" (dict "value" .Values.args "context" $) | nindent 12 }}
           {{- else }}
           args:
-            - "-cni-version={{ .Values.CNIVersion }}"
-            - "-cni-config-dir={{ .Values.CNIMountPath }}/etc/cni/net.d"
-            - "-multus-autoconfig-dir={{ .Values.CNIMountPath }}/etc/cni/net.d"
-            - "-multus-log-to-stderr=true"
+            - "--multus-conf-file=auto"
+            - "--cni-conf-dir={{ .Values.CNIMountPath }}/etc/cni/net.d"
+            - "--multus-autoconfig-dir={{ .Values.CNIMountPath }}/etc/cni/net.d"
+            - "--cni-bin-dir={{ .Values.CNIMountPath }}/opt/cni/bin"
             {{- if .Values.image.debug }}
-            - "-multus-log-level=debug"
+            - "--multus-log-level=debug"
             {{- else }}
-            - "-multus-log-level=verbose"
+            - "--multus-log-level=verbose"
             {{- end }}
           {{- end }}
           {{- if .Values.containerSecurityContext.enabled }}
@@ -150,7 +150,7 @@ spec:
             exec:
               command:
                 - pgrep
-                - multus-daemon
+                - thin_entrypoint
             initialDelaySeconds: {{ .Values.startupProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.startupProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.startupProbe.timeoutSeconds }}
@@ -164,7 +164,7 @@ spec:
             exec:
               command:
                 - pgrep
-                - multus-daemon
+                - thin_entrypoint
             initialDelaySeconds: {{ .Values.livenessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.livenessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.livenessProbe.timeoutSeconds }}
@@ -178,7 +178,7 @@ spec:
             exec:
               command:
                 - pgrep
-                - multus-daemon
+                - thin_entrypoint
             initialDelaySeconds: {{ .Values.readinessProbe.initialDelaySeconds }}
             periodSeconds: {{ .Values.readinessProbe.periodSeconds }}
             timeoutSeconds: {{ .Values.readinessProbe.timeoutSeconds }}
@@ -192,6 +192,8 @@ spec:
           volumeMounts:
             - name: cni-net-dir
               mountPath: {{ .Values.CNIMountPath }}/etc/cni/net.d
+            - name: cni-bin-dir
+              mountPath: {{ .Values.CNIMountPath }}/opt/cni/bin
             {{- if .Values.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}

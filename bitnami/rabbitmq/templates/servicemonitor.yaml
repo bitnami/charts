@@ -25,6 +25,9 @@ spec:
       {{- if .Values.metrics.serviceMonitor.path }}
       path: {{ .Values.metrics.serviceMonitor.path }}
       {{- end }}
+      {{- if .Values.metrics.serviceMonitor.params }}
+      params: {{ toYaml .Values.metrics.serviceMonitor.params | nindent 8 }}
+      {{- end }}
       {{- if .Values.metrics.serviceMonitor.interval }}
       interval: {{ .Values.metrics.serviceMonitor.interval }}
       {{- end }}
