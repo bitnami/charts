@@ -345,6 +345,7 @@ helm delete --purge my-release
 | Name                                                       | Description                                                                                                               | Value           |
 | ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- | --------------- |
 | `coordinating.replicaCount`                                | Number of coordinating-only replicas to deploy                                                                            | `2`             |
+| `coordinating.extraRoles`                                  | Append extra roles to the node role                                                                                       | `[]`            |
 | `coordinating.pdb.create`                                  | Enable/disable a Pod Disruption Budget creation                                                                           | `false`         |
 | `coordinating.pdb.minAvailable`                            | Minimum number/percentage of pods that should remain scheduled                                                            | `1`             |
 | `coordinating.pdb.maxUnavailable`                          | Maximum number/percentage of pods that may be made unavailable                                                            | `""`            |
