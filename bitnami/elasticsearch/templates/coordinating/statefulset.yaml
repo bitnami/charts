@@ -146,7 +146,7 @@ spec:
             - name: ELASTICSEARCH_IS_DEDICATED_NODE
               value: "yes"
             - name: ELASTICSEARCH_NODE_ROLES
-              value: ""
+              value: {{ ternary "" (join "," .Values.coordinating.extraRoles) (empty .Values.coordinating.extraRoles) | quote }}
             - name: ELASTICSEARCH_TRANSPORT_PORT_NUMBER
               value: {{ .Values.containerPorts.transport | quote }}
             - name: ELASTICSEARCH_HTTP_PORT_NUMBER
