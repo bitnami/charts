@@ -1364,7 +1364,7 @@ ruler:
   enabled: true
   alertmanagers:
     - http://kube-prometheus-alertmanager.monitoring.svc.cluster.local:9093
-config: |-
+  config: |-
     groups:
       - name: "metamonitoring"
         rules:
