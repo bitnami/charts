@@ -531,14 +531,6 @@ kubectl patch deployment prestashop-prestashop --type=json -p='[{"op": "remove",
 kubectl delete statefulset prestashop-mariadb --cascade=false
 ```
 
-## Community supported solution
-
-Please, note this Helm chart is a community-supported solution. This means that the Bitnami team is not actively working on new features/improvements nor providing support through GitHub Issues for this Helm chart. Any new issue will stay open for 20 days to allow the community to contribute, after 15 days without activity the issue will be marked as stale being closed after 5 days.
-
-The Bitnami team will review any PR that is created, feel free to create a PR if you find any issue or want to implement a new feature.
-
-New versions are not going to be affected. Once a new version is released in the upstream project, the Bitnami container image will be updated to use the latest version.
-
 ## License
 
 Copyright &copy; 2023 VMware, Inc.
