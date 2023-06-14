@@ -449,3 +449,15 @@ Usage:
 {{- end -}}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Labels to use on serviceMonitor.spec.selector and svc.metadata.labels
+*/}}
+{{- define "thanos.servicemonitor.matchLabels" -}}
+{{- if and .Values.metrics.enabled .Values.metrics.serviceMonitor.enabled -}}
+prometheus-operator/monitor: 'true'
+{{- if .Values.metrics.serviceMonitor.selector -}}
+{{- include "common.tplvalues.render" (dict "value" .Values.metrics.serviceMonitor.selector "context" $)}}
+{{- end -}}
+{{- end -}}
+{{- end -}}
