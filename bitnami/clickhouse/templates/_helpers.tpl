@@ -99,6 +99,18 @@ Get the ClickHouse configuration configmap.
 {{- end -}}
 {{- end -}}
 
+
+{{/*
+Get the ClickHouse configuration users configmap.
+*/}}
+{{- define "clickhouse.usersExtraConfigmapName" -}}
+{{- if .Values.usersExtraOverridesConfigmap -}}
+    {{- .Values.usersExtraOverridesConfigmap -}}
+{{- else }}
+    {{- printf "%s-users-extra" (include "common.names.fullname" . ) -}}
+{{- end -}}
+{{- end -}}
+
 {{/*
 Get the Clickhouse password secret name
 */}}
@@ -195,7 +207,7 @@ Compile all warnings into a single message.
 {{- if or (and .Values.keeper.enabled .Values.zookeeper.enabled) (and .Values.keeper.enabled .Values.externalZookeeper.servers) (and .Values.zookeeper.enabled .Values.externalZookeeper.servers) -}}
 clickhouse: Multiple [Zoo]keeper
     You can only use one [zoo]keeper
-    Please choose use ClickHouse keeper or 
+    Please choose use ClickHouse keeper or
     installing a Zookeeper chart (--set zookeeper.enabled=true) or
     using an external instance (--set zookeeper.servers )
 {{- end -}}
