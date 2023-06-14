@@ -503,13 +503,11 @@ ingress:
   ##   cert-manager.io/cluster-issuer: cluster-issuer-name
   ##
   annotations: {}
-  ## @param ingress.tls [array] Enable TLS configuration for the hosts defined
+  ## @param ingress.tls Enable TLS configuration for ingress.hostname
   ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
   ##
-  tls:
-    - hosts:
-        - example.local
-      secretName: example.local-tls
+  tls: false
+
   ## DEPRECATED: Use ingress.annotations instead of ingress.certManager
   ## certManager: false
   ##
