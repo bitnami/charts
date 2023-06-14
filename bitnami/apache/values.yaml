@@ -512,14 +512,6 @@ ingress:
   ## certManager: false
   ##
 
-  ## @param ingress.hosts An array with additional hostname(s) to be covered with the ingress record
-  ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
-  ## e.g:
-  ## hosts:
-  ##   - name: example.local
-  ##     path: /
-  ##
-  hosts: []
   ## @param ingress.extraHosts An array with additional hostname(s) to be covered with the ingress record
   ## e.g:
   ## extraHosts:
