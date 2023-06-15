@@ -129,7 +129,7 @@ Compile all warnings into a single message.
 {{- end -}}
 {{- end -}}
 
-{{/* Validate values of Wavefront - clusterName */}}
+{{/* Validate values of Redis - clusterName */}}
 {{- define "oauth2-proxy.validateValues.redis" -}}
 {{- if and .Values.redis.enabled .Values.externalRedis.host -}}
 oauth2-proxy: BothRedis
