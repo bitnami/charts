@@ -649,7 +649,7 @@ The command removes all the Kubernetes components associated with the chart and 
 ### Blackbox Exporter Traffic Exposure Parameters
 
 | Name                                                      | Description                                                                                                                     | Value         |
-|-----------------------------------------------------------| ------------------------------------------------------------------------------------------------------------------------------- | ------------- |
+| --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- | ------------- |
 | `blackboxExporter.service.type`                           | Blackbox Exporter service type                                                                                                  | `ClusterIP`   |
 | `blackboxExporter.service.ports.http`                     | Blackbox Exporter HTTP service port                                                                                             | `19115`       |
 | `blackboxExporter.service.nodePorts.http`                 | Node port for HTTP                                                                                                              | `""`          |
