@@ -2,7 +2,7 @@ annotations:
   category: Analytics
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 0.65.2
+appVersion: 0.66.0
 dependencies:
   - condition: exporters.enabled,exporters.node-exporter.enabled
     name: node-exporter
@@ -32,4 +32,4 @@ maintainers:
 name: kube-prometheus
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus
-version: 8.13.0
+version: 8.13.1
