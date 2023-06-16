@@ -9,6 +9,9 @@ metadata:
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
+    {{- if .Values.compactor.persistence.labels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.compactor.persistence.labels "context" $ ) | nindent 4 }}
+    {{- end }}
   {{- if or .Values.compactor.persistence.annotations .Values.commonAnnotations }}
   annotations:
     {{- if .Values.compactor.persistence.annotations }}
