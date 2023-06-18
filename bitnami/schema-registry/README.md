@@ -221,7 +221,7 @@ The command removes all the Kubernetes components associated with the chart and 
 ### Kafka chart parameters
 
 | Name                                     | Description                                                                                                                   | Value                            |
-|------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------|----------------------------------|
+| ---------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | -------------------------------- |
 | `kafka.enabled`                          | Enable/disable Kafka chart installation                                                                                       | `true`                           |
 | `kafka.replicaCount`                     | Number of Kafka brokers                                                                                                       | `1`                              |
 | `kafka.auth.clientProtocol`              | Authentication protocol for communications with clients. Allowed protocols: `plaintext`, `tls`, `mtls`, `sasl` and `sasl_tls` | `plaintext`                      |
