@@ -220,14 +220,18 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Kafka chart parameters
 
-| Name                               | Description                                                                   | Value                            |
-| ---------------------------------- | ----------------------------------------------------------------------------- | -------------------------------- |
-| `kafka.enabled`                    | Enable/disable Kafka chart installation                                       | `true`                           |
-| `kafka.replicaCount`               | Number of Kafka brokers                                                       | `1`                              |
-| `externalKafka.brokers`            | Array of Kafka brokers to connect to. Format: protocol://broker_hostname:port | `["PLAINTEXT://localhost:9092"]` |
-| `externalKafka.auth.protocol`      | Authentication protocol. Allowed protocols: plaintext, tls, sasl and sasl_tls | `plaintext`                      |
-| `externalKafka.auth.jaas.user`     | User for SASL authentication                                                  | `user`                           |
-| `externalKafka.auth.jaas.password` | Password for SASL authentication                                              | `""`                             |
+| Name                                     | Description                                                                                                                   | Value                            |
+|------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------|----------------------------------|
+| `kafka.enabled`                          | Enable/disable Kafka chart installation                                                                                       | `true`                           |
+| `kafka.replicaCount`                     | Number of Kafka brokers                                                                                                       | `1`                              |
+| `kafka.auth.clientProtocol`              | Authentication protocol for communications with clients. Allowed protocols: `plaintext`, `tls`, `mtls`, `sasl` and `sasl_tls` | `plaintext`                      |
+| `kafka.service.ports.client`             | Kafka svc port for client connections                                                                                         | `9092`                           |
+| `externalKafka.brokers`                  | Array of Kafka brokers to connect to. Format: protocol://broker_hostname:port                                                 | `["PLAINTEXT://localhost:9092"]` |
+| `externalKafka.auth.protocol`            | Authentication protocol. Allowed protocols: plaintext, tls, sasl and sasl_tls                                                 | `plaintext`                      |
+| `externalKafka.auth.jaas.user`           | User for SASL authentication                                                                                                  | `user`                           |
+| `externalKafka.auth.jaas.password`       | Password for SASL authentication                                                                                              | `""`                             |
+| `externalKafka.auth.jaas.existingSecret` | Name of the existing secret containing a password for SASL authentication (under the key named "client-passwords")            | `""`                             |
+
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -371,6 +375,16 @@ externalKafka.brokers=SASL_PLAINTEXT://kafka-0.kafka-headless.default.svc.cluste
 externalKafka.auth.protocol=sasl
 externalKafka.auth.jaas.user=myuser
 externalKafka.auth.jaas.password=mypassword
+```
+
+Alternatively, you can use existing secret with a key "client-passwords":
+
+```console
+kafka.enabled=false
+externalKafka.brokers=SASL_PLAINTEXT://kafka-0.kafka-headless.default.svc.cluster.local:9092
+externalKafka.auth.protocol=sasl
+externalKafka.auth.jaas.user=myuser
+externalKafka.auth.jaas.existingSecret=my-secret
 ```
 
 ### Ingress
