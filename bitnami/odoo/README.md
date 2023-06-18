@@ -78,7 +78,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.args`    | Args to override all containers in the the statefulset                                               | `["infinity"]`               |
 | `image.registry`         | Odoo image registry                                                                                  | `docker.io`                  |
 | `image.repository`       | Odoo image repository                                                                                | `bitnami/odoo`               |
-| `image.tag`              | Odoo image tag (immutable tags are recommended)                                                      | `16.0.20230515-debian-11-r3` |
+| `image.tag`              | Odoo image tag (immutable tags are recommended)                                                      | `16.0.20230615-debian-11-r0` |
 | `image.digest`           | Odoo image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                         |
 | `image.pullPolicy`       | Odoo image pull policy                                                                               | `IfNotPresent`               |
 | `image.pullSecrets`      | Odoo image pull secrets                                                                              | `[]`                         |
@@ -368,14 +368,6 @@ This major updates the PostgreSQL subchart to its newest major, 12.0.0. [Here](h
 ### To any previous version
 
 Refer to the [chart documentation for more information about how to upgrade from previous releases](https://docs.bitnami.com/kubernetes/apps/odoo/administration/upgrade/).
-
-## Community supported solution
-
-Please, note this Helm chart is a community-supported solution. This means that the Bitnami team is not actively working on new features/improvements nor providing support through GitHub Issues for this Helm chart. Any new issue will stay open for 20 days to allow the community to contribute, after 15 days without activity the issue will be marked as stale being closed after 5 days.
-
-The Bitnami team will review any PR that is created, feel free to create a PR if you find any issue or want to implement a new feature.
-
-New versions are not going to be affected. Once a new version is released in the upstream project, the Bitnami container image will be updated to use the latest version.
 
 ## License
 

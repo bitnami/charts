@@ -207,6 +207,10 @@ spec:
               value: {{ .Values.containerPorts.postgresql | quote }}
             - name: POSTGRESQL_VOLUME_DIR
               value: {{ .Values.primary.persistence.mountPath | quote }}
+            {{- if not .Values.auth.enablePostgresUser }}
+            - name: ALLOW_EMPTY_PASSWORD
+              value: "true"
+            {{- end }}
             {{- if .Values.primary.persistence.mountPath }}
             - name: PGDATA
               value: {{ .Values.postgresqlDataDir | quote }}
@@ -228,6 +232,7 @@ spec:
             {{- end }}
             {{- end }}
           {{- end }}
+            {{- if .Values.auth.enablePostgresUser }}
             {{- if .Values.auth.usePasswordFiles }}
             - name: POSTGRES_PASSWORD_FILE
               value: {{ printf "/opt/bitnami/postgresql/secrets/%s" (include "postgresql.userPasswordKey" .) }}
@@ -237,6 +242,7 @@ spec:
                 secretKeyRef:
                   name: {{ include "postgresql.secretName" . }}
                   key: {{ include "postgresql.userPasswordKey" . }}
+            {{- end }}
             {{- end }}
             {{- if (include "postgresql.database" .) }}
             - name: POSTGRES_DB

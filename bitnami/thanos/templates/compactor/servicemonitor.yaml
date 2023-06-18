@@ -1,4 +1,4 @@
-{{- if and .Values.compactor.enabled .Values.metrics.enabled .Values.metrics.serviceMonitor.enabled }}
+{{- if and .Values.compactor.enabled .Values.metrics.enabled .Values.metrics.serviceMonitor.enabled (not .Values.compactor.cronJob.enabled) }}
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
