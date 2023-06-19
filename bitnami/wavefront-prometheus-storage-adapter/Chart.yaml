@@ -25,6 +25,7 @@ keywords:
   - observability
   - wavefront
 maintainers: []
+name: wavefront-prometheus-storage-adapter
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/wavefront-prometheus-storage-adapter
 version: 2.3.3
