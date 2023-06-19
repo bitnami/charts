@@ -100,8 +100,8 @@ spec:
             - name: HARBOR_DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  {{- if .Values.core.existingEnvVarsSecret }}
-                  name: {{ .Values.core.existingEnvVarsSecret }}
+                  {{- if .Values.exporter.existingEnvVarsSecret }}
+                  name: {{ .Values.exporter.existingEnvVarsSecret }}
                   {{- else }}
                   name: {{ printf "%s-envvars" (include "harbor.core" .) }}
                   {{- end }}
@@ -109,8 +109,8 @@ spec:
             - name: HARBOR_ADMIN_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  {{- if .Values.core.existingEnvVarsSecret }}
-                  name: {{ .Values.core.existingEnvVarsSecret }}
+                  {{- if .Values.exporter.existingEnvVarsSecret }}
+                  name: {{ .Values.exporter.existingEnvVarsSecret }}
                   {{- else }}
                   name: {{ printf "%s-envvars" (include "harbor.core" .) }}
                   {{- end }}
