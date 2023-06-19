@@ -440,6 +440,29 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 9.0.0
+
+This version adds a new label `app.kubernetes.io/component=etcd` to the StatefulSet and pods. Due to this change, the StatefulSet will be replaced (as it's not possible to add additional `spec.selector.matchLabels` to an existing StatefulSet) and the pods will be recreated. To upgrade to this version from a previous version, you need to run the following steps:
+
+1. Add new label to your pods
+
+    ```console
+    kubectl label pod my-release-0 app.kubernetes.io/component=etcd
+    # Repeat for all etcd pods, based on configured .replicaCount (excluding the etcd snappshoter pod, if .disasterRecovery.enabled is set to true)
+    ````
+
+2. Remove the StatefulSet keeping the pods:
+
+    ```console
+    kubectl delete statefulset my-release --cascade=orphan
+    ```
+
+3. Upgrade your cluster:
+
+    ```console
+    helm upgrade my-release oci://registry-1.docker.io/bitnamicharts/etcd --set auth.rbac.rootPassword=$ETCD_ROOT_PASSWORD
+    ```
+
 ### To 8.0.0
 
 This version reverts the change in the previous major bump ([7.0.0](https://github.com/bitnami/charts/tree/main/bitnami/etcd#to-700)). Now the default `etcd` branch is `3.5` again once confirmed by the [etcd developers](https://github.com/etcd-io/etcd/tree/main/CHANGELOG#production-recommendation) that this version is production-ready once solved the data corruption issue.

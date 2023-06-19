@@ -55,4 +55,10 @@ rules:
       - create
       - patch
       - update
+  - apiGroups:
+      - ""
+    resources:
+      - nodes
+    verbs:
+      - get
 {{- end }}
