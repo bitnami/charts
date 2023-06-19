@@ -913,6 +913,12 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
+## Upgrading
+
+### To 2.0.0
+
+This major updates the `etcd` subchart to it newest major, 9.0.0. For more information on this subchart's major, please refer to [etcd upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/etcd#to-900).
+
 ## License
 
 Copyright &copy; 2023 VMware, Inc.
