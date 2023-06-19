@@ -1,4 +1,4 @@
-{{- if (include "supabase.createInitJob" .) }}
+{{- if and (include "supabase.createInitJob" .) (not .Values.global.jwt.existingSecret) }}
 apiVersion: batch/v1
 kind: Job
 metadata:
