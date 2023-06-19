@@ -6,6 +6,10 @@ Wavefront Storage Adapter is a Prometheus integration to transfer metrics from P
 
 [Overview of Wavefront Prometheus Adapter](https://github.com/wavefrontHQ/prometheus-storage-adapter)
 
+## This Helm chart is deprecated
+
+This Helm chart is deprecated on our side and will not receive new updates.
+
 ## TL;DR
 
 ```console
