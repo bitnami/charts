@@ -1,9 +1,7 @@
 Copyright VMware, Inc.  
 SPDX-License-Identifier: APACHE-2.0
 
-This product includes third-party open source software.
-Additional copyright and licensing information can be found inside the
-Bitnami packages themselves and/or at https://bitnami.com/open-source
+This product includes third-party open source software. Additional copyright and licensing information can be found inside the Bitnami packages themselves and/or at https://bitnami.com/open-source
 
 ----
                                  Apache License
