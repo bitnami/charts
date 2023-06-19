@@ -609,6 +609,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `compactor.persistence.storageClass`                          | Specify the `storageClass` used to provision the volume                                                                          | `""`                     |
 | `compactor.persistence.accessModes`                           | PVC Access Modes for data volume                                                                                                 | `["ReadWriteOnce"]`      |
 | `compactor.persistence.size`                                  | PVC Storage Request for data volume                                                                                              | `8Gi`                    |
+| `compactor.persistence.labels`                                | Labels for the PVC                                                                                                               | `{}`                     |
 | `compactor.persistence.annotations`                           | Annotations for the PVC                                                                                                          | `{}`                     |
 | `compactor.persistence.existingClaim`                         | Name of an existing PVC to use                                                                                                   | `""`                     |
 

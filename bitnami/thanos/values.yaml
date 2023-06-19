@@ -2109,6 +2109,9 @@ compactor:
     ## @param compactor.persistence.size PVC Storage Request for data volume
     ##
     size: 8Gi
+    ## @param compactor.persistence.labels Labels for the PVC
+    ##
+    labels: {}
     ## @param compactor.persistence.annotations Annotations for the PVC
     ##
     annotations: {}
