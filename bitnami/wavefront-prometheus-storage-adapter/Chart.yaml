@@ -13,7 +13,8 @@ dependencies:
     tags:
       - bitnami-common
     version: 2.x.x
-description: Wavefront Storage Adapter is a Prometheus integration to transfer metrics from Prometheus to Wavefront. It lets you save Prometheus data in Wavefront without changing your existing Prometheus setup.
+deprecated: true
+description: DEPRECATED Wavefront Storage Adapter is a Prometheus integration to transfer metrics from Prometheus to Wavefront. It lets you save Prometheus data in Wavefront without changing your existing Prometheus setup.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/wavefront-prometheus-storage-adapter/img/wavefront-prometheus-storage-adapter-stack-220x234.png
 keywords:
@@ -23,10 +24,7 @@ keywords:
   - monitoring
   - observability
   - wavefront
-maintainers:
-  - name: VMware, Inc.
-    url: https://github.com/bitnami/charts
-name: wavefront-prometheus-storage-adapter
+maintainers: []
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/wavefront-prometheus-storage-adapter
-version: 2.3.2
+version: 2.3.3
