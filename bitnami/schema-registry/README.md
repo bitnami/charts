@@ -232,7 +232,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalKafka.auth.jaas.password`       | Password for SASL authentication                                                                                              | `""`                             |
 | `externalKafka.auth.jaas.existingSecret` | Name of the existing secret containing a password for SASL authentication (under the key named "client-passwords")            | `""`                             |
 
-
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
