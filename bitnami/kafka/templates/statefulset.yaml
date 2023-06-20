@@ -10,7 +10,7 @@ apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
   name: {{ include "common.names.fullname" . }}
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" $ | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: kafka
     {{- if .Values.commonLabels }}

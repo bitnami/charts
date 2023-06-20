@@ -4,7 +4,7 @@ kind: Job
 apiVersion: batch/v1
 metadata:
   name: {{ printf "%s-provisioning" (include "common.names.fullname" .) }}
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" $ | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: kafka-provisioning
     {{- if .Values.commonLabels }}
