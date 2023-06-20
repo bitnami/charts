@@ -45,5 +45,5 @@ spec:
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: ruler
-      {{- include "thanos.servicemonitor.matchLabels" . | nindent 6 -}}
+      {{- include "thanos.servicemonitor.selector" . | nindent 6 -}}
 {{- end }}
