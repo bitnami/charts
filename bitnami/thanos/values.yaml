@@ -498,6 +498,9 @@ query:
     ## Denotes if this Service desires to route external traffic to node-local or cluster-wide endpoints
     ##
     externalTrafficPolicy: Cluster
+    ## @param query.service.labels Labels for Thanos Query service
+    ##
+    labels: {}
     ## @param query.service.annotations Annotations for Thanos Query service
     ##
     annotations: {}
@@ -1532,6 +1535,9 @@ bucketweb:
     ## @param bucketweb.service.externalTrafficPolicy Thanos Bucket Web service externalTrafficPolicy
     ##
     externalTrafficPolicy: Cluster
+    ## @param bucketweb.service.labels Extra labels for Thanos Bucket Web service
+    ##
+    labels: {}
     ## @param bucketweb.service.annotations Annotations for Thanos Bucket Web service
     ##
     annotations: {}
@@ -1972,6 +1978,9 @@ compactor:
     ## Denotes if this Service desires to route external traffic to node-local or cluster-wide endpoints
     ##
     externalTrafficPolicy: Cluster
+    ## @param compactor.service.labels Labels for Thanos Compactor service
+    ##
+    labels: {}
     ## @param compactor.service.annotations Annotations for Thanos Compactor service
     ##
     annotations: {}
@@ -2429,6 +2438,9 @@ storegateway:
     ## Denotes if this Service desires to route external traffic to node-local or cluster-wide endpoints
     ##
     externalTrafficPolicy: Cluster
+    ## @param storegateway.service.labels Extra labels for Thanos Store Gateway service
+    ##
+    labels: {}
     ## @param storegateway.service.annotations Annotations for Thanos Store Gateway service
     ##
     annotations: {}
@@ -3063,6 +3075,9 @@ ruler:
     ## Denotes if this Service desires to route external traffic to node-local or cluster-wide endpoints
     ##
     externalTrafficPolicy: Cluster
+    ## @param ruler.service.labels Extra labels for Thanos Ruler service
+    ##
+    labels: {}
     ## @param ruler.service.annotations Annotations for Thanos Ruler service
     ##
     annotations: {}
@@ -3562,6 +3577,9 @@ receive:
     ## Denotes if this Service desires to route external traffic to node-local or cluster-wide endpoints
     ##
     externalTrafficPolicy: Cluster
+    ## @param receive.service.labels Extra labels for Thanos Receive service
+    ##
+    labels: {}
     ## @param receive.service.annotations Annotations for Thanos Receive service
     ##
     annotations: {}
