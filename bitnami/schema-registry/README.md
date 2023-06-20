@@ -156,8 +156,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `customLivenessProbe`                | Custom livenessProbe that overrides the default one                                                                      | `{}`            |
 | `customReadinessProbe`               | Custom readinessProbe that overrides the default one                                                                     | `{}`            |
 | `customStartupProbe`                 | Custom startupProbe that overrides the default one                                                                       | `{}`            |
-| `extraVolumes`                       | Optionally specify extra list of additional volumes for schema-registry pods                                                  | `[]`            |
-| `extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for schema-registry container(s)                                     | `[]`            |
+| `extraVolumes`                       | Optionally specify extra list of additional volumes for schema-registry pods                                             | `[]`            |
+| `extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for schema-registry container(s)                                | `[]`            |
 | `initContainers`                     | Add additional init containers to the Schema Registry pods.                                                              | `[]`            |
 | `sidecars`                           | Add additional sidecar containers to the Schema Registry pods.                                                           | `[]`            |
 | `pdb.create`                         | Enable/disable a Pod Disruption Budget creation                                                                          | `false`         |
