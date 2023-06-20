@@ -114,7 +114,9 @@ image:
   ##
   pullSecrets: []
 ## @param extraArgs Additional command line arguments to pass to kube-state-metrics
-##
+## Example:
+## extraArgs:
+##    metric-labels-allowlist: pods=[*]
 extraArgs: {}
 ## @param command Override default container command (useful when using custom images)
 ##

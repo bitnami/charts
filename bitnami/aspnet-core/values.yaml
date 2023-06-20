@@ -721,6 +721,9 @@ serviceAccount:
   ## @param serviceAccount.annotations Additional custom annotations for the ServiceAccount
   ##
   annotations: {}
+  ## @param serviceAccount.extraLabels Additional labels for the ServiceAccount
+  ##
+  extraLabels: {}
   ## @param serviceAccount.automountServiceAccountToken Automount service account token
   ##
   automountServiceAccountToken: true
