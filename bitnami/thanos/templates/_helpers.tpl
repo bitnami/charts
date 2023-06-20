@@ -463,7 +463,7 @@ prometheus-operator/monitor: 'true'
 Labels to use on serviceMonitor.spec.selector
 */}}
 {{- define "thanos.servicemonitor.selector" -}}
-{{- include "thanos.servicemonitor.label $ }}
+{{- include "thanos.servicemonitor.label" $ }}
 {{- if .Values.metrics.serviceMonitor.selector -}}
 {{- include "common.tplvalues.render" (dict "value" .Values.metrics.serviceMonitor.selector "context" $)}}
 {{- end -}}
