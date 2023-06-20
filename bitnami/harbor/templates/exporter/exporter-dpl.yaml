@@ -115,7 +115,6 @@ spec:
                   name: {{ printf "%s-envvars" (include "harbor.core" .) }}
                   {{- end }}
                   key: HARBOR_ADMIN_PASSWORD
-                {{- end }}
             {{- if .Values.exporter.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.exporter.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
