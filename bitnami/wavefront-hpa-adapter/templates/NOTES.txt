@@ -1,6 +1,4 @@
-This Helm chart is deprecated
-
-The upstream project has been discontinued and no new features.
+This Helm chart is deprecated on our side and will not receive new updates.
 
 CHART NAME: {{ .Chart.Name }}
 CHART VERSION: {{ .Chart.Version }}
