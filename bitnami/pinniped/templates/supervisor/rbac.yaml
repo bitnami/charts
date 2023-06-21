@@ -3,7 +3,6 @@ apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
   name: {{ template "pinniped.supervisor.fullname" . }}
-  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/part-of: pinniped
     app.kubernetes.io/component: supervisor
@@ -132,7 +131,6 @@ kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: {{ template "pinniped.supervisor.fullname" . }}
-  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/part-of: pinniped
     app.kubernetes.io/component: supervisor
@@ -145,7 +143,6 @@ metadata:
 subjects:
   - kind: ServiceAccount
     name: {{ template "pinniped.supervisor.fullname" . }}
-    namespace: {{ include "common.names.namespace" . | quote }}
 roleRef:
   kind: Role
   name: {{ template "pinniped.supervisor.fullname" . }}
@@ -156,7 +153,6 @@ kind: RoleBinding
 apiVersion: rbac.authorization.k8s.io/v1
 metadata:
   name: {{ printf "%s-%s" (include "pinniped.supervisor.fullname.namespace" .) "extension-apiserver-authentication-reader" | trunc 63 | trimSuffix "-" }}
-  namespace: kube-system
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/part-of: pinniped
     app.kubernetes.io/component: supervisor
@@ -169,7 +165,6 @@ metadata:
 subjects:
   - kind: ServiceAccount
     name: {{ template "pinniped.supervisor.serviceAccountName" . }}
-    namespace: {{ include "common.names.namespace" . | quote }}
 roleRef:
   kind: Role
   name: extension-apiserver-authentication-reader
@@ -191,7 +186,6 @@ metadata:
 subjects:
   - kind: ServiceAccount
     name: {{ template "pinniped.supervisor.serviceAccountName" . }}
-    namespace: {{ include "common.names.namespace" . | quote }}
 roleRef:
   kind: ClusterRole
   name: system:auth-delegator
@@ -264,7 +258,6 @@ metadata:
 subjects:
   - kind: ServiceAccount
     name: {{ template "pinniped.supervisor.serviceAccountName" . }}
-    namespace: {{ include "common.names.namespace" . | quote }}
 roleRef:
   kind: ClusterRole
   name: {{ printf "%s-%s" (include "pinniped.supervisor.fullname.namespace" .) "aggregated-api-server" | trunc 63 | trimSuffix "-" }}
