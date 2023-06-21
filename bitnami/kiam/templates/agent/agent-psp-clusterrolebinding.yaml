@@ -19,4 +19,5 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: {{ template "kiam.agent.serviceAccountName" . }}
+    namespace: {{ .Release.Namespace | quote }}
 {{- end }}
