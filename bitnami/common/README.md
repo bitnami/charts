@@ -39,7 +39,6 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 
 ## Parameters
 
-## Special input schemas
 
 ### ImageRoot
 
