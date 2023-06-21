@@ -3,7 +3,6 @@ apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: Role
 metadata:
   name: {{ printf "%s-dynamic-serving" (include "certmanager.webhook.fullname" .) | trunc 63 | trimSuffix "-" }}
-  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: webhook
     {{- if .Values.commonLabels }}
@@ -26,7 +25,6 @@ apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: RoleBinding
 metadata:
   name: {{ printf "%s-dynamic-serving" (include "certmanager.webhook.fullname" .) | trunc 63 | trimSuffix "-" }}
-  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: webhook
     {{- if .Values.commonLabels }}
@@ -43,7 +41,6 @@ subjects:
 - apiGroup: ""
   kind: ServiceAccount
   name: {{ template "certmanager.webhook.serviceAccountName" . }}
-  namespace: {{ .Release.Namespace | quote }}
 ---
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
@@ -82,5 +79,4 @@ subjects:
 - apiGroup: ""
   kind: ServiceAccount
   name: {{ template "certmanager.webhook.serviceAccountName" . }}
-  namespace: {{ .Release.Namespace | quote }}
 {{- end -}}

@@ -3,7 +3,6 @@ apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: Role
 metadata:
   name: {{ printf "%s-leader-election" (include "certmanager.cainjector.fullname" .) | trunc 63 | trimSuffix "-" }}
-  namespace: {{ .Values.leaderElection.namespace }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: cainjector
     {{- if .Values.commonLabels }}
@@ -32,7 +31,6 @@ apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: RoleBinding
 metadata:
   name: {{ printf "%s-leader-election" (include "certmanager.cainjector.fullname" .) | trunc 63 | trimSuffix "-" }}
-  namespace: {{ .Values.leaderElection.namespace }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: cainjector
     {{- if .Values.commonLabels }}
@@ -48,7 +46,6 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: {{ template "certmanager.cainjector.serviceAccountName" . }}
-    namespace: {{ .Release.Namespace | quote }}
 ---
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
@@ -103,6 +100,5 @@ roleRef:
   name: {{ include "certmanager.cainjector.fullname" . }}
 subjects:
   - name: {{ template "certmanager.cainjector.fullname" . }}
-    namespace: {{ .Release.Namespace | quote }}
     kind: ServiceAccount
 {{- end -}}

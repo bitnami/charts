@@ -3,7 +3,6 @@ apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: Role
 metadata:
   name: {{ printf "%s-leader-election" (include "certmanager.controller.fullname" .) | trunc 63 | trimSuffix "-" }}
-  namespace: {{ .Values.leaderElection.namespace }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: controller
     {{- if .Values.commonLabels }}
@@ -32,7 +31,6 @@ apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: RoleBinding
 metadata:
   name: {{ printf "%s-leader-election" (include "certmanager.controller.fullname" .) | trunc 63 | trimSuffix "-" }}
-  namespace: {{ .Values.leaderElection.namespace }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: controller
     {{- if .Values.commonLabels }}
@@ -49,7 +47,6 @@ subjects:
   - apiGroup: ""
     kind: ServiceAccount
     name: {{ template "certmanager.controller.serviceAccountName" . }}
-    namespace: {{ .Release.Namespace | quote }}
 ---
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
@@ -269,7 +266,6 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: {{ template "certmanager.controller.serviceAccountName" . }}
-    namespace: {{ .Release.Namespace | quote }}
 ---
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRoleBinding
@@ -290,7 +286,6 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: {{ template "certmanager.controller.serviceAccountName" . }}
-    namespace: {{ .Release.Namespace | quote }}
 ---
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRoleBinding
@@ -311,7 +306,6 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: {{ template "certmanager.controller.serviceAccountName" . }}
-    namespace: {{ .Release.Namespace | quote }}
 ---
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRoleBinding
@@ -332,7 +326,6 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: {{ template "certmanager.controller.serviceAccountName" . }}
-    namespace: {{ .Release.Namespace | quote }}
 ---
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRoleBinding
@@ -353,7 +346,6 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: {{ template "certmanager.controller.serviceAccountName" . }}
-    namespace: {{ .Release.Namespace | quote }}
 ---
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRoleBinding
@@ -374,7 +366,6 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: {{ template "certmanager.controller.serviceAccountName" . }}
-    namespace: {{ .Release.Namespace | quote }}
 ---
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
@@ -452,6 +443,5 @@ roleRef:
   name: {{ printf "%s-controller-approve" (include "certmanager.controller.fullname" .) | trunc 63 | trimSuffix "-" }}
 subjects:
   - kind: ServiceAccount
-    namespace: {{ .Release.Namespace | quote }}
     name: {{ template "certmanager.controller.serviceAccountName" . }}
 {{- end -}}
