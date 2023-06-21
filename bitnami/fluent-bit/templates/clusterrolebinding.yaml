@@ -3,7 +3,6 @@ apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRoleBinding
 metadata:
   name: {{ include "common.names.fullname" . }}
-  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/part-of: fluent-bit
     {{- if .Values.commonLabels }}
@@ -19,5 +18,4 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: {{ include "fluent-bit.serviceAccountName" . }}
-    namespace: {{ include "common.names.namespace" . | quote }}
 {{- end -}}
