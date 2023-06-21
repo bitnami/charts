@@ -3,7 +3,6 @@ apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: Role
 metadata:
   name: {{ include "common.names.fullname" . }}
-  namespace: {{ .Release.Namespace }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: server
     {{- if .Values.commonLabels }}
@@ -80,7 +79,6 @@ apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: RoleBinding
 metadata:
   name: {{ template "common.names.fullname" . }}
-  namespace: {{ .Release.Namespace }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: server
     {{- if .Values.commonLabels }}
@@ -96,7 +94,6 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: {{ include "kong.ingressController.serviceAccountName" . }}
-    namespace: {{ .Release.Namespace }}
 ---
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
@@ -473,5 +470,4 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: {{ include "kong.ingressController.serviceAccountName" . }}
-    namespace: {{ .Release.Namespace }}
 {{- end }}
