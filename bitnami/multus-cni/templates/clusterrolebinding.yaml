@@ -17,4 +17,5 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: {{ include "multus-cni.serviceAccountName" . }}
+    namespace: {{ include "common.names.namespace" . | quote }}
 {{- end }}
