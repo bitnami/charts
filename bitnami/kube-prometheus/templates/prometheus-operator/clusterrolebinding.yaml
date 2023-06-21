@@ -17,4 +17,5 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: {{ template "kube-prometheus.operator.serviceAccountName" . }}
+    namespace: {{ include "common.names.namespace" . | quote }}
 {{- end }}
