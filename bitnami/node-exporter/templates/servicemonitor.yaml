@@ -47,4 +47,7 @@ spec:
   namespaceSelector:
     matchNames:
     - {{ include "common.names.namespace" . }}
+  {{- if .Values.serviceMonitor.attachMetadata }}
+  attachMetadata: {{- toYaml .Values.serviceMonitor.attachMetadata | nindent 4 }}
+  {{- end }}
 {{- end }}
