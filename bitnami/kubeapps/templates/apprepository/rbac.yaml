@@ -4,7 +4,6 @@ apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: Role
 metadata:
   name: {{ template "kubeapps.apprepository.fullname" . }}
-  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: apprepository
     {{- if .Values.commonLabels }}
@@ -53,7 +52,6 @@ apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: RoleBinding
 metadata:
   name: {{ template "kubeapps.apprepository.fullname" . }}
-  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: apprepository
     {{- if .Values.commonLabels }}
@@ -69,14 +67,12 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: {{ template "kubeapps.apprepository.serviceAccountName" . }}
-    namespace: {{ .Release.Namespace }}
 ---
 # Define role, but no binding, so users can be bound to this role
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: Role
 metadata:
   name: {{ printf "%s-repositories-read" .Release.Name }}
-  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: apprepository
     {{- if .Values.commonLabels }}
@@ -99,7 +95,6 @@ apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: Role
 metadata:
   name: {{ printf "%s-repositories-write" .Release.Name }}
-  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: apprepository
     {{- if .Values.commonLabels }}
@@ -168,7 +163,6 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: {{ template "kubeapps.apprepository.serviceAccountName" . }}
-    namespace: {{ .Release.Namespace }}
 ---
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
@@ -222,7 +216,6 @@ apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: RoleBinding
 metadata:
   name: {{ printf "kubeapps:%s:global-repos-read" .Release.Namespace | quote }}
-  namespace: {{ include "kubeapps.helmGlobalPackagingNamespace" . | quote }}
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
