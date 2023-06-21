@@ -8,7 +8,6 @@ metadata:
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
   name: {{ template "common.names.fullname" . }}-server-read
-  namespace: {{ .Release.Namespace | quote }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -19,5 +18,4 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: {{ template "kiam.server.serviceAccountName" . }}
-    namespace: {{ .Release.Namespace | quote }}
 {{- end }}
