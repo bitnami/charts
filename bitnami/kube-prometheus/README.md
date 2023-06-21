@@ -666,6 +666,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `kubeApiServer.serviceMonitor.jobLabel`                   | The name of the label on the target service to use as the job name in prometheus.                                               | `component`   |
 | `kubeApiServer.serviceMonitor.metricRelabelings`          | Metric relabeling                                                                                                               | `[]`          |
 | `kubeApiServer.serviceMonitor.relabelings`                | Relabel configs                                                                                                                 | `[]`          |
+| `kubeApiServer.serviceMonitor.labels`                     | Extra labels for the ServiceMonitor                                                                                             | `{}`          |
+| `kubeApiServer.serviceMonitor.annotations`                | Extra annotations for the ServiceMonitor                                                                                        | `{}`          |
 | `kubeControllerManager.enabled`                           | Create a ServiceMonitor to scrape kube-controller-manager service                                                               | `true`        |
 | `kubeControllerManager.endpoints`                         | If your kube controller manager is not deployed as a pod, specify IPs it can be found on                                        | `[]`          |
 | `kubeControllerManager.namespace`                         | Namespace where kube-controller-manager service is deployed.                                                                    | `kube-system` |
@@ -681,6 +683,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `kubeControllerManager.serviceMonitor.serverName`         | Name of the server to use when validating TLS certificate                                                                       | `""`          |
 | `kubeControllerManager.serviceMonitor.metricRelabelings`  | Metric relabeling                                                                                                               | `[]`          |
 | `kubeControllerManager.serviceMonitor.relabelings`        | Relabel configs                                                                                                                 | `[]`          |
+| `kubeControllerManager.serviceMonitor.labels`             | Extra labels for the ServiceMonitor                                                                                             | `{}`          |
+| `kubeControllerManager.serviceMonitor.annotations`        | Extra annotations for the ServiceMonitor                                                                                        | `{}`          |
 | `kubeScheduler.enabled`                                   | Create a ServiceMonitor to scrape kube-scheduler service                                                                        | `true`        |
 | `kubeScheduler.endpoints`                                 | If your kube scheduler is not deployed as a pod, specify IPs it can be found on                                                 | `[]`          |
 | `kubeScheduler.namespace`                                 | Namespace where kube-scheduler service is deployed.                                                                             | `kube-system` |
@@ -709,6 +713,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `coreDns.serviceMonitor.jobLabel`                         | The name of the label on the target service to use as the job name in prometheus.                                               | `k8s-app`     |
 | `coreDns.serviceMonitor.metricRelabelings`                | Metric relabel configs to apply to samples before ingestion.                                                                    | `[]`          |
 | `coreDns.serviceMonitor.relabelings`                      | Relabel configs to apply to samples before ingestion.                                                                           | `[]`          |
+| `coreDns.serviceMonitor.labels`                           | Extra labels for the ServiceMonitor                                                                                             | `{}`          |
+| `coreDns.serviceMonitor.annotations`                      | Extra annotations for the ServiceMonitor                                                                                        | `{}`          |
 | `kubeProxy.enabled`                                       | Create a ServiceMonitor to scrape the kube-proxy Service                                                                        | `true`        |
 | `kubeProxy.endpoints`                                     | If your kube-proxy is not deployed as a pod, specify IPs it can be found on                                                     | `[]`          |
 | `kubeProxy.namespace`                                     | Namespace where kube-proxy service is deployed.                                                                                 | `kube-system` |

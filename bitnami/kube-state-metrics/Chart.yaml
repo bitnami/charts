@@ -22,4 +22,4 @@ maintainers:
 name: kube-state-metrics
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/kube-state-metrics
-version: 3.5.4
+version: 3.5.5
