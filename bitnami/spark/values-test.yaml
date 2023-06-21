@@ -1,0 +1,26 @@
+worker:
+  tolerations:
+    - key: "nodeType"
+      operator: "Equal"
+      value: "etl"
+      effect: "NoSchedule"
+  nodeAffinity:
+    requiredDuringSchedulingIgnoredDuringExecution:
+      nodeSelectorTerms:
+      - matchExpressions:
+        - key: nodetype
+          operator: In
+          values:
+          - etl
+  extraVolumeMounts:
+    - name: spark-data
+      mountPath: '/opt/bitnami/spark/work'
+  extraVolumeClaimTemplates:
+  - metadata:
+      name: spark-data
+    spec:
+      accessModes: [ "ReadWriteOnce" ]
+      storageClassName: managed-csi
+      resources:
+        requests:
+          storage: 1Gi
