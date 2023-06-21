@@ -17,4 +17,5 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: {{ include "kubernetes-event-exporter.serviceAccountName" . }}
+    namespace: {{ .Release.Namespace | quote }}
 {{- end -}}
