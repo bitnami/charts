@@ -160,6 +160,18 @@ Create the name of the service account to use
 {{/*
 Create the name of the service account to use
 */}}
+{{- define "jupyterhub.proxyServiceAccountName" -}}
+{{- if .Values.proxy.serviceAccount.create -}}
+    {{ default (printf "%s-proxy" (include "common.names.fullname" .)) .Values.proxy.serviceAccount.name }}
+{{- else -}}
+    {{ default "default" .Values.proxy.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+
+{{/*
+Create the name of the service account to use
+*/}}
 {{- define "jupyterhub.singleuserServiceAccountName" -}}
 {{- if .Values.singleuser.serviceAccount.create -}}
     {{ default (printf "%s-singleuser" (include "common.names.fullname" .)) .Values.singleuser.serviceAccount.name }}
