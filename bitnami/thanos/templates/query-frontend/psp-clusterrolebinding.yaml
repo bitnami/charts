@@ -19,4 +19,5 @@ roleRef:
 subjects:
   - kind: ServiceAccount
     name: {{ include "thanos.serviceAccountName" (dict "component" "query-frontend" "context" $) }}
+    namespace: {{ .Release.Namespace | quote }}
 {{- end }}
