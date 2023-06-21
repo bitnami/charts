@@ -90,7 +90,7 @@ helm install my-release oci://registry-1.docker.io/bitnamicharts/redmine --set d
 | ----------------------- | ------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`        | Redmine image registry                                                                                  | `docker.io`           |
 | `image.repository`      | Redmine image repository                                                                                | `bitnami/redmine`     |
-| `image.tag`             | Redmine image tag (immutable tags are recommended)                                                      | `5.0.5-debian-11-r23` |
+| `image.tag`             | Redmine image tag (immutable tags are recommended)                                                      | `5.0.5-debian-11-r32` |
 | `image.digest`          | Redmine image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
 | `image.pullPolicy`      | Redmine image pull policy                                                                               | `IfNotPresent`        |
 | `image.pullSecrets`     | Redmine image pull secrets                                                                              | `[]`                  |
@@ -336,7 +336,7 @@ helm install my-release oci://registry-1.docker.io/bitnamicharts/redmine --set d
 | `certificates.customCA`                              | Defines a list of secrets to import into the container trust store                                      | `[]`                                     |
 | `certificates.image.registry`                        | Redmine image registry                                                                                  | `docker.io`                              |
 | `certificates.image.repository`                      | Redmine image repository                                                                                | `bitnami/bitnami-shell`                  |
-| `certificates.image.tag`                             | Redmine image tag (immutable tags are recommended)                                                      | `11-debian-11-r118`                      |
+| `certificates.image.tag`                             | Redmine image tag (immutable tags are recommended)                                                      | `11-debian-11-r127`                      |
 | `certificates.image.digest`                          | Redmine image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                                     |
 | `certificates.image.pullPolicy`                      | Redmine image pull policy                                                                               | `IfNotPresent`                           |
 | `certificates.image.pullSecrets`                     | Redmine image pull secrets                                                                              | `[]`                                     |
@@ -565,14 +565,6 @@ This major updates the PostgreSQL subchart to its newest major, 12.0.0. [Here](h
 ### To any previous version
 
 Refer to the [chart documentation for more information about how to upgrade from previous releases](https://docs.bitnami.com/kubernetes/apps/redmine/administration/upgrade/).
-
-## Community supported solution
-
-Please, note this Helm chart is a community-supported solution. This means that the Bitnami team is not actively working on new features/improvements nor providing support through GitHub Issues for this Helm chart. Any new issue will stay open for 20 days to allow the community to contribute, after 15 days without activity the issue will be marked as stale being closed after 5 days.
-
-The Bitnami team will review any PR that is created, feel free to create a PR if you find any issue or want to implement a new feature.
-
-New versions are not going to be affected. Once a new version is released in the upstream project, the Bitnami container image will be updated to use the latest version.
 
 ## License
 

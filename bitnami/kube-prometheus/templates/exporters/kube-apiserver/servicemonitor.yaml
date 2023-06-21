@@ -6,19 +6,21 @@ metadata:
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: apiserver
-    {{- if .Values.kubeProxy.serviceMonitor.labels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.kubeProxy.serviceMonitor.labels "context" $ ) | nindent 4 }}
+    {{- if .Values.kubeApiServer.serviceMonitor.labels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.kubeApiServer.serviceMonitor.labels "context" $ ) | nindent 4 }}
     {{- end }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
+  {{- if or .Values.commonAnnotations .Values.kubeApiServer.serviceMonitor.annotations }}
   annotations:
     {{- if .Values.commonAnnotations }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
     {{- end }}
-    {{- if .Values.kubeProxy.serviceMonitor.annotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.kubeProxy.serviceMonitor.annotations "context" $ ) | nindent 4 }}
+    {{- if .Values.kubeApiServer.serviceMonitor.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.kubeApiServer.serviceMonitor.annotations "context" $ ) | nindent 4 }}
     {{- end }}
+  {{- end }}
 spec:
   jobLabel: {{ .Values.kubeApiServer.serviceMonitor.jobLabel }}
   selector:

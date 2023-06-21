@@ -79,7 +79,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------------- | ------------------------------------------------------------------------------------------------------------- | ----------------------- |
 | `image.registry`              | JasperReports image registry                                                                                  | `docker.io`             |
 | `image.repository`            | JasperReports image repository                                                                                | `bitnami/jasperreports` |
-| `image.tag`                   | JasperReports image tag (immutable tags are recommended)                                                      | `8.2.0-debian-11-r6`    |
+| `image.tag`                   | JasperReports image tag (immutable tags are recommended)                                                      | `8.2.0-debian-11-r15`   |
 | `image.digest`                | JasperReports image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `image.pullPolicy`            | JasperReports image pull policy                                                                               | `IfNotPresent`          |
 | `image.pullSecrets`           | Specify docker-registry secret names as an array                                                              | `[]`                    |
@@ -473,14 +473,6 @@ Use the workaround below to upgrade from versions previous to 3.0.0. The followi
 kubectl patch deployment jasperreports-jasperreports --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
 kubectl delete statefulset jasperreports-mariadb --cascade=false
 ```
-
-## Community supported solution
-
-Please, note this Helm chart is a community-supported solution. This means that the Bitnami team is not actively working on new features/improvements nor providing support through GitHub Issues for this Helm chart. Any new issue will stay open for 20 days to allow the community to contribute, after 15 days without activity the issue will be marked as stale being closed after 5 days.
-
-The Bitnami team will review any PR that is created, feel free to create a PR if you find any issue or want to implement a new feature.
-
-New versions are not going to be affected. Once a new version is released in the upstream project, the Bitnami container image will be updated to use the latest version.
 
 ## License
 

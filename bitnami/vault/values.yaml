@@ -752,7 +752,7 @@ csiProvider:
   ##
   config: |
     vault {
-        "address" = "http://{{ include "vault.server.fullname" }}:{{ .Values.server.service.general.ports.http }}
+        "address" = "http://{{ include "vault.server.fullname" . }}:{{ .Values.server.service.general.ports.http }}
     }
 
     cache {}
