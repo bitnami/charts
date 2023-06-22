@@ -6,6 +6,10 @@ Wavefront HPA Adapter for Kubernetes is a Kubernetes Horizontal Pod Autoscaler a
 
 [Overview of Wavefront HPA Adapter for Kubernetes](https://github.com/wavefrontHQ/wavefront-kubernetes-adapter)
 
+## This Helm chart is deprecated
+
+This Helm chart is deprecated on our side and will not receive new updates.
+
 ## TL;DR
 
 ```console

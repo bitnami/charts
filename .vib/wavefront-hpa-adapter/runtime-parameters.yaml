@@ -12,7 +12,7 @@ rbac:
 apiService:
   create: true
 extraDeploy:
-- apiVersion: autoscaling/v2beta1
+- apiVersion: autoscaling/v2
   kind: HorizontalPodAutoscaler
   metadata:
     name: vib-hpa-custom-metrics
@@ -22,8 +22,11 @@ extraDeploy:
     metrics:
     - type: External
       external:
-        metricName: vib.vm.cpu
-        targetAverageValue: 1800m
+        metric:
+          name: vib.vm.cpu
+        target:
+          type: AverageValue
+          averageValue: 1800m
     scaleTargetRef:
       apiVersion: apps/v1
       kind: Deployment
