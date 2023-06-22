@@ -1,3 +1,6 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
 http:
   http://apisix-data-plane:{{ .Vars.dataPlane.service.ports.http }}:
     # The proxy does respond but the route is not registered

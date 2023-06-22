@@ -1,3 +1,6 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
 {{- if .Values.grafana.enabled }}
 apiVersion: integreatly.org/v1alpha1
 kind: Grafana

@@ -1,3 +1,6 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
 ghostUsername: bitnamiTest
 ghostPassword: Complicated123!4
 ghostEmail: vim-tests@example.com

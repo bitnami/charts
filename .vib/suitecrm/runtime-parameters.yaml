@@ -1,3 +1,6 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
 suitecrmUsername: test_user
 suitecrmPassword: ComplicatedPassword123!4
 suitecrmHost: vmware-suitecrm.my
