@@ -121,6 +121,9 @@ spec:
           args:
             - -target=ruler
             - -config.file={{ .Values.loki.dataDir }}/conf/loki.yaml
+          {{- if .Values.ruler.extraArgs }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.ruler.extraArgs "context" $) | nindent 12 }}
+          {{- end }}
           {{- end }}
           {{- if .Values.ruler.extraEnvVars }}
           env: {{- include "common.tplvalues.render" (dict "value" .Values.ruler.extraEnvVars "context" $) | nindent 12 }}

@@ -93,6 +93,9 @@ spec:
           args:
             - -target=distributor
             - -config.file={{ .Values.loki.dataDir }}/conf/loki.yaml
+          {{- if .Values.distributor.extraArgs }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.distributor.extraArgs "context" $) | nindent 12 }}
+          {{- end }}
           {{- end }}
           {{- if .Values.distributor.extraEnvVars }}
           env: {{- include "common.tplvalues.render" (dict "value" .Values.distributor.extraEnvVars "context" $) | nindent 12 }}
