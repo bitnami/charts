@@ -12,7 +12,7 @@ rbac:
 apiService:
   create: true
 extraDeploy:
-- apiVersion: autoscaling/v2beta1
+- apiVersion: autoscaling/v2
   kind: HorizontalPodAutoscaler
   metadata:
     name: vib-hpa-custom-metrics
