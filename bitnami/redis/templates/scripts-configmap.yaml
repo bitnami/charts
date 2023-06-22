@@ -189,8 +189,8 @@ data:
     fi
 
     {{- if .Values.replica.externalMaster.enabled }}
-      REDIS_MASTER_HOST={{ .Values.replica.externalMaster.host | quote }}
-      REDIS_MASTER_PORT_NUMBER={{ .Values.replica.externalMaster.port | quote }}
+    REDIS_MASTER_HOST={{ .Values.replica.externalMaster.host | quote }}
+    REDIS_MASTER_PORT_NUMBER={{ .Values.replica.externalMaster.port | quote }}
     {{- end }}
 
     if [[ -f /opt/bitnami/redis/mounted-etc/replica.conf ]];then
@@ -337,11 +337,11 @@ data:
     REDISPORT=$(get_port "$HOSTNAME" "REDIS")
 
     {{- if .Values.sentinel.externalMaster.enabled }}
-        REDIS_SERVICE={{ .Values.sentinel.externalMaster.host | quote }}
-        SENTINEL_SERVICE_PORT={{ .Values.sentinel.externalMaster.port | quote }}
+    REDIS_SERVICE={{ .Values.sentinel.externalMaster.host | quote }}
+    SENTINEL_SERVICE_PORT={{ .Values.sentinel.externalMaster.port | quote }}
     {{- else }}
-        REDIS_SERVICE="{{ template "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
-        SENTINEL_SERVICE_PORT=$(get_port "{{ include "common.names.fullname" . }}" "SENTINEL")
+    REDIS_SERVICE="{{ template "common.names.fullname" . }}.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
+    SENTINEL_SERVICE_PORT=$(get_port "{{ include "common.names.fullname" . }}" "SENTINEL")
     {{- end }}
 
     [[ -f $REDIS_PASSWORD_FILE ]] && export REDIS_PASSWORD="$(< "${REDIS_PASSWORD_FILE}")"
