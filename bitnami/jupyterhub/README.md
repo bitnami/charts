@@ -275,6 +275,15 @@ The command removes all the Kubernetes components associated with the chart and 
 | `proxy.pdb.minAvailable`                      | Set minimum available proxy instances                                                                                    | `""`                              |
 | `proxy.pdb.maxUnavailable`                    | Set maximum available proxy instances                                                                                    | `""`                              |
 
+### Proxy RBAC Parameters
+
+| Name                                                | Description                                                            | Value  |
+| --------------------------------------------------- | ---------------------------------------------------------------------- | ------ |
+| `proxy.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                   | `true` |
+| `proxy.serviceAccount.name`                         | Override Hub service account name                                      | `""`   |
+| `proxy.serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created | `true` |
+| `proxy.serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                   | `{}`   |
+
 ### Proxy Traffic Exposure Parameters
 
 | Name                                             | Description                                                                                                                      | Value                    |
