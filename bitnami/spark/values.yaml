@@ -277,6 +277,9 @@ master:
   ## @param master.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the master container(s)
   ##
   extraVolumeMounts: []
+  ## @param master.extraVolumeClaimTemplates Optionally specify extra list of volumesClaimTemplates for the Spark master statefulset
+  ##
+  extraVolumeClaimTemplates: []
   ## Container resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -558,6 +561,9 @@ worker:
   ## @param worker.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the master container(s)
   ##
   extraVolumeMounts: []
+  ## @param worker.extraVolumeClaimTemplates Optionally specify extra list of volumesClaimTemplates for the Spark worker statefulset
+  ##
+  extraVolumeClaimTemplates: []
   ## Container resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
