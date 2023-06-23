@@ -1,6 +1,3 @@
-# Copyright VMware, Inc.
-# SPDX-License-Identifier: APACHE-2.0
-
 mediawikiHost: vmware-mediawiki.my
 mediawikiUser: test_user
 mediawikiPassword: ComplicatedPassword123!4

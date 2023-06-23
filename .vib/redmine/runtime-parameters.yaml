@@ -1,6 +1,3 @@
-# Copyright VMware, Inc.
-# SPDX-License-Identifier: APACHE-2.0
-
 redmineUsername: bitnamiTest
 redminePassword: ComplicatedPassword123!4
 service:

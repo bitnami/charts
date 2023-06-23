@@ -1,6 +1,3 @@
-# Copyright VMware, Inc.
-# SPDX-License-Identifier: APACHE-2.0
-
 dbUser:
   user: test_cassandra
   password: ComplicatedPassword123!4

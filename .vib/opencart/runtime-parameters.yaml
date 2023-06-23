@@ -1,6 +1,3 @@
-# Copyright VMware, Inc.
-# SPDX-License-Identifier: APACHE-2.0
-
 opencartHost: vmware-opencart.my
 opencartUsername: opencartUser
 opencartPassword: Password123!4

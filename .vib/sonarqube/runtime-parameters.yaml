@@ -1,6 +1,3 @@
-# Copyright VMware, Inc.
-# SPDX-License-Identifier: APACHE-2.0
-
 sonarqubeUsername: test_user
 sonarqubePassword: ComplicatedPassword123!4
 service:
