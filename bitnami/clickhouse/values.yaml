@@ -429,6 +429,9 @@ args: []
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
 hostAliases: []
+## @param customShardLabel Extra label with shard number (useful for custom affinity rules)
+##
+customShardLabel: {}
 ## @param podLabels Extra labels for ClickHouse pods
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 ##
