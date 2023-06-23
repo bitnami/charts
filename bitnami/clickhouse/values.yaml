@@ -430,6 +430,9 @@ args: []
 ##
 hostAliases: []
 ## @param customShardLabel Extra label with shard number (useful for custom affinity rules)
+## Example:
+## customShardLabel:
+##   name: app.clickhouse/shard 
 ##
 customShardLabel: {}
 ## @param podLabels Extra labels for ClickHouse pods
