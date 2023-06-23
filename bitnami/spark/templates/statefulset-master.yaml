@@ -345,5 +345,5 @@ spec:
             defaultMode: 0755
         {{- end }}
   {{- if .Values.worker.extraVolumeClaimTemplates }}
-  volumeClaimTemplates: {{- include "common.tplvalues.render" (dict "value" .Values.worker.extraVolumeClaimTemplates "context" $) | nindent 8 }}
+  volumeClaimTemplates: {{- include "common.tplvalues.render" (dict "value" .Values.master.extraVolumeClaimTemplates "context" $) | nindent 8 }}
   {{- end }}
