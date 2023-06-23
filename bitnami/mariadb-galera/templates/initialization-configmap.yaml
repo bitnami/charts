@@ -1,5 +1,7 @@
-# Copyright VMware, Inc.
-# SPDX-License-Identifier: APACHE-2.0
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
 
 {{- if and (or (.Files.Glob "files/docker-entrypoint-initdb.d/*.{sh,sql,sql.gz}") .Values.initdbScripts) (not .Values.initdbScriptsConfigMap) }}
 apiVersion: v1

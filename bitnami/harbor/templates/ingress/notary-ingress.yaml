@@ -1,5 +1,7 @@
-# Copyright VMware, Inc.
-# SPDX-License-Identifier: APACHE-2.0
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
 
 {{- if and .Values.notary.enabled (eq .Values.exposureType "ingress") }}
 apiVersion: {{ template "common.capabilities.ingress.apiVersion" . }}

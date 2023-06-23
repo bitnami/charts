@@ -1,5 +1,7 @@
-# Copyright VMware, Inc.
-# SPDX-License-Identifier: APACHE-2.0
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
 
 {{- if and (eq .Values.exposureType "proxy") .Values.nginx.tls.enabled }}
 {{- $scheme := ternary "https" "http" .Values.internalTLS.enabled -}}

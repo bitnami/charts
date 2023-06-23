@@ -1,5 +1,7 @@
-# Copyright VMware, Inc.
-# SPDX-License-Identifier: APACHE-2.0
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
 
 {{- if and .Values.pgpool.initdbScripts (not .Values.pgpool.initdbScriptsCM) }}
 apiVersion: v1

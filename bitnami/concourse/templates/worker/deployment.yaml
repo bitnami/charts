@@ -1,5 +1,7 @@
-# Copyright VMware, Inc.
-# SPDX-License-Identifier: APACHE-2.0
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
 
 {{- if and .Values.worker.enabled (or (not .Values.web.enabled) (include "concourse.host" .)) }}
 {{- if eq .Values.worker.mode "deployment" }}

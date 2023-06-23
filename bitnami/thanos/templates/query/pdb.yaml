@@ -1,5 +1,7 @@
-# Copyright VMware, Inc.
-# SPDX-License-Identifier: APACHE-2.0
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
 
 {{- $query := (include "thanos.query.values" . | fromYaml) -}}
 {{- if and $query.enabled $query.pdb.create }}

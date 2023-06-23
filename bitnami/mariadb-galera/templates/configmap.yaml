@@ -1,5 +1,7 @@
-# Copyright VMware, Inc.
-# SPDX-License-Identifier: APACHE-2.0
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
 
 {{ if and (or (.Files.Glob "files/my.cnf") .Values.mariadbConfiguration) (not .Values.configurationConfigMap) }}
 apiVersion: v1

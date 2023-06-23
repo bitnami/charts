@@ -1,5 +1,7 @@
-# Copyright VMware, Inc.
-# SPDX-License-Identifier: APACHE-2.0
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
 
 {{- $scheme := ternary "https" "http" .Values.internalTLS.enabled -}}
 {{- $port := ternary .Values.core.containerPorts.https .Values.core.containerPorts.http .Values.internalTLS.enabled | int -}}

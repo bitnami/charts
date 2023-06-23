@@ -1,5 +1,7 @@
-# Copyright VMware, Inc.
-# SPDX-License-Identifier: APACHE-2.0
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
 
 {{- $replicaCount := int .Values.gateway.replicaCount }}
 {{- if and .Values.gateway.pdb.create (gt $replicaCount 1) }}

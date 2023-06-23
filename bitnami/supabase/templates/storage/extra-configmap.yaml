@@ -1,5 +1,7 @@
-# Copyright VMware, Inc.
-# SPDX-License-Identifier: APACHE-2.0
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
 
 {{- if and .Values.storage.enabled .Values.storage.extraConfig (not .Values.storage.extraConfigExistingConfigmap) }}
 apiVersion: v1

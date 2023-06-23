@@ -1,5 +1,7 @@
-# Copyright VMware, Inc.
-# SPDX-License-Identifier: APACHE-2.0
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
 
 {{- if and .Values.networkPolicy.enabled .Values.networkPolicy.ingressRules.backendOnlyAccessibleByFrontend }}
 apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}

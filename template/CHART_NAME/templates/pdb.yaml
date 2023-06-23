@@ -1,5 +1,7 @@
-# Copyright VMware, Inc.
-# SPDX-License-Identifier: APACHE-2.0
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
 
 {{- $replicaCount := int .Values.%%MAIN_OBJECT_BLOCK%%.replicaCount }}
 {{- if and .Values.%%MAIN_OBJECT_BLOCK%%.pdb.create (or (gt $replicaCount 1) .Values.%%MAIN_OBJECT_BLOCK%%.autoscaling.enabled) }}

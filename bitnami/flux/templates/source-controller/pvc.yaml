@@ -1,5 +1,7 @@
-# Copyright VMware, Inc.
-# SPDX-License-Identifier: APACHE-2.0
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
 
 {{- if and .Values.sourceController.enabled .Values.sourceController.persistence.enabled (not .Values.sourceController.persistence.existingClaim) }}
 kind: PersistentVolumeClaim

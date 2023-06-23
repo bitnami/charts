@@ -1,5 +1,7 @@
-# Copyright VMware, Inc.
-# SPDX-License-Identifier: APACHE-2.0
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
 
 {{- if and (include "mongodb.hidden.enabled" .) .Values.externalAccess.hidden.enabled }}
 {{- $fullName := include "mongodb.fullname" . }}
