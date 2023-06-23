@@ -102,7 +102,7 @@ roleRef:
   kind: ClusterRole
   name: {{ include "certmanager.cainjector.fullname" . }}
 subjects:
-  - name: {{ template "certmanager.cainjector.fullname" . }}
+  - name: {{ template "certmanager.cainjector.serviceAccountName" . }}
     namespace: {{ .Release.Namespace | quote }}
     kind: ServiceAccount
 {{- end -}}
