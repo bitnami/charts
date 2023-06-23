@@ -1,4 +1,6 @@
 #/bin/bash
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
 
 # Install required packages and download pinniped-cli
 install_packages -qq curl
