@@ -376,7 +376,7 @@ externalKafka.auth.jaas.user=myuser
 externalKafka.auth.jaas.password=mypassword
 ```
 
-Alternatively, you can use existing secret with a key "client-passwords":
+Alternatively, you can use an existing secret with a key "client-passwords":
 
 ```console
 kafka.enabled=false
