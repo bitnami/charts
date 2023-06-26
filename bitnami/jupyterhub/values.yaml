@@ -885,6 +885,27 @@ proxy:
     ##
     maxUnavailable: ""
 
+  ## @section Proxy RBAC Parameters
+
+  ## ServiceAccount parameters
+  ##
+  serviceAccount:
+    ## @param proxy.serviceAccount.create Specifies whether a ServiceAccount should be created
+    ##
+    create: true
+    ## @param proxy.serviceAccount.name Override Hub service account name
+    ## If not set and create is true, a name is generated using the fullname template
+    ##
+    name: ""
+    ## @param proxy.serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
+    ## Can be set to false if pods using this serviceAccount do not need to use K8s API
+    ##
+    automountServiceAccountToken: true
+    ## @param proxy.serviceAccount.annotations Additional custom annotations for the ServiceAccount
+    ##
+    annotations: {}
+
+
   ## @section Proxy Traffic Exposure Parameters
   ##
 
