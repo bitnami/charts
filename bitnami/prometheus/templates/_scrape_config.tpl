@@ -1,4 +1,9 @@
 {{/*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{/*
 Return the prometheus scrape configuration for kubernetes objects.
 Usage:
 {{ include "prometheus.scrape_config" (dict "component" "alertmanager" "context" $) }}

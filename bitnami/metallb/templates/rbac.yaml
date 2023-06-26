@@ -1,3 +1,8 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if and .Values.rbac.create (or .Values.controller.rbac.create .Values.speaker.rbac.create ) -}}
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: Role
