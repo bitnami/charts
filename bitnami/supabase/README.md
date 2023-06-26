@@ -23,6 +23,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 [Learn more about the default configuration of the chart](https://docs.bitnami.com/kubernetes/infrastructure/supabase/get-started/).
 
+Looking to use Supabase in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+
 ## Prerequisites
 
 - Kubernetes 1.19+

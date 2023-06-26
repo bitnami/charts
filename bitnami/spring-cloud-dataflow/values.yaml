@@ -987,10 +987,10 @@ deployer:
   tolerations: []
   ## @param deployer.volumeMounts Streaming applications extra volume mounts
   ##
-  volumeMounts: {}
+  volumeMounts: []
   ## @param deployer.volumes Streaming applications extra volumes
   ##
-  volumes: {}
+  volumes: []
   ## @param deployer.environmentVariables Streaming applications environment variables
   ## RabbitMQ/Kafka envs.
   ## Example:

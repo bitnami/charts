@@ -2518,6 +2518,12 @@ kubeApiServer:
     ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config
     ##
     relabelings: []
+    ## @param kubeApiServer.serviceMonitor.labels Extra labels for the ServiceMonitor
+    ##
+    labels: { }
+    ## @param kubeApiServer.serviceMonitor.annotations Extra annotations for the ServiceMonitor
+    ##
+    annotations: { }
 ## Component scraping the kube-controller-manager
 ##
 kubeControllerManager:
@@ -2579,6 +2585,12 @@ kubeControllerManager:
     ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config
     ##
     relabelings: []
+    ## @param kubeControllerManager.serviceMonitor.labels Extra labels for the ServiceMonitor
+    ##
+    labels: { }
+    ## @param kubeControllerManager.serviceMonitor.annotations Extra annotations for the ServiceMonitor
+    ##
+    annotations: { }
 ## Component scraping kube scheduler
 ##
 kubeScheduler:
@@ -2706,6 +2718,12 @@ coreDns:
     ##    action: replace
     ##
     relabelings: []
+    ## @param coreDns.serviceMonitor.labels Extra labels for the ServiceMonitor
+    ##
+    labels: {}
+    ## @param coreDns.serviceMonitor.annotations Extra annotations for the ServiceMonitor
+    ##
+    annotations: {}
 ## Component scraping the kube-proxy
 ##
 kubeProxy:

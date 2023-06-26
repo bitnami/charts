@@ -7,7 +7,9 @@ kind: ClusterRoleBinding
 {{- end }}
 metadata:
   name: {{ include "argo-workflows.server.fullname.namespace" . }}
+  {{- if .Values.rbac.singleNamespace }}
   namespace: {{ .Release.Namespace | quote }}
+  {{- end }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/part-of: argo-workflows
     app.kubernetes.io/component: server
@@ -36,7 +38,6 @@ apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRoleBinding
 metadata:
   name: {{ include "argo-workflows.server.fullname.namespace" . }}-cluster-template
-  namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/part-of: argo-workflows
     app.kubernetes.io/component: server

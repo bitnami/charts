@@ -2,7 +2,7 @@ annotations:
   category: Infrastructure
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 2.8.1
+appVersion: 2.8.2
 dependencies:
   - condition: redis.enabled
     name: redis
@@ -32,3 +32,4 @@ name: harbor
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/harbor
 version: 16.7.0
+

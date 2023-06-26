@@ -18,6 +18,8 @@ This chart bootstraps a [Spring Cloud Data Flow](https://github.com/bitnami/cont
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
+Looking to use Spring Cloud Data Flow in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+
 ## Prerequisites
 
 - Kubernetes 1.19+
@@ -284,8 +286,8 @@ helm uninstall my-release
 | `deployer.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                                                                         | `90`           |
 | `deployer.nodeSelector`                       | The node selectors to apply to the streaming applications deployments in "key:value" format                                                     | `""`           |
 | `deployer.tolerations`                        | Streaming applications tolerations                                                                                                              | `[]`           |
-| `deployer.volumeMounts`                       | Streaming applications extra volume mounts                                                                                                      | `{}`           |
-| `deployer.volumes`                            | Streaming applications extra volumes                                                                                                            | `{}`           |
+| `deployer.volumeMounts`                       | Streaming applications extra volume mounts                                                                                                      | `[]`           |
+| `deployer.volumes`                            | Streaming applications extra volumes                                                                                                            | `[]`           |
 | `deployer.environmentVariables`               | Streaming applications environment variables                                                                                                    | `[]`           |
 | `deployer.podSecurityContext.enabled`         | Enabled pods' Security Context of the deployed pods batch or stream pods                                                                        | `true`         |
 | `deployer.podSecurityContext.runAsUser`       | Set Dataflow Streams container's Security Context runAsUser                                                                                     | `1001`         |

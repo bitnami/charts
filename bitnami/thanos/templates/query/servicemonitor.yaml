@@ -45,7 +45,5 @@ spec:
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/component: query
-      {{- if .Values.metrics.serviceMonitor.selector }}
-      {{- include "common.tplvalues.render" (dict "value" .Values.metrics.serviceMonitor.selector "context" $) | nindent 6 }}
-      {{- end }}
+      {{- include "thanos.servicemonitor.selector" . | nindent 6 -}}
 {{- end }}
