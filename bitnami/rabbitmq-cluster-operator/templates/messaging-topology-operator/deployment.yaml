@@ -122,7 +122,7 @@ spec:
           {{- end }}
           ports:
             - name: http-webhook
-              containerPort: 9443
+              containerPort: {{ .Values.msgTopologyOperator.containerPorts.webhook }}
               protocol: TCP
             - name: http-metrics
               containerPort: {{ .Values.msgTopologyOperator.containerPorts.metrics }}

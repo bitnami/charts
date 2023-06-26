@@ -696,9 +696,12 @@ msgTopologyOperator:
   ##
   lifecycleHooks: {}
 
-  ## @param msgTopologyOperator.containerPorts.metrics RabbitMQ Messaging Topology Operator container port (used for metrics)
+  ## RabbitMQ Messaging Topology Operator ports
+  ## @param msgTopologyOperator.containerPorts.metrics RabbitMQ Messaging Topology Operator webhook port number
+  ## @param msgTopologyOperator.containerPorts.metrics RabbitMQ Messaging Topology Operator metrics port number
   ##
   containerPorts:
+    webhook: 9443
     metrics: 8080
 
   ## @param msgTopologyOperator.extraEnvVars Array with extra environment variables to add to RabbitMQ Messaging Topology Operator nodes
