@@ -105,12 +105,20 @@ spec:
             - name: HARBOR_DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "harbor.core" . }}-envvars
+                  {{- if .Values.exporter.existingEnvVarsSecret }}
+                  name: {{ .Values.exporter.existingEnvVarsSecret }}
+                  {{- else }}
+                  name: {{ printf "%s-envvars" (include "harbor.core" .) }}
+                  {{- end }}
                   key: POSTGRESQL_PASSWORD
             - name: HARBOR_ADMIN_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "harbor.core" . }}-envvars
+                  {{- if .Values.exporter.existingEnvVarsSecret }}
+                  name: {{ .Values.exporter.existingEnvVarsSecret }}
+                  {{- else }}
+                  name: {{ printf "%s-envvars" (include "harbor.core" .) }}
+                  {{- end }}
                   key: HARBOR_ADMIN_PASSWORD
             {{- if .Values.exporter.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.exporter.extraEnvVars "context" $) | nindent 12 }}
