@@ -23,8 +23,8 @@ Cypress.Commands.add(
     cy.visit('/');
     cy.get('[type="email"]').should('be.enabled').type(username);
     cy.get('[type="password"]').should('be.enabled').type(password);
-    cy.contains('button', 'sign in').click();
-    cy.contains('WORKSPACES').should('be.visible');
+    cy.contains('button', 'Sign in').click();
+    cy.contains('Workspaces').should('be.visible');
   }
 );
 
