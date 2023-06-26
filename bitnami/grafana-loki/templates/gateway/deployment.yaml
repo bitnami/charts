@@ -101,6 +101,9 @@ spec:
           args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
           {{- else if .Values.gateway.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.gateway.args "context" $) | nindent 12 }}
+          {{- if .Values.gateway.extraArgs }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.gateway.extraArgs "context" $) | nindent 12 }}
+          {{- end }}
           {{- end }}
           env:
             - name: BITNAMI_DEBUG

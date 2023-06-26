@@ -97,6 +97,9 @@ spec:
           args:
             - -target=table-manager
             - -config.file={{ .Values.loki.dataDir }}/conf/loki.yaml
+          {{- if .Values.tableManager.extraArgs }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.tableManager.extraArgs "context" $) | nindent 12 }}
+          {{- end }}
           {{- end }}
           {{- if .Values.tableManager.extraEnvVars }}
           env: {{- include "common.tplvalues.render" (dict "value" .Values.tableManager.extraEnvVars "context" $) | nindent 12 }}

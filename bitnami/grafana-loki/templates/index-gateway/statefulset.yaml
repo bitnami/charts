@@ -102,6 +102,9 @@ spec:
           args:
             - -target=index-gateway
             - -config.file={{ .Values.loki.dataDir }}/conf/loki.yaml
+          {{- if .Values.indexGateway.extraArgs }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.indexGateway.extraArgs "context" $) | nindent 12 }}
+          {{- end }}
           {{- end }}
           {{- if .Values.indexGateway.extraEnvVars }}
           env: {{- include "common.tplvalues.render" (dict "value" .Values.indexGateway.extraEnvVars "context" $) | nindent 12 }}
