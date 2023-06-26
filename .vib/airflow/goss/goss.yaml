@@ -1,3 +1,6 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
 command:
   airflow-trigger-dag:
     exec: airflow dags trigger example_bash_operator

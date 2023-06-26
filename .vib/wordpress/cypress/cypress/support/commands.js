@@ -1,3 +1,8 @@
+/*
+ * Copyright VMware, Inc.
+ * SPDX-License-Identifier: APACHE-2.0
+ */
+
 // Added to slow down Cypress test execution without using hardcoded waits. If removed, there will be false positives.
 
 const COMMAND_DELAY = 2000;

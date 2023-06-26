@@ -1,3 +1,8 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- $port := ternary .Values.portal.containerPorts.https .Values.portal.containerPorts.http .Values.internalTLS.enabled | int -}}
 apiVersion: v1
 kind: ConfigMap
