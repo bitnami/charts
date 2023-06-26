@@ -697,7 +697,7 @@ msgTopologyOperator:
   lifecycleHooks: {}
 
   ## RabbitMQ Messaging Topology Operator ports
-  ## @param msgTopologyOperator.containerPorts.metrics RabbitMQ Messaging Topology Operator webhook port number
+  ## @param msgTopologyOperator.containerPorts.webhook RabbitMQ Messaging Topology Operator webhook port number
   ## @param msgTopologyOperator.containerPorts.metrics RabbitMQ Messaging Topology Operator metrics port number
   ##
   containerPorts:
