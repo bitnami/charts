@@ -31,6 +31,9 @@ spec:
       {{- if .Values.redis.podLabels }}
       {{- toYaml .Values.redis.podLabels | nindent 8 }}
       {{- end }}
+      {{- if .Values.commonLabels }}
+      {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
+      {{- end }}
       {{- if and .Values.metrics.enabled .Values.metrics.podLabels }}
       {{- toYaml .Values.metrics.podLabels | nindent 8 }}
       {{- end }}
