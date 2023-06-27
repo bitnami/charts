@@ -12,12 +12,10 @@ it('allows to create a new project', () => {
   cy.login();
   // Go to the templates page
   cy.get('[class*="templates-tab"]').click();
-
+  cy.contains('[data-testid="template-card"]', 'Marketing Portal').within(() => {
+    cy.get('[class*="fork-button"]').click();
+  })
   // Create an application from the Marketing Portal template
-  cy.get('input[data-testid*="search-input"]').type('Marketing Portal');
-  // Wait for only the Marketplace template to show in the search
-  cy.wait(5000);
-  cy.get('.fork-button').click();
   cy.contains('Fork template').click();
   cy.contains('Deploy');
   // Check if the application exists in the applications page
