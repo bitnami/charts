@@ -349,3 +349,6 @@ spec:
             secretName: {{ template ".Values.initScriptsSecret" . }}
             defaultMode: 0755
         {{- end }}
+  {{- if .Values.master.extraVolumeClaimTemplates }}
+  volumeClaimTemplates: {{- include "common.tplvalues.render" (dict "value" .Values.master.extraVolumeClaimTemplates "context" $) | nindent 8 }}
+  {{- end }}
