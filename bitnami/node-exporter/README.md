@@ -171,6 +171,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceMonitor.metricRelabelings`            | MetricRelabelConfigs to apply to samples before ingestion                                                                                                          | `[]`                    |
 | `serviceMonitor.labels`                       | Extra labels for the ServiceMonitor                                                                                                                                | `{}`                    |
 | `serviceMonitor.honorLabels`                  | honorLabels chooses the metric's labels on collisions with target labels                                                                                           | `false`                 |
+| `serviceMonitor.attachMetadata`               | Attaches node metadata to discovered targets                                                                                                                       | `{}`                    |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example the following command sets the `minReadySeconds` of the Node Exporter Pods to `120` seconds.
 

@@ -464,3 +464,10 @@ serviceMonitor:
   ## @param serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
   ##
   honorLabels: false
+  ## @param serviceMonitor.attachMetadata Attaches node metadata to discovered targets
+  ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#attachmetadata
+  ##
+  ## attachMetadata:
+  ##   node: true
+  ##
+  attachMetadata: {}

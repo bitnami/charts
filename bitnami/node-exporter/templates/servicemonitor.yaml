@@ -52,4 +52,7 @@ spec:
   namespaceSelector:
     matchNames:
     - {{ include "common.names.namespace" . }}
+  {{- if .Values.serviceMonitor.attachMetadata }}
+  attachMetadata: {{- include "common.tplvalues.render" ( dict "value" .Values.serviceMonitor.attachMetadata "context" $) | nindent 4 }}
+  {{- end }}
 {{- end }}
