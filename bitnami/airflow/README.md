@@ -458,7 +458,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                         | Description                                                                                            | Value             |
 | -------------------------------------------- | ------------------------------------------------------------------------------------------------------ | ----------------- |
 | `postgresql.enabled`                         | Switch to enable or disable the PostgreSQL helm chart                                                  | `true`            |
-| `postgresql.auth.enablePostgresUser`         | Assign a password to the "postgres" admin user. Otherwise, remote access will be blocked for this user | `false`           |
+| `postgresql.auth.enablePostgresUser`         | Assign a password to the "postgres" admin user. Otherwise, remote access will be blocked for this user | `true`            |
 | `postgresql.auth.username`                   | Name for a custom user to create                                                                       | `bn_airflow`      |
 | `postgresql.auth.password`                   | Password for the custom user to create                                                                 | `""`              |
 | `postgresql.auth.database`                   | Name for a custom database to create                                                                   | `bitnami_airflow` |
