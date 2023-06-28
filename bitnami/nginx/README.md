@@ -99,6 +99,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                          | Description                                                                               | Value           |
 | --------------------------------------------- | ----------------------------------------------------------------------------------------- | --------------- |
 | `replicaCount`                                | Number of NGINX replicas to deploy                                                        | `1`             |
+| `revisionHistoryLimit`                        | The number of old history to retain to allow rollback                                     | `10`            |
 | `updateStrategy.type`                         | NGINX deployment strategy type                                                            | `RollingUpdate` |
 | `updateStrategy.rollingUpdate`                | NGINX deployment rolling update configuration parameters                                  | `{}`            |
 | `podLabels`                                   | Additional labels for NGINX pods                                                          | `{}`            |
@@ -217,7 +218,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
 | `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
 | `ingress.hostname`                 | Default host for the ingress resource                                                                                            | `nginx.local`            |
-| `ingress.path`                     | The Path to Nginx. You may need to set this to '/*' in order to use this with ALB ingress controllers.                           | `/`                      |
+| `ingress.path`                     | The Path to Nginx. You may need to set this to '/\*' in order to use this with ALB ingress controllers.                          | `/`                      |
 | `ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
 | `ingress.ingressClassName`         | Set the ingerssClassName on the ingress record for k8s 1.18+                                                                     | `""`                     |
 | `ingress.tls`                      | Create TLS Secret                                                                                                                | `false`                  |
@@ -308,7 +309,7 @@ To modify the application version used in this chart, specify a different versio
 
 The NGINX chart allows you to deploy a custom web application using one of the following methods:
 
-- Cloning from a git repository: Set `cloneStaticSiteFromGit.enabled` to `true` and set the repository and branch using the `cloneStaticSiteFromGit.repository` and  `cloneStaticSiteFromGit.branch` parameters. A sidecar will also pull the latest changes in an interval set by `cloneStaticSitesFromGit.interval`.
+- Cloning from a git repository: Set `cloneStaticSiteFromGit.enabled` to `true` and set the repository and branch using the `cloneStaticSiteFromGit.repository` and `cloneStaticSiteFromGit.branch` parameters. A sidecar will also pull the latest changes in an interval set by `cloneStaticSitesFromGit.interval`.
 - Providing a ConfigMap: Set the `staticSiteConfigmap` value to mount a ConfigMap in the NGINX html folder.
 - Using an existing PVC: Set the `staticSitePVC` value to mount an PersistentVolumeClaim with the static site content.
 
@@ -397,7 +398,7 @@ Affected values:
 
 This major release no longer uses the bitnami/nginx-ldap-auth-daemon container as a dependency since its upstream project is not actively maintained.
 
-*2022-04-12 edit*:
+_2022-04-12 edit_:
 
 [Bitnami's reference implementation](https://www.nginx.com/blog/nginx-plus-authenticate-users/).
 
@@ -410,9 +411,9 @@ On 9 April 2022, security vulnerabilities in the [NGINX LDAP reference implement
 #### What changes were introduced in this major version?
 
 - Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
-- Move dependency information from the *requirements.yaml* to the *Chart.yaml*
-- After running `helm dependency update`, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock*
-- The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
+- Move dependency information from the _requirements.yaml_ to the _Chart.yaml_
+- After running `helm dependency update`, a _Chart.lock_ file is generated containing the same structure used in the previous _requirements.lock_
+- The different fields present in the _Chart.yaml_ file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
 
 #### Considerations when upgrading to this version
 
