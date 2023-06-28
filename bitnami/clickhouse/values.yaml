@@ -395,6 +395,18 @@ extraOverridesConfigmap: ""
 ##
 extraOverridesSecret: ""
 
+## @param usersExtraOverrides Users extra configuration overrides (evaluated as a template) apart from the default
+##
+usersExtraOverrides: ""
+
+## @param usersExtraOverridesConfigmap The name of an existing ConfigMap with users extra configuration for ClickHouse
+##
+usersExtraOverridesConfigmap: ""
+
+## @param usersExtraOverridesSecret The name of an existing ConfigMap with your custom users configuration for ClickHouse
+##
+usersExtraOverridesSecret: ""
+
 ## @param initdbScripts Dictionary of initdb scripts
 ## Specify dictionary of scripts to be run at first boot
 ## Example:

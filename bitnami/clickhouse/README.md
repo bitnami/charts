@@ -156,6 +156,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraOverrides`                | Extra configuration overrides (evaluated as a template) apart from the default                                           | `""`                    |
 | `extraOverridesConfigmap`       | The name of an existing ConfigMap with extra configuration for ClickHouse                                                | `""`                    |
 | `extraOverridesSecret`          | The name of an existing ConfigMap with your custom configuration for ClickHouse                                          | `""`                    |
+| `usersExtraOverrides`           | Users extra configuration overrides (evaluated as a template) apart from the default                                     | `""`                    |
+| `usersExtraOverridesConfigmap`  | The name of an existing ConfigMap with users extra configuration for ClickHouse                                          | `""`                    |
+| `usersExtraOverridesSecret`     | The name of an existing ConfigMap with your custom users configuration for ClickHouse                                    | `""`                    |
 | `initdbScripts`                 | Dictionary of initdb scripts                                                                                             | `{}`                    |
 | `initdbScriptsSecret`           | ConfigMap with the initdb scripts (Note: Overrides `initdbScripts`)                                                      | `""`                    |
 | `startdbScripts`                | Dictionary of startdb scripts                                                                                            | `{}`                    |
