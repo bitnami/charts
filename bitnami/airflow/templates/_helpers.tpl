@@ -157,13 +157,13 @@ Get the Postgresql credentials secret.
 {{- if .Values.postgresql.enabled }}
     {{- if .Values.global.postgresql }}
         {{- if .Values.global.postgresql.auth }}
-            {{- if .Values.global.postgresql.auth.existingSecret }}
+            {{- if and ( .Values.global.postgresql.auth.existingSecret ) ( .Values.global.postgresql.auth.enablePostgresUser ) }}
                 {{- tpl .Values.global.postgresql.auth.existingSecret $ -}}
-            {{- else -}}
-                {{- default (include "airflow.postgresql.fullname" .) (tpl .Values.postgresql.auth.existingSecret $) -}}
             {{- end -}}
         {{- else -}}
-            {{- default (include "airflow.postgresql.fullname" .) (tpl .Values.postgresql.auth.existingSecret $) -}}
+            {{- if and ( .Values.postgresql.auth.existingSecret ) ( .Values.postgresql.auth.enablePostgresUser ) }}
+                {{- default (include "airflow.postgresql.fullname" .) (tpl .Values.postgresql.auth.existingSecret $) -}}
+            {{- end -}}
         {{- end -}}
     {{- else -}}
         {{- default (include "airflow.postgresql.fullname" .) (tpl .Values.postgresql.auth.existingSecret $) -}}
@@ -328,11 +328,16 @@ Add environment variables to configure database values
   value: {{ include "airflow.database.name" . }}
 - name: AIRFLOW_DATABASE_USERNAME
   value: {{ include "airflow.database.user" . }}
+{{- if .Values.postgresql.auth.enablePostgresUser }}
 - name: AIRFLOW_DATABASE_PASSWORD
   valueFrom:
     secretKeyRef:
       name: {{ include "airflow.postgresql.secretName" . }}
       key: {{ include "airflow.database.existingsecret.key" . }}
+{{- else }}
+- name: ALLOW_EMPTY_PASSWORD
+  value: {{ true | quote }}
+{{- end }}
 - name: AIRFLOW_DATABASE_HOST
   value: {{ include "airflow.database.host" . }}
 - name: AIRFLOW_DATABASE_PORT_NUMBER

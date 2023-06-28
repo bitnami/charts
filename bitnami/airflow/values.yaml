@@ -446,7 +446,7 @@ scheduler:
   image:
     registry: docker.io
     repository: bitnami/airflow-scheduler
-    tag: 2.6.1-debian-11-r10
+    tag: 2.6.2-debian-11-r3
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -650,7 +650,7 @@ worker:
   image:
     registry: docker.io
     repository: bitnami/airflow-worker
-    tag: 2.6.1-debian-11-r10
+    tag: 2.6.2-debian-11-r3
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1474,7 +1474,7 @@ metrics:
 postgresql:
   enabled: true
   auth:
-    enablePostgresUser: false
+    enablePostgresUser: true
     username: bn_airflow
     password: ""
     database: bitnami_airflow
