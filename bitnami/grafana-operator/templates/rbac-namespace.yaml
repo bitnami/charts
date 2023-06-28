@@ -2,7 +2,7 @@
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
 metadata:
-  name: {{ include "common.names.fullname" . }}
+  name: {{ include "common.names.fullname.namespace" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
@@ -224,7 +224,7 @@ rules:
 apiVersion: rbac.authorization.k8s.io/v1
 kind: RoleBinding
 metadata:
-  name: {{ include "common.names.fullname" . }}
+  name: {{ include "common.names.fullname.namespace" . }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -239,6 +239,6 @@ subjects:
     namespace: {{ include "common.names.namespace" . | quote }}
 roleRef:
   kind: Role
-  name: {{ include "common.names.fullname" . }}
+  name: {{ include "common.names.fullname.namespace" . }}
   apiGroup: rbac.authorization.k8s.io
 {{- end }}
