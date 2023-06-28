@@ -1,3 +1,8 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if or .Values.config (or (or .Values.proxySetHeaders .Values.headers) .Values.addHeaders) .Values.dhParam }}
 apiVersion: v1
 kind: ConfigMap

@@ -1,3 +1,6 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
 ## @section Global parameters
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
@@ -291,6 +294,9 @@ compactor:
   ## @param compactor.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param compactor.extraArgs Additional container args (will be concatenated to args, unless diagnosticMode is enabled)
+  ##
+  extraArgs: []
   ## @param compactor.replicaCount Number of Compactor replicas to deploy
   ##
   replicaCount: 1
@@ -625,6 +631,9 @@ gateway:
   ## @param gateway.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param gateway.extraArgs Additional container args (will be concatenated to args, unless diagnosticMode is enabled)
+  ##
+  extraArgs: []
   ## @param gateway.verboseLogging Show the gateway access_log
   ##
   verboseLogging: false
@@ -999,6 +1008,9 @@ indexGateway:
   ## @param indexGateway.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param indexGateway.extraArgs Additional container args (will be concatenated to args, unless diagnosticMode is enabled)
+  ##
+  extraArgs: []
   ## @param indexGateway.replicaCount Number of index-gateway replicas to deploy
   ##
   replicaCount: 1
@@ -1267,6 +1279,9 @@ distributor:
   ## @param distributor.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param distributor.extraArgs Additional container args (will be concatenated to args, unless diagnosticMode is enabled)
+  ##
+  extraArgs: []
   ## @param distributor.replicaCount Number of Distributor replicas to deploy
   ##
   replicaCount: 1
@@ -1531,6 +1546,9 @@ ingester:
   ## @param ingester.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param ingester.extraArgs Additional container args (will be concatenated to args, unless diagnosticMode is enabled)
+  ##
+  extraArgs: []
   ## @param ingester.replicaCount Number of Ingester replicas to deploy
   ##
   replicaCount: 1
@@ -1842,6 +1860,9 @@ querier:
   ## @param querier.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param querier.extraArgs Additional container args (will be concatenated to args, unless diagnosticMode is enabled)
+  ##
+  extraArgs: []
   ## @param querier.podManagementPolicy podManagementPolicy to manage scaling operation
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
   ##
@@ -2147,6 +2168,9 @@ queryFrontend:
   ## @param queryFrontend.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param queryFrontend.extraArgs Additional container args (will be concatenated to args, unless diagnosticMode is enabled)
+  ##
+  extraArgs: []
   ## @param queryFrontend.replicaCount Number of queryFrontend replicas to deploy
   ##
   replicaCount: 1
@@ -2416,6 +2440,9 @@ queryScheduler:
   ## @param queryScheduler.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param queryScheduler.extraArgs Additional container args (will be concatenated to args, unless diagnosticMode is enabled)
+  ##
+  extraArgs: []
   ## @param queryScheduler.replicaCount Number of queryScheduler replicas to deploy
   ##
   replicaCount: 1
@@ -2688,6 +2715,9 @@ ruler:
   ## @param ruler.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param ruler.extraArgs Additional container args (will be concatenated to args, unless diagnosticMode is enabled)
+  ##
+  extraArgs: []
   ## @param ruler.podManagementPolicy podManagementPolicy to manage scaling operation
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
   ##
@@ -2999,6 +3029,9 @@ tableManager:
   ## @param tableManager.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param tableManager.extraArgs Additional container args (will be concatenated to args, unless diagnosticMode is enabled)
+  ##
+  extraArgs: []
   ## @param tableManager.replicaCount Number of table-manager replicas to deploy
   ##
   replicaCount: 1
@@ -3294,6 +3327,9 @@ promtail:
   ## @param promtail.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @param promtail.extraArgs Additional container args (will be concatenated to args, unless diagnosticMode is enabled)
+  ##
+  extraArgs: []
 
   ## @param promtail.containerPorts.http Promtail HTTP port
   ##

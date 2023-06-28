@@ -20,6 +20,8 @@ This chart bootstraps [Node Exporter](https://github.com/bitnami/containers/tree
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
+Looking to use Node Exporter in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+
 ## Prerequisites
 
 - Kubernetes 1.19+
@@ -84,7 +86,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                                                                         | `{}`                    |
 | `image.registry`                              | Node Exporter image registry                                                                                                                                       | `docker.io`             |
 | `image.repository`                            | Node Exporter image repository                                                                                                                                     | `bitnami/node-exporter` |
-| `image.tag`                                   | Node Exporter image tag (immutable tags are recommended)                                                                                                           | `1.6.0-debian-11-r0`    |
+| `image.tag`                                   | Node Exporter image tag (immutable tags are recommended)                                                                                                           | `1.6.0-debian-11-r10`   |
 | `image.digest`                                | Node Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                      | `""`                    |
 | `image.pullPolicy`                            | Node Exporter image pull policy                                                                                                                                    | `IfNotPresent`          |
 | `image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                                                                   | `[]`                    |

@@ -20,6 +20,8 @@ This chart bootstraps a [influxdb](https://github.com/bitnami/containers/tree/ma
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
+Looking to use InfluxDB## Prerequisitestrade; in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+
 ## Prerequisites
 
 - Kubernetes 1.19+
@@ -234,6 +236,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.serviceMonitor.scrapeTimeout`        | Timeout after which the scrape is ended                                                                                                     | `""`                |
 | `metrics.serviceMonitor.relabelings`          | RelabelConfigs to apply to samples before scraping                                                                                          | `[]`                |
 | `metrics.serviceMonitor.metricRelabelings`    | MetricRelabelConfigs to apply to samples before ingestion                                                                                   | `[]`                |
+| `metrics.serviceMonitor.labels`               | Additional labels that can be used so ServiceMonitor will be discovered by Prometheus                                                       | `{}`                |
 | `metrics.serviceMonitor.selector`             | Prometheus instance selector labels                                                                                                         | `{}`                |
 | `metrics.serviceMonitor.honorLabels`          | honorLabels chooses the metric's labels on collisions with target labels                                                                    | `false`             |
 | `networkPolicy.enabled`                       | Enable NetworkPolicy                                                                                                                        | `false`             |

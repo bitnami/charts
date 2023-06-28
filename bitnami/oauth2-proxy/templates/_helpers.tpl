@@ -1,4 +1,9 @@
 {{/*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{/*
 Return the proper OAuth2 Proxy image name
 */}}
 {{- define "oauth2-proxy.image" -}}

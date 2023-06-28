@@ -1,3 +1,8 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
@@ -94,6 +99,9 @@ spec:
             {{- if .Values.queryScheduler.enabled }}
             - -frontend.scheduler-address={{ template "grafana-loki.query-scheduler.fullname" . }}:{{ .Values.queryScheduler.service.ports.grpc }}
             {{- end }}
+          {{- if .Values.queryFrontend.extraArgs }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.extraArgs "context" $) | nindent 12 }}
+          {{- end }}
           {{- end }}
           {{- if .Values.queryFrontend.extraEnvVars }}
           env: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.extraEnvVars "context" $) | nindent 12 }}

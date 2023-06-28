@@ -24,6 +24,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 
 [Learn more about the default configuration of the chart](https://docs.bitnami.com/kubernetes/infrastructure/jupyterhub/get-started/understand-default-configuration/).
 
+Looking to use JupyterHub in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+
 ## Prerequisites
 
 - Kubernetes 1.19+
@@ -274,6 +276,15 @@ The command removes all the Kubernetes components associated with the chart and 
 | `proxy.pdb.create`                            | Deploy Proxy PodDisruptionBudget                                                                                         | `false`                           |
 | `proxy.pdb.minAvailable`                      | Set minimum available proxy instances                                                                                    | `""`                              |
 | `proxy.pdb.maxUnavailable`                    | Set maximum available proxy instances                                                                                    | `""`                              |
+
+### Proxy RBAC Parameters
+
+| Name                                                | Description                                                            | Value  |
+| --------------------------------------------------- | ---------------------------------------------------------------------- | ------ |
+| `proxy.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                   | `true` |
+| `proxy.serviceAccount.name`                         | Override Hub service account name                                      | `""`   |
+| `proxy.serviceAccount.automountServiceAccountToken` | Allows auto mount of ServiceAccountToken on the serviceAccount created | `true` |
+| `proxy.serviceAccount.annotations`                  | Additional custom annotations for the ServiceAccount                   | `{}`   |
 
 ### Proxy Traffic Exposure Parameters
 
