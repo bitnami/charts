@@ -53,6 +53,6 @@ spec:
     matchNames:
     - {{ include "common.names.namespace" . }}
   {{- if .Values.serviceMonitor.attachMetadata }}
-  attachMetadata: {{- toYaml .Values.serviceMonitor.attachMetadata | nindent 4 }}
+  attachMetadata: {{- include "common.tplvalues.render" ( dict "value" .Values.serviceMonitor.attachMetadata "context" $) | nindent 4 }}
   {{- end }}
 {{- end }}
