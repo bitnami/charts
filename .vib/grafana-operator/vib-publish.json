@@ -33,7 +33,7 @@
         {
           "action_id": "health-check",
           "params": {
-            "endpoint": "lb-grafana-service-grafana-ve",
+            "endpoint": "lb-grafana-operator-grafana-service-grafana-ve",
             "app_protocol": "HTTP"
           }
         },
@@ -58,7 +58,7 @@
             "resources": {
               "path": "/.vib/grafana-operator/cypress"
             },
-            "endpoint": "lb-grafana-service-grafana-ve",
+            "endpoint": "lb-grafana-operator-grafana-service-grafana-ve",
             "app_protocol": "HTTP",
             "env": {
               "username": "test_admin",

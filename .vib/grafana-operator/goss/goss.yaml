@@ -1,6 +1,9 @@
 # Copyright VMware, Inc.
 # SPDX-License-Identifier: APACHE-2.0
 
+http:
+  http://grafana-operator-grafana-service:3000:
+    status: 200
 command:
   {{- $uid := .Vars.operator.containerSecurityContext.runAsUser }}
   {{- $gid := .Vars.operator.podSecurityContext.fsGroup }}
