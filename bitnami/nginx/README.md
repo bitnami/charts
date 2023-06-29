@@ -99,6 +99,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                          | Description                                                                               | Value           |
 | --------------------------------------------- | ----------------------------------------------------------------------------------------- | --------------- |
 | `replicaCount`                                | Number of NGINX replicas to deploy                                                        | `1`             |
+| `revisionHistoryLimit`                        | The number of old history to retain to allow rollback                                     | `10`            |
 | `updateStrategy.type`                         | NGINX deployment strategy type                                                            | `RollingUpdate` |
 | `updateStrategy.rollingUpdate`                | NGINX deployment rolling update configuration parameters                                  | `{}`            |
 | `podLabels`                                   | Additional labels for NGINX pods                                                          | `{}`            |
@@ -308,7 +309,7 @@ To modify the application version used in this chart, specify a different versio
 
 The NGINX chart allows you to deploy a custom web application using one of the following methods:
 
-- Cloning from a git repository: Set `cloneStaticSiteFromGit.enabled` to `true` and set the repository and branch using the `cloneStaticSiteFromGit.repository` and  `cloneStaticSiteFromGit.branch` parameters. A sidecar will also pull the latest changes in an interval set by `cloneStaticSitesFromGit.interval`.
+- Cloning from a git repository: Set `cloneStaticSiteFromGit.enabled` to `true` and set the repository and branch using the `cloneStaticSiteFromGit.repository` and `cloneStaticSiteFromGit.branch` parameters. A sidecar will also pull the latest changes in an interval set by `cloneStaticSitesFromGit.interval`.
 - Providing a ConfigMap: Set the `staticSiteConfigmap` value to mount a ConfigMap in the NGINX html folder.
 - Using an existing PVC: Set the `staticSitePVC` value to mount an PersistentVolumeClaim with the static site content.
 
