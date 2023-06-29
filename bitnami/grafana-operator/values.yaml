@@ -275,11 +275,6 @@ operator:
   ## @param operator.extraEnvVarsSecret Name of existing Secret containing extra env vars for RabbitMQ Cluster Operator nodes
   ##
   extraEnvVarsSecret: ""
-  ## @param operator.podAffinityPreset Pod affinity preset
-  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ## Allowed values: soft, hard
-  ##
-  podAffinityPreset: ""
   ## @param operator.podAntiAffinityPreset Pod anti-affinity preset. Allowed values: `soft` or `hard`
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
@@ -521,11 +516,6 @@ grafana:
   ## NOTE: Number of replicas. If more than one is selected, a shared database should be configured.
   ##
   replicaCount: 1
-  ## @param grafana.skipCreateAdminAccount Prevent the operator from creating an admin secret
-  ## Ref: https://github.com/grafana-operator/grafana-operator/blob/master/documentation/env_vars.md
-  ## Allowed values: true, false
-  ##
-  skipCreateAdminAccount: false
   ## @param grafana.podAffinityPreset Pod affinity preset
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ## Allowed values: soft, hard
@@ -557,6 +547,11 @@ grafana:
     ##   - e2e-az2
     ##
     values: []
+  ## @param grafana.affinity Affinity for controller pod assignment
+  ## Ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## Note: podAffinityPreset, podAntiAffinityPreset, and  nodeAffinityPreset will be ignored when it's set
+  ##
+  affinity: {}
   ## @param grafana.nodeSelector Node labels for controller pod assignment
   ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
   ##
@@ -601,6 +596,7 @@ grafana:
     ##     protocol: TCP
     ##     targetPort: grafana-http
     extraPorts: []
+  ## 
   ## Configure the ingress resource that allows you to access the
   ## Grafana web. Set up the URL
   ## Ref: https://kubernetes.io/docs/user-guide/ingress/
@@ -615,6 +611,15 @@ grafana:
     ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
     ##
     ingressClassName: ""
+    ## @param grafana.ingress.host The host under which the grafana instance should be reachable. If empty the parameter will not be set.
+    ##
+    host: grafana.local
+    ## @param grafana.ingress.path The path for the ingress instance to forward to the grafana app
+    ##
+    path: /
+    ## @param grafana.ingress.pathType The pathType for the ingress instance to forward to the grafana app
+    ##
+    pathType: ImplementationSpecific
     ## @param grafana.ingress.labels Additional Labels for the ingress resource
     ##
     labels: {}
@@ -628,6 +633,9 @@ grafana:
     ##   kubernetes.io/ingress.class: nginx
     ##
     annotations: {}
+    ## @param grafana.ingress.tls This enables tls support for the ingress resource
+    ##
+    tls: false
   ## Enable persistence using Persistent Volume Claims
   ## Ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
   ##
@@ -667,7 +675,7 @@ grafana:
     server:
       root_url: |-
         {{- if .Values.grafana.ingress.enabled }}
-        {{ if .Values.grafana.ingress.tls }}https{{ else }}http{{ end }}://{{ include "common.tplvalues.render" (dict "value" .Values.grafana.ingress.hostname "context" $) }}
+        {{ if .Values.grafana.ingress.tls }}https{{ else }}http{{ end }}://{{ include "common.tplvalues.render" (dict "value" .Values.grafana.ingress.host "context" $) }}
         {{- else }}
         http://localhost:3000
         {{- end }}
@@ -690,7 +698,7 @@ grafana:
       #   disable_login_form: "false"
       #   disable_signout_menu: "false"
       # auth.generic_oauth:
-      #   enabled: True
+      #   enabled: "true"
       #   client_id: grafana
       #   client_secret: a391df94-dd1f-46d6-b3ab-60e90f23e8a2
       #   scopes: profile email
@@ -723,6 +731,13 @@ grafana:
   jsonnetLibrarySelector:
     matchLabels:
       app.kubernetes.io/instance: "{{ .Release.Name }}"
+  ## @param grafana.dashboardLabelSelectors [object] This selects dashboards on the label.
+  ## A cachall is not possible so you need to define at least one label selector here.
+  ## Ref: https://github.com/integr8ly/grafana-operator/blob/master/documentation/deploy_grafana.md#deploying-grafana
+  ##
+  dashboardLabelSelectors:
+    - matchLabels:
+        app.kubernetes.io/instance: "{{ .Release.Name }}"
   ## @param grafana.dashboardNamespaceSelector Watch for dashboards only in the Namespaces that have the specified namespace label
   ## Ref: https://github.com/grafana-operator/grafana-operator/blob/master/documentation/multi_namespace_support.md#2-dashboardnamespaceselector
   ## e.g:
@@ -731,6 +746,38 @@ grafana:
   ##     key: value
   ##
   dashboardNamespaceSelector: {}
+  ## Grafana containers' liveness probe
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ## @param grafana.livenessProbe.enabled Enable livenessProbe
+  ## @param grafana.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param grafana.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param grafana.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param grafana.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param grafana.livenessProbe.successThreshold Success threshold for livenessProbe
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 120
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+  ## Grafana containers' readiness probe
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ## @param grafana.readinessProbe.enabled Enable readinessProbe
+  ## @param grafana.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param grafana.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param grafana.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param grafana.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param grafana.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 30
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
   ## @param grafana.updateStrategy Set up update strategy for Grafana installation.
   ## Set to Recreate if you use persistent volume that cannot be mounted by more than one pods to make sure the pods is destroyed first.
   ## Ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
