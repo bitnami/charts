@@ -2,7 +2,8 @@
 # Copyright VMware, Inc.
 # SPDX-License-Identifier: APACHE-2.0
 
-# Install required packages and download pinniped-cli
+# Install required packages and download pinniped-cli 
+# The version is hardcoded because there is no way to know it in advance. 
 install_packages -qq curl
 curl -JLks https://get.pinniped.dev/v0.24.0/pinniped-cli-linux-amd64 -o pinniped && chmod +x pinniped
 
