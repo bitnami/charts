@@ -5,7 +5,7 @@ annotations:
   category: CMS
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 1.9.23
+appVersion: 1.9.25
 dependencies:
   - condition: redis.enabled
     name: redis
@@ -32,4 +32,4 @@ maintainers:
 name: appsmith
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/appsmith
-version: 0.3.8
+version: 0.3.9
