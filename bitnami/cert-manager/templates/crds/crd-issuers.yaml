@@ -11,8 +11,6 @@ metadata:
   name: issuers.cert-manager.io
   annotations:
     cert-manager.io/inject-ca-from-secret: '{{ template "certmanager.webhook.caRef" . }}'
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
-    app: {{ template "common.names.name" . }}
 spec:
   group: cert-manager.io
   names:
