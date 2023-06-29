@@ -1,3 +1,8 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if .Values.shards }}
 {{- $replicas := .Values.shards | int }}
 {{- range $i, $e := until $replicas }}

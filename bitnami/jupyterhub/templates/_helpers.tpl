@@ -1,3 +1,8 @@
+{{/*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- /*
     Returns given number of random Hex characters.
 
@@ -156,6 +161,18 @@ Create the name of the service account to use
     {{ default "default" .Values.hub.serviceAccount.name }}
 {{- end -}}
 {{- end -}}
+
+{{/*
+Create the name of the service account to use
+*/}}
+{{- define "jupyterhub.proxyServiceAccountName" -}}
+{{- if .Values.proxy.serviceAccount.create -}}
+    {{ default (printf "%s-proxy" (include "common.names.fullname" .)) .Values.proxy.serviceAccount.name }}
+{{- else -}}
+    {{ default "default" .Values.proxy.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
 
 {{/*
 Create the name of the service account to use

@@ -1,3 +1,8 @@
+/*
+ * Copyright VMware, Inc.
+ * SPDX-License-Identifier: APACHE-2.0
+ */
+
 /// <reference types="cypress" />
 import { random } from '../support/utils';
 import highScoreStats from '../fixtures/high_score_stats.json';

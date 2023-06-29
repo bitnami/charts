@@ -1,3 +1,8 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if .Values.promtail.enabled }}
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: DaemonSet
@@ -90,6 +95,9 @@ spec:
           {{- else }}
           args:
             - -config.file=/bitnami/promtail/conf/promtail.yaml
+          {{- if .Values.promtail.extraArgs }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.promtail.extraArgs "context" $) | nindent 12 }}
+          {{- end }}
           {{- end }}
           env:
             - name: HOSTNAME

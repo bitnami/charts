@@ -1,3 +1,6 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
 http:
   http://appsmith:{{ .Vars.client.service.ports.http }}:
     status: 200

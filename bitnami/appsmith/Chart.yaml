@@ -1,8 +1,11 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
 annotations:
   category: CMS
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 1.9.21
+appVersion: 1.9.23
 dependencies:
   - condition: redis.enabled
     name: redis
@@ -29,4 +32,4 @@ maintainers:
 name: appsmith
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/appsmith
-version: 0.3.7
+version: 0.3.8

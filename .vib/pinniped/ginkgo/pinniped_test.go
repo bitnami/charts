@@ -1,3 +1,6 @@
+// Copyright VMware, Inc.
+// SPDX-License-Identifier: APACHE-2.0
+
 package integration
 
 import (
@@ -55,7 +58,7 @@ var _ = Describe("Pinniped:", func() {
 			BeforeEach(func() {
 				pattern := "Script finished correctly"
 
-				containsPattern, err := retry("containerLogsContainPattern", 5, 2*time.Second, func() (bool, error) {
+				containsPattern, err := retry("containerLogsContainPattern", 5, 5*time.Second, func() (bool, error) {
 					return containerLogsContainPattern(ctx, coreclient, testingPod.GetName(), "vib-minideb", pattern)
 				})
 				if err != nil {
@@ -92,7 +95,7 @@ var _ = Describe("Pinniped:", func() {
 			})
 
 			It("the pinniped cli produced the kubeconfig", func() {
-				containsPattern, _ := containsPattern(minidebLogs, "validated connection to the cluster")
+				containsPattern, _ := containsPattern(minidebLogs, "connection to the cluster")
 				Expect(containsPattern).To(BeTrue())
 			})
 

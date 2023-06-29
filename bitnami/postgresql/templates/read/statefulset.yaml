@@ -1,3 +1,8 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if eq .Values.architecture "replication" }}
 {{- $customUser := include "postgresql.username" . }}
 apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
