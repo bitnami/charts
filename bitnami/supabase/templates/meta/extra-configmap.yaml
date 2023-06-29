@@ -1,3 +1,8 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if and .Values.meta.enabled .Values.meta.extraConfig (not .Values.meta.extraConfigExistingConfigmap) }}
 apiVersion: v1
 kind: ConfigMap

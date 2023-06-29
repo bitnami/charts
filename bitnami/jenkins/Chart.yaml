@@ -1,8 +1,11 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
 annotations:
   category: Infrastructure
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 2.401.1
+appVersion: 2.401.2
 dependencies:
   - name: common
     repository: oci://registry-1.docker.io/bitnamicharts
@@ -25,4 +28,4 @@ maintainers:
 name: jenkins
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/jenkins
-version: 12.2.2
+version: 12.2.3

@@ -1,3 +1,6 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
 http:
   http://supabase-auth:{{ .Vars.auth.service.ports.http }}/health:
     status: 200

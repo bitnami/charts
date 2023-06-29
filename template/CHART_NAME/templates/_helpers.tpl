@@ -1,4 +1,9 @@
 {{/*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{/*
 Return the proper %%MAIN_OBJECT_BLOCK%% image name
 */}}
 {{- define "%%TEMPLATE_NAME%%.image" -}}

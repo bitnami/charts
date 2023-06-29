@@ -1,3 +1,8 @@
+/*
+ * Copyright VMware, Inc.
+ * SPDX-License-Identifier: APACHE-2.0
+ */
+
 export let random = (Math.random() + 1).toString(36).substring(7);
 
 export let importAppStarters = () => {

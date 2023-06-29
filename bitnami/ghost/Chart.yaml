@@ -1,8 +1,11 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
 annotations:
   category: CMS
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 5.52.0
+appVersion: 5.53.1
 dependencies:
   - condition: mysql.enabled
     name: mysql
@@ -32,4 +35,4 @@ maintainers:
 name: ghost
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/ghost
-version: 19.3.16
+version: 19.3.20
