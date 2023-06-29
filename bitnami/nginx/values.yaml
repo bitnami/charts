@@ -267,8 +267,7 @@ resources:
 ## If you do want to specify lifecycleHooks, uncomment the following
 ## lines, adjust them as necessary, and remove the curly braces on 'lifecycle:{}'.
 ## @param lifecycleHooks Optional lifecycleHooks for the NGINX container
-lifecycleHooks:
-  {}
+lifecycleHooks: {}
   ## Example:
   ## postStart:
   ##   exec:

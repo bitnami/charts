@@ -398,7 +398,7 @@ Affected values:
 
 This major release no longer uses the bitnami/nginx-ldap-auth-daemon container as a dependency since its upstream project is not actively maintained.
 
-_2022-04-12 edit_:
+*2022-04-12 edit*:
 
 [Bitnami's reference implementation](https://www.nginx.com/blog/nginx-plus-authenticate-users/).
 
@@ -411,9 +411,9 @@ On 9 April 2022, security vulnerabilities in the [NGINX LDAP reference implement
 #### What changes were introduced in this major version?
 
 - Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
-- Move dependency information from the _requirements.yaml_ to the _Chart.yaml_
-- After running `helm dependency update`, a _Chart.lock_ file is generated containing the same structure used in the previous _requirements.lock_
-- The different fields present in the _Chart.yaml_ file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
+- Move dependency information from the *requirements.yaml* to the *Chart.yaml*
+- After running `helm dependency update`, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock*
+- The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
 
 #### Considerations when upgrading to this version
 
