@@ -3,22 +3,6 @@
 
 ---
 header:
-  # License format for Chart.yaml and values files
-  - comment: on-failure
-    license:
-      spdx-id: Apache-2.0
-      copyright-owner: VMware, Inc.
-
-      content: |
-        # Copyright VMware, Inc.
-        # SPDX-License-Identifier: APACHE-2.0
-
-    paths:
-      - "bitnami/**/Chart.yml"
-      - "bitnami/**/Chart.yaml"
-      - "bitnami/**/values.yml"
-      - "bitnami/**/values.yaml"
-
   # License format for Helm templates
   - comment: on-failure
     license:
@@ -32,10 +16,22 @@ header:
         */}}
 
     paths:
-      - "bitnami/**/*.yml"
-      - "bitnami/**/*.yaml"
+      - "bitnami/**/templates/**.yml"
+      - "bitnami/**/templates/**.yaml"
+
+  # License format for all other YAML files
+  - comment: on-failure
+    license:
+      spdx-id: Apache-2.0
+      copyright-owner: VMware, Inc.
+
+      content: |
+        # Copyright VMware, Inc.
+        # SPDX-License-Identifier: APACHE-2.0
+
+    paths:
+      - "bitnami/**.yml"
+      - "bitnami/**.yaml"
     paths-ignore:
-      - "bitnami/**/Chart.yml"
-      - "bitnami/**/Chart.yaml"
-      - "bitnami/**/values.yml"
-      - "bitnami/**/values.yaml"
+      - "bitnami/**/templates/**.yml"
+      - "bitnami/**/templates/**.yaml"
