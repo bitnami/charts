@@ -10,7 +10,7 @@ dependencies:
   - condition: kafka.enabled
     name: kafka
     repository: oci://registry-1.docker.io/bitnamicharts
-    version: 22.x.x
+    version: 23.x.x
   - name: common
     repository: oci://registry-1.docker.io/bitnamicharts
     tags:
@@ -31,4 +31,4 @@ maintainers:
 name: schema-registry
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/schema-registry
-version: 11.1.0
+version: 12.0.0
