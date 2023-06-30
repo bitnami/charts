@@ -33,7 +33,7 @@
         {
           "action_id": "health-check",
           "params": {
-            "endpoint": "lb-attu-http"
+            "endpoint": "lb-milvus-attu-http"
           }
         },
         {
@@ -57,7 +57,7 @@
             "resources": {
               "path": "/.vib/milvus/cypress"
             },
-            "endpoint": "lb-attu-http",
+            "endpoint": "lb-milvus-attu-http",
             "app_protocol": "HTTP",
             "env": {
               "username": "root",
