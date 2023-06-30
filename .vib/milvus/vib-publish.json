@@ -33,7 +33,7 @@
         {
           "action_id": "health-check",
           "params": {
-            "endpoint": "lb-milvus-data-plane-http"
+            "endpoint": "lb-attu-http"
           }
         },
         {
