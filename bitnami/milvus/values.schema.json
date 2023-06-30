@@ -151,6 +151,11 @@
                             "description": "Milvus username password",
                             "default": ""
                         },
+                        "rootPassword": {
+                            "type": "string",
+                            "description": "Milvus root password",
+                            "default": ""
+                        },
                         "existingSecret": {
                             "type": "string",
                             "description": "Name of a secret containing the Milvus password",
@@ -161,7 +166,7 @@
                 "defaultConfig": {
                     "type": "string",
                     "description": "Milvus components default configuration",
-                    "default": "# etcd configuration\netcd:\n  endpoints:\n    {{- if .Values.etcd.enabled  }}\n      {{- $replicas := $.Values.etcd.replicaCount | int }}\n      {{- range $i, $_e := until $replicas }}\n    - {{ printf \"%s://%s-%d.%s:%v\" (ternary \"https\" \"http\" $.Values.etcd.auth.client.secureTransport) (include \"milvus.etcd.fullname\" $ ) $i (include \"milvus.etcd.headlessServiceName\" $) ( include \"milvus.etcd.port\" $ ) }}          {{- end }}\n    {{- else }}\n    {{- range $node := .Values.externalEtcd.servers }}\n    - {{ ternary \"https\" \"http\" $.Values.externalEtcd.secureTransport }}://{{ printf \"%s:%v\" $node (include \"milvus.etcd.port\" $) }}\n    {{- end }}\n    {{- end }}\nmetastore:\n  type: etcd\n\n# S3 configuration\nminio:\n  address: {{ include \"milvus.s3.host\" . }}\n  port: {{ include \"milvus.s3.port\" . }}\n  accessKeyID: {{ print \"{{ MILVUS_S3_ACCESS_ID }}\" | quote }}\n  secretAccessKey: {{ print \"{{ MILVUS_S3_SECRET_ACCESS_KEY }}\" | quote }}\n  useSSL: {{ include \"milvus.s3.useSSL\" . }}\n  bucketName: {{ include \"milvus.s3.bucket\" . }}\n  rootPath: {{ include \"milvus.s3.rootPath\" . }}\n  useIAM: {{ include \"milvus.s3.useIAM\" . }}\n  {{- if not .Values.minio.enabled }}\n  cloudProvider: {{ .Values.externalS3.cloudProvider }}\n  iamEndpoint: {{ .Values.externalS3.iamEndpoint }}\n  {{- end }}\n\n# Kafka configuration\nkafka:\n  brokerList:\n    {{- if .Values.kafka.enabled  }}\n      {{- $replicas := $.Values.kafka.replicaCount | int }}\n      {{- range $i, $_e := until $replicas }}\n    - {{ printf \"%s-%d.%s:%v\" (include \"milvus.kafka.fullname\" $ ) $i (include \"milvus.kafka.headlessServiceName\" $) ( include \"milvus.kafka.port\" $ ) }}\n      {{- end }}\n    {{- else }}\n    {{- range $node := .Values.kafka.servers }}\n    - {{ printf \"%s:%v\" $node (include \"milvus.kafka.port\" $) }}\n    {{- end }}\n    {{- end }}\n  securityProtocol: {{ include \"milvus.kafka.securityProtocol\" . }}\n  {{- if include \"milvus.kafka.authEnabled\" . }}\n  saslMechanisms: {{ include \"milvus.kafka.saslMechanisms\" . }}\n  saslUsername: {{ include \"milvus.kafka.user\" . }}\n  saslPassword: {{ print \"{{ MILVUS_KAFKA_PASSWORD }}\" | quote }}\n  {{- end }}\n\n# Data coordinator\ndataCoord:\n  address: {{ include \"milvus.data-coordinator.fullname\" . }}\n  port: {{ .Values.dataCoord.service.ports.grpc }}\n\n# Root coordinator\nrootCoord:\n  address: {{ include \"milvus.root-coordinator.fullname\" . }}\n  port: {{ .Values.rootCoord.service.ports.grpc }}\n\n# Index coordinator\nindexCoord:\n  address: {{ include \"milvus.index-coordinator.fullname\" . }}\n  port: {{ .Values.indexCoord.service.ports.grpc }}\n\n# Query coordinator\nqueryCoord:\n  address: {{ include \"milvus.query-coordinator.fullname\" . }}\n  port: {{ .Values.queryCoord.service.ports.grpc }}\n\n# Data node\ndataNode:\n  port: {{ .Values.dataNode.service.ports.grpc }}\n\n# Index node\nindexNode:\n  port: {{ .Values.indexNode.service.ports.grpc }}\n\n# Query node\nqueryNode:\n  port: {{ .Values.queryNode.service.ports.grpc }}\n\nproxy:\n  port: {{ .Values.proxy.service.ports.grpc }}\n  accessLog:\n    localPath: /dev\n    filename: stdout\n  http:\n    enabled: true\n\n# Log configuration\nlog:\n  level: {{ ternary \"debug\" \"info\" .Values.milvus.image.debug }}\n  stdout: true\n\n# Common configuration\ncommon:\n  storageType: minio\n  security:\n    authenticationEnabled: {{ .Values.milvus.auth.enabled }}\n    {{- if .Values.milvus.auth.enabled }}\n    superUsers: {{ .Values.milvus.auth.username }}\n    {{- end }}\n"
+                    "default": "# etcd configuration\netcd:\n  endpoints:\n    {{- if .Values.etcd.enabled  }}\n      {{- $replicas := $.Values.etcd.replicaCount | int }}\n      {{- range $i, $_e := until $replicas }}\n    - {{ printf \"%s://%s-%d.%s:%v\" (ternary \"https\" \"http\" $.Values.etcd.auth.client.secureTransport) (include \"milvus.etcd.fullname\" $ ) $i (include \"milvus.etcd.headlessServiceName\" $) ( include \"milvus.etcd.port\" $ ) }}          {{- end }}\n    {{- else }}\n    {{- range $node := .Values.externalEtcd.servers }}\n    - {{ ternary \"https\" \"http\" $.Values.externalEtcd.secureTransport }}://{{ printf \"%s:%v\" $node (include \"milvus.etcd.port\" $) }}\n    {{- end }}\n    {{- end }}\nmetastore:\n  type: etcd\n\n# S3 configuration\nminio:\n  address: {{ include \"milvus.s3.host\" . }}\n  port: {{ include \"milvus.s3.port\" . }}\n  accessKeyID: {{ print \"{{ MILVUS_S3_ACCESS_ID }}\" | quote }}\n  secretAccessKey: {{ print \"{{ MILVUS_S3_SECRET_ACCESS_KEY }}\" | quote }}\n  useSSL: {{ include \"milvus.s3.useSSL\" . }}\n  bucketName: {{ include \"milvus.s3.bucket\" . }}\n  rootPath: {{ include \"milvus.s3.rootPath\" . }}\n  useIAM: {{ include \"milvus.s3.useIAM\" . }}\n  {{- if not .Values.minio.enabled }}\n  cloudProvider: {{ .Values.externalS3.cloudProvider }}\n  iamEndpoint: {{ .Values.externalS3.iamEndpoint }}\n  {{- end }}\n\n# Kafka configuration\nkafka:\n  brokerList:\n    {{- if .Values.kafka.enabled  }}\n      {{- $replicas := $.Values.kafka.replicaCount | int }}\n      {{- range $i, $_e := until $replicas }}\n    - {{ printf \"%s-%d.%s:%v\" (include \"milvus.kafka.fullname\" $ ) $i (include \"milvus.kafka.headlessServiceName\" $) ( include \"milvus.kafka.port\" $ ) }}\n      {{- end }}\n    {{- else }}\n    {{- range $node := .Values.kafka.servers }}\n    - {{ printf \"%s:%v\" $node (include \"milvus.kafka.port\" $) }}\n    {{- end }}\n    {{- end }}\n  securityProtocol: {{ include \"milvus.kafka.securityProtocol\" . }}\n  {{- if include \"milvus.kafka.authEnabled\" . }}\n  saslMechanisms: {{ include \"milvus.kafka.saslMechanisms\" . }}\n  saslUsername: {{ include \"milvus.kafka.user\" . }}\n  saslPassword: {{ print \"{{ MILVUS_KAFKA_PASSWORD }}\" | quote }}\n  {{- end }}\n\n# Data coordinator\ndataCoord:\n  address: {{ include \"milvus.data-coordinator.fullname\" . }}\n  port: {{ .Values.dataCoord.service.ports.grpc }}\n\n# Root coordinator\nrootCoord:\n  address: {{ include \"milvus.root-coordinator.fullname\" . }}\n  port: {{ .Values.rootCoord.service.ports.grpc }}\n\n# Index coordinator\nindexCoord:\n  address: {{ include \"milvus.index-coordinator.fullname\" . }}\n  port: {{ .Values.indexCoord.service.ports.grpc }}\n\n# Query coordinator\nqueryCoord:\n  address: {{ include \"milvus.query-coordinator.fullname\" . }}\n  port: {{ .Values.queryCoord.service.ports.grpc }}\n\n# Data node\ndataNode:\n  port: {{ .Values.dataNode.service.ports.grpc }}\n\n# Index node\nindexNode:\n  port: {{ .Values.indexNode.service.ports.grpc }}\n\n# Query node\nqueryNode:\n  port: {{ .Values.queryNode.service.ports.grpc }}\n\nproxy:\n  port: {{ .Values.proxy.service.ports.grpc }}\n  accessLog:\n    localPath: /dev\n    filename: stdout\n  http:\n    enabled: true\n\n# Log configuration\nlog:\n  level: {{ ternary \"debug\" \"info\" .Values.milvus.image.debug }}\n  stdout: true\n\n# Common configuration\ncommon:\n  storageType: minio\n  security:\n    authorizationEnabled: {{ .Values.milvus.auth.enabled }}\n    {{- if .Values.milvus.auth.enabled }}\n    superUsers:\n      - {{ .Values.milvus.auth.username }}\n    {{- end }}\n"
                 },
                 "extraConfig": {
                     "type": "object",
@@ -177,6 +182,221 @@
                     "type": "string",
                     "description": "name of a ConfigMap with existing configuration for the Dashboard",
                     "default": ""
+                }
+            }
+        },
+        "initJob": {
+            "type": "object",
+            "properties": {
+                "forceRun": {
+                    "type": "boolean",
+                    "description": "Force the run of the credential job",
+                    "default": false
+                },
+                "image": {
+                    "type": "object",
+                    "properties": {
+                        "registry": {
+                            "type": "string",
+                            "description": "PyMilvus image registry",
+                            "default": "docker.io"
+                        },
+                        "repository": {
+                            "type": "string",
+                            "description": "PyMilvus image repository",
+                            "default": "bitnami/pymilvus"
+                        },
+                        "tag": {
+                            "type": "string",
+                            "description": "PyMilvus image tag (immutable tags are recommended)",
+                            "default": "2.2.13-debian-11-r1"
+                        },
+                        "digest": {
+                            "type": "string",
+                            "description": "PyMilvus image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)",
+                            "default": ""
+                        },
+                        "pullPolicy": {
+                            "type": "string",
+                            "description": "PyMilvus image pull policy",
+                            "default": "IfNotPresent"
+                        },
+                        "pullSecrets": {
+                            "type": "array",
+                            "description": "PyMilvus image pull secrets",
+                            "default": [],
+                            "items": {}
+                        }
+                    }
+                },
+                "enableDefaultInitContainers": {
+                    "type": "boolean",
+                    "description": "Deploy default init containers",
+                    "default": true
+                },
+                "backoffLimit": {
+                    "type": "number",
+                    "description": "set backoff limit of the job",
+                    "default": 10
+                },
+                "extraVolumes": {
+                    "type": "array",
+                    "description": "Optionally specify extra list of additional volumes for the credential init job",
+                    "default": [],
+                    "items": {}
+                },
+                "extraCommands": {
+                    "type": "string",
+                    "description": "Extra commands to pass to the generation job",
+                    "default": ""
+                },
+                "containerSecurityContext": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enabled credential init job containers' Security Context",
+                            "default": true
+                        },
+                        "runAsUser": {
+                            "type": "number",
+                            "description": "Set credential init job containers' Security Context runAsUser",
+                            "default": 1001
+                        },
+                        "runAsNonRoot": {
+                            "type": "boolean",
+                            "description": "Set credential init job containers' Security Context runAsNonRoot",
+                            "default": true
+                        },
+                        "readOnlyRootFilesystem": {
+                            "type": "boolean",
+                            "description": "Set credential init job containers' Security Context runAsNonRoot",
+                            "default": true
+                        },
+                        "allowPrivilegeEscalation": {
+                            "type": "boolean",
+                            "description": "Set container's privilege escalation",
+                            "default": false
+                        },
+                        "capabilities": {
+                            "type": "object",
+                            "properties": {
+                                "drop": {
+                                    "type": "array",
+                                    "description": "Set container's Security Context runAsNonRoot",
+                                    "default": [
+                                        "ALL"
+                                    ],
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "podSecurityContext": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enabled credential init job pods' Security Context",
+                            "default": true
+                        },
+                        "fsGroup": {
+                            "type": "number",
+                            "description": "Set credential init job pod's Security Context fsGroup",
+                            "default": 1001
+                        },
+                        "seccompProfile": {
+                            "type": "object",
+                            "properties": {
+                                "type": {
+                                    "type": "string",
+                                    "description": "Set container's Security Context seccomp profile",
+                                    "default": "RuntimeDefault"
+                                }
+                            }
+                        }
+                    }
+                },
+                "extraEnvVars": {
+                    "type": "array",
+                    "description": "Array containing extra env vars to configure the credential init job",
+                    "default": [],
+                    "items": {}
+                },
+                "extraEnvVarsCM": {
+                    "type": "string",
+                    "description": "ConfigMap containing extra env vars to configure the credential init job",
+                    "default": ""
+                },
+                "extraEnvVarsSecret": {
+                    "type": "string",
+                    "description": "Secret containing extra env vars to configure the credential init job (in case of sensitive data)",
+                    "default": ""
+                },
+                "extraVolumeMounts": {
+                    "type": "array",
+                    "description": "Array of extra volume mounts to be added to the jwt Container (evaluated as template). Normally used with `extraVolumes`.",
+                    "default": [],
+                    "items": {}
+                },
+                "resources": {
+                    "type": "object",
+                    "properties": {
+                        "limits": {
+                            "type": "object",
+                            "description": "The resources limits for the container",
+                            "default": {}
+                        },
+                        "requests": {
+                            "type": "object",
+                            "description": "The requested resources for the container",
+                            "default": {}
+                        }
+                    }
+                },
+                "hostAliases": {
+                    "type": "array",
+                    "description": "Add deployment host aliases",
+                    "default": [],
+                    "items": {}
+                },
+                "annotations": {
+                    "type": "object",
+                    "properties": {
+                        "helm": {
+                            "type": "object",
+                            "properties": {
+                                "sh/hook": {
+                                    "type": "string",
+                                    "description": "",
+                                    "default": "post-install"
+                                },
+                                "sh/hook-delete-policy": {
+                                    "type": "string",
+                                    "description": "",
+                                    "default": "before-hook-creation,hook-succeeded"
+                                },
+                                "sh/hook-weight": {
+                                    "type": "string",
+                                    "description": "",
+                                    "default": "10"
+                                }
+                            }
+                        }
+                    }
+                },
+                "podLabels": {
+                    "type": "object",
+                    "description": "Additional pod labels",
+                    "default": {}
+                },
+                "podAnnotations": {
+                    "type": "object",
+                    "description": "Additional pod annotations",
+                    "default": {}
                 }
             }
         },
@@ -1575,11 +1795,6 @@
                 "metrics": {
                     "type": "object",
                     "properties": {
-                        "enabled": {
-                            "type": "boolean",
-                            "description": "Enable metrics",
-                            "default": false
-                        },
                         "annotations": {
                             "type": "object",
                             "properties": {
@@ -1599,6 +1814,11 @@
                                     }
                                 }
                             }
+                        },
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable metrics",
+                            "default": false
                         },
                         "serviceMonitor": {
                             "type": "object",
@@ -6008,33 +6228,6 @@
                         }
                     }
                 },
-                "networkPolicy": {
-                    "type": "object",
-                    "properties": {
-                        "enabled": {
-                            "type": "boolean",
-                            "description": "Enable creation of NetworkPolicy resources",
-                            "default": false
-                        },
-                        "allowExternal": {
-                            "type": "boolean",
-                            "description": "The Policy model to apply",
-                            "default": true
-                        },
-                        "extraIngress": {
-                            "type": "array",
-                            "description": "Add extra ingress rules to the NetworkPolicy",
-                            "default": [],
-                            "items": {}
-                        },
-                        "extraEgress": {
-                            "type": "array",
-                            "description": "Add extra ingress rules to the NetworkPolicy",
-                            "default": [],
-                            "items": {}
-                        }
-                    }
-                },
                 "metrics": {
                     "type": "object",
                     "properties": {
@@ -6124,6 +6317,33 @@
                                     "default": ""
                                 }
                             }
+                        }
+                    }
+                },
+                "networkPolicy": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable creation of NetworkPolicy resources",
+                            "default": false
+                        },
+                        "allowExternal": {
+                            "type": "boolean",
+                            "description": "The Policy model to apply",
+                            "default": true
+                        },
+                        "extraIngress": {
+                            "type": "array",
+                            "description": "Add extra ingress rules to the NetworkPolicy",
+                            "default": [],
+                            "items": {}
+                        },
+                        "extraEgress": {
+                            "type": "array",
+                            "description": "Add extra ingress rules to the NetworkPolicy",
+                            "default": [],
+                            "items": {}
                         }
                     }
                 }
