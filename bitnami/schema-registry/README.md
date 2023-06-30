@@ -26,8 +26,6 @@ Looking to use Confluent Schema Registry in production? Try [VMware Application 
 
 - Kubernetes 1.19+
 - Helm 3.2.0+
-- PV provisioner support in the underlying infrastructure
-- ReadWriteMany volumes for deployment scaling
 
 ## Installing the Chart
 
@@ -59,7 +57,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------- | ----------------------------------------------- | ----- |
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 | `kubeVersion`             | Override Kubernetes version                     | `""`  |
 
 ### Common parameters
@@ -161,8 +158,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `customLivenessProbe`                | Custom livenessProbe that overrides the default one                                                                      | `{}`            |
 | `customReadinessProbe`               | Custom readinessProbe that overrides the default one                                                                     | `{}`            |
 | `customStartupProbe`                 | Custom startupProbe that overrides the default one                                                                       | `{}`            |
-| `extraVolumes`                       | Optionally specify extra list of additional volumes for MinIO&reg; pods                                                  | `[]`            |
-| `extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for MinIO&reg; container(s)                                     | `[]`            |
+| `extraVolumes`                       | Optionally specify extra list of additional volumes for schema-registry pods                                             | `[]`            |
+| `extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for schema-registry container(s)                                | `[]`            |
 | `initContainers`                     | Add additional init containers to the Schema Registry pods.                                                              | `[]`            |
 | `sidecars`                           | Add additional sidecar containers to the Schema Registry pods.                                                           | `[]`            |
 | `pdb.create`                         | Enable/disable a Pod Disruption Budget creation                                                                          | `false`         |

@@ -5,10 +5,9 @@
 ## @section Global parameters
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
-## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+## Current available global Docker image parameters: imageRegistry and imagePullSecrets
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
 ##
 global:
   imageRegistry: ""
@@ -17,7 +16,6 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass: ""
 
 ## @param kubeVersion Override Kubernetes version
 ##
@@ -380,7 +378,7 @@ customReadinessProbe: {}
 ## @param customStartupProbe Custom startupProbe that overrides the default one
 ##
 customStartupProbe: {}
-## @param extraVolumes Optionally specify extra list of additional volumes for MinIO&reg; pods
+## @param extraVolumes Optionally specify extra list of additional volumes for schema-registry pods
 ## e.g:
 ## extraVolumes:
 ##   - name: avro-properties
@@ -388,7 +386,7 @@ customStartupProbe: {}
 ##       name: avro-properties
 ##
 extraVolumes: []
-## @param extraVolumeMounts Optionally specify extra list of additional volumeMounts for MinIO&reg; container(s)
+## @param extraVolumeMounts Optionally specify extra list of additional volumeMounts for schema-registry container(s)
 ## e.g:
 ## extraVolumeMounts:
 ##   - name: avro-properties
