@@ -9,7 +9,7 @@ header:
       spdx-id: Apache-2.0
       copyright-owner: VMware, Inc.
 
-      pattern: |
+      content: |
         # Copyright VMware, Inc.
         # SPDX-License-Identifier: APACHE-2.0
 
@@ -25,7 +25,7 @@ header:
       spdx-id: Apache-2.0
       copyright-owner: VMware, Inc.
 
-      pattern: |
+      content: |
         {{- /*
         Copyright VMware, Inc.
         SPDX-License-Identifier: APACHE-2.0
