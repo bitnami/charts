@@ -1,3 +1,8 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 apiVersion: v1
 kind: Service
 metadata:
@@ -47,6 +52,7 @@ spec:
       nodePort: {{ .Values.meta.service.nodePorts.http }}
       {{- else if eq .Values.meta.service.type "ClusterIP" }}
       nodePort: null
+      targetPort: {{ .Values.meta.containerPorts.http }}
       {{- end }}
     {{- if .Values.meta.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.meta.service.extraPorts "context" $) | nindent 4 }}

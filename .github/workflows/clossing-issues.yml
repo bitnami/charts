@@ -1,11 +1,13 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
 name: '[Support] Close Solved issues'
 on:
   schedule:
     # Hourly
     - cron: '0 * * * *'
-permissions:
-  issues: write
-  pull-requests: write
+# Remove all permissions by default. Actions are performed by Bitnami Bot
+permissions: {}
 jobs:
   stale:
     runs-on: ubuntu-latest

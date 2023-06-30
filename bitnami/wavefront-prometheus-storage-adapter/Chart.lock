@@ -1,9 +1,0 @@
-dependencies:
-- name: wavefront
-  repository: oci://registry-1.docker.io/bitnamicharts
-  version: 4.3.1
-- name: common
-  repository: oci://registry-1.docker.io/bitnamicharts
-  version: 2.2.5
-digest: sha256:a8defc0423b0e35dc66773a68a76e2598747b8bfa321722bbf9cf5d9675674e1
-generated: "2023-05-09T01:06:18.199074622Z"

@@ -8,8 +8,6 @@ HAProxy is a TCP proxy and a HTTP reverse proxy. It supports SSL termination and
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 
-Looking to use HAProxy in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
-
 ## TL;DR
 
 ```console
@@ -25,6 +23,8 @@ This chart bootstraps a [HAProxy](https://github.com/haproxytech/haproxy) Deploy
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 [Learn more about the default configuration of the chart](https://docs.bitnami.com/kubernetes/infrastructure/haproxy/get-started/).
+
+Looking to use HAProxy in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -113,7 +113,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | ------------------------------------------------------------------------------------------------------- | -------------------- |
 | `image.registry`                        | HAProxy image registry                                                                                  | `docker.io`          |
 | `image.repository`                      | HAProxy image repository                                                                                | `bitnami/haproxy`    |
-| `image.tag`                             | HAProxy image tag (immutable tags are recommended)                                                      | `2.7.8-debian-11-r6` |
+| `image.tag`                             | HAProxy image tag (immutable tags are recommended)                                                      | `2.8.0-debian-11-r5` |
 | `image.digest`                          | HAProxy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                 |
 | `image.pullPolicy`                      | HAProxy image pull policy                                                                               | `IfNotPresent`       |
 | `image.pullSecrets`                     | HAProxy image pull secrets                                                                              | `[]`                 |
@@ -261,7 +261,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## License
 
-Copyright &copy; 2023 Bitnami
+Copyright &copy; 2023 VMware, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

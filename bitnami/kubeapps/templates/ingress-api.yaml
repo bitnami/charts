@@ -1,3 +1,8 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if and .Values.featureFlags.apiOnly.enabled (not .Values.ingress.enabled) -}}
   {{ fail "Ingress must be enabled for the API mode to work. Please set \"ingress.enabled\" to true." }}
 {{- end -}}

@@ -1,3 +1,8 @@
+{{/*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{/* vim: set filetype=mustache: */}}
 
 {{/*
@@ -519,7 +524,7 @@ kafka: .Values.auth.tls.existingSecrets
 
 {{/* Validate values of Kafka provisioning - keyPasswordSecretKey, keystorePasswordSecretKey or truststorePasswordSecretKey must not be used without passwordsSecret */}}
 {{- define "kafka.validateValues.tlsPasswords" -}}
-{{- if and (include "kafka.client.tlsEncryption" .) (not .Values.provisioning.auth.tls.passwordsSecret) }}
+{{- if and (include "kafka.client.tlsEncryption" .) .Values.provisioning.enabled (not .Values.provisioning.auth.tls.passwordsSecret) }}
 {{- if or .Values.provisioning.auth.tls.keyPasswordSecretKey .Values.provisioning.auth.tls.keystorePasswordSecretKey .Values.provisioning.auth.tls.truststorePasswordSecretKey }}
 kafka: auth.tls.keyPasswordSecretKey,auth.tls.keystorePasswordSecretKey,auth.tls.truststorePasswordSecretKey
     auth.tls.keyPasswordSecretKey,auth.tls.keystorePasswordSecretKey,auth.tls.truststorePasswordSecretKey

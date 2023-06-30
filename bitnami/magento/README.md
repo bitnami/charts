@@ -22,6 +22,8 @@ It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/t
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
+Looking to use Magento in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+
 ## Prerequisites
 
 - Kubernetes 1.19+
@@ -82,7 +84,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`                        | Magento image registry                                                                                               | `docker.io`           |
 | `image.repository`                      | Magento image repository                                                                                             | `bitnami/magento`     |
-| `image.tag`                             | Magento image tag (immutable tags are recommended)                                                                   | `2.4.6-debian-11-r17` |
+| `image.tag`                             | Magento image tag (immutable tags are recommended)                                                                   | `2.4.6-debian-11-r20` |
 | `image.digest`                          | Magento image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag              | `""`                  |
 | `image.pullPolicy`                      | Magento image pull policy                                                                                            | `IfNotPresent`        |
 | `image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                     | `[]`                  |
@@ -188,7 +190,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `mariadb.enabled`                           | Whether to deploy a mariadb server to satisfy the applications database requirements.                   | `true`                 |
 | `mariadb.image.registry`                    | MariaDB image registry                                                                                  | `docker.io`            |
 | `mariadb.image.repository`                  | MariaDB image repository                                                                                | `bitnami/mariadb`      |
-| `mariadb.image.tag`                         | MariaDB image tag (immutable tags are recommended)                                                      | `10.4.29-debian-11-r0` |
+| `mariadb.image.tag`                         | MariaDB image tag (immutable tags are recommended)                                                      | `10.4.29-debian-11-r2` |
 | `mariadb.image.digest`                      | MariaDB image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
 | `mariadb.architecture`                      | MariaDB architecture. Allowed values: `standalone` or `replication`                                     | `standalone`           |
 | `mariadb.auth.rootPassword`                 | Password for the MariaDB `root` user                                                                    | `""`                   |
@@ -215,7 +217,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `elasticsearch.enabled`                   | Whether to deploy a elasticsearch server to use as magento's search engine                                    | `true`                  |
 | `elasticsearch.image.registry`            | Elasticsearch image registry                                                                                  | `docker.io`             |
 | `elasticsearch.image.repository`          | Elasticsearch image repository                                                                                | `bitnami/elasticsearch` |
-| `elasticsearch.image.tag`                 | Elasticsearch image tag (immutable tags are recommended)                                                      | `7.17.10-debian-11-r3`  |
+| `elasticsearch.image.tag`                 | Elasticsearch image tag (immutable tags are recommended)                                                      | `7.17.10-debian-11-r5`  |
 | `elasticsearch.image.digest`              | Elasticsearch image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `elasticsearch.sysctlImage.enabled`       | Enable kernel settings modifier image for Elasticsearch                                                       | `true`                  |
 | `elasticsearch.master.replicaCount`       | Desired number of Elasticsearch master-eligible nodes                                                         | `1`                     |
@@ -247,7 +249,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                                          | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image repository                                                                                                        | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                                                                              | `11-debian-11-r115`     |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                                                                              | `11-debian-11-r118`     |
 | `volumePermissions.image.digest`       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                         | `""`                    |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                                          | `[]`                    |
@@ -293,7 +295,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`             | Start a side-car prometheus exporter                                                                            | `false`                   |
 | `metrics.image.registry`      | Apache exporter image registry                                                                                  | `docker.io`               |
 | `metrics.image.repository`    | Apache exporter image repository                                                                                | `bitnami/apache-exporter` |
-| `metrics.image.tag`           | Apache exporter image tag (immutable tags are recommended)                                                      | `0.13.3-debian-11-r5`     |
+| `metrics.image.tag`           | Apache exporter image tag (immutable tags are recommended)                                                      | `0.13.3-debian-11-r9`     |
 | `metrics.image.digest`        | Apache exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
 | `metrics.image.pullPolicy`    | Image pull policy                                                                                               | `IfNotPresent`            |
 | `metrics.image.pullSecrets`   | Specify docker-registry secret names as an array                                                                | `[]`                      |
@@ -321,7 +323,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `certificates.extraEnvVarsSecret`                    | Secret containing extra env vars (in case of sensitive data)                                                      | `""`                                     |
 | `certificates.image.registry`                        | Container sidecar registry                                                                                        | `docker.io`                              |
 | `certificates.image.repository`                      | Container sidecar image                                                                                           | `bitnami/bitnami-shell`                  |
-| `certificates.image.tag`                             | Container sidecar image tag (immutable tags are recommended)                                                      | `11-debian-11-r115`                      |
+| `certificates.image.tag`                             | Container sidecar image tag (immutable tags are recommended)                                                      | `11-debian-11-r118`                      |
 | `certificates.image.digest`                          | Container sidecar image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                                     |
 | `certificates.image.pullPolicy`                      | Container sidecar image pull policy                                                                               | `IfNotPresent`                           |
 | `certificates.image.pullSecrets`                     | Container sidecar image pull secrets                                                                              | `[]`                                     |
@@ -801,17 +803,9 @@ kubectl patch deployment magento-magento --type=json -p='[{"op": "remove", "path
 kubectl delete statefulset magento-mariadb --cascade=false
 ```
 
-## Community supported solution
-
-Please, note this Helm chart is a community-supported solution. This means that the Bitnami team is not actively working on new features/improvements nor providing support through GitHub Issues for this Helm chart. Any new issue will stay open for 20 days to allow the community to contribute, after 15 days without activity the issue will be marked as stale being closed after 5 days.
-
-The Bitnami team will review any PR that is created, feel free to create a PR if you find any issue or want to implement a new feature.
-
-New versions are not going to be affected. Once a new version is released in the upstream project, the Bitnami container image will be updated to use the latest version.
-
 ## License
 
-Copyright &copy; 2023 Bitnami
+Copyright &copy; 2023 VMware, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

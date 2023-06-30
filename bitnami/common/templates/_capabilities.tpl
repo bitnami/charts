@@ -1,3 +1,8 @@
+{{/*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{/* vim: set filetype=mustache: */}}
 
 {{/*
@@ -45,6 +50,17 @@ Return the appropriate apiVersion for cronjob.
 {{- print "batch/v1beta1" -}}
 {{- else -}}
 {{- print "batch/v1" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the appropriate apiVersion for daemonset.
+*/}}
+{{- define "common.capabilities.daemonset.apiVersion" -}}
+{{- if semverCompare "<1.14-0" (include "common.capabilities.kubeVersion" .) -}}
+{{- print "extensions/v1beta1" -}}
+{{- else -}}
+{{- print "apps/v1" -}}
 {{- end -}}
 {{- end -}}
 
@@ -130,6 +146,21 @@ Return the appropriate apiVersion for APIService.
 Return the appropriate apiVersion for Horizontal Pod Autoscaler.
 */}}
 {{- define "common.capabilities.hpa.apiVersion" -}}
+{{- if semverCompare "<1.23-0" (include "common.capabilities.kubeVersion" .context) -}}
+{{- if .beta2 -}}
+{{- print "autoscaling/v2beta2" -}}
+{{- else -}}
+{{- print "autoscaling/v2beta1" -}}
+{{- end -}}
+{{- else -}}
+{{- print "autoscaling/v2" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the appropriate apiVersion for Vertical Pod Autoscaler.
+*/}}
+{{- define "common.capabilities.vpa.apiVersion" -}}
 {{- if semverCompare "<1.23-0" (include "common.capabilities.kubeVersion" .context) -}}
 {{- if .beta2 -}}
 {{- print "autoscaling/v2beta2" -}}

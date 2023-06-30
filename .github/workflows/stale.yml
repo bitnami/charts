@@ -1,15 +1,20 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
 name: '[Support] Close stale issues and PRs'
 on:
   workflow_dispatch:
   schedule:
     - cron: '0 1 * * *'
-permissions:
-  issues: write
-  pull-requests: write
+# Remove all permissions by default
+permissions: {}
 # This job won't trigger any additional event. All actions are performed with GITHUB_TOKEN
 jobs:
   stale:
     runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
     steps:
       # This step will add the stale comment and label for the first 15 days without activity. It won't close any task
       - uses: actions/stale@v6.0.1

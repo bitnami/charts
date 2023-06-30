@@ -117,9 +117,9 @@ To connect to your database, create a MongoDB&reg; client container:
 Then, run the following command:
 
     {{- if eq .Values.architecture "replicaset" }}
-    mongosh admin --host "{{ join "," $mongoList }}" {{- if .Values.auth.enabled }} --authenticationDatabase admin -u root -p $MONGODB_ROOT_PASSWORD{{- end }}
+    mongosh admin --host "{{ join "," $mongoList }}" {{- if .Values.auth.enabled }} --authenticationDatabase admin -u $MONGODB_ROOT_USER -p $MONGODB_ROOT_PASSWORD{{- end }}
     {{- else }}
-    mongosh admin --host "{{ template "mongodb.service.nameOverride" . }}" {{- if .Values.auth.enabled }} --authenticationDatabase admin -u root -p $MONGODB_ROOT_PASSWORD{{- end }}
+    mongosh admin --host "{{ template "mongodb.service.nameOverride" . }}" {{- if .Values.auth.enabled }} --authenticationDatabase admin -u $MONGODB_ROOT_USER -p $MONGODB_ROOT_PASSWORD{{- end }}
     {{- end }}
 
 {{- if and (eq .Values.architecture "replicaset") .Values.externalAccess.enabled }}

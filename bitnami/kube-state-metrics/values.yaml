@@ -1,3 +1,6 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
 ## @section Global parameters
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
@@ -98,7 +101,7 @@ serviceAccount:
 image:
   registry: docker.io
   repository: bitnami/kube-state-metrics
-  tag: 2.8.2-debian-11-r14
+  tag: 2.9.2-debian-11-r8
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -114,7 +117,9 @@ image:
   ##
   pullSecrets: []
 ## @param extraArgs Additional command line arguments to pass to kube-state-metrics
-##
+## Example:
+## extraArgs:
+##    metric-labels-allowlist: pods=[*]
 extraArgs: {}
 ## @param command Override default container command (useful when using custom images)
 ##

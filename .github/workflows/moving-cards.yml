@@ -1,3 +1,6 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
 # This workflow is built to manage the triage support by using GH issues.
 name: '[Support] Cards movements'
 on:
@@ -5,13 +8,15 @@ on:
     types:
       - created
       - moved
-permissions:
-  issues: write
-  pull-requests: write
+# Remove all permissions by default
+permissions: {}
 jobs:
   get-issue:
     runs-on: ubuntu-latest
     name: Get issue info
+    permissions:
+      issues: read
+      pull-requests: read
     outputs:
       assignees: ${{ steps.get-issue-step.outputs.assignees }}
       author: ${{ steps.get-issue-step.outputs.author }}
@@ -39,6 +44,10 @@ jobs:
           echo "number=${number}" >> $GITHUB_OUTPUT
   label-card:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      issues: write
+      pull-requests: write
     needs:
       - get-issue
     steps:
@@ -107,6 +116,8 @@ jobs:
           remove-labels: in-progress, on-hold
   assign-assignee-if-needed:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     needs:
       - get-issue
     # The job shouldn't run for solved cards
@@ -120,12 +131,15 @@ jobs:
         with:
           path: .github/workflows/
       - name: Assign to a person to work on it
-        # Assign when there is nobody assigned or the card is new
-        if: ${{ github.event.project_card.column_id != env.SOLVED_COLUMN_ID && (needs.get-issue.outputs.assignees == '[]' || github.event.action == 'created') }}
+        # Assign when there is nobody assigned or the card is new.
+        # Cards in Build Maintenance column will remain unassigned.
+        if: |
+          github.event.project_card.column_id != env.SOLVED_COLUMN_ID && github.event.project_card.column_id != env.BUILD_MAINTENANCE_COLUMN_ID &&
+          (needs.get-issue.outputs.assignees == '[]' || github.event.action == 'created')
         uses: pozil/auto-assign-issue@v1.11.0
         with:
           numOfAssignee: 1
-          teams: ${{ github.event.project_card.column_id == env.BITNAMI_COLUMN_ID && env.SUPPORT_TEAM_NAME || (github.event.project_card.column_id == env.BUILD_MAINTENANCE_COLUMN_ID && env.BUILD_MAINTAINERS_TEAM_NAME || env.TRIAGE_TEAM_NAME) }}
+          teams: ${{ github.event.project_card.column_id == env.BITNAMI_COLUMN_ID && env.SUPPORT_TEAM_NAME || env.TRIAGE_TEAM_NAME }}
           repo-token: ${{ secrets.BITNAMI_BOT_TOKEN }}
           allowSelfAssign: false
       - name: Reassign when moved into 'In progress' from 'Triage'

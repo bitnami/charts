@@ -1,3 +1,8 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if .Values.compactor.enabled }}
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
@@ -93,6 +98,9 @@ spec:
             - -target=compactor
             - -config.file={{ .Values.loki.dataDir }}/conf/loki.yaml
             - -boltdb.shipper.compactor.working-directory={{ .Values.loki.dataDir }}/loki/compactor
+          {{- if .Values.compactor.extraArgs }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.compactor.extraArgs "context" $) | nindent 12 }}
+          {{- end }}
           {{- end }}
           {{- if .Values.compactor.extraEnvVars }}
           env: {{- include "common.tplvalues.render" (dict "value" .Values.compactor.extraEnvVars "context" $) | nindent 12 }}

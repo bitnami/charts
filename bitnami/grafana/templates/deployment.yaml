@@ -1,3 +1,8 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
@@ -179,7 +184,7 @@ spec:
               mountPath: /opt/bitnami/grafana/conf/provisioning/dashboards
             {{- end }}
             {{- range .Values.dashboardsConfigMaps }}
-            - name: {{ .configMapName }}
+            - name: {{ include "common.tplvalues.render" ( dict "value" .configMapName "context" $ ) }}
             {{- if .folderName }}
               mountPath: /opt/bitnami/grafana/dashboards/{{ .folderName }}/{{ .fileName }}
             {{- else }}
@@ -299,9 +304,9 @@ spec:
             {{- end }}
         {{- end }}
         {{- range .Values.dashboardsConfigMaps }}
-        - name: {{ .configMapName }}
+        - name: {{ include "common.tplvalues.render" ( dict "value" .configMapName "context" $ ) }}
           configMap:
-            name: {{ .configMapName }}
+            name: {{ include "common.tplvalues.render" ( dict "value" .configMapName "context" $ ) }}
         {{- end }}
         {{- if .Values.datasources.secretName }}
         - name: datasources

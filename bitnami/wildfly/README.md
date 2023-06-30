@@ -8,8 +8,6 @@ Wildfly is a lightweight, open source application server, formerly known as JBos
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 
-Looking to use WildFly in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
-
 ## TL;DR
 
 ```console
@@ -23,6 +21,8 @@ This chart bootstraps a [WildFly](https://github.com/bitnami/containers/tree/mai
 WildFly is written in Java, and implements the Java Platform, Enterprise Edition (Java EE) specification.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
+
+Looking to use WildFly in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -84,7 +84,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | ------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`    | WildFly image registry                                                                                  | `docker.io`           |
 | `image.repository`  | WildFly image repository                                                                                | `bitnami/wildfly`     |
-| `image.tag`         | WildFly image tag (immutable tags are recommended)                                                      | `28.0.0-debian-11-r4` |
+| `image.tag`         | WildFly image tag (immutable tags are recommended)                                                      | `28.0.1-debian-11-r9` |
 | `image.digest`      | WildFly image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
 | `image.pullPolicy`  | WildFly image pull policy                                                                               | `IfNotPresent`        |
 | `image.pullSecrets` | WildFly image pull secrets                                                                              | `[]`                  |
@@ -215,7 +215,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                   | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`               | `false`                 |
 | `volumePermissions.image.registry`            | Bitnami Shell image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`          | Bitnami Shell image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r113`     |
+| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r127`     |
 | `volumePermissions.image.digest`              | Bitnami Shell image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`          | Bitnami Shell image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`         | Bitnami Shell image pull secrets                                                                              | `[]`                    |
@@ -352,7 +352,7 @@ kubectl patch deployment wildfly --type=json -p='[{"op": "remove", "path": "/spe
 
 ## License
 
-Copyright &copy; 2023 Bitnami
+Copyright &copy; 2023 VMware, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

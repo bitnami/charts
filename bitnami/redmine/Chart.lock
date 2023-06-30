@@ -1,12 +1,12 @@
 dependencies:
 - name: postgresql
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 12.5.2
+  version: 12.5.7
 - name: mariadb
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 12.2.3
+  version: 12.2.5
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 2.3.0
-digest: sha256:1c3d11fce5ca99537e4db9467c9e7a22c3980bce8c1e242c84f7cf46b97402df
-generated: "2023-05-17T10:20:05.140611976Z"
+  version: 2.4.0
+digest: sha256:3541d942e911f2391ff2c5e86acdd6f8e29571fc04cc2457c98e326c6c4e2e8b
+generated: "2023-06-17T21:52:27.646545913Z"

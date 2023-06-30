@@ -1,3 +1,8 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- $fullname := include "common.names.fullname" .  }}
 {{- $releaseNamespace := .Release.Namespace }}
 {{- $clusterDomain := .Values.clusterDomain }}
@@ -164,11 +169,7 @@ spec:
             - name: SCHEMA_REGISTRY_KAFKA_SASL_PASSWORDS
               valueFrom:
                 secretKeyRef:
-                  {{- if .Values.kafka.enabled }}
-                  name: {{ printf "%s-jaas" (include "schema-registry.kafka.fullname" .) }}
-                  {{- else }}
-                  name: {{ include "common.names.fullname" . }}-external-kafka
-                  {{- end }}
+                  name: {{ include "schema-registry.jaasSecretName" . }}
                   key: client-passwords
             {{- end }}
             {{- if contains "SSL" $kafkaProtocol }}

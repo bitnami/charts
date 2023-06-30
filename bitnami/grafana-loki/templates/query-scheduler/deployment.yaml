@@ -1,3 +1,8 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if .Values.queryScheduler.enabled }}
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
@@ -92,9 +97,12 @@ spec:
           args: {{- include "common.tplvalues.render" (dict "value" .Values.queryScheduler.args "context" $) | nindent 12 }}
           {{- else }}
           args:
-          - '-config.file={{ .Values.loki.dataDir }}/conf/loki.yaml'
-          - -log.level=debug
-          - -target=query-scheduler
+            - -target=query-scheduler
+            - -config.file={{ .Values.loki.dataDir }}/conf/loki.yaml
+            - -log.level=debug
+          {{- if .Values.queryScheduler.extraArgs }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.queryScheduler.extraArgs "context" $) | nindent 12 }}
+          {{- end }}
           {{- end }}
           {{- if .Values.queryScheduler.extraEnvVars }}
           env: {{- include "common.tplvalues.render" (dict "value" .Values.queryScheduler.extraEnvVars "context" $) | nindent 12 }}

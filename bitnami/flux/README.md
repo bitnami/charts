@@ -8,8 +8,6 @@ Flux is a tool for keeping Kubernetes clusters in sync with sources of configura
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 
-Looking to use Flux in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
-
 ## TL;DR
 
 ```console
@@ -21,6 +19,8 @@ helm install my-release oci://registry-1.docker.io/bitnamicharts/flux
 This chart bootstraps a [Flux](https://github.com/bitnami/containers/tree/main/bitnami/fluxcd-kustomize-controller) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
+
+Looking to use Flux in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -82,7 +82,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `kustomizeController.enabled`                                           | Enable Kustomize Controller                                                                                                                                     | `true`                                |
 | `kustomizeController.image.registry`                                    | Kustomize Controller image registry                                                                                                                             | `docker.io`                           |
 | `kustomizeController.image.repository`                                  | Kustomize Controller image repository                                                                                                                           | `bitnami/fluxcd-kustomize-controller` |
-| `kustomizeController.image.tag`                                         | Kustomize Controller image tag (immutable tags are recommended)                                                                                                 | `0.35.1-debian-11-r0`                 |
+| `kustomizeController.image.tag`                                         | Kustomize Controller image tag (immutable tags are recommended)                                                                                                 | `0.35.1-debian-11-r30`                |
 | `kustomizeController.image.digest`                                      | Kustomize Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended) | `""`                                  |
 | `kustomizeController.image.pullPolicy`                                  | Kustomize Controller image pull policy                                                                                                                          | `IfNotPresent`                        |
 | `kustomizeController.image.pullSecrets`                                 | Kustomize Controller image pull secrets                                                                                                                         | `[]`                                  |
@@ -203,7 +203,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `helmController.enabled`                                           | Enable Helm Controller                                                                                                                                     | `true`                           |
 | `helmController.image.registry`                                    | Helm Controller image registry                                                                                                                             | `docker.io`                      |
 | `helmController.image.repository`                                  | Helm Controller image repository                                                                                                                           | `bitnami/fluxcd-helm-controller` |
-| `helmController.image.tag`                                         | Helm Controller image tag (immutable tags are recommended)                                                                                                 | `0.31.2-debian-11-r0`            |
+| `helmController.image.tag`                                         | Helm Controller image tag (immutable tags are recommended)                                                                                                 | `0.34.1-debian-11-r5`            |
 | `helmController.image.digest`                                      | Helm Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended) | `""`                             |
 | `helmController.image.pullPolicy`                                  | Helm Controller image pull policy                                                                                                                          | `IfNotPresent`                   |
 | `helmController.image.pullSecrets`                                 | Helm Controller image pull secrets                                                                                                                         | `[]`                             |
@@ -324,7 +324,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sourceController.enabled`                                           | Enable Source Controller                                                                                                                                     | `true`                             |
 | `sourceController.image.registry`                                    | Source Controller image registry                                                                                                                             | `docker.io`                        |
 | `sourceController.image.repository`                                  | Source Controller image repository                                                                                                                           | `bitnami/fluxcd-source-controller` |
-| `sourceController.image.tag`                                         | Source Controller image tag (immutable tags are recommended)                                                                                                 | `0.36.1-debian-11-r0`              |
+| `sourceController.image.tag`                                         | Source Controller image tag (immutable tags are recommended)                                                                                                 | `0.36.1-debian-11-r25`             |
 | `sourceController.image.digest`                                      | Source Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended) | `""`                               |
 | `sourceController.image.pullPolicy`                                  | Source Controller image pull policy                                                                                                                          | `IfNotPresent`                     |
 | `sourceController.image.pullSecrets`                                 | Source Controller image pull secrets                                                                                                                         | `[]`                               |
@@ -484,7 +484,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `notificationController.enabled`                                           | Enable Notification Controller                                                                                                                                     | `true`                                   |
 | `notificationController.image.registry`                                    | Notification Controller image registry                                                                                                                             | `docker.io`                              |
 | `notificationController.image.repository`                                  | Notification Controller image repository                                                                                                                           | `bitnami/fluxcd-notification-controller` |
-| `notificationController.image.tag`                                         | Notification Controller image tag (immutable tags are recommended)                                                                                                 | `0.33.0-debian-11-r3`                    |
+| `notificationController.image.tag`                                         | Notification Controller image tag (immutable tags are recommended)                                                                                                 | `0.33.0-debian-11-r31`                   |
 | `notificationController.image.digest`                                      | Notification Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended) | `""`                                     |
 | `notificationController.image.pullPolicy`                                  | Notification Controller image pull policy                                                                                                                          | `IfNotPresent`                           |
 | `notificationController.image.pullSecrets`                                 | Notification Controller image pull secrets                                                                                                                         | `[]`                                     |
@@ -605,7 +605,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `imageAutomationController.enabled`                                           | Enable Image Automation Controller                                                                                                                                     | `true`                                       |
 | `imageAutomationController.image.registry`                                    | Image Automation Controller image registry                                                                                                                             | `docker.io`                                  |
 | `imageAutomationController.image.repository`                                  | Image Automation Controller image repository                                                                                                                           | `bitnami/fluxcd-image-automation-controller` |
-| `imageAutomationController.image.tag`                                         | Image Automation Controller image tag (immutable tags are recommended)                                                                                                 | `0.31.0-debian-11-r2`                        |
+| `imageAutomationController.image.tag`                                         | Image Automation Controller image tag (immutable tags are recommended)                                                                                                 | `0.31.0-debian-11-r16`                       |
 | `imageAutomationController.image.digest`                                      | Image Automation Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended) | `""`                                         |
 | `imageAutomationController.image.pullPolicy`                                  | Image Automation Controller image pull policy                                                                                                                          | `IfNotPresent`                               |
 | `imageAutomationController.image.pullSecrets`                                 | Image Automation Controller image pull secrets                                                                                                                         | `[]`                                         |
@@ -726,7 +726,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `imageReflectorController.enabled`                                           | Enable Image Reflector Controller                                                                                                                                     | `true`                                      |
 | `imageReflectorController.image.registry`                                    | Image Reflector Controller image registry                                                                                                                             | `docker.io`                                 |
 | `imageReflectorController.image.repository`                                  | Image Reflector Controller image repository                                                                                                                           | `bitnami/fluxcd-image-reflector-controller` |
-| `imageReflectorController.image.tag`                                         | Image Reflector Controller image tag (immutable tags are recommended)                                                                                                 | `0.26.1-debian-11-r1`                       |
+| `imageReflectorController.image.tag`                                         | Image Reflector Controller image tag (immutable tags are recommended)                                                                                                 | `0.28.0-debian-11-r8`                       |
 | `imageReflectorController.image.digest`                                      | Image Reflector Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended) | `""`                                        |
 | `imageReflectorController.image.pullPolicy`                                  | Image Reflector Controller image pull policy                                                                                                                          | `IfNotPresent`                              |
 | `imageReflectorController.image.pullSecrets`                                 | Image Reflector Controller image pull secrets                                                                                                                         | `[]`                                        |
@@ -895,7 +895,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## License
 
-Copyright &copy; 2023 Bitnami
+Copyright &copy; 2023 VMware, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

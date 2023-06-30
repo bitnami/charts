@@ -30,6 +30,8 @@ Only one instance of the Prometheus Operator component should be running in the 
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
+Looking to use Prometheus Operator in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+
 ## Prerequisites
 
 - Kubernetes 1.16+
@@ -87,7 +89,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `operator.enabled`                                                                    | Deploy Prometheus Operator to the cluster                                                                              | `true`                        |
 | `operator.image.registry`                                                             | Prometheus Operator image registry                                                                                     | `docker.io`                   |
 | `operator.image.repository`                                                           | Prometheus Operator image repository                                                                                   | `bitnami/prometheus-operator` |
-| `operator.image.tag`                                                                  | Prometheus Operator image tag (immutable tags are recommended)                                                         | `0.65.1-debian-11-r3`         |
+| `operator.image.tag`                                                                  | Prometheus Operator image tag (immutable tags are recommended)                                                         | `0.66.0-debian-11-r5`         |
 | `operator.image.digest`                                                               | Prometheus Operator image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag    | `""`                          |
 | `operator.image.pullPolicy`                                                           | Prometheus Operator image pull policy                                                                                  | `IfNotPresent`                |
 | `operator.image.pullSecrets`                                                          | Specify docker-registry secret names as an array                                                                       | `[]`                          |
@@ -205,7 +207,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `prometheus.enabled`                                                  | Deploy Prometheus to the cluster                                                                                                 | `true`                    |
 | `prometheus.image.registry`                                           | Prometheus image registry                                                                                                        | `docker.io`               |
 | `prometheus.image.repository`                                         | Prometheus image repository                                                                                                      | `bitnami/prometheus`      |
-| `prometheus.image.tag`                                                | Prometheus image tag (immutable tags are recommended)                                                                            | `2.43.1-debian-11-r2`     |
+| `prometheus.image.tag`                                                | Prometheus image tag (immutable tags are recommended)                                                                            | `2.45.0-debian-11-r0`     |
 | `prometheus.image.digest`                                             | Prometheus image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                       | `""`                      |
 | `prometheus.image.pullSecrets`                                        | Specify docker-registry secret names as an array                                                                                 | `[]`                      |
 | `prometheus.serviceAccount.create`                                    | Specify whether to create a ServiceAccount for Prometheus                                                                        | `true`                    |
@@ -267,6 +269,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `prometheus.tolerations`                                              | Prometheus Tolerations for pod assignment                                                                                        | `[]`                      |
 | `prometheus.scrapeInterval`                                           | Interval between consecutive scrapes                                                                                             | `""`                      |
 | `prometheus.evaluationInterval`                                       | Interval between consecutive evaluations                                                                                         | `""`                      |
+| `prometheus.scrapeTimeout`                                            | Timeout after which the global scrape is ended                                                                                   | `""`                      |
 | `prometheus.listenLocal`                                              | ListenLocal makes the Prometheus server listen on loopback                                                                       | `false`                   |
 | `prometheus.livenessProbe.enabled`                                    | Turn on and off liveness probe                                                                                                   | `true`                    |
 | `prometheus.livenessProbe.path`                                       | Path of the HTTP service for checking the healthy state                                                                          | `/-/healthy`              |
@@ -309,6 +312,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `prometheus.podMonitorNamespaceSelector`                              | Namespaces to be selected for PodMonitor discovery                                                                               | `{}`                      |
 | `prometheus.probeSelector`                                            | Probes to be selected for target discovery.                                                                                      | `{}`                      |
 | `prometheus.probeNamespaceSelector`                                   | Namespaces to be selected for Probe discovery                                                                                    | `{}`                      |
+| `prometheus.scrapeConfigSelector`                                     | ScrapeConfig to be selected for target discovery.                                                                                | `{}`                      |
+| `prometheus.scrapeConfigNamespaceSelector`                            | Namespaces to be selected for ScrapeConfig discovery                                                                             | `{}`                      |
 | `prometheus.retention`                                                | Metrics retention days                                                                                                           | `10d`                     |
 | `prometheus.retentionSize`                                            | Maximum size of metrics                                                                                                          | `""`                      |
 | `prometheus.disableCompaction`                                        | Disable the compaction of the Prometheus TSDB                                                                                    | `false`                   |
@@ -352,7 +357,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `prometheus.thanos.create`                                            | Create a Thanos sidecar container                                                                                                | `false`                   |
 | `prometheus.thanos.image.registry`                                    | Thanos image registry                                                                                                            | `docker.io`               |
 | `prometheus.thanos.image.repository`                                  | Thanos image name                                                                                                                | `bitnami/thanos`          |
-| `prometheus.thanos.image.tag`                                         | Thanos image tag                                                                                                                 | `0.31.0-scratch-r3`       |
+| `prometheus.thanos.image.tag`                                         | Thanos image tag                                                                                                                 | `0.31.0-scratch-r8`       |
 | `prometheus.thanos.image.digest`                                      | Thanos image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                           | `""`                      |
 | `prometheus.thanos.image.pullPolicy`                                  | Thanos image pull policy                                                                                                         | `IfNotPresent`            |
 | `prometheus.thanos.image.pullSecrets`                                 | Specify docker-registry secret names as an array                                                                                 | `[]`                      |
@@ -363,7 +368,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `prometheus.thanos.containerSecurityContext.capabilities.drop`        | Linux Kernel capabilities which should be dropped                                                                                | `[]`                      |
 | `prometheus.thanos.prometheusUrl`                                     | Override default prometheus url `http://localhost:9090`                                                                          | `""`                      |
 | `prometheus.thanos.extraArgs`                                         | Additional arguments passed to the thanos sidecar container                                                                      | `[]`                      |
-| `prometheus.thanos.objectStorageConfig`                               | Support mounting a Secret for the objectStorageConfig of the sideCar container.                                                  | `{}`                      |
+| `prometheus.thanos.objectStorageConfig.secretName`                    | Support mounting a Secret for the objectStorageConfig of the sideCar container.                                                  | `""`                      |
+| `prometheus.thanos.objectStorageConfig.secretKey`                     | Secret key with the configuration file.                                                                                          | `thanos.yaml`             |
 | `prometheus.thanos.extraVolumeMounts`                                 | Additional volumeMounts from `prometheus.volumes` for thanos sidecar container                                                   | `[]`                      |
 | `prometheus.thanos.resources.limits`                                  | The resources limits for the Thanos sidecar container                                                                            | `{}`                      |
 | `prometheus.thanos.resources.requests`                                | The resources requests for the Thanos sidecar container                                                                          | `{}`                      |
@@ -387,7 +393,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `prometheus.thanos.service.nodePorts.grpc`                            | Specify the nodePort value for the LoadBalancer and NodePort service types.                                                      | `""`                      |
 | `prometheus.thanos.service.loadBalancerIP`                            | `loadBalancerIP` if service type is `LoadBalancer`                                                                               | `""`                      |
 | `prometheus.thanos.service.loadBalancerSourceRanges`                  | Address that are allowed when svc is `LoadBalancer`                                                                              | `[]`                      |
-| `prometheus.thanos.service.annotations`                               | Additional annotations for Prometheus service                                                                                    | `{}`                      |
+| `prometheus.thanos.service.labels`                                    | Additional labels for Thanos service                                                                                             | `{}`                      |
+| `prometheus.thanos.service.annotations`                               | Additional annotations for Thanos service                                                                                        | `{}`                      |
 | `prometheus.thanos.service.extraPorts`                                | Additional ports to expose from the Thanos sidecar container                                                                     | `[]`                      |
 | `prometheus.thanos.service.externalTrafficPolicy`                     | Prometheus service external traffic policy                                                                                       | `Cluster`                 |
 | `prometheus.thanos.service.sessionAffinity`                           | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                             | `None`                    |
@@ -434,7 +441,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `alertmanager.enabled`                                           | Deploy Alertmanager to the cluster                                                                                                                                                                                                                                                                         | `true`                   |
 | `alertmanager.image.registry`                                    | Prometheus image registry                                                                                                                                                                                                                                                                                  | `docker.io`              |
 | `alertmanager.image.repository`                                  | Prometheus image repository                                                                                                                                                                                                                                                                                | `bitnami/alertmanager`   |
-| `alertmanager.image.tag`                                         | Prometheus image tag (immutable tags are recommended)                                                                                                                                                                                                                                                      | `0.25.0-debian-11-r47`   |
+| `alertmanager.image.tag`                                         | Prometheus image tag (immutable tags are recommended)                                                                                                                                                                                                                                                      | `0.25.0-debian-11-r63`   |
 | `alertmanager.image.digest`                                      | Prometheus image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                                                                                                                 | `""`                     |
 | `alertmanager.image.pullSecrets`                                 | Specify docker-registry secret names as an array                                                                                                                                                                                                                                                           | `[]`                     |
 | `alertmanager.serviceAccount.create`                             | Specify whether to create a ServiceAccount for Alertmanager                                                                                                                                                                                                                                                | `true`                   |
@@ -575,7 +582,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `blackboxExporter.image.registry`                              | Blackbox Exporter image registry                                                                                  | `docker.io`                 |
 | `blackboxExporter.image.repository`                            | Blackbox Exporter image repository                                                                                | `bitnami/blackbox-exporter` |
 | `blackboxExporter.image.pullPolicy`                            | Blackbox Exporter image pull policy                                                                               | `IfNotPresent`              |
-| `blackboxExporter.image.tag`                                   | Blackbox Exporter image tag (immutable tags are recommended)                                                      | `0.23.0-debian-11-r53`      |
+| `blackboxExporter.image.tag`                                   | Blackbox Exporter image tag (immutable tags are recommended)                                                      | `0.24.0-debian-11-r14`      |
 | `blackboxExporter.image.digest`                                | Blackbox Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                        |
 | `blackboxExporter.image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                  | `[]`                        |
 | `blackboxExporter.extraEnvVars`                                | Array with extra environment variables to add to blackboxExporter nodes                                           | `[]`                        |
@@ -661,6 +668,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `kubeApiServer.serviceMonitor.jobLabel`                   | The name of the label on the target service to use as the job name in prometheus.                                               | `component`   |
 | `kubeApiServer.serviceMonitor.metricRelabelings`          | Metric relabeling                                                                                                               | `[]`          |
 | `kubeApiServer.serviceMonitor.relabelings`                | Relabel configs                                                                                                                 | `[]`          |
+| `kubeApiServer.serviceMonitor.labels`                     | Extra labels for the ServiceMonitor                                                                                             | `{}`          |
+| `kubeApiServer.serviceMonitor.annotations`                | Extra annotations for the ServiceMonitor                                                                                        | `{}`          |
 | `kubeControllerManager.enabled`                           | Create a ServiceMonitor to scrape kube-controller-manager service                                                               | `true`        |
 | `kubeControllerManager.endpoints`                         | If your kube controller manager is not deployed as a pod, specify IPs it can be found on                                        | `[]`          |
 | `kubeControllerManager.namespace`                         | Namespace where kube-controller-manager service is deployed.                                                                    | `kube-system` |
@@ -676,6 +685,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `kubeControllerManager.serviceMonitor.serverName`         | Name of the server to use when validating TLS certificate                                                                       | `""`          |
 | `kubeControllerManager.serviceMonitor.metricRelabelings`  | Metric relabeling                                                                                                               | `[]`          |
 | `kubeControllerManager.serviceMonitor.relabelings`        | Relabel configs                                                                                                                 | `[]`          |
+| `kubeControllerManager.serviceMonitor.labels`             | Extra labels for the ServiceMonitor                                                                                             | `{}`          |
+| `kubeControllerManager.serviceMonitor.annotations`        | Extra annotations for the ServiceMonitor                                                                                        | `{}`          |
 | `kubeScheduler.enabled`                                   | Create a ServiceMonitor to scrape kube-scheduler service                                                                        | `true`        |
 | `kubeScheduler.endpoints`                                 | If your kube scheduler is not deployed as a pod, specify IPs it can be found on                                                 | `[]`          |
 | `kubeScheduler.namespace`                                 | Namespace where kube-scheduler service is deployed.                                                                             | `kube-system` |
@@ -704,6 +715,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `coreDns.serviceMonitor.jobLabel`                         | The name of the label on the target service to use as the job name in prometheus.                                               | `k8s-app`     |
 | `coreDns.serviceMonitor.metricRelabelings`                | Metric relabel configs to apply to samples before ingestion.                                                                    | `[]`          |
 | `coreDns.serviceMonitor.relabelings`                      | Relabel configs to apply to samples before ingestion.                                                                           | `[]`          |
+| `coreDns.serviceMonitor.labels`                           | Extra labels for the ServiceMonitor                                                                                             | `{}`          |
+| `coreDns.serviceMonitor.annotations`                      | Extra annotations for the ServiceMonitor                                                                                        | `{}`          |
 | `kubeProxy.enabled`                                       | Create a ServiceMonitor to scrape the kube-proxy Service                                                                        | `true`        |
 | `kubeProxy.endpoints`                                     | If your kube-proxy is not deployed as a pod, specify IPs it can be found on                                                     | `[]`          |
 | `kubeProxy.namespace`                                     | Namespace where kube-proxy service is deployed.                                                                                 | `kube-system` |
@@ -785,6 +798,8 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 ## Troubleshooting
 
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+
+While upgrading a chart, please note that there are certain limitations to upgrading CRDs. This limitation requires manual installation of the CRDs. Refer to the following [Helm documentation](https://helm.sh/docs/chart_best_practices/custom_resource_definitions/#some-caveats-and-explanations/).
 
 ## Upgrading
 
@@ -931,7 +946,7 @@ helm upgrade my-release --set prometheus.thanos.create=true oci://registry-1.doc
 
 ## License
 
-Copyright &copy; 2023 Bitnami
+Copyright &copy; 2023 VMware, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

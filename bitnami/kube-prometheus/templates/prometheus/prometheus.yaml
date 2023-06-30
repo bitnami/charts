@@ -1,3 +1,8 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if .Values.prometheus.enabled }}
 apiVersion: monitoring.coreos.com/v1
 kind: Prometheus
@@ -29,6 +34,11 @@ spec:
   probeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.probeSelector "context" $) | nindent 4 }}
   {{- else }}
   probeSelector: {}
+  {{- end }}
+  {{- if .Values.prometheus.scrapeConfigSelector }}
+  scrapeConfigSelector: {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.scrapeConfigSelector "context" $) | nindent 4 }}
+  {{- else }}
+  scrapeConfigSelector: {}
   {{- end }}
   alerting:
     alertmanagers:
@@ -85,6 +95,9 @@ spec:
   {{- if .Values.prometheus.evaluationInterval }}
   evaluationInterval: {{ .Values.prometheus.evaluationInterval }}
   {{- end }}
+  {{- if .Values.prometheus.scrapeTimeout }}
+  scrapeTimeout: {{ .Values.prometheus.scrapeTimeout }}
+  {{- end }}
   {{- if .Values.prometheus.resources }}
   resources: {{- toYaml .Values.prometheus.resources | nindent 4 }}
   {{- end }}
@@ -120,6 +133,11 @@ spec:
   probeNamespaceSelector: {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.probeNamespaceSelector "context" $) | nindent 4 }}
   {{- else }}
   probeNamespaceSelector: {}
+  {{- end }}
+  {{- if .Values.prometheus.scrapeConfigNamespaceSelector }}
+  scrapeConfigNamespaceSelector: {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.scrapeConfigNamespaceSelector "context" $) | nindent 4 }}
+  {{- else }}
+  scrapeConfigNamespaceSelector: {}
   {{- end }}
   enableRemoteWriteReceiver: {{ .Values.prometheus.enableRemoteWriteReceiver }}
   {{- if .Values.prometheus.remoteRead }}
@@ -255,13 +273,13 @@ spec:
         - --grpc-address=0.0.0.0:10901
         - --http-address=0.0.0.0:10902
         - --tsdb.path=/prometheus/
-        {{- if .Values.prometheus.thanos.objectStorageConfig }}
+        {{- if .Values.prometheus.thanos.objectStorageConfig.secretName }}
         - --objstore.config=$(OBJSTORE_CONFIG)
         {{- end }}
         {{- if .Values.prometheus.thanos.extraArgs }}
         {{ toYaml .Values.prometheus.thanos.extraArgs | indent 8  | trim }}
         {{- end }}
-      {{- if .Values.prometheus.thanos.objectStorageConfig }}
+      {{- if .Values.prometheus.thanos.objectStorageConfig.secretName }}
       env:
         - name: OBJSTORE_CONFIG
           valueFrom:

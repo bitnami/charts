@@ -1,3 +1,8 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if and .Values.mongos.useStatefulSet .Values.mongos.servicePerReplica.enabled }}
 {{- range $i := until (.Values.mongos.replicaCount | int) }}
 {{- $context := deepCopy $ | merge (dict "index" $i) }}

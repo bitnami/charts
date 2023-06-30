@@ -8,8 +8,6 @@ Osclass allows you to easily create a classifieds site without any technical kno
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 
-Looking to use Osclass in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
-
 ## TL;DR
 
 ```console
@@ -23,6 +21,8 @@ This chart bootstraps an [Osclass](https://github.com/bitnami/containers/tree/ma
 It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/tree/main/bitnami/mariadb) which is required for bootstrapping a MariaDB deployment for the database requirements of the Osclass application.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
+
+Looking to use Osclass in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -76,15 +76,15 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Osclass Image parameters
 
-| Name                | Description                                                                                             | Value                |
-| ------------------- | ------------------------------------------------------------------------------------------------------- | -------------------- |
-| `image.registry`    | Osclass image registry                                                                                  | `docker.io`          |
-| `image.repository`  | Osclass image repository                                                                                | `bitnami/osclass`    |
-| `image.tag`         | Osclass image tag (immutable tags are recommended)                                                      | `8.1.2-debian-11-r2` |
-| `image.digest`      | Osclass image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                 |
-| `image.pullPolicy`  | Osclass image pull policy                                                                               | `IfNotPresent`       |
-| `image.pullSecrets` | Osclass image pull secrets                                                                              | `[]`                 |
-| `image.debug`       | Enable Bitnami debug mode in Osclass image                                                              | `false`              |
+| Name                | Description                                                                                             | Value                 |
+| ------------------- | ------------------------------------------------------------------------------------------------------- | --------------------- |
+| `image.registry`    | Osclass image registry                                                                                  | `docker.io`           |
+| `image.repository`  | Osclass image repository                                                                                | `bitnami/osclass`     |
+| `image.tag`         | Osclass image tag (immutable tags are recommended)                                                      | `8.1.2-debian-11-r16` |
+| `image.digest`      | Osclass image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
+| `image.pullPolicy`  | Osclass image pull policy                                                                               | `IfNotPresent`        |
+| `image.pullSecrets` | Osclass image pull secrets                                                                              | `[]`                  |
+| `image.debug`       | Enable Bitnami debug mode in Osclass image                                                              | `false`               |
 
 ### Osclass Configuration parameters
 
@@ -151,7 +151,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `certificates.extraEnvVarsSecret`                    | Secret with extra environment variables                                                                         | `""`                                     |
 | `certificates.image.registry`                        | Apache Exporter image registry                                                                                  | `docker.io`                              |
 | `certificates.image.repository`                      | Apache Exporter image repository                                                                                | `bitnami/bitnami-shell`                  |
-| `certificates.image.tag`                             | Apache Exporter image tag (immutable tags are recommended)                                                      | `11-debian-11-r113`                      |
+| `certificates.image.tag`                             | Apache Exporter image tag (immutable tags are recommended)                                                      | `11-debian-11-r127`                      |
 | `certificates.image.digest`                          | Apache Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                                     |
 | `certificates.image.pullPolicy`                      | Apache Exporter image pull policy                                                                               | `IfNotPresent`                           |
 | `certificates.image.pullSecrets`                     | Apache Exporter image pull secrets                                                                              | `[]`                                     |
@@ -247,7 +247,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`               | `false`                 |
 | `volumePermissions.image.registry`         | Bitnami Shell image registry                                                                                  | `docker.io`             |
 | `volumePermissions.image.repository`       | Bitnami Shell image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`              | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r113`     |
+| `volumePermissions.image.tag`              | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r127`     |
 | `volumePermissions.image.digest`           | Bitnami Shell image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `volumePermissions.image.pullPolicy`       | Bitnami Shell image pull policy                                                                               | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`      | Bitnami Shell image pull secrets                                                                              | `[]`                    |
@@ -274,7 +274,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                          | Start a sidecar prometheus exporter to expose metrics                                                           | `false`                   |
 | `metrics.image.registry`                   | Apache Exporter image registry                                                                                  | `docker.io`               |
 | `metrics.image.repository`                 | Apache Exporter image repository                                                                                | `bitnami/apache-exporter` |
-| `metrics.image.tag`                        | Apache Exporter image tag (immutable tags are recommended)                                                      | `0.13.3-debian-11-r4`     |
+| `metrics.image.tag`                        | Apache Exporter image tag (immutable tags are recommended)                                                      | `0.13.4-debian-11-r6`     |
 | `metrics.image.digest`                     | Apache Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
 | `metrics.image.pullPolicy`                 | Apache Exporter image pull policy                                                                               | `IfNotPresent`            |
 | `metrics.image.pullSecrets`                | Apache Exporter image pull secrets                                                                              | `[]`                      |
@@ -562,17 +562,9 @@ kubectl patch deployment osclass-osclass --type=json -p='[{"op": "remove", "path
 kubectl delete statefulset osclass-mariadb --cascade=false
 ```
 
-## Community supported solution
-
-Please, note this Helm chart is a community-supported solution. This means that the Bitnami team is not actively working on new features/improvements nor providing support through GitHub Issues for this Helm chart. Any new issue will stay open for 20 days to allow the community to contribute, after 15 days without activity the issue will be marked as stale being closed after 5 days.
-
-The Bitnami team will review any PR that is created, feel free to create a PR if you find any issue or want to implement a new feature.
-
-New versions are not going to be affected. Once a new version is released in the upstream project, the Bitnami container image will be updated to use the latest version.
-
 ## License
 
-Copyright &copy; 2023 Bitnami
+Copyright &copy; 2023 VMware, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

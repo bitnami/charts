@@ -1,3 +1,8 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if and .Values.rbac.create .Values.contour.enabled }}
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
@@ -81,6 +86,7 @@ rules:
     resources:
       - gatewayclasses
       - gateways
+      - grpcroutes
       - httproutes
       - tcproutes
       - tlsroutes
@@ -97,6 +103,7 @@ rules:
     resources:
       - gatewayclasses/status
       - gateways/status
+      - grpcroutes/status
       - httproutes/status
       - tcproutes/status
       - tlsroutes/status

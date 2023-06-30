@@ -22,6 +22,8 @@ Apache Spark includes APIs for Java, Python, Scala and R.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
+Looking to use Apache Spark in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+
 ## Prerequisites
 
 - Kubernetes 1.19+
@@ -80,16 +82,16 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Spark parameters
 
-| Name                | Description                                                                                           | Value                 |
-| ------------------- | ----------------------------------------------------------------------------------------------------- | --------------------- |
-| `image.registry`    | Spark image registry                                                                                  | `docker.io`           |
-| `image.repository`  | Spark image repository                                                                                | `bitnami/spark`       |
-| `image.tag`         | Spark image tag (immutable tags are recommended)                                                      | `3.3.2-debian-11-r28` |
-| `image.digest`      | Spark image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
-| `image.pullPolicy`  | Spark image pull policy                                                                               | `IfNotPresent`        |
-| `image.pullSecrets` | Specify docker-registry secret names as an array                                                      | `[]`                  |
-| `image.debug`       | Enable image debug mode                                                                               | `false`               |
-| `hostNetwork`       | Enable HOST Network                                                                                   | `false`               |
+| Name                | Description                                                                                           | Value                |
+| ------------------- | ----------------------------------------------------------------------------------------------------- | -------------------- |
+| `image.registry`    | Spark image registry                                                                                  | `docker.io`          |
+| `image.repository`  | Spark image repository                                                                                | `bitnami/spark`      |
+| `image.tag`         | Spark image tag (immutable tags are recommended)                                                      | `3.4.1-debian-11-r0` |
+| `image.digest`      | Spark image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                 |
+| `image.pullPolicy`  | Spark image pull policy                                                                               | `IfNotPresent`       |
+| `image.pullSecrets` | Specify docker-registry secret names as an array                                                      | `[]`                 |
+| `image.debug`       | Enable image debug mode                                                                               | `false`              |
+| `hostNetwork`       | Enable HOST Network                                                                                   | `false`              |
 
 ### Spark master parameters
 
@@ -135,6 +137,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `master.lifecycleHooks`                                  | for the master container(s) to automate configuration before or after startup                                            | `{}`            |
 | `master.extraVolumes`                                    | Optionally specify extra list of additional volumes for the master pod(s)                                                | `[]`            |
 | `master.extraVolumeMounts`                               | Optionally specify extra list of additional volumeMounts for the master container(s)                                     | `[]`            |
+| `master.extraVolumeClaimTemplates`                       | Optionally specify extra list of volumesClaimTemplates for the master statefulset                                        | `[]`            |
 | `master.resources.limits`                                | The resources limits for the container                                                                                   | `{}`            |
 | `master.resources.requests`                              | The requested resources for the container                                                                                | `{}`            |
 | `master.livenessProbe.enabled`                           | Enable livenessProbe                                                                                                     | `true`          |
@@ -211,6 +214,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `worker.lifecycleHooks`                                  | for the worker container(s) to automate configuration before or after startup                                            | `{}`            |
 | `worker.extraVolumes`                                    | Optionally specify extra list of additional volumes for the worker pod(s)                                                | `[]`            |
 | `worker.extraVolumeMounts`                               | Optionally specify extra list of additional volumeMounts for the master container(s)                                     | `[]`            |
+| `worker.extraVolumeClaimTemplates`                       | Optionally specify extra list of volumesClaimTemplates for the worker statefulset                                        | `[]`            |
 | `worker.resources.limits`                                | The resources limits for the container                                                                                   | `{}`            |
 | `worker.resources.requests`                              | The requested resources for the container                                                                                | `{}`            |
 | `worker.livenessProbe.enabled`                           | Enable livenessProbe                                                                                                     | `true`          |
@@ -464,7 +468,7 @@ This version standardizes the way of defining Ingress rules. When configuring a 
 
 ## License
 
-Copyright &copy; 2023 Bitnami
+Copyright &copy; 2023 VMware, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

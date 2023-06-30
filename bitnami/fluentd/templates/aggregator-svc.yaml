@@ -1,3 +1,8 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if and .Values.aggregator.enabled .Values.aggregator.service.ports -}}
 apiVersion: v1
 kind: Service

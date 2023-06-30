@@ -30,6 +30,7 @@ server:
   containerPorts:
     http: 8080
   existingConfigmapKey: test.yaml
+  scrapeInterval: 10s
   extraScrapeConfigs:
     - job_name: wordpress
       kubernetes_sd_configs:

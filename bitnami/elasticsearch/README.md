@@ -20,6 +20,8 @@ This chart bootstraps a [Elasticsearch](https://github.com/bitnami/containers/tr
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
+Looking to use Elasticsearch in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+
 ## Prerequisites
 
 - Kubernetes 1.19+
@@ -106,7 +108,7 @@ helm delete --purge my-release
 | `useIstioLabels`                           | Use this variable to add Istio labels to all pods                                                                                                   | `true`                         |
 | `image.registry`                           | Elasticsearch image registry                                                                                                                        | `docker.io`                    |
 | `image.repository`                         | Elasticsearch image repository                                                                                                                      | `bitnami/elasticsearch`        |
-| `image.tag`                                | Elasticsearch image tag (immutable tags are recommended)                                                                                            | `8.7.1-debian-11-r7`           |
+| `image.tag`                                | Elasticsearch image tag (immutable tags are recommended)                                                                                            | `8.8.1-debian-11-r0`           |
 | `image.digest`                             | Elasticsearch image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                       | `""`                           |
 | `image.pullPolicy`                         | Elasticsearch image pull policy                                                                                                                     | `IfNotPresent`                 |
 | `image.pullSecrets`                        | Elasticsearch image pull secrets                                                                                                                    | `[]`                           |
@@ -171,6 +173,7 @@ helm delete --purge my-release
 | ---------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
 | `master.masterOnly`                                  | Deploy the Elasticsearch master-elegible nodes as master-only nodes. Recommended for high-demand deployments.                                      | `true`              |
 | `master.replicaCount`                                | Number of master-elegible replicas to deploy                                                                                                       | `2`                 |
+| `master.extraRoles`                                  | Append extra roles to the node role                                                                                                                | `[]`                |
 | `master.pdb.create`                                  | Enable/disable a Pod Disruption Budget creation                                                                                                    | `false`             |
 | `master.pdb.minAvailable`                            | Minimum number/percentage of pods that should remain scheduled                                                                                     | `1`                 |
 | `master.pdb.maxUnavailable`                          | Maximum number/percentage of pods that may be made unavailable                                                                                     | `""`                |
@@ -257,6 +260,7 @@ helm delete --purge my-release
 | Name                                               | Description                                                                                                                                      | Value               |
 | -------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------- |
 | `data.replicaCount`                                | Number of data-only replicas to deploy                                                                                                           | `2`                 |
+| `data.extraRoles`                                  | Append extra roles to the node role                                                                                                              | `[]`                |
 | `data.pdb.create`                                  | Enable/disable a Pod Disruption Budget creation                                                                                                  | `false`             |
 | `data.pdb.minAvailable`                            | Minimum number/percentage of pods that should remain scheduled                                                                                   | `1`                 |
 | `data.pdb.maxUnavailable`                          | Maximum number/percentage of pods that may be made unavailable                                                                                   | `""`                |
@@ -343,6 +347,7 @@ helm delete --purge my-release
 | Name                                                       | Description                                                                                                               | Value           |
 | ---------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- | --------------- |
 | `coordinating.replicaCount`                                | Number of coordinating-only replicas to deploy                                                                            | `2`             |
+| `coordinating.extraRoles`                                  | Append extra roles to the node role                                                                                       | `[]`            |
 | `coordinating.pdb.create`                                  | Enable/disable a Pod Disruption Budget creation                                                                           | `false`         |
 | `coordinating.pdb.minAvailable`                            | Minimum number/percentage of pods that should remain scheduled                                                            | `1`             |
 | `coordinating.pdb.maxUnavailable`                          | Maximum number/percentage of pods that may be made unavailable                                                            | `""`            |
@@ -422,6 +427,7 @@ helm delete --purge my-release
 | ---------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ---------------------------- |
 | `ingest.enabled`                                     | Enable ingest nodes                                                                                                              | `true`                       |
 | `ingest.replicaCount`                                | Number of ingest-only replicas to deploy                                                                                         | `2`                          |
+| `ingest.extraRoles`                                  | Append extra roles to the node role                                                                                              | `[]`                         |
 | `ingest.pdb.create`                                  | Enable/disable a Pod Disruption Budget creation                                                                                  | `false`                      |
 | `ingest.pdb.minAvailable`                            | Minimum number/percentage of pods that should remain scheduled                                                                   | `1`                          |
 | `ingest.pdb.maxUnavailable`                          | Maximum number/percentage of pods that may be made unavailable                                                                   | `""`                         |
@@ -534,7 +540,7 @@ helm delete --purge my-release
 | `metrics.fullnameOverride`                      | String to fully override common.names.fullname                                                                                 | `""`                             |
 | `metrics.image.registry`                        | Metrics exporter image registry                                                                                                | `docker.io`                      |
 | `metrics.image.repository`                      | Metrics exporter image repository                                                                                              | `bitnami/elasticsearch-exporter` |
-| `metrics.image.tag`                             | Metrics exporter image tag                                                                                                     | `1.5.0-debian-11-r99`            |
+| `metrics.image.tag`                             | Metrics exporter image tag                                                                                                     | `1.5.0-debian-11-r106`           |
 | `metrics.image.digest`                          | Metrics exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag               | `""`                             |
 | `metrics.image.pullPolicy`                      | Metrics exporter image pull policy                                                                                             | `IfNotPresent`                   |
 | `metrics.image.pullSecrets`                     | Metrics exporter image pull secrets                                                                                            | `[]`                             |
@@ -616,7 +622,7 @@ helm delete --purge my-release
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                                          | `docker.io`             |
 | `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                                                              | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `11-debian-11-r116`     |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `11-debian-11-r123`     |
 | `volumePermissions.image.digest`       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                         | `""`                    |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`  | Init container volume-permissions image pull secrets                                                                                                      | `[]`                    |
@@ -625,7 +631,7 @@ helm delete --purge my-release
 | `sysctlImage.enabled`                  | Enable kernel settings modifier image                                                                                                                     | `true`                  |
 | `sysctlImage.registry`                 | Kernel settings modifier image registry                                                                                                                   | `docker.io`             |
 | `sysctlImage.repository`               | Kernel settings modifier image repository                                                                                                                 | `bitnami/bitnami-shell` |
-| `sysctlImage.tag`                      | Kernel settings modifier image tag                                                                                                                        | `11-debian-11-r116`     |
+| `sysctlImage.tag`                      | Kernel settings modifier image tag                                                                                                                        | `11-debian-11-r123`     |
 | `sysctlImage.digest`                   | Kernel settings modifier image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                  | `""`                    |
 | `sysctlImage.pullPolicy`               | Kernel settings modifier image pull policy                                                                                                                | `IfNotPresent`          |
 | `sysctlImage.pullSecrets`              | Kernel settings modifier image pull secrets                                                                                                               | `[]`                    |
@@ -968,7 +974,7 @@ kubectl delete statefulset elasticsearch-data --cascade=false
 
 ## License
 
-Copyright &copy; 2023 Bitnami
+Copyright &copy; 2023 VMware, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

@@ -1,3 +1,6 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
 name: '[Support] Update README metadata'
 
 on:
@@ -6,21 +9,22 @@ on:
       - main
     paths:
       - 'bitnami/*/values.yaml'
-permissions:
-  contents: write
+# Remove all permissions by default
+permissions: {}
 jobs:
   update-readme-metadata:
     runs-on: ubuntu-latest
-
+    permissions:
+      contents: write
     steps:
       - name: Install readme-generator-for-helm
         run: npm install -g @bitnami/readme-generator-for-helm
       - name: Checkout bitnami/charts
         uses: actions/checkout@v3
         with:
+          path: charts
           ref: ${{github.event.pull_request.head.ref}}
           repository: ${{github.event.pull_request.head.repo.full_name}}
-          path: charts
           token: ${{ github.actor == 'bitnami-bot' && secrets.GITHUB_TOKEN || secrets.BITNAMI_BOT_TOKEN }}
       - name: Execute readme-generator-for-helm
         env:

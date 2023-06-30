@@ -8,8 +8,6 @@ Redis(R) is an open source, scalable, distributed in-memory cache for applicatio
 
 Disclaimer: Redis is a registered trademark of Redis Ltd. Any rights therein are reserved to Redis Ltd. Any use by Bitnami is for referential purposes only and does not indicate any sponsorship, endorsement, or affiliation between Redis Ltd.
 
-Looking to use Redis&reg; Cluster in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
-
 ## TL;DR
 
 ```console
@@ -33,6 +31,8 @@ The main features of each chart are the following:
 | Supports multiple databases                            | Supports only one database. Better if you have a big dataset           |
 | Single write point (single master)                     | Multiple write points (multiple masters)                               |
 | ![Redis&reg; Topology](img/redis-topology.png) | ![Redis&reg; Cluster Topology](img/redis-cluster-topology.png) |
+
+Looking to use Redisreg; Cluster in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -94,7 +94,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.args`                                   | Args to override all containers in the deployment                                                                                                   | `["infinity"]`          |
 | `image.registry`                                        | Redis&reg; cluster image registry                                                                                                                   | `docker.io`             |
 | `image.repository`                                      | Redis&reg; cluster image repository                                                                                                                 | `bitnami/redis-cluster` |
-| `image.tag`                                             | Redis&reg; cluster image tag (immutable tags are recommended)                                                                                       | `7.0.11-debian-11-r7`   |
+| `image.tag`                                             | Redis&reg; cluster image tag (immutable tags are recommended)                                                                                       | `7.0.11-debian-11-r21`  |
 | `image.digest`                                          | Redis&reg; cluster image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                  | `""`                    |
 | `image.pullPolicy`                                      | Redis&reg; cluster image pull policy                                                                                                                | `IfNotPresent`          |
 | `image.pullSecrets`                                     | Specify docker-registry secret names as an array                                                                                                    | `[]`                    |
@@ -155,10 +155,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.size`                                      | Size of data volume                                                                                                                                 | `8Gi`                   |
 | `persistence.matchLabels`                               | Persistent Volume selectors                                                                                                                         | `{}`                    |
 | `persistence.matchExpressions`                          | matchExpressions Persistent Volume selectors                                                                                                        | `{}`                    |
+| `persistentVolumeClaimRetentionPolicy.enabled`          | Controls if and how PVCs are deleted during the lifecycle of a StatefulSet                                                                          | `false`                 |
+| `persistentVolumeClaimRetentionPolicy.whenScaled`       | Volume retention behavior when the replica count of the StatefulSet is reduced                                                                      | `Retain`                |
+| `persistentVolumeClaimRetentionPolicy.whenDeleted`      | Volume retention behavior that applies when the StatefulSet is deleted                                                                              | `Retain`                |
 | `volumePermissions.enabled`                             | Enable init container that changes volume permissions in the registry (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
 | `volumePermissions.image.registry`                      | Init container volume-permissions image registry                                                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`                    | Init container volume-permissions image repository                                                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                           | Init container volume-permissions image tag                                                                                                         | `11-debian-11-r114`     |
+| `volumePermissions.image.tag`                           | Init container volume-permissions image tag                                                                                                         | `11-debian-11-r127`     |
 | `volumePermissions.image.digest`                        | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                   | `""`                    |
 | `volumePermissions.image.pullPolicy`                    | Init container volume-permissions image pull policy                                                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                   | Specify docker-registry secret names as an array                                                                                                    | `[]`                    |
@@ -286,7 +289,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                                           | Start a side-car prometheus exporter                                                                                               | `false`                  |
 | `metrics.image.registry`                                    | Redis&reg; exporter image registry                                                                                                 | `docker.io`              |
 | `metrics.image.repository`                                  | Redis&reg; exporter image name                                                                                                     | `bitnami/redis-exporter` |
-| `metrics.image.tag`                                         | Redis&reg; exporter image tag                                                                                                      | `1.50.0-debian-11-r9`    |
+| `metrics.image.tag`                                         | Redis&reg; exporter image tag                                                                                                      | `1.51.0-debian-11-r0`    |
 | `metrics.image.digest`                                      | Redis&reg; exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                | `""`                     |
 | `metrics.image.pullPolicy`                                  | Redis&reg; exporter image pull policy                                                                                              | `IfNotPresent`           |
 | `metrics.image.pullSecrets`                                 | Specify docker-registry secret names as an array                                                                                   | `[]`                     |
@@ -326,7 +329,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sysctlImage.command`                             | sysctlImage command to execute                                                                                       | `[]`                    |
 | `sysctlImage.registry`                            | sysctlImage Init container registry                                                                                  | `docker.io`             |
 | `sysctlImage.repository`                          | sysctlImage Init container repository                                                                                | `bitnami/bitnami-shell` |
-| `sysctlImage.tag`                                 | sysctlImage Init container tag                                                                                       | `11-debian-11-r114`     |
+| `sysctlImage.tag`                                 | sysctlImage Init container tag                                                                                       | `11-debian-11-r127`     |
 | `sysctlImage.digest`                              | sysctlImage Init container digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `sysctlImage.pullPolicy`                          | sysctlImage Init container pull policy                                                                               | `IfNotPresent`          |
 | `sysctlImage.pullSecrets`                         | Specify docker-registry secret names as an array                                                                     | `[]`                    |
@@ -702,7 +705,7 @@ The version `1.0.0` was using a label in the Statefulset's volumeClaimTemplate t
 
 ## License
 
-Copyright &copy; 2023 Bitnami
+Copyright &copy; 2023 VMware, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

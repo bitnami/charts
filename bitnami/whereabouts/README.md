@@ -8,8 +8,6 @@ Whereabouts is a CNI plugin for Kubernetes clusters. It dynamically assigns IP a
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 
-Looking to use Whereabouts in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
-
 ## TL;DR
 
 ```console
@@ -21,6 +19,8 @@ helm install my-release oci://registry-1.docker.io/bitnamicharts/whereabouts
 This chart bootstraps a [Whereabouts](https://github.com/bitnami/containers/tree/main/bitnami/whereabouts) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
+
+Looking to use Whereabouts in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -82,7 +82,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | --------------------------- |
 | `image.registry`                        | Whereabouts image registry                                                                                            | `docker.io`                 |
 | `image.repository`                      | Whereabouts Image name                                                                                                | `bitnami/whereabouts`       |
-| `image.tag`                             | Whereabouts Image tag                                                                                                 | `0.6.1-debian-11-r20`       |
+| `image.tag`                             | Whereabouts Image tag                                                                                                 | `0.6.2-debian-11-r0`        |
 | `image.digest`                          | Whereabouts image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag           | `""`                        |
 | `image.pullPolicy`                      | Whereabouts image pull policy                                                                                         | `IfNotPresent`              |
 | `image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                      | `[]`                        |
@@ -219,7 +219,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## License
 
-Copyright &copy; 2023 Bitnami
+Copyright &copy; 2023 VMware, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
