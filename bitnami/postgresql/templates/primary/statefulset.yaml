@@ -49,10 +49,10 @@ spec:
       {{- if or (include "postgresql.primary.createConfigmap" .) (include "postgresql.primary.createExtendedConfigmap" .) .Values.primary.podAnnotations }}
       annotations:
         {{- if (include "postgresql.primary.createConfigmap" .) }}
-        checksum/configuration: {{ include (print $.Template.BasePath "/primary/configmap.yaml") . | sha256sum }}
+        checksum/configuration: {{ pick (include (print $.Template.BasePath "/primary/configmap.yaml") . | fromYaml) "data" | toYaml | sha256sum }}
         {{- end }}
         {{- if (include "postgresql.primary.createExtendedConfigmap" .) }}
-        checksum/extended-configuration: {{ include (print $.Template.BasePath "/primary/extended-configmap.yaml") . | sha256sum }}
+        checksum/extended-configuration: {{ pick (include (print $.Template.BasePath "/primary/extended-configmap.yaml") . | fromYaml) "data" | toYaml | sha256sum }}
         {{- end }}
         {{- if .Values.primary.podAnnotations }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.primary.podAnnotations "context" $ ) | nindent 8 }}

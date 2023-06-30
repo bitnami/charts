@@ -642,6 +642,15 @@ kafka:
   ## @param kafka.replicaCount Number of Kafka brokers
   ##
   replicaCount: 1
+  ## @param kafka.auth.clientProtocol Authentication protocol for communications with clients. Allowed protocols: `plaintext`, `tls`, `mtls`, `sasl` and `sasl_tls`
+  ##
+  auth:
+    clientProtocol: "plaintext"
+  ## @param kafka.service.ports.client Kafka svc port for client connections
+  ##
+  service:
+    ports:
+      client: 9092
 
 ##
 ## External Kafka Configuration
@@ -656,6 +665,7 @@ externalKafka:
   ## @param externalKafka.auth.protocol                   Authentication protocol. Allowed protocols: plaintext, tls, sasl and sasl_tls
   ## @param externalKafka.auth.jaas.user                  User for SASL authentication
   ## @param externalKafka.auth.jaas.password              Password for SASL authentication
+  ## @param externalKafka.auth.jaas.existingSecret        Name of the existing secret containing a password for SASL authentication (under the key named "client-passwords")
   ##
   auth:
     ## Authentication protocol
@@ -674,3 +684,4 @@ externalKafka:
     jaas:
       user: user
       password: ""
+      existingSecret: ""
