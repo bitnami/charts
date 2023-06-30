@@ -1,0 +1,16 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
+---
+name: license-headers
+
+on:
+  pull_request:
+
+jobs:
+  license-headers-linter:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Check license Headers
+        uses: apache/skywalking-eyes/header@v0.4.0
