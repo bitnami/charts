@@ -1,3 +1,6 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
 ## bitnami/common
 ## It is required by CI/CD tools and processes.
 ## @skip exampleValue

@@ -1,3 +1,8 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if and (include "mastodon.createInitJob" .) (include "mastodon.web.domain" .) (or .Values.enableS3 .Values.persistence.enabled) }}
 apiVersion: batch/v1
 kind: Job

@@ -1,3 +1,8 @@
+/*
+ * Copyright VMware, Inc.
+ * SPDX-License-Identifier: APACHE-2.0
+ */
+
 /// <reference types="cypress" />
 
 export let lastMinuteTimestamp = (Date.now() - 1000) * 1e6; // Date.now() returns the date in miliseconds

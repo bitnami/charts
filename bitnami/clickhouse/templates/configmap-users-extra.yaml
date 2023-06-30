@@ -1,18 +1,18 @@
-{{- if .Values.adapterRules }}
+{{- if and .Values.usersExtraOverrides (not .Values.usersExtraOverridesConfigmap) }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
+  name: {{ printf "%s-users-extra" (include "common.names.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
-    app.kubernetes.io/component: wavefront-hpa-adapter
+    app.kubernetes.io/component: clickhouse
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
-  name: {{ template "common.names.fullname" . }}
-  namespace: {{ .Release.Namespace }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 data:
-  config.yaml: |
-    rules: {{- include "common.tplvalues.render" ( dict "value" .Values.adapterRules "context" $ ) | nindent 6 }}
+  01_users_extra_overrides.xml: |
+    {{- include "common.tplvalues.render" (dict "value" .Values.usersExtraOverrides "context" $) | nindent 4 }}
 {{- end }}
