@@ -1,3 +1,6 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
 annotations:
   category: MachineLearning
   licenses: Apache-2.0
@@ -23,4 +26,4 @@ maintainers:
 name: pytorch
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/pytorch
-version: 3.2.4
+version: 3.2.6

@@ -1,3 +1,6 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
 http:
   http://spring-cloud-dataflow-skipper:{{ .Vars.skipper.service.port }}:
     status: 200

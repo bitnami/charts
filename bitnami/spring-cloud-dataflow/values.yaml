@@ -1,3 +1,6 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
 ## @section Global parameters
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
@@ -987,10 +990,10 @@ deployer:
   tolerations: []
   ## @param deployer.volumeMounts Streaming applications extra volume mounts
   ##
-  volumeMounts: {}
+  volumeMounts: []
   ## @param deployer.volumes Streaming applications extra volumes
   ##
-  volumes: {}
+  volumes: []
   ## @param deployer.environmentVariables Streaming applications environment variables
   ## RabbitMQ/Kafka envs.
   ## Example:

@@ -1,11 +1,13 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
 name: '[Support] Synchronize team members in the .env file'
 on:
   schedule:
     # Daily
     - cron: '0 5 * * *'
-permissions:
-  # All write actions are executed with BITNAMI_BOT
-  contents: write
+# Remove all permissions by default. Write actions are done by Bitnami Bot
+permissions: {}
 jobs:
   sync-support-teams:
     runs-on: ubuntu-latest

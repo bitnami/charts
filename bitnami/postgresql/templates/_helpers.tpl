@@ -1,3 +1,8 @@
+{{/*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{/* vim: set filetype=mustache: */}}
 
 {{/*
@@ -154,7 +159,7 @@ Get the user-password key.
 Return true if a secret object should be created
 */}}
 {{- define "postgresql.createSecret" -}}
-{{- if not (or .Values.global.postgresql.auth.existingSecret .Values.auth.existingSecret) -}}
+{{- if and (not (or .Values.global.postgresql.auth.existingSecret .Values.auth.existingSecret)) (.Values.auth.enablePostgresUser) -}}
     {{- true -}}
 {{- end -}}
 {{- end -}}

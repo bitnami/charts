@@ -1,11 +1,13 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
 name: '[Support] Assign asset label'
 on:
   pull_request_target:
     types:
       - opened
-permissions:
-  # Remove all permissions by default
-  contents: none
+# Remove all permissions by default
+permissions: {}
 jobs:
   assign-label:
     name: Assign label

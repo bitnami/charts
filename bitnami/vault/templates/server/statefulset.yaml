@@ -1,3 +1,8 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if .Values.server.enabled }}
 apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
@@ -119,7 +124,6 @@ spec:
             - -log-level=debug
             {{- end }}
           {{- end }}
-          env:
           env:
             - name: HOST_IP
               valueFrom:

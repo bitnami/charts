@@ -1,3 +1,8 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- $replicaCount := int .Values.replicaCount }}
 {{- $fullname := include "common.names.fullname" . }}
 {{- $releaseNamespace := .Release.Namespace }}
@@ -380,9 +385,6 @@ spec:
             - name: KAFKA_CFG_CONTROLLER_QUORUM_VOTERS
               value: {{ .Values.kraft.controllerQuorumVoters}}
               {{- end }}
-            {{- else }}
-            - name: KAFKA_ENABLE_KRAFT
-              value: "false"
             {{- end }}
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}

@@ -1,3 +1,8 @@
+/*
+ * Copyright VMware, Inc.
+ * SPDX-License-Identifier: APACHE-2.0
+ */
+
 /// <reference types="cypress" />
 import {
   random,
@@ -6,7 +11,7 @@ import {
 it('allows to use the API Explorer', () => {
   cy.login();
   // Go to the secrets page
-  cy.get('button[class*="nav-console"]').click();
+  cy.get('button[aria-label*="Console"]').click();
   // Create a secret
   cy.fixture('operation').then((op) => {
     cy.get('input').type(`${op.operation.command}{enter}`);

@@ -1,3 +1,8 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if and .Values.shards .Values.shardsvr.arbiter.replicaCount .Values.shardsvr.arbiter.config }}
 apiVersion: v1
 kind: ConfigMap

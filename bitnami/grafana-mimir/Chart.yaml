@@ -1,8 +1,11 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
 annotations:
   category: Infrastructure
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 2.8.0
+appVersion: 2.9.0
 dependencies:
   - condition: minio.enabled
     name: minio
@@ -47,4 +50,4 @@ maintainers:
 name: grafana-mimir
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/grafana-mimir
-version: 0.5.1
+version: 0.5.2

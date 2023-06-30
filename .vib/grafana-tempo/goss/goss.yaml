@@ -1,3 +1,6 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
 addr:
   # Querying /ready in HTTP too early results in error 503 and makes the test flaky
   tcp://grafana-tempo-ingester:{{ .Vars.ingester.service.ports.http }}:
@@ -33,6 +36,11 @@ command:
     exit-status: 0
     stdout:
       - "vulture"
+  xk6-client-registered-traces:
+    exec: tempo-cli query api search http://grafana-tempo-query-frontend:{{ .Vars.queryFrontend.service.ports.http }}
+    exit-status: 0
+    stdout:
+      - "article-to-cart"
   {{- $uid := .Vars.compactor.containerSecurityContext.runAsUser }}
   {{- $gid := .Vars.compactor.podSecurityContext.fsGroup }}
   check-user-info:

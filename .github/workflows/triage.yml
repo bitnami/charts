@@ -1,3 +1,6 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
 # This workflow is built to manage the triage support by using GH issues.
 name: '[Support] Organize triage'
 on:
@@ -9,11 +12,8 @@ on:
     types:
       - reopened
       - opened
-permissions:
-  # Please note that projects cards are created/moved with Bitnami Bot (that's reason to use pull_request_target)
-  contents: read
-  issues: write
-  pull-requests: write
+# Remove all permissions by default
+permissions: {}
 # Avoid concurrency over the same issue
 concurrency:
   group: card-movement-${{ github.event_name != 'issues' && github.event.number || github.event.issue.number }}
@@ -22,6 +22,9 @@ jobs:
   send_to_board:
     name: Organize triage
     runs-on: ubuntu-latest
+    # Please note that projects cards are created/moved with Bitnami Bot
+    permissions:
+      contents: read
     steps:
       - name: Repo checkout
         uses: actions/checkout@v3
@@ -49,15 +52,20 @@ jobs:
           column-name: ${{ (contains(fromJson(env.BITNAMI_TEAM), steps.get-issue.outputs.author)) && 'From Bitnami' || 'Triage' }}
           token: "${{ secrets.BITNAMI_BOT_TOKEN }}"
           issue-number: ${{ steps.get-issue.outputs.number }}
-      # The project API is not efficient and requires several requests to create the project card. For that reason we decided to create
-      # a card for the automated PRs only when it is needed.
+  labeling:
+    name: Set labels for Automated PRs
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+    if: ${{ github.event_name != 'issues' && github.event.pull_request.user.login == 'bitnami-bot' }}
+    # The project API is not efficient and requires several requests to create the project card. For that reason we decided to create
+    # a card for the automated PRs only when it is needed.
+    steps:
       - name: From Bitnami labeling
-        if: ${{steps.get-issue.outputs.author == 'bitnami-bot' && steps.get-issue.outputs.type == 'pull_request'}}
         uses: fmulero/labeler@1.1.0
         with:
           add-labels: 'automated, auto-merge'
       - name: Verify labeling
-        if: ${{steps.get-issue.outputs.author == 'bitnami-bot' && steps.get-issue.outputs.type == 'pull_request'}}
         uses: fmulero/labeler@1.1.0
         with:
           # Bitnami bot token is required to trigger CI workflows

@@ -1,3 +1,8 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
@@ -72,6 +77,7 @@ spec:
       {{- if .Values.serviceAccount.create }}
       serviceAccountName: {{ include "postgresql-ha.serviceAccountName" . }}
       {{- end }}
+      {{- if or .Values.pgpool.tls.enabled .Values.pgpool.initContainers }}
       initContainers:
       {{- if .Values.pgpool.tls.enabled }}
         - name: init-chmod-data
@@ -101,6 +107,7 @@ spec:
       {{- end }}
       {{- if .Values.pgpool.initContainers }}
       {{- include "common.tplvalues.render" (dict "value" .Values.pgpool.initContainers "context" $) | nindent 8 }}
+      {{- end }}
       {{- end }}
       # Auxiliary vars to populate environment variables
       {{- $postgresqlReplicaCount := int .Values.postgresql.replicaCount }}
@@ -219,7 +226,7 @@ spec:
               value: {{ ternary "yes" "no" .Values.pgpool.useLoadBalancing | quote }}
             {{- if .Values.pgpool.useLoadBalancing }}
             - name: PGPOOL_DISABLE_LOAD_BALANCE_ON_WRITE
-              value: {{ .Values.pgpool.loadBalancingOnWrite }}
+              value: {{ .Values.pgpool.loadBalancingOnWrite | quote }}
             {{- end }}
             - name: PGPOOL_ENABLE_LOG_CONNECTIONS
               value: {{ ternary "yes" "no" .Values.pgpool.logConnections | quote }}
@@ -331,6 +338,7 @@ spec:
           {{- if .Values.pgpool.resources }}
           resources: {{- toYaml .Values.pgpool.resources | nindent 12 }}
           {{- end }}
+          {{- if or .Values.pgpool.configuration .Values.pgpool.configurationCM .Values.pgpool.initdbScripts .Values.pgpool.initdbScriptsCM .Values.pgpool.initdbScriptsSecret .Values.postgresql.usePasswordFile .Values.pgpool.usePasswordFile .Values.pgpool.tls.enabled .Values.pgpool.extraVolumeMounts }}
           volumeMounts:
             {{- if or .Values.pgpool.configuration .Values.pgpool.configurationCM }}
             - name: pgpool-config
@@ -364,9 +372,11 @@ spec:
             {{- if .Values.pgpool.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.pgpool.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
+          {{- end }}
         {{- if .Values.pgpool.sidecars }}
         {{- include "common.tplvalues.render" (dict "value" .Values.pgpool.sidecars "context" $) | nindent 8 }}
         {{- end }}
+      {{- if or .Values.pgpool.configuration .Values.pgpool.configurationCM .Values.pgpool.initdbScripts .Values.pgpool.initdbScriptsCM .Values.pgpool.initdbScriptsSecret .Values.pgpool.usePasswordFile .Values.postgresql.usePasswordFile .Values.pgpool.tls.enabled .Values.pgpool.extraVolumes }}
       volumes:
         {{- if or .Values.pgpool.configuration .Values.pgpool.configurationCM }}
         - name: pgpool-config
@@ -410,4 +420,5 @@ spec:
         {{- end }}
       {{- if .Values.pgpool.extraVolumes }}
       {{- include "common.tplvalues.render" (dict "value" .Values.pgpool.extraVolumes "context" $) | nindent 8 }}
+      {{- end }}
       {{- end }}
