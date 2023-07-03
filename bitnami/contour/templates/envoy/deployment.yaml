@@ -103,6 +103,9 @@ spec:
                 name: {{ include "common.tplvalues.render" ( dict "value" .Values.contour.extraEnvVarsSecret "context" $ ) }}
             {{- end }}
           {{- end }}
+          {{- if .Values.envoy.containerSecurityContextShutdownManager.enabled }}
+          securityContext: {{- omit .Values.envoy.containerSecurityContextShutdownManager "enabled" | toYaml | nindent 12 }}
+          {{- end }}
           lifecycle:
             preStop:
               exec:
@@ -146,6 +149,9 @@ spec:
           imagePullPolicy: {{ .Values.envoy.image.pullPolicy }}
           {{- if .Values.envoy.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.envoy.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.envoy.containerSecurityContextEnvoy.enabled }}
+          securityContext: {{- omit .Values.envoy.containerSecurityContextEnvoy "enabled" | toYaml | nindent 12 }}
           {{- end }}
           env:
             - name: CONTOUR_NAMESPACE
@@ -313,6 +319,9 @@ spec:
             - secretRef:
                 name: {{ include "common.tplvalues.render" ( dict "value" .Values.contour.extraEnvVarsSecret "context" $ ) }}
             {{- end }}
+          {{- end }}
+          {{- if .Values.envoy.containerSecurityContextEnvoy.enabled }}
+          securityContext: {{- omit .Values.envoy.containerSecurityContextEnvoy "enabled" | toYaml | nindent 12 }}
           {{- end }}
       {{- if .Values.envoy.initContainers }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.envoy.initContainers "context" $ ) | nindent 8 }}

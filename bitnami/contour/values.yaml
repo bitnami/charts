@@ -690,7 +690,17 @@ envoy:
   ## @param envoy.containerSecurityContext.runAsUser User ID for the Envoy container (to change this, http and https containerPorts must be set to >1024)
   ## @param envoy.containerSecurityContext.runAsNonRoot Run as non root
   ##
-  containerSecurityContext:
+  containerSecurityContextEnvoy:
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
+  ## Shutdown Manager container security context
+  containerSecurityContextShutdownManager:
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
+  ## Envoy Initconfig initcontainer security context
+  containerSecurityContextEnvoyInitConfig:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
