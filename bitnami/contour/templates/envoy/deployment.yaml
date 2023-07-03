@@ -147,9 +147,6 @@ spec:
           {{- end }}
           image: {{ include "common.images.image" ( dict "imageRoot" .Values.envoy.image "global" .Values.global ) }}
           imagePullPolicy: {{ .Values.envoy.image.pullPolicy }}
-          {{- if .Values.envoy.containerSecurityContext.enabled }}
-          securityContext: {{- omit .Values.envoy.containerSecurityContext "enabled" | toYaml | nindent 12 }}
-          {{- end }}
           {{- if .Values.envoy.containerSecurityContextEnvoy.enabled }}
           securityContext: {{- omit .Values.envoy.containerSecurityContextEnvoy "enabled" | toYaml | nindent 12 }}
           {{- end }}
