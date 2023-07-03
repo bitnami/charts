@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 ---
-name: [License] Check license headers
+name: '[License] Check license headers'
 
 on:
   pull_request:
