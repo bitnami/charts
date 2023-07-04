@@ -260,7 +260,7 @@ spec:
             {{- end }}
             {{- end }}
             {{- if (include "postgresql.database" .) }}
-            - name: POSTGRESQL_DB
+            - name: POSTGRESQL_DATABASE
               value: {{ (include "postgresql.database" .) | quote }}
             {{- end }}
             # Replication
