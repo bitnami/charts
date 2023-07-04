@@ -36,5 +36,9 @@ sources:
 version: 13.0.0
 =======
   - https://github.com/bitnami/charts/tree/main/bitnami/contour
+<<<<<<< HEAD
 version: 12.1.2
 >>>>>>> 2b73225ec (Add feature for coutour deployment with contourconfiguration CRD)
+=======
+version: 12.2.0
+>>>>>>> 9827eaf6e (fix comments)
