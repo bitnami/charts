@@ -157,7 +157,7 @@ Get the Postgresql credentials secret.
 {{- if .Values.postgresql.enabled }}
     {{- if .Values.global.postgresql }}
         {{- if .Values.global.postgresql.auth }}
-            {{- if and ( .Values.global.postgresql.auth.existingSecret ) ( .Values.global.postgresql.auth.enablePostgresUser ) }}
+            {{- if .Values.global.postgresql.auth.existingSecret }}
                 {{- tpl .Values.global.postgresql.auth.existingSecret $ -}}
             {{- end -}}
         {{- else -}}
@@ -328,7 +328,7 @@ Add environment variables to configure database values
   value: {{ include "airflow.database.name" . }}
 - name: AIRFLOW_DATABASE_USERNAME
   value: {{ include "airflow.database.user" . }}
-{{- if .Values.postgresql.auth.enablePostgresUser }}
+{{- if or (not .Values.postgresql.enabled) .Values.postgresql.auth.enablePostgresUser }}
 - name: AIRFLOW_DATABASE_PASSWORD
   valueFrom:
     secretKeyRef:
@@ -336,7 +336,7 @@ Add environment variables to configure database values
       key: {{ include "airflow.database.existingsecret.key" . }}
 {{- else }}
 - name: ALLOW_EMPTY_PASSWORD
-  value: {{ true | quote }}
+  value: "true"
 {{- end }}
 - name: AIRFLOW_DATABASE_HOST
   value: {{ include "airflow.database.host" . }}
