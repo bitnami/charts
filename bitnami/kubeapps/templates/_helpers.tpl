@@ -1,8 +1,3 @@
-{{/*
-Copyright VMware, Inc.
-SPDX-License-Identifier: APACHE-2.0
-*/}}
-
 {{/* vim: set filetype=mustache: */}}
 
 {{/*
