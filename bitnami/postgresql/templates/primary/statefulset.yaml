@@ -212,18 +212,12 @@ spec:
               value: {{ .Values.containerPorts.postgresql | quote }}
             - name: POSTGRESQL_VOLUME_DIR
               value: {{ .Values.primary.persistence.mountPath | quote }}
-            {{- if not .Values.auth.enablePostgresUser }}
-            - name: ALLOW_EMPTY_PASSWORD
-              value: "true"
-            {{- end }}
             {{- if .Values.primary.persistence.mountPath }}
             - name: PGDATA
               value: {{ .Values.postgresqlDataDir | quote }}
             {{- end }}
             # Authentication
-          {{- if and (not (empty $customUser)) (ne $customUser "postgres") }}
-            - name: POSTGRES_USER
-              value: {{ $customUser | quote }}
+            {{- if or (eq $customUser "postgres") (empty $customUser) }}
             {{- if .Values.auth.enablePostgresUser }}
             {{- if .Values.auth.usePasswordFiles }}
             - name: POSTGRES_POSTGRES_PASSWORD_FILE
@@ -235,9 +229,13 @@ spec:
                   name: {{ include "postgresql.secretName" . }}
                   key: {{ include "postgresql.adminPasswordKey" . }}
             {{- end }}
+            {{- else }}
+            - name: ALLOW_EMPTY_PASSWORD
+              value: "true"
             {{- end }}
-          {{- end }}
-            {{- if .Values.auth.enablePostgresUser }}
+            {{- else }}
+            - name: POSTGRES_USER
+              value: {{ $customUser | quote }}
             {{- if .Values.auth.usePasswordFiles }}
             - name: POSTGRES_PASSWORD_FILE
               value: {{ printf "/opt/bitnami/postgresql/secrets/%s" (include "postgresql.userPasswordKey" .) }}
@@ -248,9 +246,24 @@ spec:
                   name: {{ include "postgresql.secretName" . }}
                   key: {{ include "postgresql.userPasswordKey" . }}
             {{- end }}
+            {{- if .Values.auth.enablePostgresUser }}
+            {{- if .Values.auth.usePasswordFiles }}
+            - name: POSTGRES_POSTGRES_PASSWORD_FILE
+              value: {{ printf "/opt/bitnami/postgresql/secrets/%s" (include "postgresql.adminPasswordKey" .) }}
+            {{- else if .Values.auth.postgresPassword }}
+            - name: POSTGRES_POSTGRES_PASSWORD
+              value: {{ .Values.auth.postgresPassword }}
+            {{- else }}
+            - name: POSTGRES_POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "postgresql.secretName" . }}
+                  key: {{ include "postgresql.adminPasswordKey" . }}
+            {{- end }}
+            {{- end }}
             {{- end }}
             {{- if (include "postgresql.database" .) }}
-            - name: POSTGRES_DB
+            - name: POSTGRES_DATABASE
               value: {{ (include "postgresql.database" .) | quote }}
             {{- end }}
             # Replication
@@ -269,7 +282,7 @@ spec:
                   name: {{ include "postgresql.secretName" . }}
                   key: {{ include "postgresql.replicationPasswordKey" . }}
             {{- end }}
-            {{- if not (eq .Values.replication.synchronousCommit "off") }}
+            {{- if ne .Values.replication.synchronousCommit "off" }}
             - name: POSTGRES_SYNCHRONOUS_COMMIT_MODE
               value: {{ .Values.replication.synchronousCommit | quote }}
             - name: POSTGRES_NUM_SYNCHRONOUS_REPLICAS
@@ -288,11 +301,11 @@ spec:
               value: {{ .Values.primary.initdb.postgresqlWalDir | quote }}
             {{- end }}
             {{- if .Values.primary.initdb.user }}
-            - name: POSTGRESQL_INITSCRIPTS_USERNAME
+            - name: POSTGRES_INITSCRIPTS_USERNAME
               value: {{ .Values.primary.initdb.user }}
             {{- end }}
             {{- if .Values.primary.initdb.password }}
-            - name: POSTGRESQL_INITSCRIPTS_PASSWORD
+            - name: POSTGRES_INITSCRIPTS_PASSWORD
               value: {{ .Values.primary.initdb.password | quote }}
             {{- end }}
             # Standby
