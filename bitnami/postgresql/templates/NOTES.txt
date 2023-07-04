@@ -47,25 +47,25 @@ PostgreSQL can be accessed via port {{ include "postgresql.service.port" . }} on
 
 To get the password for "postgres" run:
 
-    export POSTGRESQL_ADMIN_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "postgresql.secretName" . }} -o jsonpath="{.data.{{include "postgresql.adminPasswordKey" .}}}" | base64 -d)
+    export POSTGRES_ADMIN_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "postgresql.secretName" . }} -o jsonpath="{.data.{{include "postgresql.adminPasswordKey" .}}}" | base64 -d)
 {{- end }}
 
 To get the password for "{{ $customUser }}" run:
 
-    export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "postgresql.secretName" . }} -o jsonpath="{.data.{{include "postgresql.userPasswordKey" .}}}" | base64 -d)
+    export POSTGRES_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "postgresql.secretName" . }} -o jsonpath="{.data.{{include "postgresql.userPasswordKey" .}}}" | base64 -d)
 {{- else }}
 {{- if .Values.auth.enablePostgresUser }}
 
 To get the password for "{{ default "postgres" $customUser }}" run:
 
-    export POSTGRESQL_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "postgresql.secretName" . }} -o jsonpath="{.data.{{ ternary "password" (include "postgresql.adminPasswordKey" .)  (and (not (empty $customUser)) (ne $customUser "postgres")) }}}" | base64 -d)
+    export POSTGRES_PASSWORD=$(kubectl get secret --namespace {{ .Release.Namespace }} {{ include "postgresql.secretName" . }} -o jsonpath="{.data.{{ ternary "password" (include "postgresql.adminPasswordKey" .)  (and (not (empty $customUser)) (ne $customUser "postgres")) }}}" | base64 -d)
 {{- end }}
 {{- end }}
 
 To connect to your database run the following command:
     {{- if $authEnabled }}
 
-    kubectl run {{ include "common.names.fullname" . }}-client --rm --tty -i --restart='Never' --namespace {{ .Release.Namespace }} --image {{ include "postgresql.image" . }} --env="PGPASSWORD=$POSTGRESQL_PASSWORD" \
+    kubectl run {{ include "common.names.fullname" . }}-client --rm --tty -i --restart='Never' --namespace {{ .Release.Namespace }} --image {{ include "postgresql.image" . }} --env="PGPASSWORD=$POSTGRES_PASSWORD" \
       --command -- psql --host {{ include "postgresql.primary.fullname" . }} -U {{ default "postgres" $customUser }} -d {{- if include "postgresql.database" . }} {{ include "postgresql.database" . }}{{- else }} postgres{{- end }} -p {{ include "postgresql.service.port" . }}
     {{- else }}
 
@@ -82,7 +82,7 @@ To connect to your database from outside the cluster execute the following comma
     export NODE_IP=$(kubectl get nodes --namespace {{ .Release.Namespace }} -o jsonpath="{.items[0].status.addresses[0].address}")
     export NODE_PORT=$(kubectl get --namespace {{ .Release.Namespace }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ include "postgresql.primary.fullname" . }})
     {{- if $authEnabled }}
-    PGPASSWORD="$POSTGRESQL_PASSWORD" psql --host $NODE_IP --port $NODE_PORT -U {{ default "postgres" $customUser }} -d {{- if include "postgresql.database" . }} {{ include "postgresql.database" . }}{{- else }} postgres{{- end }}
+    PGPASSWORD="$POSTGRES_PASSWORD" psql --host $NODE_IP --port $NODE_PORT -U {{ default "postgres" $customUser }} -d {{- if include "postgresql.database" . }} {{ include "postgresql.database" . }}{{- else }} postgres{{- end }}
     {{- else }}
     psql --host $NODE_IP --port $NODE_PORT -d {{- if include "postgresql.database" . }} {{ include "postgresql.database" . }}{{- else }} postgres{{- end }}
     {{- end }}
@@ -93,7 +93,7 @@ To connect to your database from outside the cluster execute the following comma
 
     export SERVICE_IP=$(kubectl get svc --namespace {{ .Release.Namespace }} {{ include "postgresql.primary.fullname" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
     {{- if $authEnabled }}
-    PGPASSWORD="$POSTGRESQL_PASSWORD" psql --host $SERVICE_IP --port {{ include "postgresql.service.port" . }} -U {{ default "postgres" $customUser }} -d {{- if include "postgresql.database" . }} {{ include "postgresql.database" . }}{{- else }} postgres{{- end }}
+    PGPASSWORD="$POSTGRES_PASSWORD" psql --host $SERVICE_IP --port {{ include "postgresql.service.port" . }} -U {{ default "postgres" $customUser }} -d {{- if include "postgresql.database" . }} {{ include "postgresql.database" . }}{{- else }} postgres{{- end }}
     {{- else }}
     psql --host $SERVICE_IP --port {{ include "postgresql.service.port" . }} -d {{- if include "postgresql.database" . }} {{ include "postgresql.database" . }}{{- else }} postgres{{- end }}
     {{- end }}
@@ -101,7 +101,7 @@ To connect to your database from outside the cluster execute the following comma
 
     kubectl port-forward --namespace {{ .Release.Namespace }} svc/{{ include "postgresql.primary.fullname" . }} {{ include "postgresql.service.port" . }}:{{ include "postgresql.service.port" . }} &
     {{- if $authEnabled }}
-    PGPASSWORD="$POSTGRESQL_PASSWORD" psql --host 127.0.0.1 -U {{ default "postgres" $customUser }} -d {{- if include "postgresql.database" . }} {{ include "postgresql.database" . }}{{- else }} postgres{{- end }} -p {{ include "postgresql.service.port" . }}
+    PGPASSWORD="$POSTGRES_PASSWORD" psql --host 127.0.0.1 -U {{ default "postgres" $customUser }} -d {{- if include "postgresql.database" . }} {{ include "postgresql.database" . }}{{- else }} postgres{{- end }} -p {{ include "postgresql.service.port" . }}
     {{- else }}
     psql --host 127.0.0.1 -d {{- if include "postgresql.database" . }} {{ include "postgresql.database" . }}{{- else }} postgres{{- end }} -p {{ include "postgresql.service.port" . }}
     {{- end }}
