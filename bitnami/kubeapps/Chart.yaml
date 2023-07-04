@@ -5,7 +5,7 @@ annotations:
   category: Infrastructure
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 2.7.0
+appVersion: 2.8.0
 dependencies:
   - condition: packaging.flux.enabled
     name: redis
@@ -35,4 +35,4 @@ maintainers:
 name: kubeapps
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/kubeapps
-version: 12.4.4
+version: 12.4.5
