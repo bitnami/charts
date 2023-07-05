@@ -61,13 +61,11 @@ spec:
       {{- if .Values.grafana.service.extraPorts }}
       ports: {{- include "common.tplvalues.render" ( dict "value" .Values.grafana.service.extraPorts "context" $) | nindent 6 }}
       {{- end }}
-  {{- $imagePullSecrets := include "common.images.pullSecrets" (dict "images" (list .Values.operator.image .Values.grafana.image .Values.grafana.pluginsInitContainerImage) "global" .Values.global) }}
-  {{- if (not (empty ($imagePullSecrets))) | or .Values.grafana.serviceAccount }}
+  {{- if .Values.grafana.serviceAccount }}
   serviceAccount:
   {{- with .Values.grafana.serviceAccount }}
     {{- toYaml . | nindent 4 }}
   {{- end }}
-  {{- $imagePullSecrets | nindent 4 }}
   {{- end }}
   {{- if .Values.grafana.sidecars }}
   containers:
