@@ -460,10 +460,23 @@ primary:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param primary.containerSecurityContext.enabled Enable container security context
   ## @param primary.containerSecurityContext.runAsUser User ID for the container
+  ## @param primary.containerSecurityContext.runAsGroup Group ID for the container
+  ## @param primary.containerSecurityContext.runAsNonRoot Set runAsNonRoot for the container
+  ## @param primary.containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation for the container
+  ## @param primary.containerSecurityContext.seccompProfile.type Set seccompProfile.type for the container
+  ## @param primary.containerSecurityContext.capabilities.drop Set capabilities.drop for the container
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
+    runAsGroup: 0
+    runAsNonRoot: true
+    allowPrivilegeEscalation: false
+    seccompProfile:
+      type: RuntimeDefault
+    capabilities:
+      drop:
+        - ALL
   ## @param primary.hostAliases PostgreSQL primary pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -797,10 +810,23 @@ readReplicas:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
   ## @param readReplicas.containerSecurityContext.enabled Enable container security context
   ## @param readReplicas.containerSecurityContext.runAsUser User ID for the container
+  ## @param readReplicas.containerSecurityContext.runAsGroup Group ID for the container
+  ## @param readReplicas.containerSecurityContext.runAsNonRoot Set runAsNonRoot for the container
+  ## @param readReplicas.containerSecurityContext.allowPrivilegeEscalation Set allowPrivilegeEscalation for the container
+  ## @param readReplicas.containerSecurityContext.seccompProfile.type Set seccompProfile.type for the container
+  ## @param readReplicas.containerSecurityContext.capabilities.drop Set capabilities.drop for the container
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
+    runAsGroup: 0
+    runAsNonRoot: true
+    allowPrivilegeEscalation: false
+    seccompProfile:
+      type: RuntimeDefault
+    capabilities:
+      drop:
+        - ALL
   ## @param readReplicas.hostAliases PostgreSQL read only pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1162,10 +1188,16 @@ volumePermissions:
   ## Note: the chown of the data folder is done to containerSecurityContext.runAsUser
   ## and not the below volumePermissions.containerSecurityContext.runAsUser
   ## @param volumePermissions.containerSecurityContext.runAsUser User ID for the init container
+  ## @param volumePermissions.containerSecurityContext.runAsGroup Group ID for the init container
+  ## @param volumePermissions.containerSecurityContext.runAsNonRoot runAsNonRoot for the init container
+  ## @param volumePermissions.containerSecurityContext.seccompProfile.type seccompProfile.type for the init container
   ##
   containerSecurityContext:
     runAsUser: 0
-
+    runAsGroup: 0
+    runAsNonRoot: false
+    seccompProfile:
+      type: RuntimeDefault
 ## @section Other Parameters
 ##
 
@@ -1271,12 +1303,23 @@ metrics:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param metrics.containerSecurityContext.enabled Enable PostgreSQL Prometheus exporter containers' Security Context
   ## @param metrics.containerSecurityContext.runAsUser Set PostgreSQL Prometheus exporter containers' Security Context runAsUser
+  ## @param metrics.containerSecurityContext.runAsGroup Set PostgreSQL Prometheus exporter containers' Security Context runAsGroup
   ## @param metrics.containerSecurityContext.runAsNonRoot Set PostgreSQL Prometheus exporter containers' Security Context runAsNonRoot
+  ## @param metrics.containerSecurityContext.allowPrivilegeEscalation Set PostgreSQL Prometheus exporter containers' Security Context allowPrivilegeEscalation
+  ## @param metrics.containerSecurityContext.seccompProfile.type Set PostgreSQL Prometheus exporter containers' Security Context seccompProfile.type
+  ## @param metrics.containerSecurityContext.capabilities.drop Set PostgreSQL Prometheus exporter containers' Security Context capabilities.drop
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
+    allowPrivilegeEscalation: false
+    seccompProfile:
+      type: RuntimeDefault
+    capabilities:
+      drop:
+        - ALL
   ## Configure extra options for PostgreSQL Prometheus exporter containers' liveness, readiness and startup probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-startup-probes/#configure-probes
   ## @param metrics.livenessProbe.enabled Enable livenessProbe on PostgreSQL Prometheus exporter containers
