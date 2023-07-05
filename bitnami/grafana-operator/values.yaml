@@ -110,7 +110,7 @@ operator:
   ##         containerPort: 1234
   ##
   sidecars: []
-  ## @param operator.namespaceScope If the operator should run in namespace-scope or not,
+  ## @param operator.namespaceScope If the operator should run in namespace-scope mode or not,
   ## if true the operator will only be able to manage instances in the same namespace
   ##
   namespaceScope: false
