@@ -111,7 +111,8 @@ operator:
   ##
   sidecars: []
   ## @param operator.namespaceScope If the operator should run in namespace-scope or not,
-  # if true the operator will only be able to manage instances in the same namespace
+  ## if true the operator will only be able to manage instances in the same namespace
+  ##
   namespaceScope: false
   ## @param operator.watchNamespace Override the namespace to watch
   ##
