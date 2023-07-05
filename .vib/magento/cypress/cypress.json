@@ -6,6 +6,6 @@
   "hosts": {
     "vmware-magento.my": "{{ TARGET_IP }}"
   },
-  "defaultCommandTimeout": 80000,
-  "pageLoadTimeout": 800000
+  "defaultCommandTimeout": 90000,
+  "pageLoadTimeout": 900000
 }

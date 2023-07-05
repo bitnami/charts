@@ -39,6 +39,7 @@ Looking to use our applications in production? Try [VMware Application Catalog](
 
 ## Parameters
 
+## Special input schemas
 
 ### ImageRoot
 
