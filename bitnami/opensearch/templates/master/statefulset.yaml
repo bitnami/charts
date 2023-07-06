@@ -155,8 +155,11 @@ spec:
             - bash
             - -ec
             - |
-              if [[ "$POD_NAME" =~ -0$ ]]; then
+              if [[ "$MY_POD_NAME" =~ -0$ ]]; then
                 export OPENSEARCH_SECURITY_BOOTSTRAP=true
+                # Opensearch securityadmin.sh requires the admin.key to be in PKCS8 format
+                openssl pkcs8 -topk8 -nocrypt -in "/opt/bitnami/opensearch/config/certs/admin.key" > "/opt/bitnami/opensearch/config/admin.key"
+                export OPENSEARCH_SECURITY_ADMIN_KEY_LOCATION="/opt/bitnami/opensearch/config/admin.key"
               fi
               /opt/bitnami/scripts/opensearch/entrypoint.sh /opt/bitnami/scripts/opensearch/run.sh
           {{- end }}
