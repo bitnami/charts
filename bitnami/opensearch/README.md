@@ -1,26 +1,26 @@
-<!--- app-name: Elasticsearch -->
+<!--- app-name: Opensearch -->
 
-# Bitnami Elasticsearch Stack
+# Bitnami Opensearch Stack
 
-Elasticsearch is a distributed search and analytics engine. It is used for web search, log monitoring, and real-time analytics. Ideal for Big Data applications.
+Opensearch is a distributed search and analytics engine. It is used for web search, log monitoring, and real-time analytics. Ideal for Big Data applications.
 
-[Overview of Elasticsearch](https://www.elastic.co/products/elasticsearch)
+[Overview of Opensearch](https://www.open.co/products/opensearch)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 
 ## TL;DR
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/elasticsearch
+helm install my-release oci://registry-1.docker.io/bitnamicharts/opensearch
 ```
 
 ## Introduction
 
-This chart bootstraps a [Elasticsearch](https://github.com/bitnami/containers/tree/main/bitnami/elasticsearch) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [Opensearch](https://github.com/bitnami/containers/tree/main/bitnami/opensearch) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
-Looking to use Elasticsearch in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Opensearch in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -33,10 +33,10 @@ Looking to use Elasticsearch in production? Try [VMware Application Catalog](htt
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/elasticsearch
+helm install my-release oci://registry-1.docker.io/bitnamicharts/opensearch
 ```
 
-These commands deploy Elasticsearch on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
+These commands deploy Opensearch on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
 > **Tip**: List all releases using `helm list`
 
@@ -63,8 +63,8 @@ helm delete --purge my-release
 | `global.imageRegistry`                       | Global Docker image registry                                                                          | `""`            |
 | `global.imagePullSecrets`                    | Global Docker registry secret names as an array                                                       | `[]`            |
 | `global.storageClass`                        | Global StorageClass for Persistent Volume(s)                                                          | `""`            |
-| `global.elasticsearch.service.name`          | Elasticsearch service name to be used in the Kibana subchart (ignored if kibanaEnabled=false)         | `elasticsearch` |
-| `global.elasticsearch.service.ports.restAPI` | Elasticsearch service restAPI port to be used in the Kibana subchart (ignored if kibanaEnabled=false) | `9200`          |
+| `global.opensearch.service.name`          | Opensearch service name to be used in the Kibana subchart (ignored if kibanaEnabled=false)         | `opensearch` |
+| `global.opensearch.service.ports.restAPI` | Opensearch service restAPI port to be used in the Kibana subchart (ignored if kibanaEnabled=false) | `9200`          |
 | `global.kibanaEnabled`                       | Whether or not to enable Kibana                                                                       | `false`         |
 
 ### Common parameters
@@ -83,17 +83,17 @@ helm delete --purge my-release
 | `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]`  |
 
-### Elasticsearch cluster Parameters
+### Opensearch cluster Parameters
 
 | Name                                       | Description                                                                                                                                         | Value                          |
 | ------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------ |
-| `clusterName`                              | Elasticsearch cluster name                                                                                                                          | `elastic`                      |
-| `containerPorts.restAPI`                   | Elasticsearch REST API port                                                                                                                         | `9200`                         |
-| `containerPorts.transport`                 | Elasticsearch Transport port                                                                                                                        | `9300`                         |
+| `clusterName`                              | Opensearch cluster name                                                                                                                          | `open`                      |
+| `containerPorts.restAPI`                   | Opensearch REST API port                                                                                                                         | `9200`                         |
+| `containerPorts.transport`                 | Opensearch Transport port                                                                                                                        | `9300`                         |
 | `plugins`                                  | Comma, semi-colon or space separated list of plugins to install at initialization                                                                   | `""`                           |
 | `snapshotRepoPath`                         | File System snapshot repository path                                                                                                                | `""`                           |
-| `config`                                   | Override elasticsearch configuration                                                                                                                | `{}`                           |
-| `extraConfig`                              | Append extra configuration to the elasticsearch node configuration                                                                                  | `{}`                           |
+| `config`                                   | Override opensearch configuration                                                                                                                | `{}`                           |
+| `extraConfig`                              | Append extra configuration to the opensearch node configuration                                                                                  | `{}`                           |
 | `extraHosts`                               | A list of external hosts which are part of this cluster                                                                                             | `[]`                           |
 | `extraVolumes`                             | A list of volumes to be added to the pod                                                                                                            | `[]`                           |
 | `extraVolumeMounts`                        | A list of volume mounts to be added to the pod                                                                                                      | `[]`                           |
@@ -103,29 +103,29 @@ helm delete --purge my-release
 | `extraEnvVars`                             | Array containing extra env vars to be added to all pods (evaluated as a template)                                                                   | `[]`                           |
 | `extraEnvVarsCM`                           | ConfigMap containing extra env vars to be added to all pods (evaluated as a template)                                                               | `""`                           |
 | `extraEnvVarsSecret`                       | Secret containing extra env vars to be added to all pods (evaluated as a template)                                                                  | `""`                           |
-| `sidecars`                                 | Add additional sidecar containers to the all elasticsearch node pod(s)                                                                              | `[]`                           |
-| `initContainers`                           | Add additional init containers to the all elasticsearch node pod(s)                                                                                 | `[]`                           |
+| `sidecars`                                 | Add additional sidecar containers to the all opensearch node pod(s)                                                                              | `[]`                           |
+| `initContainers`                           | Add additional init containers to the all opensearch node pod(s)                                                                                 | `[]`                           |
 | `useIstioLabels`                           | Use this variable to add Istio labels to all pods                                                                                                   | `true`                         |
-| `image.registry`                           | Elasticsearch image registry                                                                                                                        | `docker.io`                    |
-| `image.repository`                         | Elasticsearch image repository                                                                                                                      | `bitnami/elasticsearch`        |
-| `image.tag`                                | Elasticsearch image tag (immutable tags are recommended)                                                                                            | `8.8.2-debian-11-r0`           |
-| `image.digest`                             | Elasticsearch image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                       | `""`                           |
-| `image.pullPolicy`                         | Elasticsearch image pull policy                                                                                                                     | `IfNotPresent`                 |
-| `image.pullSecrets`                        | Elasticsearch image pull secrets                                                                                                                    | `[]`                           |
-| `image.debug`                              | Enable Elasticsearch image debug mode                                                                                                               | `false`                        |
+| `image.registry`                           | Opensearch image registry                                                                                                                        | `docker.io`                    |
+| `image.repository`                         | Opensearch image repository                                                                                                                      | `bitnami/opensearch`        |
+| `image.tag`                                | Opensearch image tag (immutable tags are recommended)                                                                                            | `8.8.2-debian-11-r0`           |
+| `image.digest`                             | Opensearch image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                       | `""`                           |
+| `image.pullPolicy`                         | Opensearch image pull policy                                                                                                                     | `IfNotPresent`                 |
+| `image.pullSecrets`                        | Opensearch image pull secrets                                                                                                                    | `[]`                           |
+| `image.debug`                              | Enable Opensearch image debug mode                                                                                                               | `false`                        |
 | `security.enabled`                         | Enable X-Pack Security settings                                                                                                                     | `false`                        |
-| `security.elasticPassword`                 | Password for 'elastic' user                                                                                                                         | `""`                           |
-| `security.existingSecret`                  | Name of the existing secret containing the Elasticsearch password and                                                                               | `""`                           |
-| `security.fipsMode`                        | Configure elasticsearch with FIPS 140 compliant mode                                                                                                | `false`                        |
-| `security.tls.restEncryption`              | Enable SSL/TLS encryption for Elasticsearch REST API.                                                                                               | `true`                         |
+| `security.openPassword`                 | Password for 'open' user                                                                                                                         | `""`                           |
+| `security.existingSecret`                  | Name of the existing secret containing the Opensearch password and                                                                               | `""`                           |
+| `security.fipsMode`                        | Configure opensearch with FIPS 140 compliant mode                                                                                                | `false`                        |
+| `security.tls.restEncryption`              | Enable SSL/TLS encryption for Opensearch REST API.                                                                                               | `true`                         |
 | `security.tls.autoGenerated`               | Create self-signed TLS certificates.                                                                                                                | `false`                        |
 | `security.tls.verificationMode`            | Verification mode for SSL communications.                                                                                                           | `full`                         |
 | `security.tls.master.existingSecret`       | Existing secret containing the certificates for the master nodes                                                                                    | `""`                           |
 | `security.tls.data.existingSecret`         | Existing secret containing the certificates for the data nodes                                                                                      | `""`                           |
 | `security.tls.ingest.existingSecret`       | Existing secret containing the certificates for the ingest nodes                                                                                    | `""`                           |
 | `security.tls.coordinating.existingSecret` | Existing secret containing the certificates for the coordinating nodes                                                                              | `""`                           |
-| `security.tls.keystoreFilename`            | Name of the keystore file                                                                                                                           | `elasticsearch.keystore.jks`   |
-| `security.tls.truststoreFilename`          | Name of the truststore                                                                                                                              | `elasticsearch.truststore.jks` |
+| `security.tls.keystoreFilename`            | Name of the keystore file                                                                                                                           | `opensearch.keystore.jks`   |
+| `security.tls.truststoreFilename`          | Name of the truststore                                                                                                                              | `opensearch.truststore.jks` |
 | `security.tls.usePemCerts`                 | Use this variable if your secrets contain PEM certificates instead of JKS/PKCS12                                                                    | `false`                        |
 | `security.tls.passwordsSecret`             | Existing secret containing the Keystore and Truststore passwords, or key password if PEM certs are used                                             | `""`                           |
 | `security.tls.keystorePassword`            | Password to access the JKS/PKCS12 keystore or PEM key when they are password-protected.                                                             | `""`                           |
@@ -139,23 +139,23 @@ helm delete --purge my-release
 
 | Name                               | Description                                                                                                                      | Value                    |
 | ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `service.type`                     | Elasticsearch service type                                                                                                       | `ClusterIP`              |
-| `service.ports.restAPI`            | Elasticsearch service REST API port                                                                                              | `9200`                   |
-| `service.ports.transport`          | Elasticsearch service transport port                                                                                             | `9300`                   |
+| `service.type`                     | Opensearch service type                                                                                                       | `ClusterIP`              |
+| `service.ports.restAPI`            | Opensearch service REST API port                                                                                              | `9200`                   |
+| `service.ports.transport`          | Opensearch service transport port                                                                                             | `9300`                   |
 | `service.nodePorts.restAPI`        | Node port for REST API                                                                                                           | `""`                     |
 | `service.nodePorts.transport`      | Node port for REST API                                                                                                           | `""`                     |
-| `service.clusterIP`                | Elasticsearch service Cluster IP                                                                                                 | `""`                     |
-| `service.loadBalancerIP`           | Elasticsearch service Load Balancer IP                                                                                           | `""`                     |
-| `service.loadBalancerSourceRanges` | Elasticsearch service Load Balancer sources                                                                                      | `[]`                     |
-| `service.externalTrafficPolicy`    | Elasticsearch service external traffic policy                                                                                    | `Cluster`                |
-| `service.annotations`              | Additional custom annotations for Elasticsearch service                                                                          | `{}`                     |
-| `service.extraPorts`               | Extra ports to expose in Elasticsearch service (normally used with the `sidecars` value)                                         | `[]`                     |
+| `service.clusterIP`                | Opensearch service Cluster IP                                                                                                 | `""`                     |
+| `service.loadBalancerIP`           | Opensearch service Load Balancer IP                                                                                           | `""`                     |
+| `service.loadBalancerSourceRanges` | Opensearch service Load Balancer sources                                                                                      | `[]`                     |
+| `service.externalTrafficPolicy`    | Opensearch service external traffic policy                                                                                    | `Cluster`                |
+| `service.annotations`              | Additional custom annotations for Opensearch service                                                                          | `{}`                     |
+| `service.extraPorts`               | Extra ports to expose in Opensearch service (normally used with the `sidecars` value)                                         | `[]`                     |
 | `service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                             | `None`                   |
 | `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
-| `ingress.enabled`                  | Enable ingress record generation for Elasticsearch                                                                               | `false`                  |
+| `ingress.enabled`                  | Enable ingress record generation for Opensearch                                                                               | `false`                  |
 | `ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
 | `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
-| `ingress.hostname`                 | Default host for the ingress record                                                                                              | `elasticsearch.local`    |
+| `ingress.hostname`                 | Default host for the ingress record                                                                                              | `opensearch.local`    |
 | `ingress.path`                     | Default path for the ingress record                                                                                              | `/`                      |
 | `ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
 | `ingress.tls`                      | Enable TLS configuration for the host defined at `ingress.hostname` parameter                                                    | `false`                  |
@@ -171,20 +171,20 @@ helm delete --purge my-release
 
 | Name                                                 | Description                                                                                                                                        | Value               |
 | ---------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
-| `master.masterOnly`                                  | Deploy the Elasticsearch master-elegible nodes as master-only nodes. Recommended for high-demand deployments.                                      | `true`              |
+| `master.masterOnly`                                  | Deploy the Opensearch master-elegible nodes as master-only nodes. Recommended for high-demand deployments.                                      | `true`              |
 | `master.replicaCount`                                | Number of master-elegible replicas to deploy                                                                                                       | `2`                 |
 | `master.extraRoles`                                  | Append extra roles to the node role                                                                                                                | `[]`                |
 | `master.pdb.create`                                  | Enable/disable a Pod Disruption Budget creation                                                                                                    | `false`             |
 | `master.pdb.minAvailable`                            | Minimum number/percentage of pods that should remain scheduled                                                                                     | `1`                 |
 | `master.pdb.maxUnavailable`                          | Maximum number/percentage of pods that may be made unavailable                                                                                     | `""`                |
-| `master.nameOverride`                                | String to partially override elasticsearch.master.fullname                                                                                         | `""`                |
-| `master.fullnameOverride`                            | String to fully override elasticsearch.master.fullname                                                                                             | `""`                |
-| `master.servicenameOverride`                         | String to fully override elasticsearch.master.servicename                                                                                          | `""`                |
+| `master.nameOverride`                                | String to partially override opensearch.master.fullname                                                                                         | `""`                |
+| `master.fullnameOverride`                            | String to fully override opensearch.master.fullname                                                                                             | `""`                |
+| `master.servicenameOverride`                         | String to fully override opensearch.master.servicename                                                                                          | `""`                |
 | `master.annotations`                                 | Annotations for the master statefulset                                                                                                             | `{}`                |
 | `master.updateStrategy.type`                         | Master-elegible nodes statefulset stategy type                                                                                                     | `RollingUpdate`     |
-| `master.resources.limits`                            | The resources limits for elasticsearch containers                                                                                                  | `{}`                |
-| `master.resources.requests`                          | The requested resources for elasticsearch containers                                                                                               | `{}`                |
-| `master.heapSize`                                    | Elasticsearch master-eligible node heap size.                                                                                                      | `128m`              |
+| `master.resources.limits`                            | The resources limits for opensearch containers                                                                                                  | `{}`                |
+| `master.resources.requests`                          | The requested resources for opensearch containers                                                                                               | `{}`                |
+| `master.heapSize`                                    | Opensearch master-eligible node heap size.                                                                                                      | `128m`              |
 | `master.podSecurityContext.enabled`                  | Enabled master-elegible pods' Security Context                                                                                                     | `true`              |
 | `master.podSecurityContext.fsGroup`                  | Set master-elegible pod's Security Context fsGroup                                                                                                 | `1001`              |
 | `master.containerSecurityContext.enabled`            | Enabled master-elegible containers' Security Context                                                                                               | `true`              |
@@ -203,9 +203,9 @@ helm delete --purge my-release
 | `master.tolerations`                                 | Tolerations for master-elegible pods assignment                                                                                                    | `[]`                |
 | `master.priorityClassName`                           | master-elegible pods' priorityClassName                                                                                                            | `""`                |
 | `master.schedulerName`                               | Name of the k8s scheduler (other than default) for master-elegible pods                                                                            | `""`                |
-| `master.terminationGracePeriodSeconds`               | In seconds, time the given to the Elasticsearch Master pod needs to terminate gracefully                                                           | `""`                |
+| `master.terminationGracePeriodSeconds`               | In seconds, time the given to the Opensearch Master pod needs to terminate gracefully                                                           | `""`                |
 | `master.topologySpreadConstraints`                   | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template                           | `[]`                |
-| `master.podManagementPolicy`                         | podManagementPolicy to manage scaling operation of Elasticsearch master pods                                                                       | `Parallel`          |
+| `master.podManagementPolicy`                         | podManagementPolicy to manage scaling operation of Opensearch master pods                                                                       | `Parallel`          |
 | `master.startupProbe.enabled`                        | Enable/disable the startup probe (master nodes pod)                                                                                                | `false`             |
 | `master.startupProbe.initialDelaySeconds`            | Delay before startup probe is initiated (master nodes pod)                                                                                         | `90`                |
 | `master.startupProbe.periodSeconds`                  | How often to perform the probe (master nodes pod)                                                                                                  | `10`                |
@@ -264,14 +264,14 @@ helm delete --purge my-release
 | `data.pdb.create`                                  | Enable/disable a Pod Disruption Budget creation                                                                                                  | `false`             |
 | `data.pdb.minAvailable`                            | Minimum number/percentage of pods that should remain scheduled                                                                                   | `1`                 |
 | `data.pdb.maxUnavailable`                          | Maximum number/percentage of pods that may be made unavailable                                                                                   | `""`                |
-| `data.nameOverride`                                | String to partially override elasticsearch.data.fullname                                                                                         | `""`                |
-| `data.fullnameOverride`                            | String to fully override elasticsearch.data.fullname                                                                                             | `""`                |
-| `data.servicenameOverride`                         | String to fully override elasticsearch.data.servicename                                                                                          | `""`                |
+| `data.nameOverride`                                | String to partially override opensearch.data.fullname                                                                                         | `""`                |
+| `data.fullnameOverride`                            | String to fully override opensearch.data.fullname                                                                                             | `""`                |
+| `data.servicenameOverride`                         | String to fully override opensearch.data.servicename                                                                                          | `""`                |
 | `data.annotations`                                 | Annotations for the data statefulset                                                                                                             | `{}`                |
 | `data.updateStrategy.type`                         | Data-only nodes statefulset stategy type                                                                                                         | `RollingUpdate`     |
 | `data.resources.limits`                            | The resources limits for the data containers                                                                                                     | `{}`                |
 | `data.resources.requests`                          | The requested resources for the data containers                                                                                                  | `{}`                |
-| `data.heapSize`                                    | Elasticsearch data node heap size.                                                                                                               | `1024m`             |
+| `data.heapSize`                                    | Opensearch data node heap size.                                                                                                               | `1024m`             |
 | `data.podSecurityContext.enabled`                  | Enabled data pods' Security Context                                                                                                              | `true`              |
 | `data.podSecurityContext.fsGroup`                  | Set data pod's Security Context fsGroup                                                                                                          | `1001`              |
 | `data.containerSecurityContext.enabled`            | Enabled data containers' Security Context                                                                                                        | `true`              |
@@ -290,9 +290,9 @@ helm delete --purge my-release
 | `data.tolerations`                                 | Tolerations for data pods assignment                                                                                                             | `[]`                |
 | `data.priorityClassName`                           | data pods' priorityClassName                                                                                                                     | `""`                |
 | `data.schedulerName`                               | Name of the k8s scheduler (other than default) for data pods                                                                                     | `""`                |
-| `data.terminationGracePeriodSeconds`               | In seconds, time the given to the Elasticsearch data pod needs to terminate gracefully                                                           | `""`                |
+| `data.terminationGracePeriodSeconds`               | In seconds, time the given to the Opensearch data pod needs to terminate gracefully                                                           | `""`                |
 | `data.topologySpreadConstraints`                   | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template                         | `[]`                |
-| `data.podManagementPolicy`                         | podManagementPolicy to manage scaling operation of Elasticsearch data pods                                                                       | `Parallel`          |
+| `data.podManagementPolicy`                         | podManagementPolicy to manage scaling operation of Opensearch data pods                                                                       | `Parallel`          |
 | `data.startupProbe.enabled`                        | Enable/disable the startup probe (data nodes pod)                                                                                                | `false`             |
 | `data.startupProbe.initialDelaySeconds`            | Delay before startup probe is initiated (data nodes pod)                                                                                         | `90`                |
 | `data.startupProbe.periodSeconds`                  | How often to perform the probe (data nodes pod)                                                                                                  | `10`                |
@@ -351,14 +351,14 @@ helm delete --purge my-release
 | `coordinating.pdb.create`                                  | Enable/disable a Pod Disruption Budget creation                                                                           | `false`         |
 | `coordinating.pdb.minAvailable`                            | Minimum number/percentage of pods that should remain scheduled                                                            | `1`             |
 | `coordinating.pdb.maxUnavailable`                          | Maximum number/percentage of pods that may be made unavailable                                                            | `""`            |
-| `coordinating.nameOverride`                                | String to partially override elasticsearch.coordinating.fullname                                                          | `""`            |
-| `coordinating.fullnameOverride`                            | String to fully override elasticsearch.coordinating.fullname                                                              | `""`            |
-| `coordinating.servicenameOverride`                         | String to fully override elasticsearch.coordinating.servicename                                                           | `""`            |
+| `coordinating.nameOverride`                                | String to partially override opensearch.coordinating.fullname                                                          | `""`            |
+| `coordinating.fullnameOverride`                            | String to fully override opensearch.coordinating.fullname                                                              | `""`            |
+| `coordinating.servicenameOverride`                         | String to fully override opensearch.coordinating.servicename                                                           | `""`            |
 | `coordinating.annotations`                                 | Annotations for the coordinating-only statefulset                                                                         | `{}`            |
 | `coordinating.updateStrategy.type`                         | Coordinating-only nodes statefulset stategy type                                                                          | `RollingUpdate` |
 | `coordinating.resources.limits`                            | The resources limits for the coordinating-only containers                                                                 | `{}`            |
 | `coordinating.resources.requests`                          | The requested resources for the coordinating-only containers                                                              | `{}`            |
-| `coordinating.heapSize`                                    | Elasticsearch coordinating node heap size.                                                                                | `128m`          |
+| `coordinating.heapSize`                                    | Opensearch coordinating node heap size.                                                                                | `128m`          |
 | `coordinating.podSecurityContext.enabled`                  | Enabled coordinating-only pods' Security Context                                                                          | `true`          |
 | `coordinating.podSecurityContext.fsGroup`                  | Set coordinating-only pod's Security Context fsGroup                                                                      | `1001`          |
 | `coordinating.containerSecurityContext.enabled`            | Enabled coordinating-only containers' Security Context                                                                    | `true`          |
@@ -377,9 +377,9 @@ helm delete --purge my-release
 | `coordinating.tolerations`                                 | Tolerations for coordinating-only pods assignment                                                                         | `[]`            |
 | `coordinating.priorityClassName`                           | coordinating-only pods' priorityClassName                                                                                 | `""`            |
 | `coordinating.schedulerName`                               | Name of the k8s scheduler (other than default) for coordinating-only pods                                                 | `""`            |
-| `coordinating.terminationGracePeriodSeconds`               | In seconds, time the given to the Elasticsearch coordinating pod needs to terminate gracefully                            | `""`            |
+| `coordinating.terminationGracePeriodSeconds`               | In seconds, time the given to the Opensearch coordinating pod needs to terminate gracefully                            | `""`            |
 | `coordinating.topologySpreadConstraints`                   | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template  | `[]`            |
-| `coordinating.podManagementPolicy`                         | podManagementPolicy to manage scaling operation of Elasticsearch coordinating pods                                        | `Parallel`      |
+| `coordinating.podManagementPolicy`                         | podManagementPolicy to manage scaling operation of Opensearch coordinating pods                                        | `Parallel`      |
 | `coordinating.startupProbe.enabled`                        | Enable/disable the startup probe (coordinating-only nodes pod)                                                            | `false`         |
 | `coordinating.startupProbe.initialDelaySeconds`            | Delay before startup probe is initiated (coordinating-only nodes pod)                                                     | `90`            |
 | `coordinating.startupProbe.periodSeconds`                  | How often to perform the probe (coordinating-only nodes pod)                                                              | `10`            |
@@ -431,16 +431,16 @@ helm delete --purge my-release
 | `ingest.pdb.create`                                  | Enable/disable a Pod Disruption Budget creation                                                                                  | `false`                      |
 | `ingest.pdb.minAvailable`                            | Minimum number/percentage of pods that should remain scheduled                                                                   | `1`                          |
 | `ingest.pdb.maxUnavailable`                          | Maximum number/percentage of pods that may be made unavailable                                                                   | `""`                         |
-| `ingest.nameOverride`                                | String to partially override elasticsearch.ingest.fullname                                                                       | `""`                         |
-| `ingest.fullnameOverride`                            | String to fully override elasticsearch.ingest.fullname                                                                           | `""`                         |
+| `ingest.nameOverride`                                | String to partially override opensearch.ingest.fullname                                                                       | `""`                         |
+| `ingest.fullnameOverride`                            | String to fully override opensearch.ingest.fullname                                                                           | `""`                         |
 | `ingest.servicenameOverride`                         | String to fully override ingest.master.servicename                                                                               | `""`                         |
 | `ingest.annotations`                                 | Annotations for the ingest statefulset                                                                                           | `{}`                         |
-| `ingest.containerPorts.restAPI`                      | Elasticsearch REST API port                                                                                                      | `9200`                       |
-| `ingest.containerPorts.transport`                    | Elasticsearch Transport port                                                                                                     | `9300`                       |
+| `ingest.containerPorts.restAPI`                      | Opensearch REST API port                                                                                                      | `9200`                       |
+| `ingest.containerPorts.transport`                    | Opensearch Transport port                                                                                                     | `9300`                       |
 | `ingest.updateStrategy.type`                         | Ingest-only nodes statefulset stategy type                                                                                       | `RollingUpdate`              |
 | `ingest.resources.limits`                            | The resources limits for the ingest-only containers                                                                              | `{}`                         |
 | `ingest.resources.requests`                          | The requested resources for the ingest-only containers                                                                           | `{}`                         |
-| `ingest.heapSize`                                    | Elasticsearch ingest-only node heap size.                                                                                        | `128m`                       |
+| `ingest.heapSize`                                    | Opensearch ingest-only node heap size.                                                                                        | `128m`                       |
 | `ingest.podSecurityContext.enabled`                  | Enabled ingest-only pods' Security Context                                                                                       | `true`                       |
 | `ingest.podSecurityContext.fsGroup`                  | Set ingest-only pod's Security Context fsGroup                                                                                   | `1001`                       |
 | `ingest.containerSecurityContext.enabled`            | Enabled ingest-only containers' Security Context                                                                                 | `true`                       |
@@ -459,9 +459,9 @@ helm delete --purge my-release
 | `ingest.tolerations`                                 | Tolerations for ingest-only pods assignment                                                                                      | `[]`                         |
 | `ingest.priorityClassName`                           | ingest-only pods' priorityClassName                                                                                              | `""`                         |
 | `ingest.schedulerName`                               | Name of the k8s scheduler (other than default) for ingest-only pods                                                              | `""`                         |
-| `ingest.terminationGracePeriodSeconds`               | In seconds, time the given to the Elasticsearch ingest pod needs to terminate gracefully                                         | `""`                         |
+| `ingest.terminationGracePeriodSeconds`               | In seconds, time the given to the Opensearch ingest pod needs to terminate gracefully                                         | `""`                         |
 | `ingest.topologySpreadConstraints`                   | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template         | `[]`                         |
-| `ingest.podManagementPolicy`                         | podManagementPolicy to manage scaling operation of Elasticsearch ingest pods                                                     | `Parallel`                   |
+| `ingest.podManagementPolicy`                         | podManagementPolicy to manage scaling operation of Opensearch ingest pods                                                     | `Parallel`                   |
 | `ingest.startupProbe.enabled`                        | Enable/disable the startup probe (ingest-only nodes pod)                                                                         | `false`                      |
 | `ingest.startupProbe.initialDelaySeconds`            | Delay before startup probe is initiated (ingest-only nodes pod)                                                                  | `90`                         |
 | `ingest.startupProbe.periodSeconds`                  | How often to perform the probe (ingest-only nodes pod)                                                                           | `10`                         |
@@ -503,23 +503,23 @@ helm delete --purge my-release
 | `ingest.autoscaling.targetCPU`                       | Define the CPU target to trigger the scaling actions (utilization percentage)                                                    | `""`                         |
 | `ingest.autoscaling.targetMemory`                    | Define the memory target to trigger the scaling actions (utilization percentage)                                                 | `""`                         |
 | `ingest.service.enabled`                             | Enable Ingest-only service                                                                                                       | `false`                      |
-| `ingest.service.type`                                | Elasticsearch ingest-only service type                                                                                           | `ClusterIP`                  |
-| `ingest.service.ports.restAPI`                       | Elasticsearch service REST API port                                                                                              | `9200`                       |
-| `ingest.service.ports.transport`                     | Elasticsearch service transport port                                                                                             | `9300`                       |
+| `ingest.service.type`                                | Opensearch ingest-only service type                                                                                           | `ClusterIP`                  |
+| `ingest.service.ports.restAPI`                       | Opensearch service REST API port                                                                                              | `9200`                       |
+| `ingest.service.ports.transport`                     | Opensearch service transport port                                                                                             | `9300`                       |
 | `ingest.service.nodePorts.restAPI`                   | Node port for REST API                                                                                                           | `""`                         |
 | `ingest.service.nodePorts.transport`                 | Node port for REST API                                                                                                           | `""`                         |
-| `ingest.service.clusterIP`                           | Elasticsearch ingest-only service Cluster IP                                                                                     | `""`                         |
-| `ingest.service.loadBalancerIP`                      | Elasticsearch ingest-only service Load Balancer IP                                                                               | `""`                         |
-| `ingest.service.loadBalancerSourceRanges`            | Elasticsearch ingest-only service Load Balancer sources                                                                          | `[]`                         |
-| `ingest.service.externalTrafficPolicy`               | Elasticsearch ingest-only service external traffic policy                                                                        | `Cluster`                    |
+| `ingest.service.clusterIP`                           | Opensearch ingest-only service Cluster IP                                                                                     | `""`                         |
+| `ingest.service.loadBalancerIP`                      | Opensearch ingest-only service Load Balancer IP                                                                               | `""`                         |
+| `ingest.service.loadBalancerSourceRanges`            | Opensearch ingest-only service Load Balancer sources                                                                          | `[]`                         |
+| `ingest.service.externalTrafficPolicy`               | Opensearch ingest-only service external traffic policy                                                                        | `Cluster`                    |
 | `ingest.service.extraPorts`                          | Extra ports to expose (normally used with the `sidecar` value)                                                                   | `[]`                         |
-| `ingest.service.annotations`                         | Additional custom annotations for Elasticsearch ingest-only service                                                              | `{}`                         |
+| `ingest.service.annotations`                         | Additional custom annotations for Opensearch ingest-only service                                                              | `{}`                         |
 | `ingest.service.sessionAffinity`                     | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                             | `None`                       |
 | `ingest.service.sessionAffinityConfig`               | Additional settings for the sessionAffinity                                                                                      | `{}`                         |
-| `ingest.ingress.enabled`                             | Enable ingress record generation for Elasticsearch                                                                               | `false`                      |
+| `ingest.ingress.enabled`                             | Enable ingress record generation for Opensearch                                                                               | `false`                      |
 | `ingest.ingress.pathType`                            | Ingress path type                                                                                                                | `ImplementationSpecific`     |
 | `ingest.ingress.apiVersion`                          | Force Ingress API version (automatically detected if not set)                                                                    | `""`                         |
-| `ingest.ingress.hostname`                            | Default host for the ingress record                                                                                              | `elasticsearch-ingest.local` |
+| `ingest.ingress.hostname`                            | Default host for the ingress record                                                                                              | `opensearch-ingest.local` |
 | `ingest.ingress.path`                                | Default path for the ingress record                                                                                              | `/`                          |
 | `ingest.ingress.annotations`                         | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                         |
 | `ingest.ingress.tls`                                 | Enable TLS configuration for the host defined at `ingress.hostname` parameter                                                    | `false`                      |
@@ -539,7 +539,7 @@ helm delete --purge my-release
 | `metrics.nameOverride`                          | Metrics pod name                                                                                                               | `""`                             |
 | `metrics.fullnameOverride`                      | String to fully override common.names.fullname                                                                                 | `""`                             |
 | `metrics.image.registry`                        | Metrics exporter image registry                                                                                                | `docker.io`                      |
-| `metrics.image.repository`                      | Metrics exporter image repository                                                                                              | `bitnami/elasticsearch-exporter` |
+| `metrics.image.repository`                      | Metrics exporter image repository                                                                                              | `bitnami/opensearch-exporter` |
 | `metrics.image.tag`                             | Metrics exporter image tag                                                                                                     | `1.5.0-debian-11-r115`           |
 | `metrics.image.digest`                          | Metrics exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag               | `""`                             |
 | `metrics.image.pullPolicy`                      | Metrics exporter image pull policy                                                                                             | `IfNotPresent`                   |
@@ -548,7 +548,7 @@ helm delete --purge my-release
 | `metrics.extraArgs`                             | Extra arguments to add to the default exporter command                                                                         | `[]`                             |
 | `metrics.hostAliases`                           | Add deployment host aliases                                                                                                    | `[]`                             |
 | `metrics.schedulerName`                         | Name of the k8s scheduler (other than default)                                                                                 | `""`                             |
-| `metrics.priorityClassName`                     | Elasticsearch metrics exporter pods' priorityClassName                                                                         | `""`                             |
+| `metrics.priorityClassName`                     | Opensearch metrics exporter pods' priorityClassName                                                                         | `""`                             |
 | `metrics.service.type`                          | Metrics exporter endpoint service type                                                                                         | `ClusterIP`                      |
 | `metrics.service.port`                          | Metrics exporter endpoint service port                                                                                         | `9114`                           |
 | `metrics.service.annotations`                   | Provide any additional annotations which may be required.                                                                      | `{}`                             |
@@ -586,20 +586,20 @@ helm delete --purge my-release
 | `metrics.customReadinessProbe`                  | Custom readiness probe for the Web component                                                                                   | `{}`                             |
 | `metrics.podAnnotations`                        | Metrics exporter pod Annotation and Labels                                                                                     | `{}`                             |
 | `metrics.podLabels`                             | Extra labels to add to Pod                                                                                                     | `{}`                             |
-| `metrics.podSecurityContext.enabled`            | Enabled Elasticsearch metrics exporter pods' Security Context                                                                  | `true`                           |
-| `metrics.podSecurityContext.fsGroup`            | Set Elasticsearch metrics exporter pod's Security Context fsGroup                                                              | `1001`                           |
-| `metrics.containerSecurityContext.enabled`      | Enabled Elasticsearch metrics exporter containers' Security Context                                                            | `true`                           |
-| `metrics.containerSecurityContext.runAsUser`    | Set Elasticsearch metrics exporter containers' Security Context runAsUser                                                      | `1001`                           |
-| `metrics.containerSecurityContext.runAsNonRoot` | Set Elasticsearch metrics exporter container's Security Context runAsNonRoot                                                   | `true`                           |
+| `metrics.podSecurityContext.enabled`            | Enabled Opensearch metrics exporter pods' Security Context                                                                  | `true`                           |
+| `metrics.podSecurityContext.fsGroup`            | Set Opensearch metrics exporter pod's Security Context fsGroup                                                              | `1001`                           |
+| `metrics.containerSecurityContext.enabled`      | Enabled Opensearch metrics exporter containers' Security Context                                                            | `true`                           |
+| `metrics.containerSecurityContext.runAsUser`    | Set Opensearch metrics exporter containers' Security Context runAsUser                                                      | `1001`                           |
+| `metrics.containerSecurityContext.runAsNonRoot` | Set Opensearch metrics exporter container's Security Context runAsNonRoot                                                   | `true`                           |
 | `metrics.command`                               | Override default container command (useful when using custom images)                                                           | `[]`                             |
 | `metrics.args`                                  | Override default container args (useful when using custom images)                                                              | `[]`                             |
-| `metrics.extraEnvVars`                          | Array with extra environment variables to add to Elasticsearch metrics exporter nodes                                          | `[]`                             |
-| `metrics.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars for Elasticsearch metrics exporter nodes                                  | `""`                             |
-| `metrics.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for Elasticsearch metrics exporter nodes                                     | `""`                             |
-| `metrics.extraVolumes`                          | Optionally specify extra list of additional volumes for the Elasticsearch metrics exporter pod(s)                              | `[]`                             |
-| `metrics.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the Elasticsearch metrics exporter container(s)                   | `[]`                             |
-| `metrics.sidecars`                              | Add additional sidecar containers to the Elasticsearch metrics exporter pod(s)                                                 | `[]`                             |
-| `metrics.initContainers`                        | Add additional init containers to the Elasticsearch metrics exporter pod(s)                                                    | `[]`                             |
+| `metrics.extraEnvVars`                          | Array with extra environment variables to add to Opensearch metrics exporter nodes                                          | `[]`                             |
+| `metrics.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars for Opensearch metrics exporter nodes                                  | `""`                             |
+| `metrics.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for Opensearch metrics exporter nodes                                     | `""`                             |
+| `metrics.extraVolumes`                          | Optionally specify extra list of additional volumes for the Opensearch metrics exporter pod(s)                              | `[]`                             |
+| `metrics.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the Opensearch metrics exporter container(s)                   | `[]`                             |
+| `metrics.sidecars`                              | Add additional sidecar containers to the Opensearch metrics exporter pod(s)                                                 | `[]`                             |
+| `metrics.initContainers`                        | Add additional init containers to the Opensearch metrics exporter pod(s)                                                    | `[]`                             |
 | `metrics.serviceMonitor.enabled`                | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator                                                   | `false`                          |
 | `metrics.serviceMonitor.namespace`              | Namespace which Prometheus is running in                                                                                       | `""`                             |
 | `metrics.serviceMonitor.jobLabel`               | The name of the label on the target service to use as the job name in prometheus.                                              | `""`                             |
@@ -642,23 +642,23 @@ helm delete --purge my-release
 
 | Name                         | Description                                                               | Value                                                   |
 | ---------------------------- | ------------------------------------------------------------------------- | ------------------------------------------------------- |
-| `kibana.elasticsearch.hosts` | Array containing hostnames for the ES instances. Used to generate the URL | `[]`                                                    |
-| `kibana.elasticsearch.port`  | Port to connect Kibana and ES instance. Used to generate the URL          | `{{ include "elasticsearch.service.ports.restAPI" . }}` |
+| `kibana.opensearch.hosts` | Array containing hostnames for the ES instances. Used to generate the URL | `[]`                                                    |
+| `kibana.opensearch.port`  | Port to connect Kibana and ES instance. Used to generate the URL          | `{{ include "opensearch.service.ports.restAPI" . }}` |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
 helm install my-release \
-  --set name=my-elastic,client.service.port=8080 \
-  oci://registry-1.docker.io/bitnamicharts/elasticsearch
+  --set name=my-open,client.service.port=8080 \
+  oci://registry-1.docker.io/bitnamicharts/opensearch
 ```
 
-The above command sets the Elasticsearch cluster name to `my-elastic` and REST port number to `8080`.
+The above command sets the Opensearch cluster name to `my-open` and REST port number to `8080`.
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/elasticsearch
+helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/opensearch
 ```
 
 > **Tip**: You can use the default [values.yaml](values.yaml).
@@ -671,58 +671,58 @@ It is strongly recommended to use immutable tags in a production environment. Th
 
 Bitnami will release a new chart updating its containers if a new version of the main container, significant changes, or critical vulnerabilities exist.
 
-### Change ElasticSearch version
+### Change OpenSearch version
 
-To modify the ElasticSearch version used in this chart you can specify a [valid image tag](https://hub.docker.com/r/bitnami/elasticsearch/tags/) using the `image.tag` parameter. For example, `image.tag=X.Y.Z`. This approach is also applicable to other images like exporters.
+To modify the OpenSearch version used in this chart you can specify a [valid image tag](https://hub.docker.com/r/bitnami/opensearch/tags/) using the `image.tag` parameter. For example, `image.tag=X.Y.Z`. This approach is also applicable to other images like exporters.
 
 ### Default kernel settings
 
-Currently, Elasticsearch requires some changes in the kernel of the host machine to work as expected. If those values are not set in the underlying operating system, the ES containers fail to boot with ERROR messages. More information about these requirements can be found in the links below:
+Currently, Opensearch requires some changes in the kernel of the host machine to work as expected. If those values are not set in the underlying operating system, the ES containers fail to boot with ERROR messages. More information about these requirements can be found in the links below:
 
-- [File Descriptor requirements](https://www.elastic.co/guide/en/elasticsearch/reference/current/file-descriptors.html)
-- [Virtual memory requirements](https://www.elastic.co/guide/en/elasticsearch/reference/current/vm-max-map-count.html)
+- [File Descriptor requirements](https://www.open.co/guide/en/opensearch/reference/current/file-descriptors.html)
+- [Virtual memory requirements](https://www.open.co/guide/en/opensearch/reference/current/vm-max-map-count.html)
 
 This chart uses a **privileged** initContainer to change those settings in the Kernel by running: `sysctl -w vm.max_map_count=262144 && sysctl -w fs.file-max=65536`.
 You can disable the initContainer using the `sysctlImage.enabled=false` parameter.
 
 ### Enable bundled Kibana
 
-This Elasticsearch chart contains Kibana as subchart, you can enable it just setting the `global.kibanaEnabled=true` parameter.
+This Opensearch chart contains Kibana as subchart, you can enable it just setting the `global.kibanaEnabled=true` parameter.
 To see the notes with some operational instructions from the Kibana chart, please use the `--render-subchart-notes` as part of your `helm install` command, in this way you can see the Kibana and ES notes in your terminal.
 
 When enabling the bundled kibana subchart, there are a few gotchas that you should be aware of listed below.
 
-#### Elasticsearch rest Encryption
+#### Opensearch rest Encryption
 
-When enabling elasticsearch' rest endpoint encryption you will also need to set `kibana.elasticsearch.security.tls.enabled` to the SAME value along with some additional values shown below for an "out of the box experience":
+When enabling opensearch' rest endpoint encryption you will also need to set `kibana.opensearch.security.tls.enabled` to the SAME value along with some additional values shown below for an "out of the box experience":
 
 ```yaml
 security:
   enabled: true
-  # PASSWORD must be the same value passed to elasticsearch to get an "out of the box" experience
-  elasticPassword: "<PASSWORD>"
+  # PASSWORD must be the same value passed to opensearch to get an "out of the box" experience
+  openPassword: "<PASSWORD>"
   tls:
-    # AutoGenerate TLS certs for elastic
+    # AutoGenerate TLS certs for open
     autoGenerated: true
 
 kibana:
-  elasticsearch:
+  opensearch:
     security:
       auth:
         enabled: true
-        # default in the elasticsearch chart is elastic
+        # default in the opensearch chart is open
         kibanaUsername: "<USERNAME>"
         kibanaPassword: "<PASSWORD>"
       tls:
-        # Instruct kibana to connect to elastic over https
+        # Instruct kibana to connect to open over https
         enabled: true
         # Bit of a catch 22, as you will need to know the name upfront of your release
-        existingSecret: RELEASENAME-elasticsearch-coordinating-crt # or just 'elasticsearch-coordinating-crt' if the release name happens to be 'elasticsearch'
+        existingSecret: RELEASENAME-opensearch-coordinating-crt # or just 'opensearch-coordinating-crt' if the release name happens to be 'opensearch'
         # As the certs are auto-generated, they are pemCerts so set to true
         usePemCerts: true
 ```
 
-At a bare-minimum, when working with kibana and elasticsearch together the following values MUST be the same, otherwise things will fail:
+At a bare-minimum, when working with kibana and opensearch together the following values MUST be the same, otherwise things will fail:
 
 ```yaml
 security:
@@ -731,7 +731,7 @@ security:
 
 # assumes global.kibanaEnabled=true
 kibana:
-  elasticsearch:
+  opensearch:
     security:
       tls:
         enabled: true
@@ -743,7 +743,7 @@ In case you want to add extra environment variables (useful for advanced operati
 
 ```yaml
 extraEnvVars:
-  - name: ELASTICSEARCH_VERSION
+  - name: OPENSEARCH_VERSION
     value: 7.0
 ```
 
@@ -751,7 +751,7 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 
 ### Using custom init scripts
 
-For advanced operations, the Bitnami Elasticsearch charts allows using custom init scripts that will be mounted inside `/docker-entrypoint.init-db`. You can include the file directly in your `values.yaml` with `initScripts`, or use a ConfigMap or a Secret (in case of sensitive data) for mounting these extra scripts. In this case you use the `initScriptsCM` and `initScriptsSecret` values.
+For advanced operations, the Bitnami Opensearch charts allows using custom init scripts that will be mounted inside `/docker-entrypoint.init-db`. You can include the file directly in your `values.yaml` with `initScripts`, or use a ConfigMap or a Secret (in case of sensitive data) for mounting these extra scripts. In this case you use the `initScriptsCM` and `initScriptsSecret` values.
 
 ```console
 initScriptsCM=special-scripts
@@ -760,9 +760,9 @@ initScriptsSecret=special-scripts-sensitive
 
 ### Snapshot and restore operations
 
-As it's described in the [official documentation](https://www.elastic.co/guide/en/elasticsearch/reference/current/snapshots-register-repository.html#snapshots-filesystem-repository), it's necessary to register a snapshot repository before you can perform snapshot and restore operations.
+As it's described in the [official documentation](https://www.open.co/guide/en/opensearch/reference/current/snapshots-register-repository.html#snapshots-filesystem-repository), it's necessary to register a snapshot repository before you can perform snapshot and restore operations.
 
-This chart allows you to configure Elasticsearch to use a shared file system to store snapshots. To do so, you need to mount a RWX volume on every Elasticsearch node, and set the parameter `snapshotRepoPath` with the path where the volume is mounted. In the example below, you can find the values to set when using a NFS Perstitent Volume:
+This chart allows you to configure Opensearch to use a shared file system to store snapshots. To do so, you need to mount a RWX volume on every Opensearch node, and set the parameter `snapshotRepoPath` with the path where the volume is mounted. In the example below, you can find the values to set when using a NFS Perstitent Volume:
 
 ```yaml
 extraVolumes:
@@ -778,7 +778,7 @@ snapshotRepoPath: "/snapshots"
 
 ### Sidecars and Init Containers
 
-If you have a need for additional containers to run within the same pod as Elasticsearch components (e.g. an additional metrics or logging exporter), you can do so via the `XXX.sidecars` parameter(s), where XXX is placeholder you need to replace with the actual component(s). Simply define your container according to the Kubernetes container spec.
+If you have a need for additional containers to run within the same pod as Opensearch components (e.g. an additional metrics or logging exporter), you can do so via the `XXX.sidecars` parameter(s), where XXX is placeholder you need to replace with the actual component(s). Simply define your container according to the Kubernetes container spec.
 
 ```yaml
 sidecars:
@@ -809,7 +809,7 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 
 ## Persistence
 
-The [Bitnami Elasticsearch](https://github.com/bitnami/containers/tree/main/bitnami/elasticsearch) image stores the Elasticsearch data at the `/bitnami/elasticsearch/data` path of the container.
+The [Bitnami Opensearch](https://github.com/bitnami/containers/tree/main/bitnami/opensearch) image stores the Opensearch data at the `/bitnami/opensearch/data` path of the container.
 
 By default, the chart mounts a [Persistent Volume](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) at this location. The volume is created using dynamic volume provisioning. See the [Parameters](#parameters) section to configure the PVC.
 
@@ -834,20 +834,20 @@ This version fixes the headless services creation. When upgrading you will need 
 
 ### To 19.0.0
 
-The new version of this chart no longer supports elasticsearch-curator, this repository has been deprecated.
+The new version of this chart no longer supports opensearch-curator, this repository has been deprecated.
 
 ### To 18.0.0
 
-This major release refactors the bitnami/elasticsearch chart, adding some organization and functional changes.
+This major release refactors the bitnami/opensearch chart, adding some organization and functional changes.
 
 - Each role has now the same structure: its Statefulset, a headless service (for FQDN, it gives each node an individual Advertised name, required for TLS verification), its own ServiceAccount (BWC), and HorizontalPodAutoscaling.
 - Previously, the chart would alternate between a Coordinating service and an All-nodes service for traffic exposure. This logic has been replaced with a single Traffic exposure service, that will have coordinating-only nodes as backend pods, or master pods if no coordinating nodes are enabled.
 - Master-eligible nodes can now be deployed as multi-role nodes using the setting masterOnly. This allows the creation of different topologies, smaller clusters with HA (3 multi-role master-eligible nodes), and single-node deployments.
 - Renamed several values to be in line with the rest of the catalog.
 
-This major release also upgrades Elasticsearch to its version 8.x.x and the updates Kibana subchart.
+This major release also upgrades Opensearch to its version 8.x.x and the updates Kibana subchart.
 
-- Upgrade to Elasticsearch 8
+- Upgrade to Opensearch 8
 - Upgrade Kibana subchart.
 
 In addition, several modifications have been performed adding missing features and renaming values, in order to get aligned with the rest of the assets in the Bitnami charts repository.
@@ -859,13 +859,13 @@ The following values have been modified:
 - `data.service.*` has been removed.
 - `master.ingress.*` has been renamed as `ingress.*`. This ingress will be backed by the coordinating/master service previously mentioned.
 - In addition, an Ingest-only service and ingress have been added, for use cases where separated ingrestion and search channels are needed.
-- `global.coordinating.name` have been renamed as `global.elasticsaerch.service.name`.
+- `global.coordinating.name` have been renamed as `global.opensaerch.service.name`.
 - `name` has been renamed as `clusterName`.
 - `extraEnvVarsConfigMap` has been renamed as `extraEnvVarsCM`.
 - `{master/data/ingest/coordinating}.replicas` has been renamed as `{master/data/ingest/coordinating}.replicaCount`.
 - `{master/data/ingest/coordinating}.securityContext` has been separated in two different values: `podSecurityContext` and `containerSecurityContext`.
 - `{master/data/ingest/coordinating}.updateStrategy` is now interpreted as an object. `rollingUpdatePartition` has been removed and has to be configured inside the updateStrategy object when needed.
-- Default values for `kibana.elasticsearch.hosts` and `kibana.elasticsearch.port` have been modified to use the new helpers.
+- Default values for `kibana.opensearch.hosts` and `kibana.opensearch.port` have been modified to use the new helpers.
 - `{master/data/ingest/coordinating/curator/metrics}.name` has been renamed as `{master/data/ingest/coordinating/curator}.nameOverride`.
 
 ### To 17.0.0
@@ -882,7 +882,7 @@ Additionally, this version adds support for X-Pack Security features such as TLS
 
 ### To 15.0.0
 
-From this version onwards, Elasticsearch container components are now licensed under the [Elastic License](https://www.elastic.co/licensing/elastic-license) that is not currently accepted as an Open Source license by the Open Source Initiative (OSI).
+From this version onwards, Opensearch container components are now licensed under the [Open License](https://www.open.co/licensing/open-license) that is not currently accepted as an Open Source license by the Open Source Initiative (OSI).
 
 Also, from now on, the Helm Chart will include the X-Pack plugin installed by default.
 
@@ -921,17 +921,17 @@ Several changes were introduced that breaks backwards compatibility:
 
 - Ports names were prefixed with the protocol to comply with Istio (see <https://istio.io/docs/ops/deployment/requirements/>).
 - Labels are adapted to follow the Helm charts best practices.
-- Elasticsearch data pods are now deployed in parallel in order to bootstrap the cluster and be discovered.
+- Opensearch data pods are now deployed in parallel in order to bootstrap the cluster and be discovered.
 
 ### To 11.0.0
 
-Elasticsearch master pods are now deployed in parallel in order to bootstrap the cluster and be discovered.
+Opensearch master pods are now deployed in parallel in order to bootstrap the cluster and be discovered.
 
 The field `podManagementPolicy` can't be updated in a StatefulSet, so you need to destroy it before you upgrade the chart to this version.
 
 ```console
-kubectl delete statefulset elasticsearch-master
-helm upgrade <DEPLOYMENT_NAME> oci://registry-1.docker.io/bitnamicharts/elasticsearch
+kubectl delete statefulset opensearch-master
+helm upgrade <DEPLOYMENT_NAME> oci://registry-1.docker.io/bitnamicharts/opensearch
 ```
 
 ### TO 10.0.0
@@ -940,7 +940,7 @@ In this version, Kibana was added as dependent chart. More info about how to ena
 
 ### To 9.0.0
 
-Elasticsearch master nodes store the cluster status at `/bitnami/elasticsearch/data`. Among other things this includes the UUID of the elasticsearch cluster. Without a persistent data store for this data, the UUID of a cluster could change if k8s node(s) hosting the es master nodes go down and are scheduled on some other master node. In the event that this happens, the data nodes will no longer be able to join a cluster as the uuid changed resulting in a broken cluster.
+Opensearch master nodes store the cluster status at `/bitnami/opensearch/data`. Among other things this includes the UUID of the opensearch cluster. Without a persistent data store for this data, the UUID of a cluster could change if k8s node(s) hosting the es master nodes go down and are scheduled on some other master node. In the event that this happens, the data nodes will no longer be able to join a cluster as the uuid changed resulting in a broken cluster.
 
 To resolve such issues, PVC's are now attached for master node data persistence.
 
@@ -956,20 +956,20 @@ This version also introduces `bitnami/common`, a [library chart](https://helm.sh
 
 ### To 7.0.0
 
-This version enabled by default the initContainer that modify some kernel settings to meet the Elasticsearch requirements. More info in the ["Default kernel settings"](#default-kernel-settings) section.
+This version enabled by default the initContainer that modify some kernel settings to meet the Opensearch requirements. More info in the ["Default kernel settings"](#default-kernel-settings) section.
 You can disable the initContainer using the `sysctlImage.enabled=false` parameter.
 
 ### To 3.0.0
 
 Backwards compatibility is not guaranteed unless you modify the labels used on the chart's deployments.
-Use the workaround below to upgrade from versions previous to 3.0.0. The following example assumes that the release name is elasticsearch:
+Use the workaround below to upgrade from versions previous to 3.0.0. The following example assumes that the release name is opensearch:
 
 ```console
-kubectl patch deployment elasticsearch-coordinating --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
-kubectl patch deployment elasticsearch-ingest --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
-kubectl patch deployment elasticsearch-master --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
-kubectl patch deployment elasticsearch-metrics --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
-kubectl delete statefulset elasticsearch-data --cascade=false
+kubectl patch deployment opensearch-coordinating --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
+kubectl patch deployment opensearch-ingest --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
+kubectl patch deployment opensearch-master --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
+kubectl patch deployment opensearch-metrics --type=json -p='[{"op": "remove", "path": "/spec/selector/matchLabels/chart"}]'
+kubectl delete statefulset opensearch-data --cascade=false
 ```
 
 ## License
