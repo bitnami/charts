@@ -682,6 +682,9 @@ annotationFilter: ""
 ## @param labelFilter Select sources managed by external-dns using label selector (optional)
 ##
 labelFilter: ""
+## @param ingressClassFilters Filter sources managed by external-dns via IngressClass (optional)
+##
+ingressClassFilters: []
 ## @param dryRun When enabled, prints DNS record changes rather than actually performing them (optional)
 ##
 dryRun: false
