@@ -4,7 +4,7 @@
  */
 
 const COMMAND_DELAY = 2000;
-const BASE_URL = 'http://vmware-magento.my';
+const BASE_URL = 'http://magento.my';
 
 for (const command of ['click', 'get']) {
   Cypress.Commands.overwrite(command, (originalFn, ...args) => {
@@ -47,9 +47,6 @@ Cypress.on('uncaught:exception', (err, runnable) => {
   // we expect an application error with message 'rendering locks'
   // and don't want to fail the test so we return false XMLHttpRequest
   if (err.message.includes('renderingLocks')) {
-    return false;
-  }
-  if (err.message.includes('XMLHttpRequest')) {
     return false;
   }
   // we still want to ensure there are no other unexpected
