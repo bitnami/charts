@@ -189,10 +189,6 @@ For more information, refer to the [documentation on the differences between the
 | Name                                                        | Description                                                                                            | Value                    |
 | ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ | ------------------------ |
 | `grafana.enabled`                                           | Enabled the deployment of the Grafana CRD object into the cluster                                      | `true`                   |
-| `grafana.pluginsInitContainerImage.registry`                | Grafana Plugins image registry                                                                         | `""`                     |
-| `grafana.pluginsInitContainerImage.repository`              | Grafana Plugins image name                                                                             | `""`                     |
-| `grafana.pluginsInitContainerImage.tag`                     | Grafana Plugins image tag                                                                              | `""`                     |
-| `grafana.pluginsInitContainerImage.pullSecrets`             | Grafana Plugins image pull secrets                                                                     | `[]`                     |
 | `grafana.serviceAccount`                                    | Additional service account configuration                                                               | `{}`                     |
 | `grafana.podSecurityContext.enabled`                        | Enable pods security context                                                                           | `true`                   |
 | `grafana.podSecurityContext.runAsUser`                      | User ID for the pods                                                                                   | `1001`                   |

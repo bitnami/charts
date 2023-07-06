@@ -36,17 +36,6 @@ Return the proper grafana-operator grafana baseImage name
 {{- end -}}
 
 {{/*
-Return the grafana-operator grafana plugins init container name if defined or the grafana base image otherwise
-*/}}
-{{- define "grafana-operator.grafana.pluginsInitContainerImage" -}}
-{{- if .Values.grafana.pluginsInitContainerImage.repository }}
-{{- include "grafana-operator.getBaseImage" (dict "image" .Values.grafana.pluginsInitContainerImage "context" $) }}
-{{- else -}}
-{{- include "grafana-operator.grafana.baseImage" . }}
-{{- end -}}
-{{- end -}}
-
-{{/*
 Create the name of the grafana-operator service account to use
 */}}
 {{- define "grafana-operator.serviceAccountName" -}}
