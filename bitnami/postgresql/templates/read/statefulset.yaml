@@ -215,7 +215,36 @@ spec:
               value: {{ .Values.postgresqlDataDir | quote }}
             {{- end }}
             # Authentication
-          {{- if and (not (empty $customUser)) (ne $customUser "postgres") .Values.auth.enablePostgresUser }}
+            {{- if or (eq $customUser "postgres") (empty $customUser) }}
+            {{- if .Values.auth.enablePostgresUser }}
+            {{- if .Values.auth.usePasswordFiles }}
+            - name: POSTGRES_PASSWORD_FILE
+              value: {{ printf "/opt/bitnami/postgresql/secrets/%s" (include "postgresql.adminPasswordKey" .) }}
+            {{- else }}
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "postgresql.secretName" . }}
+                  key: {{ include "postgresql.adminPasswordKey" . }}
+            {{- end }}
+            {{- else }}
+            - name: ALLOW_EMPTY_PASSWORD
+              value: "true"
+            {{- end }}
+            {{- else }}
+            - name: POSTGRES_USER
+              value: {{ $customUser | quote }}
+            {{- if .Values.auth.usePasswordFiles }}
+            - name: POSTGRES_PASSWORD_FILE
+              value: {{ printf "/opt/bitnami/postgresql/secrets/%s" (include "postgresql.userPasswordKey" .) }}
+            {{- else }}
+            - name: POSTGRES_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "postgresql.secretName" . }}
+                  key: {{ include "postgresql.userPasswordKey" . }}
+            {{- end }}
+            {{- if .Values.auth.enablePostgresUser }}
             {{- if .Values.auth.usePasswordFiles }}
             - name: POSTGRES_POSTGRES_PASSWORD_FILE
               value: {{ printf "/opt/bitnami/postgresql/secrets/%s" (include "postgresql.adminPasswordKey" .) }}
@@ -226,16 +255,7 @@ spec:
                   name: {{ include "postgresql.secretName" . }}
                   key: {{ include "postgresql.adminPasswordKey" . }}
             {{- end }}
-          {{- end }}
-            {{- if .Values.auth.usePasswordFiles }}
-            - name: POSTGRES_PASSWORD_FILE
-              value: {{ printf "/opt/bitnami/postgresql/secrets/%s" (include "postgresql.userPasswordKey" .) }}
-            {{- else }}
-            - name: POSTGRES_PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "postgresql.secretName" . }}
-                  key: {{ include "postgresql.userPasswordKey" . }}
+            {{- end }}
             {{- end }}
             # Replication
             - name: POSTGRES_REPLICATION_MODE

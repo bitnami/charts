@@ -33,7 +33,7 @@ it('allows the creation of key-value pairs', () => {
     });
   });
   cy.contains('Save').click({ force: true });
-  cy.get('.notice').contains('Success');
+  cy.contains('Success');
   cy.get('.tabular-collection').within(() => {
     cy.fixture('keys').then((key) => {
       cy.contains(`${key.newKey.testKey}.${random}`);
