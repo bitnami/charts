@@ -4,7 +4,7 @@ SPDX-License-Identifier: APACHE-2.0
 */}}
 
 {{- if .Values.grafana.enabled }}
-apiVersion: integreatly.org/v1alpha1
+apiVersion: grafana.integreatly.org/v1beta1
 kind: Grafana
 metadata:
   name: {{ printf "%s-grafana" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
@@ -17,10 +17,8 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  baseImage: {{ include "common.images.image" (dict "imageRoot" .Values.grafana.image "global" .Values.global) }}
   client:
     timeout: {{ .Values.grafana.client.timeout }}
-    preferService: {{ .Values.grafana.client.preferService }}
   {{- if .Values.grafana.persistence.enabled }}
   dataStorage:
     labels: {{- include "common.labels.standard" . | nindent 6 }}
@@ -49,13 +47,6 @@ spec:
     {{- end }}
   {{- end }}
   service:
-    labels: {{- include "common.labels.standard" . | nindent 6 }}
-      {{- if .Values.commonLabels }}
-      {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 6 }}
-      {{- end }}
-      {{- if .Values.grafana.labels }}
-      {{- include "common.tplvalues.render" ( dict "value" .Values.grafana.labels "context" $ ) | nindent 6 }}
-      {{- end }}
     {{- if or .Values.commonAnnotations .Values.grafana.service.annotations }}
     annotations:
       {{- if .Values.grafana.service.annotations }}
@@ -65,76 +56,67 @@ spec:
       {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 6 }}
       {{- end }}
     {{- end }}
-    type: {{ .Values.grafana.service.type }}
-    {{- if .Values.grafana.service.extraPorts }}
-    ports: {{- include "common.tplvalues.render" ( dict "value" .Values.grafana.service.extraPorts "context" $) | nindent 6 }}
-    {{- end }}
-  {{- $imagePullSecrets := include "common.images.pullSecrets" (dict "images" (list .Values.operator.image .Values.grafana.image .Values.grafana.pluginsInitContainerImage) "global" .Values.global) }}
-  {{- if (not (empty ($imagePullSecrets))) | or .Values.grafana.serviceAccount }}
+    spec:
+      type: {{ .Values.grafana.service.type }}
+      {{- if .Values.grafana.service.extraPorts }}
+      ports: {{- include "common.tplvalues.render" ( dict "value" .Values.grafana.service.extraPorts "context" $) | nindent 6 }}
+      {{- end }}
+  {{- if .Values.grafana.serviceAccount }}
   serviceAccount:
   {{- with .Values.grafana.serviceAccount }}
     {{- toYaml . | nindent 4 }}
   {{- end }}
-  {{- $imagePullSecrets | nindent 4 }}
   {{- end }}
   {{- if .Values.grafana.sidecars }}
   containers:
     {{- include "common.tplvalues.render" ( dict "value" .Values.grafana.sidecars "context" $) | nindent 4 }}
-  {{- end }}
-  {{- if .Values.grafana.livenessProbe.enabled }}
-  livenessProbeSpec:
-    initialDelaySeconds: {{ .Values.grafana.livenessProbe.initialDelaySeconds }}
-    periodSeconds: {{ .Values.grafana.livenessProbe.periodSeconds }}
-    timeoutSeconds: {{ .Values.grafana.livenessProbe.timeoutSeconds }}
-    successThreshold: {{ .Values.grafana.livenessProbe.successThreshold }}
-    failureThreshold: {{ .Values.grafana.livenessProbe.failureThreshold }}
-  {{- end }}
-  {{- if .Values.grafana.readinessProbe.enabled }}
-  readinessProbeSpec:
-    initialDelaySeconds: {{ .Values.grafana.readinessProbe.initialDelaySeconds }}
-    periodSeconds: {{ .Values.grafana.readinessProbe.periodSeconds }}
-    timeoutSeconds: {{ .Values.grafana.readinessProbe.timeoutSeconds }}
-    successThreshold: {{ .Values.grafana.readinessProbe.successThreshold }}
-    failureThreshold: {{ .Values.grafana.readinessProbe.failureThreshold }}
+    {{- if .Values.grafana.livenessProbe.enabled }}
+    livenessProbeSpec:
+      initialDelaySeconds: {{ .Values.grafana.livenessProbe.initialDelaySeconds }}
+      periodSeconds: {{ .Values.grafana.livenessProbe.periodSeconds }}
+      timeoutSeconds: {{ .Values.grafana.livenessProbe.timeoutSeconds }}
+      successThreshold: {{ .Values.grafana.livenessProbe.successThreshold }}
+      failureThreshold: {{ .Values.grafana.livenessProbe.failureThreshold }}
+    {{- end }}
+    {{- if .Values.grafana.readinessProbe.enabled }}
+    readinessProbeSpec:
+      initialDelaySeconds: {{ .Values.grafana.readinessProbe.initialDelaySeconds }}
+      periodSeconds: {{ .Values.grafana.readinessProbe.periodSeconds }}
+      timeoutSeconds: {{ .Values.grafana.readinessProbe.timeoutSeconds }}
+      successThreshold: {{ .Values.grafana.readinessProbe.successThreshold }}
+      failureThreshold: {{ .Values.grafana.readinessProbe.failureThreshold }}
+    {{- end }}
   {{- end }}
   deployment:
-    labels: {{- include "common.labels.standard" . | nindent 6 }}
-      {{- if .Values.commonLabels }}
-      {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 6 }}
-      {{- end }}
-      {{- if .Values.grafana.labels }}
-      {{- include "common.tplvalues.render" ( dict "value" .Values.grafana.labels "context" $ ) | nindent 6 }}
-      {{- end }}
     {{- if .Values.commonAnnotations }}
     annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 6 }}
     {{- end }}
     {{- if .Values.grafana.envFrom }}
     envFrom: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.envFrom "context" $ ) | nindent 6 }}
     {{- end }}
-    replicas: {{ .Values.grafana.replicaCount }}
-    skipCreateAdminAccount: {{ .Values.grafana.skipCreateAdminAccount }}
-    {{- if .Values.grafana.podSecurityContext.enabled }}
-    securityContext: {{- omit .Values.grafana.podSecurityContext "enabled" | toYaml | nindent 6 }}
-    {{- end }}
-    {{- if .Values.grafana.containerSecurityContext.enabled }}
-    containerSecurityContext: {{- omit .Values.grafana.containerSecurityContext "enabled" | toYaml | nindent 6 }}
-    {{- end }}
+    spec:
+      replicas: {{ .Values.grafana.replicaCount }}
+      template:
+        spec:
+          {{- if .Values.grafana.affinity }}
+          affinity: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.affinity "context" $) | nindent 6 }}
+          {{- else }}
+          affinity:
+            {{- if not (empty .Values.grafana.podAffinityPreset) }}
+            podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.grafana.podAffinityPreset "component" "grafana" "context" $) | nindent 14 }}
+            {{- end }}
+            {{- if not (empty .Values.grafana.podAntiAffinityPreset) }}
+            podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.grafana.podAntiAffinityPreset "component" "grafana" "context" $) | nindent 14 }}
+            {{- end }}
+            {{- if not (empty .Values.grafana.nodeAffinityPreset.type) }}
+            nodeAffinity: {{- (dict "type" .Values.grafana.nodeAffinityPreset.type "key" .Values.grafana.nodeAffinityPreset.key "values" .Values.grafana.nodeAffinityPreset.values) | nindent 14 }}
+            {{- end }}
+          {{- end }}
+          {{- if .Values.grafana.podSecurityContext.enabled }}
+          securityContext: {{- omit .Values.grafana.podSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
     {{- if .Values.grafana.tolerations }}
     tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.tolerations "context" $) | nindent 6 }}
-    {{- end }}
-    {{- if .Values.grafana.affinity }}
-    affinity: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.affinity "context" $) | nindent 6 }}
-    {{- else }}
-    affinity:
-      {{- if not (empty .Values.grafana.podAffinityPreset) }}
-      podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.grafana.podAffinityPreset "component" "grafana" "context" $) | nindent 8 }}
-      {{- end }}
-      {{- if not (empty .Values.grafana.podAntiAffinityPreset) }}
-      podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.grafana.podAntiAffinityPreset "component" "grafana" "context" $) | nindent 8 }}
-      {{- end }}
-      {{- if not (empty .Values.grafana.nodeAffinityPreset.type) }}
-      nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.grafana.nodeAffinityPreset.type "key" .Values.grafana.nodeAffinityPreset.key "values" .Values.grafana.nodeAffinityPreset.values) | nindent 8 }}
-      {{- end }}
     {{- end }}
     {{- if .Values.grafana.nodeSelector }}
     nodeSelector: {{ toYaml .Values.grafana.nodeSelector | nindent 6 }}
@@ -150,20 +132,23 @@ spec:
     extraVolumes:
       {{- include "common.tplvalues.render" (dict "value" .Values.grafana.extraVolumes "context" $) | nindent 6 }}
     {{- end }}
-  {{- if .Values.grafana.resources }}
-  resources: {{- toYaml .Values.grafana.resources | nindent 4 }}
-  {{- end }}
-  ingress:
-    enabled: {{ .Values.grafana.ingress.enabled }}
-    {{- if and .Values.grafana.ingress.ingressClassName (include "common.ingress.supportsIngressClassname" .) }}
-    ingressClassName: {{ .Values.grafana.ingress.ingressClassName | quote }}
-    {{- end }}
-    {{- if .Values.grafana.ingress.hostname }}
-    hostname: {{ include "common.tplvalues.render" (dict "value" .Values.grafana.ingress.hostname "context" $) }}
-    {{- end }}
-    tlsEnabled: {{ .Values.grafana.ingress.tls }}
-    tlsSecretName: {{ .Values.grafana.ingress.tlsSecret }}
-    {{- if or .Values.commonLabels .Values.grafana.ingress.labels }}
+  {{- if .Values.grafana.ingress.enabled }}
+  ingress: 
+    spec: 
+      {{- if and .Values.grafana.ingress.ingressClassName (include "common.ingress.supportsIngressClassname" .) }}
+      ingressClassName: {{ .Values.grafana.ingress.ingressClassName | quote }}
+      {{- end }}
+      tlsEnabled: {{ .Values.grafana.ingress.tls }}
+      tlsSecretName: {{ .Values.grafana.ingress.tlsSecret }}
+      rules:
+        {{- if .Values.grafana.ingress.host }}
+        host: {{ include "common.tplvalues.render" (dict "value" .Values.grafana.ingress.host "context" $) }}
+        {{- end }}
+        - http:
+          paths:
+            - path: {{ include "common.tplvalues.render" (dict "value" .Values.grafana.ingress.path "context" $) }}
+            - pathType: {{ include "common.tplvalues.render" (dict "value" .Values.grafana.ingress.pathType "context" $) }}
+    {{- if or .Values.commonLabels .Values.grafana.ingress.labels .Values.grafana.labels }}
     labels:
       {{- if .Values.commonLabels }}
       {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 6 }}
@@ -184,8 +169,7 @@ spec:
       {{- include "common.tplvalues.render" ( dict "value" .Values.grafana.ingress.annotations "context" $ ) | nindent 6 }}
       {{- end }}
     {{- end }}
-    path: {{ include "common.tplvalues.render" (dict "value" .Values.grafana.ingress.path "context" $) }}
-    pathType: {{ include "common.tplvalues.render" (dict "value" .Values.grafana.ingress.pathType "context" $) }}
+  {{- end }}
   config: {{- include "common.tplvalues.render" ( dict "value" .Values.grafana.config "context" $ ) | nindent 4 }}
   {{- if .Values.grafana.configMaps }}
   configMaps: {{ toYaml .Values.grafana.configMaps | nindent 4 }}
@@ -193,7 +177,6 @@ spec:
   {{- if .Values.grafana.secrets }}
   secrets: {{ toYaml .Values.grafana.secrets | nindent 4 }}
   {{- end }}
-  dashboardLabelSelector: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.dashboardLabelSelectors "context" $ ) | nindent 4 }}
   {{- if .Values.grafana.dashboardNamespaceSelector }}
   dashboardNamespaceSelector: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.dashboardNamespaceSelector "context" $ ) | nindent 4 }}
   {{- end }}
