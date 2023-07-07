@@ -67,6 +67,7 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/memcached/**'
       - 'bitnami/metallb/**'
       - 'bitnami/metrics-server/**'
+      - 'bitnami/milvus/**'
       - 'bitnami/minio/**'
       - 'bitnami/mongodb/**'
       - 'bitnami/mongodb-sharded/**'
