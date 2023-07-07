@@ -301,7 +301,7 @@ configuration:
   google:
     enabled: false
     adminEmail: ""
-    googleGroup: ""
+    googleGroups: []
     serviceAccountJson: ""
     existingSecret: ""
   ## Custom configuration file: oauth2_proxy.cfg
