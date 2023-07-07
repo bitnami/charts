@@ -148,7 +148,7 @@ spec:
           paths:
             - path: {{ include "common.tplvalues.render" (dict "value" .Values.grafana.ingress.path "context" $) }}
             - pathType: {{ include "common.tplvalues.render" (dict "value" .Values.grafana.ingress.pathType "context" $) }}
-    {{- if or .Values.commonLabels .Values.grafana.ingress.labels }}
+    {{- if or .Values.commonLabels .Values.grafana.ingress.labels .Values.grafana.labels }}
     labels:
       {{- if .Values.commonLabels }}
       {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 6 }}

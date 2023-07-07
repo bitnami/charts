@@ -3,7 +3,7 @@ Copyright VMware, Inc.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if not .Values.operator.namespaceScope }}
+{{- if and .Values.operator.rbac.create (not .Values.operator.namespaceScope) }}
 apiVersion: rbac.authorization.k8s.io/v1
 kind: ClusterRole
 metadata:
