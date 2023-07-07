@@ -6,7 +6,7 @@ SPDX-License-Identifier: APACHE-2.0
 {{/* vim: set filetype=mustache: */}}
 
 {{/*
-Return the proper ES image name
+Return the proper OS image name
 */}}
 {{- define "opensearch.image" -}}
 {{ include "common.images.image" (dict "imageRoot" .Values.image "global" .Values.global) }}
@@ -20,7 +20,7 @@ Return the proper Docker Image Registry Secret Names
 {{- end -}}
 
 {{/*
-Return the proper ES exporter image name
+Return the proper OS exporter image name
 */}}
 {{- define "opensearch.metrics.image" -}}
 {{ include "common.images.image" (dict "imageRoot" .Values.metrics.image "global" .Values.global) }}
@@ -628,3 +628,35 @@ if [ "$DESIRED" -gt "$CURRENT" ]; then
     sysctl -w {{ .key }}={{ .value }};
 fi;
 {{- end -}}
+
+{{/*
+Create a default fully qualified dashboards name.
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+*/}}
+{{- define "opensearch.dashboards.fullname" -}}
+{{- $name := default "dashboards" .Values.dashboards.nameOverride -}}
+{{- if .Values.data.fullnameOverride -}}
+{{- .Values.data.fullnameOverride | trunc 63 | trimSuffix "-" -}}
+{{- else -}}
+{{- printf "%s-%s" (include "common.names.fullname" .) $name | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+ Create the name of the dashboards service account to use
+ */}}
+{{- define "opensearch.dashboards.serviceAccountName" -}}
+{{- if .Values.dashboards.serviceAccount.create -}}
+    {{ default (include "opensearch.dashboards.fullname" .) .Values.dashboards.serviceAccount.name }}
+{{- else -}}
+    {{ default "default" .Values.dashboards.serviceAccount.name }}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the proper Opensearch Dashboards image name
+*/}}
+{{- define "opensearch.dashboards.image" -}}
+{{ include "common.images.image" (dict "imageRoot" .Values.dashboards.image "global" .Values.global) }}
+{{- end -}}
+

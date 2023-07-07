@@ -22,7 +22,7 @@ APP VERSION: {{ .Chart.AppVersion }}
 
     Opensearch requires some changes in the kernel of the host machine to
     work as expected. If those values are not set in the underlying operating
-    system, the ES containers fail to boot with ERROR messages.
+    system, the OS containers fail to boot with ERROR messages.
 
     To check whether the host machine meets the requirements, run the command
     below:
@@ -57,7 +57,7 @@ APP VERSION: {{ .Chart.AppVersion }}
 
     Opensearch requires some changes in the kernel of the host machine to
     work as expected. If those values are not set in the underlying operating
-    system, the ES containers fail to boot with ERROR messages.
+    system, the OS containers fail to boot with ERROR messages.
 
     More information about these requirements can be found in the links below:
 

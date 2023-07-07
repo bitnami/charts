@@ -58,14 +58,14 @@ helm delete --purge my-release
 
 ### Global parameters
 
-| Name                                         | Description                                                                                           | Value           |
-| -------------------------------------------- | ----------------------------------------------------------------------------------------------------- | --------------- |
-| `global.imageRegistry`                       | Global Docker image registry                                                                          | `""`            |
-| `global.imagePullSecrets`                    | Global Docker registry secret names as an array                                                       | `[]`            |
-| `global.storageClass`                        | Global StorageClass for Persistent Volume(s)                                                          | `""`            |
-| `global.opensearch.service.name`          | Opensearch service name to be used in the Kibana subchart (ignored if kibanaEnabled=false)         | `opensearch` |
-| `global.opensearch.service.ports.restAPI` | Opensearch service restAPI port to be used in the Kibana subchart (ignored if kibanaEnabled=false) | `9200`          |
-| `global.kibanaEnabled`                       | Whether or not to enable Kibana                                                                       | `false`         |
+| Name                                      | Description                                                                                                                     | Value        |
+| ----------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------- | ------------ |
+| `global.imageRegistry`                    | Global Docker image registry                                                                                                    | `""`         |
+| `global.imagePullSecrets`                 | Global Docker registry secret names as an array                                                                                 | `[]`         |
+| `global.storageClass`                     | Global StorageClass for Persistent Volume(s)                                                                                    | `""`         |
+| `global.opensearch.service.name`          | Opensearch service name to be used in the Opensearch Dashborads subchart (ignored if opensearchDashboradsEnabled=false)         | `opensearch` |
+| `global.opensearch.service.ports.restAPI` | Opensearch service restAPI port to be used in the Opensearch Dashborads subchart (ignored if opensearchDashboradsEnabled=false) | `9200`       |
+| `global.opensearchDashboradsEnabled`      | Whether or not to enable Opensearch Dashborads                                                                                  | `false`      |
 
 ### Common parameters
 
@@ -85,77 +85,87 @@ helm delete --purge my-release
 
 ### Opensearch cluster Parameters
 
-| Name                                       | Description                                                                                                                                         | Value                          |
-| ------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------ |
-| `clusterName`                              | Opensearch cluster name                                                                                                                          | `open`                      |
-| `containerPorts.restAPI`                   | Opensearch REST API port                                                                                                                         | `9200`                         |
-| `containerPorts.transport`                 | Opensearch Transport port                                                                                                                        | `9300`                         |
-| `plugins`                                  | Comma, semi-colon or space separated list of plugins to install at initialization                                                                   | `""`                           |
-| `snapshotRepoPath`                         | File System snapshot repository path                                                                                                                | `""`                           |
-| `config`                                   | Override opensearch configuration                                                                                                                | `{}`                           |
-| `extraConfig`                              | Append extra configuration to the opensearch node configuration                                                                                  | `{}`                           |
-| `extraHosts`                               | A list of external hosts which are part of this cluster                                                                                             | `[]`                           |
-| `extraVolumes`                             | A list of volumes to be added to the pod                                                                                                            | `[]`                           |
-| `extraVolumeMounts`                        | A list of volume mounts to be added to the pod                                                                                                      | `[]`                           |
-| `initScripts`                              | Dictionary of init scripts. Evaluated as a template.                                                                                                | `{}`                           |
-| `initScriptsCM`                            | ConfigMap with the init scripts. Evaluated as a template.                                                                                           | `""`                           |
-| `initScriptsSecret`                        | Secret containing `/docker-entrypoint-initdb.d` scripts to be executed at initialization time that contain sensitive data. Evaluated as a template. | `""`                           |
-| `extraEnvVars`                             | Array containing extra env vars to be added to all pods (evaluated as a template)                                                                   | `[]`                           |
-| `extraEnvVarsCM`                           | ConfigMap containing extra env vars to be added to all pods (evaluated as a template)                                                               | `""`                           |
-| `extraEnvVarsSecret`                       | Secret containing extra env vars to be added to all pods (evaluated as a template)                                                                  | `""`                           |
-| `sidecars`                                 | Add additional sidecar containers to the all opensearch node pod(s)                                                                              | `[]`                           |
-| `initContainers`                           | Add additional init containers to the all opensearch node pod(s)                                                                                 | `[]`                           |
-| `useIstioLabels`                           | Use this variable to add Istio labels to all pods                                                                                                   | `true`                         |
-| `image.registry`                           | Opensearch image registry                                                                                                                        | `docker.io`                    |
-| `image.repository`                         | Opensearch image repository                                                                                                                      | `bitnami/opensearch`        |
-| `image.tag`                                | Opensearch image tag (immutable tags are recommended)                                                                                            | `8.8.2-debian-11-r0`           |
-| `image.digest`                             | Opensearch image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                       | `""`                           |
-| `image.pullPolicy`                         | Opensearch image pull policy                                                                                                                     | `IfNotPresent`                 |
-| `image.pullSecrets`                        | Opensearch image pull secrets                                                                                                                    | `[]`                           |
-| `image.debug`                              | Enable Opensearch image debug mode                                                                                                               | `false`                        |
-| `security.enabled`                         | Enable X-Pack Security settings                                                                                                                     | `false`                        |
-| `security.openPassword`                 | Password for 'open' user                                                                                                                         | `""`                           |
-| `security.existingSecret`                  | Name of the existing secret containing the Opensearch password and                                                                               | `""`                           |
-| `security.fipsMode`                        | Configure opensearch with FIPS 140 compliant mode                                                                                                | `false`                        |
-| `security.tls.restEncryption`              | Enable SSL/TLS encryption for Opensearch REST API.                                                                                               | `true`                         |
-| `security.tls.autoGenerated`               | Create self-signed TLS certificates.                                                                                                                | `false`                        |
-| `security.tls.verificationMode`            | Verification mode for SSL communications.                                                                                                           | `full`                         |
-| `security.tls.master.existingSecret`       | Existing secret containing the certificates for the master nodes                                                                                    | `""`                           |
-| `security.tls.data.existingSecret`         | Existing secret containing the certificates for the data nodes                                                                                      | `""`                           |
-| `security.tls.ingest.existingSecret`       | Existing secret containing the certificates for the ingest nodes                                                                                    | `""`                           |
-| `security.tls.coordinating.existingSecret` | Existing secret containing the certificates for the coordinating nodes                                                                              | `""`                           |
-| `security.tls.keystoreFilename`            | Name of the keystore file                                                                                                                           | `opensearch.keystore.jks`   |
-| `security.tls.truststoreFilename`          | Name of the truststore                                                                                                                              | `opensearch.truststore.jks` |
-| `security.tls.usePemCerts`                 | Use this variable if your secrets contain PEM certificates instead of JKS/PKCS12                                                                    | `false`                        |
-| `security.tls.passwordsSecret`             | Existing secret containing the Keystore and Truststore passwords, or key password if PEM certs are used                                             | `""`                           |
-| `security.tls.keystorePassword`            | Password to access the JKS/PKCS12 keystore or PEM key when they are password-protected.                                                             | `""`                           |
-| `security.tls.truststorePassword`          | Password to access the JKS/PKCS12 truststore when they are password-protected.                                                                      | `""`                           |
-| `security.tls.keyPassword`                 | Password to access the PEM key when they are password-protected.                                                                                    | `""`                           |
-| `security.tls.secretKeystoreKey`           | Name of the secret key containing the Keystore password                                                                                             | `""`                           |
-| `security.tls.secretTruststoreKey`         | Name of the secret key containing the Truststore password                                                                                           | `""`                           |
-| `security.tls.secretKey`                   | Name of the secret key containing the PEM key password                                                                                              | `""`                           |
+| Name                          | Description                                                                                                                                         | Value                |
+| ----------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------- |
+| `clusterName`                 | Opensearch cluster name                                                                                                                             | `open`               |
+| `containerPorts.restAPI`      | Opensearch REST API port                                                                                                                            | `9200`               |
+| `containerPorts.transport`    | Opensearch Transport port                                                                                                                           | `9300`               |
+| `plugins`                     | Comma, semi-colon or space separated list of plugins to install at initialization                                                                   | `""`                 |
+| `snapshotRepoPath`            | File System snapshot repository path                                                                                                                | `""`                 |
+| `config`                      | Override opensearch configuration                                                                                                                   | `{}`                 |
+| `extraConfig`                 | Append extra configuration to the opensearch node configuration                                                                                     | `{}`                 |
+| `extraHosts`                  | A list of external hosts which are part of this cluster                                                                                             | `[]`                 |
+| `extraVolumes`                | A list of volumes to be added to the pod                                                                                                            | `[]`                 |
+| `extraVolumeMounts`           | A list of volume mounts to be added to the pod                                                                                                      | `[]`                 |
+| `initScripts`                 | Dictionary of init scripts. Evaluated as a template.                                                                                                | `{}`                 |
+| `initScriptsCM`               | ConfigMap with the init scripts. Evaluated as a template.                                                                                           | `""`                 |
+| `initScriptsSecret`           | Secret containing `/docker-entrypoint-initdb.d` scripts to be executed at initialization time that contain sensitive data. Evaluated as a template. | `""`                 |
+| `extraEnvVars`                | Array containing extra env vars to be added to all pods (evaluated as a template)                                                                   | `[]`                 |
+| `extraEnvVarsCM`              | ConfigMap containing extra env vars to be added to all pods (evaluated as a template)                                                               | `""`                 |
+| `extraEnvVarsSecret`          | Secret containing extra env vars to be added to all pods (evaluated as a template)                                                                  | `""`                 |
+| `sidecars`                    | Add additional sidecar containers to the all opensearch node pod(s)                                                                                 | `[]`                 |
+| `initContainers`              | Add additional init containers to the all opensearch node pod(s)                                                                                    | `[]`                 |
+| `useIstioLabels`              | Use this variable to add Istio labels to all pods                                                                                                   | `true`               |
+| `image.registry`              | Opensearch image registry                                                                                                                           | `docker.io`          |
+| `image.repository`            | Opensearch image repository                                                                                                                         | `bitnami/opensearch` |
+| `image.tag`                   | Opensearch image tag (immutable tags are recommended)                                                                                               | `development`        |
+| `image.digest`                | Opensearch image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                          | `""`                 |
+| `image.pullPolicy`            | Opensearch image pull policy                                                                                                                        | `IfNotPresent`       |
+| `image.pullSecrets`           | Opensearch image pull secrets                                                                                                                       | `[]`                 |
+| `image.debug`                 | Enable Opensearch image debug mode                                                                                                                  | `false`              |
+| `security.enabled`            | Enable X-Pack Security settings                                                                                                                     | `true`               |
+| `security.adminPassword`      | Password for 'admin' user                                                                                                                           | `""`                 |
+| `security.dashboardsPassword` | Password for 'opensearchDashboradsserver'                                                                                                           | `""`                 |
+| `security.logstashPassword`   | Password for Logstash                                                                                                                               | `""`                 |
+| `security.existingSecret`     | Name of the existing secret containing the Opensearch password and                                                                                  | `""`                 |
+| `security.fipsMode`           | Configure opensearch with FIPS 140 compliant mode                                                                                                   | `false`              |
+
+### Opensearch admin parameters
+
+| Name                                       | Description                                                                                             | Value                       |
+| ------------------------------------------ | ------------------------------------------------------------------------------------------------------- | --------------------------- |
+| `security.tls.admin.existingSecret`        | Existing secret containing the certificates for admin                                                   | `""`                        |
+| `security.tls.restEncryption`              | Enable SSL/TLS encryption for Opensearch REST API.                                                      | `true`                      |
+| `security.tls.autoGenerated`               | Create self-signed TLS certificates.                                                                    | `true`                      |
+| `security.tls.verificationMode`            | Verification mode for SSL communications.                                                               | `full`                      |
+| `security.tls.master.existingSecret`       | Existing secret containing the certificates for the master nodes                                        | `""`                        |
+| `security.tls.data.existingSecret`         | Existing secret containing the certificates for the data nodes                                          | `""`                        |
+| `security.tls.ingest.existingSecret`       | Existing secret containing the certificates for the ingest nodes                                        | `""`                        |
+| `security.tls.coordinating.existingSecret` | Existing secret containing the certificates for the coordinating nodes                                  | `""`                        |
+| `security.tls.keystoreFilename`            | Name of the keystore file                                                                               | `opensearch.keystore.jks`   |
+| `security.tls.truststoreFilename`          | Name of the truststore                                                                                  | `opensearch.truststore.jks` |
+| `security.tls.usePemCerts`                 | Use this variable if your secrets contain PEM certificates instead of JKS/PKCS12                        | `false`                     |
+| `security.tls.passwordsSecret`             | Existing secret containing the Keystore and Truststore passwords, or key password if PEM certs are used | `""`                        |
+| `security.tls.keystorePassword`            | Password to access the JKS/PKCS12 keystore or PEM key when they are password-protected.                 | `""`                        |
+| `security.tls.truststorePassword`          | Password to access the JKS/PKCS12 truststore when they are password-protected.                          | `""`                        |
+| `security.tls.keyPassword`                 | Password to access the PEM key when they are password-protected.                                        | `""`                        |
+| `security.tls.secretKeystoreKey`           | Name of the secret key containing the Keystore password                                                 | `""`                        |
+| `security.tls.secretTruststoreKey`         | Name of the secret key containing the Truststore password                                               | `""`                        |
+| `security.tls.secretKey`                   | Name of the secret key containing the PEM key password                                                  | `""`                        |
+| `security.tls.nodesDN`                     | A comma separated list of DN for nodes                                                                  | `""`                        |
+| `security.tls.adminDN`                     | A comma separated list of DN for admins                                                                 | `""`                        |
 
 ### Traffic Exposure Parameters
 
 | Name                               | Description                                                                                                                      | Value                    |
 | ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `service.type`                     | Opensearch service type                                                                                                       | `ClusterIP`              |
-| `service.ports.restAPI`            | Opensearch service REST API port                                                                                              | `9200`                   |
-| `service.ports.transport`          | Opensearch service transport port                                                                                             | `9300`                   |
+| `service.type`                     | Opensearch service type                                                                                                          | `ClusterIP`              |
+| `service.ports.restAPI`            | Opensearch service REST API port                                                                                                 | `9200`                   |
+| `service.ports.transport`          | Opensearch service transport port                                                                                                | `9300`                   |
 | `service.nodePorts.restAPI`        | Node port for REST API                                                                                                           | `""`                     |
 | `service.nodePorts.transport`      | Node port for REST API                                                                                                           | `""`                     |
-| `service.clusterIP`                | Opensearch service Cluster IP                                                                                                 | `""`                     |
-| `service.loadBalancerIP`           | Opensearch service Load Balancer IP                                                                                           | `""`                     |
-| `service.loadBalancerSourceRanges` | Opensearch service Load Balancer sources                                                                                      | `[]`                     |
-| `service.externalTrafficPolicy`    | Opensearch service external traffic policy                                                                                    | `Cluster`                |
-| `service.annotations`              | Additional custom annotations for Opensearch service                                                                          | `{}`                     |
-| `service.extraPorts`               | Extra ports to expose in Opensearch service (normally used with the `sidecars` value)                                         | `[]`                     |
+| `service.clusterIP`                | Opensearch service Cluster IP                                                                                                    | `""`                     |
+| `service.loadBalancerIP`           | Opensearch service Load Balancer IP                                                                                              | `""`                     |
+| `service.loadBalancerSourceRanges` | Opensearch service Load Balancer sources                                                                                         | `[]`                     |
+| `service.externalTrafficPolicy`    | Opensearch service external traffic policy                                                                                       | `Cluster`                |
+| `service.annotations`              | Additional custom annotations for Opensearch service                                                                             | `{}`                     |
+| `service.extraPorts`               | Extra ports to expose in Opensearch service (normally used with the `sidecars` value)                                            | `[]`                     |
 | `service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                             | `None`                   |
 | `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
-| `ingress.enabled`                  | Enable ingress record generation for Opensearch                                                                               | `false`                  |
+| `ingress.enabled`                  | Enable ingress record generation for Opensearch                                                                                  | `false`                  |
 | `ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
 | `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
-| `ingress.hostname`                 | Default host for the ingress record                                                                                              | `opensearch.local`    |
+| `ingress.hostname`                 | Default host for the ingress record                                                                                              | `opensearch.local`       |
 | `ingress.path`                     | Default path for the ingress record                                                                                              | `/`                      |
 | `ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
 | `ingress.tls`                      | Enable TLS configuration for the host defined at `ingress.hostname` parameter                                                    | `false`                  |
@@ -171,20 +181,20 @@ helm delete --purge my-release
 
 | Name                                                 | Description                                                                                                                                        | Value               |
 | ---------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
-| `master.masterOnly`                                  | Deploy the Opensearch master-elegible nodes as master-only nodes. Recommended for high-demand deployments.                                      | `true`              |
+| `master.masterOnly`                                  | Deploy the Opensearch master-elegible nodes as master-only nodes. Recommended for high-demand deployments.                                         | `true`              |
 | `master.replicaCount`                                | Number of master-elegible replicas to deploy                                                                                                       | `2`                 |
 | `master.extraRoles`                                  | Append extra roles to the node role                                                                                                                | `[]`                |
 | `master.pdb.create`                                  | Enable/disable a Pod Disruption Budget creation                                                                                                    | `false`             |
 | `master.pdb.minAvailable`                            | Minimum number/percentage of pods that should remain scheduled                                                                                     | `1`                 |
 | `master.pdb.maxUnavailable`                          | Maximum number/percentage of pods that may be made unavailable                                                                                     | `""`                |
-| `master.nameOverride`                                | String to partially override opensearch.master.fullname                                                                                         | `""`                |
-| `master.fullnameOverride`                            | String to fully override opensearch.master.fullname                                                                                             | `""`                |
-| `master.servicenameOverride`                         | String to fully override opensearch.master.servicename                                                                                          | `""`                |
+| `master.nameOverride`                                | String to partially override opensearch.master.fullname                                                                                            | `""`                |
+| `master.fullnameOverride`                            | String to fully override opensearch.master.fullname                                                                                                | `""`                |
+| `master.servicenameOverride`                         | String to fully override opensearch.master.servicename                                                                                             | `""`                |
 | `master.annotations`                                 | Annotations for the master statefulset                                                                                                             | `{}`                |
 | `master.updateStrategy.type`                         | Master-elegible nodes statefulset stategy type                                                                                                     | `RollingUpdate`     |
-| `master.resources.limits`                            | The resources limits for opensearch containers                                                                                                  | `{}`                |
-| `master.resources.requests`                          | The requested resources for opensearch containers                                                                                               | `{}`                |
-| `master.heapSize`                                    | Opensearch master-eligible node heap size.                                                                                                      | `128m`              |
+| `master.resources.limits`                            | The resources limits for opensearch containers                                                                                                     | `{}`                |
+| `master.resources.requests`                          | The requested resources for opensearch containers                                                                                                  | `{}`                |
+| `master.heapSize`                                    | Opensearch master-eligible node heap size.                                                                                                         | `128m`              |
 | `master.podSecurityContext.enabled`                  | Enabled master-elegible pods' Security Context                                                                                                     | `true`              |
 | `master.podSecurityContext.fsGroup`                  | Set master-elegible pod's Security Context fsGroup                                                                                                 | `1001`              |
 | `master.containerSecurityContext.enabled`            | Enabled master-elegible containers' Security Context                                                                                               | `true`              |
@@ -203,9 +213,9 @@ helm delete --purge my-release
 | `master.tolerations`                                 | Tolerations for master-elegible pods assignment                                                                                                    | `[]`                |
 | `master.priorityClassName`                           | master-elegible pods' priorityClassName                                                                                                            | `""`                |
 | `master.schedulerName`                               | Name of the k8s scheduler (other than default) for master-elegible pods                                                                            | `""`                |
-| `master.terminationGracePeriodSeconds`               | In seconds, time the given to the Opensearch Master pod needs to terminate gracefully                                                           | `""`                |
+| `master.terminationGracePeriodSeconds`               | In seconds, time the given to the Opensearch Master pod needs to terminate gracefully                                                              | `""`                |
 | `master.topologySpreadConstraints`                   | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template                           | `[]`                |
-| `master.podManagementPolicy`                         | podManagementPolicy to manage scaling operation of Opensearch master pods                                                                       | `Parallel`          |
+| `master.podManagementPolicy`                         | podManagementPolicy to manage scaling operation of Opensearch master pods                                                                          | `Parallel`          |
 | `master.startupProbe.enabled`                        | Enable/disable the startup probe (master nodes pod)                                                                                                | `false`             |
 | `master.startupProbe.initialDelaySeconds`            | Delay before startup probe is initiated (master nodes pod)                                                                                         | `90`                |
 | `master.startupProbe.periodSeconds`                  | How often to perform the probe (master nodes pod)                                                                                                  | `10`                |
@@ -264,14 +274,14 @@ helm delete --purge my-release
 | `data.pdb.create`                                  | Enable/disable a Pod Disruption Budget creation                                                                                                  | `false`             |
 | `data.pdb.minAvailable`                            | Minimum number/percentage of pods that should remain scheduled                                                                                   | `1`                 |
 | `data.pdb.maxUnavailable`                          | Maximum number/percentage of pods that may be made unavailable                                                                                   | `""`                |
-| `data.nameOverride`                                | String to partially override opensearch.data.fullname                                                                                         | `""`                |
-| `data.fullnameOverride`                            | String to fully override opensearch.data.fullname                                                                                             | `""`                |
-| `data.servicenameOverride`                         | String to fully override opensearch.data.servicename                                                                                          | `""`                |
+| `data.nameOverride`                                | String to partially override opensearch.data.fullname                                                                                            | `""`                |
+| `data.fullnameOverride`                            | String to fully override opensearch.data.fullname                                                                                                | `""`                |
+| `data.servicenameOverride`                         | String to fully override opensearch.data.servicename                                                                                             | `""`                |
 | `data.annotations`                                 | Annotations for the data statefulset                                                                                                             | `{}`                |
 | `data.updateStrategy.type`                         | Data-only nodes statefulset stategy type                                                                                                         | `RollingUpdate`     |
 | `data.resources.limits`                            | The resources limits for the data containers                                                                                                     | `{}`                |
 | `data.resources.requests`                          | The requested resources for the data containers                                                                                                  | `{}`                |
-| `data.heapSize`                                    | Opensearch data node heap size.                                                                                                               | `1024m`             |
+| `data.heapSize`                                    | Opensearch data node heap size.                                                                                                                  | `1024m`             |
 | `data.podSecurityContext.enabled`                  | Enabled data pods' Security Context                                                                                                              | `true`              |
 | `data.podSecurityContext.fsGroup`                  | Set data pod's Security Context fsGroup                                                                                                          | `1001`              |
 | `data.containerSecurityContext.enabled`            | Enabled data containers' Security Context                                                                                                        | `true`              |
@@ -290,9 +300,9 @@ helm delete --purge my-release
 | `data.tolerations`                                 | Tolerations for data pods assignment                                                                                                             | `[]`                |
 | `data.priorityClassName`                           | data pods' priorityClassName                                                                                                                     | `""`                |
 | `data.schedulerName`                               | Name of the k8s scheduler (other than default) for data pods                                                                                     | `""`                |
-| `data.terminationGracePeriodSeconds`               | In seconds, time the given to the Opensearch data pod needs to terminate gracefully                                                           | `""`                |
+| `data.terminationGracePeriodSeconds`               | In seconds, time the given to the Opensearch data pod needs to terminate gracefully                                                              | `""`                |
 | `data.topologySpreadConstraints`                   | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template                         | `[]`                |
-| `data.podManagementPolicy`                         | podManagementPolicy to manage scaling operation of Opensearch data pods                                                                       | `Parallel`          |
+| `data.podManagementPolicy`                         | podManagementPolicy to manage scaling operation of Opensearch data pods                                                                          | `Parallel`          |
 | `data.startupProbe.enabled`                        | Enable/disable the startup probe (data nodes pod)                                                                                                | `false`             |
 | `data.startupProbe.initialDelaySeconds`            | Delay before startup probe is initiated (data nodes pod)                                                                                         | `90`                |
 | `data.startupProbe.periodSeconds`                  | How often to perform the probe (data nodes pod)                                                                                                  | `10`                |
@@ -351,14 +361,14 @@ helm delete --purge my-release
 | `coordinating.pdb.create`                                  | Enable/disable a Pod Disruption Budget creation                                                                           | `false`         |
 | `coordinating.pdb.minAvailable`                            | Minimum number/percentage of pods that should remain scheduled                                                            | `1`             |
 | `coordinating.pdb.maxUnavailable`                          | Maximum number/percentage of pods that may be made unavailable                                                            | `""`            |
-| `coordinating.nameOverride`                                | String to partially override opensearch.coordinating.fullname                                                          | `""`            |
-| `coordinating.fullnameOverride`                            | String to fully override opensearch.coordinating.fullname                                                              | `""`            |
-| `coordinating.servicenameOverride`                         | String to fully override opensearch.coordinating.servicename                                                           | `""`            |
+| `coordinating.nameOverride`                                | String to partially override opensearch.coordinating.fullname                                                             | `""`            |
+| `coordinating.fullnameOverride`                            | String to fully override opensearch.coordinating.fullname                                                                 | `""`            |
+| `coordinating.servicenameOverride`                         | String to fully override opensearch.coordinating.servicename                                                              | `""`            |
 | `coordinating.annotations`                                 | Annotations for the coordinating-only statefulset                                                                         | `{}`            |
 | `coordinating.updateStrategy.type`                         | Coordinating-only nodes statefulset stategy type                                                                          | `RollingUpdate` |
 | `coordinating.resources.limits`                            | The resources limits for the coordinating-only containers                                                                 | `{}`            |
 | `coordinating.resources.requests`                          | The requested resources for the coordinating-only containers                                                              | `{}`            |
-| `coordinating.heapSize`                                    | Opensearch coordinating node heap size.                                                                                | `128m`          |
+| `coordinating.heapSize`                                    | Opensearch coordinating node heap size.                                                                                   | `128m`          |
 | `coordinating.podSecurityContext.enabled`                  | Enabled coordinating-only pods' Security Context                                                                          | `true`          |
 | `coordinating.podSecurityContext.fsGroup`                  | Set coordinating-only pod's Security Context fsGroup                                                                      | `1001`          |
 | `coordinating.containerSecurityContext.enabled`            | Enabled coordinating-only containers' Security Context                                                                    | `true`          |
@@ -377,9 +387,9 @@ helm delete --purge my-release
 | `coordinating.tolerations`                                 | Tolerations for coordinating-only pods assignment                                                                         | `[]`            |
 | `coordinating.priorityClassName`                           | coordinating-only pods' priorityClassName                                                                                 | `""`            |
 | `coordinating.schedulerName`                               | Name of the k8s scheduler (other than default) for coordinating-only pods                                                 | `""`            |
-| `coordinating.terminationGracePeriodSeconds`               | In seconds, time the given to the Opensearch coordinating pod needs to terminate gracefully                            | `""`            |
+| `coordinating.terminationGracePeriodSeconds`               | In seconds, time the given to the Opensearch coordinating pod needs to terminate gracefully                               | `""`            |
 | `coordinating.topologySpreadConstraints`                   | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template  | `[]`            |
-| `coordinating.podManagementPolicy`                         | podManagementPolicy to manage scaling operation of Opensearch coordinating pods                                        | `Parallel`      |
+| `coordinating.podManagementPolicy`                         | podManagementPolicy to manage scaling operation of Opensearch coordinating pods                                           | `Parallel`      |
 | `coordinating.startupProbe.enabled`                        | Enable/disable the startup probe (coordinating-only nodes pod)                                                            | `false`         |
 | `coordinating.startupProbe.initialDelaySeconds`            | Delay before startup probe is initiated (coordinating-only nodes pod)                                                     | `90`            |
 | `coordinating.startupProbe.periodSeconds`                  | How often to perform the probe (coordinating-only nodes pod)                                                              | `10`            |
@@ -423,197 +433,197 @@ helm delete --purge my-release
 
 ### Ingest-only nodes parameters
 
-| Name                                                 | Description                                                                                                                      | Value                        |
-| ---------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ---------------------------- |
-| `ingest.enabled`                                     | Enable ingest nodes                                                                                                              | `true`                       |
-| `ingest.replicaCount`                                | Number of ingest-only replicas to deploy                                                                                         | `2`                          |
-| `ingest.extraRoles`                                  | Append extra roles to the node role                                                                                              | `[]`                         |
-| `ingest.pdb.create`                                  | Enable/disable a Pod Disruption Budget creation                                                                                  | `false`                      |
-| `ingest.pdb.minAvailable`                            | Minimum number/percentage of pods that should remain scheduled                                                                   | `1`                          |
-| `ingest.pdb.maxUnavailable`                          | Maximum number/percentage of pods that may be made unavailable                                                                   | `""`                         |
-| `ingest.nameOverride`                                | String to partially override opensearch.ingest.fullname                                                                       | `""`                         |
-| `ingest.fullnameOverride`                            | String to fully override opensearch.ingest.fullname                                                                           | `""`                         |
-| `ingest.servicenameOverride`                         | String to fully override ingest.master.servicename                                                                               | `""`                         |
-| `ingest.annotations`                                 | Annotations for the ingest statefulset                                                                                           | `{}`                         |
-| `ingest.containerPorts.restAPI`                      | Opensearch REST API port                                                                                                      | `9200`                       |
-| `ingest.containerPorts.transport`                    | Opensearch Transport port                                                                                                     | `9300`                       |
-| `ingest.updateStrategy.type`                         | Ingest-only nodes statefulset stategy type                                                                                       | `RollingUpdate`              |
-| `ingest.resources.limits`                            | The resources limits for the ingest-only containers                                                                              | `{}`                         |
-| `ingest.resources.requests`                          | The requested resources for the ingest-only containers                                                                           | `{}`                         |
-| `ingest.heapSize`                                    | Opensearch ingest-only node heap size.                                                                                        | `128m`                       |
-| `ingest.podSecurityContext.enabled`                  | Enabled ingest-only pods' Security Context                                                                                       | `true`                       |
-| `ingest.podSecurityContext.fsGroup`                  | Set ingest-only pod's Security Context fsGroup                                                                                   | `1001`                       |
-| `ingest.containerSecurityContext.enabled`            | Enabled ingest-only containers' Security Context                                                                                 | `true`                       |
-| `ingest.containerSecurityContext.runAsUser`          | Set ingest-only containers' Security Context runAsUser                                                                           | `1001`                       |
-| `ingest.containerSecurityContext.runAsNonRoot`       | Set ingest-only containers' Security Context runAsNonRoot                                                                        | `true`                       |
-| `ingest.hostAliases`                                 | ingest-only pods host aliases                                                                                                    | `[]`                         |
-| `ingest.podLabels`                                   | Extra labels for ingest-only pods                                                                                                | `{}`                         |
-| `ingest.podAnnotations`                              | Annotations for ingest-only pods                                                                                                 | `{}`                         |
-| `ingest.podAffinityPreset`                           | Pod affinity preset. Ignored if `ingest.affinity` is set. Allowed values: `soft` or `hard`                                       | `""`                         |
-| `ingest.podAntiAffinityPreset`                       | Pod anti-affinity preset. Ignored if `ingest.affinity` is set. Allowed values: `soft` or `hard`                                  | `""`                         |
-| `ingest.nodeAffinityPreset.type`                     | Node affinity preset type. Ignored if `ingest.affinity` is set. Allowed values: `soft` or `hard`                                 | `""`                         |
-| `ingest.nodeAffinityPreset.key`                      | Node label key to match. Ignored if `ingest.affinity` is set                                                                     | `""`                         |
-| `ingest.nodeAffinityPreset.values`                   | Node label values to match. Ignored if `ingest.affinity` is set                                                                  | `[]`                         |
-| `ingest.affinity`                                    | Affinity for ingest-only pods assignment                                                                                         | `{}`                         |
-| `ingest.nodeSelector`                                | Node labels for ingest-only pods assignment                                                                                      | `{}`                         |
-| `ingest.tolerations`                                 | Tolerations for ingest-only pods assignment                                                                                      | `[]`                         |
-| `ingest.priorityClassName`                           | ingest-only pods' priorityClassName                                                                                              | `""`                         |
-| `ingest.schedulerName`                               | Name of the k8s scheduler (other than default) for ingest-only pods                                                              | `""`                         |
-| `ingest.terminationGracePeriodSeconds`               | In seconds, time the given to the Opensearch ingest pod needs to terminate gracefully                                         | `""`                         |
-| `ingest.topologySpreadConstraints`                   | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template         | `[]`                         |
-| `ingest.podManagementPolicy`                         | podManagementPolicy to manage scaling operation of Opensearch ingest pods                                                     | `Parallel`                   |
-| `ingest.startupProbe.enabled`                        | Enable/disable the startup probe (ingest-only nodes pod)                                                                         | `false`                      |
-| `ingest.startupProbe.initialDelaySeconds`            | Delay before startup probe is initiated (ingest-only nodes pod)                                                                  | `90`                         |
-| `ingest.startupProbe.periodSeconds`                  | How often to perform the probe (ingest-only nodes pod)                                                                           | `10`                         |
-| `ingest.startupProbe.timeoutSeconds`                 | When the probe times out (ingest-only nodes pod)                                                                                 | `5`                          |
-| `ingest.startupProbe.successThreshold`               | Minimum consecutive successes for the probe to be considered successful after having failed (ingest-only nodes pod)              | `1`                          |
-| `ingest.startupProbe.failureThreshold`               | Minimum consecutive failures for the probe to be considered failed after having succeeded                                        | `5`                          |
-| `ingest.livenessProbe.enabled`                       | Enable/disable the liveness probe (ingest-only nodes pod)                                                                        | `true`                       |
-| `ingest.livenessProbe.initialDelaySeconds`           | Delay before liveness probe is initiated (ingest-only nodes pod)                                                                 | `90`                         |
-| `ingest.livenessProbe.periodSeconds`                 | How often to perform the probe (ingest-only nodes pod)                                                                           | `10`                         |
-| `ingest.livenessProbe.timeoutSeconds`                | When the probe times out (ingest-only nodes pod)                                                                                 | `5`                          |
-| `ingest.livenessProbe.successThreshold`              | Minimum consecutive successes for the probe to be considered successful after having failed (ingest-only nodes pod)              | `1`                          |
-| `ingest.livenessProbe.failureThreshold`              | Minimum consecutive failures for the probe to be considered failed after having succeeded                                        | `5`                          |
-| `ingest.readinessProbe.enabled`                      | Enable/disable the readiness probe (ingest-only nodes pod)                                                                       | `true`                       |
-| `ingest.readinessProbe.initialDelaySeconds`          | Delay before readiness probe is initiated (ingest-only nodes pod)                                                                | `90`                         |
-| `ingest.readinessProbe.periodSeconds`                | How often to perform the probe (ingest-only nodes pod)                                                                           | `10`                         |
-| `ingest.readinessProbe.timeoutSeconds`               | When the probe times out (ingest-only nodes pod)                                                                                 | `5`                          |
-| `ingest.readinessProbe.successThreshold`             | Minimum consecutive successes for the probe to be considered successful after having failed (ingest-only nodes pod)              | `1`                          |
-| `ingest.readinessProbe.failureThreshold`             | Minimum consecutive failures for the probe to be considered failed after having succeeded                                        | `5`                          |
-| `ingest.customStartupProbe`                          | Override default startup probe                                                                                                   | `{}`                         |
-| `ingest.customLivenessProbe`                         | Override default liveness probe                                                                                                  | `{}`                         |
-| `ingest.customReadinessProbe`                        | Override default readiness probe                                                                                                 | `{}`                         |
-| `ingest.command`                                     | Override default container command (useful when using custom images)                                                             | `[]`                         |
-| `ingest.args`                                        | Override default container args (useful when using custom images)                                                                | `[]`                         |
-| `ingest.lifecycleHooks`                              | for the ingest-only container(s) to automate configuration before or after startup                                               | `{}`                         |
-| `ingest.extraEnvVars`                                | Array with extra environment variables to add to ingest-only nodes                                                               | `[]`                         |
-| `ingest.extraEnvVarsCM`                              | Name of existing ConfigMap containing extra env vars for ingest-only nodes                                                       | `""`                         |
-| `ingest.extraEnvVarsSecret`                          | Name of existing Secret containing extra env vars for ingest-only nodes                                                          | `""`                         |
-| `ingest.extraVolumes`                                | Optionally specify extra list of additional volumes for the ingest-only pod(s)                                                   | `[]`                         |
-| `ingest.extraVolumeMounts`                           | Optionally specify extra list of additional volumeMounts for the ingest-only container(s)                                        | `[]`                         |
-| `ingest.sidecars`                                    | Add additional sidecar containers to the ingest-only pod(s)                                                                      | `[]`                         |
-| `ingest.initContainers`                              | Add additional init containers to the ingest-only pod(s)                                                                         | `[]`                         |
-| `ingest.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                                             | `false`                      |
-| `ingest.serviceAccount.name`                         | Name of the service account to use. If not set and create is true, a name is generated using the fullname template.              | `""`                         |
-| `ingest.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                                   | `true`                       |
-| `ingest.serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                                       | `{}`                         |
-| `ingest.autoscaling.enabled`                         | Whether enable horizontal pod autoscale                                                                                          | `false`                      |
-| `ingest.autoscaling.minReplicas`                     | Configure a minimum amount of pods                                                                                               | `3`                          |
-| `ingest.autoscaling.maxReplicas`                     | Configure a maximum amount of pods                                                                                               | `11`                         |
-| `ingest.autoscaling.targetCPU`                       | Define the CPU target to trigger the scaling actions (utilization percentage)                                                    | `""`                         |
-| `ingest.autoscaling.targetMemory`                    | Define the memory target to trigger the scaling actions (utilization percentage)                                                 | `""`                         |
-| `ingest.service.enabled`                             | Enable Ingest-only service                                                                                                       | `false`                      |
-| `ingest.service.type`                                | Opensearch ingest-only service type                                                                                           | `ClusterIP`                  |
-| `ingest.service.ports.restAPI`                       | Opensearch service REST API port                                                                                              | `9200`                       |
-| `ingest.service.ports.transport`                     | Opensearch service transport port                                                                                             | `9300`                       |
-| `ingest.service.nodePorts.restAPI`                   | Node port for REST API                                                                                                           | `""`                         |
-| `ingest.service.nodePorts.transport`                 | Node port for REST API                                                                                                           | `""`                         |
-| `ingest.service.clusterIP`                           | Opensearch ingest-only service Cluster IP                                                                                     | `""`                         |
-| `ingest.service.loadBalancerIP`                      | Opensearch ingest-only service Load Balancer IP                                                                               | `""`                         |
-| `ingest.service.loadBalancerSourceRanges`            | Opensearch ingest-only service Load Balancer sources                                                                          | `[]`                         |
-| `ingest.service.externalTrafficPolicy`               | Opensearch ingest-only service external traffic policy                                                                        | `Cluster`                    |
-| `ingest.service.extraPorts`                          | Extra ports to expose (normally used with the `sidecar` value)                                                                   | `[]`                         |
-| `ingest.service.annotations`                         | Additional custom annotations for Opensearch ingest-only service                                                              | `{}`                         |
-| `ingest.service.sessionAffinity`                     | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                             | `None`                       |
-| `ingest.service.sessionAffinityConfig`               | Additional settings for the sessionAffinity                                                                                      | `{}`                         |
-| `ingest.ingress.enabled`                             | Enable ingress record generation for Opensearch                                                                               | `false`                      |
-| `ingest.ingress.pathType`                            | Ingress path type                                                                                                                | `ImplementationSpecific`     |
-| `ingest.ingress.apiVersion`                          | Force Ingress API version (automatically detected if not set)                                                                    | `""`                         |
+| Name                                                 | Description                                                                                                                      | Value                     |
+| ---------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
+| `ingest.enabled`                                     | Enable ingest nodes                                                                                                              | `true`                    |
+| `ingest.replicaCount`                                | Number of ingest-only replicas to deploy                                                                                         | `2`                       |
+| `ingest.extraRoles`                                  | Append extra roles to the node role                                                                                              | `[]`                      |
+| `ingest.pdb.create`                                  | Enable/disable a Pod Disruption Budget creation                                                                                  | `false`                   |
+| `ingest.pdb.minAvailable`                            | Minimum number/percentage of pods that should remain scheduled                                                                   | `1`                       |
+| `ingest.pdb.maxUnavailable`                          | Maximum number/percentage of pods that may be made unavailable                                                                   | `""`                      |
+| `ingest.nameOverride`                                | String to partially override opensearch.ingest.fullname                                                                          | `""`                      |
+| `ingest.fullnameOverride`                            | String to fully override opensearch.ingest.fullname                                                                              | `""`                      |
+| `ingest.servicenameOverride`                         | String to fully override ingest.master.servicename                                                                               | `""`                      |
+| `ingest.annotations`                                 | Annotations for the ingest statefulset                                                                                           | `{}`                      |
+| `ingest.containerPorts.restAPI`                      | Opensearch REST API port                                                                                                         | `9200`                    |
+| `ingest.containerPorts.transport`                    | Opensearch Transport port                                                                                                        | `9300`                    |
+| `ingest.updateStrategy.type`                         | Ingest-only nodes statefulset stategy type                                                                                       | `RollingUpdate`           |
+| `ingest.resources.limits`                            | The resources limits for the ingest-only containers                                                                              | `{}`                      |
+| `ingest.resources.requests`                          | The requested resources for the ingest-only containers                                                                           | `{}`                      |
+| `ingest.heapSize`                                    | Opensearch ingest-only node heap size.                                                                                           | `128m`                    |
+| `ingest.podSecurityContext.enabled`                  | Enabled ingest-only pods' Security Context                                                                                       | `true`                    |
+| `ingest.podSecurityContext.fsGroup`                  | Set ingest-only pod's Security Context fsGroup                                                                                   | `1001`                    |
+| `ingest.containerSecurityContext.enabled`            | Enabled ingest-only containers' Security Context                                                                                 | `true`                    |
+| `ingest.containerSecurityContext.runAsUser`          | Set ingest-only containers' Security Context runAsUser                                                                           | `1001`                    |
+| `ingest.containerSecurityContext.runAsNonRoot`       | Set ingest-only containers' Security Context runAsNonRoot                                                                        | `true`                    |
+| `ingest.hostAliases`                                 | ingest-only pods host aliases                                                                                                    | `[]`                      |
+| `ingest.podLabels`                                   | Extra labels for ingest-only pods                                                                                                | `{}`                      |
+| `ingest.podAnnotations`                              | Annotations for ingest-only pods                                                                                                 | `{}`                      |
+| `ingest.podAffinityPreset`                           | Pod affinity preset. Ignored if `ingest.affinity` is set. Allowed values: `soft` or `hard`                                       | `""`                      |
+| `ingest.podAntiAffinityPreset`                       | Pod anti-affinity preset. Ignored if `ingest.affinity` is set. Allowed values: `soft` or `hard`                                  | `""`                      |
+| `ingest.nodeAffinityPreset.type`                     | Node affinity preset type. Ignored if `ingest.affinity` is set. Allowed values: `soft` or `hard`                                 | `""`                      |
+| `ingest.nodeAffinityPreset.key`                      | Node label key to match. Ignored if `ingest.affinity` is set                                                                     | `""`                      |
+| `ingest.nodeAffinityPreset.values`                   | Node label values to match. Ignored if `ingest.affinity` is set                                                                  | `[]`                      |
+| `ingest.affinity`                                    | Affinity for ingest-only pods assignment                                                                                         | `{}`                      |
+| `ingest.nodeSelector`                                | Node labels for ingest-only pods assignment                                                                                      | `{}`                      |
+| `ingest.tolerations`                                 | Tolerations for ingest-only pods assignment                                                                                      | `[]`                      |
+| `ingest.priorityClassName`                           | ingest-only pods' priorityClassName                                                                                              | `""`                      |
+| `ingest.schedulerName`                               | Name of the k8s scheduler (other than default) for ingest-only pods                                                              | `""`                      |
+| `ingest.terminationGracePeriodSeconds`               | In seconds, time the given to the Opensearch ingest pod needs to terminate gracefully                                            | `""`                      |
+| `ingest.topologySpreadConstraints`                   | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template         | `[]`                      |
+| `ingest.podManagementPolicy`                         | podManagementPolicy to manage scaling operation of Opensearch ingest pods                                                        | `Parallel`                |
+| `ingest.startupProbe.enabled`                        | Enable/disable the startup probe (ingest-only nodes pod)                                                                         | `false`                   |
+| `ingest.startupProbe.initialDelaySeconds`            | Delay before startup probe is initiated (ingest-only nodes pod)                                                                  | `90`                      |
+| `ingest.startupProbe.periodSeconds`                  | How often to perform the probe (ingest-only nodes pod)                                                                           | `10`                      |
+| `ingest.startupProbe.timeoutSeconds`                 | When the probe times out (ingest-only nodes pod)                                                                                 | `5`                       |
+| `ingest.startupProbe.successThreshold`               | Minimum consecutive successes for the probe to be considered successful after having failed (ingest-only nodes pod)              | `1`                       |
+| `ingest.startupProbe.failureThreshold`               | Minimum consecutive failures for the probe to be considered failed after having succeeded                                        | `5`                       |
+| `ingest.livenessProbe.enabled`                       | Enable/disable the liveness probe (ingest-only nodes pod)                                                                        | `true`                    |
+| `ingest.livenessProbe.initialDelaySeconds`           | Delay before liveness probe is initiated (ingest-only nodes pod)                                                                 | `90`                      |
+| `ingest.livenessProbe.periodSeconds`                 | How often to perform the probe (ingest-only nodes pod)                                                                           | `10`                      |
+| `ingest.livenessProbe.timeoutSeconds`                | When the probe times out (ingest-only nodes pod)                                                                                 | `5`                       |
+| `ingest.livenessProbe.successThreshold`              | Minimum consecutive successes for the probe to be considered successful after having failed (ingest-only nodes pod)              | `1`                       |
+| `ingest.livenessProbe.failureThreshold`              | Minimum consecutive failures for the probe to be considered failed after having succeeded                                        | `5`                       |
+| `ingest.readinessProbe.enabled`                      | Enable/disable the readiness probe (ingest-only nodes pod)                                                                       | `true`                    |
+| `ingest.readinessProbe.initialDelaySeconds`          | Delay before readiness probe is initiated (ingest-only nodes pod)                                                                | `90`                      |
+| `ingest.readinessProbe.periodSeconds`                | How often to perform the probe (ingest-only nodes pod)                                                                           | `10`                      |
+| `ingest.readinessProbe.timeoutSeconds`               | When the probe times out (ingest-only nodes pod)                                                                                 | `5`                       |
+| `ingest.readinessProbe.successThreshold`             | Minimum consecutive successes for the probe to be considered successful after having failed (ingest-only nodes pod)              | `1`                       |
+| `ingest.readinessProbe.failureThreshold`             | Minimum consecutive failures for the probe to be considered failed after having succeeded                                        | `5`                       |
+| `ingest.customStartupProbe`                          | Override default startup probe                                                                                                   | `{}`                      |
+| `ingest.customLivenessProbe`                         | Override default liveness probe                                                                                                  | `{}`                      |
+| `ingest.customReadinessProbe`                        | Override default readiness probe                                                                                                 | `{}`                      |
+| `ingest.command`                                     | Override default container command (useful when using custom images)                                                             | `[]`                      |
+| `ingest.args`                                        | Override default container args (useful when using custom images)                                                                | `[]`                      |
+| `ingest.lifecycleHooks`                              | for the ingest-only container(s) to automate configuration before or after startup                                               | `{}`                      |
+| `ingest.extraEnvVars`                                | Array with extra environment variables to add to ingest-only nodes                                                               | `[]`                      |
+| `ingest.extraEnvVarsCM`                              | Name of existing ConfigMap containing extra env vars for ingest-only nodes                                                       | `""`                      |
+| `ingest.extraEnvVarsSecret`                          | Name of existing Secret containing extra env vars for ingest-only nodes                                                          | `""`                      |
+| `ingest.extraVolumes`                                | Optionally specify extra list of additional volumes for the ingest-only pod(s)                                                   | `[]`                      |
+| `ingest.extraVolumeMounts`                           | Optionally specify extra list of additional volumeMounts for the ingest-only container(s)                                        | `[]`                      |
+| `ingest.sidecars`                                    | Add additional sidecar containers to the ingest-only pod(s)                                                                      | `[]`                      |
+| `ingest.initContainers`                              | Add additional init containers to the ingest-only pod(s)                                                                         | `[]`                      |
+| `ingest.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                                             | `false`                   |
+| `ingest.serviceAccount.name`                         | Name of the service account to use. If not set and create is true, a name is generated using the fullname template.              | `""`                      |
+| `ingest.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                                   | `true`                    |
+| `ingest.serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                                       | `{}`                      |
+| `ingest.autoscaling.enabled`                         | Whether enable horizontal pod autoscale                                                                                          | `false`                   |
+| `ingest.autoscaling.minReplicas`                     | Configure a minimum amount of pods                                                                                               | `3`                       |
+| `ingest.autoscaling.maxReplicas`                     | Configure a maximum amount of pods                                                                                               | `11`                      |
+| `ingest.autoscaling.targetCPU`                       | Define the CPU target to trigger the scaling actions (utilization percentage)                                                    | `""`                      |
+| `ingest.autoscaling.targetMemory`                    | Define the memory target to trigger the scaling actions (utilization percentage)                                                 | `""`                      |
+| `ingest.service.enabled`                             | Enable Ingest-only service                                                                                                       | `false`                   |
+| `ingest.service.type`                                | Opensearch ingest-only service type                                                                                              | `ClusterIP`               |
+| `ingest.service.ports.restAPI`                       | Opensearch service REST API port                                                                                                 | `9200`                    |
+| `ingest.service.ports.transport`                     | Opensearch service transport port                                                                                                | `9300`                    |
+| `ingest.service.nodePorts.restAPI`                   | Node port for REST API                                                                                                           | `""`                      |
+| `ingest.service.nodePorts.transport`                 | Node port for REST API                                                                                                           | `""`                      |
+| `ingest.service.clusterIP`                           | Opensearch ingest-only service Cluster IP                                                                                        | `""`                      |
+| `ingest.service.loadBalancerIP`                      | Opensearch ingest-only service Load Balancer IP                                                                                  | `""`                      |
+| `ingest.service.loadBalancerSourceRanges`            | Opensearch ingest-only service Load Balancer sources                                                                             | `[]`                      |
+| `ingest.service.externalTrafficPolicy`               | Opensearch ingest-only service external traffic policy                                                                           | `Cluster`                 |
+| `ingest.service.extraPorts`                          | Extra ports to expose (normally used with the `sidecar` value)                                                                   | `[]`                      |
+| `ingest.service.annotations`                         | Additional custom annotations for Opensearch ingest-only service                                                                 | `{}`                      |
+| `ingest.service.sessionAffinity`                     | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                             | `None`                    |
+| `ingest.service.sessionAffinityConfig`               | Additional settings for the sessionAffinity                                                                                      | `{}`                      |
+| `ingest.ingress.enabled`                             | Enable ingress record generation for Opensearch                                                                                  | `false`                   |
+| `ingest.ingress.pathType`                            | Ingress path type                                                                                                                | `ImplementationSpecific`  |
+| `ingest.ingress.apiVersion`                          | Force Ingress API version (automatically detected if not set)                                                                    | `""`                      |
 | `ingest.ingress.hostname`                            | Default host for the ingress record                                                                                              | `opensearch-ingest.local` |
-| `ingest.ingress.path`                                | Default path for the ingress record                                                                                              | `/`                          |
-| `ingest.ingress.annotations`                         | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                         |
-| `ingest.ingress.tls`                                 | Enable TLS configuration for the host defined at `ingress.hostname` parameter                                                    | `false`                      |
-| `ingest.ingress.selfSigned`                          | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                      |
-| `ingest.ingress.ingressClassName`                    | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                         |
-| `ingest.ingress.extraHosts`                          | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                         |
-| `ingest.ingress.extraPaths`                          | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                         |
-| `ingest.ingress.extraTls`                            | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                         |
-| `ingest.ingress.secrets`                             | Custom TLS certificates as secrets                                                                                               | `[]`                         |
-| `ingest.ingress.extraRules`                          | Additional rules to be covered with this ingress record                                                                          | `[]`                         |
+| `ingest.ingress.path`                                | Default path for the ingress record                                                                                              | `/`                       |
+| `ingest.ingress.annotations`                         | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                      |
+| `ingest.ingress.tls`                                 | Enable TLS configuration for the host defined at `ingress.hostname` parameter                                                    | `false`                   |
+| `ingest.ingress.selfSigned`                          | Create a TLS secret for this ingress record using self-signed certificates generated by Helm                                     | `false`                   |
+| `ingest.ingress.ingressClassName`                    | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                      |
+| `ingest.ingress.extraHosts`                          | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                      |
+| `ingest.ingress.extraPaths`                          | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                      |
+| `ingest.ingress.extraTls`                            | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                      |
+| `ingest.ingress.secrets`                             | Custom TLS certificates as secrets                                                                                               | `[]`                      |
+| `ingest.ingress.extraRules`                          | Additional rules to be covered with this ingress record                                                                          | `[]`                      |
 
 ### Metrics parameters
 
-| Name                                            | Description                                                                                                                    | Value                            |
-| ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | -------------------------------- |
-| `metrics.enabled`                               | Enable prometheus exporter                                                                                                     | `false`                          |
-| `metrics.nameOverride`                          | Metrics pod name                                                                                                               | `""`                             |
-| `metrics.fullnameOverride`                      | String to fully override common.names.fullname                                                                                 | `""`                             |
-| `metrics.image.registry`                        | Metrics exporter image registry                                                                                                | `docker.io`                      |
+| Name                                            | Description                                                                                                                    | Value                         |
+| ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | ----------------------------- |
+| `metrics.enabled`                               | Enable prometheus exporter                                                                                                     | `false`                       |
+| `metrics.nameOverride`                          | Metrics pod name                                                                                                               | `""`                          |
+| `metrics.fullnameOverride`                      | String to fully override common.names.fullname                                                                                 | `""`                          |
+| `metrics.image.registry`                        | Metrics exporter image registry                                                                                                | `docker.io`                   |
 | `metrics.image.repository`                      | Metrics exporter image repository                                                                                              | `bitnami/opensearch-exporter` |
-| `metrics.image.tag`                             | Metrics exporter image tag                                                                                                     | `1.5.0-debian-11-r115`           |
-| `metrics.image.digest`                          | Metrics exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag               | `""`                             |
-| `metrics.image.pullPolicy`                      | Metrics exporter image pull policy                                                                                             | `IfNotPresent`                   |
-| `metrics.image.pullSecrets`                     | Metrics exporter image pull secrets                                                                                            | `[]`                             |
-| `metrics.annotations`                           | Annotations for metrics                                                                                                        | `{}`                             |
-| `metrics.extraArgs`                             | Extra arguments to add to the default exporter command                                                                         | `[]`                             |
-| `metrics.hostAliases`                           | Add deployment host aliases                                                                                                    | `[]`                             |
-| `metrics.schedulerName`                         | Name of the k8s scheduler (other than default)                                                                                 | `""`                             |
-| `metrics.priorityClassName`                     | Opensearch metrics exporter pods' priorityClassName                                                                         | `""`                             |
-| `metrics.service.type`                          | Metrics exporter endpoint service type                                                                                         | `ClusterIP`                      |
-| `metrics.service.port`                          | Metrics exporter endpoint service port                                                                                         | `9114`                           |
-| `metrics.service.annotations`                   | Provide any additional annotations which may be required.                                                                      | `{}`                             |
-| `metrics.podAffinityPreset`                     | Metrics Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                    | `""`                             |
-| `metrics.podAntiAffinityPreset`                 | Metrics Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                               | `""`                             |
-| `metrics.nodeAffinityPreset.type`               | Metrics Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                              | `""`                             |
-| `metrics.nodeAffinityPreset.key`                | Metrics Node label key to match Ignored if `affinity` is set.                                                                  | `""`                             |
-| `metrics.nodeAffinityPreset.values`             | Metrics Node label values to match. Ignored if `affinity` is set.                                                              | `[]`                             |
-| `metrics.affinity`                              | Metrics Affinity for pod assignment                                                                                            | `{}`                             |
-| `metrics.nodeSelector`                          | Metrics Node labels for pod assignment                                                                                         | `{}`                             |
-| `metrics.tolerations`                           | Metrics Tolerations for pod assignment                                                                                         | `[]`                             |
-| `metrics.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template       | `[]`                             |
-| `metrics.resources.limits`                      | The resources limits for the container                                                                                         | `{}`                             |
-| `metrics.resources.requests`                    | The requested resources for the container                                                                                      | `{}`                             |
-| `metrics.livenessProbe.enabled`                 | Enable/disable the liveness probe (metrics pod)                                                                                | `true`                           |
-| `metrics.livenessProbe.initialDelaySeconds`     | Delay before liveness probe is initiated (metrics pod)                                                                         | `60`                             |
-| `metrics.livenessProbe.periodSeconds`           | How often to perform the probe (metrics pod)                                                                                   | `10`                             |
-| `metrics.livenessProbe.timeoutSeconds`          | When the probe times out (metrics pod)                                                                                         | `5`                              |
-| `metrics.livenessProbe.failureThreshold`        | Minimum consecutive failures for the probe to be considered failed after having succeeded                                      | `5`                              |
-| `metrics.livenessProbe.successThreshold`        | Minimum consecutive successes for the probe to be considered successful after having failed (metrics pod)                      | `1`                              |
-| `metrics.readinessProbe.enabled`                | Enable/disable the readiness probe (metrics pod)                                                                               | `true`                           |
-| `metrics.readinessProbe.initialDelaySeconds`    | Delay before readiness probe is initiated (metrics pod)                                                                        | `5`                              |
-| `metrics.readinessProbe.periodSeconds`          | How often to perform the probe (metrics pod)                                                                                   | `10`                             |
-| `metrics.readinessProbe.timeoutSeconds`         | When the probe times out (metrics pod)                                                                                         | `1`                              |
-| `metrics.readinessProbe.failureThreshold`       | Minimum consecutive failures for the probe to be considered failed after having succeeded                                      | `5`                              |
-| `metrics.readinessProbe.successThreshold`       | Minimum consecutive successes for the probe to be considered successful after having failed (metrics pod)                      | `1`                              |
-| `metrics.startupProbe.enabled`                  | Enable/disable the startup probe (metrics pod)                                                                                 | `false`                          |
-| `metrics.startupProbe.initialDelaySeconds`      | Delay before startup probe is initiated (metrics pod)                                                                          | `5`                              |
-| `metrics.startupProbe.periodSeconds`            | How often to perform the probe (metrics pod)                                                                                   | `10`                             |
-| `metrics.startupProbe.timeoutSeconds`           | When the probe times out (metrics pod)                                                                                         | `1`                              |
-| `metrics.startupProbe.failureThreshold`         | Minimum consecutive failures for the probe to be considered failed after having succeeded                                      | `5`                              |
-| `metrics.startupProbe.successThreshold`         | Minimum consecutive successes for the probe to be considered successful after having failed (metrics pod)                      | `1`                              |
-| `metrics.customStartupProbe`                    | Custom liveness probe for the Web component                                                                                    | `{}`                             |
-| `metrics.customLivenessProbe`                   | Custom liveness probe for the Web component                                                                                    | `{}`                             |
-| `metrics.customReadinessProbe`                  | Custom readiness probe for the Web component                                                                                   | `{}`                             |
-| `metrics.podAnnotations`                        | Metrics exporter pod Annotation and Labels                                                                                     | `{}`                             |
-| `metrics.podLabels`                             | Extra labels to add to Pod                                                                                                     | `{}`                             |
-| `metrics.podSecurityContext.enabled`            | Enabled Opensearch metrics exporter pods' Security Context                                                                  | `true`                           |
-| `metrics.podSecurityContext.fsGroup`            | Set Opensearch metrics exporter pod's Security Context fsGroup                                                              | `1001`                           |
-| `metrics.containerSecurityContext.enabled`      | Enabled Opensearch metrics exporter containers' Security Context                                                            | `true`                           |
-| `metrics.containerSecurityContext.runAsUser`    | Set Opensearch metrics exporter containers' Security Context runAsUser                                                      | `1001`                           |
-| `metrics.containerSecurityContext.runAsNonRoot` | Set Opensearch metrics exporter container's Security Context runAsNonRoot                                                   | `true`                           |
-| `metrics.command`                               | Override default container command (useful when using custom images)                                                           | `[]`                             |
-| `metrics.args`                                  | Override default container args (useful when using custom images)                                                              | `[]`                             |
-| `metrics.extraEnvVars`                          | Array with extra environment variables to add to Opensearch metrics exporter nodes                                          | `[]`                             |
-| `metrics.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars for Opensearch metrics exporter nodes                                  | `""`                             |
-| `metrics.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for Opensearch metrics exporter nodes                                     | `""`                             |
-| `metrics.extraVolumes`                          | Optionally specify extra list of additional volumes for the Opensearch metrics exporter pod(s)                              | `[]`                             |
-| `metrics.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the Opensearch metrics exporter container(s)                   | `[]`                             |
-| `metrics.sidecars`                              | Add additional sidecar containers to the Opensearch metrics exporter pod(s)                                                 | `[]`                             |
-| `metrics.initContainers`                        | Add additional init containers to the Opensearch metrics exporter pod(s)                                                    | `[]`                             |
-| `metrics.serviceMonitor.enabled`                | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator                                                   | `false`                          |
-| `metrics.serviceMonitor.namespace`              | Namespace which Prometheus is running in                                                                                       | `""`                             |
-| `metrics.serviceMonitor.jobLabel`               | The name of the label on the target service to use as the job name in prometheus.                                              | `""`                             |
-| `metrics.serviceMonitor.interval`               | Interval at which metrics should be scraped                                                                                    | `""`                             |
-| `metrics.serviceMonitor.scrapeTimeout`          | Timeout after which the scrape is ended                                                                                        | `""`                             |
-| `metrics.serviceMonitor.relabelings`            | RelabelConfigs to apply to samples before scraping                                                                             | `[]`                             |
-| `metrics.serviceMonitor.metricRelabelings`      | MetricRelabelConfigs to apply to samples before ingestion                                                                      | `[]`                             |
-| `metrics.serviceMonitor.selector`               | ServiceMonitor selector labels                                                                                                 | `{}`                             |
-| `metrics.serviceMonitor.labels`                 | Extra labels for the ServiceMonitor                                                                                            | `{}`                             |
-| `metrics.serviceMonitor.honorLabels`            | honorLabels chooses the metric's labels on collisions with target labels                                                       | `false`                          |
-| `metrics.prometheusRule.enabled`                | Creates a Prometheus Operator PrometheusRule (also requires `metrics.enabled` to be `true` and `metrics.prometheusRule.rules`) | `false`                          |
-| `metrics.prometheusRule.namespace`              | Namespace for the PrometheusRule Resource (defaults to the Release Namespace)                                                  | `""`                             |
-| `metrics.prometheusRule.additionalLabels`       | Additional labels that can be used so PrometheusRule will be discovered by Prometheus                                          | `{}`                             |
-| `metrics.prometheusRule.rules`                  | Prometheus Rule definitions                                                                                                    | `[]`                             |
+| `metrics.image.tag`                             | Metrics exporter image tag                                                                                                     | `1.5.0-debian-11-r115`        |
+| `metrics.image.digest`                          | Metrics exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag               | `""`                          |
+| `metrics.image.pullPolicy`                      | Metrics exporter image pull policy                                                                                             | `IfNotPresent`                |
+| `metrics.image.pullSecrets`                     | Metrics exporter image pull secrets                                                                                            | `[]`                          |
+| `metrics.annotations`                           | Annotations for metrics                                                                                                        | `{}`                          |
+| `metrics.extraArgs`                             | Extra arguments to add to the default exporter command                                                                         | `[]`                          |
+| `metrics.hostAliases`                           | Add deployment host aliases                                                                                                    | `[]`                          |
+| `metrics.schedulerName`                         | Name of the k8s scheduler (other than default)                                                                                 | `""`                          |
+| `metrics.priorityClassName`                     | Opensearch metrics exporter pods' priorityClassName                                                                            | `""`                          |
+| `metrics.service.type`                          | Metrics exporter endpoint service type                                                                                         | `ClusterIP`                   |
+| `metrics.service.port`                          | Metrics exporter endpoint service port                                                                                         | `9114`                        |
+| `metrics.service.annotations`                   | Provide any additional annotations which may be required.                                                                      | `{}`                          |
+| `metrics.podAffinityPreset`                     | Metrics Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                    | `""`                          |
+| `metrics.podAntiAffinityPreset`                 | Metrics Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                               | `""`                          |
+| `metrics.nodeAffinityPreset.type`               | Metrics Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                              | `""`                          |
+| `metrics.nodeAffinityPreset.key`                | Metrics Node label key to match Ignored if `affinity` is set.                                                                  | `""`                          |
+| `metrics.nodeAffinityPreset.values`             | Metrics Node label values to match. Ignored if `affinity` is set.                                                              | `[]`                          |
+| `metrics.affinity`                              | Metrics Affinity for pod assignment                                                                                            | `{}`                          |
+| `metrics.nodeSelector`                          | Metrics Node labels for pod assignment                                                                                         | `{}`                          |
+| `metrics.tolerations`                           | Metrics Tolerations for pod assignment                                                                                         | `[]`                          |
+| `metrics.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template       | `[]`                          |
+| `metrics.resources.limits`                      | The resources limits for the container                                                                                         | `{}`                          |
+| `metrics.resources.requests`                    | The requested resources for the container                                                                                      | `{}`                          |
+| `metrics.livenessProbe.enabled`                 | Enable/disable the liveness probe (metrics pod)                                                                                | `true`                        |
+| `metrics.livenessProbe.initialDelaySeconds`     | Delay before liveness probe is initiated (metrics pod)                                                                         | `60`                          |
+| `metrics.livenessProbe.periodSeconds`           | How often to perform the probe (metrics pod)                                                                                   | `10`                          |
+| `metrics.livenessProbe.timeoutSeconds`          | When the probe times out (metrics pod)                                                                                         | `5`                           |
+| `metrics.livenessProbe.failureThreshold`        | Minimum consecutive failures for the probe to be considered failed after having succeeded                                      | `5`                           |
+| `metrics.livenessProbe.successThreshold`        | Minimum consecutive successes for the probe to be considered successful after having failed (metrics pod)                      | `1`                           |
+| `metrics.readinessProbe.enabled`                | Enable/disable the readiness probe (metrics pod)                                                                               | `true`                        |
+| `metrics.readinessProbe.initialDelaySeconds`    | Delay before readiness probe is initiated (metrics pod)                                                                        | `5`                           |
+| `metrics.readinessProbe.periodSeconds`          | How often to perform the probe (metrics pod)                                                                                   | `10`                          |
+| `metrics.readinessProbe.timeoutSeconds`         | When the probe times out (metrics pod)                                                                                         | `1`                           |
+| `metrics.readinessProbe.failureThreshold`       | Minimum consecutive failures for the probe to be considered failed after having succeeded                                      | `5`                           |
+| `metrics.readinessProbe.successThreshold`       | Minimum consecutive successes for the probe to be considered successful after having failed (metrics pod)                      | `1`                           |
+| `metrics.startupProbe.enabled`                  | Enable/disable the startup probe (metrics pod)                                                                                 | `false`                       |
+| `metrics.startupProbe.initialDelaySeconds`      | Delay before startup probe is initiated (metrics pod)                                                                          | `5`                           |
+| `metrics.startupProbe.periodSeconds`            | How often to perform the probe (metrics pod)                                                                                   | `10`                          |
+| `metrics.startupProbe.timeoutSeconds`           | When the probe times out (metrics pod)                                                                                         | `1`                           |
+| `metrics.startupProbe.failureThreshold`         | Minimum consecutive failures for the probe to be considered failed after having succeeded                                      | `5`                           |
+| `metrics.startupProbe.successThreshold`         | Minimum consecutive successes for the probe to be considered successful after having failed (metrics pod)                      | `1`                           |
+| `metrics.customStartupProbe`                    | Custom liveness probe for the Web component                                                                                    | `{}`                          |
+| `metrics.customLivenessProbe`                   | Custom liveness probe for the Web component                                                                                    | `{}`                          |
+| `metrics.customReadinessProbe`                  | Custom readiness probe for the Web component                                                                                   | `{}`                          |
+| `metrics.podAnnotations`                        | Metrics exporter pod Annotation and Labels                                                                                     | `{}`                          |
+| `metrics.podLabels`                             | Extra labels to add to Pod                                                                                                     | `{}`                          |
+| `metrics.podSecurityContext.enabled`            | Enabled Opensearch metrics exporter pods' Security Context                                                                     | `true`                        |
+| `metrics.podSecurityContext.fsGroup`            | Set Opensearch metrics exporter pod's Security Context fsGroup                                                                 | `1001`                        |
+| `metrics.containerSecurityContext.enabled`      | Enabled Opensearch metrics exporter containers' Security Context                                                               | `true`                        |
+| `metrics.containerSecurityContext.runAsUser`    | Set Opensearch metrics exporter containers' Security Context runAsUser                                                         | `1001`                        |
+| `metrics.containerSecurityContext.runAsNonRoot` | Set Opensearch metrics exporter container's Security Context runAsNonRoot                                                      | `true`                        |
+| `metrics.command`                               | Override default container command (useful when using custom images)                                                           | `[]`                          |
+| `metrics.args`                                  | Override default container args (useful when using custom images)                                                              | `[]`                          |
+| `metrics.extraEnvVars`                          | Array with extra environment variables to add to Opensearch metrics exporter nodes                                             | `[]`                          |
+| `metrics.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars for Opensearch metrics exporter nodes                                     | `""`                          |
+| `metrics.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for Opensearch metrics exporter nodes                                        | `""`                          |
+| `metrics.extraVolumes`                          | Optionally specify extra list of additional volumes for the Opensearch metrics exporter pod(s)                                 | `[]`                          |
+| `metrics.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the Opensearch metrics exporter container(s)                      | `[]`                          |
+| `metrics.sidecars`                              | Add additional sidecar containers to the Opensearch metrics exporter pod(s)                                                    | `[]`                          |
+| `metrics.initContainers`                        | Add additional init containers to the Opensearch metrics exporter pod(s)                                                       | `[]`                          |
+| `metrics.serviceMonitor.enabled`                | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator                                                   | `false`                       |
+| `metrics.serviceMonitor.namespace`              | Namespace which Prometheus is running in                                                                                       | `""`                          |
+| `metrics.serviceMonitor.jobLabel`               | The name of the label on the target service to use as the job name in prometheus.                                              | `""`                          |
+| `metrics.serviceMonitor.interval`               | Interval at which metrics should be scraped                                                                                    | `""`                          |
+| `metrics.serviceMonitor.scrapeTimeout`          | Timeout after which the scrape is ended                                                                                        | `""`                          |
+| `metrics.serviceMonitor.relabelings`            | RelabelConfigs to apply to samples before scraping                                                                             | `[]`                          |
+| `metrics.serviceMonitor.metricRelabelings`      | MetricRelabelConfigs to apply to samples before ingestion                                                                      | `[]`                          |
+| `metrics.serviceMonitor.selector`               | ServiceMonitor selector labels                                                                                                 | `{}`                          |
+| `metrics.serviceMonitor.labels`                 | Extra labels for the ServiceMonitor                                                                                            | `{}`                          |
+| `metrics.serviceMonitor.honorLabels`            | honorLabels chooses the metric's labels on collisions with target labels                                                       | `false`                       |
+| `metrics.prometheusRule.enabled`                | Creates a Prometheus Operator PrometheusRule (also requires `metrics.enabled` to be `true` and `metrics.prometheusRule.rules`) | `false`                       |
+| `metrics.prometheusRule.namespace`              | Namespace for the PrometheusRule Resource (defaults to the Release Namespace)                                                  | `""`                          |
+| `metrics.prometheusRule.additionalLabels`       | Additional labels that can be used so PrometheusRule will be discovered by Prometheus                                          | `{}`                          |
+| `metrics.prometheusRule.rules`                  | Prometheus Rule definitions                                                                                                    | `[]`                          |
 
 ### Init Container Parameters
 
@@ -638,12 +648,12 @@ helm delete --purge my-release
 | `sysctlImage.resources.limits`         | The resources limits for the container                                                                                                                    | `{}`                    |
 | `sysctlImage.resources.requests`       | The requested resources for the container                                                                                                                 | `{}`                    |
 
-### Kibana Parameters
+### Opensearch Dashborads Parameters
 
-| Name                         | Description                                                               | Value                                                   |
-| ---------------------------- | ------------------------------------------------------------------------- | ------------------------------------------------------- |
-| `kibana.opensearch.hosts` | Array containing hostnames for the ES instances. Used to generate the URL | `[]`                                                    |
-| `kibana.opensearch.port`  | Port to connect Kibana and ES instance. Used to generate the URL          | `{{ include "opensearch.service.ports.restAPI" . }}` |
+| Name                                    | Description                                                                     | Value                                                |
+| --------------------------------------- | ------------------------------------------------------------------------------- | ---------------------------------------------------- |
+| `opensearchDashborads.opensearch.hosts` | Array containing hostnames for the OS instances. Used to generate the URL       | `[]`                                                 |
+| `opensearchDashborads.opensearch.port`  | Port to connect Opensearch Dashborads and OS instance. Used to generate the URL | `{{ include "opensearch.service.ports.restAPI" . }}` |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -677,7 +687,7 @@ To modify the OpenSearch version used in this chart you can specify a [valid ima
 
 ### Default kernel settings
 
-Currently, Opensearch requires some changes in the kernel of the host machine to work as expected. If those values are not set in the underlying operating system, the ES containers fail to boot with ERROR messages. More information about these requirements can be found in the links below:
+Currently, Opensearch requires some changes in the kernel of the host machine to work as expected. If those values are not set in the underlying operating system, the OS containers fail to boot with ERROR messages. More information about these requirements can be found in the links below:
 
 - [File Descriptor requirements](https://www.open.co/guide/en/opensearch/reference/current/file-descriptors.html)
 - [Virtual memory requirements](https://www.open.co/guide/en/opensearch/reference/current/vm-max-map-count.html)
@@ -688,7 +698,7 @@ You can disable the initContainer using the `sysctlImage.enabled=false` paramete
 ### Enable bundled Kibana
 
 This Opensearch chart contains Kibana as subchart, you can enable it just setting the `global.kibanaEnabled=true` parameter.
-To see the notes with some operational instructions from the Kibana chart, please use the `--render-subchart-notes` as part of your `helm install` command, in this way you can see the Kibana and ES notes in your terminal.
+To see the notes with some operational instructions from the Kibana chart, please use the `--render-subchart-notes` as part of your `helm install` command, in this way you can see the Kibana and OS notes in your terminal.
 
 When enabling the bundled kibana subchart, there are a few gotchas that you should be aware of listed below.
 

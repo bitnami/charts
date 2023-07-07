@@ -9,9 +9,9 @@
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
 ## @param global.storageClass Global StorageClass for Persistent Volume(s)
-## @param global.opensearch.service.name Opensearch service name to be used in the Kibana subchart (ignored if kibanaEnabled=false)
-## @param global.opensearch.service.ports.restAPI Opensearch service restAPI port to be used in the Kibana subchart (ignored if kibanaEnabled=false)
-## @param global.kibanaEnabled Whether or not to enable Kibana
+## @param global.opensearch.service.name Opensearch service name to be used in the Opensearch Dashborads subchart (ignored if opensearchDashboradsEnabled=false)
+## @param global.opensearch.service.ports.restAPI Opensearch service restAPI port to be used in the Opensearch Dashborads subchart (ignored if opensearchDashboradsEnabled=false)
+## @param global.opensearchDashboradsEnabled Whether or not to enable Opensearch Dashborads
 ##
 global:
   imageRegistry: ""
@@ -26,7 +26,7 @@ global:
       name: opensearch
       ports:
         restAPI: 9200
-  kibanaEnabled: false
+  opensearchDashboradsEnabled: false
 
 ## @section Common parameters
 
@@ -219,9 +219,6 @@ security:
   ## Ref: https://github.com/bitnami/containers/tree/main/bitnami/opensearch#security
   ##
   adminPassword: ""
-  ## @param security.dashboardsPassword Password for 'kibanaserver'
-  ##
-  dashboardsPassword: ""
   ## @param security.logstashPassword Password for Logstash
   ##
   logstashPassword: ""
@@ -236,6 +233,9 @@ security:
   ## TLS configuration
   ##
   tls:
+    ## @section Opensearch admin parameters
+    ## @param security.tls.admin.existingSecret Existing secret containing the certificates for admin
+    ##
     admin:
       existingSecret: ""
     ## @param security.tls.restEncryption Enable SSL/TLS encryption for Opensearch REST API.
@@ -2271,14 +2271,406 @@ sysctlImage:
     ##    memory: 128Mi
     requests: {}
 
-## @section Kibana Parameters
+## @section Opensearch Dashborads Parameters
 
-## Bundled Kibana parameters
-## @param kibana.opensearch.hosts [array] Array containing hostnames for the ES instances. Used to generate the URL
-## @param kibana.opensearch.port Port to connect Kibana and ES instance. Used to generate the URL
-##
-kibana:
-  opensearch:
-    hosts:
-      - '{{ include "opensearch.service.name" . }}'
-    port: '{{ include "opensearch.service.ports.restAPI" . }}'
+dashboards:
+  ## @param dashboards.enabled Enables Opensearch Dashboards deployment
+  ##
+  enabled: false
+  ## Bitnami Opensearch Dashboards image
+  ## @param dashboards.image.registry Opensearch Dashboards image registry
+  ## @param dashboards.image.repository Opensearch Dashboards image repository
+  ## @param dashboards.image.tag Opensearch Dashboards image tag (immutable tags are recommended)
+  ## @param dashboards.image.digest Opensearch Dashboards image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## @param dashboards.image.pullPolicy Opensearch Dashboards image pull policy
+  ## @param dashboards.image.pullSecrets Opensearch Dashboards image pull secrets
+  ## @param dashboards.image.debug Enable Opensearch Dashboards image debug mode
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/opensearch-dashboards
+    tag: development
+    digest: ""
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: [ ]
+    ## Enable debug mode
+    ##
+    debug: false
+  ## Opensearch Dashboards service parameters
+  ##
+  service:
+    ## @param service.type Opensearch Dashboards service type
+    ##
+    type: ClusterIP
+    ## @param service.ports.http Opensearch Dashboards service web UI port
+    ##
+    ports:
+      http: 5601
+    ## Node ports to expose
+    ## @param dashboards.service.nodePorts.http Node port for web UI
+    ## @param dashboards.service.nodePorts.transport Node port for REST API
+    ## NOTE: choose port between <30000-32767>
+    ##
+    nodePorts:
+      http: ""
+    ## @param dashboards.service.clusterIP Opensearch Dashboards service Cluster IP
+    ## e.g.:
+    ## clusterIP: None
+    ##
+    clusterIP: ""
+    ## @param dashboards.service.loadBalancerIP Opensearch Dashboards service Load Balancer IP
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerIP: ""
+    ## @param dashboards.service.loadBalancerSourceRanges Opensearch Dashboards service Load Balancer sources
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g:
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: [ ]
+    ## @param dashboards.service.externalTrafficPolicy Opensearch Dashboards service external traffic policy
+    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param dashboards.service.annotations Additional custom annotations for Opensearch Dashboards service
+    ##
+    annotations: { }
+    ## @param dashboards.service.extraPorts Extra ports to expose in Opensearch Dashboards service (normally used with the `sidecars` value)
+    ##
+    extraPorts: [ ]
+    ## @param dashboards.service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+    ## If "ClientIP", consecutive client requests will be directed to the same Pod
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+    ##
+    sessionAffinity: None
+    ## @param dashboards.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: { }
+  ## @param dashboards.containerPorts.restAPI Opensearch Dashboards REST API port
+  ## @param dashboards.containerPorts.transport Opensearch Dashboards transport port
+  ##
+  containerPorts:
+    http: 5601
+    transport: 5601
+  ## @param dashboards.password Password for Opensearch Dashboards
+  ##
+  password: ""
+  ## @param dashboards.replicaCount Number of data-only replicas to deploy
+  ##
+  replicaCount: 1
+  ## @param dashboards.extraRoles Append extra roles to the node role
+  ##
+  extraRoles: []
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param dashboards.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param dashboards.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param dashboards.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ##
+  pdb:
+    create: false
+    minAvailable: 1
+    maxUnavailable: ""
+  ## @param dashboards.nameOverride String to partially override opensearch.dashboards.fullname
+  ##
+  nameOverride: ""
+  ## @param dashboards.fullnameOverride String to fully override opensearch.dashboards.fullname
+  ##
+  fullnameOverride: ""
+  ## @param dashboards.servicenameOverride String to fully override opensearch.dashboards.servicename
+  ##
+  servicenameOverride: ""
+  ## @param dashboards.annotations [object] Annotations for the data statefulset
+  ##
+  annotations: {}
+  ## @param dashboards.updateStrategy.type Data-only nodes statefulset stategy type
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy:
+    type: RollingUpdate
+  ## Opensearch resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param dashboards.resources.limits The resources limits for the data containers
+  ## @param dashboards.resources.requests [object] The requested resources for the data containers
+  ##
+  resources:
+    limits: {}
+    requests:
+      cpu: 25m
+      memory: 2048Mi
+  ## @param dashboards.heapSize Opensearch data node heap size.
+  ## Note: The recommended heapSize is half of the container's memory.
+  ## If omitted, it will be automatically set.
+  ## Example:
+  ##   heapSize: 128m
+  ##
+  heapSize: 1024m
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param dashboards.podSecurityContext.enabled Enabled data pods' Security Context
+  ## @param dashboards.podSecurityContext.fsGroup Set data pod's Security Context fsGroup
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param dashboards.containerSecurityContext.enabled Enabled data containers' Security Context
+  ## @param dashboards.containerSecurityContext.runAsUser Set data containers' Security Context runAsUser
+  ## @param dashboards.containerSecurityContext.runAsNonRoot Set data containers' Security Context runAsNonRoot
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
+  ## @param dashboards.hostAliases data pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param dashboards.podLabels Extra labels for data pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param dashboards.podAnnotations Annotations for data pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param dashboards.podAffinityPreset Pod affinity preset. Ignored if `dashboards.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param dashboards.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `dashboards.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: ""
+  ## Node dashboards.affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param dashboards.nodeAffinityPreset.type Node affinity preset type. Ignored if `dashboards.affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param dashboards.nodeAffinityPreset.key Node label key to match. Ignored if `dashboards.affinity` is set
+    ##
+    key: ""
+    ## @param dashboards.nodeAffinityPreset.values Node label values to match. Ignored if `dashboards.affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param dashboards.affinity Affinity for data pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `dashboards.podAffinityPreset`, `dashboards.podAntiAffinityPreset`, and `dashboards.nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param dashboards.nodeSelector Node labels for data pods assignment
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+  ## @param dashboards.tolerations Tolerations for data pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param dashboards.priorityClassName data pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param dashboards.schedulerName Name of the k8s scheduler (other than default) for data pods
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param dashboards.terminationGracePeriodSeconds In seconds, time the given to the Opensearch data pod needs to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
+  ## @param dashboards.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: []
+  ## @param dashboards.podManagementPolicy podManagementPolicy to manage scaling operation of Opensearch data pods
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
+  ##
+  podManagementPolicy: "Parallel"
+  ## Configure extra options for Opensearch data containers' liveness, readiness and startup probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param dashboards.startupProbe.enabled Enable/disable the startup probe (data nodes pod)
+  ## @param dashboards.startupProbe.initialDelaySeconds Delay before startup probe is initiated (data nodes pod)
+  ## @param dashboards.startupProbe.periodSeconds How often to perform the probe (data nodes pod)
+  ## @param dashboards.startupProbe.timeoutSeconds When the probe times out (data nodes pod)
+  ## @param dashboards.startupProbe.successThreshold Minimum consecutive successes for the probe to be considered successful after having failed (data nodes pod)
+  ## @param dashboards.startupProbe.failureThreshold Minimum consecutive failures for the probe to be considered failed after having succeeded
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  ## @param dashboards.livenessProbe.enabled Enable/disable the liveness probe (data nodes pod)
+  ## @param dashboards.livenessProbe.initialDelaySeconds Delay before liveness probe is initiated (data nodes pod)
+  ## @param dashboards.livenessProbe.periodSeconds How often to perform the probe (data nodes pod)
+  ## @param dashboards.livenessProbe.timeoutSeconds When the probe times out (data nodes pod)
+  ## @param dashboards.livenessProbe.successThreshold Minimum consecutive successes for the probe to be considered successful after having failed (data nodes pod)
+  ## @param dashboards.livenessProbe.failureThreshold Minimum consecutive failures for the probe to be considered failed after having succeeded
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  ## @param dashboards.readinessProbe.enabled Enable/disable the readiness probe (data nodes pod)
+  ## @param dashboards.readinessProbe.initialDelaySeconds Delay before readiness probe is initiated (data nodes pod)
+  ## @param dashboards.readinessProbe.periodSeconds How often to perform the probe (data nodes pod)
+  ## @param dashboards.readinessProbe.timeoutSeconds When the probe times out (data nodes pod)
+  ## @param dashboards.readinessProbe.successThreshold Minimum consecutive successes for the probe to be considered successful after having failed (data nodes pod)
+  ## @param dashboards.readinessProbe.failureThreshold Minimum consecutive failures for the probe to be considered failed after having succeeded
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  ## @param dashboards.customStartupProbe Override default startup probe
+  ##
+  customStartupProbe: {}
+  ## @param dashboards.customLivenessProbe Override default liveness probe
+  ##
+  customLivenessProbe: {}
+  ## @param dashboards.customReadinessProbe Override default readiness probe
+  ##
+  customReadinessProbe: {}
+  ## @param dashboards.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param dashboards.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param dashboards.lifecycleHooks for the data container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param dashboards.extraEnvVars Array with extra environment variables to add to data nodes
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param dashboards.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for data nodes
+  ##
+  extraEnvVarsCM: ""
+  ## @param dashboards.extraEnvVarsSecret Name of existing Secret containing extra env vars for data nodes
+  ##
+  extraEnvVarsSecret: ""
+  ## @param dashboards.extraVolumes Optionally specify extra list of additional volumes for the data pod(s)
+  ##
+  extraVolumes: []
+  ## @param dashboards.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the data container(s)
+  ##
+  extraVolumeMounts: []
+  ## @param dashboards.sidecars Add additional sidecar containers to the data pod(s)
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param dashboards.initContainers Add additional init containers to the data pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
+  ## Enable persistence using Persistent Volume Claims
+  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+  ##
+  persistence:
+    ## @param dashboards.persistence.enabled Enable persistence using a `PersistentVolumeClaim`
+    ##
+    enabled: true
+    ## @param dashboards.persistence.storageClass Persistent Volume Storage Class
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    ##
+    storageClass: ""
+    ## @param dashboards.persistence.existingClaim Existing Persistent Volume Claim
+    ## then accept the value as an existing Persistent Volume Claim to which
+    ## the container should be bound
+    ##
+    existingClaim: ""
+    ## @param dashboards.persistence.existingVolume Existing Persistent Volume for use as volume match label selector to the `volumeClaimTemplate`. Ignored when `dashboards.persistence.selector` is set.
+    ##
+    existingVolume: ""
+    ## @param dashboards.persistence.selector Configure custom selector for existing Persistent Volume. Overwrites `dashboards.persistence.existingVolume`
+    ## selector:
+    ##   matchLabels:
+    ##     volume:
+    ##
+    selector: {}
+    ## @param dashboards.persistence.annotations Persistent Volume Claim annotations
+    ##
+    annotations: {}
+    ## @param dashboards.persistence.accessModes Persistent Volume Access Modes
+    ##
+    accessModes:
+      - ReadWriteOnce
+    ## @param dashboards.persistence.size Persistent Volume Size
+    ##
+    size: 8Gi
+  ## Pods Service Account
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+  ## @param dashboards.serviceAccount.create Specifies whether a ServiceAccount should be created
+  ## @param dashboards.serviceAccount.name Name of the service account to use. If not set and create is true, a name is generated using the fullname template.
+  ## @param dashboards.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+  ## @param dashboards.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
+  ##
+  serviceAccount:
+    create: false
+    name: ""
+    automountServiceAccountToken: true
+    annotations: {}
+  ## Enable HorizontalPodAutoscaler for Opensearch data pods
+  ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
+  ## @param dashboards.autoscaling.enabled Whether enable horizontal pod autoscale
+  ## @param dashboards.autoscaling.minReplicas Configure a minimum amount of pods
+  ## @param dashboards.autoscaling.maxReplicas Configure a maximum amount of pods
+  ## @param dashboards.autoscaling.targetCPU Define the CPU target to trigger the scaling actions (utilization percentage)
+  ## @param dashboards.autoscaling.targetMemory Define the memory target to trigger the scaling actions (utilization percentage)
+  ##
+  autoscaling:
+    enabled: false
+    minReplicas: 1
+    maxReplicas: 11
+    targetCPU: ""
+    targetMemory: ""
