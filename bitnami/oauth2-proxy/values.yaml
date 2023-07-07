@@ -294,7 +294,7 @@ configuration:
   ##
   ## @param configuration.google.enabled Enable Google service account
   ## @param configuration.google.adminEmail Google admin email
-  ## @param configuration.google.groups Restrict logins to members of this google group
+  ## @param configuration.google.groups Restrict logins to members of these google groups
   ## @param configuration.google.serviceAccountJson Google Service account JSON
   ## @param configuration.google.existingSecret Existing secret containing Google Service Account
   ##
