@@ -45,7 +45,7 @@ Cypress.Commands.add('logout', () => {
 
 Cypress.on('uncaught:exception', (err, runnable) => {
   // we expect an application error with message 'rendering locks'
-  // and don't want to fail the test so we return false XMLHttpRequest
+  // and don't want to fail the test so we return false
   if (err.message.includes('renderingLocks')) {
     return false;
   }
