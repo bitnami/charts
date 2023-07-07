@@ -305,7 +305,7 @@ helm upgrade my-release oci://registry-1.docker.io/bitnamicharts/grafana-operato
 
 ### To 3.0.0
 
-In this version use different apiVersion in CRs `integreatly.org/v1alpha1` -> `grafana.integreatly.org/v1beta1`
+In this version use different apiVersion in CRDs `integreatly.org/v1alpha1` -> `grafana.integreatly.org/v1beta1`
 Please check the [offical documentation|https://github.com/grafana-operator/grafana-operator/blob/master/docs/blog/v4-v5-migration.md] to migrate to version 3.
 
 ### To 2.0.0
