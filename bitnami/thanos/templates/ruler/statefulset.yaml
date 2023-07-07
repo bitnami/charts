@@ -64,6 +64,9 @@ spec:
       {{- if .Values.ruler.dnsConfig }}
       dnsConfig: {{- include "common.tplvalues.render" (dict "value" .Values.ruler.dnsConfig "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.ruler.dnsPolicy }}
+      dnsPolicy: {{ .Values.ruler.dnsPolicy | quote }}
+      {{- end }}
       {{- if .Values.ruler.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.ruler.nodeSelector "context" $) | nindent 8 }}
       {{- end }}

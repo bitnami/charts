@@ -60,6 +60,9 @@ spec:
       {{- if .Values.bucketweb.dnsConfig }}
       dnsConfig: {{- include "common.tplvalues.render" (dict "value" .Values.bucketweb.dnsConfig "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.bucketweb.dnsPolicy }}
+      dnsPolicy: {{ .Values.bucketweb.dnsPolicy | quote }}
+      {{- end }}
       {{- if .Values.bucketweb.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.bucketweb.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
