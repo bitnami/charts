@@ -9,7 +9,7 @@ SPDX-License-Identifier: APACHE-2.0
 {{- $secretName := printf "%s" (include "rmqco.msgTopologyOperator.webhook.fullname" .) }}
 {{- $ca := genCA "rmq-msg-topology-ca" 365 }}
 {{- $cert := genSignedCert (include "rmqco.msgTopologyOperator.fullname" .) nil (list (printf "%s.%s.svc" (include "rmqco.msgTopologyOperator.webhook.fullname" .) (include "common.names.namespace" .)) (printf "%s.%s.svc.%s" (include "rmqco.msgTopologyOperator.webhook.fullname" .) (include "common.names.namespace" .) .Values.clusterDomain)) 365 $ca }}
-{{- if and (not .Values.useCertManager) (not .Values.msgTopologyOperator.existingWebhookCertSecret) }}
+{{- if and (.Values.msgTopologyOperator.enabled) (not .Values.useCertManager) (not .Values.msgTopologyOperator.existingWebhookCertSecret) }}
 apiVersion: v1
 kind: Secret
 metadata:
@@ -29,6 +29,7 @@ data:
   ca.crt: {{ include "common.secrets.lookup" (dict "secret" $secretName "key" "ca.crt" "defaultValue" $ca.Cert "context" $) }}
 {{- end }}
 ---
+{{- if .Values.msgTopologyOperator.enabled }}
 apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingWebhookConfiguration
 metadata:
@@ -311,3 +312,4 @@ webhooks:
         resources:
           - vhosts
     sideEffects: None
+{{- end }}

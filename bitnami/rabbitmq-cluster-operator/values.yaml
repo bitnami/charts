@@ -479,6 +479,9 @@ clusterOperator:
 ## @section RabbitMQ Messaging Topology Operator Parameters
 ##
 msgTopologyOperator:
+  ## @param msgTopologyOperator.enabled Enabled RabbitMQ Messaging Topology Operator for installation
+  ##
+  enabled: true
   ## Bitnami RabbitMQ Messaging Topology Operator image
   ## ref: https://hub.docker.com/r/bitnami/rmq-messaging-topology-operator/tags/
   ## @param msgTopologyOperator.image.registry RabbitMQ Messaging Topology Operator image registry
