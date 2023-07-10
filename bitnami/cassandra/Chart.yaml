@@ -1,3 +1,6 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
 annotations:
   category: Database
   licenses: Apache-2.0
@@ -22,4 +25,4 @@ maintainers:
 name: cassandra
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/cassandra
-version: 10.4.2
+version: 10.4.3

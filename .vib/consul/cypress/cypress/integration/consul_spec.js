@@ -1,3 +1,8 @@
+/*
+ * Copyright VMware, Inc.
+ * SPDX-License-Identifier: APACHE-2.0
+ */
+
 /// <reference types="cypress" />
 
 import { random } from '../support/utils';
@@ -28,7 +33,7 @@ it('allows the creation of key-value pairs', () => {
     });
   });
   cy.contains('Save').click({ force: true });
-  cy.get('.notice').contains('Success');
+  cy.contains('Success');
   cy.get('.tabular-collection').within(() => {
     cy.fixture('keys').then((key) => {
       cy.contains(`${key.newKey.testKey}.${random}`);

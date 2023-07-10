@@ -1,0 +1,9 @@
+{
+  "baseUrl": "http://localhost",
+  "env": {
+    "username": "root",
+    "password": "ComplicatedPassword123!4",
+    "host": "milvus-proxy:80"
+  },
+  "defaultCommandTimeout": 30000
+}

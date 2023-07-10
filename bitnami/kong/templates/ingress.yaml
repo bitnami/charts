@@ -1,3 +1,8 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if .Values.ingress.enabled -}}
 {{- $backendPort := ternary "https-proxy" "http-proxy" .Values.service.disableHttpPort }}
 apiVersion: {{ template "common.capabilities.ingress.apiVersion" . }}

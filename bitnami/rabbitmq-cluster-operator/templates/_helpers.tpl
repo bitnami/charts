@@ -1,4 +1,9 @@
 {{/*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{/*
 Return the proper RabbitMQ Cluster Operator fullname
 Note: We use the regular common function as the chart name already contains the
 the rabbitmq-cluster-operator name.

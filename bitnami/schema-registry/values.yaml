@@ -1,11 +1,13 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
 
 ## @section Global parameters
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
-## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+## Current available global Docker image parameters: imageRegistry and imagePullSecrets
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
-## @param global.storageClass Global StorageClass for Persistent Volume(s)
 ##
 global:
   imageRegistry: ""
@@ -14,7 +16,6 @@ global:
   ##   - myRegistryKeySecretName
   ##
   imagePullSecrets: []
-  storageClass: ""
 
 ## @param kubeVersion Override Kubernetes version
 ##
@@ -377,7 +378,7 @@ customReadinessProbe: {}
 ## @param customStartupProbe Custom startupProbe that overrides the default one
 ##
 customStartupProbe: {}
-## @param extraVolumes Optionally specify extra list of additional volumes for MinIO&reg; pods
+## @param extraVolumes Optionally specify extra list of additional volumes for schema-registry pods
 ## e.g:
 ## extraVolumes:
 ##   - name: avro-properties
@@ -385,7 +386,7 @@ customStartupProbe: {}
 ##       name: avro-properties
 ##
 extraVolumes: []
-## @param extraVolumeMounts Optionally specify extra list of additional volumeMounts for MinIO&reg; container(s)
+## @param extraVolumeMounts Optionally specify extra list of additional volumeMounts for schema-registry container(s)
 ## e.g:
 ## extraVolumeMounts:
 ##   - name: avro-properties
@@ -639,6 +640,15 @@ kafka:
   ## @param kafka.replicaCount Number of Kafka brokers
   ##
   replicaCount: 1
+  ## @param kafka.auth.clientProtocol Authentication protocol for communications with clients. Allowed protocols: `plaintext`, `tls`, `mtls`, `sasl` and `sasl_tls`
+  ##
+  auth:
+    clientProtocol: "plaintext"
+  ## @param kafka.service.ports.client Kafka svc port for client connections
+  ##
+  service:
+    ports:
+      client: 9092
 
 ##
 ## External Kafka Configuration
@@ -653,6 +663,7 @@ externalKafka:
   ## @param externalKafka.auth.protocol                   Authentication protocol. Allowed protocols: plaintext, tls, sasl and sasl_tls
   ## @param externalKafka.auth.jaas.user                  User for SASL authentication
   ## @param externalKafka.auth.jaas.password              Password for SASL authentication
+  ## @param externalKafka.auth.jaas.existingSecret        Name of the existing secret containing a password for SASL authentication (under the key named "client-passwords")
   ##
   auth:
     ## Authentication protocol
@@ -671,3 +682,4 @@ externalKafka:
     jaas:
       user: user
       password: ""
+      existingSecret: ""
