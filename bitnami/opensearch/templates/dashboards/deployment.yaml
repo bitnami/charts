@@ -101,6 +101,12 @@ spec:
                   name: {{ include "opensearch.secretName" . }}
                   key: opensearch-dashboards-password
             {{- end }}
+            {{- if .Values.dashboards.tls.enabled }}
+            - name: OPENSEARCH_DASHBOARDS_SERVER_ENABLE_TLS
+              value: "true"
+            - name: OPENSEARCH_DASHBOARDS_SERVER_TLS_USE_PEM
+              value: "true"
+            {{- end }}
             - name: OPENSEARCH_DASHBOARDS_OPENSEARCH_URL
               value: {{ (include "opensearch.url" .) }}
             {{- if .Values.dashboards.extraEnvVars }}
@@ -135,8 +141,12 @@ spec:
           volumeMounts:
             {{- if .Values.security.enabled }}
             - name: opensearch-certificates
-              mountPath: /opt/bitnami/opensearch/config/certs/opensearch/ca.crt
-              subPath: ca.crt
+              mountPath: /opt/bitnami/opensearch/config/certs/opensearch
+              readOnly: true
+            {{- end }}
+            {{- if .Values.dashboards.tls.enabled }}
+            - name: opensearch-dashboard-certificates
+              mountPath: /opt/bitnami/opensearch/config/certs
               readOnly: true
             {{- end }}
             {{- if .Values.dashboards.extraVolumeMounts }}
@@ -148,18 +158,19 @@ spec:
       volumes:
         {{- if .Values.security.enabled }}
         - name: opensearch-certificates
+          secret:
+            secretName: {{ include "opensearch.master.tlsSecretName" . }}
+            items:
+              - key: ca.crt
+                path: ca.crt
+        {{- end }}
+        {{- if .Values.dashboards.tls.enabled }}
+        - name: opensearch-dashboard-certificates
           projected:
             defaultMode: 256
             sources:
               - secret:
                   name: {{ include "opensearch.master.tlsSecretName" . }}
-        {{- end }}
-        - name: foo
-        {{- if .Values.dashboards.persistence.enabled }}
-          persistentVolumeClaim:
-            claimName: {{ default (include "common.names.fullname" .) .Values.dashboards.persistence.existingClaim }}
-        {{- else }}
-          emptyDir: {}
         {{- end }}
         {{- if .Values.dashboards.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.dashboards.extraVolumes "context" $) | nindent 8 }}
