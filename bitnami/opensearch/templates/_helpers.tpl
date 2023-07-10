@@ -654,6 +654,18 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 
 {{/*
+Create a default Dashboards service name.
+We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
+*/}}
+{{- define "opensearch.dashboards.servicename" -}}
+{{- if .Values.dashboards.servicenameOverride -}}
+{{- .Values.dashboards.servicenameOverride | trunc 63 | trimSuffix "-" -}}
+{{- else -}}
+{{- printf "%s-hl" (include "opensearch.dashboards.fullname" .) | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the proper Opensearch Dashboards image name
 */}}
 {{- define "opensearch.dashboards.image" -}}

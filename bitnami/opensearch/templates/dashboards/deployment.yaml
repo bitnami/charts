@@ -6,7 +6,7 @@ SPDX-License-Identifier: APACHE-2.0
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
-  name: {{ template "common.names.fullname" . }}
+  name: {{ template "opensearch.dashboards.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: dashboards
@@ -40,7 +40,7 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
         {{- end }}
     spec:
-      serviceAccountName: {{ template "opensearch .dashboards.serviceAccountName" . }}
+      serviceAccountName: {{ template "opensearch.dashboards.serviceAccountName" . }}
       {{- include "opensearch.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.dashboards.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.dashboards.hostAliases "context" $) | nindent 8 }}
@@ -114,24 +114,15 @@ spec:
           ports:
             - name: http
               containerPort: {{ .Values.dashboards.containerPorts.http }}
+
+
           {{- if not .Values.diagnosticMode.enabled }}
-          {{- if .Values.dashboards.customLivenessProbe }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.dashboards.customLivenessProbe "context" $) | nindent 12 }}
-          {{- else if .Values.dashboards.livenessProbe.enabled }}
-          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.dashboards.livenessProbe "enabled") "context" $) | nindent 12 }}
-            %%httpGet || command || etc%%
-          {{- end }}
+
           {{- if .Values.dashboards.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.dashboards.customReadinessProbe "context" $) | nindent 12 }}
-          {{- else if .Values.dashboards.readinessProbe.enabled }}
-          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.dashboards.readinessProbe "enabled") "context" $) | nindent 12 }}
-            %%httpGet || command || etc%%
           {{- end }}
           {{- if .Values.dashboards.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.dashboards.customStartupProbe "context" $) | nindent 12 }}
-          {{- else if .Values.dashboards.startupProbe.enabled }}
-          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.dashboards.startupProbe "enabled") "context" $) | nindent 12 }}
-            %%httpGet || command || etc%%
           {{- end }}
           {{- end }}
           {{- if .Values.dashboards.lifecycleHooks }}
@@ -140,6 +131,8 @@ spec:
           {{- include "common.tplvalues.render" (dict "value" .Values.dashboards.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
           {{- end }}
+
+
         {{- if .Values.dashboards.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.dashboards.sidecars "context" $) | nindent 8 }}
         {{- end }}

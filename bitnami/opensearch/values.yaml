@@ -2276,7 +2276,7 @@ sysctlImage:
 dashboards:
   ## @param dashboards.enabled Enables Opensearch Dashboards deployment
   ##
-  enabled: false
+  enabled: true
   ## Bitnami Opensearch Dashboards image
   ## @param dashboards.image.registry Opensearch Dashboards image registry
   ## @param dashboards.image.repository Opensearch Dashboards image repository
@@ -2319,11 +2319,12 @@ dashboards:
       http: 5601
     ## Node ports to expose
     ## @param dashboards.service.nodePorts.http Node port for web UI
-    ## @param dashboards.service.nodePorts.transport Node port for REST API
+    ## @param dashboards.service.nodePorts.http-os Node port for REST API
     ## NOTE: choose port between <30000-32767>
     ##
     nodePorts:
       http: ""
+      http-os: ""
     ## @param dashboards.service.clusterIP Opensearch Dashboards service Cluster IP
     ## e.g.:
     ## clusterIP: None
@@ -2615,7 +2616,7 @@ dashboards:
   persistence:
     ## @param dashboards.persistence.enabled Enable persistence using a `PersistentVolumeClaim`
     ##
-    enabled: true
+    enabled: false
     ## @param dashboards.persistence.storageClass Persistent Volume Storage Class
     ## If defined, storageClassName: <storageClass>
     ## If set to "-", storageClassName: "", which disables dynamic provisioning
