@@ -64,11 +64,7 @@ Port number for the Opensearch service REST API port
 Required for the Kibana subchart to find Opensearch service.
 */}}
 {{- define "opensearch.service.ports.restAPI" -}}
-{{- if .Values.global.kibanaEnabled -}}
-{{- printf "%d" (int .Values.global.opensearch.service.ports.restAPI) -}}
-{{- else -}}
 {{- printf "%d" (int .Values.service.ports.restAPI) -}}
-{{- end -}}
 {{- end -}}
 
 {{/*
@@ -671,4 +667,14 @@ Return the proper Opensearch Dashboards image name
 {{- define "opensearch.dashboards.image" -}}
 {{ include "common.images.image" (dict "imageRoot" .Values.dashboards.image "global" .Values.global) }}
 {{- end -}}
+
+
+{{/*
+Set Opensearch URL.
+*/}}
+{{- define "opensearch.url" -}}
+{{- $protocol := ternary "https" "http" .Values.security.tls.restEncryption -}}
+{{- printf "%s://%s:%s" $protocol (include "opensearch.service.name" .) (include "opensearch.service.ports.restAPI" .) -}}
+{{- end -}}
+
 

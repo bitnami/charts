@@ -150,7 +150,7 @@ spec:
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
           {{- else if .Values.master.command }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.master.command "context" $) | nindent 12 }}
-          {{- else }}
+          {{- else if .Values.security.enabled }}
           command:
             - bash
             - -ec

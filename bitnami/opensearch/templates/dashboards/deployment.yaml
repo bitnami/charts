@@ -94,8 +94,15 @@ spec:
           env:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" (or .Values.dashboards.image.debug .Values.diagnosticMode.enabled) | quote }}
-            - name: foo
-              value: bar
+            {{- if .Values.security.enabled }}
+            - name: OPENSEARCH_DASHBOARDS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "opensearch.secretName" . }}
+                  key: opensearch-dashboards-password
+            {{- end }}
+            - name: OPENSEARCH_DASHBOARDS_OPENSEARCH_URL
+              value: {{ (include "opensearch.url" .) }}
             {{- if .Values.dashboards.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.dashboards.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
@@ -114,10 +121,7 @@ spec:
           ports:
             - name: http
               containerPort: {{ .Values.dashboards.containerPorts.http }}
-
-
           {{- if not .Values.diagnosticMode.enabled }}
-
           {{- if .Values.dashboards.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.dashboards.customReadinessProbe "context" $) | nindent 12 }}
           {{- end }}
@@ -127,16 +131,29 @@ spec:
           {{- end }}
           {{- if .Values.dashboards.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.dashboards.lifecycleHooks "context" $) | nindent 12 }}
-          {{- if .Values.dashboards.extraVolumeMounts }}
-          {{- include "common.tplvalues.render" (dict "value" .Values.dashboards.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
-          {{- end }}
-
-
+          volumeMounts:
+            {{- if .Values.security.enabled }}
+            - name: opensearch-certificates
+              mountPath: /opt/bitnami/opensearch/config/certs/opensearch/ca.crt
+              subPath: ca.crt
+              readOnly: true
+            {{- end }}
+            {{- if .Values.dashboards.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.dashboards.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
         {{- if .Values.dashboards.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.dashboards.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        {{- if .Values.security.enabled }}
+        - name: opensearch-certificates
+          projected:
+            defaultMode: 256
+            sources:
+              - secret:
+                  name: {{ include "opensearch.master.tlsSecretName" . }}
+        {{- end }}
         - name: foo
         {{- if .Values.dashboards.persistence.enabled }}
           persistentVolumeClaim:

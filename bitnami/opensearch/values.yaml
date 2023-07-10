@@ -9,9 +9,6 @@
 ## @param global.imageRegistry Global Docker image registry
 ## @param global.imagePullSecrets Global Docker registry secret names as an array
 ## @param global.storageClass Global StorageClass for Persistent Volume(s)
-## @param global.opensearch.service.name Opensearch service name to be used in the Opensearch Dashborads subchart (ignored if opensearchDashboradsEnabled=false)
-## @param global.opensearch.service.ports.restAPI Opensearch service restAPI port to be used in the Opensearch Dashborads subchart (ignored if opensearchDashboradsEnabled=false)
-## @param global.opensearchDashboradsEnabled Whether or not to enable Opensearch Dashborads
 ##
 global:
   imageRegistry: ""
@@ -21,12 +18,6 @@ global:
   ##
   imagePullSecrets: []
   storageClass: ""
-  opensearch:
-    service:
-      name: opensearch
-      ports:
-        restAPI: 9200
-  opensearchDashboradsEnabled: false
 
 ## @section Common parameters
 
@@ -2367,7 +2358,6 @@ dashboards:
   ##
   containerPorts:
     http: 5601
-    transport: 5601
   ## @param dashboards.password Password for Opensearch Dashboards
   ##
   password: ""
