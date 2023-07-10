@@ -141,12 +141,12 @@ spec:
           volumeMounts:
             {{- if .Values.security.enabled }}
             - name: opensearch-certificates
-              mountPath: /opt/bitnami/opensearch/config/certs/opensearch
+              mountPath: /opt/bitnami/opensearch-dashboards/config/certs/opensearch
               readOnly: true
             {{- end }}
             {{- if .Values.dashboards.tls.enabled }}
             - name: opensearch-dashboard-certificates
-              mountPath: /opt/bitnami/opensearch/config/certs
+              mountPath: /opt/bitnami/opensearch-dashboards/config/certs/server
               readOnly: true
             {{- end }}
             {{- if .Values.dashboards.extraVolumeMounts }}
@@ -170,7 +170,7 @@ spec:
             defaultMode: 256
             sources:
               - secret:
-                  name: {{ include "opensearch.master.tlsSecretName" . }}
+                  name: {{ include "opensearch.dashboards.tlsSecretName" . }}
         {{- end }}
         {{- if .Values.dashboards.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.dashboards.extraVolumes "context" $) | nindent 8 }}
