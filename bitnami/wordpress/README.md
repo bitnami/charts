@@ -235,27 +235,27 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Persistence Parameters
 
-| Name                                                   | Description                                                                                                   | Value                   |
-| ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------- | ----------------------- |
-| `persistence.enabled`                                  | Enable persistence using Persistent Volume Claims                                                             | `true`                  |
-| `persistence.storageClass`                             | Persistent Volume storage class                                                                               | `""`                    |
-| `persistence.accessModes`                              | Persistent Volume access modes                                                                                | `[]`                    |
-| `persistence.accessMode`                               | Persistent Volume access mode (DEPRECATED: use `persistence.accessModes` instead)                             | `ReadWriteOnce`         |
-| `persistence.size`                                     | Persistent Volume size                                                                                        | `10Gi`                  |
-| `persistence.dataSource`                               | Custom PVC data source                                                                                        | `{}`                    |
-| `persistence.existingClaim`                            | The name of an existing PVC to use for persistence                                                            | `""`                    |
-| `persistence.selector`                                 | Selector to match an existing Persistent Volume for WordPress data PVC                                        | `{}`                    |
-| `persistence.annotations`                              | Persistent Volume Claim annotations                                                                           | `{}`                    |
-| `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`               | `false`                 |
-| `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                                  | `docker.io`             |
-| `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r133`     |
-| `volumePermissions.image.digest`                       | Bitnami Shell image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
-| `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                               | `IfNotPresent`          |
-| `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                              | `[]`                    |
-| `volumePermissions.resources.limits`                   | The resources limits for the init container                                                                   | `{}`                    |
-| `volumePermissions.resources.requests`                 | The requested resources for the init container                                                                | `{}`                    |
-| `volumePermissions.containerSecurityContext.runAsUser` | User ID for the init container                                                                                | `0`                     |
+| Name                                                   | Description                                                                                                        | Value                   |
+| ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------ | ----------------------- |
+| `persistence.enabled`                                  | Enable persistence using Persistent Volume Claims                                                                  | `true`                  |
+| `persistence.storageClass`                             | Persistent Volume storage class                                                                                    | `""`                    |
+| `persistence.accessModes`                              | Persistent Volume access modes                                                                                     | `[]`                    |
+| `persistence.accessMode`                               | Persistent Volume access mode (DEPRECATED: use `persistence.accessModes` instead)                                  | `ReadWriteOnce`         |
+| `persistence.size`                                     | Persistent Volume size                                                                                             | `10Gi`                  |
+| `persistence.dataSource`                               | Custom PVC data source                                                                                             | `{}`                    |
+| `persistence.existingClaim`                            | The name of an existing PVC to use for persistence                                                                 | `""`                    |
+| `persistence.selector`                                 | Selector to match an existing Persistent Volume for WordPress data PVC                                             | `{}`                    |
+| `persistence.annotations`                              | Persistent Volume Claim annotations                                                                                | `{}`                    |
+| `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`                    | `false`                 |
+| `volumePermissions.image.registry`                     | OS Shell + Utility image registry                                                                                  | `docker.io`             |
+| `volumePermissions.image.repository`                   | OS Shell + Utility image repository                                                                                | `bitnami/bitnami-shell` |
+| `volumePermissions.image.tag`                          | OS Shell + Utility image tag (immutable tags are recommended)                                                      | `11-debian-11-r133`     |
+| `volumePermissions.image.digest`                       | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
+| `volumePermissions.image.pullPolicy`                   | OS Shell + Utility image pull policy                                                                               | `IfNotPresent`          |
+| `volumePermissions.image.pullSecrets`                  | OS Shell + Utility image pull secrets                                                                              | `[]`                    |
+| `volumePermissions.resources.limits`                   | The resources limits for the init container                                                                        | `{}`                    |
+| `volumePermissions.resources.requests`                 | The requested resources for the init container                                                                     | `{}`                    |
+| `volumePermissions.containerSecurityContext.runAsUser` | User ID for the init container                                                                                     | `0`                     |
 
 ### Other Parameters
 

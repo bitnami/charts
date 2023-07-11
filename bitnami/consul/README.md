@@ -215,17 +215,17 @@ helm delete --purge my-release
 
 ### Volume Permissions parameters
 
-| Name                                   | Description                                                                                                   | Value                   |
-| -------------------------------------- | ------------------------------------------------------------------------------------------------------------- | ----------------------- |
-| `volumePermissions.enabled`            | Enable init container that changes the owner and group of the persistent volume                               | `false`                 |
-| `volumePermissions.image.registry`     | Bitnami Shell image registry                                                                                  | `docker.io`             |
-| `volumePermissions.image.repository`   | Bitnami Shell image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r129`     |
-| `volumePermissions.image.digest`       | Bitnami Shell image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
-| `volumePermissions.image.pullPolicy`   | Bitnami Shell image pull policy                                                                               | `IfNotPresent`          |
-| `volumePermissions.image.pullSecrets`  | Bitnami Shell image pull secrets                                                                              | `[]`                    |
-| `volumePermissions.resources.limits`   | The resources limits for the container                                                                        | `{}`                    |
-| `volumePermissions.resources.requests` | The requested resources for the container                                                                     | `{}`                    |
+| Name                                   | Description                                                                                                        | Value                   |
+| -------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | ----------------------- |
+| `volumePermissions.enabled`            | Enable init container that changes the owner and group of the persistent volume                                    | `false`                 |
+| `volumePermissions.image.registry`     | OS Shell + Utility image registry                                                                                  | `docker.io`             |
+| `volumePermissions.image.repository`   | OS Shell + Utility image repository                                                                                | `bitnami/bitnami-shell` |
+| `volumePermissions.image.tag`          | OS Shell + Utility image tag (immutable tags are recommended)                                                      | `11-debian-11-r129`     |
+| `volumePermissions.image.digest`       | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
+| `volumePermissions.image.pullPolicy`   | OS Shell + Utility image pull policy                                                                               | `IfNotPresent`          |
+| `volumePermissions.image.pullSecrets`  | OS Shell + Utility image pull secrets                                                                              | `[]`                    |
+| `volumePermissions.resources.limits`   | The resources limits for the container                                                                             | `{}`                    |
+| `volumePermissions.resources.requests` | The requested resources for the container                                                                          | `{}`                    |
 
 ### Metrics parameters
 
