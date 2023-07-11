@@ -2301,10 +2301,10 @@ dashboards:
   ## Opensearch Dashboards service parameters
   ##
   service:
-    ## @param service.type Opensearch Dashboards service type
+    ## @param dashboards.service.type Opensearch Dashboards service type
     ##
     type: ClusterIP
-    ## @param service.ports.http Opensearch Dashboards service web UI port
+    ## @param dashboards.service.ports.http Opensearch Dashboards service web UI port
     ##
     ports:
       http: 5601
@@ -2353,8 +2353,7 @@ dashboards:
     ##     timeoutSeconds: 300
     ##
     sessionAffinityConfig: { }
-  ## @param dashboards.containerPorts.restAPI Opensearch Dashboards REST API port
-  ## @param dashboards.containerPorts.transport Opensearch Dashboards transport port
+  ## @param dashboards.containerPorts.http Opensearch Dashboards HTTP port
   ##
   containerPorts:
     http: 5601
