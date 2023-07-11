@@ -5,7 +5,7 @@ annotations:
   category: Analytics
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 8.8.2
+appVersion: 2.8.0
 dependencies:
   - name: common
     repository: oci://registry-1.docker.io/bitnamicharts
