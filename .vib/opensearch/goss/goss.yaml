@@ -1,0 +1,14 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
+file:   
+ /opt/bitnami/opensearch/config/opensearch.yml:
+    mode: "0644"
+    filetype: file
+    contains: 
+     - /port.*{{ .Vars.containerPorts.transport }}/
+    exists: true
+/bitnami/opensearch/data:
+    mode: "0644"
+    filetype: directory
+    exists: true  
