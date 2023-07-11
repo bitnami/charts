@@ -109,8 +109,8 @@ dags:
   ## @param dags.existingConfigmap Name of an existing ConfigMap with all the DAGs files you want to load in Airflow
   ##
   existingConfigmap: ""
-  ## Bitnami Shell image
-  ## ref: https://hub.docker.com/r/bitnami/bitnami-shell/tags/
+  ## OS Shell + Utility image
+  ## ref: https://hub.docker.com/r/bitnami/os-shell/tags/
   ## @param dags.image.registry Init container load-dags image registry
   ## @param dags.image.repository Init container load-dags image repository
   ## @param dags.image.tag Init container load-dags image tag (immutable tags are recommended)

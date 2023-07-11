@@ -584,13 +584,13 @@ volumePermissions:
   ## @param volumePermissions.enabled Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`
   ##
   enabled: false
-  ## Bitnami Shell image
+  ## OS Shell + Utility image
   ## ref: https://hub.docker.com/r/bitnami/os-shell/tags/
-  ## @param volumePermissions.image.registry OS Shell image registry
-  ## @param volumePermissions.image.repository OS Shell image repository
-  ## @param volumePermissions.image.tag OS Shell image tag (immutable tags are recommended)
-  ## @param volumePermissions.image.pullPolicy OS Shell image pull policy
-  ## @param volumePermissions.image.pullSecrets OS Shell image pull secrets
+  ## @param volumePermissions.image.registry OS Shell + Utility image registry
+  ## @param volumePermissions.image.repository OS Shell + Utility image repository
+  ## @param volumePermissions.image.tag OS Shell + Utility image tag (immutable tags are recommended)
+  ## @param volumePermissions.image.pullPolicy OS Shell + Utility image pull policy
+  ## @param volumePermissions.image.pullSecrets OS Shell + Utility image pull secrets
   ##
   image:
     registry: docker.io
