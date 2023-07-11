@@ -20,6 +20,8 @@ This chart bootstraps a [Thanos](https://github.com/bitnami/containers/tree/main
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
+Looking to use Thanos in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+
 ## Prerequisites
 
 - Kubernetes 1.19+
@@ -107,7 +109,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ------------------- |
 | `image.registry`                              | Thanos image registry                                                                                               | `docker.io`         |
 | `image.repository`                            | Thanos image repository                                                                                             | `bitnami/thanos`    |
-| `image.tag`                                   | Thanos image tag (immutable tags are recommended)                                                                   | `0.31.0-scratch-r6` |
+| `image.tag`                                   | Thanos image tag (immutable tags are recommended)                                                                   | `0.31.0-scratch-r8` |
 | `image.digest`                                | Thanos image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag              | `""`                |
 | `image.pullPolicy`                            | Thanos image pull policy                                                                                            | `IfNotPresent`      |
 | `image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                    | `[]`                |
@@ -1371,7 +1373,7 @@ ruler:
   enabled: true
   alertmanagers:
     - http://kube-prometheus-alertmanager.monitoring.svc.cluster.local:9093
-config: |-
+  config: |-
     groups:
       - name: "metamonitoring"
         rules:

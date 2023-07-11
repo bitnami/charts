@@ -1,3 +1,8 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if .Values.metrics.serviceMonitor.enabled }}
 apiVersion: {{ default "monitoring.coreos.com/v1" .Values.metrics.serviceMonitor.apiVersion }}
 kind: ServiceMonitor

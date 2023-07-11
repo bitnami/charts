@@ -1,3 +1,8 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 apiVersion: {{ if .Values.mongos.useStatefulSet }}{{ include "common.capabilities.statefulset.apiVersion" . }}{{- else }}{{ include "common.capabilities.deployment.apiVersion" . }}{{- end }}
 kind: {{ if .Values.mongos.useStatefulSet }}StatefulSet{{- else }}Deployment{{- end }}
 metadata:

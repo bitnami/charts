@@ -1,3 +1,8 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if (include "mongodb.hidden.enabled" .) }}
 {{- $replicaCount := int .Values.hidden.replicaCount }}
 {{- $loadBalancerIPListLength := len .Values.externalAccess.hidden.service.loadBalancerIPs }}

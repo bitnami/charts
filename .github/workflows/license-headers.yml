@@ -1,0 +1,29 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
+---
+name: '[License] Check license headers'
+on:
+  pull_request_target:
+    types:
+      - opened
+      - synchronize
+    branches:
+      - main
+      - bitnami:main
+# Remove all permissions by default
+permissions: {}
+jobs:
+  license-headers-linter:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v3
+        name: Checkout Repository
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+          repository: ${{ github.event.pull_request.head.repo.full_name }}
+      - name: Check license Headers
+        uses: apache/skywalking-eyes/header@v0.4.0

@@ -1,3 +1,6 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
 command:
   # During the initilization process, EJBCA is restarted to apply some settings. It
   # might happen that GOSS tests are launched precisely when this restart is triggered,

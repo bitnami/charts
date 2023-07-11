@@ -1,3 +1,8 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- $kube := (contains "KubernetesExecutor" .Values.executor) -}}
 {{- if or .Values.configuration $kube }}
 apiVersion: v1

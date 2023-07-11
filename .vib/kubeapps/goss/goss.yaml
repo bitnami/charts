@@ -1,3 +1,6 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
 http:
   http://kubeapps-internal-kubeappsapis:{{ .Vars.kubeappsapis.service.ports.http }}/core/plugins/v1alpha1/configured-plugins:
     status: 200

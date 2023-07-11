@@ -1,3 +1,8 @@
+/*
+ * Copyright VMware, Inc.
+ * SPDX-License-Identifier: APACHE-2.0
+ */
+
 /// <reference types="cypress" />
 import { random } from '../support/utils';
 
@@ -34,7 +39,7 @@ it('allows creating and deleting a data source', () => {
     cy.contains('a', datasourceName).click({ force: true });
   });
   cy.contains('button', 'Delete').click();
-  cy.get('[aria-label*="Confirm"]').click();
+  cy.get('[data-testid*="Confirm"]').click();
   cy.get('[data-testid*="data-testid Alert success"]').should('be.visible');
 });
 

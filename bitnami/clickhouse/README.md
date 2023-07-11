@@ -24,6 +24,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 [Learn more about the default configuration of the chart](https://docs.bitnami.com/kubernetes/infrastructure/clickhouse/get-started/).
 
+Looking to use ClickHouse in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+
 ## Prerequisites
 
 - Kubernetes 1.19+
@@ -89,7 +91,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`                                    | ClickHouse image registry                                                                                  | `docker.io`           |
 | `image.repository`                                  | ClickHouse image repository                                                                                | `bitnami/clickhouse`  |
-| `image.tag`                                         | ClickHouse image tag (immutable tags are recommended)                                                      | `23.5.3-debian-11-r0` |
+| `image.tag`                                         | ClickHouse image tag (immutable tags are recommended)                                                      | `23.6.2-debian-11-r0` |
 | `image.digest`                                      | ClickHouse image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
 | `image.pullPolicy`                                  | ClickHouse image pull policy                                                                               | `IfNotPresent`        |
 | `image.pullSecrets`                                 | ClickHouse image pull secrets                                                                              | `[]`                  |
@@ -154,6 +156,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraOverrides`                | Extra configuration overrides (evaluated as a template) apart from the default                                           | `""`                    |
 | `extraOverridesConfigmap`       | The name of an existing ConfigMap with extra configuration for ClickHouse                                                | `""`                    |
 | `extraOverridesSecret`          | The name of an existing ConfigMap with your custom configuration for ClickHouse                                          | `""`                    |
+| `usersExtraOverrides`           | Users extra configuration overrides (evaluated as a template) apart from the default                                     | `""`                    |
+| `usersExtraOverridesConfigmap`  | The name of an existing ConfigMap with users extra configuration for ClickHouse                                          | `""`                    |
+| `usersExtraOverridesSecret`     | The name of an existing ConfigMap with your custom users configuration for ClickHouse                                    | `""`                    |
 | `initdbScripts`                 | Dictionary of initdb scripts                                                                                             | `{}`                    |
 | `initdbScriptsSecret`           | ConfigMap with the initdb scripts (Note: Overrides `initdbScripts`)                                                      | `""`                    |
 | `startdbScripts`                | Dictionary of startdb scripts                                                                                            | `{}`                    |
@@ -293,7 +298,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                 |
 | `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `11-debian-11-r127`     |
+| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                        | `11-debian-11-r134`     |
 | `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                | `[]`                    |
 | `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                    |

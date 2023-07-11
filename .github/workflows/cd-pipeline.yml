@@ -1,3 +1,6 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
 name: '[CI/CD] CD Pipeline'
 on: # rebuild any PRs and main branch changes
   push:
@@ -38,7 +41,6 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/grafana-tempo/**'
       - 'bitnami/grafana/**'
       - 'bitnami/haproxy/**'
-      - 'bitnami/haproxy-intel/**'
       - 'bitnami/harbor/**'
       - 'bitnami/influxdb/**'
       - 'bitnami/jaeger/**'
@@ -65,6 +67,7 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/memcached/**'
       - 'bitnami/metallb/**'
       - 'bitnami/metrics-server/**'
+      - 'bitnami/milvus/**'
       - 'bitnami/minio/**'
       - 'bitnami/mongodb/**'
       - 'bitnami/mongodb-sharded/**'
@@ -74,7 +77,6 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/mysql/**'
       - 'bitnami/nats/**'
       - 'bitnami/nginx-ingress-controller/**'
-      - 'bitnami/nginx-intel/**'
       - 'bitnami/nginx/**'
       - 'bitnami/node-exporter/**'
       - 'bitnami/oauth2-proxy/**'
@@ -107,13 +109,9 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/thanos/**'
       - 'bitnami/tomcat/**'
       - 'bitnami/vault/**'
-      - 'bitnami/wavefront/**'
-      - 'bitnami/wavefront-hpa-adapter/**'
-      - 'bitnami/wavefront-prometheus-storage-adapter/**'
       - 'bitnami/whereabouts/**'
       - 'bitnami/wildfly/**'
       - 'bitnami/wordpress/**'
-      - 'bitnami/wordpress-intel/**'
       - 'bitnami/zookeeper/**'
       - '!**.md'
 # Remove all permissions by default.
