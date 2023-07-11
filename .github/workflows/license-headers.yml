@@ -25,5 +25,44 @@ jobs:
         with:
           ref: ${{ github.event.pull_request.head.ref }}
           repository: ${{ github.event.pull_request.head.repo.full_name }}
+      - id: get-modified-files
+        name: 'Get modified files'
+        env:
+          DIFF_URL: "${{github.event.pull_request.diff_url}}"
+          TEMP_FILE: "${{runner.temp}}/pr-${{github.event.number}}.diff"
+        run: |
+          # This request doesn't consume API calls.
+          curl -Lkso $TEMP_FILE $DIFF_URL
+          files_changed="$(sed -nr 's/[\-\+]{3} [ab]\/(.*)/\1/p' $TEMP_FILE | sort | uniq)"
+          templates=()
+          regular_files=()
+          while read -r file_changed; do
+            # Avoid removed files
+            if [[ -f "${file_changed}" ]]; then
+              if [[ "${file_changed}" =~ \/templates\/ ]]; then
+                templates+=("${file_changed}")
+              else
+                regular_files+=("${file_changed}")
+              fi
+            fi
+          done <<< "$(echo "$files_changed" | grep -oE "^bitnami/.*\.ya?ml$" | sort | uniq || true)"
+          if [[ ${#templates[@]} -gt 0 ]] || [[ ${#regular_files[@]} -gt 0 ]]; then
+            if [[ ${#templates[@]} -gt 0 ]]; then
+              # There are modifications over yaml tamplates
+              export tamplates_json=$(printf "%s\n" "${templates[@]}" | jq -R . | jq -cs .)
+              # Overwrite configuration file to analyze only changed templates
+              yq -i '. | .header[0].paths=env(tamplates_json)' .licenserc.yaml
+            fi
+            if [[ ${#regular_files[@]} -gt 0 ]]; then
+              # There are modifications over yaml files
+              export regular_files_json=$(printf "%s\n" "${regular_files[@]}" | jq -R . | jq -cs .)
+              # Overwrite configuration file to analyze only changed files
+              yq -i '. | .header[1].paths=env(regular_files_json)' .licenserc.yaml
+            fi
+            echo "result=success" >> $GITHUB_OUTPUT
+          else
+            echo "result=skip" >> $GITHUB_OUTPUT
+          fi
       - name: Check license Headers
         uses: apache/skywalking-eyes/header@v0.4.0
+        if: ${{ steps.get-modified-files.outputs.result == 'success' }}
