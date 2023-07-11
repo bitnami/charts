@@ -1,3 +1,8 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
@@ -123,6 +128,9 @@ spec:
             {{- if .Values.queryScheduler.enabled }}
             - -querier.scheduler-address={{ template "grafana-loki.query-scheduler.fullname" . }}:{{ .Values.queryScheduler.service.ports.grpc }}
             {{- end }}
+          {{- if .Values.querier.extraArgs }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.querier.extraArgs "context" $) | nindent 12 }}
+          {{- end }}
           {{- end }}
           {{- if .Values.querier.extraEnvVars }}
           env: {{- include "common.tplvalues.render" (dict "value" .Values.querier.extraEnvVars "context" $) | nindent 12 }}

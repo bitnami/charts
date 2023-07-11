@@ -24,6 +24,8 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment
 
 [Learn more about the default configuration of the chart](https://docs.bitnami.com/kubernetes/infrastructure/pinniped/get-started/).
 
+Looking to use Pinniped in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+
 ## Prerequisites
 
 - Kubernetes 1.19+
@@ -75,7 +77,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraDeploy`       | Array of extra objects to deploy with the release                                                        | `[]`                |
 | `image.registry`    | Pinniped image registry                                                                                  | `docker.io`         |
 | `image.repository`  | Pinniped image repository                                                                                | `bitnami/pinniped`  |
-| `image.tag`         | Pinniped image tag (immutable tags are recommended)                                                      | `0.24.0-scratch-r0` |
+| `image.tag`         | Pinniped image tag (immutable tags are recommended)                                                      | `0.24.0-scratch-r1` |
 | `image.digest`      | Pinniped image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                |
 | `image.pullPolicy`  | Pinniped image pull policy                                                                               | `IfNotPresent`      |
 | `image.pullSecrets` | Pinniped image pull secrets                                                                              | `[]`                |

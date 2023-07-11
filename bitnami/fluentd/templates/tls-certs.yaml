@@ -1,3 +1,8 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if and .Values.aggregator.ingress.enabled .Values.aggregator.ingress.secrets }}
 {{- range .Values.aggregator.ingress.secrets }}
 apiVersion: v1

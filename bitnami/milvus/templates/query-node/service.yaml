@@ -1,0 +1,77 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.queryNode.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ template "milvus.query-node.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/part-of: milvus
+    app.kubernetes.io/component: query-node
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if or .Values.commonAnnotations .Values.queryNode.service.annotations }}
+  annotations:
+    {{- if .Values.queryNode.service.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.queryNode.service.annotations "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if and .Values.queryNode.metrics.enabled .Values.queryNode.metrics.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.queryNode.metrics.annotations "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+spec:
+  type: {{ .Values.queryNode.service.type }}
+  {{- if .Values.queryNode.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.queryNode.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.queryNode.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.queryNode.service.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.queryNode.service.clusterIP }}
+  clusterIP: {{ .Values.queryNode.service.clusterIP }}
+  {{- end }}
+  {{- if (or (eq .Values.queryNode.service.type "LoadBalancer") (eq .Values.queryNode.service.type "NodePort")) }}
+  externalTrafficPolicy: {{ .Values.queryNode.service.externalTrafficPolicy | quote }}
+  {{- end }}
+  {{ if eq .Values.queryNode.service.type "LoadBalancer" }}
+  loadBalancerSourceRanges: {{ .Values.queryNode.service.loadBalancerSourceRanges }}
+  {{ end }}
+  {{- if (and (eq .Values.queryNode.service.type "LoadBalancer") (not (empty .Values.queryNode.service.loadBalancerIP))) }}
+  loadBalancerIP: {{ .Values.queryNode.service.loadBalancerIP }}
+  {{- end }}
+  ports:
+    - name: grpc
+      port: {{ .Values.queryNode.service.ports.grpc }}
+      targetPort: grpc
+      protocol: TCP
+      {{- if (and (or (eq .Values.queryNode.service.type "NodePort") (eq .Values.queryNode.service.type "LoadBalancer")) (not (empty .Values.queryNode.service.nodePorts.grpc))) }}
+      nodePort: {{ .Values.queryNode.service.nodePorts.grpc }}
+      {{- else if eq .Values.queryNode.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    {{- if .Values.queryNode.metrics.enabled }}
+    - name: http-metrics
+      port: {{ .Values.queryNode.service.ports.metrics }}
+      targetPort: http-metrics
+      protocol: TCP
+      {{- if (and (or (eq .Values.queryNode.service.type "NodePort") (eq .Values.queryNode.service.type "LoadBalancer")) (not (empty .Values.queryNode.service.nodePorts.metrics))) }}
+      nodePort: {{ .Values.queryNode.service.nodePorts.metrics }}
+      {{- else if eq .Values.queryNode.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    {{- end }}
+    {{- if .Values.queryNode.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.queryNode.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
+    app.kubernetes.io/part-of: milvus
+    app.kubernetes.io/component: query-node
+{{- end }}

@@ -1,3 +1,8 @@
+/*
+ * Copyright VMware, Inc.
+ * SPDX-License-Identifier: APACHE-2.0
+ */
+
 Cypress.Commands.add('loadB64Image', (base64) => {
   const loadImage = () => {
     const img = new Image();

@@ -1,4 +1,9 @@
 {{/*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{/*
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "apisix.imagePullSecrets" -}}

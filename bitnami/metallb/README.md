@@ -22,6 +22,8 @@ This chart bootstraps a [MetalLB Controller](https://metallb.universe.tf/communi
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
+Looking to use MetalLB in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+
 ## Prerequisites
 
 - Kubernetes 1.19+
@@ -91,7 +93,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------- |
 | `controller.image.registry`                                    | MetalLB Controller image registry                                                                                                           | `docker.io`                  |
 | `controller.image.repository`                                  | MetalLB Controller image repository                                                                                                         | `bitnami/metallb-controller` |
-| `controller.image.tag`                                         | MetalLB Controller  image tag (immutable tags are recommended)                                                                              | `0.13.10-debian-11-r0`       |
+| `controller.image.tag`                                         | MetalLB Controller  image tag (immutable tags are recommended)                                                                              | `0.13.10-debian-11-r9`       |
 | `controller.image.digest`                                      | MetalLB Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                          | `""`                         |
 | `controller.image.pullPolicy`                                  | MetalLB Controller image pull policy                                                                                                        | `IfNotPresent`               |
 | `controller.image.pullSecrets`                                 | Specify docker-registry secret names as an array                                                                                            | `[]`                         |
@@ -186,7 +188,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `speaker.enabled`                                           | Whether to enable BGP speakers or not                                                                                                       | `true`                    |
 | `speaker.image.registry`                                    | MetalLB Speaker image registry                                                                                                              | `docker.io`               |
 | `speaker.image.repository`                                  | MetalLB Speaker image repository                                                                                                            | `bitnami/metallb-speaker` |
-| `speaker.image.tag`                                         | MetalLB Speaker  image tag (immutable tags are recommended)                                                                                 | `0.13.9-debian-11-r31`    |
+| `speaker.image.tag`                                         | MetalLB Speaker  image tag (immutable tags are recommended)                                                                                 | `0.13.10-debian-11-r8`    |
 | `speaker.image.digest`                                      | MetalLB Speaker image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                             | `""`                      |
 | `speaker.image.pullPolicy`                                  | MetalLB Speaker image pull policy                                                                                                           | `IfNotPresent`            |
 | `speaker.image.pullSecrets`                                 | Specify docker-registry secret names as an array                                                                                            | `[]`                      |

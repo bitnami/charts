@@ -1,3 +1,8 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- $pspAvailable := (semverCompare "<1.25-0" (include "common.capabilities.kubeVersion" .)) -}}
 {{- if and $pspAvailable .Values.rbac.create .Values.rbac.pspEnabled }}
 apiVersion: policy/v1beta1

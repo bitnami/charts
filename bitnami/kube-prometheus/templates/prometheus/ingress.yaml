@@ -1,3 +1,8 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if and .Values.prometheus.enabled .Values.prometheus.ingress.enabled }}
 apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
 kind: Ingress
@@ -21,8 +26,7 @@ spec:
   {{- end }}
   rules:
     {{- if .Values.prometheus.ingress.hostname }}
-    - host: {{ .Values.prometheus.ingress.hostname }}
-      http:
+    - http:
         paths:
           {{- if .Values.prometheus.ingress.extraPaths }}
           {{- toYaml .Values.prometheus.ingress.extraPaths | nindent 10 }}
@@ -32,6 +36,9 @@ spec:
             pathType: {{ .Values.prometheus.ingress.pathType }}
             {{- end }}
             backend: {{- include "common.ingress.backend" (dict "serviceName" (include "kube-prometheus.prometheus.fullname" $) "servicePort" "http" "context" $)  | nindent 14 }}
+      {{- if ne .Values.prometheus.ingress.hostname "*" }}
+      host: {{ .Values.prometheus.ingress.hostname }}
+      {{- end}}
     {{- end }}
     {{- range .Values.prometheus.ingress.extraHosts }}
     - host: {{ .name | quote }}
