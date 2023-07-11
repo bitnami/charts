@@ -110,6 +110,10 @@ operator:
   ##         containerPort: 1234
   ##
   sidecars: []
+  ## @param operator.namespaceScope If the operator should run in namespace-scope mode or not,
+  ## if true the operator will only be able to manage instances in the same namespace
+  ##
+  namespaceScope: false
   ## @param operator.watchNamespace Override the namespace to watch
   ##
   watchNamespace: ""
@@ -147,7 +151,7 @@ operator:
   image:
     registry: docker.io
     repository: bitnami/grafana-operator
-    tag: 4.10.1-debian-11-r0
+    tag: 5.1.0-debian-11-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -163,8 +167,6 @@ operator:
     ##
     pullSecrets: []
   ## @param operator.leaderElect Enables or disables the operator leader Election.
-  ## @param operator.scanAllNamespaces Specify if all namespace should be scanned for dashboards and datasources. (Creates ClusterRole)
-  ## @param operator.scanNamespaces Specify the namespaces which should be scanned for dashboards and datasources (Creates ClusterRole)
   ## @param operator.zapDevel Enable zap development mode (changes defaults to console encoder, debug log level, disables sampling and stacktrace from 'warning' level)
   ## @param operator.zapEncoder Zap log encoding ('json' or 'console')
   ## @param operator.zapLevel Zap log level (one of 'debug', 'info', 'error' or any integer value > 0) (default info)
@@ -180,8 +182,6 @@ operator:
   ## ensure that the operator is able to get data from other namespaces.
   ## The options are mutually exclusive.
   ##
-  scanAllNamespaces: false
-  scanNamespaces: []
   zapDevel: false
   zapEncoder: ""
   zapLevel: ""
@@ -276,11 +276,6 @@ operator:
   ## @param operator.extraEnvVarsSecret Name of existing Secret containing extra env vars for RabbitMQ Cluster Operator nodes
   ##
   extraEnvVarsSecret: ""
-  ## @param operator.podAffinityPreset Pod affinity preset
-  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
-  ## Allowed values: soft, hard
-  ##
-  podAffinityPreset: ""
   ## @param operator.podAntiAffinityPreset Pod anti-affinity preset. Allowed values: `soft` or `hard`
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
@@ -419,42 +414,6 @@ grafana:
   ## @param grafana.enabled Enabled the deployment of the Grafana CRD object into the cluster
   ##
   enabled: true
-  ## @param grafana.image.registry Grafana image registry
-  ## @param grafana.image.repository Grafana image name
-  ## @param grafana.image.tag Grafana image tag
-  ## @param grafana.image.digest Grafana image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
-  ## @param grafana.image.pullSecrets Grafana image pull secrets
-  ##
-  image:
-    registry: docker.io
-    repository: bitnami/grafana
-    tag: 9.5.2-debian-11-r6
-    digest: ""
-    ## Optionally specify an array of imagePullSecrets.
-    ## Secrets must be manually created in the namespace.
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-    ## e.g:
-    ## pullSecrets:
-    ##   - myRegistryKeySecretName
-    ##
-    pullSecrets: []
-  ## Grafana Plugins init container image attributes. If omitted values from `grafana.image` will be used
-  ## @param grafana.pluginsInitContainerImage.registry Grafana Plugins image registry
-  ## @param grafana.pluginsInitContainerImage.repository Grafana Plugins image name
-  ## @param grafana.pluginsInitContainerImage.tag Grafana Plugins image tag
-  ## @param grafana.pluginsInitContainerImage.pullSecrets Grafana Plugins image pull secrets
-  pluginsInitContainerImage:
-    registry: ""
-    repository: ""
-    tag: ""
-    ## Optionally specify an array of imagePullSecrets.
-    ## Secrets must be manually created in the namespace.
-    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
-    ## e.g:
-    ## pullSecrets:
-    ##   - myRegistryKeySecretName
-    ##
-    pullSecrets: []
   ## @param grafana.serviceAccount Additional service account configuration
   ## Ref: https://github.com/integr8ly/grafana-operator/blob/master/documentation/deploy_grafana.md#configuring-the-serviceaccount
   ## e.g:
@@ -522,11 +481,6 @@ grafana:
   ## NOTE: Number of replicas. If more than one is selected, a shared database should be configured.
   ##
   replicaCount: 1
-  ## @param grafana.skipCreateAdminAccount Prevent the operator from creating an admin secret
-  ## Ref: https://github.com/grafana-operator/grafana-operator/blob/master/documentation/env_vars.md
-  ## Allowed values: true, false
-  ##
-  skipCreateAdminAccount: false
   ## @param grafana.podAffinityPreset Pod affinity preset
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ## Allowed values: soft, hard
@@ -584,11 +538,9 @@ grafana:
   ## The grafana-operator client-configuration for this grafana instance
   ## Ref: https://github.com/integr8ly/grafana-operator/blob/master/documentation/deploy_grafana.md#configuring-grafana-api-access
   ## @param grafana.client.timeout The timeout in seconds for the Grafana Rest API on that instance
-  ## @param grafana.client.preferService If the API should be used via Ingress or via the internal service
   ##
   client:
     timeout: 5
-    preferService: true
   ## @param grafana.labels Add additional labels to the grafana deployment, service and ingress resources
   ##
   labels: {}
@@ -609,6 +561,7 @@ grafana:
     ##     protocol: TCP
     ##     targetPort: grafana-http
     extraPorts: []
+  ## 
   ## Configure the ingress resource that allows you to access the
   ## Grafana web. Set up the URL
   ## Ref: https://kubernetes.io/docs/user-guide/ingress/
@@ -623,9 +576,9 @@ grafana:
     ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
     ##
     ingressClassName: ""
-    ## @param grafana.ingress.hostname The hostname under which the grafana instance should be reachable. If empty the parameter will not be set.
+    ## @param grafana.ingress.host The host under which the grafana instance should be reachable. If empty the parameter will not be set.
     ##
-    hostname: grafana.local
+    host: grafana.local
     ## @param grafana.ingress.path The path for the ingress instance to forward to the grafana app
     ##
     path: /
@@ -690,18 +643,18 @@ grafana:
     server:
       root_url: |-
         {{- if .Values.grafana.ingress.enabled }}
-        {{ if .Values.grafana.ingress.tls }}https{{ else }}http{{ end }}://{{ include "common.tplvalues.render" (dict "value" .Values.grafana.ingress.hostname "context" $) }}
+        {{ if .Values.grafana.ingress.tls }}https{{ else }}http{{ end }}://{{ include "common.tplvalues.render" (dict "value" .Values.grafana.ingress.host "context" $) }}
         {{- else }}
         http://localhost:3000
         {{- end }}
     log:
       mode: "console"
       level: "warn"
-    alerting:
-      enabled: false
+    database:
+      wal: "true"
     analytics:
-      reporting_enabled: false
-      check_for_updates: false
+      reporting_enabled: "false"
+      check_for_updates: "false"
     security:
       # ## Grafana Admin credentials, if omitted they will be admin:<random_pass>
       # admin_user:
@@ -710,10 +663,10 @@ grafana:
       # ## OIDC configuration
       # ##
       # auth:
-      #   disable_login_form: false
-      #   disable_signout_menu: false
+      #   disable_login_form: "false"
+      #   disable_signout_menu: "false"
       # auth.generic_oauth:
-      #   enabled: True
+      #   enabled: "true"
       #   client_id: grafana
       #   client_secret: a391df94-dd1f-46d6-b3ab-60e90f23e8a2
       #   scopes: profile email
@@ -724,8 +677,8 @@ grafana:
       #   ##
       #   # role_attribute_path: contains(groups[*], 'platform-readonly') && 'Viewer' || contains(groups[*], 'platform-admin') && 'Admin' || contains(groups[*], 'platform-emergency') && 'Admin' || contains(groups[*], 'customer-poweruser') && 'Admin' || contains(groups[*], 'customer-collaborator') && 'Editor' || contains(groups[*], 'customer-readonly') && 'Viewer'
       #   # allowed_domains: example.com
-      #   allow_sign_up: True
-      disable_gravatar: false
+      #   allow_sign_up: "True"
+      disable_gravatar: "false"
   ## @param grafana.configMaps Extra configMaps to mount into the grafana pod
   ## Ref: https://github.com/integr8ly/grafana-operator/blob/master/documentation/extra_files.md
   ## e.g:
