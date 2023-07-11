@@ -585,16 +585,16 @@ volumePermissions:
   ##
   enabled: false
   ## Bitnami Shell image
-  ## ref: https://hub.docker.com/r/bitnami/bitnami-shell/tags/
-  ## @param volumePermissions.image.registry Bitnami Shell image registry
-  ## @param volumePermissions.image.repository Bitnami Shell image repository
-  ## @param volumePermissions.image.tag Bitnami Shell image tag (immutable tags are recommended)
-  ## @param volumePermissions.image.pullPolicy Bitnami Shell image pull policy
-  ## @param volumePermissions.image.pullSecrets Bitnami Shell image pull secrets
+  ## ref: https://hub.docker.com/r/bitnami/os-shell/tags/
+  ## @param volumePermissions.image.registry OS Shell image registry
+  ## @param volumePermissions.image.repository OS Shell image repository
+  ## @param volumePermissions.image.tag OS Shell image tag (immutable tags are recommended)
+  ## @param volumePermissions.image.pullPolicy OS Shell image pull policy
+  ## @param volumePermissions.image.pullSecrets OS Shell image pull secrets
   ##
   image:
     registry: docker.io
-    repository: bitnami/bitnami-shell
+    repository: bitnami/os-shell
     tag: 11-debian-11-r%%IMAGE_REVISION%%
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
