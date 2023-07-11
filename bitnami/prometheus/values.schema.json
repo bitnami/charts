@@ -1897,27 +1897,27 @@
                     "properties": {
                         "registry": {
                             "type": "string",
-                            "description": "Bitnami Shell image registry",
+                            "description": "OS Shell + Utility image registry",
                             "default": "docker.io"
                         },
                         "repository": {
                             "type": "string",
-                            "description": "Bitnami Shell image repository",
-                            "default": "bitnami/bitnami-shell"
+                            "description": "OS Shell + Utility image repository",
+                            "default": "bitnami/os-shell"
                         },
                         "tag": {
                             "type": "string",
-                            "description": "Bitnami Shell image tag (immutable tags are recommended)",
-                            "default": "11-debian-11-r99"
+                            "description": "OS Shell + Utility image tag (immutable tags are recommended)",
+                            "default": "11-debian-11-r2"
                         },
                         "pullPolicy": {
                             "type": "string",
-                            "description": "Bitnami Shell image pull policy",
+                            "description": "OS Shell + Utility image pull policy",
                             "default": "IfNotPresent"
                         },
                         "pullSecrets": {
                             "type": "array",
-                            "description": "Bitnami Shell image pull secrets",
+                            "description": "OS Shell + Utility image pull secrets",
                             "default": [],
                             "items": {}
                         }

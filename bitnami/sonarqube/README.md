@@ -221,72 +221,72 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### SonarQube caCerts provisioning parameters
 
-| Name                                         | Description                                                                                                   | Value                   |
-| -------------------------------------------- | ------------------------------------------------------------------------------------------------------------- | ----------------------- |
-| `caCerts.enabled`                            | Enable the use of caCerts                                                                                     | `false`                 |
-| `caCerts.image.registry`                     | Bitnami Shell image registry                                                                                  | `docker.io`             |
-| `caCerts.image.repository`                   | Bitnami Shell image repository                                                                                | `bitnami/bitnami-shell` |
-| `caCerts.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r129`     |
-| `caCerts.image.digest`                       | Bitnami Shell image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
-| `caCerts.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                               | `IfNotPresent`          |
-| `caCerts.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                              | `[]`                    |
-| `caCerts.secret`                             | Name of the secret containing the certificates                                                                | `ca-certs-secret`       |
-| `caCerts.resources.limits`                   | The resources limits for the init container                                                                   | `{}`                    |
-| `caCerts.resources.requests`                 | The requested resources for the init container                                                                | `{}`                    |
-| `caCerts.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                               | `0`                     |
+| Name                                         | Description                                                                                                        | Value                   |
+| -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | ----------------------- |
+| `caCerts.enabled`                            | Enable the use of caCerts                                                                                          | `false`                 |
+| `caCerts.image.registry`                     | OS Shell + Utility image registry                                                                                  | `docker.io`             |
+| `caCerts.image.repository`                   | OS Shell + Utility image repository                                                                                | `bitnami/bitnami-shell` |
+| `caCerts.image.tag`                          | OS Shell + Utility image tag (immutable tags are recommended)                                                      | `11-debian-11-r129`     |
+| `caCerts.image.digest`                       | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
+| `caCerts.image.pullPolicy`                   | OS Shell + Utility image pull policy                                                                               | `IfNotPresent`          |
+| `caCerts.image.pullSecrets`                  | OS Shell + Utility image pull secrets                                                                              | `[]`                    |
+| `caCerts.secret`                             | Name of the secret containing the certificates                                                                     | `ca-certs-secret`       |
+| `caCerts.resources.limits`                   | The resources limits for the init container                                                                        | `{}`                    |
+| `caCerts.resources.requests`                 | The requested resources for the init container                                                                     | `{}`                    |
+| `caCerts.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                                    | `0`                     |
 
 ### SonarQube plugin provisioning parameters
 
-| Name                                         | Description                                                                                                   | Value                   |
-| -------------------------------------------- | ------------------------------------------------------------------------------------------------------------- | ----------------------- |
-| `plugins.install`                            | List of plugin URLS to download and install                                                                   | `[]`                    |
-| `plugins.netrcCreds`                         | .netrc secret file with a key "netrc" to use basic auth while downloading plugins                             | `""`                    |
-| `plugins.noCheckCertificate`                 | Set to true to not validate the server's certificate to download plugin                                       | `true`                  |
-| `plugins.image.registry`                     | Bitnami Shell image registry                                                                                  | `docker.io`             |
-| `plugins.image.repository`                   | Bitnami Shell image repository                                                                                | `bitnami/bitnami-shell` |
-| `plugins.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r129`     |
-| `plugins.image.digest`                       | Bitnami Shell image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
-| `plugins.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                               | `IfNotPresent`          |
-| `plugins.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                              | `[]`                    |
-| `plugins.resources.limits`                   | The resources limits for the init container                                                                   | `{}`                    |
-| `plugins.resources.requests`                 | The requested resources for the init container                                                                | `{}`                    |
-| `plugins.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                               | `0`                     |
+| Name                                         | Description                                                                                                        | Value                   |
+| -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | ----------------------- |
+| `plugins.install`                            | List of plugin URLS to download and install                                                                        | `[]`                    |
+| `plugins.netrcCreds`                         | .netrc secret file with a key "netrc" to use basic auth while downloading plugins                                  | `""`                    |
+| `plugins.noCheckCertificate`                 | Set to true to not validate the server's certificate to download plugin                                            | `true`                  |
+| `plugins.image.registry`                     | OS Shell + Utility image registry                                                                                  | `docker.io`             |
+| `plugins.image.repository`                   | OS Shell + Utility image repository                                                                                | `bitnami/bitnami-shell` |
+| `plugins.image.tag`                          | OS Shell + Utility image tag (immutable tags are recommended)                                                      | `11-debian-11-r129`     |
+| `plugins.image.digest`                       | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
+| `plugins.image.pullPolicy`                   | OS Shell + Utility image pull policy                                                                               | `IfNotPresent`          |
+| `plugins.image.pullSecrets`                  | OS Shell + Utility image pull secrets                                                                              | `[]`                    |
+| `plugins.resources.limits`                   | The resources limits for the init container                                                                        | `{}`                    |
+| `plugins.resources.requests`                 | The requested resources for the init container                                                                     | `{}`                    |
+| `plugins.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                                    | `0`                     |
 
 ### Persistence Parameters
 
-| Name                                                   | Description                                                                                                   | Value                   |
-| ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------- | ----------------------- |
-| `persistence.enabled`                                  | Enable persistence using Persistent Volume Claims                                                             | `false`                 |
-| `persistence.storageClass`                             | Persistent Volume storage class                                                                               | `""`                    |
-| `persistence.accessModes`                              | Persistent Volume access modes                                                                                | `[]`                    |
-| `persistence.size`                                     | Persistent Volume size                                                                                        | `10Gi`                  |
-| `persistence.dataSource`                               | Custom PVC data source                                                                                        | `{}`                    |
-| `persistence.existingClaim`                            | The name of an existing PVC to use for persistence                                                            | `""`                    |
-| `persistence.annotations`                              | Persistent Volume Claim annotations                                                                           | `{}`                    |
-| `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`               | `false`                 |
-| `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                                  | `docker.io`             |
-| `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r129`     |
-| `volumePermissions.image.digest`                       | Bitnami Shell image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
-| `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                               | `IfNotPresent`          |
-| `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                              | `[]`                    |
-| `volumePermissions.resources.limits`                   | The resources limits for the init container                                                                   | `{}`                    |
-| `volumePermissions.resources.requests`                 | The requested resources for the init container                                                                | `{}`                    |
-| `volumePermissions.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                               | `0`                     |
+| Name                                                   | Description                                                                                                        | Value                   |
+| ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------ | ----------------------- |
+| `persistence.enabled`                                  | Enable persistence using Persistent Volume Claims                                                                  | `false`                 |
+| `persistence.storageClass`                             | Persistent Volume storage class                                                                                    | `""`                    |
+| `persistence.accessModes`                              | Persistent Volume access modes                                                                                     | `[]`                    |
+| `persistence.size`                                     | Persistent Volume size                                                                                             | `10Gi`                  |
+| `persistence.dataSource`                               | Custom PVC data source                                                                                             | `{}`                    |
+| `persistence.existingClaim`                            | The name of an existing PVC to use for persistence                                                                 | `""`                    |
+| `persistence.annotations`                              | Persistent Volume Claim annotations                                                                                | `{}`                    |
+| `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`                    | `false`                 |
+| `volumePermissions.image.registry`                     | OS Shell + Utility image registry                                                                                  | `docker.io`             |
+| `volumePermissions.image.repository`                   | OS Shell + Utility image repository                                                                                | `bitnami/bitnami-shell` |
+| `volumePermissions.image.tag`                          | OS Shell + Utility image tag (immutable tags are recommended)                                                      | `11-debian-11-r129`     |
+| `volumePermissions.image.digest`                       | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
+| `volumePermissions.image.pullPolicy`                   | OS Shell + Utility image pull policy                                                                               | `IfNotPresent`          |
+| `volumePermissions.image.pullSecrets`                  | OS Shell + Utility image pull secrets                                                                              | `[]`                    |
+| `volumePermissions.resources.limits`                   | The resources limits for the init container                                                                        | `{}`                    |
+| `volumePermissions.resources.requests`                 | The requested resources for the init container                                                                     | `{}`                    |
+| `volumePermissions.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                                    | `0`                     |
 
 ### Sysctl Image parameters
 
-| Name                        | Description                                                                                                   | Value                   |
-| --------------------------- | ------------------------------------------------------------------------------------------------------------- | ----------------------- |
-| `sysctl.enabled`            | Enable kernel settings modifier image                                                                         | `true`                  |
-| `sysctl.image.registry`     | Bitnami Shell image registry                                                                                  | `docker.io`             |
-| `sysctl.image.repository`   | Bitnami Shell image repository                                                                                | `bitnami/bitnami-shell` |
-| `sysctl.image.tag`          | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r129`     |
-| `sysctl.image.digest`       | Bitnami Shell image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
-| `sysctl.image.pullPolicy`   | Bitnami Shell image pull policy                                                                               | `IfNotPresent`          |
-| `sysctl.image.pullSecrets`  | Bitnami Shell image pull secrets                                                                              | `[]`                    |
-| `sysctl.resources.limits`   | The resources limits for the init container                                                                   | `{}`                    |
-| `sysctl.resources.requests` | The requested resources for the init container                                                                | `{}`                    |
+| Name                        | Description                                                                                                        | Value                   |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------------ | ----------------------- |
+| `sysctl.enabled`            | Enable kernel settings modifier image                                                                              | `true`                  |
+| `sysctl.image.registry`     | OS Shell + Utility image registry                                                                                  | `docker.io`             |
+| `sysctl.image.repository`   | OS Shell + Utility image repository                                                                                | `bitnami/bitnami-shell` |
+| `sysctl.image.tag`          | OS Shell + Utility image tag (immutable tags are recommended)                                                      | `11-debian-11-r129`     |
+| `sysctl.image.digest`       | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
+| `sysctl.image.pullPolicy`   | OS Shell + Utility image pull policy                                                                               | `IfNotPresent`          |
+| `sysctl.image.pullSecrets`  | OS Shell + Utility image pull secrets                                                                              | `[]`                    |
+| `sysctl.resources.limits`   | The resources limits for the init container                                                                        | `{}`                    |
+| `sysctl.resources.requests` | The requested resources for the init container                                                                     | `{}`                    |
 
 ### Other Parameters
 
