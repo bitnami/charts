@@ -103,6 +103,8 @@ spec:
             {{- end }}
           {{- end }}
           volumeMounts:
+            - name: tmp
+              mountPath: /tmp
           {{- if .Values.initJob.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.initJob.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
@@ -110,7 +112,7 @@ spec:
           resources: {{- toYaml .Values.initJob.resources | nindent 12 }}
           {{- end }}
       volumes:
-        - name: secret-files
+        - name: tmp
           emptyDir: {}
       {{- if .Values.extraVolumes }}
       {{- include "common.tplvalues.render" (dict "value" .Values.initJob.extraVolumes "context" $) | nindent 6 }}
