@@ -5,7 +5,7 @@ annotations:
   category: WorkFlow
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 2.6.2
+appVersion: 2.6.3
 dependencies:
   - condition: redis.enabled
     name: redis
@@ -34,4 +34,4 @@ maintainers:
 name: airflow
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/airflow
-version: 14.3.0
+version: 14.3.1

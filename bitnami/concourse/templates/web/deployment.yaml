@@ -72,7 +72,7 @@ spec:
       serviceAccountName: {{ template "concourse.web.serviceAccountName" . }}
       initContainers:
         {{- if .Values.postgresql.enabled }}
-        # NOTE: The value postgresql.image is not available unless postgresql.enabled is not set. We could change this to use bitnami-shell if
+        # NOTE: The value postgresql.image is not available unless postgresql.enabled is not set. We could change this to use os-shell if
         # it had the binary wait-for-port.
         # This init container is for avoiding CrashLoopback errors in the Hub container because the PostgreSQL container is not ready
         - name: wait-for-db

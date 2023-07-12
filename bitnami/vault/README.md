@@ -464,25 +464,25 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Vault Kubernetes Injector RBAC Parameters
 
-| Name                                                   | Description                                                                                                   | Value                   |
-| ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------- | ----------------------- |
-| `injector.rbac.create`                                 | Specifies whether RBAC resources should be created                                                            | `true`                  |
-| `injector.rbac.rules`                                  | Custom RBAC rules to set                                                                                      | `[]`                    |
-| `injector.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                          | `true`                  |
-| `injector.serviceAccount.name`                         | The name of the ServiceAccount to use.                                                                        | `""`                    |
-| `injector.serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template)                                              | `{}`                    |
-| `injector.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                | `true`                  |
-| `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`               | `false`                 |
-| `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                                  | `docker.io`             |
-| `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r128`     |
-| `volumePermissions.image.digest`                       | Bitnami Shell image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
-| `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                               | `IfNotPresent`          |
-| `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                              | `[]`                    |
-| `volumePermissions.resources.limits`                   | The resources limits for the init container                                                                   | `{}`                    |
-| `volumePermissions.resources.requests`                 | The requested resources for the init container                                                                | `{}`                    |
-| `volumePermissions.containerSecurityContext.enabled`   | Enable init container's Security Context                                                                      | `true`                  |
-| `volumePermissions.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                               | `0`                     |
+| Name                                                   | Description                                                                                                        | Value                   |
+| ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------ | ----------------------- |
+| `injector.rbac.create`                                 | Specifies whether RBAC resources should be created                                                                 | `true`                  |
+| `injector.rbac.rules`                                  | Custom RBAC rules to set                                                                                           | `[]`                    |
+| `injector.serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                               | `true`                  |
+| `injector.serviceAccount.name`                         | The name of the ServiceAccount to use.                                                                             | `""`                    |
+| `injector.serviceAccount.annotations`                  | Additional Service Account annotations (evaluated as a template)                                                   | `{}`                    |
+| `injector.serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                     | `true`                  |
+| `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`                    | `false`                 |
+| `volumePermissions.image.registry`                     | OS Shell + Utility image registry                                                                                  | `docker.io`             |
+| `volumePermissions.image.repository`                   | OS Shell + Utility image repository                                                                                | `bitnami/bitnami-shell` |
+| `volumePermissions.image.tag`                          | OS Shell + Utility image tag (immutable tags are recommended)                                                      | `11-debian-11-r128`     |
+| `volumePermissions.image.digest`                       | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
+| `volumePermissions.image.pullPolicy`                   | OS Shell + Utility image pull policy                                                                               | `IfNotPresent`          |
+| `volumePermissions.image.pullSecrets`                  | OS Shell + Utility image pull secrets                                                                              | `[]`                    |
+| `volumePermissions.resources.limits`                   | The resources limits for the init container                                                                        | `{}`                    |
+| `volumePermissions.resources.requests`                 | The requested resources for the init container                                                                     | `{}`                    |
+| `volumePermissions.containerSecurityContext.enabled`   | Enable init container's Security Context                                                                           | `true`                  |
+| `volumePermissions.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                                    | `0`                     |
 
 The above parameters map to the env variables defined in [bitnami/vault](https://github.com/bitnami/containers/tree/main/bitnami/vault). For more information please refer to the [bitnami/vault](https://github.com/bitnami/containers/tree/main/bitnami/vault) image documentation.
 
