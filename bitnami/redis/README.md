@@ -449,7 +449,7 @@ The command removes all the Kubernetes components associated with the chart and 
 ### Metrics Parameters
 
 | Name                                         | Description                                                                                                         | Value                    |
-|----------------------------------------------|---------------------------------------------------------------------------------------------------------------------|--------------------------|
+| -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ------------------------ |
 | `metrics.enabled`                            | Start a sidecar prometheus exporter to expose Redis&reg; metrics                                                    | `false`                  |
 | `metrics.image.registry`                     | Redis&reg; Exporter image registry                                                                                  | `docker.io`              |
 | `metrics.image.repository`                   | Redis&reg; Exporter image repository                                                                                | `bitnami/redis-exporter` |
