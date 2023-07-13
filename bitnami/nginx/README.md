@@ -82,7 +82,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------- | ----------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`     | NGINX image registry                                                                                  | `docker.io`           |
 | `image.repository`   | NGINX image repository                                                                                | `bitnami/nginx`       |
-| `image.tag`          | NGINX image tag (immutable tags are recommended)                                                      | `1.25.1-debian-11-r0` |
+| `image.tag`          | NGINX image tag (immutable tags are recommended)                                                      | `1.25.1-debian-11-r9` |
 | `image.digest`       | NGINX image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
 | `image.pullPolicy`   | NGINX image pull policy                                                                               | `IfNotPresent`        |
 | `image.pullSecrets`  | Specify docker-registry secret names as an array                                                      | `[]`                  |
@@ -171,30 +171,30 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Custom NGINX application parameters
 
-| Name                                                | Description                                                                                         | Value                 |
-| --------------------------------------------------- | --------------------------------------------------------------------------------------------------- | --------------------- |
-| `cloneStaticSiteFromGit.enabled`                    | Get the server static content from a Git repository                                                 | `false`               |
-| `cloneStaticSiteFromGit.image.registry`             | Git image registry                                                                                  | `docker.io`           |
-| `cloneStaticSiteFromGit.image.repository`           | Git image repository                                                                                | `bitnami/git`         |
-| `cloneStaticSiteFromGit.image.tag`                  | Git image tag (immutable tags are recommended)                                                      | `2.41.0-debian-11-r4` |
-| `cloneStaticSiteFromGit.image.digest`               | Git image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
-| `cloneStaticSiteFromGit.image.pullPolicy`           | Git image pull policy                                                                               | `IfNotPresent`        |
-| `cloneStaticSiteFromGit.image.pullSecrets`          | Specify docker-registry secret names as an array                                                    | `[]`                  |
-| `cloneStaticSiteFromGit.repository`                 | Git Repository to clone static content from                                                         | `""`                  |
-| `cloneStaticSiteFromGit.branch`                     | Git branch to checkout                                                                              | `""`                  |
-| `cloneStaticSiteFromGit.interval`                   | Interval for sidecar container pull from the Git repository                                         | `60`                  |
-| `cloneStaticSiteFromGit.gitClone.command`           | Override default container command for git-clone-repository                                         | `[]`                  |
-| `cloneStaticSiteFromGit.gitClone.args`              | Override default container args for git-clone-repository                                            | `[]`                  |
-| `cloneStaticSiteFromGit.gitSync.command`            | Override default container command for git-repo-syncer                                              | `[]`                  |
-| `cloneStaticSiteFromGit.gitSync.args`               | Override default container args for git-repo-syncer                                                 | `[]`                  |
-| `cloneStaticSiteFromGit.gitSync.resources.limits`   | The resources limits for the git-repo-syncer container                                              | `{}`                  |
-| `cloneStaticSiteFromGit.gitSync.resources.requests` | The requested resources for the git-repo-syncer container                                           | `{}`                  |
-| `cloneStaticSiteFromGit.extraEnvVars`               | Additional environment variables to set for the in the containers that clone static site from git   | `[]`                  |
-| `cloneStaticSiteFromGit.extraVolumeMounts`          | Add extra volume mounts for the Git containers                                                      | `[]`                  |
-| `serverBlock`                                       | Custom server block to be added to NGINX configuration                                              | `""`                  |
-| `existingServerBlockConfigmap`                      | ConfigMap with custom server block to be added to NGINX configuration                               | `""`                  |
-| `staticSiteConfigmap`                               | Name of existing ConfigMap with the server static site content                                      | `""`                  |
-| `staticSitePVC`                                     | Name of existing PVC with the server static site content                                            | `""`                  |
+| Name                                                | Description                                                                                         | Value                  |
+| --------------------------------------------------- | --------------------------------------------------------------------------------------------------- | ---------------------- |
+| `cloneStaticSiteFromGit.enabled`                    | Get the server static content from a Git repository                                                 | `false`                |
+| `cloneStaticSiteFromGit.image.registry`             | Git image registry                                                                                  | `docker.io`            |
+| `cloneStaticSiteFromGit.image.repository`           | Git image repository                                                                                | `bitnami/git`          |
+| `cloneStaticSiteFromGit.image.tag`                  | Git image tag (immutable tags are recommended)                                                      | `2.41.0-debian-11-r14` |
+| `cloneStaticSiteFromGit.image.digest`               | Git image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
+| `cloneStaticSiteFromGit.image.pullPolicy`           | Git image pull policy                                                                               | `IfNotPresent`         |
+| `cloneStaticSiteFromGit.image.pullSecrets`          | Specify docker-registry secret names as an array                                                    | `[]`                   |
+| `cloneStaticSiteFromGit.repository`                 | Git Repository to clone static content from                                                         | `""`                   |
+| `cloneStaticSiteFromGit.branch`                     | Git branch to checkout                                                                              | `""`                   |
+| `cloneStaticSiteFromGit.interval`                   | Interval for sidecar container pull from the Git repository                                         | `60`                   |
+| `cloneStaticSiteFromGit.gitClone.command`           | Override default container command for git-clone-repository                                         | `[]`                   |
+| `cloneStaticSiteFromGit.gitClone.args`              | Override default container args for git-clone-repository                                            | `[]`                   |
+| `cloneStaticSiteFromGit.gitSync.command`            | Override default container command for git-repo-syncer                                              | `[]`                   |
+| `cloneStaticSiteFromGit.gitSync.args`               | Override default container args for git-repo-syncer                                                 | `[]`                   |
+| `cloneStaticSiteFromGit.gitSync.resources.limits`   | The resources limits for the git-repo-syncer container                                              | `{}`                   |
+| `cloneStaticSiteFromGit.gitSync.resources.requests` | The requested resources for the git-repo-syncer container                                           | `{}`                   |
+| `cloneStaticSiteFromGit.extraEnvVars`               | Additional environment variables to set for the in the containers that clone static site from git   | `[]`                   |
+| `cloneStaticSiteFromGit.extraVolumeMounts`          | Add extra volume mounts for the Git containers                                                      | `[]`                   |
+| `serverBlock`                                       | Custom server block to be added to NGINX configuration                                              | `""`                   |
+| `existingServerBlockConfigmap`                      | ConfigMap with custom server block to be added to NGINX configuration                               | `""`                   |
+| `staticSiteConfigmap`                               | Name of existing ConfigMap with the server static site content                                      | `""`                   |
+| `staticSitePVC`                                     | Name of existing PVC with the server static site content                                            | `""`                   |
 
 ### Traffic Exposure parameters
 
@@ -249,7 +249,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.port`                             | NGINX Container Status Port scraped by Prometheus Exporter                                                                                | `""`                     |
 | `metrics.image.registry`                   | NGINX Prometheus exporter image registry                                                                                                  | `docker.io`              |
 | `metrics.image.repository`                 | NGINX Prometheus exporter image repository                                                                                                | `bitnami/nginx-exporter` |
-| `metrics.image.tag`                        | NGINX Prometheus exporter image tag (immutable tags are recommended)                                                                      | `0.11.0-debian-11-r91`   |
+| `metrics.image.tag`                        | NGINX Prometheus exporter image tag (immutable tags are recommended)                                                                      | `0.11.0-debian-11-r100`  |
 | `metrics.image.digest`                     | NGINX Prometheus exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                 | `""`                     |
 | `metrics.image.pullPolicy`                 | NGINX Prometheus exporter image pull policy                                                                                               | `IfNotPresent`           |
 | `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                                                                                          | `[]`                     |
