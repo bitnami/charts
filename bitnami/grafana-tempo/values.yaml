@@ -75,7 +75,7 @@ tempo:
   image:
     registry: docker.io
     repository: bitnami/grafana-tempo
-    tag: 2.1.1-debian-11-r18
+    tag: 2.1.1-debian-11-r26
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1822,7 +1822,7 @@ queryFrontend:
     image:
       registry: docker.io
       repository: bitnami/grafana-tempo-query
-      tag: 2.1.1-debian-11-r18
+      tag: 2.1.1-debian-11-r27
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2033,7 +2033,7 @@ vulture:
   image:
     registry: docker.io
     repository: bitnami/grafana-tempo-vulture
-    tag: 2.1.1-debian-11-r15
+    tag: 2.1.1-debian-11-r24
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2330,8 +2330,8 @@ volumePermissions:
   ##
   image:
     registry: docker.io
-    repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r127
+    repository: bitnami/os-shell
+    tag: 11-debian-11-r2
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
