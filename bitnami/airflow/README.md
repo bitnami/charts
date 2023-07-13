@@ -109,7 +109,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | -------------------- |
 | `web.image.registry`                        | Airflow image registry                                                                                                   | `docker.io`          |
 | `web.image.repository`                      | Airflow image repository                                                                                                 | `bitnami/airflow`    |
-| `web.image.tag`                             | Airflow image tag (immutable tags are recommended)                                                                       | `2.6.3-debian-11-r1` |
+| `web.image.tag`                             | Airflow image tag (immutable tags are recommended)                                                                       | `2.6.3-debian-11-r2` |
 | `web.image.digest`                          | Airflow image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                  | `""`                 |
 | `web.image.pullPolicy`                      | Airflow image pull policy                                                                                                | `IfNotPresent`       |
 | `web.image.pullSecrets`                     | Airflow image pull secrets                                                                                               | `[]`                 |
