@@ -5,7 +5,7 @@ annotations:
   category: Infrastructure
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 2.2.10
+appVersion: 2.2.11
 dependencies:
   - name: etcd
     repository: oci://registry-1.docker.io/bitnamicharts
@@ -39,4 +39,4 @@ maintainers:
 name: milvus
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/milvus
-version: 1.0.1
+version: 1.0.2
