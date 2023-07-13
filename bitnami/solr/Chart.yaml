@@ -29,4 +29,4 @@ maintainers:
 name: solr
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/solr
-version: 7.5.2
+version: 7.5.3
