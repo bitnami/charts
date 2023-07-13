@@ -479,7 +479,7 @@ clusterOperator:
 ## @section RabbitMQ Messaging Topology Operator Parameters
 ##
 msgTopologyOperator:
-  ## @param msgTopologyOperator.enabled Enabled RabbitMQ Messaging Topology Operator for installation
+  ## @param msgTopologyOperator.enabled Deploy RabbitMQ Messaging Topology Operator as part of the installation
   ##
   enabled: true
   ## Bitnami RabbitMQ Messaging Topology Operator image
