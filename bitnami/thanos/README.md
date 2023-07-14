@@ -109,7 +109,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ------------------- |
 | `image.registry`                              | Thanos image registry                                                                                               | `docker.io`         |
 | `image.repository`                            | Thanos image repository                                                                                             | `bitnami/thanos`    |
-| `image.tag`                                   | Thanos image tag (immutable tags are recommended)                                                                   | `0.31.0-scratch-r8` |
+| `image.tag`                                   | Thanos image tag (immutable tags are recommended)                                                                   | `0.31.0-scratch-r9` |
 | `image.digest`                                | Thanos image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag              | `""`                |
 | `image.pullPolicy`                            | Thanos image pull policy                                                                                            | `IfNotPresent`      |
 | `image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                    | `[]`                |
@@ -1170,15 +1170,15 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 
 ### Volume Permissions parameters
 
-| Name                                  | Description                                                                                                                       | Value                   |
-| ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
-| `volumePermissions.enabled`           | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`                                   | `false`                 |
-| `volumePermissions.image.registry`    | Init container volume-permissions image registry                                                                                  | `docker.io`             |
-| `volumePermissions.image.repository`  | Init container volume-permissions image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`         | Init container volume-permissions image tag                                                                                       | `11-debian-11-r128`     |
-| `volumePermissions.image.digest`      | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
-| `volumePermissions.image.pullPolicy`  | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`          |
-| `volumePermissions.image.pullSecrets` | Specify docker-registry secret names as an array                                                                                  | `[]`                    |
+| Name                                  | Description                                                                                                                       | Value              |
+| ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ------------------ |
+| `volumePermissions.enabled`           | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`                                   | `false`            |
+| `volumePermissions.image.registry`    | Init container volume-permissions image registry                                                                                  | `docker.io`        |
+| `volumePermissions.image.repository`  | Init container volume-permissions image repository                                                                                | `bitnami/os-shell` |
+| `volumePermissions.image.tag`         | Init container volume-permissions image tag                                                                                       | `11-debian-11-r2`  |
+| `volumePermissions.image.digest`      | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`               |
+| `volumePermissions.image.pullPolicy`  | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`     |
+| `volumePermissions.image.pullSecrets` | Specify docker-registry secret names as an array                                                                                  | `[]`               |
 
 ### MinIO&reg; chart parameters
 

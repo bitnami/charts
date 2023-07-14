@@ -104,7 +104,11 @@ spec:
             {{- if .Values.configuration.google.enabled }}
             - --google-admin-email={{ .Values.configuration.google.adminEmail }}
             - --google-service-account-json=/bitnami/oauth2-proxy/conf/google/service-account.json
-            - --google-group={{ .Values.configuration.google.googleGroup }}
+            {{- if .Values.configuration.google.groups }}
+            {{- range $group := .Values.configuration.google.groups }}
+            - --google-group={{ $group }}
+            {{- end }}
+            {{- end }}
             {{- end }}
             {{- if .Values.configuration.htpasswdFile.enabled }}
             - --htpasswd-file=/bitnami/oauth2-proxy/conf/htpasswd/users.txt

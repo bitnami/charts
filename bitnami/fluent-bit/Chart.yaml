@@ -5,7 +5,7 @@ annotations:
   category: Analytics
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 2.1.6
+appVersion: 2.1.7
 dependencies:
   - name: common
     repository: oci://registry-1.docker.io/bitnamicharts
@@ -25,4 +25,4 @@ maintainers:
 name: fluent-bit
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/fluent-bit
-version: 0.4.6
+version: 0.4.8

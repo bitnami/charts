@@ -25,4 +25,4 @@ maintainers:
 name: sealed-secrets
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/sealed-secrets
-version: 1.4.4
+version: 1.4.5

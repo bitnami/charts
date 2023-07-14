@@ -4,7 +4,7 @@
 
 Milvus is a cloud-native, open-source vector database solution for AI applications and similarity search. Features high scalability, hibrid search and unified lambda structure.
 
-[Overview of Milvus](https://grafana.com/oss)
+[Overview of Milvus](https://milvus.io/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 
@@ -85,7 +85,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
 | `milvus.image.registry`                                     | Milvus image registry                                                                                                                               | `docker.io`           |
 | `milvus.image.repository`                                   | Milvus image repository                                                                                                                             | `bitnami/milvus`      |
-| `milvus.image.tag`                                          | Milvus image tag (immutable tags are recommended)                                                                                                   | `2.2.10-debian-11-r3` |
+| `milvus.image.tag`                                          | Milvus image tag (immutable tags are recommended)                                                                                                   | `2.2.11-debian-11-r0` |
 | `milvus.image.digest`                                       | Milvus image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                              | `""`                  |
 | `milvus.image.pullPolicy`                                   | Milvus image pull policy                                                                                                                            | `IfNotPresent`        |
 | `milvus.image.pullSecrets`                                  | Milvus image pull secrets                                                                                                                           | `[]`                  |
@@ -102,7 +102,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `initJob.forceRun`                                          | Force the run of the credential job                                                                                                                 | `false`               |
 | `initJob.image.registry`                                    | PyMilvus image registry                                                                                                                             | `docker.io`           |
 | `initJob.image.repository`                                  | PyMilvus image repository                                                                                                                           | `bitnami/pymilvus`    |
-| `initJob.image.tag`                                         | PyMilvus image tag (immutable tags are recommended)                                                                                                 | `2.2.13-debian-11-r1` |
+| `initJob.image.tag`                                         | PyMilvus image tag (immutable tags are recommended)                                                                                                 | `2.2.13-debian-11-r4` |
 | `initJob.image.digest`                                      | PyMilvus image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended) | `""`                  |
 | `initJob.image.pullPolicy`                                  | PyMilvus image pull policy                                                                                                                          | `IfNotPresent`        |
 | `initJob.image.pullSecrets`                                 | PyMilvus image pull secrets                                                                                                                         | `[]`                  |
@@ -1250,7 +1250,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `attu.enabled`                                           | Enable Attu deployment                                                                               | `true`               |
 | `attu.image.registry`                                    | Attu image registry                                                                                  | `docker.io`          |
 | `attu.image.repository`                                  | Attu image repository                                                                                | `bitnami/attu`       |
-| `attu.image.tag`                                         | Attu image tag (immutable tags are recommended)                                                      | `2.2.6-debian-11-r1` |
+| `attu.image.tag`                                         | Attu image tag (immutable tags are recommended)                                                      | `2.2.7-debian-11-r3` |
 | `attu.image.digest`                                      | Attu image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                 |
 | `attu.image.pullPolicy`                                  | Attu image pull policy                                                                               | `IfNotPresent`       |
 | `attu.image.pullSecrets`                                 | Attu image pull secrets                                                                              | `[]`                 |
@@ -1384,7 +1384,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
 | `waitContainer.image.registry`                                    | Init container wait-container image registry                                                                                  | `docker.io`             |
 | `waitContainer.image.repository`                                  | Init container wait-container image name                                                                                      | `bitnami/bitnami-shell` |
-| `waitContainer.image.tag`                                         | Init container wait-container image tag                                                                                       | `11-debian-11-r127`     |
+| `waitContainer.image.tag`                                         | Init container wait-container image tag                                                                                       | `11-debian-11-r134`     |
 | `waitContainer.image.digest`                                      | Init container wait-container image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `waitContainer.image.pullPolicy`                                  | Init container wait-container image pull policy                                                                               | `IfNotPresent`          |
 | `waitContainer.image.pullSecrets`                                 | Specify docker-registry secret names as an array                                                                              | `[]`                    |

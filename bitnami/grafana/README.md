@@ -162,7 +162,7 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------- |
 | `image.registry`                   | Grafana image registry                                                                                                                               | `docker.io`                       |
 | `image.repository`                 | Grafana image repository                                                                                                                             | `bitnami/grafana`                 |
-| `image.tag`                        | Grafana image tag (immutable tags are recommended)                                                                                                   | `10.0.1-debian-11-r1`             |
+| `image.tag`                        | Grafana image tag (immutable tags are recommended)                                                                                                   | `10.0.2-debian-11-r0`             |
 | `image.digest`                     | Grafana image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                              | `""`                              |
 | `image.pullPolicy`                 | Grafana image pull policy                                                                                                                            | `IfNotPresent`                    |
 | `image.pullSecrets`                | Grafana image pull secrets                                                                                                                           | `[]`                              |
@@ -360,7 +360,7 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `imageRenderer.enabled`                                  | Enable using a remote rendering service to render PNG images                                                                              | `false`                          |
 | `imageRenderer.image.registry`                           | Grafana Image Renderer image registry                                                                                                     | `docker.io`                      |
 | `imageRenderer.image.repository`                         | Grafana Image Renderer image repository                                                                                                   | `bitnami/grafana-image-renderer` |
-| `imageRenderer.image.tag`                                | Grafana Image Renderer image tag (immutable tags are recommended)                                                                         | `3.7.1-debian-11-r16`            |
+| `imageRenderer.image.tag`                                | Grafana Image Renderer image tag (immutable tags are recommended)                                                                         | `3.7.1-debian-11-r19`            |
 | `imageRenderer.image.digest`                             | Grafana Image Renderer image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                    | `""`                             |
 | `imageRenderer.image.pullPolicy`                         | Grafana Image Renderer image pull policy                                                                                                  | `IfNotPresent`                   |
 | `imageRenderer.image.pullSecrets`                        | Grafana image Renderer pull secrets                                                                                                       | `[]`                             |
@@ -429,18 +429,18 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 
 ### Volume permissions init Container Parameters
 
-| Name                                                   | Description                                                                                                   | Value                   |
-| ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------- | ----------------------- |
-| `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`               | `false`                 |
-| `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                                  | `docker.io`             |
-| `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r133`     |
-| `volumePermissions.image.digest`                       | Bitnami Shell image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
-| `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                               | `IfNotPresent`          |
-| `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                              | `[]`                    |
-| `volumePermissions.resources.limits`                   | The resources limits for the init container                                                                   | `{}`                    |
-| `volumePermissions.resources.requests`                 | The requested resources for the init container                                                                | `{}`                    |
-| `volumePermissions.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                               | `0`                     |
+| Name                                                   | Description                                                                                                        | Value              |
+| ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------ | ------------------ |
+| `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`                    | `false`            |
+| `volumePermissions.image.registry`                     | OS Shell + Utility image registry                                                                                  | `docker.io`        |
+| `volumePermissions.image.repository`                   | OS Shell + Utility image repository                                                                                | `bitnami/os-shell` |
+| `volumePermissions.image.tag`                          | OS Shell + Utility image tag (immutable tags are recommended)                                                      | `11-debian-11-r2`  |
+| `volumePermissions.image.digest`                       | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`               |
+| `volumePermissions.image.pullPolicy`                   | OS Shell + Utility image pull policy                                                                               | `IfNotPresent`     |
+| `volumePermissions.image.pullSecrets`                  | OS Shell + Utility image pull secrets                                                                              | `[]`               |
+| `volumePermissions.resources.limits`                   | The resources limits for the init container                                                                        | `{}`               |
+| `volumePermissions.resources.requests`                 | The requested resources for the init container                                                                     | `{}`               |
+| `volumePermissions.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                                    | `0`                |
 
 ### Diagnostic Mode Parameters
 

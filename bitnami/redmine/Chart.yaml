@@ -38,4 +38,4 @@ maintainers:
 name: redmine
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/redmine
-version: 22.1.4
+version: 22.1.6

@@ -27,4 +27,4 @@ maintainers:
 name: elasticsearch
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/elasticsearch
-version: 19.10.3
+version: 19.10.4
