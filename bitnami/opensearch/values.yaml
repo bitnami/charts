@@ -1929,7 +1929,7 @@ sysctlImage:
 dashboards:
   ## @param dashboards.enabled Enables Opensearch Dashboards deployment
   ##
-  enabled: true
+  enabled: false
   ## Bitnami Opensearch Dashboards image
   ## @param dashboards.image.registry Opensearch Dashboards image registry
   ## @param dashboards.image.repository Opensearch Dashboards image repository
@@ -2170,7 +2170,7 @@ dashboards:
   ##
   startupProbe:
     enabled: false
-    initialDelaySeconds: 90
+    initialDelaySeconds: 120
     periodSeconds: 10
     timeoutSeconds: 5
     successThreshold: 1
@@ -2184,7 +2184,7 @@ dashboards:
   ##
   livenessProbe:
     enabled: true
-    initialDelaySeconds: 90
+    initialDelaySeconds: 120
     periodSeconds: 10
     timeoutSeconds: 5
     successThreshold: 1
@@ -2198,7 +2198,7 @@ dashboards:
   ##
   readinessProbe:
     enabled: true
-    initialDelaySeconds: 90
+    initialDelaySeconds: 120
     periodSeconds: 10
     timeoutSeconds: 5
     successThreshold: 1

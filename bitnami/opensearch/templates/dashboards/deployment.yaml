@@ -128,11 +128,29 @@ spec:
             - name: http
               containerPort: {{ .Values.dashboards.containerPorts.http }}
           {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.dashboards.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.dashboards.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.dashboards.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.dashboards.livenessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: "/"
+              port: {{ .Values.dashboards.containerPorts.http }}
+          {{- end }}
           {{- if .Values.dashboards.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.dashboards.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.dashboards.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.dashboards.readinessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: "/"
+              port: {{ .Values.dashboards.containerPorts.http }}
           {{- end }}
           {{- if .Values.dashboards.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.dashboards.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.dashboards.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.dashboards.startupProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: "/"
+              port: {{ .Values.dashboards.containerPorts.http }}
           {{- end }}
           {{- end }}
           {{- if .Values.dashboards.lifecycleHooks }}

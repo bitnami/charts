@@ -636,7 +636,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- if .Values.dashboards.servicenameOverride -}}
 {{- .Values.dashboards.servicenameOverride | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
-{{- printf "%s-hl" (include "opensearch.dashboards.fullname" .) | trunc 63 | trimSuffix "-" -}}
+{{- printf "%s" (include "opensearch.dashboards.fullname" .) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 {{- end -}}
 
