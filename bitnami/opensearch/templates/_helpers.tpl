@@ -16,14 +16,7 @@ Return the proper OS image name
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "opensearch.imagePullSecrets" -}}
-{{ include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.metrics.image .Values.sysctlImage .Values.volumePermissions.image) "global" .Values.global) }}
-{{- end -}}
-
-{{/*
-Return the proper OS exporter image name
-*/}}
-{{- define "opensearch.metrics.image" -}}
-{{ include "common.images.image" (dict "imageRoot" .Values.metrics.image "global" .Values.global) }}
+{{ include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.sysctlImage .Values.volumePermissions.image) "global" .Values.global) }}
 {{- end -}}
 
 {{/*
@@ -164,19 +157,6 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- .Values.ingest.servicenameOverride | trunc 63 | trimSuffix "-" -}}
 {{- else -}}
 {{- printf "%s-hl" (include "opensearch.ingest.fullname" .) | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
-{{- end -}}
-
-{{/*
-Create a default fully qualified metrics name.
-We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
-*/}}
-{{- define "opensearch.metrics.fullname" -}}
-{{- $name := default "metrics" .Values.metrics.nameOverride -}}
-{{- if .Values.metrics.fullnameOverride -}}
-{{- .Values.metrics.fullnameOverride | trunc 63 | trimSuffix "-" -}}
-{{- else -}}
-{{- printf "%s-%s" (include "common.names.fullname" .) $name | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 {{- end -}}
 
