@@ -232,12 +232,12 @@ Return the api ingress anotation
 Return the ingress hostname
 */}}
 {{- define "minio.ingress.hostname" -}}
-{{- .Values.ingress.hostname -}}
+{{- tpl .Values.ingress.hostname $ -}}
 {{- end -}}
 
 {{/*
 Return the api ingress hostname
 */}}
 {{- define "minio.apiIngress.hostname" -}}
-{{- .Values.apiIngress.hostname -}}
+{{- tpl .Values.apiIngress.hostname $ -}}
 {{- end -}}
