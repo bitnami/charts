@@ -16,3 +16,8 @@ sysctlImage:
   enabled: true
 containerPorts:
   transport: 9300
+dashboards:
+  enabled: true
+  service:
+    ports:
+      http: 5605
