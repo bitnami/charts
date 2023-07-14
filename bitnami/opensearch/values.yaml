@@ -180,7 +180,7 @@ useIstioLabels: true
 image:
   registry: docker.io
   repository: bitnami/opensearch
-  tag: development
+  tag: 2.8.0-debian-11-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2280,7 +2280,7 @@ dashboards:
   image:
     registry: docker.io
     repository: bitnami/opensearch-dashboards
-    tag: development
+    tag: 2.8.0-debian-11-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
