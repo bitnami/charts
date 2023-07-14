@@ -1007,7 +1007,7 @@ defaultBackend:
   ## @param defaultBackend.containerPorts.http Set http port inside Contour pod
   ##
   containerPorts:
-    http: 8001
+    http: 8080
   ## @param defaultBackend.updateStrategy Strategy to use to update Pods
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
