@@ -334,7 +334,7 @@ helm uninstall my-release
 | `defaultBackend.extraVolumeMounts`                     | Array to add extra mounts (normally used with extraVolumes)                                                     | `[]`                     |
 | `defaultBackend.initContainers`                        | Attach additional init containers to the http backend pods                                                      | `[]`                     |
 | `defaultBackend.sidecars`                              | Add additional sidecar containers to the default backend                                                        | `[]`                     |
-| `defaultBackend.containerPorts.http`                   | Set http port inside Contour pod                                                                                | `8001`                   |
+| `defaultBackend.containerPorts.http`                   | Set http port inside Contour pod                                                                                | `8080`                   |
 | `defaultBackend.updateStrategy`                        | Strategy to use to update Pods                                                                                  | `{}`                     |
 | `defaultBackend.command`                               | Override default command                                                                                        | `[]`                     |
 | `defaultBackend.args`                                  | Override default args                                                                                           | `[]`                     |
