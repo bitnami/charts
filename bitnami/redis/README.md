@@ -453,7 +453,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                            | Start a sidecar prometheus exporter to expose Redis&reg; metrics                                                    | `false`                  |
 | `metrics.image.registry`                     | Redis&reg; Exporter image registry                                                                                  | `docker.io`              |
 | `metrics.image.repository`                   | Redis&reg; Exporter image repository                                                                                | `bitnami/redis-exporter` |
-| `metrics.image.tag`                          | Redis&reg; Exporter image tag (immutable tags are recommended)                                                      | `1.51.0-debian-11-r10`   |
+| `metrics.image.tag`                          | Redis&reg; Exporter image tag (immutable tags are recommended)                                                      | `1.51.0-debian-11-r11`   |
 | `metrics.image.digest`                       | Redis&reg; Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                     |
 | `metrics.image.pullPolicy`                   | Redis&reg; Exporter image pull policy                                                                               | `IfNotPresent`           |
 | `metrics.image.pullSecrets`                  | Redis&reg; Exporter image pull secrets                                                                              | `[]`                     |
