@@ -5,7 +5,7 @@ annotations:
   category: Infrastructure
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 2.9.19
+appVersion: 2.9.20
 dependencies:
   - name: common
     repository: oci://registry-1.docker.io/bitnamicharts
@@ -26,4 +26,4 @@ maintainers:
 name: nats
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/nats
-version: 7.8.5
+version: 7.8.6
