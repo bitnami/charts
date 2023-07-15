@@ -85,7 +85,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
 | `milvus.image.registry`                                     | Milvus image registry                                                                                                                               | `docker.io`           |
 | `milvus.image.repository`                                   | Milvus image repository                                                                                                                             | `bitnami/milvus`      |
-| `milvus.image.tag`                                          | Milvus image tag (immutable tags are recommended)                                                                                                   | `2.2.11-debian-11-r0` |
+| `milvus.image.tag`                                          | Milvus image tag (immutable tags are recommended)                                                                                                   | `2.2.11-debian-11-r1` |
 | `milvus.image.digest`                                       | Milvus image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                              | `""`                  |
 | `milvus.image.pullPolicy`                                   | Milvus image pull policy                                                                                                                            | `IfNotPresent`        |
 | `milvus.image.pullSecrets`                                  | Milvus image pull secrets                                                                                                                           | `[]`                  |
@@ -102,7 +102,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `initJob.forceRun`                                          | Force the run of the credential job                                                                                                                 | `false`               |
 | `initJob.image.registry`                                    | PyMilvus image registry                                                                                                                             | `docker.io`           |
 | `initJob.image.repository`                                  | PyMilvus image repository                                                                                                                           | `bitnami/pymilvus`    |
-| `initJob.image.tag`                                         | PyMilvus image tag (immutable tags are recommended)                                                                                                 | `2.2.13-debian-11-r4` |
+| `initJob.image.tag`                                         | PyMilvus image tag (immutable tags are recommended)                                                                                                 | `2.2.13-debian-11-r5` |
 | `initJob.image.digest`                                      | PyMilvus image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended) | `""`                  |
 | `initJob.image.pullPolicy`                                  | PyMilvus image pull policy                                                                                                                          | `IfNotPresent`        |
 | `initJob.image.pullSecrets`                                 | PyMilvus image pull secrets                                                                                                                         | `[]`                  |
@@ -1250,7 +1250,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `attu.enabled`                                           | Enable Attu deployment                                                                               | `true`               |
 | `attu.image.registry`                                    | Attu image registry                                                                                  | `docker.io`          |
 | `attu.image.repository`                                  | Attu image repository                                                                                | `bitnami/attu`       |
-| `attu.image.tag`                                         | Attu image tag (immutable tags are recommended)                                                      | `2.2.7-debian-11-r3` |
+| `attu.image.tag`                                         | Attu image tag (immutable tags are recommended)                                                      | `2.2.7-debian-11-r4` |
 | `attu.image.digest`                                      | Attu image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                 |
 | `attu.image.pullPolicy`                                  | Attu image pull policy                                                                               | `IfNotPresent`       |
 | `attu.image.pullSecrets`                                 | Attu image pull secrets                                                                              | `[]`                 |
@@ -1380,20 +1380,20 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Init Container Parameters
 
-| Name                                                              | Description                                                                                                                   | Value                   |
-| ----------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
-| `waitContainer.image.registry`                                    | Init container wait-container image registry                                                                                  | `docker.io`             |
-| `waitContainer.image.repository`                                  | Init container wait-container image name                                                                                      | `bitnami/bitnami-shell` |
-| `waitContainer.image.tag`                                         | Init container wait-container image tag                                                                                       | `11-debian-11-r134`     |
-| `waitContainer.image.digest`                                      | Init container wait-container image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
-| `waitContainer.image.pullPolicy`                                  | Init container wait-container image pull policy                                                                               | `IfNotPresent`          |
-| `waitContainer.image.pullSecrets`                                 | Specify docker-registry secret names as an array                                                                              | `[]`                    |
-| `waitContainer.containerSecurityContext.enabled`                  | Enabled Milvus containers' Security Context                                                                                   | `true`                  |
-| `waitContainer.containerSecurityContext.runAsUser`                | Set Milvus containers' Security Context runAsUser                                                                             | `1001`                  |
-| `waitContainer.containerSecurityContext.runAsNonRoot`             | Set Milvus containers' Security Context runAsNonRoot                                                                          | `true`                  |
-| `waitContainer.containerSecurityContext.readOnlyRootFilesystem`   | Set Milvus containers' Security Context runAsNonRoot                                                                          | `true`                  |
-| `waitContainer.containerSecurityContext.allowPrivilegeEscalation` | Set Milvus container's privilege escalation                                                                                   | `false`                 |
-| `waitContainer.containerSecurityContext.capabilities.drop`        | Set Milvus container's Security Context runAsNonRoot                                                                          | `["ALL"]`               |
+| Name                                                              | Description                                                                                                                   | Value              |
+| ----------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ------------------ |
+| `waitContainer.image.registry`                                    | Init container wait-container image registry                                                                                  | `docker.io`        |
+| `waitContainer.image.repository`                                  | Init container wait-container image name                                                                                      | `bitnami/os-shell` |
+| `waitContainer.image.tag`                                         | Init container wait-container image tag                                                                                       | `11-debian-11-r2`  |
+| `waitContainer.image.digest`                                      | Init container wait-container image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`               |
+| `waitContainer.image.pullPolicy`                                  | Init container wait-container image pull policy                                                                               | `IfNotPresent`     |
+| `waitContainer.image.pullSecrets`                                 | Specify docker-registry secret names as an array                                                                              | `[]`               |
+| `waitContainer.containerSecurityContext.enabled`                  | Enabled Milvus containers' Security Context                                                                                   | `true`             |
+| `waitContainer.containerSecurityContext.runAsUser`                | Set Milvus containers' Security Context runAsUser                                                                             | `1001`             |
+| `waitContainer.containerSecurityContext.runAsNonRoot`             | Set Milvus containers' Security Context runAsNonRoot                                                                          | `true`             |
+| `waitContainer.containerSecurityContext.readOnlyRootFilesystem`   | Set Milvus containers' Security Context runAsNonRoot                                                                          | `true`             |
+| `waitContainer.containerSecurityContext.allowPrivilegeEscalation` | Set Milvus container's privilege escalation                                                                                   | `false`            |
+| `waitContainer.containerSecurityContext.capabilities.drop`        | Set Milvus container's Security Context runAsNonRoot                                                                          | `["ALL"]`          |
 
 ### External etcd parameters
 
