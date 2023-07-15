@@ -25,4 +25,4 @@ maintainers:
 name: metrics-server
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/metrics-server
-version: 6.4.3
+version: 6.4.4
