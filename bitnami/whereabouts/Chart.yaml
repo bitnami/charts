@@ -26,4 +26,4 @@ maintainers:
 name: whereabouts
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/whereabouts
-version: 0.4.2
+version: 0.4.3
