@@ -82,7 +82,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`                                 | InfluxDB&trade; image registry                                                                                                                                                                                                                                       | `docker.io`           |
 | `image.repository`                               | InfluxDB&trade; image repository                                                                                                                                                                                                                                     | `bitnami/influxdb`    |
-| `image.tag`                                      | InfluxDB&trade; image tag (immutable tags are recommended)                                                                                                                                                                                                           | `2.7.1-debian-11-r17` |
+| `image.tag`                                      | InfluxDB&trade; image tag (immutable tags are recommended)                                                                                                                                                                                                           | `2.7.1-debian-11-r25` |
 | `image.digest`                                   | InfluxDB&trade; image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                                                                      | `""`                  |
 | `image.pullPolicy`                               | InfluxDB&trade; image pull policy                                                                                                                                                                                                                                    | `IfNotPresent`        |
 | `image.pullSecrets`                              | Specify docker-registry secret names as an array                                                                                                                                                                                                                     | `[]`                  |
@@ -236,7 +236,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.serviceMonitor.scrapeTimeout`        | Timeout after which the scrape is ended                                                                                                     | `""`                |
 | `metrics.serviceMonitor.relabelings`          | RelabelConfigs to apply to samples before scraping                                                                                          | `[]`                |
 | `metrics.serviceMonitor.metricRelabelings`    | MetricRelabelConfigs to apply to samples before ingestion                                                                                   | `[]`                |
-| `metrics.serviceMonitor.labels`               | Additional labels that can be used so ServiceMonitor will be discovered by Prometheus                                                       | `{}`                |
 | `metrics.serviceMonitor.selector`             | Prometheus instance selector labels                                                                                                         | `{}`                |
 | `metrics.serviceMonitor.honorLabels`          | honorLabels chooses the metric's labels on collisions with target labels                                                                    | `false`             |
 | `networkPolicy.enabled`                       | Enable NetworkPolicy                                                                                                                        | `false`             |
@@ -256,16 +255,16 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Volume permissions parameters
 
-| Name                                          | Description                                                                                                                       | Value                   |
-| --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
-| `volumePermissions.enabled`                   | Enable init container that changes the owner and group of the persistent volume mountpoint to `runAsUser:fsGroup`                 | `false`                 |
-| `volumePermissions.image.registry`            | Init container volume-permissions image registry                                                                                  | `docker.io`             |
-| `volumePermissions.image.repository`          | Init container volume-permissions image name                                                                                      | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Init container volume-permissions image tag                                                                                       | `11-debian-11-r126`     |
-| `volumePermissions.image.digest`              | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
-| `volumePermissions.image.pullPolicy`          | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`          |
-| `volumePermissions.image.pullSecrets`         | Specify docker-registry secret names as an array                                                                                  | `[]`                    |
-| `volumePermissions.securityContext.runAsUser` | User ID for the init container (when facing issues in OpenShift or uid unknown, try value "auto")                                 | `0`                     |
+| Name                                          | Description                                                                                                                       | Value              |
+| --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ------------------ |
+| `volumePermissions.enabled`                   | Enable init container that changes the owner and group of the persistent volume mountpoint to `runAsUser:fsGroup`                 | `false`            |
+| `volumePermissions.image.registry`            | Init container volume-permissions image registry                                                                                  | `docker.io`        |
+| `volumePermissions.image.repository`          | Init container volume-permissions image name                                                                                      | `bitnami/os-shell` |
+| `volumePermissions.image.tag`                 | Init container volume-permissions image tag                                                                                       | `11-debian-11-r2`  |
+| `volumePermissions.image.digest`              | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`               |
+| `volumePermissions.image.pullPolicy`          | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`     |
+| `volumePermissions.image.pullSecrets`         | Specify docker-registry secret names as an array                                                                                  | `[]`               |
+| `volumePermissions.securityContext.runAsUser` | User ID for the init container (when facing issues in OpenShift or uid unknown, try value "auto")                                 | `0`                |
 
 ### InfluxDB&trade; backup parameters
 
@@ -295,7 +294,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `backup.uploadProviders.google.bucketName`        | google storage bucket name name                                                                                  | `gs://bucket/influxdb`     |
 | `backup.uploadProviders.google.image.registry`    | Google Cloud SDK image registry                                                                                  | `docker.io`                |
 | `backup.uploadProviders.google.image.repository`  | Google Cloud SDK image name                                                                                      | `bitnami/google-cloud-sdk` |
-| `backup.uploadProviders.google.image.tag`         | Google Cloud SDK image tag                                                                                       | `0.435.0-debian-11-r1`     |
+| `backup.uploadProviders.google.image.tag`         | Google Cloud SDK image tag                                                                                       | `0.438.0-debian-11-r0`     |
 | `backup.uploadProviders.google.image.digest`      | Google Cloud SDK image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
 | `backup.uploadProviders.google.image.pullPolicy`  | Google Cloud SDK image pull policy                                                                               | `IfNotPresent`             |
 | `backup.uploadProviders.google.image.pullSecrets` | Specify docker-registry secret names as an array                                                                 | `[]`                       |
@@ -306,7 +305,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `backup.uploadProviders.azure.containerName`      | Destination container                                                                                            | `influxdb-container`       |
 | `backup.uploadProviders.azure.image.registry`     | Azure CLI image registry                                                                                         | `docker.io`                |
 | `backup.uploadProviders.azure.image.repository`   | Azure CLI image repository                                                                                       | `bitnami/azure-cli`        |
-| `backup.uploadProviders.azure.image.tag`          | Azure CLI image tag (immutable tags are recommended)                                                             | `2.49.0-debian-11-r8`      |
+| `backup.uploadProviders.azure.image.tag`          | Azure CLI image tag (immutable tags are recommended)                                                             | `2.50.0-debian-11-r1`      |
 | `backup.uploadProviders.azure.image.digest`       | Azure CLI image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag        | `""`                       |
 | `backup.uploadProviders.azure.image.pullPolicy`   | Azure CLI image pull policy                                                                                      | `IfNotPresent`             |
 | `backup.uploadProviders.azure.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                 | `[]`                       |
@@ -318,7 +317,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `backup.uploadProviders.aws.bucketName`           | aws s3 bucket name                                                                                               | `s3://bucket/influxdb`     |
 | `backup.uploadProviders.aws.image.registry`       | AWS CLI image registry                                                                                           | `docker.io`                |
 | `backup.uploadProviders.aws.image.repository`     | AWS CLI image repository                                                                                         | `bitnami/aws-cli`          |
-| `backup.uploadProviders.aws.image.tag`            | AWS CLI image tag (immutable tags are recommended)                                                               | `2.12.1-debian-11-r0`      |
+| `backup.uploadProviders.aws.image.tag`            | AWS CLI image tag (immutable tags are recommended)                                                               | `2.13.0-debian-11-r1`      |
 | `backup.uploadProviders.aws.image.digest`         | AWS CLI image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag          | `""`                       |
 | `backup.uploadProviders.aws.image.pullPolicy`     | AWS CLI image pull policy                                                                                        | `IfNotPresent`             |
 | `backup.uploadProviders.aws.image.pullSecrets`    | Specify docker-registry secret names as an array                                                                 | `[]`                       |
