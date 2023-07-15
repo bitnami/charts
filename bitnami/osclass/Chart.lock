@@ -1,9 +1,9 @@
 dependencies:
 - name: mariadb
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 12.2.5
+  version: 12.2.7
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 2.4.0
-digest: sha256:0cf51ae54156893e9277582f668441c1ad0274e022655e64b381a94ad8a9bbd8
-generated: "2023-06-17T20:07:13.113906715Z"
+  version: 2.6.0
+digest: sha256:8ef0558081eec791104c560473fb5d0912e488e76be6bcb1cf1c24ae62fb7eaf
+generated: "2023-07-13T12:40:22.105803709Z"

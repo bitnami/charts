@@ -28,4 +28,4 @@ maintainers:
 name: postgresql
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/post
-version: 12.6.5
+version: 12.6.6

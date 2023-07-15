@@ -94,7 +94,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.args`                                   | Args to override all containers in the deployment                                                                                                   | `["infinity"]`          |
 | `image.registry`                                        | Redis&reg; cluster image registry                                                                                                                   | `docker.io`             |
 | `image.repository`                                      | Redis&reg; cluster image repository                                                                                                                 | `bitnami/redis-cluster` |
-| `image.tag`                                             | Redis&reg; cluster image tag (immutable tags are recommended)                                                                                       | `7.0.12-debian-11-r0`   |
+| `image.tag`                                             | Redis&reg; cluster image tag (immutable tags are recommended)                                                                                       | `7.0.12-debian-11-r2`   |
 | `image.digest`                                          | Redis&reg; cluster image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                  | `""`                    |
 | `image.pullPolicy`                                      | Redis&reg; cluster image pull policy                                                                                                                | `IfNotPresent`          |
 | `image.pullSecrets`                                     | Specify docker-registry secret names as an array                                                                                                    | `[]`                    |
@@ -160,8 +160,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistentVolumeClaimRetentionPolicy.whenDeleted`      | Volume retention behavior that applies when the StatefulSet is deleted                                                                              | `Retain`                |
 | `volumePermissions.enabled`                             | Enable init container that changes volume permissions in the registry (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
 | `volumePermissions.image.registry`                      | Init container volume-permissions image registry                                                                                                    | `docker.io`             |
-| `volumePermissions.image.repository`                    | Init container volume-permissions image repository                                                                                                  | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                           | Init container volume-permissions image tag                                                                                                         | `11-debian-11-r134`     |
+| `volumePermissions.image.repository`                    | Init container volume-permissions image repository                                                                                                  | `bitnami/os-shell`      |
+| `volumePermissions.image.tag`                           | Init container volume-permissions image tag                                                                                                         | `11-debian-11-r3`       |
 | `volumePermissions.image.digest`                        | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                   | `""`                    |
 | `volumePermissions.image.pullPolicy`                    | Init container volume-permissions image pull policy                                                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                   | Specify docker-registry secret names as an array                                                                                                    | `[]`                    |
@@ -289,7 +289,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                                           | Start a side-car prometheus exporter                                                                                               | `false`                  |
 | `metrics.image.registry`                                    | Redis&reg; exporter image registry                                                                                                 | `docker.io`              |
 | `metrics.image.repository`                                  | Redis&reg; exporter image name                                                                                                     | `bitnami/redis-exporter` |
-| `metrics.image.tag`                                         | Redis&reg; exporter image tag                                                                                                      | `1.51.0-debian-11-r8`    |
+| `metrics.image.tag`                                         | Redis&reg; exporter image tag                                                                                                      | `1.51.0-debian-11-r11`   |
 | `metrics.image.digest`                                      | Redis&reg; exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                | `""`                     |
 | `metrics.image.pullPolicy`                                  | Redis&reg; exporter image pull policy                                                                                              | `IfNotPresent`           |
 | `metrics.image.pullSecrets`                                 | Specify docker-registry secret names as an array                                                                                   | `[]`                     |
@@ -323,22 +323,22 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Sysctl Image parameters
 
-| Name                                              | Description                                                                                                          | Value                   |
-| ------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ----------------------- |
-| `sysctlImage.enabled`                             | Enable an init container to modify Kernel settings                                                                   | `false`                 |
-| `sysctlImage.command`                             | sysctlImage command to execute                                                                                       | `[]`                    |
-| `sysctlImage.registry`                            | sysctlImage Init container registry                                                                                  | `docker.io`             |
-| `sysctlImage.repository`                          | sysctlImage Init container repository                                                                                | `bitnami/bitnami-shell` |
-| `sysctlImage.tag`                                 | sysctlImage Init container tag                                                                                       | `11-debian-11-r134`     |
-| `sysctlImage.digest`                              | sysctlImage Init container digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
-| `sysctlImage.pullPolicy`                          | sysctlImage Init container pull policy                                                                               | `IfNotPresent`          |
-| `sysctlImage.pullSecrets`                         | Specify docker-registry secret names as an array                                                                     | `[]`                    |
-| `sysctlImage.mountHostSys`                        | Mount the host `/sys` folder to `/host-sys`                                                                          | `false`                 |
-| `sysctlImage.containerSecurityContext.enabled`    | Enable Containers' Security Context                                                                                  | `true`                  |
-| `sysctlImage.containerSecurityContext.runAsUser`  | User ID for the containers.                                                                                          | `0`                     |
-| `sysctlImage.containerSecurityContext.privileged` | Run privileged as privileged                                                                                         | `true`                  |
-| `sysctlImage.resources.limits`                    | The resources limits for the container                                                                               | `{}`                    |
-| `sysctlImage.resources.requests`                  | The requested resources for the container                                                                            | `{}`                    |
+| Name                                              | Description                                                                                                          | Value              |
+| ------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ------------------ |
+| `sysctlImage.enabled`                             | Enable an init container to modify Kernel settings                                                                   | `false`            |
+| `sysctlImage.command`                             | sysctlImage command to execute                                                                                       | `[]`               |
+| `sysctlImage.registry`                            | sysctlImage Init container registry                                                                                  | `docker.io`        |
+| `sysctlImage.repository`                          | sysctlImage Init container repository                                                                                | `bitnami/os-shell` |
+| `sysctlImage.tag`                                 | sysctlImage Init container tag                                                                                       | `11-debian-11-r3`  |
+| `sysctlImage.digest`                              | sysctlImage Init container digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`               |
+| `sysctlImage.pullPolicy`                          | sysctlImage Init container pull policy                                                                               | `IfNotPresent`     |
+| `sysctlImage.pullSecrets`                         | Specify docker-registry secret names as an array                                                                     | `[]`               |
+| `sysctlImage.mountHostSys`                        | Mount the host `/sys` folder to `/host-sys`                                                                          | `false`            |
+| `sysctlImage.containerSecurityContext.enabled`    | Enable Containers' Security Context                                                                                  | `true`             |
+| `sysctlImage.containerSecurityContext.runAsUser`  | User ID for the containers.                                                                                          | `0`                |
+| `sysctlImage.containerSecurityContext.privileged` | Run privileged as privileged                                                                                         | `true`             |
+| `sysctlImage.resources.limits`                    | The resources limits for the container                                                                               | `{}`               |
+| `sysctlImage.resources.requests`                  | The requested resources for the container                                                                            | `{}`               |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

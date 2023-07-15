@@ -31,4 +31,4 @@ maintainers:
 name: parse
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/parse
-version: 20.2.4
+version: 20.2.5
