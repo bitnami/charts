@@ -1,3 +1,8 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if .Values.aggregator.autoscaling.enabled }}
 apiVersion: {{ include "common.capabilities.hpa.apiVersion" ( dict "beta2" "true" "context" $ ) }}
 kind: HorizontalPodAutoscaler

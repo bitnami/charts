@@ -1,3 +1,8 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 apiVersion: {{ template "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
@@ -127,14 +132,6 @@ spec:
               value: /etc/harbor/ssl/registry/tls.crt
             - name: INTERNAL_TLS_TRUST_CA_PATH
               value: /etc/harbor/ssl/registry/ca.crt
-            {{- end }}
-            {{- if has "chartmuseum" .Values.proxy.components }}
-            - name: HTTP_PROXY
-              value: {{ .Values.proxy.httpProxy | quote  }}
-            - name: HTTPS_PROXY
-              value: {{ .Values.proxy.httpsProxy | quote }}
-            - name: NO_PROXY
-              value: {{ include "harbor.noProxy" . | quote }}
             {{- end }}
             {{- if .Values.registry.server.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.registry.server.extraEnvVars "context" $) | nindent 12 }}

@@ -1,3 +1,8 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if and (or .Values.postgresql.repmgrConfiguration .Values.postgresql.configuration .Values.postgresql.pgHbaConfiguration) (not .Values.postgresql.configurationCM) }}
 apiVersion: v1
 kind: ConfigMap

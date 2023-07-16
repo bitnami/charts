@@ -1,3 +1,8 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if and .Values.metrics.enabled .Values.metrics.serviceMonitor.enabled }}
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
@@ -34,6 +39,12 @@ spec:
       {{- end }}
   {{- if .Values.metrics.serviceMonitor.podTargetLabels }}
   podTargetLabels: {{- toYaml .Values.metrics.serviceMonitor.podTargetLabels | nindent 4 }}
+  {{- end }}
+  {{ with .Values.metrics.serviceMonitor.sampleLimit }}
+  sampleLimit: {{ . }}
+  {{- end }}
+  {{ with .Values.metrics.serviceMonitor.targetLimit }}
+  targetLimit: {{ . }}
   {{- end }}
   namespaceSelector:
     matchNames:

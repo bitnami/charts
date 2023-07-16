@@ -1,12 +1,12 @@
 dependencies:
 - name: node-exporter
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 3.5.2
+  version: 3.6.0
 - name: kube-state-metrics
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 3.5.1
+  version: 3.5.7
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 2.4.0
-digest: sha256:ccfeabb524bebe6e3efd0972ce14e916c0ea1b87837250196a93ccbe193f7860
-generated: "2023-05-22T04:28:22.664172483Z"
+  version: 2.6.0
+digest: sha256:3f6c3750e3873dd9ca2b40b1c212299981e4c1a5e2a1d9bc82dbac26495923e9
+generated: "2023-07-05T20:02:30.799050307Z"

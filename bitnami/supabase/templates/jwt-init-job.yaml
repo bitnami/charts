@@ -1,4 +1,9 @@
-{{- if (include "supabase.createInitJob" .) }}
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and (include "supabase.createInitJob" .) (not .Values.global.jwt.existingSecret) }}
 apiVersion: batch/v1
 kind: Job
 metadata:

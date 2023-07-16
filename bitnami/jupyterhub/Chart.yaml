@@ -1,8 +1,11 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
 annotations:
   category: MachineLearning
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 4.0.0
+appVersion: 4.0.1
 dependencies:
   - condition: postgresql.enabled
     name: postgresql
@@ -25,4 +28,4 @@ maintainers:
 name: jupyterhub
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/jupyterhub
-version: 4.1.4
+version: 4.1.7

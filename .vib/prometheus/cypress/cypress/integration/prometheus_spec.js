@@ -1,3 +1,8 @@
+/*
+ * Copyright VMware, Inc.
+ * SPDX-License-Identifier: APACHE-2.0
+ */
+
 /// <reference types="cypress" />
 
 it('allows executing a query and displaying response data for each deployment', () => {

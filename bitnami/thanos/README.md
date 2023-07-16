@@ -20,6 +20,8 @@ This chart bootstraps a [Thanos](https://github.com/bitnami/containers/tree/main
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
+Looking to use Thanos in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+
 ## Prerequisites
 
 - Kubernetes 1.19+
@@ -107,7 +109,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ------------------- |
 | `image.registry`                              | Thanos image registry                                                                                               | `docker.io`         |
 | `image.repository`                            | Thanos image repository                                                                                             | `bitnami/thanos`    |
-| `image.tag`                                   | Thanos image tag (immutable tags are recommended)                                                                   | `0.31.0-scratch-r5` |
+| `image.tag`                                   | Thanos image tag (immutable tags are recommended)                                                                   | `0.31.0-scratch-r9` |
 | `image.digest`                                | Thanos image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag              | `""`                |
 | `image.pullPolicy`                            | Thanos image pull policy                                                                                            | `IfNotPresent`      |
 | `image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                    | `[]`                |
@@ -227,6 +229,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `query.service.loadBalancerIP`                            | Load balancer IP if service type is `LoadBalancer`                                                                                      | `""`                     |
 | `query.service.loadBalancerSourceRanges`                  | Address that are allowed when service is LoadBalancer                                                                                   | `[]`                     |
 | `query.service.externalTrafficPolicy`                     | Thanos Query service externalTrafficPolicy                                                                                              | `Cluster`                |
+| `query.service.labels`                                    | Labels for Thanos Query service                                                                                                         | `{}`                     |
 | `query.service.annotations`                               | Annotations for Thanos Query service                                                                                                    | `{}`                     |
 | `query.service.extraPorts`                                | Extra ports to expose in the Thanos Query service                                                                                       | `[]`                     |
 | `query.service.labelSelectorsOverride`                    | Selector for Thanos Query service                                                                                                       | `{}`                     |
@@ -469,6 +472,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `bucketweb.service.loadBalancerIP`                            | Load balancer IP if service type is `LoadBalancer`                                                                               | `""`                     |
 | `bucketweb.service.loadBalancerSourceRanges`                  | Address that are allowed when service is LoadBalancer                                                                            | `[]`                     |
 | `bucketweb.service.externalTrafficPolicy`                     | Thanos Bucket Web service externalTrafficPolicy                                                                                  | `Cluster`                |
+| `bucketweb.service.labels`                                    | Extra labels for Thanos Bucket Web service                                                                                       | `{}`                     |
 | `bucketweb.service.annotations`                               | Annotations for Thanos Bucket Web service                                                                                        | `{}`                     |
 | `bucketweb.service.extraPorts`                                | Extra ports to expose in the Thanos Bucket Web service                                                                           | `[]`                     |
 | `bucketweb.service.labelSelectorsOverride`                    | Selector for Thanos Query service                                                                                                | `{}`                     |
@@ -584,6 +588,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `compactor.service.loadBalancerIP`                            | Load balancer IP if service type is `LoadBalancer`                                                                               | `""`                     |
 | `compactor.service.loadBalancerSourceRanges`                  | Addresses that are allowed when service is LoadBalancer                                                                          | `[]`                     |
 | `compactor.service.externalTrafficPolicy`                     | Thanos Compactor service externalTrafficPolicy                                                                                   | `Cluster`                |
+| `compactor.service.labels`                                    | Labels for Thanos Compactor service                                                                                              | `{}`                     |
 | `compactor.service.annotations`                               | Annotations for Thanos Compactor service                                                                                         | `{}`                     |
 | `compactor.service.extraPorts`                                | Extra ports to expose in the Thanos Compactor service                                                                            | `[]`                     |
 | `compactor.service.labelSelectorsOverride`                    | Selector for Thanos Query service                                                                                                | `{}`                     |
@@ -609,6 +614,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `compactor.persistence.storageClass`                          | Specify the `storageClass` used to provision the volume                                                                          | `""`                     |
 | `compactor.persistence.accessModes`                           | PVC Access Modes for data volume                                                                                                 | `["ReadWriteOnce"]`      |
 | `compactor.persistence.size`                                  | PVC Storage Request for data volume                                                                                              | `8Gi`                    |
+| `compactor.persistence.labels`                                | Labels for the PVC                                                                                                               | `{}`                     |
 | `compactor.persistence.annotations`                           | Annotations for the PVC                                                                                                          | `{}`                     |
 | `compactor.persistence.existingClaim`                         | Name of an existing PVC to use                                                                                                   | `""`                     |
 
@@ -695,6 +701,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `storegateway.service.loadBalancerIP`                            | Load balancer IP if service type is `LoadBalancer`                                                                                       | `""`                        |
 | `storegateway.service.loadBalancerSourceRanges`                  | Addresses that are allowed when service is LoadBalancer                                                                                  | `[]`                        |
 | `storegateway.service.externalTrafficPolicy`                     | Thanos Store Gateway service externalTrafficPolicy                                                                                       | `Cluster`                   |
+| `storegateway.service.labels`                                    | Extra labels for Thanos Store Gateway service                                                                                            | `{}`                        |
 | `storegateway.service.annotations`                               | Annotations for Thanos Store Gateway service                                                                                             | `{}`                        |
 | `storegateway.service.extraPorts`                                | Extra ports to expose in the Thanos Store Gateway service                                                                                | `[]`                        |
 | `storegateway.service.labelSelectorsOverride`                    | Selector for Thanos Query service                                                                                                        | `{}`                        |
@@ -838,6 +845,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `ruler.service.loadBalancerIP`                            | Load balancer IP if service type is `LoadBalancer`                                                                               | `""`                     |
 | `ruler.service.loadBalancerSourceRanges`                  | Address that are allowed when service is LoadBalancer                                                                            | `[]`                     |
 | `ruler.service.externalTrafficPolicy`                     | Thanos Ruler service externalTrafficPolicy                                                                                       | `Cluster`                |
+| `ruler.service.labels`                                    | Extra labels for Thanos Ruler service                                                                                            | `{}`                     |
 | `ruler.service.annotations`                               | Annotations for Thanos Ruler service                                                                                             | `{}`                     |
 | `ruler.service.extraPorts`                                | Extra ports to expose in the Thanos Ruler service                                                                                | `[]`                     |
 | `ruler.service.labelSelectorsOverride`                    | Selector for Thanos Query service                                                                                                | `{}`                     |
@@ -964,6 +972,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `receive.service.loadBalancerIP`                            | Load balancer IP if service type is `LoadBalancer`                                                                               | `""`                     |
 | `receive.service.loadBalancerSourceRanges`                  | Addresses that are allowed when service is LoadBalancer                                                                          | `[]`                     |
 | `receive.service.externalTrafficPolicy`                     | Thanos Ruler service externalTrafficPolicy                                                                                       | `Cluster`                |
+| `receive.service.labels`                                    | Extra labels for Thanos Receive service                                                                                          | `{}`                     |
 | `receive.service.annotations`                               | Annotations for Thanos Receive service                                                                                           | `{}`                     |
 | `receive.service.extraPorts`                                | Extra ports to expose in the Thanos Receive service                                                                              | `[]`                     |
 | `receive.service.labelSelectorsOverride`                    | Selector for Thanos receive service                                                                                              | `{}`                     |
@@ -1161,15 +1170,15 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 
 ### Volume Permissions parameters
 
-| Name                                  | Description                                                                                                                       | Value                   |
-| ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
-| `volumePermissions.enabled`           | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`                                   | `false`                 |
-| `volumePermissions.image.registry`    | Init container volume-permissions image registry                                                                                  | `docker.io`             |
-| `volumePermissions.image.repository`  | Init container volume-permissions image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`         | Init container volume-permissions image tag                                                                                       | `11-debian-11-r118`     |
-| `volumePermissions.image.digest`      | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
-| `volumePermissions.image.pullPolicy`  | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`          |
-| `volumePermissions.image.pullSecrets` | Specify docker-registry secret names as an array                                                                                  | `[]`                    |
+| Name                                  | Description                                                                                                                       | Value              |
+| ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ------------------ |
+| `volumePermissions.enabled`           | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`                                   | `false`            |
+| `volumePermissions.image.registry`    | Init container volume-permissions image registry                                                                                  | `docker.io`        |
+| `volumePermissions.image.repository`  | Init container volume-permissions image repository                                                                                | `bitnami/os-shell` |
+| `volumePermissions.image.tag`         | Init container volume-permissions image tag                                                                                       | `11-debian-11-r2`  |
+| `volumePermissions.image.digest`      | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`               |
+| `volumePermissions.image.pullPolicy`  | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`     |
+| `volumePermissions.image.pullSecrets` | Specify docker-registry secret names as an array                                                                                  | `[]`               |
 
 ### MinIO&reg; chart parameters
 
@@ -1364,7 +1373,7 @@ ruler:
   enabled: true
   alertmanagers:
     - http://kube-prometheus-alertmanager.monitoring.svc.cluster.local:9093
-config: |-
+  config: |-
     groups:
       - name: "metamonitoring"
         rules:
@@ -1652,7 +1661,7 @@ ingress.secrets[0].key -> querier.ingress.secrets[0].key
 
 ## License
 
-Copyright &copy; 2023 Bitnami
+Copyright &copy; 2023 VMware, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

@@ -1,3 +1,8 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
@@ -80,6 +85,7 @@ spec:
       {{- end }}
       hostNetwork: {{ .Values.postgresql.hostNetwork }}
       hostIPC: {{ .Values.postgresql.hostIPC }}
+      {{- if or .Values.postgresql.tls.enabled .Values.postgresql.initContainers .Values.postgresql.extraInitContainers (and .Values.volumePermissions.enabled (or (or (not (empty .Values.postgresql.extendedConf)) (not (empty .Values.postgresql.extendedConfCM))) .Values.persistence.enabled)) }}
       initContainers:
       {{- if .Values.postgresql.tls.enabled }}
         - name: init-chmod-tls
@@ -130,6 +136,7 @@ spec:
       {{- end }}
       {{- if or .Values.postgresql.initContainers .Values.postgresql.extraInitContainers }}
       {{- include "common.tplvalues.render" ( dict "value" (coalesce .Values.postgresql.initContainers .Values.postgresql.extraInitContainers) "context" $ ) | nindent 8 }}
+      {{- end }}
       {{- end }}
       containers:
         - name: postgresql
@@ -524,6 +531,7 @@ spec:
           {{- if .Values.metrics.resources }}
           resources: {{- toYaml .Values.metrics.resources | nindent 12 }}
           {{- end }}
+          {{- if or .Values.postgresql.usePasswordFile .Values.metrics.customMetrics }}
           volumeMounts:
             {{- if .Values.postgresql.usePasswordFile }}
             - name: password
@@ -533,6 +541,9 @@ spec:
             - name: custom-metrics
               mountPath: /conf
               readOnly: true
+            {{- end }}
+          {{- end }}
+          {{- if .Values.metrics.customMetrics }}
           {{- if .Values.diagnosticMode.enabled }}
           command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
           {{- end }}

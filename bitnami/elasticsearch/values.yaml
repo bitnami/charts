@@ -1,3 +1,6 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
 ## @section Global parameters
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
@@ -186,7 +189,7 @@ useIstioLabels: true
 image:
   registry: docker.io
   repository: bitnami/elasticsearch
-  tag: 8.8.0-debian-11-r0
+  tag: 8.8.2-debian-11-r4
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -463,6 +466,10 @@ master:
   ## @param master.replicaCount Number of master-elegible replicas to deploy
   ##
   replicaCount: 2
+
+  ## @param master.extraRoles Append extra roles to the node role
+  ##
+  extraRoles: []
 
   ## Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
@@ -781,6 +788,10 @@ data:
   ##
   replicaCount: 2
 
+  ## @param data.extraRoles Append extra roles to the node role
+  ##
+  extraRoles: []
+
   ## Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
   ## @param data.pdb.create Enable/disable a Pod Disruption Budget creation
@@ -1088,6 +1099,11 @@ coordinating:
   ##
   replicaCount: 2
 
+  ## @param coordinating.extraRoles Append extra roles to the node role
+  ## NOTE: In Elasticsearch, all nodes act as coordinators, coordinating-only nodes do not have any other role by default.
+  ##
+  extraRoles: []
+
   ## Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
   ## @param coordinating.pdb.create Enable/disable a Pod Disruption Budget creation
@@ -1358,6 +1374,10 @@ ingest:
   ## @param ingest.replicaCount Number of ingest-only replicas to deploy
   ##
   replicaCount: 2
+
+  ## @param ingest.extraRoles Append extra roles to the node role
+  ##
+  extraRoles: []
 
   ## Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
@@ -1819,7 +1839,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/elasticsearch-exporter
-    tag: 1.5.0-debian-11-r102
+    tag: 1.6.0-debian-11-r4
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -2151,8 +2171,8 @@ volumePermissions:
   ##
   image:
     registry: docker.io
-    repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r119
+    repository: bitnami/os-shell
+    tag: 11-debian-11-r2
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -2198,8 +2218,8 @@ sysctlImage:
   ## @param sysctlImage.pullSecrets Kernel settings modifier image pull secrets
   ##
   registry: docker.io
-  repository: bitnami/bitnami-shell
-  tag: 11-debian-11-r119
+  repository: bitnami/os-shell
+  tag: 11-debian-11-r2
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

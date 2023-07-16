@@ -1,3 +1,8 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if (include "elasticsearch.master.enabled" .) }}
 apiVersion: {{ template "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
@@ -163,8 +168,9 @@ spec:
                   fieldPath: metadata.name
             - name: ELASTICSEARCH_IS_DEDICATED_NODE
               value: {{ ternary "yes" "no" .Values.master.masterOnly | quote }}
+            {{- $roles := ternary "master" (list "master" .Values.master.extraRoles) (empty .Values.master.extraRoles) }}
             - name: ELASTICSEARCH_NODE_ROLES
-              value: "master"
+              value: {{ join "," $roles | quote }}
             - name: ELASTICSEARCH_TRANSPORT_PORT_NUMBER
               value: {{ .Values.containerPorts.transport | quote }}
             - name: ELASTICSEARCH_HTTP_PORT_NUMBER

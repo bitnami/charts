@@ -1,19 +1,24 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
 name: '[Support] Review based card movements'
 on:
-  pull_request:
+  pull_request_target:
     types:
       - review_requested
       - synchronize
-permissions:
-  repository-projects: write
-  contents: read
-  issues: read
-  pull-requests: read
+# Remove all permissions by default
+permissions: {}
 concurrency:
   group: card-movement-${{ github.event.number }}
 jobs:
   handler:
     runs-on: ubuntu-latest
+    permissions:
+      repository-projects: write
+      contents: read
+      issues: read
+      pull-requests: read
     # This job will ignore:
     # * Events triggered by bitnami-bot (README commits for example).
     # * Events triggered over automated PRs (They are managed in comments.yml workflow).
@@ -24,10 +29,6 @@ jobs:
     steps:
       - name: Repo checkout
         uses: actions/checkout@v3
-        with:
-          # Checkout from base to try to get latest information from the main branch.
-          ref: ${{ github.event.pull_request.base.ref }}
-          repository: ${{ github.event.pull_request.base.repo.full_name }}
       - name: Load .env file
         uses: xom9ikk/dotenv@v2
         with:

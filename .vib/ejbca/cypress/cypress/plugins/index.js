@@ -1,3 +1,8 @@
+/*
+ * Copyright VMware, Inc.
+ * SPDX-License-Identifier: APACHE-2.0
+ */
+
 /// <reference types="cypress" />
 // ***********************************************************
 // This example plugins/index.js can be used to load plugins

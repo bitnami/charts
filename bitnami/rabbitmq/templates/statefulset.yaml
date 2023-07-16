@@ -1,3 +1,8 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
@@ -39,6 +44,9 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
         {{- end }}
         checksum/config: {{ include (print $.Template.BasePath "/config-secret.yaml") . | sha256sum }}
+        {{- if (include "rabbitmq.createTlsSecret" . ) }}
+        checksum/config: {{ include (print $.Template.BasePath "/tls-secrets.yaml") . | sha256sum }}
+        {{- end }}
         {{- if or (not .Values.auth.existingErlangSecret) (not .Values.auth.existingPasswordSecret) .Values.extraSecrets }}
         checksum/secret: {{ include (print $.Template.BasePath "/secrets.yaml") . | sha256sum }}
         {{- end }}
@@ -289,7 +297,11 @@ spec:
               command:
                 - sh
                 - -ec
+                {{- if or (.Values.loadDefinition.enabled) (not (contains "rabbitmq_management" .Values.plugins )) }}
                 - rabbitmq-diagnostics -q ping
+                {{- else }}
+                - curl -f --user {{ .Values.auth.username }}:$RABBITMQ_PASSWORD 127.0.0.1:{{ .Values.containerPorts.manager }}/api/health/checks/virtual-hosts
+                {{- end }}
           {{- end }}
           {{- if .Values.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customReadinessProbe "context" $) | nindent 12 }}
@@ -299,7 +311,11 @@ spec:
               command:
                 - sh
                 - -ec
+                {{- if or (.Values.loadDefinition.enabled) (not (contains "rabbitmq_management" .Values.plugins )) }}
                 - rabbitmq-diagnostics -q check_running && rabbitmq-diagnostics -q check_local_alarms
+                {{- else }}
+                - curl -f --user {{ .Values.auth.username }}:$RABBITMQ_PASSWORD 127.0.0.1:{{ .Values.containerPorts.manager }}/api/health/checks/local-alarms
+                {{- end }}
           {{- end }}
           {{- if .Values.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.customStartupProbe "context" $) | nindent 12 }}

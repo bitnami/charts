@@ -1,3 +1,8 @@
+/*
+ * Copyright VMware, Inc.
+ * SPDX-License-Identifier: APACHE-2.0
+ */
+
 const BASE_URL = 'http://vmware-oauth2-proxy.my';
 
 // DEX is deployed at localhost:5556/dex/, which is not exposed (only port 80 is).

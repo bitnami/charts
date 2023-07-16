@@ -1,9 +1,15 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
 metadata:
   name: {{ include "common.names.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: etcd
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
@@ -14,12 +20,14 @@ spec:
   replicas: {{ .Values.replicaCount }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: etcd
   serviceName: {{ printf "%s-headless" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   podManagementPolicy: {{ .Values.podManagementPolicy }}
   updateStrategy: {{- include "common.tplvalues.render" (dict "value" .Values.updateStrategy "context" $ ) | nindent 4 }}
   template:
     metadata:
       labels: {{- include "common.labels.standard" . | nindent 8 }}
+        app.kubernetes.io/component: etcd
         {{- if .Values.podLabels }}
         {{- include "common.tplvalues.render" (dict "value" .Values.podLabels "context" $) | nindent 8 }}
         {{- end }}
@@ -333,6 +341,9 @@ spec:
             {{- if or .Values.disasterRecovery.enabled (and .Values.disasterRecovery.enabled .Values.startFromSnapshot.enabled) }}
             - name: snapshot-volume
               mountPath: /snapshots
+              {{- if .Values.disasterRecovery.pvc.subPath }}
+              subPath: {{ .Values.disasterRecovery.pvc.subPath }}
+              {{- end }}
             {{- end }}
             {{- if or .Values.configuration .Values.existingConfigmap }}
             - name: etcd-config

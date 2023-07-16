@@ -22,6 +22,8 @@ It also packages the [Bitnami PostgreSQL chart](https://github.com/bitnami/chart
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
 
+Looking to use Gitea in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+
 ## Prerequisites
 
 - Kubernetes 1.19+
@@ -79,7 +81,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`                        | Gitea image registry                                                                                                  | `docker.io`           |
 | `image.repository`                      | Gitea Image name                                                                                                      | `bitnami/gitea`       |
-| `image.tag`                             | Gitea Image tag                                                                                                       | `1.19.3-debian-11-r6` |
+| `image.tag`                             | Gitea Image tag                                                                                                       | `1.19.4-debian-11-r3` |
 | `image.digest`                          | Gitea image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                 | `""`                  |
 | `image.pullPolicy`                      | Gitea image pull policy                                                                                               | `IfNotPresent`        |
 | `image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                      | `[]`                  |
@@ -227,17 +229,17 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Volume Permissions parameters
 
-| Name                                   | Description                                                                                                                                               | Value                   |
-| -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
-| `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
-| `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                                          | `docker.io`             |
-| `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                                                              | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `11-debian-11-r118`     |
-| `volumePermissions.image.digest`       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                         | `""`                    |
-| `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`          |
-| `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                                          | `[]`                    |
-| `volumePermissions.resources.limits`   | The resources limits for the container                                                                                                                    | `{}`                    |
-| `volumePermissions.resources.requests` | The requested resources for the container                                                                                                                 | `{}`                    |
+| Name                                   | Description                                                                                                                                               | Value              |
+| -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ |
+| `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`            |
+| `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                                          | `docker.io`        |
+| `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                                                              | `bitnami/os-shell` |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `11-debian-11-r2`  |
+| `volumePermissions.image.digest`       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                         | `""`               |
+| `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`     |
+| `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                                          | `[]`               |
+| `volumePermissions.resources.limits`   | The resources limits for the container                                                                                                                    | `{}`               |
+| `volumePermissions.resources.requests` | The requested resources for the container                                                                                                                 | `{}`               |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -333,7 +335,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## License
 
-Copyright &copy; 2023 Bitnami
+Copyright &copy; 2023 VMware, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

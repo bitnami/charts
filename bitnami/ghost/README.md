@@ -22,6 +22,8 @@ It also packages the [Bitnami MySQL chart](https://github.com/bitnami/charts/tre
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
+Looking to use Ghost in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+
 ## Prerequisites
 
 - Kubernetes 1.19+
@@ -79,7 +81,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | ----------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`    | Ghost image registry                                                                                  | `docker.io`           |
 | `image.repository`  | Ghost image repository                                                                                | `bitnami/ghost`       |
-| `image.tag`         | Ghost image tag (immutable tags are recommended)                                                      | `5.49.1-debian-11-r0` |
+| `image.tag`         | Ghost image tag (immutable tags are recommended)                                                      | `5.54.2-debian-11-r0` |
 | `image.digest`      | Ghost image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
 | `image.pullPolicy`  | Ghost image pull policy                                                                               | `IfNotPresent`        |
 | `image.pullSecrets` | Ghost image pull secrets                                                                              | `[]`                  |
@@ -201,25 +203,25 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Persistence Parameters
 
-| Name                                          | Description                                                                                                   | Value                   |
-| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------- | ----------------------- |
-| `persistence.enabled`                         | Enable persistence using Persistent Volume Claims                                                             | `true`                  |
-| `persistence.storageClass`                    | Persistent Volume storage class                                                                               | `""`                    |
-| `persistence.annotations`                     | Additional custom annotations for the PVC                                                                     | `{}`                    |
-| `persistence.accessModes`                     | Persistent Volume access modes                                                                                | `[]`                    |
-| `persistence.size`                            | Persistent Volume size                                                                                        | `8Gi`                   |
-| `persistence.existingClaim`                   | The name of an existing PVC to use for persistence                                                            | `""`                    |
-| `persistence.subPath`                         | The name of a volume's sub path to mount for persistence                                                      | `""`                    |
-| `volumePermissions.enabled`                   | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`               | `false`                 |
-| `volumePermissions.image.registry`            | Bitnami Shell image registry                                                                                  | `docker.io`             |
-| `volumePermissions.image.repository`          | Bitnami Shell image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r119`     |
-| `volumePermissions.image.digest`              | Bitnami Shell image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
-| `volumePermissions.image.pullPolicy`          | Bitnami Shell image pull policy                                                                               | `IfNotPresent`          |
-| `volumePermissions.image.pullSecrets`         | Bitnami Shell image pull secrets                                                                              | `[]`                    |
-| `volumePermissions.resources.limits`          | The resources limits for the init container                                                                   | `{}`                    |
-| `volumePermissions.resources.requests`        | The requested resources for the init container                                                                | `{}`                    |
-| `volumePermissions.securityContext.runAsUser` | Set init container's Security Context runAsUser                                                               | `0`                     |
+| Name                                          | Description                                                                                                        | Value              |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | ------------------ |
+| `persistence.enabled`                         | Enable persistence using Persistent Volume Claims                                                                  | `true`             |
+| `persistence.storageClass`                    | Persistent Volume storage class                                                                                    | `""`               |
+| `persistence.annotations`                     | Additional custom annotations for the PVC                                                                          | `{}`               |
+| `persistence.accessModes`                     | Persistent Volume access modes                                                                                     | `[]`               |
+| `persistence.size`                            | Persistent Volume size                                                                                             | `8Gi`              |
+| `persistence.existingClaim`                   | The name of an existing PVC to use for persistence                                                                 | `""`               |
+| `persistence.subPath`                         | The name of a volume's sub path to mount for persistence                                                           | `""`               |
+| `volumePermissions.enabled`                   | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`                    | `false`            |
+| `volumePermissions.image.registry`            | OS Shell + Utility image registry                                                                                  | `docker.io`        |
+| `volumePermissions.image.repository`          | OS Shell + Utility image repository                                                                                | `bitnami/os-shell` |
+| `volumePermissions.image.tag`                 | OS Shell + Utility image tag (immutable tags are recommended)                                                      | `11-debian-11-r3`  |
+| `volumePermissions.image.digest`              | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`               |
+| `volumePermissions.image.pullPolicy`          | OS Shell + Utility image pull policy                                                                               | `IfNotPresent`     |
+| `volumePermissions.image.pullSecrets`         | OS Shell + Utility image pull secrets                                                                              | `[]`               |
+| `volumePermissions.resources.limits`          | The resources limits for the init container                                                                        | `{}`               |
+| `volumePermissions.resources.requests`        | The requested resources for the init container                                                                     | `{}`               |
+| `volumePermissions.securityContext.runAsUser` | Set init container's Security Context runAsUser                                                                    | `0`                |
 
 ### Database Parameters
 
@@ -518,17 +520,9 @@ kubectl patch deployment ghost-ghost --type=json -p='[{"op": "remove", "path": "
 kubectl delete statefulset ghost-mariadb --cascade=false
 ```
 
-## Community supported solution
-
-Please, note this Helm chart is a community-supported solution. This means that the Bitnami team is not actively working on new features/improvements nor providing support through GitHub Issues for this Helm chart. Any new issue will stay open for 20 days to allow the community to contribute, after 15 days without activity the issue will be marked as stale being closed after 5 days.
-
-The Bitnami team will review any PR that is created, feel free to create a PR if you find any issue or want to implement a new feature.
-
-New versions are not going to be affected. Once a new version is released in the upstream project, the Bitnami container image will be updated to use the latest version.
-
 ## License
 
-Copyright &copy; 2023 Bitnami
+Copyright &copy; 2023 VMware, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

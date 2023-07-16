@@ -8,8 +8,6 @@ Multus is a CNI plugin for Kubernetes clusters. Written in Go, features adding m
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 
-Looking to use Multus CNI in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
-
 ## TL;DR
 
 ```console
@@ -21,6 +19,8 @@ helm install my-release oci://registry-1.docker.io/bitnamicharts/multus-cni
 This chart bootstraps a [Multus CNI](https://github.com/bitnami/containers/tree/main/bitnami/multus-cni) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
+
+Looking to use Multus CNI in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -82,7 +82,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | -------------------------- |
 | `image.registry`                        | Multus CNI image registry                                                                                             | `docker.io`                |
 | `image.repository`                      | Multus CNI Image name                                                                                                 | `bitnami/multus-cni`       |
-| `image.tag`                             | Multus CNI Image tag                                                                                                  | `3.9.3-debian-11-r19`      |
+| `image.tag`                             | Multus CNI Image tag                                                                                                  | `4.0.2-debian-11-r16`      |
 | `image.digest`                          | Multus CNI image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag            | `""`                       |
 | `image.pullPolicy`                      | Multus CNI image pull policy                                                                                          | `IfNotPresent`             |
 | `image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                      | `[]`                       |
@@ -220,7 +220,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## License
 
-Copyright &copy; 2023 Bitnami
+Copyright &copy; 2023 VMware, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.

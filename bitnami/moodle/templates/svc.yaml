@@ -1,3 +1,8 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 apiVersion: v1
 kind: Service
 metadata:
@@ -42,6 +47,7 @@ spec:
       nodePort: {{ .Values.service.nodePorts.http }}
       {{- else if eq .Values.service.type "ClusterIP" }}
       nodePort: null
+      targetPort: {{ .Values.containerPorts.http }}
       {{- end }}
     - name: https
       port: {{ coalesce .Values.service.ports.https .Values.service.httpsPort }}

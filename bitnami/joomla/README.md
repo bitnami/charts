@@ -22,6 +22,8 @@ It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/t
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
+Looking to use Joomla! in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+
 ## Prerequisites
 
 - Kubernetes 1.19+
@@ -79,7 +81,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | -------------------- |
 | `image.registry`                        | Joomla! image registry                                                                                               | `docker.io`          |
 | `image.repository`                      | Joomla! Image name                                                                                                   | `bitnami/joomla`     |
-| `image.tag`                             | Joomla! Image tag                                                                                                    | `4.3.1-debian-11-r7` |
+| `image.tag`                             | Joomla! Image tag                                                                                                    | `4.3.3-debian-11-r0` |
 | `image.digest`                          | Joomla! image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag              | `""`                 |
 | `image.pullPolicy`                      | Joomla! image pull policy                                                                                            | `IfNotPresent`       |
 | `image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                     | `[]`                 |
@@ -219,7 +221,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`           | Start a side-car prometheus exporter                                                                            | `false`                   |
 | `metrics.image.registry`    | Apache exporter image registry                                                                                  | `docker.io`               |
 | `metrics.image.repository`  | Apache exporter image name                                                                                      | `bitnami/apache-exporter` |
-| `metrics.image.tag`         | Apache exporter image tag                                                                                       | `0.13.3-debian-11-r9`     |
+| `metrics.image.tag`         | Apache exporter image tag                                                                                       | `0.13.4-debian-11-r14`    |
 | `metrics.image.digest`      | Apache exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
 | `metrics.image.pullPolicy`  | Image pull policy                                                                                               | `IfNotPresent`            |
 | `metrics.image.pullSecrets` | Specify docker-registry secret names as an array                                                                | `[]`                      |
@@ -474,17 +476,9 @@ kubectl patch deployment joomla-joomla --type=json -p='[{"op": "remove", "path":
 kubectl delete statefulset joomla-mariadb --cascade=false
 ```
 
-## Community supported solution
-
-Please, note this Helm chart is a community-supported solution. This means that the Bitnami team is not actively working on new features/improvements nor providing support through GitHub Issues for this Helm chart. Any new issue will stay open for 20 days to allow the community to contribute, after 15 days without activity the issue will be marked as stale being closed after 5 days.
-
-The Bitnami team will review any PR that is created, feel free to create a PR if you find any issue or want to implement a new feature.
-
-New versions are not going to be affected. Once a new version is released in the upstream project, the Bitnami container image will be updated to use the latest version.
-
 ## License
 
-Copyright &copy; 2023 Bitnami
+Copyright &copy; 2023 VMware, Inc.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
