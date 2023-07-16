@@ -1,3 +1,6 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
 annotations:
   category: Infrastructure
   licenses: Apache-2.0
@@ -21,4 +24,4 @@ maintainers:
 name: memcached
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/memcached
-version: 6.5.3
+version: 6.5.5

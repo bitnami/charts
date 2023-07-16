@@ -1,3 +1,8 @@
+{{/*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{/* vim: set filetype=mustache: */}}
 {{/*
 Create a default fully qualified app name for Kafka subchart
@@ -127,12 +132,13 @@ schema-registry: kafka.auth.jaas.clientUsers kafka.auth.jaas.clientPasswords
       - kafka.auth.jaas.clientUsers
       - kafka.auth.jaas.clientPasswords
 {{- end }}
-{{- else if and (contains "SASL" $kafkaProtocol) (or (not .Values.externalKafka.auth.jaas.user) (not .Values.externalKafka.auth.jaas.password)) }}
+{{- else if and (contains "SASL" $kafkaProtocol) (or (not .Values.externalKafka.auth.jaas.user) (not (or (.Values.externalKafka.auth.jaas.password) (.Values.externalKafka.auth.jaas.existingSecret) ) ) ) }}
 schema-registry: externalKafka.auth.jaas.user externalKafka.auth.jaas.password
     It's mandatory to set the SASL credentials when enabling SASL authentication with Kafka brokers.
     You can specify these credentials setting the parameters below:
-      - kexternalKafka.auth.jaas.user
+      - externalKafka.auth.jaas.user
       - externalKafka.auth.jaas.password
+      - externalKafka.auth.jaas.existingSecret (takes precedence over password)
 {{- end -}}
 {{- end -}}
 
@@ -142,5 +148,19 @@ schema-registry: externalKafka.auth.jaas.user externalKafka.auth.jaas.password
 {{- if and (contains "SSL" $kafkaProtocol) (not .Values.auth.kafka.jksSecret) }}
 kafka: auth.kafka.jksSecret
     A secret containing the Schema Registry JKS files is required when TLS encryption in enabled
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the external Kafka JAAS credentials secret name
+*/}}
+{{- define "schema-registry.jaasSecretName" -}}
+{{- $secretName := .Values.externalKafka.auth.jaas.existingSecret -}}
+{{- if .Values.kafka.enabled }}
+    {{- printf "%s-jaas" (include "schema-registry.kafka.fullname" .) -}}
+{{- else if $secretName -}}
+    {{- printf "%s" (tpl $secretName $) -}}
+{{- else -}}
+    {{- printf "%s-external-kafka" (include "common.names.fullname" .) -}}
 {{- end -}}
 {{- end -}}

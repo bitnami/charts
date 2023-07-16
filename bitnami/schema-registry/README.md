@@ -20,12 +20,12 @@ This chart bootstraps a [Schema Registry](https://github.com/bitnami/containers/
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
 
+Looking to use Confluent Schema Registry in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+
 ## Prerequisites
 
 - Kubernetes 1.19+
 - Helm 3.2.0+
-- PV provisioner support in the underlying infrastructure
-- ReadWriteMany volumes for deployment scaling
 
 ## Installing the Chart
 
@@ -57,7 +57,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------- | ----------------------------------------------- | ----- |
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
-| `global.storageClass`     | Global StorageClass for Persistent Volume(s)    | `""`  |
 | `kubeVersion`             | Override Kubernetes version                     | `""`  |
 
 ### Common parameters
@@ -81,7 +80,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | ------------------------- |
 | `image.registry`                                | Schema Registry image registry                                                                                  | `docker.io`               |
 | `image.repository`                              | Schema Registry image repository                                                                                | `bitnami/schema-registry` |
-| `image.tag`                                     | Schema Registry image tag (immutable tags are recommended)                                                      | `7.4.0-debian-11-r9`      |
+| `image.tag`                                     | Schema Registry image tag (immutable tags are recommended)                                                      | `7.4.0-debian-11-r18`     |
 | `image.digest`                                  | Schema Registry image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
 | `image.pullPolicy`                              | Schema Registry image pull policy                                                                               | `IfNotPresent`            |
 | `image.pullSecrets`                             | Schema Registry image pull secrets                                                                              | `[]`                      |
@@ -159,8 +158,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `customLivenessProbe`                | Custom livenessProbe that overrides the default one                                                                      | `{}`            |
 | `customReadinessProbe`               | Custom readinessProbe that overrides the default one                                                                     | `{}`            |
 | `customStartupProbe`                 | Custom startupProbe that overrides the default one                                                                       | `{}`            |
-| `extraVolumes`                       | Optionally specify extra list of additional volumes for MinIO&reg; pods                                                  | `[]`            |
-| `extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for MinIO&reg; container(s)                                     | `[]`            |
+| `extraVolumes`                       | Optionally specify extra list of additional volumes for schema-registry pods                                             | `[]`            |
+| `extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for schema-registry container(s)                                | `[]`            |
 | `initContainers`                     | Add additional init containers to the Schema Registry pods.                                                              | `[]`            |
 | `sidecars`                           | Add additional sidecar containers to the Schema Registry pods.                                                           | `[]`            |
 | `pdb.create`                         | Enable/disable a Pod Disruption Budget creation                                                                          | `false`         |
@@ -220,14 +219,17 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Kafka chart parameters
 
-| Name                               | Description                                                                   | Value                            |
-| ---------------------------------- | ----------------------------------------------------------------------------- | -------------------------------- |
-| `kafka.enabled`                    | Enable/disable Kafka chart installation                                       | `true`                           |
-| `kafka.replicaCount`               | Number of Kafka brokers                                                       | `1`                              |
-| `externalKafka.brokers`            | Array of Kafka brokers to connect to. Format: protocol://broker_hostname:port | `["PLAINTEXT://localhost:9092"]` |
-| `externalKafka.auth.protocol`      | Authentication protocol. Allowed protocols: plaintext, tls, sasl and sasl_tls | `plaintext`                      |
-| `externalKafka.auth.jaas.user`     | User for SASL authentication                                                  | `user`                           |
-| `externalKafka.auth.jaas.password` | Password for SASL authentication                                              | `""`                             |
+| Name                                     | Description                                                                                                                   | Value                            |
+| ---------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | -------------------------------- |
+| `kafka.enabled`                          | Enable/disable Kafka chart installation                                                                                       | `true`                           |
+| `kafka.replicaCount`                     | Number of Kafka brokers                                                                                                       | `1`                              |
+| `kafka.auth.clientProtocol`              | Authentication protocol for communications with clients. Allowed protocols: `plaintext`, `tls`, `mtls`, `sasl` and `sasl_tls` | `plaintext`                      |
+| `kafka.service.ports.client`             | Kafka svc port for client connections                                                                                         | `9092`                           |
+| `externalKafka.brokers`                  | Array of Kafka brokers to connect to. Format: protocol://broker_hostname:port                                                 | `["PLAINTEXT://localhost:9092"]` |
+| `externalKafka.auth.protocol`            | Authentication protocol. Allowed protocols: plaintext, tls, sasl and sasl_tls                                                 | `plaintext`                      |
+| `externalKafka.auth.jaas.user`           | User for SASL authentication                                                                                                  | `user`                           |
+| `externalKafka.auth.jaas.password`       | Password for SASL authentication                                                                                              | `""`                             |
+| `externalKafka.auth.jaas.existingSecret` | Name of the existing secret containing a password for SASL authentication (under the key named "client-passwords")            | `""`                             |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -371,6 +373,16 @@ externalKafka.brokers=SASL_PLAINTEXT://kafka-0.kafka-headless.default.svc.cluste
 externalKafka.auth.protocol=sasl
 externalKafka.auth.jaas.user=myuser
 externalKafka.auth.jaas.password=mypassword
+```
+
+Alternatively, you can use an existing secret with a key "client-passwords":
+
+```console
+kafka.enabled=false
+externalKafka.brokers=SASL_PLAINTEXT://kafka-0.kafka-headless.default.svc.cluster.local:9092
+externalKafka.auth.protocol=sasl
+externalKafka.auth.jaas.user=myuser
+externalKafka.auth.jaas.existingSecret=my-secret
 ```
 
 ### Ingress

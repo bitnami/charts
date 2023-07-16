@@ -1,3 +1,8 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if and (eq .Values.architecture "standalone") (eq .Values.master.kind "Deployment") (.Values.master.persistence.enabled) (not .Values.master.persistence.existingClaim) }}
 kind: PersistentVolumeClaim
 apiVersion: v1

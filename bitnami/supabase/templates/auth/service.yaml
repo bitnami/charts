@@ -1,3 +1,8 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 apiVersion: v1
 kind: Service
 metadata:
@@ -41,10 +46,10 @@ spec:
   ports:
     - name: http
       port: {{ .Values.auth.service.ports.http }}
-      targetPort: http
       protocol: TCP
       {{- if and (or (eq .Values.auth.service.type "NodePort") (eq .Values.auth.service.type "LoadBalancer")) (not (empty .Values.auth.service.nodePorts.http)) }}
       nodePort: {{ .Values.auth.service.nodePorts.http }}
+      targetPort: http
       {{- else if eq .Values.auth.service.type "ClusterIP" }}
       nodePort: null
       targetPort: {{ .Values.auth.containerPorts.http }}

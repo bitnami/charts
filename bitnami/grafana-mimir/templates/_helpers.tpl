@@ -1,4 +1,9 @@
 {{/*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{/*
 Return the proper Grafana Mimir image name
 */}}
 {{- define "grafana-mimir.image" -}}
@@ -19,7 +24,7 @@ Return the proper the name of the secret with the auth credentials for the gatew
 {{- if not .Values.gateway.auth.existingSecret }}
   {{- include "grafana-mimir.gateway.fullname" . }}
 {{- else }}
-  {{- include "" .Values.gateway.auth.existingSecret }}
+  {{- printf "%s" .Values.gateway.auth.existingSecret -}}
 {{- end }}
 {{- end -}}
 

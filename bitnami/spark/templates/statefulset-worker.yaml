@@ -1,3 +1,8 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: StatefulSet
 metadata:
@@ -368,3 +373,6 @@ spec:
             secretName: {{ template ".Values.initScriptsSecret" . }}
             defaultMode: 0755
         {{- end }}
+  {{- if .Values.worker.extraVolumeClaimTemplates }}
+  volumeClaimTemplates: {{- include "common.tplvalues.render" (dict "value" .Values.worker.extraVolumeClaimTemplates "context" $) | nindent 8 }}
+  {{- end }}

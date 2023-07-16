@@ -18,6 +18,14 @@ When submitting a PR make sure that it:
 - Must pass CI jobs for linting and test the changes on top of different k8s platforms. (Automatically done by the Bitnami CI/CD pipeline).
 - Must follow [Helm best practices](https://helm.sh/docs/chart_best_practices/).
 - Any change to a chart requires a version bump following [semver](https://semver.org/) principles. This is the version that is going to be merged in the GitHub repository, then our CI/CD system is going to publish in the Helm registry a new patch version including your changes and the latest images and dependencies.
+- Any change to a Helm template (especially new templates) must include a license header like the following:
+
+```yaml
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+```
 
 #### Sign Your Work
 
@@ -70,10 +78,25 @@ Notice the `Author` and `Signed-off-by` lines match. If they don't your PR will 
 
 ### Adding a new chart to the repository
 
-There are three major technical requirements to add a new Helm chart to our catalog:
+There are five major technical requirements to add a new Helm chart to our catalog:
 
 - The chart should use Bitnami based container images. If they don't exist, you can [open a GitHub issue](https://github.com/bitnami/charts/issues/new/choose) and we will work together to create them.
 - Follow the same structure/patterns that the rest of the Bitnami charts (you can find a basic scaffolding in the [`template` directory](https://github.com/bitnami/charts/tree/main/template)) and the [Best Practices for Creating Production-Ready Helm charts](https://docs.bitnami.com/tutorials/production-ready-charts/) guide.
 - Use an [OSI approved license](https://opensource.org/licenses) for all the software.
+- Every new Helm template must include a license header like the following:
+
+```yaml
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+```
+
+- The exception to the license header rule above are `Chart.yaml` and `values.yaml` files, that use the following format instead:
+
+```yaml
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+```
 
 Please, note we will need to check internally and evaluate the feasibility of adding the new solution to the catalog. Due to limited resources this step could take some time.

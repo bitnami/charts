@@ -1,4 +1,9 @@
-{{- if and .Values.msgTopologyOperator.metrics.serviceMonitor.enabled .Values.msgTopologyOperator.metrics.enabled }}
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.msgTopologyOperator.enabled .Values.msgTopologyOperator.metrics.serviceMonitor.enabled .Values.msgTopologyOperator.metrics.enabled }}
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:

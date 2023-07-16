@@ -22,6 +22,8 @@ It also packages [Bitnami MariaDB](https://github.com/bitnami/charts/tree/main/b
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
+Looking to use EJBCA in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+
 ## Prerequisites
 
 - Kubernetes 1.19+
@@ -81,7 +83,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | ----------------------------------------------------------------------------------------------------------- | ---------------------- |
 | `image.registry`                        | EJBCA image registry                                                                                        | `docker.io`            |
 | `image.repository`                      | EJBCA image name                                                                                            | `bitnami/ejbca`        |
-| `image.tag`                             | EJBCA image tag                                                                                             | `7.11.0-debian-11-r38` |
+| `image.tag`                             | EJBCA image tag                                                                                             | `7.11.0-debian-11-r55` |
 | `image.digest`                          | EJBCA image image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
 | `image.pullPolicy`                      | EJBCA image pull policy                                                                                     | `IfNotPresent`         |
 | `image.pullSecrets`                     | Specify docker-registry secret names as an array                                                            | `[]`                   |

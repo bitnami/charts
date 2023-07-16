@@ -1,3 +1,6 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
 ## @section Global parameters
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
@@ -68,7 +71,7 @@ hub:
   image:
     registry: docker.io
     repository: bitnami/jupyterhub
-    tag: 4.0.0-debian-11-r8
+    tag: 4.0.1-debian-11-r12
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -636,7 +639,7 @@ proxy:
   image:
     registry: docker.io
     repository: bitnami/configurable-http-proxy
-    tag: 4.5.5-debian-11-r16
+    tag: 4.5.5-debian-11-r33
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -884,6 +887,27 @@ proxy:
     ## @param proxy.pdb.maxUnavailable Set maximum available proxy instances
     ##
     maxUnavailable: ""
+
+  ## @section Proxy RBAC Parameters
+
+  ## ServiceAccount parameters
+  ##
+  serviceAccount:
+    ## @param proxy.serviceAccount.create Specifies whether a ServiceAccount should be created
+    ##
+    create: true
+    ## @param proxy.serviceAccount.name Override Hub service account name
+    ## If not set and create is true, a name is generated using the fullname template
+    ##
+    name: ""
+    ## @param proxy.serviceAccount.automountServiceAccountToken Allows auto mount of ServiceAccountToken on the serviceAccount created
+    ## Can be set to false if pods using this serviceAccount do not need to use K8s API
+    ##
+    automountServiceAccountToken: true
+    ## @param proxy.serviceAccount.annotations Additional custom annotations for the ServiceAccount
+    ##
+    annotations: {}
+
 
   ## @section Proxy Traffic Exposure Parameters
   ##
@@ -1392,7 +1416,7 @@ singleuser:
   image:
     registry: docker.io
     repository: bitnami/jupyter-base-notebook
-    tag: 4.0.0-debian-11-r5
+    tag: 4.0.1-debian-11-r11
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1575,8 +1599,8 @@ singleuser:
 ##
 auxiliaryImage:
   registry: docker.io
-  repository: bitnami/bitnami-shell
-  tag: 11-debian-11-r118
+  repository: bitnami/os-shell
+  tag: 11-debian-11-r2
   digest: ""
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.

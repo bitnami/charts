@@ -1,6 +1,6 @@
 magentoUsername: user
 magentoPassword: ComplicatedPassword123!4
-magentoHost: vmware-magento.my
+magentoHost: magento.my
 magentoAdminUri: admin
 service:
   type: LoadBalancer
