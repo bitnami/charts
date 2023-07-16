@@ -1,8 +1,11 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
 annotations:
   category: Analytics
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 2.44.0
+appVersion: 2.45.0
 dependencies:
   - name: common
     repository: oci://registry-1.docker.io/bitnamicharts
@@ -23,4 +26,4 @@ sources:
   - https://github.com/bitnami/containers/tree/main/bitnami/prometheus
   - https://github.com/prometheus/prometheus
   - https://github.com/prometheus-community/helm-charts
-version: 0.1.5
+version: 0.1.7

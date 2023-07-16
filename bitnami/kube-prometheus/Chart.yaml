@@ -1,3 +1,6 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
 annotations:
   category: Analytics
   licenses: Apache-2.0
@@ -32,4 +35,4 @@ maintainers:
 name: kube-prometheus
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus
-version: 8.14.1
+version: 8.15.2

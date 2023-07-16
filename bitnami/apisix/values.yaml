@@ -1,3 +1,6 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
 ## @section Global parameters
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
@@ -73,7 +76,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/apisix
-  tag: 3.3.0-debian-11-r16
+  tag: 3.4.0-debian-11-r4
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -705,7 +708,6 @@ dataPlane:
     ## @param dataPlane.serviceAccount.automountServiceAccountToken Automount service account token for the apisix service account
     ##
     automountServiceAccountToken: true
-
 
   ## @section APISIX Data Plane Metrics Parameters
   ##
@@ -1411,7 +1413,6 @@ controlPlane:
     ##
     rules: []
 
-
   ## ServiceAccount configuration
   ##
   serviceAccount:
@@ -1511,7 +1512,7 @@ dashboard:
   image:
     registry: docker.io
     repository: bitnami/apisix-dashboard
-    tag: 3.0.1-debian-11-r14
+    tag: 3.0.1-debian-11-r22
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1588,6 +1589,87 @@ dashboard:
       users:
         - username: "{{ print "{{ APISIX_DASHBOARD_USER }}" }}"
           password: "{{ print "{{ APISIX_DASHBOARD_PASSWORD }}" }}"
+    plugins:
+      - api-breaker
+      - authz-casbin
+      - authz-casdoor
+      - authz-keycloak
+      - aws-lambda
+      - azure-functions
+      - basic-auth
+      # - batch-requests
+      - clickhouse-logger
+      - client-control
+      - consumer-restriction
+      - cors
+      - csrf
+      - datadog
+      # - dubbo-proxy
+      - echo
+      - error-log-logger
+      # - example-plugin
+      - ext-plugin-post-req
+      - ext-plugin-post-resp
+      - ext-plugin-pre-req
+      - fault-injection
+      - file-logger
+      - forward-auth
+      - google-cloud-logging
+      - grpc-transcode
+      - grpc-web
+      - gzip
+      - hmac-auth
+      - http-logger
+      - ip-restriction
+      - jwt-auth
+      - kafka-logger
+      - kafka-proxy
+      - key-auth
+      - ldap-auth
+      - limit-conn
+      - limit-count
+      - limit-req
+      - loggly
+      # - log-rotate
+      - mocking
+      # - node-status
+      - opa
+      - openid-connect
+      - opentelemetry
+      - openwhisk
+      - prometheus
+      - proxy-cache
+      - proxy-control
+      - proxy-mirror
+      - proxy-rewrite
+      - public-api
+      - real-ip
+      - redirect
+      - referer-restriction
+      - request-id
+      - request-validation
+      - response-rewrite
+      - rocketmq-logger
+      - server-info
+      - serverless-post-function
+      - serverless-pre-function
+      - skywalking
+      - skywalking-logger
+      - sls-logger
+      - splunk-hec-logging
+      - syslog
+      - tcp-logger
+      - traffic-split
+      - ua-restriction
+      - udp-logger
+      - uri-blocker
+      - wolf-rbac
+      - zipkin
+      - elasticsearch-logge
+      - openfunction
+      - tencent-cloud-cls
+      - ai
+      - cas-auth
 
   ## @param dashboard.extraConfig extra configuration settings for APISIX Dashboard
   ##
@@ -2099,7 +2181,7 @@ ingressController:
   image:
     registry: docker.io
     repository: bitnami/apisix-ingress-controller
-    tag: 1.6.1-debian-11-r14
+    tag: 1.6.1-debian-11-r22
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2424,7 +2506,6 @@ ingressController:
     ##
     ca: ""
 
-
   ## @section APISIX Ingress Controller Traffic Exposure Parameters
   ##
   service:
@@ -2736,8 +2817,8 @@ waitContainer:
   ##
   image:
     registry: docker.io
-    repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r127
+    repository: bitnami/os-shell
+    tag: 11-debian-11-r2
     digest: ""
     ## @param waitContainer.image.pullPolicy Init container wait-container image pull policy
     ##

@@ -1,8 +1,11 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
 annotations:
   category: Infrastructure
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 2.7.6
+appVersion: 2.7.7
 dependencies:
   - condition: redis.enabled
     name: redis
@@ -27,4 +30,4 @@ maintainers:
 name: argo-cd
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/argo-cd
-version: 4.7.13
+version: 4.7.16

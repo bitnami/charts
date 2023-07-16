@@ -82,7 +82,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | --------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`    | WordPress image registry                                                                                  | `docker.io`           |
 | `image.repository`  | WordPress image repository                                                                                | `bitnami/wordpress`   |
-| `image.tag`         | WordPress image tag (immutable tags are recommended)                                                      | `6.2.2-debian-11-r19` |
+| `image.tag`         | WordPress image tag (immutable tags are recommended)                                                      | `6.2.2-debian-11-r30` |
 | `image.digest`      | WordPress image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
 | `image.pullPolicy`  | WordPress image pull policy                                                                               | `IfNotPresent`        |
 | `image.pullSecrets` | WordPress image pull secrets                                                                              | `[]`                  |
@@ -235,27 +235,27 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Persistence Parameters
 
-| Name                                                   | Description                                                                                                   | Value                   |
-| ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------- | ----------------------- |
-| `persistence.enabled`                                  | Enable persistence using Persistent Volume Claims                                                             | `true`                  |
-| `persistence.storageClass`                             | Persistent Volume storage class                                                                               | `""`                    |
-| `persistence.accessModes`                              | Persistent Volume access modes                                                                                | `[]`                    |
-| `persistence.accessMode`                               | Persistent Volume access mode (DEPRECATED: use `persistence.accessModes` instead)                             | `ReadWriteOnce`         |
-| `persistence.size`                                     | Persistent Volume size                                                                                        | `10Gi`                  |
-| `persistence.dataSource`                               | Custom PVC data source                                                                                        | `{}`                    |
-| `persistence.existingClaim`                            | The name of an existing PVC to use for persistence                                                            | `""`                    |
-| `persistence.selector`                                 | Selector to match an existing Persistent Volume for WordPress data PVC                                        | `{}`                    |
-| `persistence.annotations`                              | Persistent Volume Claim annotations                                                                           | `{}`                    |
-| `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`               | `false`                 |
-| `volumePermissions.image.registry`                     | Bitnami Shell image registry                                                                                  | `docker.io`             |
-| `volumePermissions.image.repository`                   | Bitnami Shell image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                          | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r128`     |
-| `volumePermissions.image.digest`                       | Bitnami Shell image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
-| `volumePermissions.image.pullPolicy`                   | Bitnami Shell image pull policy                                                                               | `IfNotPresent`          |
-| `volumePermissions.image.pullSecrets`                  | Bitnami Shell image pull secrets                                                                              | `[]`                    |
-| `volumePermissions.resources.limits`                   | The resources limits for the init container                                                                   | `{}`                    |
-| `volumePermissions.resources.requests`                 | The requested resources for the init container                                                                | `{}`                    |
-| `volumePermissions.containerSecurityContext.runAsUser` | User ID for the init container                                                                                | `0`                     |
+| Name                                                   | Description                                                                                                        | Value              |
+| ------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------ | ------------------ |
+| `persistence.enabled`                                  | Enable persistence using Persistent Volume Claims                                                                  | `true`             |
+| `persistence.storageClass`                             | Persistent Volume storage class                                                                                    | `""`               |
+| `persistence.accessModes`                              | Persistent Volume access modes                                                                                     | `[]`               |
+| `persistence.accessMode`                               | Persistent Volume access mode (DEPRECATED: use `persistence.accessModes` instead)                                  | `ReadWriteOnce`    |
+| `persistence.size`                                     | Persistent Volume size                                                                                             | `10Gi`             |
+| `persistence.dataSource`                               | Custom PVC data source                                                                                             | `{}`               |
+| `persistence.existingClaim`                            | The name of an existing PVC to use for persistence                                                                 | `""`               |
+| `persistence.selector`                                 | Selector to match an existing Persistent Volume for WordPress data PVC                                             | `{}`               |
+| `persistence.annotations`                              | Persistent Volume Claim annotations                                                                                | `{}`               |
+| `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`                    | `false`            |
+| `volumePermissions.image.registry`                     | OS Shell + Utility image registry                                                                                  | `docker.io`        |
+| `volumePermissions.image.repository`                   | OS Shell + Utility image repository                                                                                | `bitnami/os-shell` |
+| `volumePermissions.image.tag`                          | OS Shell + Utility image tag (immutable tags are recommended)                                                      | `11-debian-11-r2`  |
+| `volumePermissions.image.digest`                       | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`               |
+| `volumePermissions.image.pullPolicy`                   | OS Shell + Utility image pull policy                                                                               | `IfNotPresent`     |
+| `volumePermissions.image.pullSecrets`                  | OS Shell + Utility image pull secrets                                                                              | `[]`               |
+| `volumePermissions.resources.limits`                   | The resources limits for the init container                                                                        | `{}`               |
+| `volumePermissions.resources.requests`                 | The requested resources for the init container                                                                     | `{}`               |
+| `volumePermissions.containerSecurityContext.runAsUser` | User ID for the init container                                                                                     | `0`                |
 
 ### Other Parameters
 
@@ -281,7 +281,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                            | Start a sidecar prometheus exporter to expose metrics                                                           | `false`                   |
 | `metrics.image.registry`                     | Apache exporter image registry                                                                                  | `docker.io`               |
 | `metrics.image.repository`                   | Apache exporter image repository                                                                                | `bitnami/apache-exporter` |
-| `metrics.image.tag`                          | Apache exporter image tag (immutable tags are recommended)                                                      | `0.13.4-debian-11-r8`     |
+| `metrics.image.tag`                          | Apache exporter image tag (immutable tags are recommended)                                                      | `0.13.4-debian-11-r14`    |
 | `metrics.image.digest`                       | Apache exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
 | `metrics.image.pullPolicy`                   | Apache exporter image pull policy                                                                               | `IfNotPresent`            |
 | `metrics.image.pullSecrets`                  | Apache exporter image pull secrets                                                                              | `[]`                      |

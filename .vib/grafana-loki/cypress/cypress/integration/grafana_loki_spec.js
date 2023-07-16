@@ -1,3 +1,8 @@
+/*
+ * Copyright VMware, Inc.
+ * SPDX-License-Identifier: APACHE-2.0
+ */
+
 /// <reference types="cypress" />
 import body from '../fixtures/logs-body.json';
 import { lastMinuteTimestamp } from '../support/utils';

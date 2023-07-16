@@ -1,3 +1,6 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
 annotations:
   category: Infrastructure
   licenses: Apache-2.0
@@ -25,4 +28,4 @@ maintainers:
 name: kubernetes-event-exporter
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/kubernetes-event-exporter
-version: 2.4.4
+version: 2.4.5

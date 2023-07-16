@@ -1,3 +1,6 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
 annotations:
   category: MachineLearning
   licenses: Apache-2.0
@@ -25,4 +28,4 @@ maintainers:
 name: tensorflow-resnet
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/tensorflow-resnet
-version: 3.8.3
+version: 3.8.4

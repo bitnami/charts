@@ -1,3 +1,6 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
 annotations:
   category: Analytics
   licenses: Apache-2.0
@@ -23,4 +26,4 @@ maintainers:
 name: whereabouts
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/whereabouts
-version: 0.4.1
+version: 0.4.3

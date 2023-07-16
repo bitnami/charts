@@ -1,3 +1,6 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
 ## @section Global parameters
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
@@ -245,7 +248,7 @@ ingress:
 image:
   registry: docker.io
   repository: bitnami/oauth2-proxy
-  tag: 7.4.0-debian-11-r81
+  tag: 7.4.0-debian-11-r88
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -291,14 +294,14 @@ configuration:
   ##
   ## @param configuration.google.enabled Enable Google service account
   ## @param configuration.google.adminEmail Google admin email
-  ## @param configuration.google.googleGroup Restrict logins to members of this google group
+  ## @param configuration.google.groups Restrict logins to members of these google groups
   ## @param configuration.google.serviceAccountJson Google Service account JSON
   ## @param configuration.google.existingSecret Existing secret containing Google Service Account
   ##
   google:
     enabled: false
     adminEmail: ""
-    googleGroup: ""
+    groups: []
     serviceAccountJson: ""
     existingSecret: ""
   ## Custom configuration file: oauth2_proxy.cfg

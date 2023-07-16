@@ -1,3 +1,8 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{/* This service is meant to be consumed by the Kubernetes API, so we don't allow configuration on it */}}
 {{- if .Values.concierge.enabled }}
 apiVersion: v1

@@ -1,3 +1,6 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
 annotations:
   category: CertificateAuthority
   licenses: Apache-2.0
@@ -29,4 +32,4 @@ maintainers:
 name: ejbca
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/ejbca
-version: 7.1.3
+version: 7.1.4

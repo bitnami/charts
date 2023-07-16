@@ -1,3 +1,6 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
 annotations:
   category: Infrastructure
   licenses: Apache-2.0
@@ -21,4 +24,4 @@ maintainers:
 name: spark
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/spark
-version: 7.0.2
+version: 7.1.1

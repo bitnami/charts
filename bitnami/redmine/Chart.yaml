@@ -1,3 +1,6 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
 annotations:
   category: ProjectManagement
   licenses: Apache-2.0
@@ -35,4 +38,4 @@ maintainers:
 name: redmine
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/redmine
-version: 22.1.4
+version: 22.1.6

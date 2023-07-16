@@ -86,7 +86,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | ----------------------------------------------------------------------------------------------------- | -------------------- |
 | `image.registry`    | Spark image registry                                                                                  | `docker.io`          |
 | `image.repository`  | Spark image repository                                                                                | `bitnami/spark`      |
-| `image.tag`         | Spark image tag (immutable tags are recommended)                                                      | `3.4.1-debian-11-r0` |
+| `image.tag`         | Spark image tag (immutable tags are recommended)                                                      | `3.4.1-debian-11-r6` |
 | `image.digest`      | Spark image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                 |
 | `image.pullPolicy`  | Spark image pull policy                                                                               | `IfNotPresent`       |
 | `image.pullSecrets` | Specify docker-registry secret names as an array                                                      | `[]`                 |
@@ -137,6 +137,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `master.lifecycleHooks`                                  | for the master container(s) to automate configuration before or after startup                                            | `{}`            |
 | `master.extraVolumes`                                    | Optionally specify extra list of additional volumes for the master pod(s)                                                | `[]`            |
 | `master.extraVolumeMounts`                               | Optionally specify extra list of additional volumeMounts for the master container(s)                                     | `[]`            |
+| `master.extraVolumeClaimTemplates`                       | Optionally specify extra list of volumesClaimTemplates for the master statefulset                                        | `[]`            |
 | `master.resources.limits`                                | The resources limits for the container                                                                                   | `{}`            |
 | `master.resources.requests`                              | The requested resources for the container                                                                                | `{}`            |
 | `master.livenessProbe.enabled`                           | Enable livenessProbe                                                                                                     | `true`          |
@@ -213,6 +214,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `worker.lifecycleHooks`                                  | for the worker container(s) to automate configuration before or after startup                                            | `{}`            |
 | `worker.extraVolumes`                                    | Optionally specify extra list of additional volumes for the worker pod(s)                                                | `[]`            |
 | `worker.extraVolumeMounts`                               | Optionally specify extra list of additional volumeMounts for the master container(s)                                     | `[]`            |
+| `worker.extraVolumeClaimTemplates`                       | Optionally specify extra list of volumesClaimTemplates for the worker statefulset                                        | `[]`            |
 | `worker.resources.limits`                                | The resources limits for the container                                                                                   | `{}`            |
 | `worker.resources.requests`                              | The requested resources for the container                                                                                | `{}`            |
 | `worker.livenessProbe.enabled`                           | Enable livenessProbe                                                                                                     | `true`          |
