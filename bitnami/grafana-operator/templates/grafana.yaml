@@ -115,6 +115,16 @@ spec:
           {{- if .Values.grafana.podSecurityContext.enabled }}
           securityContext: {{- omit .Values.grafana.podSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
+          containers:
+            - name: grafana
+              image: {{ include "common.images.image" (dict "imageRoot" .Values.grafana.image "global" .Values.global) }}
+              imagePullPolicy: {{ .Values.grafana.image.pullPolicy }}
+              {{- if .Values.grafana.containerSecurityContext.enabled }}
+              securityContext: {{- omit .Values.grafana.containerSecurityContext "enabled" | toYaml | nindent 16 }}
+              {{- end }}
+              {{- if .Values.operator.resources }}
+              resources: {{- toYaml .Values.operator.resources | nindent 16 }}
+              {{- end }}
     {{- if .Values.grafana.tolerations }}
     tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.tolerations "context" $) | nindent 6 }}
     {{- end }}
@@ -133,8 +143,8 @@ spec:
       {{- include "common.tplvalues.render" (dict "value" .Values.grafana.extraVolumes "context" $) | nindent 6 }}
     {{- end }}
   {{- if .Values.grafana.ingress.enabled }}
-  ingress: 
-    spec: 
+  ingress:
+    spec:
       {{- if and .Values.grafana.ingress.ingressClassName (include "common.ingress.supportsIngressClassname" .) }}
       ingressClassName: {{ .Values.grafana.ingress.ingressClassName | quote }}
       {{- end }}
