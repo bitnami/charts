@@ -77,9 +77,9 @@ diagnosticMode:
 ## @param image.debug Specify if debug values should be set
 ##
 image:
-  registry: docker.io
+  registry: registry-1.docker.io
   repository: bitnami/zookeeper
-  tag: 3.8.1-debian-11-r54
+  tag: 3.8.1-debian-11-r145
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -661,9 +661,9 @@ volumePermissions:
   ## @param volumePermissions.image.pullSecrets Init container volume-permissions image pull secrets
   ##
   image:
-    registry: docker.io
+    registry: registry-1.docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r2
+    tag: 11-debian-11-r11
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
