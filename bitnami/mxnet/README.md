@@ -370,7 +370,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
 | `git.registry`                         | Git image registry                                                                                                                | `docker.io`            |
 | `git.repository`                       | Git image repository                                                                                                              | `bitnami/git`          |
-| `git.tag`                              | Git image tag (immutable tags are recommended)                                                                                    | `2.41.0-debian-11-r14` |
+| `git.tag`                              | Git image tag (immutable tags are recommended)                                                                                    | `2.41.0-debian-11-r16` |
 | `git.digest`                           | Git image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                               | `""`                   |
 | `git.pullPolicy`                       | Git image pull policy                                                                                                             | `IfNotPresent`         |
 | `git.pullSecrets`                      | Specify docker-registry secret names as an array                                                                                  | `[]`                   |
