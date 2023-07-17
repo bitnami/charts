@@ -586,7 +586,6 @@ helm delete --purge my-release
 | `dashboards.containerPorts.http`                         | Opensearch Dashboards HTTP port                                                                                          | `5601`                          |
 | `dashboards.password`                                    | Password for Opensearch Dashboards                                                                                       | `""`                            |
 | `dashboards.replicaCount`                                | Number of data-only replicas to deploy                                                                                   | `1`                             |
-| `dashboards.extraRoles`                                  | Append extra roles to the node role                                                                                      | `[]`                            |
 | `dashboards.pdb.create`                                  | Enable/disable a Pod Disruption Budget creation                                                                          | `false`                         |
 | `dashboards.pdb.minAvailable`                            | Minimum number/percentage of pods that should remain scheduled                                                           | `1`                             |
 | `dashboards.pdb.maxUnavailable`                          | Maximum number/percentage of pods that may be made unavailable                                                           | `""`                            |
