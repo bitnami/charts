@@ -40,16 +40,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 Required for the Kibana subchart to find Opensearch service.
 */}}
 {{- define "opensearch.service.name" -}}
-{{- if .Values.global.kibanaEnabled -}}
-    {{- $name := .Values.global.opensearch.service.name -}}
-    {{- if contains $name .Release.Name -}}
-    {{- .Release.Name | trunc 63 | trimSuffix "-" -}}
-    {{- else -}}
-    {{- printf "%s-%s" .Release.Name $name | trunc 63 | trimSuffix "-" -}}
-    {{- end -}}
-{{- else -}}
     {{- printf "%s" ( include "common.names.fullname" . )  | trunc 63 | trimSuffix "-" -}}
-{{- end -}}
 {{- end -}}
 
 {{/*
