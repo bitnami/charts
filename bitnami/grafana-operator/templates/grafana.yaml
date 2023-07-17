@@ -122,8 +122,8 @@ spec:
               {{- if .Values.grafana.containerSecurityContext.enabled }}
               securityContext: {{- omit .Values.grafana.containerSecurityContext "enabled" | toYaml | nindent 16 }}
               {{- end }}
-              {{- if .Values.operator.resources }}
-              resources: {{- toYaml .Values.operator.resources | nindent 16 }}
+              {{- if .Values.grafana.resources }}
+              resources: {{- toYaml .Values.grafana.resources | nindent 16 }}
               {{- end }}
     {{- if .Values.grafana.tolerations }}
     tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.tolerations "context" $) | nindent 6 }}
