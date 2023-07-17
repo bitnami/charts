@@ -23,10 +23,10 @@ spec:
   publishNotReadyAddresses: true
   ports:
     - name: tcp-rest-api
-      port: {{ .Values.containerPorts.restAPI }}
+      port: {{ .Values.containerPorts.ingest.restAPI }}
       targetPort: rest-api
     - name: tcp-transport
-      port: {{ .Values.containerPorts.transport }}
+      port: {{ .Values.containerPorts.ingest.transport }}
       targetPort: transport
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
     app.kubernetes.io/component: ingest
