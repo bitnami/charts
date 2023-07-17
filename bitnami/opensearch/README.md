@@ -616,7 +616,6 @@ helm delete --purge my-release
 | `dashboards.schedulerName`                               | Name of the k8s scheduler (other than default) for data pods                                                             | `""`                            |
 | `dashboards.terminationGracePeriodSeconds`               | In seconds, time the given to the Opensearch data pod needs to terminate gracefully                                      | `""`                            |
 | `dashboards.topologySpreadConstraints`                   | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`                            |
-| `dashboards.podManagementPolicy`                         | podManagementPolicy to manage scaling operation of Opensearch data pods                                                  | `Parallel`                      |
 | `dashboards.startupProbe.enabled`                        | Enable/disable the startup probe (data nodes pod)                                                                        | `false`                         |
 | `dashboards.startupProbe.initialDelaySeconds`            | Delay before startup probe is initiated (data nodes pod)                                                                 | `120`                           |
 | `dashboards.startupProbe.periodSeconds`                  | How often to perform the probe (data nodes pod)                                                                          | `10`                            |

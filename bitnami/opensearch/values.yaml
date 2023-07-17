@@ -2147,10 +2147,6 @@ dashboards:
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
   ##
   topologySpreadConstraints: []
-  ## @param dashboards.podManagementPolicy podManagementPolicy to manage scaling operation of Opensearch data pods
-  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
-  ##
-  podManagementPolicy: "Parallel"
   ## Configure extra options for Opensearch data containers' liveness, readiness and startup probes
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
   ## @param dashboards.startupProbe.enabled Enable/disable the startup probe (data nodes pod)
