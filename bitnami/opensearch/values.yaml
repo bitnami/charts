@@ -2023,9 +2023,6 @@ dashboards:
   ## @param dashboards.replicaCount Number of data-only replicas to deploy
   ##
   replicaCount: 1
-  ## @param dashboards.extraRoles Append extra roles to the node role
-  ##
-  extraRoles: []
   ## Pod Disruption Budget configuration
   ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
   ## @param dashboards.pdb.create Enable/disable a Pod Disruption Budget creation
