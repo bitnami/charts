@@ -207,7 +207,7 @@ spec:
           {{- end }}
           ports:
             - name: rest-api
-              containerPort: {{ .Values.containerPorts.restAPI }}
+              containerPort: {{ .Values.ingest.containerPorts.restAPI }}
             - name: transport
               containerPort: {{ .Values.containerPorts.transport }}
           {{- if not .Values.diagnosticMode.enabled }}
