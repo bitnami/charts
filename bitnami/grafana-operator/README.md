@@ -72,7 +72,6 @@ For more information, refer to the [documentation on the differences between the
 | `global.imageRegistry`    | Global Docker image registry                    | `""`  |
 | `global.imagePullSecrets` | Global Docker registry secret names as an array | `[]`  |
 
-
 ### Common parameters
 
 | Name                | Description                                                                                               | Value           |
@@ -85,7 +84,6 @@ For more information, refer to the [documentation on the differences between the
 | `commonLabels`      | Common Labels which are applied to every resource deployed                                                | `{}`            |
 | `commonAnnotations` | Common Annotations which are applied to every ressource deployed                                          | `{}`            |
 | `clusterDomain`     | Kubernetes cluster domain name                                                                            | `cluster.local` |
-
 
 ### Grafana Operator parameters
 
@@ -186,7 +184,6 @@ For more information, refer to the [documentation on the differences between the
 | `operator.startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                                                        | `3`                        |
 | `operator.startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                                                        | `1`                        |
 
-
 ### Grafana parameters
 
 | Name                                                        | Description                                                                                             | Value                    |
@@ -196,6 +193,7 @@ For more information, refer to the [documentation on the differences between the
 | `grafana.image.repository`                                  | Grafana image name                                                                                      | `bitnami/grafana`        |
 | `grafana.image.tag`                                         | Grafana image tag                                                                                       | `10.0.2-debian-11-r0`    |
 | `grafana.image.digest`                                      | Grafana image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                     |
+| `grafana.image.pullPolicy`                                  | Grafana image pull policy                                                                               | `IfNotPresent`           |
 | `grafana.image.pullSecrets`                                 | Grafana image pull secrets                                                                              | `[]`                     |
 | `grafana.serviceAccount`                                    | Additional service account configuration                                                                | `{}`                     |
 | `grafana.podSecurityContext.enabled`                        | Enable pods security context                                                                            | `true`                   |

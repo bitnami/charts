@@ -418,6 +418,7 @@ grafana:
   ## @param grafana.image.repository Grafana image name
   ## @param grafana.image.tag Grafana image tag
   ## @param grafana.image.digest Grafana image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## @param grafana.image.pullPolicy Grafana image pull policy
   ## @param grafana.image.pullSecrets Grafana image pull secrets
   ##
   image:
