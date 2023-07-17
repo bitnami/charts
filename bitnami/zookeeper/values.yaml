@@ -77,7 +77,7 @@ diagnosticMode:
 ## @param image.debug Specify if debug values should be set
 ##
 image:
-  registry: registry-1.docker.io
+  registry: docker.io
   repository: bitnami/zookeeper
   tag: 3.8.1-debian-11-r145
   digest: ""
@@ -661,7 +661,7 @@ volumePermissions:
   ## @param volumePermissions.image.pullSecrets Init container volume-permissions image pull secrets
   ##
   image:
-    registry: registry-1.docker.io
+    registry: docker.io
     repository: bitnami/os-shell
     tag: 11-debian-11-r11
     digest: ""
