@@ -923,7 +923,7 @@ git:
   image:
     registry: docker.io
     repository: bitnami/git
-    tag: 2.41.0-debian-11-r14
+    tag: 2.41.0-debian-11-r16
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
