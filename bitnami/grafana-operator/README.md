@@ -264,7 +264,6 @@ For more information, refer to the [documentation on the differences between the
 | `grafana.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the grafana container(s)                   | `[]`                     |
 | `grafana.sidecars`                                          | Add additional sidecar containers to the grafana pod(s)                                                 | `[]`                     |
 
-
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
