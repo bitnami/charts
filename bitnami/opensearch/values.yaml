@@ -2045,9 +2045,6 @@ dashboards:
   ## @param dashboards.servicenameOverride String to fully override opensearch.dashboards.servicename
   ##
   servicenameOverride: ""
-  ## @param dashboards.annotations [object] Annotations for the data statefulset
-  ##
-  annotations: {}
   ## @param dashboards.updateStrategy.type Data-only nodes statefulset stategy type
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##
@@ -2259,45 +2256,6 @@ dashboards:
   ##    command: ['sh', '-c', 'echo "hello world"']
   ##
   initContainers: []
-  ## Enable persistence using Persistent Volume Claims
-  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
-  ##
-  persistence:
-    ## @param dashboards.persistence.enabled Enable persistence using a `PersistentVolumeClaim`
-    ##
-    enabled: false
-    ## @param dashboards.persistence.storageClass Persistent Volume Storage Class
-    ## If defined, storageClassName: <storageClass>
-    ## If set to "-", storageClassName: "", which disables dynamic provisioning
-    ## If undefined (the default) or set to null, no storageClassName spec is
-    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
-    ##   GKE, AWS & OpenStack)
-    ##
-    storageClass: ""
-    ## @param dashboards.persistence.existingClaim Existing Persistent Volume Claim
-    ## then accept the value as an existing Persistent Volume Claim to which
-    ## the container should be bound
-    ##
-    existingClaim: ""
-    ## @param dashboards.persistence.existingVolume Existing Persistent Volume for use as volume match label selector to the `volumeClaimTemplate`. Ignored when `dashboards.persistence.selector` is set.
-    ##
-    existingVolume: ""
-    ## @param dashboards.persistence.selector Configure custom selector for existing Persistent Volume. Overwrites `dashboards.persistence.existingVolume`
-    ## selector:
-    ##   matchLabels:
-    ##     volume:
-    ##
-    selector: {}
-    ## @param dashboards.persistence.annotations Persistent Volume Claim annotations
-    ##
-    annotations: {}
-    ## @param dashboards.persistence.accessModes Persistent Volume Access Modes
-    ##
-    accessModes:
-      - ReadWriteOnce
-    ## @param dashboards.persistence.size Persistent Volume Size
-    ##
-    size: 8Gi
   ## Pods Service Account
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
   ## @param dashboards.serviceAccount.create Specifies whether a ServiceAccount should be created
