@@ -205,8 +205,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingress.hostname`                 | Default host for the ingress record                                                                                              | `example.local`          |
 | `ingress.path`                     | Default path for the ingress record                                                                                              | `/`                      |
 | `ingress.annotations`              | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
-| `ingress.tls`                      | Enable TLS configuration for the hosts defined                                                                                   | `[]`                     |
-| `ingress.hosts`                    | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                     |
+| `ingress.tls`                      | Enable TLS configuration for the host defined at `ingress.hostname` parameter                                                    | `false`                  |
 | `ingress.extraHosts`               | An array with additional hostname(s) to be covered with the ingress record                                                       | `[]`                     |
 | `ingress.extraPaths`               | An array with additional arbitrary paths that may need to be added to the ingress under the main host                            | `[]`                     |
 | `ingress.extraTls`                 | TLS configuration for additional hostname(s) to be covered with this ingress record                                              | `[]`                     |
@@ -303,6 +302,10 @@ This release updates the Bitnami Apache container to `2.4.41-debian-9-r40`, whic
 This release allows you to use your custom static application. In order to do so, check [this section](#deploying-a-custom-web-application).
 
 ## Upgrading
+
+### To 10.0.0
+
+This major release standardizes the input values and features for the ingress object. Refer to [this section](#traffic-exposure-parameters) for the complete list of parameters accepted.
 
 ### To 9.0.0
 
