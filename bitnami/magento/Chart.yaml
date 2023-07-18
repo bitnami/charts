@@ -37,4 +37,4 @@ maintainers:
 name: magento
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/magento
-version: 22.1.4
+version: 22.1.6

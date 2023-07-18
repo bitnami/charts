@@ -81,7 +81,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | ----------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`    | Ghost image registry                                                                                  | `docker.io`           |
 | `image.repository`  | Ghost image repository                                                                                | `bitnami/ghost`       |
-| `image.tag`         | Ghost image tag (immutable tags are recommended)                                                      | `5.54.0-debian-11-r0` |
+| `image.tag`         | Ghost image tag (immutable tags are recommended)                                                      | `5.54.3-debian-11-r0` |
 | `image.digest`      | Ghost image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
 | `image.pullPolicy`  | Ghost image pull policy                                                                               | `IfNotPresent`        |
 | `image.pullSecrets` | Ghost image pull secrets                                                                              | `[]`                  |
@@ -203,25 +203,25 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Persistence Parameters
 
-| Name                                          | Description                                                                                                        | Value                   |
-| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | ----------------------- |
-| `persistence.enabled`                         | Enable persistence using Persistent Volume Claims                                                                  | `true`                  |
-| `persistence.storageClass`                    | Persistent Volume storage class                                                                                    | `""`                    |
-| `persistence.annotations`                     | Additional custom annotations for the PVC                                                                          | `{}`                    |
-| `persistence.accessModes`                     | Persistent Volume access modes                                                                                     | `[]`                    |
-| `persistence.size`                            | Persistent Volume size                                                                                             | `8Gi`                   |
-| `persistence.existingClaim`                   | The name of an existing PVC to use for persistence                                                                 | `""`                    |
-| `persistence.subPath`                         | The name of a volume's sub path to mount for persistence                                                           | `""`                    |
-| `volumePermissions.enabled`                   | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`                    | `false`                 |
-| `volumePermissions.image.registry`            | OS Shell + Utility image registry                                                                                  | `docker.io`             |
-| `volumePermissions.image.repository`          | OS Shell + Utility image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | OS Shell + Utility image tag (immutable tags are recommended)                                                      | `11-debian-11-r133`     |
-| `volumePermissions.image.digest`              | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
-| `volumePermissions.image.pullPolicy`          | OS Shell + Utility image pull policy                                                                               | `IfNotPresent`          |
-| `volumePermissions.image.pullSecrets`         | OS Shell + Utility image pull secrets                                                                              | `[]`                    |
-| `volumePermissions.resources.limits`          | The resources limits for the init container                                                                        | `{}`                    |
-| `volumePermissions.resources.requests`        | The requested resources for the init container                                                                     | `{}`                    |
-| `volumePermissions.securityContext.runAsUser` | Set init container's Security Context runAsUser                                                                    | `0`                     |
+| Name                                          | Description                                                                                                        | Value              |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | ------------------ |
+| `persistence.enabled`                         | Enable persistence using Persistent Volume Claims                                                                  | `true`             |
+| `persistence.storageClass`                    | Persistent Volume storage class                                                                                    | `""`               |
+| `persistence.annotations`                     | Additional custom annotations for the PVC                                                                          | `{}`               |
+| `persistence.accessModes`                     | Persistent Volume access modes                                                                                     | `[]`               |
+| `persistence.size`                            | Persistent Volume size                                                                                             | `8Gi`              |
+| `persistence.existingClaim`                   | The name of an existing PVC to use for persistence                                                                 | `""`               |
+| `persistence.subPath`                         | The name of a volume's sub path to mount for persistence                                                           | `""`               |
+| `volumePermissions.enabled`                   | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`                    | `false`            |
+| `volumePermissions.image.registry`            | OS Shell + Utility image registry                                                                                  | `docker.io`        |
+| `volumePermissions.image.repository`          | OS Shell + Utility image repository                                                                                | `bitnami/os-shell` |
+| `volumePermissions.image.tag`                 | OS Shell + Utility image tag (immutable tags are recommended)                                                      | `11-debian-11-r11` |
+| `volumePermissions.image.digest`              | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`               |
+| `volumePermissions.image.pullPolicy`          | OS Shell + Utility image pull policy                                                                               | `IfNotPresent`     |
+| `volumePermissions.image.pullSecrets`         | OS Shell + Utility image pull secrets                                                                              | `[]`               |
+| `volumePermissions.resources.limits`          | The resources limits for the init container                                                                        | `{}`               |
+| `volumePermissions.resources.requests`        | The requested resources for the init container                                                                     | `{}`               |
+| `volumePermissions.securityContext.runAsUser` | Set init container's Security Context runAsUser                                                                    | `0`                |
 
 ### Database Parameters
 

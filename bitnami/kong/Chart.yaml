@@ -38,4 +38,4 @@ maintainers:
 name: kong
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/kong
-version: 9.4.1
+version: 9.4.2

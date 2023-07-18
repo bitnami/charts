@@ -80,7 +80,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | ------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`    | Osclass image registry                                                                                  | `docker.io`           |
 | `image.repository`  | Osclass image repository                                                                                | `bitnami/osclass`     |
-| `image.tag`         | Osclass image tag (immutable tags are recommended)                                                      | `8.1.2-debian-11-r16` |
+| `image.tag`         | Osclass image tag (immutable tags are recommended)                                                      | `8.1.2-debian-11-r26` |
 | `image.digest`      | Osclass image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
 | `image.pullPolicy`  | Osclass image pull policy                                                                               | `IfNotPresent`        |
 | `image.pullSecrets` | Osclass image pull secrets                                                                              | `[]`                  |
@@ -150,8 +150,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `certificates.extraEnvVarsCM`                        | ConfigMap with extra environment variables                                                                      | `""`                                     |
 | `certificates.extraEnvVarsSecret`                    | Secret with extra environment variables                                                                         | `""`                                     |
 | `certificates.image.registry`                        | Apache Exporter image registry                                                                                  | `docker.io`                              |
-| `certificates.image.repository`                      | Apache Exporter image repository                                                                                | `bitnami/bitnami-shell`                  |
-| `certificates.image.tag`                             | Apache Exporter image tag (immutable tags are recommended)                                                      | `11-debian-11-r127`                      |
+| `certificates.image.repository`                      | Apache Exporter image repository                                                                                | `bitnami/os-shell`                       |
+| `certificates.image.tag`                             | Apache Exporter image tag (immutable tags are recommended)                                                      | `11-debian-11-r11`                       |
 | `certificates.image.digest`                          | Apache Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                                     |
 | `certificates.image.pullPolicy`                      | Apache Exporter image pull policy                                                                               | `IfNotPresent`                           |
 | `certificates.image.pullSecrets`                     | Apache Exporter image pull secrets                                                                              | `[]`                                     |
@@ -219,40 +219,40 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Database Parameters
 
-| Name                                       | Description                                                                                                        | Value                   |
-| ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------ | ----------------------- |
-| `externalDatabase.host`                    | External Database server host                                                                                      | `""`                    |
-| `externalDatabase.port`                    | External Database server port                                                                                      | `3306`                  |
-| `externalDatabase.user`                    | External Database username                                                                                         | `bn_osclass`            |
-| `externalDatabase.password`                | External Database user password                                                                                    | `""`                    |
-| `externalDatabase.database`                | External Database database name                                                                                    | `bitnami_osclass`       |
-| `externalDatabase.existingSecret`          | Name of an existing secret resource containing the DB password                                                     | `""`                    |
-| `mariadb.enabled`                          | Deploy a MariaDB server to satisfy the applications database requirements                                          | `true`                  |
-| `mariadb.architecture`                     | MariaDB architecture. Allowed values: `standalone` or `replication`                                                | `standalone`            |
-| `mariadb.auth.rootPassword`                | MariaDB root password                                                                                              | `""`                    |
-| `mariadb.auth.database`                    | MariaDB custom database                                                                                            | `bitnami_osclass`       |
-| `mariadb.auth.username`                    | MariaDB custom user name                                                                                           | `bn_osclass`            |
-| `mariadb.auth.password`                    | MariaDB custom user password                                                                                       | `""`                    |
-| `mariadb.primary.persistence.enabled`      | Enable persistence on MariaDB using PVC(s)                                                                         | `true`                  |
-| `mariadb.primary.persistence.storageClass` | Persistent Volume storage class                                                                                    | `""`                    |
-| `mariadb.primary.persistence.accessModes`  | Persistent Volume access modes                                                                                     | `[]`                    |
-| `mariadb.primary.persistence.size`         | Persistent Volume size                                                                                             | `8Gi`                   |
-| `persistence.enabled`                      | Enable persistence using Persistent Volume Claims                                                                  | `true`                  |
-| `persistence.storageClass`                 | Persistent Volume storage class                                                                                    | `""`                    |
-| `persistence.accessModes`                  | Persistent Volume access modes                                                                                     | `[]`                    |
-| `persistence.size`                         | Persistent Volume size                                                                                             | `8Gi`                   |
-| `persistence.existingClaim`                | The name of an existing PVC to use for persistence                                                                 | `""`                    |
-| `persistence.hostPath`                     | If defined, the osclass-data volume will mount to the specified hostPath.                                          | `""`                    |
-| `persistence.annotations`                  | Persistent Volume Claim annotations                                                                                | `{}`                    |
-| `volumePermissions.enabled`                | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`                    | `false`                 |
-| `volumePermissions.image.registry`         | OS Shell + Utility image registry                                                                                  | `docker.io`             |
-| `volumePermissions.image.repository`       | OS Shell + Utility image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`              | OS Shell + Utility image tag (immutable tags are recommended)                                                      | `11-debian-11-r127`     |
-| `volumePermissions.image.digest`           | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
-| `volumePermissions.image.pullPolicy`       | OS Shell + Utility image pull policy                                                                               | `IfNotPresent`          |
-| `volumePermissions.image.pullSecrets`      | OS Shell + Utility image pull secrets                                                                              | `[]`                    |
-| `volumePermissions.resources.limits`       | The resources limits for the init container                                                                        | `{}`                    |
-| `volumePermissions.resources.requests`     | The requested resources for the init container                                                                     | `{}`                    |
+| Name                                       | Description                                                                                                        | Value              |
+| ------------------------------------------ | ------------------------------------------------------------------------------------------------------------------ | ------------------ |
+| `externalDatabase.host`                    | External Database server host                                                                                      | `""`               |
+| `externalDatabase.port`                    | External Database server port                                                                                      | `3306`             |
+| `externalDatabase.user`                    | External Database username                                                                                         | `bn_osclass`       |
+| `externalDatabase.password`                | External Database user password                                                                                    | `""`               |
+| `externalDatabase.database`                | External Database database name                                                                                    | `bitnami_osclass`  |
+| `externalDatabase.existingSecret`          | Name of an existing secret resource containing the DB password                                                     | `""`               |
+| `mariadb.enabled`                          | Deploy a MariaDB server to satisfy the applications database requirements                                          | `true`             |
+| `mariadb.architecture`                     | MariaDB architecture. Allowed values: `standalone` or `replication`                                                | `standalone`       |
+| `mariadb.auth.rootPassword`                | MariaDB root password                                                                                              | `""`               |
+| `mariadb.auth.database`                    | MariaDB custom database                                                                                            | `bitnami_osclass`  |
+| `mariadb.auth.username`                    | MariaDB custom user name                                                                                           | `bn_osclass`       |
+| `mariadb.auth.password`                    | MariaDB custom user password                                                                                       | `""`               |
+| `mariadb.primary.persistence.enabled`      | Enable persistence on MariaDB using PVC(s)                                                                         | `true`             |
+| `mariadb.primary.persistence.storageClass` | Persistent Volume storage class                                                                                    | `""`               |
+| `mariadb.primary.persistence.accessModes`  | Persistent Volume access modes                                                                                     | `[]`               |
+| `mariadb.primary.persistence.size`         | Persistent Volume size                                                                                             | `8Gi`              |
+| `persistence.enabled`                      | Enable persistence using Persistent Volume Claims                                                                  | `true`             |
+| `persistence.storageClass`                 | Persistent Volume storage class                                                                                    | `""`               |
+| `persistence.accessModes`                  | Persistent Volume access modes                                                                                     | `[]`               |
+| `persistence.size`                         | Persistent Volume size                                                                                             | `8Gi`              |
+| `persistence.existingClaim`                | The name of an existing PVC to use for persistence                                                                 | `""`               |
+| `persistence.hostPath`                     | If defined, the osclass-data volume will mount to the specified hostPath.                                          | `""`               |
+| `persistence.annotations`                  | Persistent Volume Claim annotations                                                                                | `{}`               |
+| `volumePermissions.enabled`                | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`                    | `false`            |
+| `volumePermissions.image.registry`         | OS Shell + Utility image registry                                                                                  | `docker.io`        |
+| `volumePermissions.image.repository`       | OS Shell + Utility image repository                                                                                | `bitnami/os-shell` |
+| `volumePermissions.image.tag`              | OS Shell + Utility image tag (immutable tags are recommended)                                                      | `11-debian-11-r11` |
+| `volumePermissions.image.digest`           | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`               |
+| `volumePermissions.image.pullPolicy`       | OS Shell + Utility image pull policy                                                                               | `IfNotPresent`     |
+| `volumePermissions.image.pullSecrets`      | OS Shell + Utility image pull secrets                                                                              | `[]`               |
+| `volumePermissions.resources.limits`       | The resources limits for the init container                                                                        | `{}`               |
+| `volumePermissions.resources.requests`     | The requested resources for the init container                                                                     | `{}`               |
 
 ### Other Parameters
 
@@ -274,7 +274,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                          | Start a sidecar prometheus exporter to expose metrics                                                           | `false`                   |
 | `metrics.image.registry`                   | Apache Exporter image registry                                                                                  | `docker.io`               |
 | `metrics.image.repository`                 | Apache Exporter image repository                                                                                | `bitnami/apache-exporter` |
-| `metrics.image.tag`                        | Apache Exporter image tag (immutable tags are recommended)                                                      | `0.13.4-debian-11-r6`     |
+| `metrics.image.tag`                        | Apache Exporter image tag (immutable tags are recommended)                                                      | `0.13.4-debian-11-r47`    |
 | `metrics.image.digest`                     | Apache Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
 | `metrics.image.pullPolicy`                 | Apache Exporter image pull policy                                                                               | `IfNotPresent`            |
 | `metrics.image.pullSecrets`                | Apache Exporter image pull secrets                                                                              | `[]`                      |
