@@ -22,6 +22,8 @@ It also packages the [Bitnami MariaDB chart](https://github.com/bitnami/charts/t
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
+Looking to use Redmine in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+
 ## Prerequisites
 
 - Kubernetes 1.19+
@@ -90,7 +92,7 @@ helm install my-release oci://registry-1.docker.io/bitnamicharts/redmine --set d
 | ----------------------- | ------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`        | Redmine image registry                                                                                  | `docker.io`           |
 | `image.repository`      | Redmine image repository                                                                                | `bitnami/redmine`     |
-| `image.tag`             | Redmine image tag (immutable tags are recommended)                                                      | `5.0.5-debian-11-r23` |
+| `image.tag`             | Redmine image tag (immutable tags are recommended)                                                      | `5.0.5-debian-11-r43` |
 | `image.digest`          | Redmine image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
 | `image.pullPolicy`      | Redmine image pull policy                                                                               | `IfNotPresent`        |
 | `image.pullSecrets`     | Redmine image pull secrets                                                                              | `[]`                  |
@@ -335,8 +337,8 @@ helm install my-release oci://registry-1.docker.io/bitnamicharts/redmine --set d
 | `certificates.customCertificate.chainSecret.key`     | Key of the certificate chain file inside the secret                                                     | `""`                                     |
 | `certificates.customCA`                              | Defines a list of secrets to import into the container trust store                                      | `[]`                                     |
 | `certificates.image.registry`                        | Redmine image registry                                                                                  | `docker.io`                              |
-| `certificates.image.repository`                      | Redmine image repository                                                                                | `bitnami/bitnami-shell`                  |
-| `certificates.image.tag`                             | Redmine image tag (immutable tags are recommended)                                                      | `11-debian-11-r118`                      |
+| `certificates.image.repository`                      | Redmine image repository                                                                                | `bitnami/os-shell`                       |
+| `certificates.image.tag`                             | Redmine image tag (immutable tags are recommended)                                                      | `11-debian-11-r11`                       |
 | `certificates.image.digest`                          | Redmine image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                                     |
 | `certificates.image.pullPolicy`                      | Redmine image pull policy                                                                               | `IfNotPresent`                           |
 | `certificates.image.pullSecrets`                     | Redmine image pull secrets                                                                              | `[]`                                     |

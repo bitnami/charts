@@ -1,0 +1,32 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.rootCoord.pdb.create }}
+apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
+kind: PodDisruptionBudget
+metadata:
+  name: {{ template "milvus.root-coordinator.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/part-of: milvus
+    app.kubernetes.io/component: root-coordinator
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if .Values.rootCoord.pdb.minAvailable }}
+  minAvailable: {{ .Values.rootCoord.pdb.minAvailable }}
+  {{- end }}
+  {{- if .Values.rootCoord.pdb.maxUnavailable }}
+  maxUnavailable: {{ .Values.rootCoord.pdb.maxUnavailable }}
+  {{- end }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/part-of: milvus
+      app.kubernetes.io/component: root-coordinator
+{{- end }}

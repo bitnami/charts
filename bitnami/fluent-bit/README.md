@@ -20,6 +20,8 @@ This chart bootstraps a [fluent-bit](https://github.com/bitnami/containers/tree/
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
+Looking to use Fluent Bit in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+
 ## Prerequisites
 
 - Kubernetes 1.19+
@@ -78,7 +80,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | ---------------------------------------------------------------------------------------------------------- | -------------------- |
 | `image.registry`    | Fluent Bit image registry                                                                                  | `docker.io`          |
 | `image.repository`  | Fluent Bit image repository                                                                                | `bitnami/fluent-bit` |
-| `image.tag`         | Fluent Bit image tag (immutable tags are recommended)                                                      | `2.1.3-debian-11-r2` |
+| `image.tag`         | Fluent Bit image tag (immutable tags are recommended)                                                      | `2.1.7-debian-11-r0` |
 | `image.digest`      | Fluent Bit image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                 |
 | `image.pullPolicy`  | image pull policy                                                                                          | `IfNotPresent`       |
 | `image.pullSecrets` | Fluent Bit image pull secrets                                                                              | `[]`                 |

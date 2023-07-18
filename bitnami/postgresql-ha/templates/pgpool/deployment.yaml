@@ -1,3 +1,8 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
@@ -221,7 +226,7 @@ spec:
               value: {{ ternary "yes" "no" .Values.pgpool.useLoadBalancing | quote }}
             {{- if .Values.pgpool.useLoadBalancing }}
             - name: PGPOOL_DISABLE_LOAD_BALANCE_ON_WRITE
-              value: {{ .Values.pgpool.loadBalancingOnWrite }}
+              value: {{ .Values.pgpool.loadBalancingOnWrite | quote }}
             {{- end }}
             - name: PGPOOL_ENABLE_LOG_CONNECTIONS
               value: {{ ternary "yes" "no" .Values.pgpool.logConnections | quote }}

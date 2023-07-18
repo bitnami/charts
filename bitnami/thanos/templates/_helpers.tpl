@@ -1,3 +1,8 @@
+{{/*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{/* vim: set filetype=mustache: */}}
 
 {{/*
@@ -447,5 +452,24 @@ Usage:
 {{- else -}}
 {{- .Values.receive.config | toPrettyJson -}}
 {{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Labels to use on serviceMonitor.spec.selector and svc.metadata.labels
+*/}}
+{{- define "thanos.servicemonitor.matchLabels" -}}
+{{- if and .Values.metrics.enabled .Values.metrics.serviceMonitor.enabled -}}
+prometheus-operator/monitor: 'true'
+{{- end }}
+{{- end }}
+
+{{/*
+Labels to use on serviceMonitor.spec.selector
+*/}}
+{{- define "thanos.servicemonitor.selector" -}}
+{{- include "thanos.servicemonitor.matchLabels" $ }}
+{{- if .Values.metrics.serviceMonitor.selector -}}
+{{- include "common.tplvalues.render" (dict "value" .Values.metrics.serviceMonitor.selector "context" $)}}
 {{- end -}}
 {{- end -}}

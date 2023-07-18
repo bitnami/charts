@@ -1,3 +1,6 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
 http:
   https://kong:{{ .Vars.service.ports.proxyHttps }}:
     # The proxy does respond but the route is not registered

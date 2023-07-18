@@ -1,9 +1,9 @@
 dependencies:
 - name: kafka
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 22.1.2
+  version: 23.0.5
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 2.3.0
-digest: sha256:f3767230abb74f7d0043e973d43c7d3d72b24332cc7edcb9d7653cbb309720a4
-generated: "2023-05-18T11:49:52.099825905Z"
+  version: 2.6.0
+digest: sha256:6722d025723d4fa35e002ea4508f93a5ba0842926b605137b10176a75355e18a
+generated: "2023-07-17T23:46:08.247309457Z"

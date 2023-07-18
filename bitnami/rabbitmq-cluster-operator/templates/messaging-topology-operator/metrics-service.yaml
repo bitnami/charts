@@ -1,4 +1,9 @@
-{{- if .Values.msgTopologyOperator.metrics.enabled }}
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and .Values.msgTopologyOperator.enabled .Values.msgTopologyOperator.metrics.enabled }}
 apiVersion: v1
 kind: Service
 metadata:

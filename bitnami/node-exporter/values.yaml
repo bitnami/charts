@@ -1,3 +1,6 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
 ## @section Global parameters
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
@@ -99,7 +102,7 @@ serviceAccount:
 image:
   registry: docker.io
   repository: bitnami/node-exporter
-  tag: 1.6.0-debian-11-r0
+  tag: 1.6.1-debian-11-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -461,3 +464,10 @@ serviceMonitor:
   ## @param serviceMonitor.honorLabels honorLabels chooses the metric's labels on collisions with target labels
   ##
   honorLabels: false
+  ## @param serviceMonitor.attachMetadata Attaches node metadata to discovered targets
+  ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#attachmetadata
+  ##
+  ## attachMetadata:
+  ##   node: true
+  ##
+  attachMetadata: {}

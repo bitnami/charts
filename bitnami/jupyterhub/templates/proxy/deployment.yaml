@@ -1,3 +1,8 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
@@ -33,6 +38,8 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.proxy.podLabels "context" $) | nindent 8 }}
         {{- end }}
     spec:
+      serviceAccountName: {{ template "jupyterhub.proxyServiceAccountName" . }}
+      automountServiceAccountToken: {{ .Values.proxy.automountServiceAccountToken }}
       {{- include "jupyterhub.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.proxy.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.proxy.hostAliases "context" $) | nindent 8 }}

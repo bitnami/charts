@@ -20,6 +20,8 @@ This chart bootstraps a [Apache APISIX](https://github.com/bitnami/containers/tr
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
 
+Looking to use Apache APISIX in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+
 ## Prerequisites
 
 - Kubernetes 1.19+
@@ -74,7 +76,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                                                                                 | `["infinity"]`       |
 | `image.registry`         | APISIX image registry                                                                                                                             | `docker.io`          |
 | `image.repository`       | APISIX image repository                                                                                                                           | `bitnami/apisix`     |
-| `image.tag`              | APISIX image tag (immutable tags are recommended)                                                                                                 | `3.3.0-debian-11-r7` |
+| `image.tag`              | APISIX image tag (immutable tags are recommended)                                                                                                 | `3.4.0-debian-11-r4` |
 | `image.digest`           | APISIX image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended) | `""`                 |
 | `image.pullPolicy`       | APISIX image pull policy                                                                                                                          | `IfNotPresent`       |
 | `image.pullSecrets`      | APISIX image pull secrets                                                                                                                         | `[]`                 |
@@ -425,7 +427,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dashboard.replicaCount`                                      | Number of APISIX Dashboard replicas to deploy                                                                                                               | `1`                        |
 | `dashboard.image.registry`                                    | APISIX Dashboard image registry                                                                                                                             | `docker.io`                |
 | `dashboard.image.repository`                                  | APISIX Dashboard image repository                                                                                                                           | `bitnami/apisix-dashboard` |
-| `dashboard.image.tag`                                         | APISIX Dashboard image tag (immutable tags are recommended)                                                                                                 | `3.0.1-debian-11-r5`       |
+| `dashboard.image.tag`                                         | APISIX Dashboard image tag (immutable tags are recommended)                                                                                                 | `3.0.1-debian-11-r22`      |
 | `dashboard.image.digest`                                      | APISIX Dashboard image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended) | `""`                       |
 | `dashboard.image.pullPolicy`                                  | APISIX Dashboard image pull policy                                                                                                                          | `IfNotPresent`             |
 | `dashboard.image.pullSecrets`                                 | APISIX Dashboard image pull secrets                                                                                                                         | `[]`                       |
@@ -572,7 +574,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `ingressController.enabled`                                           | Enable APISIX Ingress Controller                                                                                                                                     | `true`                              |
 | `ingressController.image.registry`                                    | APISIX Ingress Controller image registry                                                                                                                             | `docker.io`                         |
 | `ingressController.image.repository`                                  | APISIX Ingress Controller image repository                                                                                                                           | `bitnami/apisix-ingress-controller` |
-| `ingressController.image.tag`                                         | APISIX Ingress Controller image tag (immutable tags are recommended)                                                                                                 | `1.6.1-debian-11-r5`                |
+| `ingressController.image.tag`                                         | APISIX Ingress Controller image tag (immutable tags are recommended)                                                                                                 | `1.6.1-debian-11-r22`               |
 | `ingressController.image.digest`                                      | APISIX Ingress Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended) | `""`                                |
 | `ingressController.image.pullPolicy`                                  | APISIX Ingress Controller image pull policy                                                                                                                          | `IfNotPresent`                      |
 | `ingressController.image.pullSecrets`                                 | APISIX Ingress Controller image pull secrets                                                                                                                         | `[]`                                |
@@ -729,20 +731,20 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Init containers parameters
 
-| Name                                                              | Description                                                                                                                   | Value                   |
-| ----------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
-| `waitContainer.image.registry`                                    | Init container wait-container image registry                                                                                  | `docker.io`             |
-| `waitContainer.image.repository`                                  | Init container wait-container image name                                                                                      | `bitnami/bitnami-shell` |
-| `waitContainer.image.tag`                                         | Init container wait-container image tag                                                                                       | `11-debian-11-r118`     |
-| `waitContainer.image.digest`                                      | Init container wait-container image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
-| `waitContainer.image.pullPolicy`                                  | Init container wait-container image pull policy                                                                               | `IfNotPresent`          |
-| `waitContainer.image.pullSecrets`                                 | Specify docker-registry secret names as an array                                                                              | `[]`                    |
-| `waitContainer.containerSecurityContext.enabled`                  | Enabled APISIX containers' Security Context                                                                                   | `true`                  |
-| `waitContainer.containerSecurityContext.runAsUser`                | Set APISIX containers' Security Context runAsUser                                                                             | `1001`                  |
-| `waitContainer.containerSecurityContext.runAsNonRoot`             | Set APISIX containers' Security Context runAsNonRoot                                                                          | `true`                  |
-| `waitContainer.containerSecurityContext.readOnlyRootFilesystem`   | Set APISIX containers' Security Context runAsNonRoot                                                                          | `true`                  |
-| `waitContainer.containerSecurityContext.allowPrivilegeEscalation` | Set APISIX container's privilege escalation                                                                                   | `false`                 |
-| `waitContainer.containerSecurityContext.capabilities.drop`        | Set APISIX container's Security Context runAsNonRoot                                                                          | `["ALL"]`               |
+| Name                                                              | Description                                                                                                                   | Value              |
+| ----------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ------------------ |
+| `waitContainer.image.registry`                                    | Init container wait-container image registry                                                                                  | `docker.io`        |
+| `waitContainer.image.repository`                                  | Init container wait-container image name                                                                                      | `bitnami/os-shell` |
+| `waitContainer.image.tag`                                         | Init container wait-container image tag                                                                                       | `11-debian-11-r2`  |
+| `waitContainer.image.digest`                                      | Init container wait-container image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`               |
+| `waitContainer.image.pullPolicy`                                  | Init container wait-container image pull policy                                                                               | `IfNotPresent`     |
+| `waitContainer.image.pullSecrets`                                 | Specify docker-registry secret names as an array                                                                              | `[]`               |
+| `waitContainer.containerSecurityContext.enabled`                  | Enabled APISIX containers' Security Context                                                                                   | `true`             |
+| `waitContainer.containerSecurityContext.runAsUser`                | Set APISIX containers' Security Context runAsUser                                                                             | `1001`             |
+| `waitContainer.containerSecurityContext.runAsNonRoot`             | Set APISIX containers' Security Context runAsNonRoot                                                                          | `true`             |
+| `waitContainer.containerSecurityContext.readOnlyRootFilesystem`   | Set APISIX containers' Security Context runAsNonRoot                                                                          | `true`             |
+| `waitContainer.containerSecurityContext.allowPrivilegeEscalation` | Set APISIX container's privilege escalation                                                                                   | `false`            |
+| `waitContainer.containerSecurityContext.capabilities.drop`        | Set APISIX container's Security Context runAsNonRoot                                                                          | `["ALL"]`          |
 
 ### External etcd settings
 
@@ -912,6 +914,12 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 ## Troubleshooting
 
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+
+## Upgrading
+
+### To 2.0.0
+
+This major updates the `etcd` subchart to it newest major, 9.0.0. For more information on this subchart's major, please refer to [etcd upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/etcd#to-900).
 
 ## License
 

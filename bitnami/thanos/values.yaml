@@ -1,3 +1,6 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
 ## @section Global parameters
 ## Global Docker image parameters
 ## Please, note that this will override the image parameters, including dependencies, configured to use the global value
@@ -54,7 +57,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/thanos
-  tag: 0.31.0-scratch-r5
+  tag: 0.31.0-scratch-r10
   digest: ""
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -498,6 +501,9 @@ query:
     ## Denotes if this Service desires to route external traffic to node-local or cluster-wide endpoints
     ##
     externalTrafficPolicy: Cluster
+    ## @param query.service.labels Labels for Thanos Query service
+    ##
+    labels: {}
     ## @param query.service.annotations Annotations for Thanos Query service
     ##
     annotations: {}
@@ -1532,6 +1538,9 @@ bucketweb:
     ## @param bucketweb.service.externalTrafficPolicy Thanos Bucket Web service externalTrafficPolicy
     ##
     externalTrafficPolicy: Cluster
+    ## @param bucketweb.service.labels Extra labels for Thanos Bucket Web service
+    ##
+    labels: {}
     ## @param bucketweb.service.annotations Annotations for Thanos Bucket Web service
     ##
     annotations: {}
@@ -1972,6 +1981,9 @@ compactor:
     ## Denotes if this Service desires to route external traffic to node-local or cluster-wide endpoints
     ##
     externalTrafficPolicy: Cluster
+    ## @param compactor.service.labels Labels for Thanos Compactor service
+    ##
+    labels: {}
     ## @param compactor.service.annotations Annotations for Thanos Compactor service
     ##
     annotations: {}
@@ -2109,6 +2121,9 @@ compactor:
     ## @param compactor.persistence.size PVC Storage Request for data volume
     ##
     size: 8Gi
+    ## @param compactor.persistence.labels Labels for the PVC
+    ##
+    labels: {}
     ## @param compactor.persistence.annotations Annotations for the PVC
     ##
     annotations: {}
@@ -2426,6 +2441,9 @@ storegateway:
     ## Denotes if this Service desires to route external traffic to node-local or cluster-wide endpoints
     ##
     externalTrafficPolicy: Cluster
+    ## @param storegateway.service.labels Extra labels for Thanos Store Gateway service
+    ##
+    labels: {}
     ## @param storegateway.service.annotations Annotations for Thanos Store Gateway service
     ##
     annotations: {}
@@ -3060,6 +3078,9 @@ ruler:
     ## Denotes if this Service desires to route external traffic to node-local or cluster-wide endpoints
     ##
     externalTrafficPolicy: Cluster
+    ## @param ruler.service.labels Extra labels for Thanos Ruler service
+    ##
+    labels: {}
     ## @param ruler.service.annotations Annotations for Thanos Ruler service
     ##
     annotations: {}
@@ -3559,6 +3580,9 @@ receive:
     ## Denotes if this Service desires to route external traffic to node-local or cluster-wide endpoints
     ##
     externalTrafficPolicy: Cluster
+    ## @param receive.service.labels Extra labels for Thanos Receive service
+    ##
+    labels: {}
     ## @param receive.service.annotations Annotations for Thanos Receive service
     ##
     annotations: {}
@@ -4173,8 +4197,8 @@ volumePermissions:
   ##
   image:
     registry: docker.io
-    repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r118
+    repository: bitnami/os-shell
+    tag: 11-debian-11-r11
     digest: ""
     ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
     ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images

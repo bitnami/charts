@@ -1,3 +1,8 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if eq .Values.mode "distributed" }}
 apiVersion: {{ include "common.capabilities.statefulset.apiVersion" . }}
 kind: StatefulSet
@@ -72,7 +77,7 @@ spec:
           image: {{ include "git.image" . }}
           imagePullPolicy: {{ .Values.git.pullPolicy | quote }}
           command:
-            - /bin/sh
+            - /bin/bash
           args:
             - -c
             - |

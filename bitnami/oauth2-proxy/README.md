@@ -22,6 +22,8 @@ This chart bootstraps a [OAuth2 Proxy](https://github.com/oauth2-proxy/oauth2-pr
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
+Looking to use OAuth2 Proxy in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+
 ## Prerequisites
 
 - Kubernetes 1.19+
@@ -114,7 +116,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | ------------------------------------------------------------------------------------------------------------ | ---------------------- |
 | `image.registry`    | OAuth2 Proxy image registry                                                                                  | `docker.io`            |
 | `image.repository`  | OAuth2 Proxy image repository                                                                                | `bitnami/oauth2-proxy` |
-| `image.tag`         | OAuth2 Proxy image tag (immutable tags are recommended)                                                      | `7.4.0-debian-11-r70`  |
+| `image.tag`         | OAuth2 Proxy image tag (immutable tags are recommended)                                                      | `7.4.0-debian-11-r88`  |
 | `image.digest`      | OAuth2 Proxy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
 | `image.pullPolicy`  | OAuth2 Proxy image pull policy                                                                               | `IfNotPresent`         |
 | `image.pullSecrets` | OAuth2 Proxy image pull secrets                                                                              | `[]`                   |
@@ -129,7 +131,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `configuration.existingSecret`                         | Secret with the client ID, secret and cookie secret                                                      | `""`               |
 | `configuration.google.enabled`                         | Enable Google service account                                                                            | `false`            |
 | `configuration.google.adminEmail`                      | Google admin email                                                                                       | `""`               |
-| `configuration.google.googleGroup`                     | Restrict logins to members of this google group                                                          | `""`               |
+| `configuration.google.groups`                          | Restrict logins to members of these google groups                                                        | `[]`               |
 | `configuration.google.serviceAccountJson`              | Google Service account JSON                                                                              | `""`               |
 | `configuration.google.existingSecret`                  | Existing secret containing Google Service Account                                                        | `""`               |
 | `configuration.content`                                | Default configuration                                                                                    | `""`               |

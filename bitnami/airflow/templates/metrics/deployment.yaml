@@ -1,3 +1,8 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
 {{- if .Values.metrics.enabled }}
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
@@ -80,11 +85,16 @@ spec:
               value: {{ include "airflow.database.port" . }}
             - name: AIRFLOW_PROMETHEUS_DATABASE_USER
               value: {{ include "airflow.database.user" . }}
+            {{- if or (not .Values.postgresql.enabled) .Values.postgresql.auth.enablePostgresUser }}
             - name: AIRFLOW_PROMETHEUS_DATABASE_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "airflow.postgresql.secretName" . }}
                   key: {{ include "airflow.database.existingsecret.key" . }}
+            {{- else }}
+            - name: ALLOW_EMPTY_PASSWORD
+              value: "true"
+            {{- end }}
             - name: AIRFLOW_PROMETHEUS_DATABASE_NAME
               value: {{ include "airflow.database.name" . }}
             {{- if .Values.metrics.extraEnvVars }}

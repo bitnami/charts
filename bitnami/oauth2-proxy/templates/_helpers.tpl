@@ -1,4 +1,9 @@
 {{/*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{/*
 Return the proper OAuth2 Proxy image name
 */}}
 {{- define "oauth2-proxy.image" -}}
@@ -129,7 +134,7 @@ Compile all warnings into a single message.
 {{- end -}}
 {{- end -}}
 
-{{/* Validate values of Wavefront - clusterName */}}
+{{/* Validate values of Redis - clusterName */}}
 {{- define "oauth2-proxy.validateValues.redis" -}}
 {{- if and .Values.redis.enabled .Values.externalRedis.host -}}
 oauth2-proxy: BothRedis
