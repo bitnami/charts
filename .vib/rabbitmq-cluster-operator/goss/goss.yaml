@@ -2,8 +2,10 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 http:
+  {{ if .Vars.msgTopologyOperator.enabled }}
   http://rmq-op-webhook:{{ .Vars.msgTopologyOperator.service.ports.webhook }}:
     status: 400
+  {{ end }}
   {{- $manager_port := (index (index .Vars.extraDeploy 2).spec.ports 0).targetPort }}
   http://ve-testing:{{ $manager_port }}:
     status: 200

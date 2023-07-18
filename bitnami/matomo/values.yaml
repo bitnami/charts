@@ -62,7 +62,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/matomo
-  tag: 4.14.2-debian-11-r26
+  tag: 4.15.0-debian-11-r2
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -679,8 +679,8 @@ volumePermissions:
   ##
   image:
     registry: docker.io
-    repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r131
+    repository: bitnami/os-shell
+    tag: 11-debian-11-r2
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -733,7 +733,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.13.4-debian-11-r10
+    tag: 0.13.4-debian-11-r14
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -803,8 +803,8 @@ certificates:
   ##
   image:
     registry: docker.io
-    repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r131
+    repository: bitnami/os-shell
+    tag: 11-debian-11-r2
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

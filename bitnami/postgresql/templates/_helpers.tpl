@@ -160,7 +160,7 @@ Return true if a secret object should be created
 */}}
 {{- define "postgresql.createSecret" -}}
 {{- $customUser := include "postgresql.username" . -}}
-{{- $postgresPassword := include "common.secrets.lookup" (dict "secret" (include "common.names.fullname" .) "key" .Values.auth.secretKeys.adminPasswordKey "defaultValue" (ternary .Values.auth.postgresPassword .Values.auth.password  (eq $customUser "postgres")) "context" $) -}}
+{{- $postgresPassword := include "common.secrets.lookup" (dict "secret" (include "common.names.fullname" .) "key" .Values.auth.secretKeys.adminPasswordKey "defaultValue" (ternary (coalesce .Values.global.postgresql.auth.postgresPassword .Values.auth.postgresPassword) (coalesce .Values.global.postgresql.auth.password .Values.auth.password) (or (empty $customUser) (eq $customUser "postgres"))) "context" $) -}}
 {{- if and (not (or .Values.global.postgresql.auth.existingSecret .Values.auth.existingSecret))
     (or $postgresPassword .Values.auth.enablePostgresUser (and (not (empty $customUser)) (ne $customUser "postgres")) (eq .Values.architecture "replication") (and .Values.ldap.enabled (or .Values.ldap.bind_password .Values.ldap.bindpw))) -}}
     {{- true -}}

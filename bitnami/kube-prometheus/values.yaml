@@ -67,7 +67,7 @@ operator:
   image:
     registry: docker.io
     repository: bitnami/prometheus-operator
-    tag: 0.66.0-debian-11-r8
+    tag: 0.66.0-debian-11-r10
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -518,7 +518,7 @@ prometheus:
   image:
     registry: docker.io
     repository: bitnami/prometheus
-    tag: 2.45.0-debian-11-r2
+    tag: 2.45.0-debian-11-r5
     digest: ""
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1184,7 +1184,7 @@ prometheus:
     image:
       registry: docker.io
       repository: bitnami/thanos
-      tag: 0.31.0-scratch-r8
+      tag: 0.31.0-scratch-r9
       digest: ""
       ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1574,7 +1574,7 @@ alertmanager:
   image:
     registry: docker.io
     repository: bitnami/alertmanager
-    tag: 0.25.0-debian-11-r65
+    tag: 0.25.0-debian-11-r68
     digest: ""
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -2040,10 +2040,10 @@ alertmanager:
   ## @param alertmanager.portName Port name used for the pods and governing service. This defaults to web
   ##
   portName: web
-  ## @param alertmanager.configNamespaceSelector AlertmanagerConfigs to be selected for to merge and configure Alertmanager with. This defaults to {}
+  ## @param alertmanager.configNamespaceSelector Namespaces to be selected for AlertmanagerConfig discovery. If nil, only check own namespace. This defaults to {}
   ##
   configNamespaceSelector: {}
-  ## @param alertmanager.configSelector Namespaces to be selected for AlertmanagerConfig discovery. If nil, only check own namespace. This defaults to {}
+  ## @param alertmanager.configSelector AlertmanagerConfigs to be selected for to merge and configure Alertmanager with. This defaults to {}
   ##
   configSelector: {}
   ## @param alertmanager.configuration EXPERIMENTAL: alertmanagerConfiguration specifies the global Alertmanager configuration. If defined, it takes precedence over the `configSecret` field. This field may change in future releases. The specified global alertmanager config will not force add a namespace label in routes and inhibitRules
@@ -2161,7 +2161,7 @@ blackboxExporter:
   image:
     registry: docker.io
     repository: bitnami/blackbox-exporter
-    tag: 0.24.0-debian-11-r16
+    tag: 0.24.0-debian-11-r19
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

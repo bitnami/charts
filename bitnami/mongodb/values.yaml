@@ -120,7 +120,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mongodb
-  tag: 6.0.7-debian-11-r0
+  tag: 6.0.8-debian-11-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -244,7 +244,7 @@ tls:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.25.1-debian-11-r5
+    tag: 1.25.1-debian-11-r9
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -538,12 +538,23 @@ podSecurityContext:
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ## @param containerSecurityContext.enabled Enable MongoDB(&reg;) container(s)' Security Context
 ## @param containerSecurityContext.runAsUser User ID for the MongoDB(&reg;) container
+## @param containerSecurityContext.runAsGroup Group ID for the MongoDB(&reg;) container
 ## @param containerSecurityContext.runAsNonRoot Set MongoDB(&reg;) container's Security Context runAsNonRoot
+## @param containerSecurityContext.allowPrivilegeEscalation Is it possible to escalate MongoDB(&reg;) pod(s) privileges
+## @param containerSecurityContext.seccompProfile.type Set MongoDB(&reg;) container's Security Context seccompProfile type
+## @param containerSecurityContext.capabilities.drop Set MongoDB(&reg;) container's Security Context capabilities to drop
 ##
 containerSecurityContext:
   enabled: true
   runAsUser: 1001
+  runAsGroup: 0
   runAsNonRoot: true
+  allowPrivilegeEscalation: false
+  seccompProfile:
+    type: RuntimeDefault
+  capabilities:
+    drop:
+      - ALL
 ## MongoDB(&reg;) containers' resource requests and limits.
 ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
 ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -798,7 +809,7 @@ externalAccess:
     image:
       registry: docker.io
       repository: bitnami/kubectl
-      tag: 1.25.11-debian-11-r5
+      tag: 1.25.11-debian-11-r10
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1170,8 +1181,8 @@ volumePermissions:
   ##
   image:
     registry: docker.io
-    repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r131
+    repository: bitnami/os-shell
+    tag: 11-debian-11-r2
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1375,12 +1386,23 @@ arbiter:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param arbiter.containerSecurityContext.enabled Enable Arbiter container(s)' Security Context
   ## @param arbiter.containerSecurityContext.runAsUser User ID for the Arbiter container
+  ## @param arbiter.containerSecurityContext.runAsGroup Group ID for the Arbiter container
   ## @param arbiter.containerSecurityContext.runAsNonRoot Set Arbiter containers' Security Context runAsNonRoot
+  ## @param arbiter.containerSecurityContext.allowPrivilegeEscalation Is it possible to escalate Arbiter pod(s) privileges
+  ## @param arbiter.containerSecurityContext.seccompProfile.type Set Arbiter container's Security Context seccompProfile type
+  ## @param arbiter.containerSecurityContext.capabilities.drop Set Arbiter container's Security Context capabilities to drop
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
+    allowPrivilegeEscalation: false
+    seccompProfile:
+      type: RuntimeDefault
+    capabilities:
+      drop:
+        - ALL
   ## MongoDB(&reg;) Arbiter containers' resource requests and limits.
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -1698,12 +1720,23 @@ hidden:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param hidden.containerSecurityContext.enabled Enable Hidden container(s)' Security Context
   ## @param hidden.containerSecurityContext.runAsUser User ID for the Hidden container
+  ## @param hidden.containerSecurityContext.runAsGroup Group ID for the Hidden container
   ## @param hidden.containerSecurityContext.runAsNonRoot Set Hidden containers' Security Context runAsNonRoot
+  ## @param hidden.containerSecurityContext.allowPrivilegeEscalation Set Hidden containers' Security Context allowPrivilegeEscalation
+  ## @param hidden.containerSecurityContext.seccompProfile.type Set Hidden container's Security Context seccompProfile type
+  ## @param hidden.containerSecurityContext.capabilities.drop Set Hidden container's Security Context capabilities to drop
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
+    allowPrivilegeEscalation: false
+    seccompProfile:
+      type: RuntimeDefault
+    capabilities:
+      drop:
+        - ALL
   ## MongoDB(&reg;) Hidden containers' resource requests and limits.
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -1930,7 +1963,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mongodb-exporter
-    tag: 0.39.0-debian-11-r10
+    tag: 0.39.0-debian-11-r14
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

@@ -74,7 +74,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/nginx
-  tag: 1.25.1-debian-11-r0
+  tag: 1.25.1-debian-11-r9
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -428,7 +428,7 @@ cloneStaticSiteFromGit:
   image:
     registry: docker.io
     repository: bitnami/git
-    tag: 2.41.0-debian-11-r4
+    tag: 2.41.0-debian-11-r14
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -788,7 +788,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/nginx-exporter
-    tag: 0.11.0-debian-11-r91
+    tag: 0.11.0-debian-11-r100
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
