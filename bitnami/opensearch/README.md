@@ -441,8 +441,6 @@ helm delete --purge my-release
 | `ingest.fullnameOverride`                            | String to fully override opensearch.ingest.fullname                                                                              | `""`                      |
 | `ingest.servicenameOverride`                         | String to fully override ingest.master.servicename                                                                               | `""`                      |
 | `ingest.annotations`                                 | Annotations for the ingest statefulset                                                                                           | `{}`                      |
-| `ingest.containerPorts.restAPI`                      | Opensearch REST API port                                                                                                         | `9200`                    |
-| `ingest.containerPorts.transport`                    | Opensearch Transport port                                                                                                        | `9300`                    |
 | `ingest.updateStrategy.type`                         | Ingest-only nodes statefulset stategy type                                                                                       | `RollingUpdate`           |
 | `ingest.resources.limits`                            | The resources limits for the ingest-only containers                                                                              | `{}`                      |
 | `ingest.resources.requests`                          | The requested resources for the ingest-only containers                                                                           | `{}`                      |
