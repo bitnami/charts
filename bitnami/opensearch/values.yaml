@@ -1409,12 +1409,6 @@ ingest:
   ## @param ingest.annotations [object] Annotations for the ingest statefulset
   ##
   annotations: {}
-  ## @param ingest.containerPorts.restAPI Opensearch REST API port
-  ## @param ingest.containerPorts.transport Opensearch Transport port
-  ##
-  containerPorts:
-    restAPI: 9200
-    transport: 9300
   ## @param ingest.updateStrategy.type Ingest-only nodes statefulset stategy type
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
   ##

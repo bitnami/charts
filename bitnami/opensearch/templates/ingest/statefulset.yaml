@@ -207,9 +207,9 @@ spec:
           {{- end }}
           ports:
             - name: rest-api
-              containerPort: {{ .Values.ingest.containerPorts.restAPI }}
+              containerPort: {{ .Values.containerPorts.restAPI }}
             - name: transport
-              containerPort: {{ .Values.ingest.containerPorts.transport }}
+              containerPort: {{ .Values.containerPorts.transport }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.ingest.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ingest.customStartupProbe "context" $) | nindent 12 }}
