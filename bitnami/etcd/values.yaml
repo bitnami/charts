@@ -384,6 +384,9 @@ extraVolumes: []
 ## @param extraVolumeMounts [array] Optionally specify extra list of additional volumeMounts for etcd container(s)
 ##
 extraVolumeMounts: []
+## @param extraVolumeClaimTemplates [array] Optionally specify extra list of additional volumeClaimTemplates for etcd container(s)
+##
+extraVolumeClaimTemplates: []
 ## @param initContainers [array] Add additional init containers to the etcd pods
 ## e.g:
 ## initContainers:
