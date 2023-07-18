@@ -98,7 +98,7 @@ spec:
         ## Image that performs the sysctl operation to modify Kernel settings (needed sometimes to avoid boot errors)
         - name: sysctl
           image: {{ include "opensearch.sysctl.image" . }}
-          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          imagePullPolicy: {{ .Values.sysctlImage.pullPolicy | quote }}
           command:
             - /bin/bash
             - -ec
