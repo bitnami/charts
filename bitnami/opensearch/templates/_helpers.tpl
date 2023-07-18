@@ -473,7 +473,7 @@ Returns true if at least 1 existing secret was provided
 {{- if and .Values.security.enabled (include "opensearch.security.tlsSecretsProvided" .) $masterSecret -}}
 opensearch: security.tls.master.existingSecret
     Missing secret containing the TLS certificates for the Opensearch master nodes.
-    Provide the certificates using --set .Values.security.tls.master.existingSecret="my-secret".
+    Provide the certificates using --set .security.tls.master.existingSecret="my-secret".
 {{- end -}}
 {{- end -}}
 
@@ -483,7 +483,7 @@ opensearch: security.tls.master.existingSecret
 {{- if and .Values.security.enabled (include "opensearch.security.tlsSecretsProvided" .) $coordinatingSecret -}}
 opensearch: security.tls.coordinating.existingSecret
     Missing secret containing the TLS certificates for the Opensearch coordinating-only nodes.
-    Provide the certificates using --set .Values.security.tls.coordinating.existingSecret="my-secret".
+    Provide the certificates using --set .security.tls.coordinating.existingSecret="my-secret".
 {{- end -}}
 {{- end -}}
 
@@ -493,7 +493,7 @@ opensearch: security.tls.coordinating.existingSecret
 {{- if and .Values.security.enabled (include "opensearch.security.tlsSecretsProvided" .) $dataSecret -}}
 opensearch: security.tls.data.existingSecret
     Missing secret containing the TLS certificates for the Opensearch data nodes.
-    Provide the certificates using --set .Values.security.tls.data.existingSecret="my-secret".
+    Provide the certificates using --set .security.tls.data.existingSecret="my-secret".
 {{- end -}}
 {{- end -}}
 
@@ -503,7 +503,7 @@ opensearch: security.tls.data.existingSecret
 {{- if and .Values.security.enabled (include "opensearch.security.tlsSecretsProvided" .) $ingestSecret -}}
 opensearch: security.tls.ingest.existingSecret
     Missing secret containing the TLS certificates for the Opensearch ingest nodes.
-    Provide the certificates using --set .Values.security.tls.ingest.existingSecret="my-secret".
+    Provide the certificates using --set .security.tls.ingest.existingSecret="my-secret".
 {{- end -}}
 {{- end -}}
 
