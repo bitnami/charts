@@ -571,7 +571,8 @@ envoy:
   ## @param envoy.shutdownManager.port Specify Port for shutdown container
   ## @param envoy.shutdownManager.resources.limits [object] Specify resource limits which the container is not allowed to succeed.
   ## @param envoy.shutdownManager.resources.requests [object] Specify resource requests which the container needs to spawn.
-  ##
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param envoy.shutdownManager.containerSecurityContext.enabled shutdownManager Container securityContext
   shutdownManager:
     extraArgs: []
     port: "8090"
@@ -589,6 +590,8 @@ envoy:
       ## memory: 16Mi
       ##
       requests: {}
+    containerSecurityContext:
+      enabled: false
   ## @param envoy.kind Install as deployment or daemonset
   ##
   kind: daemonset

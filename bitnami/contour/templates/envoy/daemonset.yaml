@@ -83,6 +83,11 @@ spec:
             {{- end }}
           image: {{ include "common.images.image" ( dict "imageRoot" .Values.contour.image "global" .Values.global) }}
           imagePullPolicy: {{ .Values.contour.image.pullPolicy }}
+          {{- if .Values.envoy.shutdownManager.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.envoy.shutdownManager.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- else if .Values.envoy.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.envoy.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
           {{- if .Values.contour.extraEnvVars }}
           env:
             {{- include "common.tplvalues.render" (dict "value" .Values.contour.extraEnvVars "context" $) | nindent 12 }}
