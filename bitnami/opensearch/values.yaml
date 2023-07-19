@@ -774,7 +774,7 @@ master:
   serviceAccount:
     create: false
     name: ""
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
     annotations: {}
 
   autoscaling:
@@ -1115,7 +1115,7 @@ data:
   serviceAccount:
     create: false
     name: ""
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
     annotations: {}
   autoscaling:
     vpa:
@@ -1417,7 +1417,7 @@ coordinating:
   serviceAccount:
     create: false
     name: ""
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
     annotations: {}
   autoscaling:
     vpa:
@@ -1721,7 +1721,7 @@ ingest:
   serviceAccount:
     create: false
     name: ""
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
     annotations: {}
   autoscaling:
     vpa:
@@ -2373,7 +2373,7 @@ dashboards:
   serviceAccount:
     create: false
     name: ""
-    automountServiceAccountToken: true
+    automountServiceAccountToken: false
     annotations: {}
   autoscaling:
     vpa:
