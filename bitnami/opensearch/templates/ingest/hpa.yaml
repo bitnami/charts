@@ -3,7 +3,7 @@ Copyright VMware, Inc.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if and (include "opensearch.ingest.enabled" .) .Values.ingest.autoscaling.enabled }}
+{{- if and (include "opensearch.ingest.enabled" .) .Values.ingest.autoscaling.hpa.enabled }}
 apiVersion: {{ include "common.capabilities.hpa.apiVersion" ( dict "context" $ ) }}
 kind: HorizontalPodAutoscaler
 metadata:
@@ -22,31 +22,31 @@ spec:
     apiVersion: {{ template "common.capabilities.statefulset.apiVersion" . }}
     kind: StatefulSet
     name: {{ include "opensearch.ingest.fullname" . }}
-  minReplicas: {{ .Values.ingest.autoscaling.minReplicas }}
-  maxReplicas: {{ .Values.ingest.autoscaling.maxReplicas }}
+  minReplicas: {{ .Values.ingest.autoscaling.hpa.minReplicas }}
+  maxReplicas: {{ .Values.ingest.autoscaling.hpa.maxReplicas }}
   metrics:
-    {{- if .Values.ingest.autoscaling.targetCPU }}
+    {{- if .Values.ingest.autoscaling.hpa.targetCPU }}
     - type: Resource
       resource:
         name: cpu
         {{- if semverCompare "<1.23-0" (include "common.capabilities.kubeVersion" .) }}
-        targetAverageUtilization: {{ .Values.ingest.autoscaling.targetCPU }}
+        targetAverageUtilization: {{ .Values.ingest.autoscaling.hpa.targetCPU }}
         {{- else }}
         target:
           type: Utilization
-          averageUtilization: {{ .Values.ingest.autoscaling.targetCPU }}
+          averageUtilization: {{ .Values.ingest.autoscaling.hpa.targetCPU }}
         {{- end }}
     {{- end }}
-    {{- if .Values.ingest.autoscaling.targetMemory }}
+    {{- if .Values.ingest.autoscaling.hpa.targetMemory }}
     - type: Resource
       resource:
         name: memory
         {{- if semverCompare "<1.23-0" (include "common.capabilities.kubeVersion" .) }}
-        targetAverageUtilization: {{ .Values.ingest.autoscaling.targetMemory }}
+        targetAverageUtilization: {{ .Values.ingest.autoscaling.hpa.targetMemory }}
         {{- else }}
         target:
           type: Utilization
-          averageUtilization: {{ .Values.ingest.autoscaling.targetMemory }}
+          averageUtilization: {{ .Values.ingest.autoscaling.hpa.targetMemory }}
         {{- end }}
     {{- end }}
 {{- end }}

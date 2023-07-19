@@ -28,7 +28,7 @@ metadata:
     {{- end }}
   {{- end }}
 spec:
-  {{- if not .Values.data.autoscaling.enabled }}
+  {{- if not .Values.data.autoscaling.hpa.enabled }}
   replicas: {{ .Values.data.replicaCount }}
   {{- end }}
   podManagementPolicy: {{ .Values.data.podManagementPolicy }}
@@ -180,13 +180,13 @@ spec:
             - name: OPENSEARCH_CLUSTER_HOSTS
               value: {{ include "opensearch.hosts" . | quote }}
             - name: OPENSEARCH_TOTAL_NODES
-              value: {{ add (ternary .Values.master.autoscaling.minReplicas .Values.master.replicaCount .Values.master.autoscaling.enabled) (ternary .Values.data.autoscaling.minReplicas .Values.data.replicaCount .Values.data.autoscaling.enabled) | quote }}
+              value: {{ add (ternary .Values.master.autoscaling.hpa.minReplicas .Values.master.replicaCount .Values.master.autoscaling.hpa.enabled) (ternary .Values.data.autoscaling.hpa.minReplicas .Values.data.replicaCount .Values.data.autoscaling.hpa.enabled) | quote }}
             - name: OPENSEARCH_CLUSTER_MASTER_HOSTS
               {{- $opensearchMasterFullname := include "opensearch.master.fullname" . }}
-              {{- $replicas := int (ternary .Values.master.autoscaling.minReplicas .Values.master.replicaCount .Values.master.autoscaling.enabled) }}
+              {{- $replicas := int (ternary .Values.master.autoscaling.hpa.minReplicas .Values.master.replicaCount .Values.master.autoscaling.hpa.enabled) }}
               value: {{ range $i, $e := until $replicas }}{{ printf "%s-%d" $opensearchMasterFullname $e }} {{ end }}
             - name: OPENSEARCH_MINIMUM_MASTER_NODES
-              value: {{ add (div (ternary .Values.master.autoscaling.minReplicas .Values.master.replicaCount .Values.master.autoscaling.enabled) 2) 1 | quote }}
+              value: {{ add (div (ternary .Values.master.autoscaling.hpa.minReplicas .Values.master.replicaCount .Values.master.autoscaling.hpa.enabled) 2) 1 | quote }}
             - name: OPENSEARCH_ADVERTISED_HOSTNAME
               value: "$(MY_POD_NAME).{{ (include "opensearch.data.servicename" .)}}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}"
             {{- if .Values.plugins }}

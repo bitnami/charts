@@ -773,20 +773,47 @@ master:
     name: ""
     automountServiceAccountToken: true
     annotations: {}
-  ## Enable HorizontalPodAutoscaler for Opensearch Master pods
-  ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
-  ## @param master.autoscaling.enabled Whether enable horizontal pod autoscale
-  ## @param master.autoscaling.minReplicas Configure a minimum amount of pods
-  ## @param master.autoscaling.maxReplicas Configure a maximum amount of pods
-  ## @param master.autoscaling.targetCPU Define the CPU target to trigger the scaling actions (utilization percentage)
-  ## @param master.autoscaling.targetMemory Define the memory target to trigger the scaling actions (utilization percentage)
-  ##
+
   autoscaling:
-    enabled: false
-    minReplicas: 3
-    maxReplicas: 11
-    targetCPU: ""
-    targetMemory: ""
+    vpa:
+      ## @param master.autoscaling.vpa.enabled Enable VPA
+      ##
+      enabled: false
+      ## @param master.autoscaling.vpa.annotations Annotations for VPA resource
+      ##
+      annotations: { }
+      ## @param master.autoscaling.vpa.controlledResources VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory
+      ##
+      controlledResources: [ ]
+      ## @param master.autoscaling.vpa.maxAllowed VPA Max allowed resources for the pod
+      ## cpu: 200m
+      ## memory: 100Mi
+      maxAllowed: { }
+      ## @param master.autoscaling.vpa.minAllowed VPA Min allowed resources for the pod
+      ## cpu: 200m
+      ## memory: 100Mi
+      minAllowed: { }
+      updatePolicy:
+        ## @param master.autoscaling.vpa.updatePolicy.updateMode Autoscaling update policy Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod
+        ## Possible values are "Off", "Initial", "Recreate", and "Auto".
+        ##
+        updateMode: Auto
+    hpa:
+      ## @param master.autoscaling.hpa.enabled Enable HPA for APISIX Data Plane
+      ##
+      enabled: false
+      ## @param master.autoscaling.hpa.minReplicas Minimum number of APISIX Data Plane replicas
+      ##
+      minReplicas: 3
+      ## @param master.autoscaling.hpa.maxReplicas Maximum number of APISIX Data Plane replicas
+      ##
+      maxReplicas: 11
+      ## @param master.autoscaling.hpa.targetCPU Target CPU utilization percentage
+      ##
+      targetCPU: ""
+      ## @param master.autoscaling.hpa.targetMemory Target Memory utilization percentage
+      ##
+      targetMemory: ""
 
 ## @section Data-only nodes parameters
 
@@ -1084,20 +1111,46 @@ data:
     name: ""
     automountServiceAccountToken: true
     annotations: {}
-  ## Enable HorizontalPodAutoscaler for Opensearch data pods
-  ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
-  ## @param data.autoscaling.enabled Whether enable horizontal pod autoscale
-  ## @param data.autoscaling.minReplicas Configure a minimum amount of pods
-  ## @param data.autoscaling.maxReplicas Configure a maximum amount of pods
-  ## @param data.autoscaling.targetCPU Define the CPU target to trigger the scaling actions (utilization percentage)
-  ## @param data.autoscaling.targetMemory Define the memory target to trigger the scaling actions (utilization percentage)
-  ##
   autoscaling:
-    enabled: false
-    minReplicas: 3
-    maxReplicas: 11
-    targetCPU: ""
-    targetMemory: ""
+    vpa:
+      ## @param data.autoscaling.vpa.enabled Enable VPA
+      ##
+      enabled: false
+      ## @param data.autoscaling.vpa.annotations Annotations for VPA resource
+      ##
+      annotations: { }
+      ## @param data.autoscaling.vpa.controlledResources VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory
+      ##
+      controlledResources: [ ]
+      ## @param data.autoscaling.vpa.maxAllowed VPA Max allowed resources for the pod
+      ## cpu: 200m
+      ## memory: 100Mi
+      maxAllowed: { }
+      ## @param data.autoscaling.vpa.minAllowed VPA Min allowed resources for the pod
+      ## cpu: 200m
+      ## memory: 100Mi
+      minAllowed: { }
+      updatePolicy:
+        ## @param data.autoscaling.vpa.updatePolicy.updateMode Autoscaling update policy Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod
+        ## Possible values are "Off", "Initial", "Recreate", and "Auto".
+        ##
+        updateMode: Auto
+    hpa:
+      ## @param data.autoscaling.hpa.enabled Enable HPA for APISIX Data Plane
+      ##
+      enabled: false
+      ## @param data.autoscaling.hpa.minReplicas Minimum number of APISIX Data Plane replicas
+      ##
+      minReplicas: 3
+      ## @param data.autoscaling.hpa.maxReplicas Maximum number of APISIX Data Plane replicas
+      ##
+      maxReplicas: 11
+      ## @param data.autoscaling.hpa.targetCPU Target CPU utilization percentage
+      ##
+      targetCPU: ""
+      ## @param data.autoscaling.hpa.targetMemory Target Memory utilization percentage
+      ##
+      targetMemory: ""
 
 ## @section Coordinating-only nodes parameters
 
@@ -1357,20 +1410,46 @@ coordinating:
     name: ""
     automountServiceAccountToken: true
     annotations: {}
-  ## Enable HorizontalPodAutoscaler for Opensearch coordinating pods
-  ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
-  ## @param coordinating.autoscaling.enabled Whether enable horizontal pod autoscale
-  ## @param coordinating.autoscaling.minReplicas Configure a minimum amount of pods
-  ## @param coordinating.autoscaling.maxReplicas Configure a maximum amount of pods
-  ## @param coordinating.autoscaling.targetCPU Define the CPU target to trigger the scaling actions (utilization percentage)
-  ## @param coordinating.autoscaling.targetMemory Define the memory target to trigger the scaling actions (utilization percentage)
-  ##
   autoscaling:
-    enabled: false
-    minReplicas: 3
-    maxReplicas: 11
-    targetCPU: ""
-    targetMemory: ""
+    vpa:
+      ## @param coordinating.autoscaling.vpa.enabled Enable VPA
+      ##
+      enabled: false
+      ## @param coordinating.autoscaling.vpa.annotations Annotations for VPA resource
+      ##
+      annotations: { }
+      ## @param coordinating.autoscaling.vpa.controlledResources VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory
+      ##
+      controlledResources: [ ]
+      ## @param coordinating.autoscaling.vpa.maxAllowed VPA Max allowed resources for the pod
+      ## cpu: 200m
+      ## memory: 100Mi
+      maxAllowed: { }
+      ## @param coordinating.autoscaling.vpa.minAllowed VPA Min allowed resources for the pod
+      ## cpu: 200m
+      ## memory: 100Mi
+      minAllowed: { }
+      updatePolicy:
+        ## @param coordinating.autoscaling.vpa.updatePolicy.updateMode Autoscaling update policy Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod
+        ## Possible values are "Off", "Initial", "Recreate", and "Auto".
+        ##
+        updateMode: Auto
+    hpa:
+      ## @param coordinating.autoscaling.hpa.enabled Enable HPA for APISIX Data Plane
+      ##
+      enabled: false
+      ## @param coordinating.autoscaling.hpa.minReplicas Minimum number of APISIX Data Plane replicas
+      ##
+      minReplicas: 3
+      ## @param coordinating.autoscaling.hpa.maxReplicas Maximum number of APISIX Data Plane replicas
+      ##
+      maxReplicas: 11
+      ## @param coordinating.autoscaling.hpa.targetCPU Target CPU utilization percentage
+      ##
+      targetCPU: ""
+      ## @param coordinating.autoscaling.hpa.targetMemory Target Memory utilization percentage
+      ##
+      targetMemory: ""
 
 ## @section Ingest-only nodes parameters
 
@@ -1632,20 +1711,46 @@ ingest:
     name: ""
     automountServiceAccountToken: true
     annotations: {}
-  ## Enable HorizontalPodAutoscaler for Opensearch ingest-only pods
-  ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
-  ## @param ingest.autoscaling.enabled Whether enable horizontal pod autoscale
-  ## @param ingest.autoscaling.minReplicas Configure a minimum amount of pods
-  ## @param ingest.autoscaling.maxReplicas Configure a maximum amount of pods
-  ## @param ingest.autoscaling.targetCPU Define the CPU target to trigger the scaling actions (utilization percentage)
-  ## @param ingest.autoscaling.targetMemory Define the memory target to trigger the scaling actions (utilization percentage)
-  ##
   autoscaling:
-    enabled: false
-    minReplicas: 3
-    maxReplicas: 11
-    targetCPU: ""
-    targetMemory: ""
+    vpa:
+      ## @param ingest.autoscaling.vpa.enabled Enable VPA
+      ##
+      enabled: false
+      ## @param ingest.autoscaling.vpa.annotations Annotations for VPA resource
+      ##
+      annotations: { }
+      ## @param ingest.autoscaling.vpa.controlledResources VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory
+      ##
+      controlledResources: [ ]
+      ## @param ingest.autoscaling.vpa.maxAllowed VPA Max allowed resources for the pod
+      ## cpu: 200m
+      ## memory: 100Mi
+      maxAllowed: { }
+      ## @param ingest.autoscaling.vpa.minAllowed VPA Min allowed resources for the pod
+      ## cpu: 200m
+      ## memory: 100Mi
+      minAllowed: { }
+      updatePolicy:
+        ## @param ingest.autoscaling.vpa.updatePolicy.updateMode Autoscaling update policy Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod
+        ## Possible values are "Off", "Initial", "Recreate", and "Auto".
+        ##
+        updateMode: Auto
+    hpa:
+      ## @param ingest.autoscaling.hpa.enabled Enable HPA for APISIX Data Plane
+      ##
+      enabled: false
+      ## @param ingest.autoscaling.hpa.minReplicas Minimum number of APISIX Data Plane replicas
+      ##
+      minReplicas: 3
+      ## @param ingest.autoscaling.hpa.maxReplicas Maximum number of APISIX Data Plane replicas
+      ##
+      maxReplicas: 11
+      ## @param ingest.autoscaling.hpa.targetCPU Target CPU utilization percentage
+      ##
+      targetCPU: ""
+      ## @param ingest.autoscaling.hpa.targetMemory Target Memory utilization percentage
+      ##
+      targetMemory: ""
 
   ## Opensearch Ingest-only Service
   ## Recommended for heavy ingestion, improves performance by sending ingest traffic directly into the ingest nodes.
@@ -2255,20 +2360,46 @@ dashboards:
     name: ""
     automountServiceAccountToken: true
     annotations: {}
-  ## Enable HorizontalPodAutoscaler for Opensearch data pods
-  ## ref: https://kubernetes.io/docs/tasks/run-application/horizontal-pod-autoscale/
-  ## @param dashboards.autoscaling.enabled Whether enable horizontal pod autoscale
-  ## @param dashboards.autoscaling.minReplicas Configure a minimum amount of pods
-  ## @param dashboards.autoscaling.maxReplicas Configure a maximum amount of pods
-  ## @param dashboards.autoscaling.targetCPU Define the CPU target to trigger the scaling actions (utilization percentage)
-  ## @param dashboards.autoscaling.targetMemory Define the memory target to trigger the scaling actions (utilization percentage)
-  ##
   autoscaling:
-    enabled: false
-    minReplicas: 1
-    maxReplicas: 11
-    targetCPU: ""
-    targetMemory: ""
+    vpa:
+      ## @param dashboards.autoscaling.vpa.enabled Enable VPA
+      ##
+      enabled: false
+      ## @param dashboards.autoscaling.vpa.annotations Annotations for VPA resource
+      ##
+      annotations: { }
+      ## @param dashboards.autoscaling.vpa.controlledResources VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory
+      ##
+      controlledResources: [ ]
+      ## @param dashboards.autoscaling.vpa.maxAllowed VPA Max allowed resources for the pod
+      ## cpu: 200m
+      ## memory: 100Mi
+      maxAllowed: { }
+      ## @param dashboards.autoscaling.vpa.minAllowed VPA Min allowed resources for the pod
+      ## cpu: 200m
+      ## memory: 100Mi
+      minAllowed: { }
+      updatePolicy:
+        ## @param dashboards.autoscaling.vpa.updatePolicy.updateMode Autoscaling update policy Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod
+        ## Possible values are "Off", "Initial", "Recreate", and "Auto".
+        ##
+        updateMode: Auto
+    hpa:
+      ## @param dashboards.autoscaling.hpa.enabled Enable HPA for APISIX Data Plane
+      ##
+      enabled: false
+      ## @param dashboards.autoscaling.hpa.minReplicas Minimum number of APISIX Data Plane replicas
+      ##
+      minReplicas: 3
+      ## @param dashboards.autoscaling.hpa.maxReplicas Maximum number of APISIX Data Plane replicas
+      ##
+      maxReplicas: 11
+      ## @param dashboards.autoscaling.hpa.targetCPU Target CPU utilization percentage
+      ##
+      targetCPU: ""
+      ## @param dashboards.autoscaling.hpa.targetMemory Target Memory utilization percentage
+      ##
+      targetMemory: ""
   ## TLS configuration
   ##
   tls:

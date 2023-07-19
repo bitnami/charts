@@ -3,7 +3,7 @@ Copyright VMware, Inc.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if and (include "opensearch.coordinating.enabled" .) .Values.coordinating.autoscaling.enabled }}
+{{- if and (include "opensearch.coordinating.enabled" .) .Values.coordinating.autoscaling.hpa.enabled }}
 apiVersion: {{ include "common.capabilities.hpa.apiVersion" ( dict "context" $ ) }}
 kind: HorizontalPodAutoscaler
 metadata:
@@ -22,31 +22,31 @@ spec:
     apiVersion: {{ template "common.capabilities.statefulset.apiVersion" . }}
     kind: StatefulSet
     name: {{ include "opensearch.coordinating.fullname" . }}
-  minReplicas: {{ .Values.coordinating.autoscaling.minReplicas }}
-  maxReplicas: {{ .Values.coordinating.autoscaling.maxReplicas }}
+  minReplicas: {{ .Values.coordinating.autoscaling.hpa.minReplicas }}
+  maxReplicas: {{ .Values.coordinating.autoscaling.hpa.maxReplicas }}
   metrics:
-    {{- if .Values.coordinating.autoscaling.targetCPU }}
+    {{- if .Values.coordinating.autoscaling.hpa.targetCPU }}
     - type: Resource
       resource:
         name: cpu
         {{- if semverCompare "<1.23-0" (include "common.capabilities.kubeVersion" .) }}
-        targetAverageUtilization: {{ .Values.coordinating.autoscaling.targetCPU }}
+        targetAverageUtilization: {{ .Values.coordinating.autoscaling.hpa.targetCPU }}
         {{- else }}
         target:
           type: Utilization
-          averageUtilization: {{ .Values.coordinating.autoscaling.targetCPU }}
+          averageUtilization: {{ .Values.coordinating.autoscaling.hpa.targetCPU }}
         {{- end }}
     {{- end }}
-    {{- if .Values.coordinating.autoscaling.targetMemory }}
+    {{- if .Values.coordinating.autoscaling.hpa.targetMemory }}
     - type: Resource
       resource:
         name: memory
         {{- if semverCompare "<1.23-0" (include "common.capabilities.kubeVersion" .) }}
-        targetAverageUtilization: {{ .Values.coordinating.autoscaling.targetMemory }}
+        targetAverageUtilization: {{ .Values.coordinating.autoscaling.hpa.targetMemory }}
         {{- else }}
         target:
           type: Utilization
-          averageUtilization: {{ .Values.coordinating.autoscaling.targetMemory }}
+          averageUtilization: {{ .Values.coordinating.autoscaling.hpa.targetMemory }}
         {{- end }}
     {{- end }}
 {{- end }}
