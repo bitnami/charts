@@ -27,6 +27,28 @@ Return the proper sysctl image name
 {{- end -}}
 
 {{/*
+Return the proper sysctl image name
+*/}}
+{{- define "opensearch.sysctl.initContainer" -}}
+## Image that performs the sysctl operation to modify Kernel settings (needed sometimes to avoid boot errors)
+- name: sysctl
+  image: {{ include "opensearch.sysctl.image" . }}
+  imagePullPolicy: {{ .Values.sysctlImage.pullPolicy | quote }}
+  command:
+    - /bin/bash
+    - -ec
+    - |
+      {{- include "opensearch.sysctlIfLess" (dict "key" "vm.max_map_count" "value" "262144") | nindent 14 }}
+      {{- include "opensearch.sysctlIfLess" (dict "key" "fs.file-max" "value" "65536") | nindent 14 }}
+  securityContext:
+    privileged: true
+    runAsUser: 0
+  {{- if .Values.sysctlImage.resources }}
+  resources: {{- toYaml .Values.sysctlImage.resources | nindent 12 }}
+  {{- end }}
+{{- end -}}
+
+{{/*
 Return the proper image name (for the init container volume-permissions image)
 */}}
 {{- define "opensearch.volumePermissions.image" -}}
