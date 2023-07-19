@@ -5,7 +5,7 @@ annotations:
   category: Infrastructure
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 2023.7.11
+appVersion: 2023.7.18
 dependencies:
   - name: common
     repository: oci://registry-1.docker.io/bitnamicharts
@@ -27,4 +27,4 @@ maintainers:
 name: minio
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/minio
-version: 12.6.9
+version: 12.6.10

@@ -220,7 +220,7 @@ spec:
             {{- if or (eq $customUser "postgres") (empty $customUser) }}
             {{- if .Values.auth.enablePostgresUser }}
             {{- if .Values.auth.usePasswordFiles }}
-            - name: POSTGRES_POSTGRES_PASSWORD_FILE
+            - name: POSTGRES_PASSWORD_FILE
               value: {{ printf "/opt/bitnami/postgresql/secrets/%s" (include "postgresql.adminPasswordKey" .) }}
             {{- else if .Values.auth.postgresPassword }}
             - name: POSTGRES_PASSWORD

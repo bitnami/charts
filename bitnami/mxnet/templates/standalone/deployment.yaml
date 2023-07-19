@@ -75,7 +75,7 @@ spec:
           image: {{ include "git.image" . }}
           imagePullPolicy: {{ .Values.git.pullPolicy | quote }}
           command:
-            - /bin/sh
+            - /bin/bash
           args:
             - -c
             - |
