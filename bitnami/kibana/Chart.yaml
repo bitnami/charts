@@ -27,4 +27,4 @@ maintainers:
 name: kibana
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/kibana
-version: 10.4.4
+version: 10.4.5
