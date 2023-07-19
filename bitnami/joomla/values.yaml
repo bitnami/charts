@@ -65,7 +65,7 @@ image:
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -171,7 +171,7 @@ containerPorts:
   http: 8080
   https: 8443
 ## Enable persistence using Persistent Volume Claims
-## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
 ## @param persistence.enabled Enable persistence using PVC
 ## @param persistence.storageClass PVC Storage Class for Joomla! volume
 ## @param persistence.accessModes PVC Access Mode for Joomla! volume
@@ -553,7 +553,7 @@ mariadb:
     ##
     password: ""
   ## Enable persistence using Persistent Volume Claims
-  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
   ## @param mariadb.primary.persistence.enabled Enable database persistence using PVC
   ## @param mariadb.primary.persistence.storageClass PVC Storage Class
   ## @param mariadb.primary.persistence.accessModes [array] Persistent Volume access modes

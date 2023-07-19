@@ -1331,7 +1331,7 @@ sourceController:
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
   ## @section Source Conttroller Persistence Parameters
-  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
   ##
   persistence:
     ## @param sourceController.persistence.enabled Enable persistence using Persistent Volume Claims
@@ -2673,7 +2673,7 @@ imageReflectorController:
   initContainers: []
 
   ## @section Image Reflector Conttroller Persistence Parameters
-  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
   ##
   persistence:
     ## @param imageReflectorController.persistence.enabled Enable persistence using Persistent Volume Claims

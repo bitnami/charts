@@ -155,7 +155,7 @@ operator:
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## Ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## Ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -632,7 +632,7 @@ grafana:
     ##
     tlsSecret: grafana.local-tls
   ## Enable persistence using Persistent Volume Claims
-  ## Ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## Ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
   ##
   persistence:
     ## @param grafana.persistence.enabled Enable persistent storage for the grafana deployment
