@@ -153,7 +153,7 @@ spec:
             - --grpc-server-tls-client-ca=/certs/{{ include "common.secrets.key" (dict "existingSecret" .Values.receive.grpc.server.tls.existingSecret "key" "ca-cert") }}
             {{- end }}
             {{- if .Values.receive.extraFlags }}
-            {{- .Values.receive.extraFlags | toYaml | nindent 12 }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.receive.extraFlags "context" $) | nindent 12 }}
             {{- end }}
             {{- end }}
           env:
