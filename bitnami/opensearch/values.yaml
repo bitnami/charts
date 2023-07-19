@@ -546,11 +546,14 @@ master:
   ## @param master.containerSecurityContext.enabled Enabled master-elegible containers' Security Context
   ## @param master.containerSecurityContext.runAsUser Set master-elegible containers' Security Context runAsUser
   ## @param master.containerSecurityContext.runAsNonRoot Set master-elegible containers' Security Context runAsNonRoot
+  ## @param master.containerSecurityContext.capabilities.drop Set APISIX container's Security Context runAsNonRoot
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    capabilities:
+      drop: [ "ALL" ]
   ## @param master.hostAliases master-elegible pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -884,11 +887,14 @@ data:
   ## @param data.containerSecurityContext.enabled Enabled data containers' Security Context
   ## @param data.containerSecurityContext.runAsUser Set data containers' Security Context runAsUser
   ## @param data.containerSecurityContext.runAsNonRoot Set data containers' Security Context runAsNonRoot
+  ## @param data.containerSecurityContext.capabilities.drop Set APISIX container's Security Context runAsNonRoot
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    capabilities:
+      drop: [ "ALL" ]
   ## @param data.hostAliases data pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1222,11 +1228,14 @@ coordinating:
   ## @param coordinating.containerSecurityContext.enabled Enabled coordinating-only containers' Security Context
   ## @param coordinating.containerSecurityContext.runAsUser Set coordinating-only containers' Security Context runAsUser
   ## @param coordinating.containerSecurityContext.runAsNonRoot Set coordinating-only containers' Security Context runAsNonRoot
+  ## @param coordinating.containerSecurityContext.capabilities.drop Set APISIX container's Security Context runAsNonRoot
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    capabilities:
+      drop: [ "ALL" ]
   ## @param coordinating.hostAliases coordinating-only pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -1523,11 +1532,14 @@ ingest:
   ## @param ingest.containerSecurityContext.enabled Enabled ingest-only containers' Security Context
   ## @param ingest.containerSecurityContext.runAsUser Set ingest-only containers' Security Context runAsUser
   ## @param ingest.containerSecurityContext.runAsNonRoot Set ingest-only containers' Security Context runAsNonRoot
+  ## @param ingest.containerSecurityContext.capabilities.drop Set APISIX container's Security Context runAsNonRoot
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    capabilities:
+      drop: [ "ALL" ]
   ## @param ingest.hostAliases ingest-only pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -2176,11 +2188,14 @@ dashboards:
   ## @param dashboards.containerSecurityContext.enabled Enabled data containers' Security Context
   ## @param dashboards.containerSecurityContext.runAsUser Set data containers' Security Context runAsUser
   ## @param dashboards.containerSecurityContext.runAsNonRoot Set data containers' Security Context runAsNonRoot
+  ## @param dashboards.containerSecurityContext.capabilities.drop Set APISIX container's Security Context runAsNonRoot
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
+    capabilities:
+      drop: [ "ALL" ]
   ## @param dashboards.hostAliases data pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
