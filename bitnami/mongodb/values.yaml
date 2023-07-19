@@ -129,7 +129,7 @@ image:
   tag: 7.0.4-debian-11-r4
   digest: ""
   ## Specify a imagePullPolicy
-  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
   ##
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -828,7 +828,7 @@ externalAccess:
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-      ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+      ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
       ##
       pullPolicy: IfNotPresent
       ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
@@ -1069,7 +1069,7 @@ networkPolicy:
 ##
 
 ## Enable persistence using Persistent Volume Claims
-## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
 ##
 persistence:
   ## @param persistence.enabled Enable MongoDB(&reg;) data persistence using PVC
@@ -1375,7 +1375,7 @@ volumePermissions:
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
-    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ## ref: https://kubernetes.io/docs/concepts/containers/images/#pre-pulled-images
     ##
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
@@ -2065,7 +2065,7 @@ hidden:
     ##
     maxUnavailable: ""
   ## Enable persistence using Persistent Volume Claims
-  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
   ##
   persistence:
     ## @param hidden.persistence.enabled Enable hidden node data persistence using PVC
