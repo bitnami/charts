@@ -537,10 +537,13 @@ master:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param master.podSecurityContext.enabled Enabled master-elegible pods' Security Context
   ## @param master.podSecurityContext.fsGroup Set master-elegible pod's Security Context fsGroup
+  ## @param master.podSecurityContext.seccompProfile.type Set Proxy container's Security Context seccomp profile
   ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
+    seccompProfile:
+      type: "RuntimeDefault"
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param master.containerSecurityContext.enabled Enabled master-elegible containers' Security Context
@@ -928,10 +931,13 @@ data:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param data.podSecurityContext.enabled Enabled data pods' Security Context
   ## @param data.podSecurityContext.fsGroup Set data pod's Security Context fsGroup
+  ## @param data.podSecurityContext.seccompProfile.type Set Proxy container's Security Context seccomp profile
   ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
+    seccompProfile:
+      type: "RuntimeDefault"
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param data.containerSecurityContext.enabled Enabled data containers' Security Context
@@ -1320,10 +1326,13 @@ coordinating:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param coordinating.podSecurityContext.enabled Enabled coordinating-only pods' Security Context
   ## @param coordinating.podSecurityContext.fsGroup Set coordinating-only pod's Security Context fsGroup
+  ## @param coordinating.podSecurityContext.seccompProfile.type Set Proxy container's Security Context seccomp profile
   ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
+    seccompProfile:
+      type: "RuntimeDefault"
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param coordinating.containerSecurityContext.enabled Enabled coordinating-only containers' Security Context
@@ -1675,10 +1684,13 @@ ingest:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param ingest.podSecurityContext.enabled Enabled ingest-only pods' Security Context
   ## @param ingest.podSecurityContext.fsGroup Set ingest-only pod's Security Context fsGroup
+  ## @param ingest.podSecurityContext.seccompProfile.type Set Proxy container's Security Context seccomp profile
   ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
+    seccompProfile:
+      type: "RuntimeDefault"
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param ingest.containerSecurityContext.enabled Enabled ingest-only containers' Security Context
@@ -2381,11 +2393,14 @@ dashboards:
   ## Configure Pods Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param dashboards.podSecurityContext.enabled Enabled data pods' Security Context
-  ## @param dashboards.podSecurityContext.fsGroup Set data pod's Security Context fsGroup
+  ## @param dashboards.podSecurityContext.fsGroup Set dashboards pod's Security Context fsGroup
+  ## @param dashboards.podSecurityContext.seccompProfile.type Set Proxy container's Security Context seccomp profile
   ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
+    seccompProfile:
+      type: "RuntimeDefault"
   ## Configure Container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param dashboards.containerSecurityContext.enabled Enabled data containers' Security Context
