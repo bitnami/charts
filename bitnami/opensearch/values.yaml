@@ -1,0 +1,2700 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
+## @section Global parameters
+## Global Docker image parameters
+## Please, note that this will override the image parameters, including dependencies, configured to use the global value
+## Current available global Docker image parameters: imageRegistry, imagePullSecrets and storageClass
+
+## @param global.imageRegistry Global Docker image registry
+## @param global.imagePullSecrets Global Docker registry secret names as an array
+## @param global.storageClass Global StorageClass for Persistent Volume(s)
+##
+global:
+  imageRegistry: ""
+  ## E.g.
+  ## imagePullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  imagePullSecrets: []
+  storageClass: ""
+
+## @section Common parameters
+
+## @param kubeVersion Override Kubernetes version
+##
+kubeVersion: ""
+## @param nameOverride String to partially override common.names.fullname
+##
+nameOverride: ""
+## @param fullnameOverride String to fully override common.names.fullname
+##
+fullnameOverride: ""
+## @param commonLabels Labels to add to all deployed objects
+##
+commonLabels: {}
+## @param commonAnnotations Annotations to add to all deployed objects
+##
+commonAnnotations: {}
+## @param clusterDomain Kubernetes cluster domain name
+##
+clusterDomain: cluster.local
+## @param extraDeploy Array of extra objects to deploy with the release
+##
+extraDeploy: []
+## @param namespaceOverride String to fully override common.names.namespace
+##
+namespaceOverride: ""
+
+## Enable diagnostic mode in the deployment
+##
+diagnosticMode:
+  ## @param diagnosticMode.enabled Enable diagnostic mode (all probes will be disabled and the command will be overridden)
+  ##
+  enabled: false
+  ## @param diagnosticMode.command Command to override all containers in the deployment
+  ##
+  command:
+    - sleep
+  ## @param diagnosticMode.args Args to override all containers in the deployment
+  ##
+  args:
+    - infinity
+
+## @section Opensearch cluster Parameters
+
+## @param clusterName Opensearch cluster name
+##
+clusterName: open
+## @param containerPorts.restAPI Opensearch REST API port
+## @param containerPorts.transport Opensearch Transport port
+##
+containerPorts:
+  restAPI: 9200
+  transport: 9300
+## @param plugins Comma, semi-colon or space separated list of plugins to install at initialization
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/opensearch#environment-variables
+##
+plugins: ""
+## @param snapshotRepoPath File System snapshot repository path
+## ref: https://github.com/bitnami/containers/tree/main/bitnami/opensearch#environment-variables
+##
+snapshotRepoPath: ""
+## @param config Override opensearch configuration
+##
+config: {}
+## @param extraConfig Append extra configuration to the opensearch node configuration
+## Use this instead of `config` to add more configuration
+## See below example:
+## extraConfig:
+##   node:
+##     store:
+##       allow_mmap: false
+## ref: https://www.open.co/guide/en/opensearch/reference/current/settings.html
+##
+extraConfig: {}
+## @param extraHosts A list of external hosts which are part of this cluster
+## Example Use Case: When you have a cluster with nodes spaned acorss multiple K8s or namespaces
+## extraHosts:
+##   - datacenter2-opensearch-master-hl.namespace2.svc
+##   - datacenter2-opensearch-data-hl.namespace2.svc
+extraHosts: []
+## @param extraVolumes A list of volumes to be added to the pod
+## Example Use Case: mount ssl certificates when opensearch has tls enabled
+## extraVolumes:
+##   - name: es-certs
+##     secret:
+##       defaultMode: 420
+##       secretName: es-certs
+extraVolumes: []
+## @param extraVolumeMounts A list of volume mounts to be added to the pod
+## extraVolumeMounts:
+##   - name: es-certs
+##     mountPath: /certs
+##     readOnly: true
+extraVolumeMounts: []
+## @param initScripts Dictionary of init scripts. Evaluated as a template.
+## Specify dictionary of scripts to be run at first boot
+## Alternatively, you can put your scripts under the files/docker-entrypoint-initdb.d directory
+## For example:
+## initScripts:
+##   my_init_script.sh: |
+##      #!/bin/sh
+##      echo "Do something."
+##
+initScripts: {}
+## @param initScriptsCM ConfigMap with the init scripts. Evaluated as a template.
+## Note: This will override initScripts
+##
+initScriptsCM: ""
+## @param initScriptsSecret Secret containing `/docker-entrypoint-initdb.d` scripts to be executed at initialization time that contain sensitive data. Evaluated as a template.
+##
+initScriptsSecret: ""
+## @param extraEnvVars Array containing extra env vars to be added to all pods (evaluated as a template)
+## For example:
+## extraEnvVars:
+##  - name: MY_ENV_VAR
+##    value: env_var_value
+##
+extraEnvVars: []
+## @param extraEnvVarsCM ConfigMap containing extra env vars to be added to all pods (evaluated as a template)
+##
+extraEnvVarsCM: ""
+## @param extraEnvVarsSecret Secret containing extra env vars to be added to all pods (evaluated as a template)
+##
+extraEnvVarsSecret: ""
+## @param sidecars Add additional sidecar containers to the all opensearch node pod(s)
+## e.g:
+## sidecars:
+##   - name: your-image-name
+##     image: your-image
+##     imagePullPolicy: Always
+##     ports:
+##       - name: portname
+##         containerPort: 1234
+##
+sidecars: []
+## @param initContainers Add additional init containers to the all opensearch node pod(s)
+## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+## e.g:
+## initContainers:
+##  - name: your-image-name
+##    image: your-image
+##    imagePullPolicy: Always
+##    command: ['sh', '-c', 'echo "hello world"']
+##
+initContainers: []
+## @param useIstioLabels Use this variable to add Istio labels to all pods
+##
+useIstioLabels: true
+
+## Bitnami Opensearch image
+## @param image.registry Opensearch image registry
+## @param image.repository Opensearch image repository
+## @param image.tag Opensearch image tag (immutable tags are recommended)
+## @param image.digest Opensearch image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+## @param image.pullPolicy Opensearch image pull policy
+## @param image.pullSecrets Opensearch image pull secrets
+## @param image.debug Enable Opensearch image debug mode
+##
+image:
+  registry: docker.io
+  repository: bitnami/opensearch
+  tag: 2.8.0-debian-11-r0
+  digest: ""
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ##
+  pullPolicy: IfNotPresent
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## e.g:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  pullSecrets: []
+  ## Enable debug mode
+  ##
+  debug: false
+
+## X-Pack security parameters
+## Note: TLS configuration is required in order to configure password authentication
+##
+security:
+  ## @param security.enabled Enable X-Pack Security settings
+  ##
+  enabled: false
+  ## @param security.adminPassword Password for 'admin' user
+  ## Ref: https://github.com/bitnami/containers/tree/main/bitnami/opensearch#security
+  ##
+  adminPassword: ""
+  ## @param security.logstashPassword Password for Logstash
+  ##
+  logstashPassword: ""
+  ## @param security.existingSecret Name of the existing secret containing the Opensearch password and
+  ##
+  existingSecret: ""
+  ## FIPS mode
+  ## @param security.fipsMode Configure opensearch with FIPS 140 compliant mode
+  ## Ref: https://www.open.co/guide/en/opensearch/reference/current/fips-140-compliance.html
+  ##
+  fipsMode: false
+  ## TLS configuration
+  ##
+  tls:
+    ## @section Opensearch admin parameters
+    ## @param security.tls.admin.existingSecret Existing secret containing the certificates for admin
+    ##
+    admin:
+      existingSecret: ""
+    ## @param security.tls.restEncryption Enable SSL/TLS encryption for Opensearch REST API.
+    ##
+    restEncryption: false
+    ## @param security.tls.autoGenerated Create self-signed TLS certificates.
+    ## NOTE: If autoGenerated certs are enabled and a new node type is enabled using helm upgrade, make sure you remove previously existing Opensearch TLS secrets.
+    ## Otherwise, the new node certs won't match the existing certs.
+    ##
+    autoGenerated: true
+    ## @param security.tls.verificationMode Verification mode for SSL communications.
+    ## Supported values: full, certificate, none.
+    ## Ref: https://www.open.co/guide/en/opensearch/reference/current/security-settings.html
+    ##
+    verificationMode: "full"
+    ## @param security.tls.master.existingSecret Existing secret containing the certificates for the master nodes
+    ## @param security.tls.data.existingSecret Existing secret containing the certificates for the data nodes
+    ## @param security.tls.ingest.existingSecret Existing secret containing the certificates for the ingest nodes
+    ## @param security.tls.coordinating.existingSecret Existing secret containing the certificates for the coordinating nodes
+    ##
+    master:
+      existingSecret: ""
+    data:
+      existingSecret: ""
+    ingest:
+      existingSecret: ""
+    coordinating:
+      existingSecret: ""
+    ## @param security.tls.keystoreFilename Name of the keystore file
+    ##
+    keystoreFilename: opensearch.keystore.jks
+    ## @param security.tls.truststoreFilename Name of the truststore
+    ##
+    truststoreFilename: opensearch.truststore.jks
+    ## @param security.tls.usePemCerts Use this variable if your secrets contain PEM certificates instead of JKS/PKCS12
+    ## Ignored when using autoGenerated certs.
+    ##
+    usePemCerts: false
+    ## @param security.tls.passwordsSecret Existing secret containing the Keystore and Truststore passwords, or key password if PEM certs are used
+    ##
+    passwordsSecret: ""
+    ## @param security.tls.keystorePassword Password to access the JKS/PKCS12 keystore or PEM key when they are password-protected.
+    ## Ignored if security.tls.passwordsSecret is provided.
+    ##
+    keystorePassword: ""
+    ## @param security.tls.truststorePassword Password to access the JKS/PKCS12 truststore when they are password-protected.
+    ## Ignored if security.tls.passwordsSecret is provided.
+    ##
+    truststorePassword: ""
+    ## @param security.tls.keyPassword Password to access the PEM key when they are password-protected.
+    ## Ignored if security.tls.passwordsSecret is provided.
+    ##
+    keyPassword: ""
+    ## @param security.tls.secretKeystoreKey Name of the secret key containing the Keystore password
+    ##
+    secretKeystoreKey: ""
+    ## @param security.tls.secretTruststoreKey Name of the secret key containing the Truststore password
+    ##
+    secretTruststoreKey: ""
+    ## @param security.tls.secretKey Name of the secret key containing the PEM key password
+    ##
+    secretKey: ""
+    ## @param security.tls.nodesDN A comma separated list of DN for nodes
+    ## e.g. nodesDN: "O=Example CA,C=SE,UID=c-5ca04c9328c8208704310f7c2ed16414"
+    ##
+    ##
+    nodesDN: ""
+    ## @param security.tls.adminDN A comma separated list of DN for admins
+    ##
+    adminDN: ""
+
+## @section Traffic Exposure Parameters
+##
+
+## Opensearch service parameters
+##
+service:
+  ## @param service.type Opensearch service type
+  ##
+  type: ClusterIP
+  ## @param service.ports.restAPI Opensearch service REST API port
+  ## @param service.ports.transport Opensearch service transport port
+  ##
+  ports:
+    restAPI: 9200
+    transport: 9300
+  ## Node ports to expose
+  ## @param service.nodePorts.restAPI Node port for REST API
+  ## @param service.nodePorts.transport Node port for REST API
+  ## NOTE: choose port between <30000-32767>
+  ##
+  nodePorts:
+    restAPI: ""
+    transport: ""
+  ## @param service.clusterIP Opensearch service Cluster IP
+  ## e.g.:
+  ## clusterIP: None
+  ##
+  clusterIP: ""
+  ## @param service.loadBalancerIP Opensearch service Load Balancer IP
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+  ##
+  loadBalancerIP: ""
+  ## @param service.loadBalancerSourceRanges Opensearch service Load Balancer sources
+  ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+  ## e.g:
+  ## loadBalancerSourceRanges:
+  ##   - 10.10.10.0/24
+  ##
+  loadBalancerSourceRanges: []
+  ## @param service.externalTrafficPolicy Opensearch service external traffic policy
+  ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+  ##
+  externalTrafficPolicy: Cluster
+  ## @param service.annotations Additional custom annotations for Opensearch service
+  ##
+  annotations: {}
+  ## @param service.extraPorts Extra ports to expose in Opensearch service (normally used with the `sidecars` value)
+  ##
+  extraPorts: []
+  ## @param service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+  ## If "ClientIP", consecutive client requests will be directed to the same Pod
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+  ##
+  sessionAffinity: None
+  ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
+  ## sessionAffinityConfig:
+  ##   clientIP:
+  ##     timeoutSeconds: 300
+  ##
+  sessionAffinityConfig: {}
+
+## Opensearch ingress parameters
+## ref: http://kubernetes.io/docs/user-guide/ingress/
+##
+ingress:
+  ## @param ingress.enabled Enable ingress record generation for Opensearch
+  ##
+  enabled: false
+  ## @param ingress.pathType Ingress path type
+  ##
+  pathType: ImplementationSpecific
+  ## @param ingress.apiVersion Force Ingress API version (automatically detected if not set)
+  ##
+  apiVersion: ""
+  ## @param ingress.hostname Default host for the ingress record
+  ##
+  hostname: opensearch.local
+  ## @param ingress.path Default path for the ingress record
+  ## NOTE: You may need to set this to '/*' in order to use this with ALB ingress controllers
+  ##
+  path: /
+  ## @param ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
+  ## Use this parameter to set the required annotations for cert-manager, see
+  ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
+  ## e.g:
+  ## annotations:
+  ##   kubernetes.io/ingress.class: nginx
+  ##   cert-manager.io/cluster-issuer: cluster-issuer-name
+  ##
+  annotations: {}
+  ## @param ingress.tls Enable TLS configuration for the host defined at `ingress.hostname` parameter
+  ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.ingress.hostname }}`
+  ## You can:
+  ##   - Use the `ingress.secrets` parameter to create this TLS secret
+  ##   - Rely on cert-manager to create it by setting the corresponding annotations
+  ##   - Rely on Helm to create self-signed certificates by setting `ingress.selfSigned=true`
+  ##
+  tls: false
+  ## @param ingress.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
+  ##
+  selfSigned: false
+  ## @param ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+  ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+  ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+  ##
+  ingressClassName: ""
+  ## @param ingress.extraHosts An array with additional hostname(s) to be covered with the ingress record
+  ## e.g:
+  ## extraHosts:
+  ##   - name: opensearch.local
+  ##     path: /
+  ##
+  extraHosts: []
+  ## @param ingress.extraPaths An array with additional arbitrary paths that may need to be added to the ingress under the main host
+  ## e.g:
+  ## extraPaths:
+  ## - path: /*
+  ##   backend:
+  ##     serviceName: ssl-redirect
+  ##     servicePort: use-annotation
+  ##
+  extraPaths: []
+  ## @param ingress.extraTls TLS configuration for additional hostname(s) to be covered with this ingress record
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+  ## e.g:
+  ## extraTls:
+  ## - hosts:
+  ##     - opensearch.local
+  ##   secretName: opensearch.local-tls
+  ##
+  extraTls: []
+  ## @param ingress.secrets Custom TLS certificates as secrets
+  ## NOTE: 'key' and 'certificate' are expected in PEM format
+  ## NOTE: 'name' should line up with a 'secretName' set further up
+  ## If it is not set and you're using cert-manager, this is unneeded, as it will create a secret for you with valid certificates
+  ## If it is not set and you're NOT using cert-manager either, self-signed certificates will be created valid for 365 days
+  ## It is also possible to create and manage the certificates outside of this helm chart
+  ## Please see README.md for more information
+  ## e.g:
+  ## secrets:
+  ##   - name: opensearch.local-tls
+  ##     key: |-
+  ##       -----BEGIN RSA PRIVATE KEY-----
+  ##       ...
+  ##       -----END RSA PRIVATE KEY-----
+  ##     certificate: |-
+  ##       -----BEGIN CERTIFICATE-----
+  ##       ...
+  ##       -----END CERTIFICATE-----
+  ##
+  secrets: []
+  ## @param ingress.extraRules Additional rules to be covered with this ingress record
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
+  ## e.g:
+  ## extraRules:
+  ## - host: example.local
+  ##     http:
+  ##       path: /
+  ##       backend:
+  ##         service:
+  ##           name: example-svc
+  ##           port:
+  ##             name: http
+  ##
+  extraRules: []
+
+## @section Master-elegible nodes parameters
+
+master:
+  ## @param master.masterOnly Deploy the Opensearch master-elegible nodes as master-only nodes. Recommended for high-demand deployments.
+  ## If you are
+  masterOnly: true
+  ## @param master.replicaCount Number of master-elegible replicas to deploy
+  ##
+  replicaCount: 2
+
+  ## @param master.extraRoles Append extra roles to the node role
+  ##
+  extraRoles: []
+
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param master.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param master.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param master.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ##
+  pdb:
+    create: false
+    minAvailable: 1
+    maxUnavailable: ""
+
+  ## @param master.nameOverride String to partially override opensearch.master.fullname
+  ##
+  nameOverride: ""
+  ## @param master.fullnameOverride String to fully override opensearch.master.fullname
+  ##
+  fullnameOverride: ""
+  ## @param master.servicenameOverride String to fully override opensearch.master.servicename
+  ##
+  servicenameOverride: ""
+  ## @param master.annotations [object] Annotations for the master statefulset
+  ##
+  annotations: {}
+  ## @param master.updateStrategy.type Master-elegible nodes statefulset stategy type
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy:
+    type: RollingUpdate
+  ## Opensearch resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## We usually recommend not to specify default resources and to leave this as a conscious
+  ## choice for the user. This also increases chances charts run on environments with little
+  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## @param master.resources.limits The resources limits for opensearch containers
+  ## @param master.resources.requests The requested resources for opensearch containers
+  ##
+  resources:
+    ## Example:
+    ## limits:
+    ##    cpu: 500m
+    ##    memory: 1Gi
+    limits: {}
+    ## Examples:
+    ## requests:
+    ##    cpu: 250m
+    ##    memory: 256Mi
+    requests: {}
+  ## @param master.heapSize Opensearch master-eligible node heap size.
+  ## Note: The recommended heapSize is half of the container's memory.
+  ## If omitted, it will be automatically set.
+  ## Example:
+  ##   heapSize: 128m
+  ##
+  heapSize: 128m
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param master.podSecurityContext.enabled Enabled master-elegible pods' Security Context
+  ## @param master.podSecurityContext.fsGroup Set master-elegible pod's Security Context fsGroup
+  ## @param master.podSecurityContext.seccompProfile.type Set Proxy container's Security Context seccomp profile
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+    seccompProfile:
+      type: "RuntimeDefault"
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param master.containerSecurityContext.enabled Enabled master-elegible containers' Security Context
+  ## @param master.containerSecurityContext.runAsUser Set master-elegible containers' Security Context runAsUser
+  ## @param master.containerSecurityContext.runAsNonRoot Set master-elegible containers' Security Context runAsNonRoot
+  ## @param master.containerSecurityContext.capabilities.drop Set APISIX container's Security Context runAsNonRoot
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
+    capabilities:
+      drop: [ "ALL" ]
+  ## @param master.hostAliases master-elegible pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param master.podLabels Extra labels for master-elegible pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param master.podAnnotations Annotations for master-elegible pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param master.podAffinityPreset Pod affinity preset. Ignored if `master.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param master.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `master.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: ""
+  ## Node master.affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param master.nodeAffinityPreset.type Node affinity preset type. Ignored if `master.affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param master.nodeAffinityPreset.key Node label key to match. Ignored if `master.affinity` is set
+    ##
+    key: ""
+    ## @param master.nodeAffinityPreset.values Node label values to match. Ignored if `master.affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param master.affinity Affinity for master-elegible pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `master.podAffinityPreset`, `master.podAntiAffinityPreset`, and `master.nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param master.nodeSelector Node labels for master-elegible pods assignment
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+  ## @param master.tolerations Tolerations for master-elegible pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param master.priorityClassName master-elegible pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param master.schedulerName Name of the k8s scheduler (other than default) for master-elegible pods
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param master.terminationGracePeriodSeconds In seconds, time the given to the Opensearch Master pod needs to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
+  ## @param master.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: []
+  ## @param master.podManagementPolicy podManagementPolicy to manage scaling operation of Opensearch master pods
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
+  ##
+  podManagementPolicy: "Parallel"
+  ## Configure extra options for Opensearch master-elegible containers' liveness, readiness and startup probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param master.startupProbe.enabled Enable/disable the startup probe (master nodes pod)
+  ## @param master.startupProbe.initialDelaySeconds Delay before startup probe is initiated (master nodes pod)
+  ## @param master.startupProbe.periodSeconds How often to perform the probe (master nodes pod)
+  ## @param master.startupProbe.timeoutSeconds When the probe times out (master nodes pod)
+  ## @param master.startupProbe.successThreshold Minimum consecutive successes for the probe to be considered successful after having failed (master nodes pod)
+  ## @param master.startupProbe.failureThreshold Minimum consecutive failures for the probe to be considered failed after having succeeded
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  ## @param master.livenessProbe.enabled Enable/disable the liveness probe (master-eligible nodes pod)
+  ## @param master.livenessProbe.initialDelaySeconds Delay before liveness probe is initiated (master-eligible nodes pod)
+  ## @param master.livenessProbe.periodSeconds How often to perform the probe (master-eligible nodes pod)
+  ## @param master.livenessProbe.timeoutSeconds When the probe times out (master-eligible nodes pod)
+  ## @param master.livenessProbe.successThreshold Minimum consecutive successes for the probe to be considered successful after having failed (master-eligible nodes pod)
+  ## @param master.livenessProbe.failureThreshold Minimum consecutive failures for the probe to be considered failed after having succeeded
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  ## @param master.readinessProbe.enabled Enable/disable the readiness probe (master-eligible nodes pod)
+  ## @param master.readinessProbe.initialDelaySeconds Delay before readiness probe is initiated (master-eligible nodes pod)
+  ## @param master.readinessProbe.periodSeconds How often to perform the probe (master-eligible nodes pod)
+  ## @param master.readinessProbe.timeoutSeconds When the probe times out (master-eligible nodes pod)
+  ## @param master.readinessProbe.successThreshold Minimum consecutive successes for the probe to be considered successful after having failed (master-eligible nodes pod)
+  ## @param master.readinessProbe.failureThreshold Minimum consecutive failures for the probe to be considered failed after having succeeded
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  ## @param master.customStartupProbe Override default startup probe
+  ##
+  customStartupProbe: {}
+  ## @param master.customLivenessProbe Override default liveness probe
+  ##
+  customLivenessProbe: {}
+  ## @param master.customReadinessProbe Override default readiness probe
+  ##
+  customReadinessProbe: {}
+  ## @param master.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param master.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param master.lifecycleHooks for the master-elegible container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param master.extraEnvVars Array with extra environment variables to add to master-elegible nodes
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param master.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for master-elegible nodes
+  ##
+  extraEnvVarsCM: ""
+  ## @param master.extraEnvVarsSecret Name of existing Secret containing extra env vars for master-elegible nodes
+  ##
+  extraEnvVarsSecret: ""
+  ## @param master.extraVolumes Optionally specify extra list of additional volumes for the master-elegible pod(s)
+  ##
+  extraVolumes: []
+  ## @param master.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the master-elegible container(s)
+  ##
+  extraVolumeMounts: []
+  ## @param master.sidecars Add additional sidecar containers to the master-elegible pod(s)
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param master.initContainers Add additional init containers to the master-elegible pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
+  ## Enable persistence using Persistent Volume Claims
+  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+  ##
+  persistence:
+    ## @param master.persistence.enabled Enable persistence using a `PersistentVolumeClaim`
+    ##
+    enabled: true
+    ## @param master.persistence.storageClass Persistent Volume Storage Class
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    ##
+    storageClass: ""
+    ## @param master.persistence.existingClaim Existing Persistent Volume Claim
+    ## then accept the value as an existing Persistent Volume Claim to which
+    ## the container should be bound
+    ##
+    existingClaim: ""
+    ## @param master.persistence.existingVolume Existing Persistent Volume for use as volume match label selector to the `volumeClaimTemplate`. Ignored when `master.persistence.selector` is set.
+    ##
+    existingVolume: ""
+    ## @param master.persistence.selector Configure custom selector for existing Persistent Volume. Overwrites `master.persistence.existingVolume`
+    ## selector:
+    ##   matchLabels:
+    ##     volume:
+    ##
+    selector: {}
+    ## @param master.persistence.annotations Persistent Volume Claim annotations
+    ##
+    annotations: {}
+    ## @param master.persistence.accessModes Persistent Volume Access Modes
+    ##
+    accessModes:
+      - ReadWriteOnce
+    ## @param master.persistence.size Persistent Volume Size
+    ##
+    size: 8Gi
+  ## Pods Service Account
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+  ## @param master.serviceAccount.create Specifies whether a ServiceAccount should be created
+  ## @param master.serviceAccount.name Name of the service account to use. If not set and create is true, a name is generated using the fullname template.
+  ## @param master.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+  ## @param master.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
+  ##
+  serviceAccount:
+    create: false
+    name: ""
+    automountServiceAccountToken: false
+    annotations: {}
+  ## Network Policy configuration
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param master.networkPolicy.enabled Enable creation of NetworkPolicy resources
+    ##
+    enabled: false
+    ## @param master.networkPolicy.allowExternal The Policy model to apply
+    ## When set to false, only pods with the correct client label will have network access to the ports Keycloak is
+    ## listening on. When true, Keycloak will accept connections from any source (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param master.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraIngress: [ ]
+    ## @param master.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: [ ]
+    ## @param master.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param master.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: { }
+    ingressNSPodMatchLabels: { }
+  autoscaling:
+    vpa:
+      ## @param master.autoscaling.vpa.enabled Enable VPA
+      ##
+      enabled: false
+      ## @param master.autoscaling.vpa.annotations Annotations for VPA resource
+      ##
+      annotations: { }
+      ## @param master.autoscaling.vpa.controlledResources VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory
+      ##
+      controlledResources: [ ]
+      ## @param master.autoscaling.vpa.maxAllowed VPA Max allowed resources for the pod
+      ## cpu: 200m
+      ## memory: 100Mi
+      maxAllowed: { }
+      ## @param master.autoscaling.vpa.minAllowed VPA Min allowed resources for the pod
+      ## cpu: 200m
+      ## memory: 100Mi
+      minAllowed: { }
+      updatePolicy:
+        ## @param master.autoscaling.vpa.updatePolicy.updateMode Autoscaling update policy Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod
+        ## Possible values are "Off", "Initial", "Recreate", and "Auto".
+        ##
+        updateMode: Auto
+    hpa:
+      ## @param master.autoscaling.hpa.enabled Enable HPA for APISIX Data Plane
+      ##
+      enabled: false
+      ## @param master.autoscaling.hpa.minReplicas Minimum number of APISIX Data Plane replicas
+      ##
+      minReplicas: 3
+      ## @param master.autoscaling.hpa.maxReplicas Maximum number of APISIX Data Plane replicas
+      ##
+      maxReplicas: 11
+      ## @param master.autoscaling.hpa.targetCPU Target CPU utilization percentage
+      ##
+      targetCPU: ""
+      ## @param master.autoscaling.hpa.targetMemory Target Memory utilization percentage
+      ##
+      targetMemory: ""
+
+## @section Data-only nodes parameters
+
+data:
+  ## @param data.replicaCount Number of data-only replicas to deploy
+  ##
+  replicaCount: 2
+
+  ## @param data.extraRoles Append extra roles to the node role
+  ##
+  extraRoles: []
+
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param data.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param data.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param data.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ##
+  pdb:
+    create: false
+    minAvailable: 1
+    maxUnavailable: ""
+
+  ## @param data.nameOverride String to partially override opensearch.data.fullname
+  ##
+  nameOverride: ""
+  ## @param data.fullnameOverride String to fully override opensearch.data.fullname
+  ##
+  fullnameOverride: ""
+  ## @param data.servicenameOverride String to fully override opensearch.data.servicename
+  ##
+  servicenameOverride: ""
+  ## @param data.annotations [object] Annotations for the data statefulset
+  ##
+  annotations: {}
+  ## @param data.updateStrategy.type Data-only nodes statefulset stategy type
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy:
+    type: RollingUpdate
+  ## Opensearch resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param data.resources.limits The resources limits for the data containers
+  ## @param data.resources.requests [object] The requested resources for the data containers
+  ##
+  resources:
+    limits: {}
+    requests:
+      cpu: 25m
+      memory: 2048Mi
+  ## @param data.heapSize Opensearch data node heap size.
+  ## Note: The recommended heapSize is half of the container's memory.
+  ## If omitted, it will be automatically set.
+  ## Example:
+  ##   heapSize: 128m
+  ##
+  heapSize: 1024m
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param data.podSecurityContext.enabled Enabled data pods' Security Context
+  ## @param data.podSecurityContext.fsGroup Set data pod's Security Context fsGroup
+  ## @param data.podSecurityContext.seccompProfile.type Set Proxy container's Security Context seccomp profile
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+    seccompProfile:
+      type: "RuntimeDefault"
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param data.containerSecurityContext.enabled Enabled data containers' Security Context
+  ## @param data.containerSecurityContext.runAsUser Set data containers' Security Context runAsUser
+  ## @param data.containerSecurityContext.runAsNonRoot Set data containers' Security Context runAsNonRoot
+  ## @param data.containerSecurityContext.capabilities.drop Set APISIX container's Security Context runAsNonRoot
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
+    capabilities:
+      drop: [ "ALL" ]
+  ## @param data.hostAliases data pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param data.podLabels Extra labels for data pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param data.podAnnotations Annotations for data pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param data.podAffinityPreset Pod affinity preset. Ignored if `data.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param data.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `data.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: ""
+  ## Node data.affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param data.nodeAffinityPreset.type Node affinity preset type. Ignored if `data.affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param data.nodeAffinityPreset.key Node label key to match. Ignored if `data.affinity` is set
+    ##
+    key: ""
+    ## @param data.nodeAffinityPreset.values Node label values to match. Ignored if `data.affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param data.affinity Affinity for data pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `data.podAffinityPreset`, `data.podAntiAffinityPreset`, and `data.nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param data.nodeSelector Node labels for data pods assignment
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+  ## @param data.tolerations Tolerations for data pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param data.priorityClassName data pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param data.schedulerName Name of the k8s scheduler (other than default) for data pods
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param data.terminationGracePeriodSeconds In seconds, time the given to the Opensearch data pod needs to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
+  ## @param data.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: []
+  ## @param data.podManagementPolicy podManagementPolicy to manage scaling operation of Opensearch data pods
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
+  ##
+  podManagementPolicy: "Parallel"
+  ## Configure extra options for Opensearch data containers' liveness, readiness and startup probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param data.startupProbe.enabled Enable/disable the startup probe (data nodes pod)
+  ## @param data.startupProbe.initialDelaySeconds Delay before startup probe is initiated (data nodes pod)
+  ## @param data.startupProbe.periodSeconds How often to perform the probe (data nodes pod)
+  ## @param data.startupProbe.timeoutSeconds When the probe times out (data nodes pod)
+  ## @param data.startupProbe.successThreshold Minimum consecutive successes for the probe to be considered successful after having failed (data nodes pod)
+  ## @param data.startupProbe.failureThreshold Minimum consecutive failures for the probe to be considered failed after having succeeded
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  ## @param data.livenessProbe.enabled Enable/disable the liveness probe (data nodes pod)
+  ## @param data.livenessProbe.initialDelaySeconds Delay before liveness probe is initiated (data nodes pod)
+  ## @param data.livenessProbe.periodSeconds How often to perform the probe (data nodes pod)
+  ## @param data.livenessProbe.timeoutSeconds When the probe times out (data nodes pod)
+  ## @param data.livenessProbe.successThreshold Minimum consecutive successes for the probe to be considered successful after having failed (data nodes pod)
+  ## @param data.livenessProbe.failureThreshold Minimum consecutive failures for the probe to be considered failed after having succeeded
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  ## @param data.readinessProbe.enabled Enable/disable the readiness probe (data nodes pod)
+  ## @param data.readinessProbe.initialDelaySeconds Delay before readiness probe is initiated (data nodes pod)
+  ## @param data.readinessProbe.periodSeconds How often to perform the probe (data nodes pod)
+  ## @param data.readinessProbe.timeoutSeconds When the probe times out (data nodes pod)
+  ## @param data.readinessProbe.successThreshold Minimum consecutive successes for the probe to be considered successful after having failed (data nodes pod)
+  ## @param data.readinessProbe.failureThreshold Minimum consecutive failures for the probe to be considered failed after having succeeded
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  ## @param data.customStartupProbe Override default startup probe
+  ##
+  customStartupProbe: {}
+  ## @param data.customLivenessProbe Override default liveness probe
+  ##
+  customLivenessProbe: {}
+  ## @param data.customReadinessProbe Override default readiness probe
+  ##
+  customReadinessProbe: {}
+  ## @param data.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param data.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param data.lifecycleHooks for the data container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param data.extraEnvVars Array with extra environment variables to add to data nodes
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param data.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for data nodes
+  ##
+  extraEnvVarsCM: ""
+  ## @param data.extraEnvVarsSecret Name of existing Secret containing extra env vars for data nodes
+  ##
+  extraEnvVarsSecret: ""
+  ## @param data.extraVolumes Optionally specify extra list of additional volumes for the data pod(s)
+  ##
+  extraVolumes: []
+  ## @param data.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the data container(s)
+  ##
+  extraVolumeMounts: []
+  ## @param data.sidecars Add additional sidecar containers to the data pod(s)
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param data.initContainers Add additional init containers to the data pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
+  ## Enable persistence using Persistent Volume Claims
+  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+  ##
+  persistence:
+    ## @param data.persistence.enabled Enable persistence using a `PersistentVolumeClaim`
+    ##
+    enabled: true
+    ## @param data.persistence.storageClass Persistent Volume Storage Class
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    ##
+    storageClass: ""
+    ## @param data.persistence.existingClaim Existing Persistent Volume Claim
+    ## then accept the value as an existing Persistent Volume Claim to which
+    ## the container should be bound
+    ##
+    existingClaim: ""
+    ## @param data.persistence.existingVolume Existing Persistent Volume for use as volume match label selector to the `volumeClaimTemplate`. Ignored when `data.persistence.selector` is set.
+    ##
+    existingVolume: ""
+    ## @param data.persistence.selector Configure custom selector for existing Persistent Volume. Overwrites `data.persistence.existingVolume`
+    ## selector:
+    ##   matchLabels:
+    ##     volume:
+    ##
+    selector: {}
+    ## @param data.persistence.annotations Persistent Volume Claim annotations
+    ##
+    annotations: {}
+    ## @param data.persistence.accessModes Persistent Volume Access Modes
+    ##
+    accessModes:
+      - ReadWriteOnce
+    ## @param data.persistence.size Persistent Volume Size
+    ##
+    size: 8Gi
+  ## Pods Service Account
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+  ## @param data.serviceAccount.create Specifies whether a ServiceAccount should be created
+  ## @param data.serviceAccount.name Name of the service account to use. If not set and create is true, a name is generated using the fullname template.
+  ## @param data.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+  ## @param data.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
+  ##
+  serviceAccount:
+    create: false
+    name: ""
+    automountServiceAccountToken: false
+    annotations: {}
+  ## Network Policy configuration
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param data.networkPolicy.enabled Enable creation of NetworkPolicy resources
+    ##
+    enabled: false
+    ## @param data.networkPolicy.allowExternal The Policy model to apply
+    ## When set to false, only pods with the correct client label will have network access to the ports Keycloak is
+    ## listening on. When true, Keycloak will accept connections from any source (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param data.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraIngress: [ ]
+    ## @param data.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: [ ]
+    ## @param data.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param data.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: { }
+    ingressNSPodMatchLabels: { }
+  autoscaling:
+    vpa:
+      ## @param data.autoscaling.vpa.enabled Enable VPA
+      ##
+      enabled: false
+      ## @param data.autoscaling.vpa.annotations Annotations for VPA resource
+      ##
+      annotations: { }
+      ## @param data.autoscaling.vpa.controlledResources VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory
+      ##
+      controlledResources: [ ]
+      ## @param data.autoscaling.vpa.maxAllowed VPA Max allowed resources for the pod
+      ## cpu: 200m
+      ## memory: 100Mi
+      maxAllowed: { }
+      ## @param data.autoscaling.vpa.minAllowed VPA Min allowed resources for the pod
+      ## cpu: 200m
+      ## memory: 100Mi
+      minAllowed: { }
+      updatePolicy:
+        ## @param data.autoscaling.vpa.updatePolicy.updateMode Autoscaling update policy Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod
+        ## Possible values are "Off", "Initial", "Recreate", and "Auto".
+        ##
+        updateMode: Auto
+    hpa:
+      ## @param data.autoscaling.hpa.enabled Enable HPA for APISIX Data Plane
+      ##
+      enabled: false
+      ## @param data.autoscaling.hpa.minReplicas Minimum number of APISIX Data Plane replicas
+      ##
+      minReplicas: 3
+      ## @param data.autoscaling.hpa.maxReplicas Maximum number of APISIX Data Plane replicas
+      ##
+      maxReplicas: 11
+      ## @param data.autoscaling.hpa.targetCPU Target CPU utilization percentage
+      ##
+      targetCPU: ""
+      ## @param data.autoscaling.hpa.targetMemory Target Memory utilization percentage
+      ##
+      targetMemory: ""
+
+## @section Coordinating-only nodes parameters
+
+coordinating:
+  ## @param coordinating.replicaCount Number of coordinating-only replicas to deploy
+  ##
+  replicaCount: 2
+
+  ## @param coordinating.extraRoles Append extra roles to the node role
+  ## NOTE: In Opensearch, all nodes act as coordinators, coordinating-only nodes do not have any other role by default.
+  ##
+  extraRoles: []
+
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param coordinating.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param coordinating.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param coordinating.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ##
+  pdb:
+    create: false
+    minAvailable: 1
+    maxUnavailable: ""
+
+  ## @param coordinating.nameOverride String to partially override opensearch.coordinating.fullname
+  ##
+  nameOverride: ""
+  ## @param coordinating.fullnameOverride String to fully override opensearch.coordinating.fullname
+  ##
+  fullnameOverride: ""
+  ## @param coordinating.servicenameOverride String to fully override opensearch.coordinating.servicename
+  ##
+  servicenameOverride: ""
+  ## @param coordinating.annotations [object] Annotations for the coordinating-only statefulset
+  ##
+  annotations: {}
+  ## @param coordinating.updateStrategy.type Coordinating-only nodes statefulset stategy type
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy:
+    type: RollingUpdate
+  ## Opensearch resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param coordinating.resources.limits The resources limits for the coordinating-only containers
+  ## @param coordinating.resources.requests [object] The requested resources for the coordinating-only containers
+  ##
+  resources:
+    limits: {}
+    requests:
+      cpu: 25m
+      memory: 256Mi
+  ## @param coordinating.heapSize Opensearch coordinating node heap size.
+  ## Note: The recommended heapSize is half of the container's memory.
+  ## If omitted, it will be automatically set.
+  ## Example:
+  ##   heapSize: 128m
+  ##
+  heapSize: 128m
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param coordinating.podSecurityContext.enabled Enabled coordinating-only pods' Security Context
+  ## @param coordinating.podSecurityContext.fsGroup Set coordinating-only pod's Security Context fsGroup
+  ## @param coordinating.podSecurityContext.seccompProfile.type Set Proxy container's Security Context seccomp profile
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+    seccompProfile:
+      type: "RuntimeDefault"
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param coordinating.containerSecurityContext.enabled Enabled coordinating-only containers' Security Context
+  ## @param coordinating.containerSecurityContext.runAsUser Set coordinating-only containers' Security Context runAsUser
+  ## @param coordinating.containerSecurityContext.runAsNonRoot Set coordinating-only containers' Security Context runAsNonRoot
+  ## @param coordinating.containerSecurityContext.capabilities.drop Set APISIX container's Security Context runAsNonRoot
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
+    capabilities:
+      drop: [ "ALL" ]
+  ## @param coordinating.hostAliases coordinating-only pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param coordinating.podLabels Extra labels for coordinating-only pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param coordinating.podAnnotations Annotations for coordinating-only pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param coordinating.podAffinityPreset Pod affinity preset. Ignored if `coordinating.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param coordinating.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `coordinating.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: ""
+  ## Node coordinating.affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param coordinating.nodeAffinityPreset.type Node affinity preset type. Ignored if `coordinating.affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param coordinating.nodeAffinityPreset.key Node label key to match. Ignored if `coordinating.affinity` is set
+    ##
+    key: ""
+    ## @param coordinating.nodeAffinityPreset.values Node label values to match. Ignored if `coordinating.affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param coordinating.affinity Affinity for coordinating-only pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `coordinating.podAffinityPreset`, `coordinating.podAntiAffinityPreset`, and `coordinating.nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param coordinating.nodeSelector Node labels for coordinating-only pods assignment
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+  ## @param coordinating.tolerations Tolerations for coordinating-only pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param coordinating.priorityClassName coordinating-only pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param coordinating.schedulerName Name of the k8s scheduler (other than default) for coordinating-only pods
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param coordinating.terminationGracePeriodSeconds In seconds, time the given to the Opensearch coordinating pod needs to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
+  ## @param coordinating.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: []
+  ## @param coordinating.podManagementPolicy podManagementPolicy to manage scaling operation of Opensearch coordinating pods
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
+  ##
+  podManagementPolicy: "Parallel"
+  ## Configure extra options for Opensearch coordinating-only containers' liveness, readiness and startup probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param coordinating.startupProbe.enabled Enable/disable the startup probe (coordinating-only nodes pod)
+  ## @param coordinating.startupProbe.initialDelaySeconds Delay before startup probe is initiated (coordinating-only nodes pod)
+  ## @param coordinating.startupProbe.periodSeconds How often to perform the probe (coordinating-only nodes pod)
+  ## @param coordinating.startupProbe.timeoutSeconds When the probe times out (coordinating-only nodes pod)
+  ## @param coordinating.startupProbe.successThreshold Minimum consecutive successes for the probe to be considered successful after having failed (coordinating-only nodes pod)
+  ## @param coordinating.startupProbe.failureThreshold Minimum consecutive failures for the probe to be considered failed after having succeeded
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  ## @param coordinating.livenessProbe.enabled Enable/disable the liveness probe (coordinating-only nodes pod)
+  ## @param coordinating.livenessProbe.initialDelaySeconds Delay before liveness probe is initiated (coordinating-only nodes pod)
+  ## @param coordinating.livenessProbe.periodSeconds How often to perform the probe (coordinating-only nodes pod)
+  ## @param coordinating.livenessProbe.timeoutSeconds When the probe times out (coordinating-only nodes pod)
+  ## @param coordinating.livenessProbe.successThreshold Minimum consecutive successes for the probe to be considered successful after having failed (coordinating-only nodes pod)
+  ## @param coordinating.livenessProbe.failureThreshold Minimum consecutive failures for the probe to be considered failed after having succeeded
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  ## @param coordinating.readinessProbe.enabled Enable/disable the readiness probe (coordinating-only nodes pod)
+  ## @param coordinating.readinessProbe.initialDelaySeconds Delay before readiness probe is initiated (coordinating-only nodes pod)
+  ## @param coordinating.readinessProbe.periodSeconds How often to perform the probe (coordinating-only nodes pod)
+  ## @param coordinating.readinessProbe.timeoutSeconds When the probe times out (coordinating-only nodes pod)
+  ## @param coordinating.readinessProbe.successThreshold Minimum consecutive successes for the probe to be considered successful after having failed (coordinating-only nodes pod)
+  ## @param coordinating.readinessProbe.failureThreshold Minimum consecutive failures for the probe to be considered failed after having succeeded
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  ## @param coordinating.customStartupProbe Override default startup probe
+  ##
+  customStartupProbe: {}
+  ## @param coordinating.customLivenessProbe Override default liveness probe
+  ##
+  customLivenessProbe: {}
+  ## @param coordinating.customReadinessProbe Override default readiness probe
+  ##
+  customReadinessProbe: {}
+  ## @param coordinating.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param coordinating.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param coordinating.lifecycleHooks for the coordinating-only container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param coordinating.extraEnvVars Array with extra environment variables to add to coordinating-only nodes
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param coordinating.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for coordinating-only nodes
+  ##
+  extraEnvVarsCM: ""
+  ## @param coordinating.extraEnvVarsSecret Name of existing Secret containing extra env vars for coordinating-only nodes
+  ##
+  extraEnvVarsSecret: ""
+  ## @param coordinating.extraVolumes Optionally specify extra list of additional volumes for the coordinating-only pod(s)
+  ##
+  extraVolumes: []
+  ## @param coordinating.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the coordinating-only container(s)
+  ##
+  extraVolumeMounts: []
+  ## @param coordinating.sidecars Add additional sidecar containers to the coordinating-only pod(s)
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param coordinating.initContainers Add additional init containers to the coordinating-only pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
+  ## Pods Service Account
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+  ## @param coordinating.serviceAccount.create Specifies whether a ServiceAccount should be created
+  ## @param coordinating.serviceAccount.name Name of the service account to use. If not set and create is true, a name is generated using the fullname template.
+  ## @param coordinating.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+  ## @param coordinating.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
+  ##
+  serviceAccount:
+    create: false
+    name: ""
+    automountServiceAccountToken: false
+    annotations: {}
+  ## Network Policy configuration
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param coordinating.networkPolicy.enabled Enable creation of NetworkPolicy resources
+    ##
+    enabled: false
+    ## @param coordinating.networkPolicy.allowExternal The Policy model to apply
+    ## When set to false, only pods with the correct client label will have network access to the ports Keycloak is
+    ## listening on. When true, Keycloak will accept connections from any source (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param coordinating.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraIngress: [ ]
+    ## @param coordinating.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: [ ]
+    ## @param coordinating.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param coordinating.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: { }
+    ingressNSPodMatchLabels: { }
+  autoscaling:
+    vpa:
+      ## @param coordinating.autoscaling.vpa.enabled Enable VPA
+      ##
+      enabled: false
+      ## @param coordinating.autoscaling.vpa.annotations Annotations for VPA resource
+      ##
+      annotations: { }
+      ## @param coordinating.autoscaling.vpa.controlledResources VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory
+      ##
+      controlledResources: [ ]
+      ## @param coordinating.autoscaling.vpa.maxAllowed VPA Max allowed resources for the pod
+      ## cpu: 200m
+      ## memory: 100Mi
+      maxAllowed: { }
+      ## @param coordinating.autoscaling.vpa.minAllowed VPA Min allowed resources for the pod
+      ## cpu: 200m
+      ## memory: 100Mi
+      minAllowed: { }
+      updatePolicy:
+        ## @param coordinating.autoscaling.vpa.updatePolicy.updateMode Autoscaling update policy Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod
+        ## Possible values are "Off", "Initial", "Recreate", and "Auto".
+        ##
+        updateMode: Auto
+    hpa:
+      ## @param coordinating.autoscaling.hpa.enabled Enable HPA for APISIX Data Plane
+      ##
+      enabled: false
+      ## @param coordinating.autoscaling.hpa.minReplicas Minimum number of APISIX Data Plane replicas
+      ##
+      minReplicas: 3
+      ## @param coordinating.autoscaling.hpa.maxReplicas Maximum number of APISIX Data Plane replicas
+      ##
+      maxReplicas: 11
+      ## @param coordinating.autoscaling.hpa.targetCPU Target CPU utilization percentage
+      ##
+      targetCPU: ""
+      ## @param coordinating.autoscaling.hpa.targetMemory Target Memory utilization percentage
+      ##
+      targetMemory: ""
+
+## @section Ingest-only nodes parameters
+
+ingest:
+  ## @param ingest.enabled Enable ingest nodes
+  ##
+  enabled: true
+  ## @param ingest.replicaCount Number of ingest-only replicas to deploy
+  ##
+  replicaCount: 2
+
+  ## @param ingest.extraRoles Append extra roles to the node role
+  ##
+  extraRoles: []
+
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param ingest.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param ingest.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param ingest.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ##
+  pdb:
+    create: false
+    minAvailable: 1
+    maxUnavailable: ""
+
+  ## @param ingest.nameOverride String to partially override opensearch.ingest.fullname
+  ##
+  nameOverride: ""
+  ## @param ingest.fullnameOverride String to fully override opensearch.ingest.fullname
+  ##
+  fullnameOverride: ""
+  ## @param ingest.servicenameOverride String to fully override ingest.master.servicename
+  ##
+  servicenameOverride: ""
+  ## @param ingest.annotations [object] Annotations for the ingest statefulset
+  ##
+  annotations: {}
+  ## @param ingest.updateStrategy.type Ingest-only nodes statefulset stategy type
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy:
+    type: RollingUpdate
+  ## Opensearch resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param ingest.resources.limits The resources limits for the ingest-only containers
+  ## @param ingest.resources.requests [object] The requested resources for the ingest-only containers
+  ##
+  resources:
+    limits: {}
+    requests:
+      cpu: 25m
+      memory: 256Mi
+  ## @param ingest.heapSize Opensearch ingest-only node heap size.
+  ## Note: The recommended heapSize is half of the container's memory.
+  ## If omitted, it will be automatically set.
+  ## Example:
+  ##   heapSize: 128m
+  ##
+  heapSize: 128m
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param ingest.podSecurityContext.enabled Enabled ingest-only pods' Security Context
+  ## @param ingest.podSecurityContext.fsGroup Set ingest-only pod's Security Context fsGroup
+  ## @param ingest.podSecurityContext.seccompProfile.type Set Proxy container's Security Context seccomp profile
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+    seccompProfile:
+      type: "RuntimeDefault"
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param ingest.containerSecurityContext.enabled Enabled ingest-only containers' Security Context
+  ## @param ingest.containerSecurityContext.runAsUser Set ingest-only containers' Security Context runAsUser
+  ## @param ingest.containerSecurityContext.runAsNonRoot Set ingest-only containers' Security Context runAsNonRoot
+  ## @param ingest.containerSecurityContext.capabilities.drop Set APISIX container's Security Context runAsNonRoot
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
+    capabilities:
+      drop: [ "ALL" ]
+  ## @param ingest.hostAliases ingest-only pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param ingest.podLabels Extra labels for ingest-only pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param ingest.podAnnotations Annotations for ingest-only pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param ingest.podAffinityPreset Pod affinity preset. Ignored if `ingest.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param ingest.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `ingest.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: ""
+  ## Node ingest.affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param ingest.nodeAffinityPreset.type Node affinity preset type. Ignored if `ingest.affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param ingest.nodeAffinityPreset.key Node label key to match. Ignored if `ingest.affinity` is set
+    ##
+    key: ""
+    ## @param ingest.nodeAffinityPreset.values Node label values to match. Ignored if `ingest.affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param ingest.affinity Affinity for ingest-only pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `ingest.podAffinityPreset`, `ingest.podAntiAffinityPreset`, and `ingest.nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param ingest.nodeSelector Node labels for ingest-only pods assignment
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+  ## @param ingest.tolerations Tolerations for ingest-only pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param ingest.priorityClassName ingest-only pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param ingest.schedulerName Name of the k8s scheduler (other than default) for ingest-only pods
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param ingest.terminationGracePeriodSeconds In seconds, time the given to the Opensearch ingest pod needs to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
+  ## @param ingest.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: []
+  ## @param ingest.podManagementPolicy podManagementPolicy to manage scaling operation of Opensearch ingest pods
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#pod-management-policies
+  ##
+  podManagementPolicy: "Parallel"
+  ## Configure extra options for Opensearch ingest-only containers' liveness, readiness and startup probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param ingest.startupProbe.enabled Enable/disable the startup probe (ingest-only nodes pod)
+  ## @param ingest.startupProbe.initialDelaySeconds Delay before startup probe is initiated (ingest-only nodes pod)
+  ## @param ingest.startupProbe.periodSeconds How often to perform the probe (ingest-only nodes pod)
+  ## @param ingest.startupProbe.timeoutSeconds When the probe times out (ingest-only nodes pod)
+  ## @param ingest.startupProbe.successThreshold Minimum consecutive successes for the probe to be considered successful after having failed (ingest-only nodes pod)
+  ## @param ingest.startupProbe.failureThreshold Minimum consecutive failures for the probe to be considered failed after having succeeded
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  ## @param ingest.livenessProbe.enabled Enable/disable the liveness probe (ingest-only nodes pod)
+  ## @param ingest.livenessProbe.initialDelaySeconds Delay before liveness probe is initiated (ingest-only nodes pod)
+  ## @param ingest.livenessProbe.periodSeconds How often to perform the probe (ingest-only nodes pod)
+  ## @param ingest.livenessProbe.timeoutSeconds When the probe times out (ingest-only nodes pod)
+  ## @param ingest.livenessProbe.successThreshold Minimum consecutive successes for the probe to be considered successful after having failed (ingest-only nodes pod)
+  ## @param ingest.livenessProbe.failureThreshold Minimum consecutive failures for the probe to be considered failed after having succeeded
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  ## @param ingest.readinessProbe.enabled Enable/disable the readiness probe (ingest-only nodes pod)
+  ## @param ingest.readinessProbe.initialDelaySeconds Delay before readiness probe is initiated (ingest-only nodes pod)
+  ## @param ingest.readinessProbe.periodSeconds How often to perform the probe (ingest-only nodes pod)
+  ## @param ingest.readinessProbe.timeoutSeconds When the probe times out (ingest-only nodes pod)
+  ## @param ingest.readinessProbe.successThreshold Minimum consecutive successes for the probe to be considered successful after having failed (ingest-only nodes pod)
+  ## @param ingest.readinessProbe.failureThreshold Minimum consecutive failures for the probe to be considered failed after having succeeded
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 90
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  ## @param ingest.customStartupProbe Override default startup probe
+  ##
+  customStartupProbe: {}
+  ## @param ingest.customLivenessProbe Override default liveness probe
+  ##
+  customLivenessProbe: {}
+  ## @param ingest.customReadinessProbe Override default readiness probe
+  ##
+  customReadinessProbe: {}
+  ## @param ingest.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param ingest.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param ingest.lifecycleHooks for the ingest-only container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param ingest.extraEnvVars Array with extra environment variables to add to ingest-only nodes
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param ingest.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for ingest-only nodes
+  ##
+  extraEnvVarsCM: ""
+  ## @param ingest.extraEnvVarsSecret Name of existing Secret containing extra env vars for ingest-only nodes
+  ##
+  extraEnvVarsSecret: ""
+  ## @param ingest.extraVolumes Optionally specify extra list of additional volumes for the ingest-only pod(s)
+  ##
+  extraVolumes: []
+  ## @param ingest.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the ingest-only container(s)
+  ##
+  extraVolumeMounts: []
+  ## @param ingest.sidecars Add additional sidecar containers to the ingest-only pod(s)
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param ingest.initContainers Add additional init containers to the ingest-only pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
+  ## Pods Service Account
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+  ## @param ingest.serviceAccount.create Specifies whether a ServiceAccount should be created
+  ## @param ingest.serviceAccount.name Name of the service account to use. If not set and create is true, a name is generated using the fullname template.
+  ## @param ingest.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+  ## @param ingest.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
+  ##
+  serviceAccount:
+    create: false
+    name: ""
+    automountServiceAccountToken: false
+    annotations: {}
+  ## Network Policy configuration
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param ingest.networkPolicy.enabled Enable creation of NetworkPolicy resources
+    ##
+    enabled: false
+    ## @param ingest.networkPolicy.allowExternal The Policy model to apply
+    ## When set to false, only pods with the correct client label will have network access to the ports Keycloak is
+    ## listening on. When true, Keycloak will accept connections from any source (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param ingest.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraIngress: [ ]
+    ## @param ingest.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: [ ]
+    ## @param ingest.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param ingest.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: { }
+    ingressNSPodMatchLabels: { }
+  autoscaling:
+    vpa:
+      ## @param ingest.autoscaling.vpa.enabled Enable VPA
+      ##
+      enabled: false
+      ## @param ingest.autoscaling.vpa.annotations Annotations for VPA resource
+      ##
+      annotations: { }
+      ## @param ingest.autoscaling.vpa.controlledResources VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory
+      ##
+      controlledResources: [ ]
+      ## @param ingest.autoscaling.vpa.maxAllowed VPA Max allowed resources for the pod
+      ## cpu: 200m
+      ## memory: 100Mi
+      maxAllowed: { }
+      ## @param ingest.autoscaling.vpa.minAllowed VPA Min allowed resources for the pod
+      ## cpu: 200m
+      ## memory: 100Mi
+      minAllowed: { }
+      updatePolicy:
+        ## @param ingest.autoscaling.vpa.updatePolicy.updateMode Autoscaling update policy Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod
+        ## Possible values are "Off", "Initial", "Recreate", and "Auto".
+        ##
+        updateMode: Auto
+    hpa:
+      ## @param ingest.autoscaling.hpa.enabled Enable HPA for APISIX Data Plane
+      ##
+      enabled: false
+      ## @param ingest.autoscaling.hpa.minReplicas Minimum number of APISIX Data Plane replicas
+      ##
+      minReplicas: 3
+      ## @param ingest.autoscaling.hpa.maxReplicas Maximum number of APISIX Data Plane replicas
+      ##
+      maxReplicas: 11
+      ## @param ingest.autoscaling.hpa.targetCPU Target CPU utilization percentage
+      ##
+      targetCPU: ""
+      ## @param ingest.autoscaling.hpa.targetMemory Target Memory utilization percentage
+      ##
+      targetMemory: ""
+
+  ## Opensearch Ingest-only Service
+  ## Recommended for heavy ingestion, improves performance by sending ingest traffic directly into the ingest nodes.
+  ## NOTE: Ingest nodes will only accept index requests with an associated pipeline, any other request won't be rerouted.
+  ##
+  service:
+    ## @param ingest.service.enabled Enable Ingest-only service
+    ##
+    enabled: false
+    ## @param ingest.service.type Opensearch ingest-only service type
+    ##
+    type: ClusterIP
+    ## @param ingest.service.ports.restAPI Opensearch service REST API port
+    ## @param ingest.service.ports.transport Opensearch service transport port
+    ##
+    ports:
+      restAPI: 9200
+      transport: 9300
+    ## Node ports to expose
+    ## @param ingest.service.nodePorts.restAPI Node port for REST API
+    ## @param ingest.service.nodePorts.transport Node port for REST API
+    ## NOTE: choose port between <30000-32767>
+    ##
+    nodePorts:
+      restAPI: ""
+      transport: ""
+    ## @param ingest.service.clusterIP Opensearch ingest-only service Cluster IP
+    ## e.g.:
+    ## clusterIP: None
+    ##
+    clusterIP: ""
+    ## @param ingest.service.loadBalancerIP Opensearch ingest-only service Load Balancer IP
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerIP: ""
+    ## @param ingest.service.loadBalancerSourceRanges Opensearch ingest-only service Load Balancer sources
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g:
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: []
+    ## @param ingest.service.externalTrafficPolicy Opensearch ingest-only service external traffic policy
+    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param ingest.service.extraPorts Extra ports to expose (normally used with the `sidecar` value)
+    ##
+    extraPorts: []
+    ## @param ingest.service.annotations Additional custom annotations for Opensearch ingest-only service
+    ##
+    annotations: {}
+    ## @param ingest.service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+    ## If "ClientIP", consecutive client requests will be directed to the same Pod
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+    ##
+    sessionAffinity: None
+    ## @param ingest.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: {}
+  ## Opensearch Ingest-only ingress parameters
+  ## ref: http://kubernetes.io/docs/user-guide/ingress/
+  ##
+  ingress:
+    ## @param ingest.ingress.enabled Enable ingress record generation for Opensearch
+    ##
+    enabled: false
+    ## @param ingest.ingress.pathType Ingress path type
+    ##
+    pathType: ImplementationSpecific
+    ## @param ingest.ingress.apiVersion Force Ingress API version (automatically detected if not set)
+    ##
+    apiVersion: ""
+    ## @param ingest.ingress.hostname Default host for the ingress record
+    ##
+    hostname: opensearch-ingest.local
+    ## @param ingest.ingress.path Default path for the ingress record
+    ## NOTE: You may need to set this to '/*' in order to use this with ALB ingress controllers
+    ##
+    path: /
+    ## @param ingest.ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
+    ## Use this parameter to set the required annotations for cert-manager, see
+    ## ref: https://cert-manager.io/docs/usage/ingress/#supported-annotations
+    ## e.g:
+    ## annotations:
+    ##   kubernetes.io/ingress.class: nginx
+    ##   cert-manager.io/cluster-issuer: cluster-issuer-name
+    ##
+    annotations: {}
+    ## @param ingest.ingress.tls Enable TLS configuration for the host defined at `ingress.hostname` parameter
+    ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.ingress.hostname }}`
+    ## You can:
+    ##   - Use the `ingress.secrets` parameter to create this TLS secret
+    ##   - Rely on cert-manager to create it by setting the corresponding annotations
+    ##   - Rely on Helm to create self-signed certificates by setting `ingress.selfSigned=true`
+    ##
+    tls: false
+    ## @param ingest.ingress.selfSigned Create a TLS secret for this ingress record using self-signed certificates generated by Helm
+    ##
+    selfSigned: false
+    ## @param ingest.ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
+    ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
+    ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
+    ##
+    ingressClassName: ""
+    ## @param ingest.ingress.extraHosts An array with additional hostname(s) to be covered with the ingress record
+    ## e.g:
+    ## extraHosts:
+    ##   - name: opensearch.local
+    ##     path: /
+    ##
+    extraHosts: []
+    ## @param ingest.ingress.extraPaths An array with additional arbitrary paths that may need to be added to the ingress under the main host
+    ## e.g:
+    ## extraPaths:
+    ## - path: /*
+    ##   backend:
+    ##     serviceName: ssl-redirect
+    ##     servicePort: use-annotation
+    ##
+    extraPaths: []
+    ## @param ingest.ingress.extraTls TLS configuration for additional hostname(s) to be covered with this ingress record
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+    ## e.g:
+    ## extraTls:
+    ## - hosts:
+    ##     - opensearch.local
+    ##   secretName: opensearch.local-tls
+    ##
+    extraTls: []
+    ## @param ingest.ingress.secrets Custom TLS certificates as secrets
+    ## NOTE: 'key' and 'certificate' are expected in PEM format
+    ## NOTE: 'name' should line up with a 'secretName' set further up
+    ## If it is not set and you're using cert-manager, this is unneeded, as it will create a secret for you with valid certificates
+    ## If it is not set and you're NOT using cert-manager either, self-signed certificates will be created valid for 365 days
+    ## It is also possible to create and manage the certificates outside of this helm chart
+    ## Please see README.md for more information
+    ## e.g:
+    ## secrets:
+    ##   - name: opensearch.local-tls
+    ##     key: |-
+    ##       -----BEGIN RSA PRIVATE KEY-----
+    ##       ...
+    ##       -----END RSA PRIVATE KEY-----
+    ##     certificate: |-
+    ##       -----BEGIN CERTIFICATE-----
+    ##       ...
+    ##       -----END CERTIFICATE-----
+    ##
+    secrets: []
+    ## @param ingest.ingress.extraRules Additional rules to be covered with this ingress record
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#ingress-rules
+    ## e.g:
+    ## extraRules:
+    ## - host: example.local
+    ##     http:
+    ##       path: /
+    ##       backend:
+    ##         service:
+    ##           name: example-svc
+    ##           port:
+    ##             name: http
+    ##
+    extraRules: []
+
+
+## @section Init Container Parameters
+
+## 'volumePermissions' init container parameters
+## Changes the owner and group of the persistent volume mount point to runAsUser:fsGroup values
+##   based on the *podSecurityContext/*containerSecurityContext parameters
+##
+volumePermissions:
+  ## @param volumePermissions.enabled Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work)
+  ##
+  enabled: false
+  ## @param volumePermissions.image.registry Init container volume-permissions image registry
+  ## @param volumePermissions.image.repository Init container volume-permissions image name
+  ## @param volumePermissions.image.tag Init container volume-permissions image tag
+  ## @param volumePermissions.image.digest Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
+  ## @param volumePermissions.image.pullSecrets Init container volume-permissions image pull secrets
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/bitnami-shell
+    tag: 11-debian-11-r131
+    digest: ""
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+  ## Init container' resource requests and limits
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## We usually recommend not to specify default resources and to leave this as a conscious
+  ## choice for the user. This also increases chances charts run on environments with little
+  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## @param volumePermissions.resources.limits The resources limits for the container
+  ## @param volumePermissions.resources.requests The requested resources for the container
+  ##
+  resources:
+    ## Example:
+    ## limits:
+    ##    cpu: 100m
+    ##    memory: 128Mi
+    limits: {}
+    ## Examples:
+    ## requests:
+    ##    cpu: 100m
+    ##    memory: 128Mi
+    requests: {}
+
+## Kernel settings modifier image
+##
+sysctlImage:
+  ## @param sysctlImage.enabled Enable kernel settings modifier image
+  ##
+  enabled: true
+  ## @param sysctlImage.registry Kernel settings modifier image registry
+  ## @param sysctlImage.repository Kernel settings modifier image repository
+  ## @param sysctlImage.tag Kernel settings modifier image tag
+  ## @param sysctlImage.digest Kernel settings modifier image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## @param sysctlImage.pullPolicy Kernel settings modifier image pull policy
+  ## @param sysctlImage.pullSecrets Kernel settings modifier image pull secrets
+  ##
+  registry: docker.io
+  repository: bitnami/bitnami-shell
+  tag: 11-debian-11-r131
+  digest: ""
+  ## Specify a imagePullPolicy
+  ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+  ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+  ##
+  pullPolicy: IfNotPresent
+  ## Optionally specify an array of imagePullSecrets.
+  ## Secrets must be manually created in the namespace.
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+  ## e.g:
+  ## pullSecrets:
+  ##   - myRegistryKeySecretName
+  ##
+  pullSecrets: []
+  ## Init container' resource requests and limits
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## We usually recommend not to specify default resources and to leave this as a conscious
+  ## choice for the user. This also increases chances charts run on environments with little
+  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## @param sysctlImage.resources.limits The resources limits for the container
+  ## @param sysctlImage.resources.requests The requested resources for the container
+  ##
+  resources:
+    ## Example:
+    ## limits:
+    ##    cpu: 100m
+    ##    memory: 128Mi
+    limits: {}
+    ## Examples:
+    ## requests:
+    ##    cpu: 100m
+    ##    memory: 128Mi
+    requests: {}
+
+## @section Opensearch Dashborads Parameters
+
+dashboards:
+  ## @param dashboards.enabled Enables Opensearch Dashboards deployment
+  ##
+  enabled: false
+  ## Bitnami Opensearch Dashboards image
+  ## @param dashboards.image.registry Opensearch Dashboards image registry
+  ## @param dashboards.image.repository Opensearch Dashboards image repository
+  ## @param dashboards.image.tag Opensearch Dashboards image tag (immutable tags are recommended)
+  ## @param dashboards.image.digest Opensearch Dashboards image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## @param dashboards.image.pullPolicy Opensearch Dashboards image pull policy
+  ## @param dashboards.image.pullSecrets Opensearch Dashboards image pull secrets
+  ## @param dashboards.image.debug Enable Opensearch Dashboards image debug mode
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/opensearch-dashboards
+    tag: 2.8.0-debian-11-r0
+    digest: ""
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: http://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: [ ]
+    ## Enable debug mode
+    ##
+    debug: false
+  ## Opensearch Dashboards service parameters
+  ##
+  service:
+    ## @param dashboards.service.type Opensearch Dashboards service type
+    ##
+    type: ClusterIP
+    ## @param dashboards.service.ports.http Opensearch Dashboards service web UI port
+    ##
+    ports:
+      http: 5601
+    ## Node ports to expose
+    ## @param dashboards.service.nodePorts.http Node port for web UI
+    ## NOTE: choose port between <30000-32767>
+    ##
+    nodePorts:
+      http: ""
+    ## @param dashboards.service.clusterIP Opensearch Dashboards service Cluster IP
+    ## e.g.:
+    ## clusterIP: None
+    ##
+    clusterIP: ""
+    ## @param dashboards.service.loadBalancerIP Opensearch Dashboards service Load Balancer IP
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerIP: ""
+    ## @param dashboards.service.loadBalancerSourceRanges Opensearch Dashboards service Load Balancer sources
+    ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
+    ## e.g:
+    ## loadBalancerSourceRanges:
+    ##   - 10.10.10.0/24
+    ##
+    loadBalancerSourceRanges: [ ]
+    ## @param dashboards.service.externalTrafficPolicy Opensearch Dashboards service external traffic policy
+    ## ref http://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
+    ##
+    externalTrafficPolicy: Cluster
+    ## @param dashboards.service.annotations Additional custom annotations for Opensearch Dashboards service
+    ##
+    annotations: { }
+    ## @param dashboards.service.extraPorts Extra ports to expose in Opensearch Dashboards service (normally used with the `sidecars` value)
+    ##
+    extraPorts: [ ]
+    ## @param dashboards.service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
+    ## If "ClientIP", consecutive client requests will be directed to the same Pod
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#virtual-ips-and-service-proxies
+    ##
+    sessionAffinity: None
+    ## @param dashboards.service.sessionAffinityConfig Additional settings for the sessionAffinity
+    ## sessionAffinityConfig:
+    ##   clientIP:
+    ##     timeoutSeconds: 300
+    ##
+    sessionAffinityConfig: { }
+  ## @param dashboards.containerPorts.http Opensearch Dashboards HTTP port
+  ##
+  containerPorts:
+    http: 5601
+  ## @param dashboards.password Password for Opensearch Dashboards
+  ##
+  password: ""
+  ## @param dashboards.replicaCount Number of data-only replicas to deploy
+  ##
+  replicaCount: 1
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param dashboards.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param dashboards.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param dashboards.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ##
+  pdb:
+    create: false
+    minAvailable: 1
+    maxUnavailable: ""
+  ## @param dashboards.nameOverride String to partially override opensearch.dashboards.fullname
+  ##
+  nameOverride: ""
+  ## @param dashboards.fullnameOverride String to fully override opensearch.dashboards.fullname
+  ##
+  fullnameOverride: ""
+  ## @param dashboards.servicenameOverride String to fully override opensearch.dashboards.servicename
+  ##
+  servicenameOverride: ""
+  ## @param dashboards.updateStrategy.type Data-only nodes statefulset stategy type
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#update-strategies
+  ##
+  updateStrategy:
+    type: RollingUpdate
+  ## Opensearch resource requests and limits
+  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param dashboards.resources.limits The resources limits for the data containers
+  ## @param dashboards.resources.requests [object] The requested resources for the data containers
+  ##
+  resources:
+    limits: {}
+    requests:
+      cpu: 25m
+      memory: 2048Mi
+  ## @param dashboards.heapSize Opensearch data node heap size.
+  ## Note: The recommended heapSize is half of the container's memory.
+  ## If omitted, it will be automatically set.
+  ## Example:
+  ##   heapSize: 128m
+  ##
+  heapSize: 1024m
+  ## Configure Pods Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param dashboards.podSecurityContext.enabled Enabled data pods' Security Context
+  ## @param dashboards.podSecurityContext.fsGroup Set dashboards pod's Security Context fsGroup
+  ## @param dashboards.podSecurityContext.seccompProfile.type Set Proxy container's Security Context seccomp profile
+  ##
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1001
+    seccompProfile:
+      type: "RuntimeDefault"
+  ## Configure Container Security Context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
+  ## @param dashboards.containerSecurityContext.enabled Enabled data containers' Security Context
+  ## @param dashboards.containerSecurityContext.runAsUser Set data containers' Security Context runAsUser
+  ## @param dashboards.containerSecurityContext.runAsNonRoot Set data containers' Security Context runAsNonRoot
+  ## @param dashboards.containerSecurityContext.capabilities.drop Set APISIX container's Security Context runAsNonRoot
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
+    capabilities:
+      drop: [ "ALL" ]
+  ## @param dashboards.hostAliases data pods host aliases
+  ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
+  ##
+  hostAliases: []
+  ## @param dashboards.podLabels Extra labels for data pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  podLabels: {}
+  ## @param dashboards.podAnnotations Annotations for data pods
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+  ##
+  podAnnotations: {}
+  ## @param dashboards.podAffinityPreset Pod affinity preset. Ignored if `dashboards.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAffinityPreset: ""
+  ## @param dashboards.podAntiAffinityPreset Pod anti-affinity preset. Ignored if `dashboards.affinity` is set. Allowed values: `soft` or `hard`
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
+  ##
+  podAntiAffinityPreset: ""
+  ## Node dashboards.affinity preset
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
+  ##
+  nodeAffinityPreset:
+    ## @param dashboards.nodeAffinityPreset.type Node affinity preset type. Ignored if `dashboards.affinity` is set. Allowed values: `soft` or `hard`
+    ##
+    type: ""
+    ## @param dashboards.nodeAffinityPreset.key Node label key to match. Ignored if `dashboards.affinity` is set
+    ##
+    key: ""
+    ## @param dashboards.nodeAffinityPreset.values Node label values to match. Ignored if `dashboards.affinity` is set
+    ## E.g.
+    ## values:
+    ##   - e2e-az1
+    ##   - e2e-az2
+    ##
+    values: []
+  ## @param dashboards.affinity Affinity for data pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/assign-pod-node/#affinity-and-anti-affinity
+  ## NOTE: `dashboards.podAffinityPreset`, `dashboards.podAntiAffinityPreset`, and `dashboards.nodeAffinityPreset` will be ignored when it's set
+  ##
+  affinity: {}
+  ## @param dashboards.nodeSelector Node labels for data pods assignment
+  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ##
+  nodeSelector: {}
+  ## @param dashboards.tolerations Tolerations for data pods assignment
+  ## ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
+  ##
+  tolerations: []
+  ## @param dashboards.priorityClassName data pods' priorityClassName
+  ##
+  priorityClassName: ""
+  ## @param dashboards.schedulerName Name of the k8s scheduler (other than default) for data pods
+  ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
+  ##
+  schedulerName: ""
+  ## @param dashboards.terminationGracePeriodSeconds In seconds, time the given to the Opensearch data pod needs to terminate gracefully
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod/#termination-of-pods
+  ##
+  terminationGracePeriodSeconds: ""
+  ## @param dashboards.topologySpreadConstraints Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template
+  ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-topology-spread-constraints/#spread-constraints-for-pods
+  ##
+  topologySpreadConstraints: []
+  ## Configure extra options for Opensearch data containers' liveness, readiness and startup probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param dashboards.startupProbe.enabled Enable/disable the startup probe (data nodes pod)
+  ## @param dashboards.startupProbe.initialDelaySeconds Delay before startup probe is initiated (data nodes pod)
+  ## @param dashboards.startupProbe.periodSeconds How often to perform the probe (data nodes pod)
+  ## @param dashboards.startupProbe.timeoutSeconds When the probe times out (data nodes pod)
+  ## @param dashboards.startupProbe.successThreshold Minimum consecutive successes for the probe to be considered successful after having failed (data nodes pod)
+  ## @param dashboards.startupProbe.failureThreshold Minimum consecutive failures for the probe to be considered failed after having succeeded
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 120
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  ## @param dashboards.livenessProbe.enabled Enable/disable the liveness probe (data nodes pod)
+  ## @param dashboards.livenessProbe.initialDelaySeconds Delay before liveness probe is initiated (data nodes pod)
+  ## @param dashboards.livenessProbe.periodSeconds How often to perform the probe (data nodes pod)
+  ## @param dashboards.livenessProbe.timeoutSeconds When the probe times out (data nodes pod)
+  ## @param dashboards.livenessProbe.successThreshold Minimum consecutive successes for the probe to be considered successful after having failed (data nodes pod)
+  ## @param dashboards.livenessProbe.failureThreshold Minimum consecutive failures for the probe to be considered failed after having succeeded
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 120
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  ## @param dashboards.readinessProbe.enabled Enable/disable the readiness probe (data nodes pod)
+  ## @param dashboards.readinessProbe.initialDelaySeconds Delay before readiness probe is initiated (data nodes pod)
+  ## @param dashboards.readinessProbe.periodSeconds How often to perform the probe (data nodes pod)
+  ## @param dashboards.readinessProbe.timeoutSeconds When the probe times out (data nodes pod)
+  ## @param dashboards.readinessProbe.successThreshold Minimum consecutive successes for the probe to be considered successful after having failed (data nodes pod)
+  ## @param dashboards.readinessProbe.failureThreshold Minimum consecutive failures for the probe to be considered failed after having succeeded
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 120
+    periodSeconds: 10
+    timeoutSeconds: 5
+    successThreshold: 1
+    failureThreshold: 5
+  ## @param dashboards.customStartupProbe Override default startup probe
+  ##
+  customStartupProbe: {}
+  ## @param dashboards.customLivenessProbe Override default liveness probe
+  ##
+  customLivenessProbe: {}
+  ## @param dashboards.customReadinessProbe Override default readiness probe
+  ##
+  customReadinessProbe: {}
+  ## @param dashboards.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param dashboards.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param dashboards.lifecycleHooks for the data container(s) to automate configuration before or after startup
+  ##
+  lifecycleHooks: {}
+  ## @param dashboards.extraEnvVars Array with extra environment variables to add to data nodes
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param dashboards.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for data nodes
+  ##
+  extraEnvVarsCM: ""
+  ## @param dashboards.extraEnvVarsSecret Name of existing Secret containing extra env vars for data nodes
+  ##
+  extraEnvVarsSecret: ""
+  ## @param dashboards.extraVolumes Optionally specify extra list of additional volumes for the data pod(s)
+  ##
+  extraVolumes: []
+  ## @param dashboards.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the data container(s)
+  ##
+  extraVolumeMounts: []
+  ## @param dashboards.sidecars Add additional sidecar containers to the data pod(s)
+  ## e.g:
+  ## sidecars:
+  ##   - name: your-image-name
+  ##     image: your-image
+  ##     imagePullPolicy: Always
+  ##     ports:
+  ##       - name: portname
+  ##         containerPort: 1234
+  ##
+  sidecars: []
+  ## @param dashboards.initContainers Add additional init containers to the data pod(s)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
+  ## e.g:
+  ## initContainers:
+  ##  - name: your-image-name
+  ##    image: your-image
+  ##    imagePullPolicy: Always
+  ##    command: ['sh', '-c', 'echo "hello world"']
+  ##
+  initContainers: []
+  ## Pods Service Account
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-service-account/
+  ## @param dashboards.serviceAccount.create Specifies whether a ServiceAccount should be created
+  ## @param dashboards.serviceAccount.name Name of the service account to use. If not set and create is true, a name is generated using the fullname template.
+  ## @param dashboards.serviceAccount.automountServiceAccountToken Automount service account token for the server service account
+  ## @param dashboards.serviceAccount.annotations Annotations for service account. Evaluated as a template. Only used if `create` is `true`.
+  ##
+  serviceAccount:
+    create: false
+    name: ""
+    automountServiceAccountToken: false
+    annotations: {}
+  ## Network Policy configuration
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/network-policies/
+  ##
+  networkPolicy:
+    ## @param dashboards.networkPolicy.enabled Enable creation of NetworkPolicy resources
+    ##
+    enabled: false
+    ## @param dashboards.networkPolicy.allowExternal The Policy model to apply
+    ## When set to false, only pods with the correct client label will have network access to the ports Keycloak is
+    ## listening on. When true, Keycloak will accept connections from any source (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param dashboards.networkPolicy.extraIngress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraIngress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     from:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraIngress: []
+    ## @param dashboards.networkPolicy.extraEgress [array] Add extra ingress rules to the NetworkPolicy
+    ## e.g:
+    ## extraEgress:
+    ##   - ports:
+    ##       - port: 1234
+    ##     to:
+    ##       - podSelector:
+    ##           - matchLabels:
+    ##               - role: frontend
+    ##       - podSelector:
+    ##           - matchExpressions:
+    ##               - key: role
+    ##                 operator: In
+    ##                 values:
+    ##                   - frontend
+    ##
+    extraEgress: []
+    ## @param dashboards.networkPolicy.ingressNSMatchLabels [object] Labels to match to allow traffic from other namespaces
+    ## @param dashboards.networkPolicy.ingressNSPodMatchLabels [object] Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
+  autoscaling:
+    vpa:
+      ## @param dashboards.autoscaling.vpa.enabled Enable VPA
+      ##
+      enabled: false
+      ## @param dashboards.autoscaling.vpa.annotations Annotations for VPA resource
+      ##
+      annotations: { }
+      ## @param dashboards.autoscaling.vpa.controlledResources VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory
+      ##
+      controlledResources: [ ]
+      ## @param dashboards.autoscaling.vpa.maxAllowed VPA Max allowed resources for the pod
+      ## cpu: 200m
+      ## memory: 100Mi
+      maxAllowed: { }
+      ## @param dashboards.autoscaling.vpa.minAllowed VPA Min allowed resources for the pod
+      ## cpu: 200m
+      ## memory: 100Mi
+      minAllowed: { }
+      updatePolicy:
+        ## @param dashboards.autoscaling.vpa.updatePolicy.updateMode Autoscaling update policy Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod
+        ## Possible values are "Off", "Initial", "Recreate", and "Auto".
+        ##
+        updateMode: Auto
+    hpa:
+      ## @param dashboards.autoscaling.hpa.enabled Enable HPA for APISIX Data Plane
+      ##
+      enabled: false
+      ## @param dashboards.autoscaling.hpa.minReplicas Minimum number of APISIX Data Plane replicas
+      ##
+      minReplicas: 3
+      ## @param dashboards.autoscaling.hpa.maxReplicas Maximum number of APISIX Data Plane replicas
+      ##
+      maxReplicas: 11
+      ## @param dashboards.autoscaling.hpa.targetCPU Target CPU utilization percentage
+      ##
+      targetCPU: ""
+      ## @param dashboards.autoscaling.hpa.targetMemory Target Memory utilization percentage
+      ##
+      targetMemory: ""
+  ## TLS configuration
+  ##
+  tls:
+    ## @param dashboards.tls.enabled Enable TLS for Opensearch Dashboards webserver
+    ##
+    enabled: false
+    ## @param dashboards.tls.existingSecret Existing secret containing the certificates for Opensearch Dashboards webserver
+    ##
+    existingSecret: ""
+    ## @param dashboards.tls.autoGenerated Create self-signed TLS certificates.
+    ## NOTE: If autoGenerated certs are enabled and a new node type is enabled using helm upgrade, make sure you remove previously existing TLS secrets.
+    ## Otherwise, the new node certs won't match the existing certs.
+    ##
+    autoGenerated: true
