@@ -71,10 +71,7 @@ spec:
               {{- end }}
           {{- end }}
         {{- end }}
-    {{- if .Values.dashboards.metrics.enabled }}
-    - ports:
-        - port: {{ .Values.dashboards.service.ports.metrics }}
-    {{- end }}
+
     {{- if .Values.dashboards.networkPolicy.extraIngress }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.dashboards.networkPolicy.extraIngress "context" $ ) | nindent 4 }}
     {{- end }}

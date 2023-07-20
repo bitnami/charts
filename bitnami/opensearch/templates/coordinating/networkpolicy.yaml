@@ -71,10 +71,6 @@ spec:
               {{- end }}
           {{- end }}
         {{- end }}
-    {{- if .Values.coordinating.metrics.enabled }}
-    - ports:
-        - port: {{ .Values.coordinating.service.ports.metrics }}
-    {{- end }}
     {{- if .Values.coordinating.networkPolicy.extraIngress }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.coordinating.networkPolicy.extraIngress "context" $ ) | nindent 4 }}
     {{- end }}
