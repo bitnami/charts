@@ -200,7 +200,7 @@ spec:
             {{- end }}
             {{- if gt $replicaCount 1 }}
             - name: ETCD_INITIAL_CLUSTER_TOKEN
-              value: "etcd-cluster-k8s"
+              value: {{ .Values.initialClusterToken | quote }}
             - name: ETCD_INITIAL_CLUSTER_STATE
               value: {{ default (ternary "new" "existing" .Release.IsInstall) .Values.initialClusterState | quote }}
             {{- $initialCluster := list }}
