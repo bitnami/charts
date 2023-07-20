@@ -18,3 +18,13 @@ addr:
   tcp://opensearch-dashboards:{{ .Vars.dashboards.service.ports.http }}:
     reachable: true
     timeout: 180000
+command:
+  check-no-capabilities:
+    exec: cat /proc/1/status
+    exit-status: 0
+    stdout:
+      - "CapInh:	0000000000000000"
+      - "CapPrm:	0000000000000000"
+      - "CapEff:	0000000000000000"
+      - "CapBnd:	0000000000000000"
+      - "CapAmb:	0000000000000000"
