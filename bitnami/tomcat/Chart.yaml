@@ -5,7 +5,7 @@ annotations:
   category: ApplicationServer
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 10.1.10
+appVersion: 10.1.11
 dependencies:
   - name: common
     repository: oci://registry-1.docker.io/bitnamicharts
@@ -28,4 +28,4 @@ maintainers:
 name: tomcat
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/tomcat
-version: 10.9.3
+version: 10.9.5

@@ -26,4 +26,4 @@ maintainers:
 name: multus-cni
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/multus-cni
-version: 1.0.2
+version: 1.0.3

@@ -115,7 +115,7 @@ spec:
             - --query-range.response-cache-config-file=/conf/cache/config.yml
             {{- end }}
             {{- if .Values.queryFrontend.extraFlags }}
-            {{- .Values.queryFrontend.extraFlags | toYaml | nindent 12 }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.extraFlags "context" $) | nindent 12 }}
             {{- end }}
             {{- end }}
           {{- if .Values.queryFrontend.extraEnvVars }}

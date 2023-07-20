@@ -77,7 +77,7 @@ spec:
           image: {{ include "git.image" . }}
           imagePullPolicy: {{ .Values.git.pullPolicy | quote }}
           command:
-            - /bin/sh
+            - /bin/bash
             - -c
             - |
               [[ -f "/opt/bitnami/scripts/git/entrypoint.sh" ]] && source "/opt/bitnami/scripts/git/entrypoint.sh"

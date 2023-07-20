@@ -6,7 +6,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.10.0
+    controller-gen.kubebuilder.io/version: v0.12.0
   creationTimestamp: null
   name: bindings.rabbitmq.com
 spec:
@@ -138,7 +138,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.10.0
+    controller-gen.kubebuilder.io/version: v0.12.0
   creationTimestamp: null
   name: exchanges.rabbitmq.com
 spec:
@@ -268,7 +268,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.10.0
+    controller-gen.kubebuilder.io/version: v0.12.0
   creationTimestamp: null
   name: federations.rabbitmq.com
 spec:
@@ -420,7 +420,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.10.0
+    controller-gen.kubebuilder.io/version: v0.12.0
   creationTimestamp: null
   name: permissions.rabbitmq.com
 spec:
@@ -561,7 +561,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.10.0
+    controller-gen.kubebuilder.io/version: v0.12.0
   creationTimestamp: null
   name: policies.rabbitmq.com
 spec:
@@ -703,7 +703,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.10.0
+    controller-gen.kubebuilder.io/version: v0.12.0
   creationTimestamp: null
   name: queues.rabbitmq.com
 spec:
@@ -836,7 +836,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.10.0
+    controller-gen.kubebuilder.io/version: v0.12.0
   creationTimestamp: null
   name: schemareplications.rabbitmq.com
 spec:
@@ -979,7 +979,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.10.0
+    controller-gen.kubebuilder.io/version: v0.12.0
   creationTimestamp: null
   name: shovels.rabbitmq.com
 spec:
@@ -1030,20 +1030,37 @@ spec:
               destAddTimestampHeader:
                 type: boolean
               destAddress:
+                description: amqp10 configuration; required if destProtocol is amqp10
                 type: string
               destApplicationProperties:
-                type: string
+                description: amqp10 configuration
+                type: object
+                x-kubernetes-preserve-unknown-fields: true
               destExchange:
+                description: amqp091 configuration
                 type: string
               destExchangeKey:
+                description: amqp091 configuration
                 type: string
+              destMessageAnnotations:
+                description: amqp10 configuration
+                type: object
+                x-kubernetes-preserve-unknown-fields: true
               destProperties:
-                type: string
+                description: amqp10 configuration
+                type: object
+                x-kubernetes-preserve-unknown-fields: true
               destProtocol:
+                enum:
+                - amqp091
+                - amqp10
                 type: string
               destPublishProperties:
-                type: string
+                description: amqp091 configuration
+                type: object
+                x-kubernetes-preserve-unknown-fields: true
               destQueue:
+                description: amqp091 configuration
                 type: string
               name:
                 description: Required property; cannot be updated
@@ -1078,18 +1095,29 @@ spec:
               reconnectDelay:
                 type: integer
               srcAddress:
+                description: amqp10 configuration; required if srcProtocol is amqp10
                 type: string
+              srcConsumerArgs:
+                description: amqp091 configuration
+                type: object
+                x-kubernetes-preserve-unknown-fields: true
               srcDeleteAfter:
                 type: string
               srcExchange:
+                description: amqp091 configuration
                 type: string
               srcExchangeKey:
+                description: amqp091 configuration
                 type: string
               srcPrefetchCount:
                 type: integer
               srcProtocol:
+                enum:
+                - amqp091
+                - amqp10
                 type: string
               srcQueue:
+                description: amqp091 configuration
                 type: string
               uriSecret:
                 description: Secret contains the AMQP URI(s) to configure Shovel destination
@@ -1158,7 +1186,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.10.0
+    controller-gen.kubebuilder.io/version: v0.12.0
   creationTimestamp: null
   name: superstreams.rabbitmq.com
 spec:
@@ -1293,7 +1321,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.10.0
+    controller-gen.kubebuilder.io/version: v0.12.0
   creationTimestamp: null
   name: topicpermissions.rabbitmq.com
 spec:
@@ -1433,7 +1461,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.10.0
+    controller-gen.kubebuilder.io/version: v0.12.0
   creationTimestamp: null
   name: users.rabbitmq.com
 spec:
@@ -1589,7 +1617,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.10.0
+    controller-gen.kubebuilder.io/version: v0.12.0
   creationTimestamp: null
   name: vhosts.rabbitmq.com
 spec:
@@ -1624,6 +1652,14 @@ spec:
           spec:
             description: VhostSpec defines the desired state of Vhost
             properties:
+              defaultQueueType:
+                description: Default queue type for this vhost; can be set to quorum,
+                  classic or stream. Supported in RabbitMQ 3.11.12 or above.
+                enum:
+                  - quorum
+                  - classic
+                  - stream
+                type: string
               name:
                 description: Name of the vhost; see https://www.rabbitmq.com/vhosts.html.
                 type: string
