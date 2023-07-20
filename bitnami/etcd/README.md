@@ -114,7 +114,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `autoCompactionMode`                   | Auto compaction mode, by default periodic. Valid values: "periodic", "revision".                            | `""`                  |
 | `autoCompactionRetention`              | Auto compaction retention for mvcc key value store in hour, by default 0, means disabled                    | `""`                  |
 | `initialClusterState`                  | Initial cluster state. Allowed values: 'new' or 'existing'                                                  | `""`                  |
-| `initialClusterToken`                  | Name of the initial cluster token.                                                                          | `etcd-cluster-k8s`    |
+| `initialClusterToken`                  | Initial cluster token. If spinning up multiple clusters (or creating and destroying a single cluster)       | `etcd-cluster-k8s`    |
 | `logLevel`                             | Sets the log level for the etcd process. Allowed values: 'debug', 'info', 'warn', 'error', 'panic', 'fatal' | `info`                |
 | `maxProcs`                             | Limits the number of operating system threads that can execute user-level                                   | `""`                  |
 | `removeMemberOnContainerTermination`   | Use a PreStop hook to remove the etcd members from the etcd cluster on container termination                | `true`                |
