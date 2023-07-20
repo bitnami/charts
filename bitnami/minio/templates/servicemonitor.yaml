@@ -42,6 +42,12 @@ spec:
       {{- if .Values.metrics.serviceMonitor.relabelings }}
       relabelings: {{- toYaml .Values.metrics.serviceMonitor.relabelings | nindent 6 }}
       {{- end }}
+      {{- if .Values.tls.enabled }}
+      scheme: https
+      {{- end }}
+      {{- if .Values.metrics.serviceMonitor.tlsConfig }}
+      {{- toYaml .Values.metrics.serviceMonitor.tlsConfig | nindent 6 }}
+      {{- end }}
   {{- if .Values.metrics.serviceMonitor.jobLabel }}
   jobLabel: {{ .Values.metrics.serviceMonitor.jobLabel }}
   {{- end }}
