@@ -21,7 +21,7 @@ dashboards:
   service:
     ports:
       http: 5605
-config:
+extraConfig:
   node:
     store:
       allow_mmap: false
