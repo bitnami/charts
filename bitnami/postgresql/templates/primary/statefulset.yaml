@@ -250,6 +250,7 @@ spec:
             {{- if .Values.auth.usePasswordFiles }}
             - name: POSTGRES_POSTGRES_PASSWORD_FILE
               value: {{ printf "/opt/bitnami/postgresql/secrets/%s" (include "postgresql.adminPasswordKey" .) }}
+            {{- else }}
             - name: POSTGRES_POSTGRES_PASSWORD
               valueFrom:
                 secretKeyRef:
