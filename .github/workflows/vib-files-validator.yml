@@ -29,6 +29,7 @@ jobs:
             .vib/**
       - name: Validate VIB pipeline files
         if: ${{ steps.changed-files.outputs.any_changed == 'true' }}
+        shell: bash
         run: |
           exit_code=0
           for dir in ${{ steps.changed-files.outputs.all_changed_files }}; do
@@ -38,4 +39,3 @@ jobs:
             echo "::error:: Please ensure the VIB's verify phase is aligned both in vib-verify and vib-publish pipeline files"
             exit "$exit_code"
           fi
-        shell: bash
