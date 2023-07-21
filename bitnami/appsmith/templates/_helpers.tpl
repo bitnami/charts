@@ -125,6 +125,15 @@ Return Redis(TM) port
 {{- end -}}
 
 {{/*
+Return whether Redis&reg; uses password authentication or not
+*/}}
+{{- define "appsmith.redis.auth.enabled" -}}
+{{- if or (and .Values.redis.enabled .Values.redis.auth.enabled) (and (not .Values.redis.enabled) (or .Values.externalRedis.password .Values.externalRedis.existingSecret)) }}
+    {{- true -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return MongoDB fullname
 */}}
 {{- define "appsmith.mongodb.fullname" -}}

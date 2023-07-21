@@ -154,11 +154,13 @@ spec:
               value: {{ include "appsmith.redis.host" . | quote }}
             - name: APPSMITH_REDIS_PORT_NUMBER
               value: {{ include "appsmith.redis.port" . | quote }}
+            {{- if (include "appsmith.redis.auth.enabled" .) }}
             - name: APPSMITH_REDIS_PASSWORD
               valueFrom:
                 secretKeyRef:
                   name: {{ include "appsmith.redis.secretName" . }}
                   key: {{ include "appsmith.redis.secretKey" . }}
+            {{- end }}
             - name: APPSMITH_RTS_PORT
               value: {{ .Values.rts.containerPorts.http | quote }}
             {{- if .Values.backend.extraEnvVars }}

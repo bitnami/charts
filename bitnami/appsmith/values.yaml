@@ -1182,47 +1182,40 @@ externalDatabase:
   existingSecretPasswordKey: ""
 
 ## @section External Redis parameters
+## Redis&reg; chart configuration
+## ref: https://github.com/bitnami/charts/blob/main/bitnami/redis/values.yaml
+## @param redis.enabled Switch to enable or disable the Redis&reg; helm
+## @param redis.auth.enabled Enable password authentication
+## @param redis.auth.password Redis&reg; password
+## @param redis.auth.existingSecret The name of an existing secret with Redis&reg; credentials
+## @param redis.architecture Redis&reg; architecture. Allowed values: `standalone` or `replication`
+##
+redis:
+  enabled: true
+  auth:
+    enabled: false
+    ## Redis&reg; password (both master and slave). Defaults to a random 10-character alphanumeric string if not set and auth.enabled is true.
+    ## It should always be set using the password value or in the existingSecret to avoid issues
+    ## with Appsmith.
+    ## The password value is ignored if existingSecret is set
+    password: ""
+    existingSecret: ""
+  architecture: standalone
+
+## External Redis&reg; configuration
 ## All of these values are only used when redis.enabled is set to false
-## @param externalRedis.host Redis host
-## @param externalRedis.port Redis port number
-## @param externalRedis.password Password for the Redis
-## @param externalRedis.existingSecret Name of an existing secret resource containing the Redis credentials
-## @param externalRedis.existingSecretPasswordKey Name of an existing secret key containing the Redis credentials
+## @param externalRedis.host Redis&reg; host
+## @param externalRedis.port Redis&reg; port number
+## @param externalRedis.password Redis&reg; password
+## @param externalRedis.existingSecret Name of an existing secret resource containing the Redis&trade credentials
+## @param externalRedis.existingSecretPasswordKey Name of an existing secret key containing the Redis&trade credentials
 ##
 externalRedis:
-  host: ""
+  host: localhost
   port: 6379
   password: ""
   existingSecret: ""
-  existingSecretPasswordKey: ""
-
-## @section Redis sub-chart parameters
-##
-redis:
-  ## @param redis.enabled Deploy Redis subchart
-  ##
-  enabled: true
-  ## @param redis.architecture Set Redis architecture
-  ##
-  architecture: standalone
-  ## @param redis.existingSecret Name of a secret containing redis credentials
-  ##
-  existingSecret: ""
-  ## @param redis.master.service.ports.redis Redis port
-  ##
-  master:
-    service:
-      ports:
-        redis: 6379
-
-  ## @param redis.auth.enabled Enable Redis auth
-  ## @param redis.auth.password Redis password
-  ## @param redis.auth.existingSecret Name of a secret containing the Redis password
-  ##
-  auth:
-    enabled: true
-    password: ""
-    existingSecret: ""
+  existingSecretPasswordKey: "redis-password"
 
 ## @section MongoDB sub-chart parameters
 ##
