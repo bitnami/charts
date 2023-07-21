@@ -28,14 +28,14 @@ jobs:
           files: |
             .vib/**
       - name: Validate VIB pipeline files
-        if: steps.changed-files.outputs.any_changed == 'true'
+        if: ${{ steps.changed-files.outputs.any_changed == 'true' }}
         run: |
           exit_code=0
           for dir in ${{ steps.changed-files.outputs.all_changed_files }}; do
             diff <(jq .phases.verify < "${dir}/vib-publish.json") <(jq .phases.verify < "${dir}/vib-verify.json") || exit_code=$?
           done
           if [[ $exit_code -ne 0 ]]; then
-            echo "::error:: Please ensure verify phase is aligned on VIB pipeline files"
+            echo "::error:: Please ensure the VIB's verify phase is aligned both in vib-verify and vib-publish pipeline files"
             exit "$exit_code"
           fi
         shell: bash
