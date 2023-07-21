@@ -19,7 +19,7 @@ jobs:
     steps:
       - name: Checkout project
         uses: actions/checkout@v3
-      - name: Get changed src code
+      - name: Get changed VIB pipeline files
         id: changed-files
         uses: tj-actions/changed-files@v37
         with:
