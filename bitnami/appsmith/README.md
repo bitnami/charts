@@ -397,25 +397,18 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### External Redis parameters
 
-| Name                                      | Description                                                          | Value  |
-| ----------------------------------------- | -------------------------------------------------------------------- | ------ |
-| `externalRedis.host`                      | Redis host                                                           | `""`   |
-| `externalRedis.port`                      | Redis port number                                                    | `6379` |
-| `externalRedis.password`                  | Password for the Redis                                               | `""`   |
-| `externalRedis.existingSecret`            | Name of an existing secret resource containing the Redis credentials | `""`   |
-| `externalRedis.existingSecretPasswordKey` | Name of an existing secret key containing the Redis credentials      | `""`   |
-
-### Redis sub-chart parameters
-
-| Name                               | Description                                    | Value        |
-| ---------------------------------- | ---------------------------------------------- | ------------ |
-| `redis.enabled`                    | Deploy Redis subchart                          | `true`       |
-| `redis.architecture`               | Set Redis architecture                         | `standalone` |
-| `redis.existingSecret`             | Name of a secret containing redis credentials  | `""`         |
-| `redis.master.service.ports.redis` | Redis port                                     | `6379`       |
-| `redis.auth.enabled`               | Enable Redis auth                              | `true`       |
-| `redis.auth.password`              | Redis password                                 | `""`         |
-| `redis.auth.existingSecret`        | Name of a secret containing the Redis password | `""`         |
+| Name                                      | Description                                                                | Value            |
+| ----------------------------------------- | -------------------------------------------------------------------------- | ---------------- |
+| `redis.enabled`                           | Switch to enable or disable the Redis&reg; helm                            | `true`           |
+| `redis.auth.enabled`                      | Enable password authentication                                             | `false`          |
+| `redis.auth.password`                     | Redis&reg; password                                                        | `""`             |
+| `redis.auth.existingSecret`               | The name of an existing secret with Redis&reg; credentials                 | `""`             |
+| `redis.architecture`                      | Redis&reg; architecture. Allowed values: `standalone` or `replication`     | `standalone`     |
+| `externalRedis.host`                      | Redis&reg; host                                                            | `localhost`      |
+| `externalRedis.port`                      | Redis&reg; port number                                                     | `6379`           |
+| `externalRedis.password`                  | Redis&reg; password                                                        | `""`             |
+| `externalRedis.existingSecret`            | Name of an existing secret resource containing the Redis&trade credentials | `""`             |
+| `externalRedis.existingSecretPasswordKey` | Name of an existing secret key containing the Redis&trade credentials      | `redis-password` |
 
 ### MongoDB sub-chart parameters
 
