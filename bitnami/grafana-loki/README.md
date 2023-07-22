@@ -85,7 +85,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------- | ------------------------------------------------------------------------------------------------------------ | ----------------------- |
 | `loki.image.registry`                 | Grafana Loki image registry                                                                                  | `docker.io`             |
 | `loki.image.repository`               | Grafana Loki image repository                                                                                | `bitnami/grafana-loki`  |
-| `loki.image.tag`                      | Grafana Loki image tag (immutable tags are recommended)                                                      | `2.8.3-debian-11-r0`    |
+| `loki.image.tag`                      | Grafana Loki image tag (immutable tags are recommended)                                                      | `2.8.3-debian-11-r1`    |
 | `loki.image.digest`                   | Grafana Loki image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `loki.image.pullPolicy`               | Grafana Loki image pull policy                                                                               | `IfNotPresent`          |
 | `loki.image.pullSecrets`              | Grafana Loki image pull secrets                                                                              | `[]`                    |
@@ -973,7 +973,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `promtail.enabled`                               | Deploy promtail                                                                                                  | `true`               |
 | `promtail.image.registry`                        | Grafana Promtail image registry                                                                                  | `docker.io`          |
 | `promtail.image.repository`                      | Grafana Promtail image repository                                                                                | `bitnami/promtail`   |
-| `promtail.image.tag`                             | Grafana Promtail image tag (immutable tags are recommended)                                                      | `2.8.3-debian-11-r0` |
+| `promtail.image.tag`                             | Grafana Promtail image tag (immutable tags are recommended)                                                      | `2.8.3-debian-11-r1` |
 | `promtail.image.digest`                          | Grafana Promtail image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                 |
 | `promtail.image.pullPolicy`                      | Grafana Promtail image pull policy                                                                               | `IfNotPresent`       |
 | `promtail.image.pullSecrets`                     | Grafana Promtail image pull secrets                                                                              | `[]`                 |
