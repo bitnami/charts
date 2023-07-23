@@ -418,7 +418,7 @@ sidecars:
     imagePullPolicy: Always
     ports:
       - name: portname
-       containerPort: 1234
+        containerPort: 1234
 ```
 
 Similarly, you can add extra init containers using the `initContainers` parameter.
