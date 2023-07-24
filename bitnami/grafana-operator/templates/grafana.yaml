@@ -142,12 +142,19 @@ spec:
       tlsSecretName: {{ .Values.grafana.ingress.tlsSecret }}
       rules:
         {{- if .Values.grafana.ingress.host }}
-        host: {{ include "common.tplvalues.render" (dict "value" .Values.grafana.ingress.host "context" $) }}
-        {{- end }}
+        - host: {{ include "common.tplvalues.render" (dict "value" .Values.grafana.ingress.host "context" $) }}
+          http:
+        {{- else }}
         - http:
-          paths:
-            - path: {{ include "common.tplvalues.render" (dict "value" .Values.grafana.ingress.path "context" $) }}
-            - pathType: {{ include "common.tplvalues.render" (dict "value" .Values.grafana.ingress.pathType "context" $) }}
+        {{- end }}
+            paths:
+              - path: {{ include "common.tplvalues.render" (dict "value" .Values.grafana.ingress.path "context" $) }}
+                pathType: {{ include "common.tplvalues.render" (dict "value" .Values.grafana.ingress.pathType "context" $) }}
+                backend:
+                  service:
+                    name: {{ printf "%s-grafana-service" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+                    port:
+                      number: 3000
     {{- if or .Values.commonLabels .Values.grafana.ingress.labels .Values.grafana.labels }}
     labels:
       {{- if .Values.commonLabels }}
