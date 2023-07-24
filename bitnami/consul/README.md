@@ -85,7 +85,7 @@ helm delete --purge my-release
 | ------------------------------- | ---------------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`                | HashiCorp Consul image registry                                                                                  | `docker.io`           |
 | `image.repository`              | HashiCorp Consul image repository                                                                                | `bitnami/consul`      |
-| `image.tag`                     | HashiCorp Consul image tag (immutable tags are recommended)                                                      | `1.16.0-debian-11-r0` |
+| `image.tag`                     | HashiCorp Consul image tag (immutable tags are recommended)                                                      | `1.16.0-debian-11-r5` |
 | `image.digest`                  | HashiCorp Consul image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
 | `image.pullPolicy`              | HashiCorp Consul image pull policy                                                                               | `IfNotPresent`        |
 | `image.pullSecrets`             | HashiCorp Consul image pull secrets                                                                              | `[]`                  |
@@ -215,17 +215,17 @@ helm delete --purge my-release
 
 ### Volume Permissions parameters
 
-| Name                                   | Description                                                                                                   | Value                   |
-| -------------------------------------- | ------------------------------------------------------------------------------------------------------------- | ----------------------- |
-| `volumePermissions.enabled`            | Enable init container that changes the owner and group of the persistent volume                               | `false`                 |
-| `volumePermissions.image.registry`     | Bitnami Shell image registry                                                                                  | `docker.io`             |
-| `volumePermissions.image.repository`   | Bitnami Shell image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Bitnami Shell image tag (immutable tags are recommended)                                                      | `11-debian-11-r129`     |
-| `volumePermissions.image.digest`       | Bitnami Shell image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
-| `volumePermissions.image.pullPolicy`   | Bitnami Shell image pull policy                                                                               | `IfNotPresent`          |
-| `volumePermissions.image.pullSecrets`  | Bitnami Shell image pull secrets                                                                              | `[]`                    |
-| `volumePermissions.resources.limits`   | The resources limits for the container                                                                        | `{}`                    |
-| `volumePermissions.resources.requests` | The requested resources for the container                                                                     | `{}`                    |
+| Name                                   | Description                                                                                                        | Value              |
+| -------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | ------------------ |
+| `volumePermissions.enabled`            | Enable init container that changes the owner and group of the persistent volume                                    | `false`            |
+| `volumePermissions.image.registry`     | OS Shell + Utility image registry                                                                                  | `docker.io`        |
+| `volumePermissions.image.repository`   | OS Shell + Utility image repository                                                                                | `bitnami/os-shell` |
+| `volumePermissions.image.tag`          | OS Shell + Utility image tag (immutable tags are recommended)                                                      | `11-debian-11-r2`  |
+| `volumePermissions.image.digest`       | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`               |
+| `volumePermissions.image.pullPolicy`   | OS Shell + Utility image pull policy                                                                               | `IfNotPresent`     |
+| `volumePermissions.image.pullSecrets`  | OS Shell + Utility image pull secrets                                                                              | `[]`               |
+| `volumePermissions.resources.limits`   | The resources limits for the container                                                                             | `{}`               |
+| `volumePermissions.resources.requests` | The requested resources for the container                                                                          | `{}`               |
 
 ### Metrics parameters
 
@@ -234,7 +234,7 @@ helm delete --purge my-release
 | `metrics.enabled`                               | Start a side-car prometheus exporter                                                                                                 | `false`                   |
 | `metrics.image.registry`                        | HashiCorp Consul Prometheus Exporter image registry                                                                                  | `docker.io`               |
 | `metrics.image.repository`                      | HashiCorp Consul Prometheus Exporter image repository                                                                                | `bitnami/consul-exporter` |
-| `metrics.image.tag`                             | HashiCorp Consul Prometheus Exporter image tag (immutable tags are recommended)                                                      | `0.9.0-debian-11-r69`     |
+| `metrics.image.tag`                             | HashiCorp Consul Prometheus Exporter image tag (immutable tags are recommended)                                                      | `0.9.0-debian-11-r75`     |
 | `metrics.image.digest`                          | HashiCorp Consul Prometheus Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
 | `metrics.image.pullPolicy`                      | HashiCorp Consul Prometheus Exporter image pull policy                                                                               | `IfNotPresent`            |
 | `metrics.image.pullSecrets`                     | HashiCorp Consul Prometheus Exporter image pull secrets                                                                              | `[]`                      |

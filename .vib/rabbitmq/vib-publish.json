@@ -38,20 +38,6 @@
           }
         },
         {
-          "action_id": "cypress",
-          "params": {
-            "resources": {
-              "path": "/.vib/rabbitmq/cypress"
-            },
-            "endpoint": "lb-rabbitmq-http-stats",
-            "app_protocol": "HTTP",
-            "env": {
-              "username": "test_user",
-              "password": "ComplicatedPassword123!4"
-            }
-          }
-        },
-        {
           "action_id": "goss",
           "params": {
             "resources": {
@@ -63,6 +49,20 @@
               "pod": {
                 "workload": "sts-rabbitmq"
               }
+            }
+          }
+        },
+        {
+          "action_id": "cypress",
+          "params": {
+            "resources": {
+              "path": "/.vib/rabbitmq/cypress"
+            },
+            "endpoint": "lb-rabbitmq-http-stats",
+            "app_protocol": "HTTP",
+            "env": {
+              "username": "test_user",
+              "password": "ComplicatedPassword123!4"
             }
           }
         }

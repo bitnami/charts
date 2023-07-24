@@ -37,4 +37,4 @@ maintainers:
 name: wordpress
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/wordpress
-version: 16.1.25
+version: 16.1.33

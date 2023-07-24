@@ -96,7 +96,7 @@ Refer to the [chart documentation for more information on each of these architec
 | -------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`                 | MongoDB(&reg;) image registry                                                                                                                               | `docker.io`           |
 | `image.repository`               | MongoDB(&reg;) image registry                                                                                                                               | `bitnami/mongodb`     |
-| `image.tag`                      | MongoDB(&reg;) image tag (immutable tags are recommended)                                                                                                   | `6.0.7-debian-11-r0`  |
+| `image.tag`                      | MongoDB(&reg;) image tag (immutable tags are recommended)                                                                                                   | `6.0.8-debian-11-r0`  |
 | `image.digest`                   | MongoDB(&reg;) image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                              | `""`                  |
 | `image.pullPolicy`               | MongoDB(&reg;) image pull policy                                                                                                                            | `IfNotPresent`        |
 | `image.pullSecrets`              | Specify docker-registry secret names as an array                                                                                                            | `[]`                  |
@@ -127,7 +127,7 @@ Refer to the [chart documentation for more information on each of these architec
 | `tls.arbiter.existingSecret`     | Existing secret with TLS certificates (`tls.key`, `tls.crt`, `ca.crt`) or (`tls.key`, `tls.crt`) with tls.pemChainIncluded set as enabled.                  | `""`                  |
 | `tls.image.registry`             | Init container TLS certs setup image registry                                                                                                               | `docker.io`           |
 | `tls.image.repository`           | Init container TLS certs setup image repository                                                                                                             | `bitnami/nginx`       |
-| `tls.image.tag`                  | Init container TLS certs setup image tag (immutable tags are recommended)                                                                                   | `1.25.1-debian-11-r5` |
+| `tls.image.tag`                  | Init container TLS certs setup image tag (immutable tags are recommended)                                                                                   | `1.25.1-debian-11-r9` |
 | `tls.image.digest`               | Init container TLS certs setup image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                              | `""`                  |
 | `tls.image.pullPolicy`           | Init container TLS certs setup image pull policy                                                                                                            | `IfNotPresent`        |
 | `tls.image.pullSecrets`          | Init container TLS certs specify docker-registry secret names as an array                                                                                   | `[]`                  |
@@ -164,129 +164,133 @@ Refer to the [chart documentation for more information on each of these architec
 
 ### MongoDB(&reg;) statefulset parameters
 
-| Name                                    | Description                                                                                                     | Value           |
-| --------------------------------------- | --------------------------------------------------------------------------------------------------------------- | --------------- |
-| `annotations`                           | Additional labels to be added to the MongoDB(&reg;) statefulset. Evaluated as a template                        | `{}`            |
-| `labels`                                | Annotations to be added to the MongoDB(&reg;) statefulset. Evaluated as a template                              | `{}`            |
-| `replicaCount`                          | Number of MongoDB(&reg;) nodes (only when `architecture=replicaset`)                                            | `2`             |
-| `updateStrategy.type`                   | Strategy to use to replace existing MongoDB(&reg;) pods. When architecture=standalone and useStatefulSet=false, | `RollingUpdate` |
-| `podManagementPolicy`                   | Pod management policy for MongoDB(&reg;)                                                                        | `OrderedReady`  |
-| `podAffinityPreset`                     | MongoDB(&reg;) Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`              | `""`            |
-| `podAntiAffinityPreset`                 | MongoDB(&reg;) Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`         | `soft`          |
-| `nodeAffinityPreset.type`               | MongoDB(&reg;) Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`        | `""`            |
-| `nodeAffinityPreset.key`                | MongoDB(&reg;) Node label key to match Ignored if `affinity` is set.                                            | `""`            |
-| `nodeAffinityPreset.values`             | MongoDB(&reg;) Node label values to match. Ignored if `affinity` is set.                                        | `[]`            |
-| `affinity`                              | MongoDB(&reg;) Affinity for pod assignment                                                                      | `{}`            |
-| `nodeSelector`                          | MongoDB(&reg;) Node labels for pod assignment                                                                   | `{}`            |
-| `tolerations`                           | MongoDB(&reg;) Tolerations for pod assignment                                                                   | `[]`            |
-| `topologySpreadConstraints`             | MongoDB(&reg;) Spread Constraints for Pods                                                                      | `[]`            |
-| `lifecycleHooks`                        | LifecycleHook for the MongoDB(&reg;) container(s) to automate configuration before or after startup             | `{}`            |
-| `terminationGracePeriodSeconds`         | MongoDB(&reg;) Termination Grace Period                                                                         | `""`            |
-| `podLabels`                             | MongoDB(&reg;) pod labels                                                                                       | `{}`            |
-| `podAnnotations`                        | MongoDB(&reg;) Pod annotations                                                                                  | `{}`            |
-| `priorityClassName`                     | Name of the existing priority class to be used by MongoDB(&reg;) pod(s)                                         | `""`            |
-| `runtimeClassName`                      | Name of the runtime class to be used by MongoDB(&reg;) pod(s)                                                   | `""`            |
-| `podSecurityContext.enabled`            | Enable MongoDB(&reg;) pod(s)' Security Context                                                                  | `true`          |
-| `podSecurityContext.fsGroup`            | Group ID for the volumes of the MongoDB(&reg;) pod(s)                                                           | `1001`          |
-| `podSecurityContext.sysctls`            | sysctl settings of the MongoDB(&reg;) pod(s)'                                                                   | `[]`            |
-| `containerSecurityContext.enabled`      | Enable MongoDB(&reg;) container(s)' Security Context                                                            | `true`          |
-| `containerSecurityContext.runAsUser`    | User ID for the MongoDB(&reg;) container                                                                        | `1001`          |
-| `containerSecurityContext.runAsNonRoot` | Set MongoDB(&reg;) container's Security Context runAsNonRoot                                                    | `true`          |
-| `resources.limits`                      | The resources limits for MongoDB(&reg;) containers                                                              | `{}`            |
-| `resources.requests`                    | The requested resources for MongoDB(&reg;) containers                                                           | `{}`            |
-| `containerPorts.mongodb`                | MongoDB(&reg;) container port                                                                                   | `27017`         |
-| `livenessProbe.enabled`                 | Enable livenessProbe                                                                                            | `true`          |
-| `livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                         | `30`            |
-| `livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                                | `20`            |
-| `livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                               | `10`            |
-| `livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                             | `6`             |
-| `livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                             | `1`             |
-| `readinessProbe.enabled`                | Enable readinessProbe                                                                                           | `true`          |
-| `readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                        | `5`             |
-| `readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                               | `10`            |
-| `readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                              | `5`             |
-| `readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                            | `6`             |
-| `readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                            | `1`             |
-| `startupProbe.enabled`                  | Enable startupProbe                                                                                             | `false`         |
-| `startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                          | `5`             |
-| `startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                                 | `20`            |
-| `startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                                | `10`            |
-| `startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                              | `30`            |
-| `startupProbe.successThreshold`         | Success threshold for startupProbe                                                                              | `1`             |
-| `customLivenessProbe`                   | Override default liveness probe for MongoDB(&reg;) containers                                                   | `{}`            |
-| `customReadinessProbe`                  | Override default readiness probe for MongoDB(&reg;) containers                                                  | `{}`            |
-| `customStartupProbe`                    | Override default startup probe for MongoDB(&reg;) containers                                                    | `{}`            |
-| `initContainers`                        | Add additional init containers for the hidden node pod(s)                                                       | `[]`            |
-| `sidecars`                              | Add additional sidecar containers for the MongoDB(&reg;) pod(s)                                                 | `[]`            |
-| `extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the MongoDB(&reg;) container(s)                    | `[]`            |
-| `extraVolumes`                          | Optionally specify extra list of additional volumes to the MongoDB(&reg;) statefulset                           | `[]`            |
-| `pdb.create`                            | Enable/disable a Pod Disruption Budget creation for MongoDB(&reg;) pod(s)                                       | `false`         |
-| `pdb.minAvailable`                      | Minimum number/percentage of MongoDB(&reg;) pods that must still be available after the eviction                | `1`             |
-| `pdb.maxUnavailable`                    | Maximum number/percentage of MongoDB(&reg;) pods that may be made unavailable after the eviction                | `""`            |
+| Name                                                | Description                                                                                                     | Value            |
+| --------------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | ---------------- |
+| `annotations`                                       | Additional labels to be added to the MongoDB(&reg;) statefulset. Evaluated as a template                        | `{}`             |
+| `labels`                                            | Annotations to be added to the MongoDB(&reg;) statefulset. Evaluated as a template                              | `{}`             |
+| `replicaCount`                                      | Number of MongoDB(&reg;) nodes (only when `architecture=replicaset`)                                            | `2`              |
+| `updateStrategy.type`                               | Strategy to use to replace existing MongoDB(&reg;) pods. When architecture=standalone and useStatefulSet=false, | `RollingUpdate`  |
+| `podManagementPolicy`                               | Pod management policy for MongoDB(&reg;)                                                                        | `OrderedReady`   |
+| `podAffinityPreset`                                 | MongoDB(&reg;) Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`              | `""`             |
+| `podAntiAffinityPreset`                             | MongoDB(&reg;) Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`         | `soft`           |
+| `nodeAffinityPreset.type`                           | MongoDB(&reg;) Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`        | `""`             |
+| `nodeAffinityPreset.key`                            | MongoDB(&reg;) Node label key to match Ignored if `affinity` is set.                                            | `""`             |
+| `nodeAffinityPreset.values`                         | MongoDB(&reg;) Node label values to match. Ignored if `affinity` is set.                                        | `[]`             |
+| `affinity`                                          | MongoDB(&reg;) Affinity for pod assignment                                                                      | `{}`             |
+| `nodeSelector`                                      | MongoDB(&reg;) Node labels for pod assignment                                                                   | `{}`             |
+| `tolerations`                                       | MongoDB(&reg;) Tolerations for pod assignment                                                                   | `[]`             |
+| `topologySpreadConstraints`                         | MongoDB(&reg;) Spread Constraints for Pods                                                                      | `[]`             |
+| `lifecycleHooks`                                    | LifecycleHook for the MongoDB(&reg;) container(s) to automate configuration before or after startup             | `{}`             |
+| `terminationGracePeriodSeconds`                     | MongoDB(&reg;) Termination Grace Period                                                                         | `""`             |
+| `podLabels`                                         | MongoDB(&reg;) pod labels                                                                                       | `{}`             |
+| `podAnnotations`                                    | MongoDB(&reg;) Pod annotations                                                                                  | `{}`             |
+| `priorityClassName`                                 | Name of the existing priority class to be used by MongoDB(&reg;) pod(s)                                         | `""`             |
+| `runtimeClassName`                                  | Name of the runtime class to be used by MongoDB(&reg;) pod(s)                                                   | `""`             |
+| `podSecurityContext.enabled`                        | Enable MongoDB(&reg;) pod(s)' Security Context                                                                  | `true`           |
+| `podSecurityContext.fsGroup`                        | Group ID for the volumes of the MongoDB(&reg;) pod(s)                                                           | `1001`           |
+| `podSecurityContext.sysctls`                        | sysctl settings of the MongoDB(&reg;) pod(s)'                                                                   | `[]`             |
+| `containerSecurityContext.enabled`                  | Enable MongoDB(&reg;) container(s)' Security Context                                                            | `true`           |
+| `containerSecurityContext.runAsUser`                | User ID for the MongoDB(&reg;) container                                                                        | `1001`           |
+| `containerSecurityContext.runAsGroup`               | Group ID for the MongoDB(&reg;) container                                                                       | `0`              |
+| `containerSecurityContext.runAsNonRoot`             | Set MongoDB(&reg;) container's Security Context runAsNonRoot                                                    | `true`           |
+| `containerSecurityContext.allowPrivilegeEscalation` | Is it possible to escalate MongoDB(&reg;) pod(s) privileges                                                     | `false`          |
+| `containerSecurityContext.seccompProfile.type`      | Set MongoDB(&reg;) container's Security Context seccompProfile type                                             | `RuntimeDefault` |
+| `containerSecurityContext.capabilities.drop`        | Set MongoDB(&reg;) container's Security Context capabilities to drop                                            | `["ALL"]`        |
+| `resources.limits`                                  | The resources limits for MongoDB(&reg;) containers                                                              | `{}`             |
+| `resources.requests`                                | The requested resources for MongoDB(&reg;) containers                                                           | `{}`             |
+| `containerPorts.mongodb`                            | MongoDB(&reg;) container port                                                                                   | `27017`          |
+| `livenessProbe.enabled`                             | Enable livenessProbe                                                                                            | `true`           |
+| `livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                         | `30`             |
+| `livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                | `20`             |
+| `livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                               | `10`             |
+| `livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                             | `6`              |
+| `livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                             | `1`              |
+| `readinessProbe.enabled`                            | Enable readinessProbe                                                                                           | `true`           |
+| `readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                        | `5`              |
+| `readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                               | `10`             |
+| `readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                              | `5`              |
+| `readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                            | `6`              |
+| `readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                            | `1`              |
+| `startupProbe.enabled`                              | Enable startupProbe                                                                                             | `false`          |
+| `startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                                          | `5`              |
+| `startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                                 | `20`             |
+| `startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                                                | `10`             |
+| `startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                              | `30`             |
+| `startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                              | `1`              |
+| `customLivenessProbe`                               | Override default liveness probe for MongoDB(&reg;) containers                                                   | `{}`             |
+| `customReadinessProbe`                              | Override default readiness probe for MongoDB(&reg;) containers                                                  | `{}`             |
+| `customStartupProbe`                                | Override default startup probe for MongoDB(&reg;) containers                                                    | `{}`             |
+| `initContainers`                                    | Add additional init containers for the hidden node pod(s)                                                       | `[]`             |
+| `sidecars`                                          | Add additional sidecar containers for the MongoDB(&reg;) pod(s)                                                 | `[]`             |
+| `extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the MongoDB(&reg;) container(s)                    | `[]`             |
+| `extraVolumes`                                      | Optionally specify extra list of additional volumes to the MongoDB(&reg;) statefulset                           | `[]`             |
+| `pdb.create`                                        | Enable/disable a Pod Disruption Budget creation for MongoDB(&reg;) pod(s)                                       | `false`          |
+| `pdb.minAvailable`                                  | Minimum number/percentage of MongoDB(&reg;) pods that must still be available after the eviction                | `1`              |
+| `pdb.maxUnavailable`                                | Maximum number/percentage of MongoDB(&reg;) pods that may be made unavailable after the eviction                | `""`             |
 
 ### Traffic exposure parameters
 
-| Name                                                          | Description                                                                                                                                     | Value                  |
-| ------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
-| `service.nameOverride`                                        | MongoDB(&reg;) service name                                                                                                                     | `""`                   |
-| `service.type`                                                | Kubernetes Service type (only for standalone architecture)                                                                                      | `ClusterIP`            |
-| `service.portName`                                            | MongoDB(&reg;) service port name (only for standalone architecture)                                                                             | `mongodb`              |
-| `service.ports.mongodb`                                       | MongoDB(&reg;) service port.                                                                                                                    | `27017`                |
-| `service.nodePorts.mongodb`                                   | Port to bind to for NodePort and LoadBalancer service types (only for standalone architecture)                                                  | `""`                   |
-| `service.clusterIP`                                           | MongoDB(&reg;) service cluster IP (only for standalone architecture)                                                                            | `""`                   |
-| `service.externalIPs`                                         | Specify the externalIP value ClusterIP service type (only for standalone architecture)                                                          | `[]`                   |
-| `service.loadBalancerIP`                                      | loadBalancerIP for MongoDB(&reg;) Service (only for standalone architecture)                                                                    | `""`                   |
-| `service.loadBalancerClass`                                   | loadBalancerClass for MongoDB(&reg;) Service (only for standalone architecture)                                                                 | `""`                   |
-| `service.loadBalancerSourceRanges`                            | Address(es) that are allowed when service is LoadBalancer (only for standalone architecture)                                                    | `[]`                   |
-| `service.allocateLoadBalancerNodePorts`                       | Wheter to allocate node ports when service type is LoadBalancer                                                                                 | `true`                 |
-| `service.extraPorts`                                          | Extra ports to expose (normally used with the `sidecar` value)                                                                                  | `[]`                   |
-| `service.annotations`                                         | Provide any additional annotations that may be required                                                                                         | `{}`                   |
-| `service.externalTrafficPolicy`                               | service external traffic policy (only for standalone architecture)                                                                              | `Local`                |
-| `service.sessionAffinity`                                     | Control where client requests go, to the same pod or round-robin                                                                                | `None`                 |
-| `service.sessionAffinityConfig`                               | Additional settings for the sessionAffinity                                                                                                     | `{}`                   |
-| `service.headless.annotations`                                | Annotations for the headless service.                                                                                                           | `{}`                   |
-| `externalAccess.enabled`                                      | Enable Kubernetes external cluster access to MongoDB(&reg;) nodes (only for replicaset architecture)                                            | `false`                |
-| `externalAccess.autoDiscovery.enabled`                        | Enable using an init container to auto-detect external IPs by querying the K8s API                                                              | `false`                |
-| `externalAccess.autoDiscovery.image.registry`                 | Init container auto-discovery image registry                                                                                                    | `docker.io`            |
-| `externalAccess.autoDiscovery.image.repository`               | Init container auto-discovery image repository                                                                                                  | `bitnami/kubectl`      |
-| `externalAccess.autoDiscovery.image.tag`                      | Init container auto-discovery image tag (immutable tags are recommended)                                                                        | `1.25.11-debian-11-r5` |
-| `externalAccess.autoDiscovery.image.digest`                   | Init container auto-discovery image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                   | `""`                   |
-| `externalAccess.autoDiscovery.image.pullPolicy`               | Init container auto-discovery image pull policy                                                                                                 | `IfNotPresent`         |
-| `externalAccess.autoDiscovery.image.pullSecrets`              | Init container auto-discovery image pull secrets                                                                                                | `[]`                   |
-| `externalAccess.autoDiscovery.resources.limits`               | Init container auto-discovery resource limits                                                                                                   | `{}`                   |
-| `externalAccess.autoDiscovery.resources.requests`             | Init container auto-discovery resource requests                                                                                                 | `{}`                   |
-| `externalAccess.externalMaster.enabled`                       | Use external master for bootstrapping                                                                                                           | `false`                |
-| `externalAccess.externalMaster.host`                          | External master host to bootstrap from                                                                                                          | `""`                   |
-| `externalAccess.externalMaster.port`                          | Port for MongoDB(&reg;) service external master host                                                                                            | `27017`                |
-| `externalAccess.service.type`                                 | Kubernetes Service type for external access. Allowed values: NodePort, LoadBalancer or ClusterIP                                                | `LoadBalancer`         |
-| `externalAccess.service.portName`                             | MongoDB(&reg;) port name used for external access when service type is LoadBalancer                                                             | `mongodb`              |
-| `externalAccess.service.ports.mongodb`                        | MongoDB(&reg;) port used for external access when service type is LoadBalancer                                                                  | `27017`                |
-| `externalAccess.service.loadBalancerIPs`                      | Array of load balancer IPs for MongoDB(&reg;) nodes                                                                                             | `[]`                   |
-| `externalAccess.service.loadBalancerClass`                    | loadBalancerClass when service type is LoadBalancer                                                                                             | `""`                   |
-| `externalAccess.service.loadBalancerSourceRanges`             | Address(es) that are allowed when service is LoadBalancer                                                                                       | `[]`                   |
-| `externalAccess.service.allocateLoadBalancerNodePorts`        | Wheter to allocate node ports when service type is LoadBalancer                                                                                 | `true`                 |
-| `externalAccess.service.externalTrafficPolicy`                | MongoDB(&reg;) service external traffic policy                                                                                                  | `Local`                |
-| `externalAccess.service.nodePorts`                            | Array of node ports used to configure MongoDB(&reg;) advertised hostname when service type is NodePort                                          | `[]`                   |
-| `externalAccess.service.domain`                               | Domain or external IP used to configure MongoDB(&reg;) advertised hostname when service type is NodePort                                        | `""`                   |
-| `externalAccess.service.extraPorts`                           | Extra ports to expose (normally used with the `sidecar` value)                                                                                  | `[]`                   |
-| `externalAccess.service.annotations`                          | Service annotations for external access                                                                                                         | `{}`                   |
-| `externalAccess.service.sessionAffinity`                      | Control where client requests go, to the same pod or round-robin                                                                                | `None`                 |
-| `externalAccess.service.sessionAffinityConfig`                | Additional settings for the sessionAffinity                                                                                                     | `{}`                   |
-| `externalAccess.hidden.enabled`                               | Enable Kubernetes external cluster access to MongoDB(&reg;) hidden nodes                                                                        | `false`                |
-| `externalAccess.hidden.service.type`                          | Kubernetes Service type for external access. Allowed values: NodePort or LoadBalancer                                                           | `LoadBalancer`         |
-| `externalAccess.hidden.service.portName`                      | MongoDB(&reg;) port name used for external access when service type is LoadBalancer                                                             | `mongodb`              |
-| `externalAccess.hidden.service.ports.mongodb`                 | MongoDB(&reg;) port used for external access when service type is LoadBalancer                                                                  | `27017`                |
-| `externalAccess.hidden.service.loadBalancerIPs`               | Array of load balancer IPs for MongoDB(&reg;) nodes                                                                                             | `[]`                   |
-| `externalAccess.hidden.service.loadBalancerClass`             | loadBalancerClass when service type is LoadBalancer                                                                                             | `""`                   |
-| `externalAccess.hidden.service.loadBalancerSourceRanges`      | Address(es) that are allowed when service is LoadBalancer                                                                                       | `[]`                   |
-| `externalAccess.hidden.service.allocateLoadBalancerNodePorts` | Wheter to allocate node ports when service type is LoadBalancer                                                                                 | `true`                 |
-| `externalAccess.hidden.service.externalTrafficPolicy`         | MongoDB(&reg;) service external traffic policy                                                                                                  | `Local`                |
-| `externalAccess.hidden.service.nodePorts`                     | Array of node ports used to configure MongoDB(&reg;) advertised hostname when service type is NodePort. Length must be the same as replicaCount | `[]`                   |
-| `externalAccess.hidden.service.domain`                        | Domain or external IP used to configure MongoDB(&reg;) advertised hostname when service type is NodePort                                        | `""`                   |
-| `externalAccess.hidden.service.extraPorts`                    | Extra ports to expose (normally used with the `sidecar` value)                                                                                  | `[]`                   |
-| `externalAccess.hidden.service.annotations`                   | Service annotations for external access                                                                                                         | `{}`                   |
-| `externalAccess.hidden.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin                                                                                | `None`                 |
-| `externalAccess.hidden.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                                                                     | `{}`                   |
+| Name                                                          | Description                                                                                                                                     | Value                   |
+| ------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
+| `service.nameOverride`                                        | MongoDB(&reg;) service name                                                                                                                     | `""`                    |
+| `service.type`                                                | Kubernetes Service type (only for standalone architecture)                                                                                      | `ClusterIP`             |
+| `service.portName`                                            | MongoDB(&reg;) service port name (only for standalone architecture)                                                                             | `mongodb`               |
+| `service.ports.mongodb`                                       | MongoDB(&reg;) service port.                                                                                                                    | `27017`                 |
+| `service.nodePorts.mongodb`                                   | Port to bind to for NodePort and LoadBalancer service types (only for standalone architecture)                                                  | `""`                    |
+| `service.clusterIP`                                           | MongoDB(&reg;) service cluster IP (only for standalone architecture)                                                                            | `""`                    |
+| `service.externalIPs`                                         | Specify the externalIP value ClusterIP service type (only for standalone architecture)                                                          | `[]`                    |
+| `service.loadBalancerIP`                                      | loadBalancerIP for MongoDB(&reg;) Service (only for standalone architecture)                                                                    | `""`                    |
+| `service.loadBalancerClass`                                   | loadBalancerClass for MongoDB(&reg;) Service (only for standalone architecture)                                                                 | `""`                    |
+| `service.loadBalancerSourceRanges`                            | Address(es) that are allowed when service is LoadBalancer (only for standalone architecture)                                                    | `[]`                    |
+| `service.allocateLoadBalancerNodePorts`                       | Wheter to allocate node ports when service type is LoadBalancer                                                                                 | `true`                  |
+| `service.extraPorts`                                          | Extra ports to expose (normally used with the `sidecar` value)                                                                                  | `[]`                    |
+| `service.annotations`                                         | Provide any additional annotations that may be required                                                                                         | `{}`                    |
+| `service.externalTrafficPolicy`                               | service external traffic policy (only for standalone architecture)                                                                              | `Local`                 |
+| `service.sessionAffinity`                                     | Control where client requests go, to the same pod or round-robin                                                                                | `None`                  |
+| `service.sessionAffinityConfig`                               | Additional settings for the sessionAffinity                                                                                                     | `{}`                    |
+| `service.headless.annotations`                                | Annotations for the headless service.                                                                                                           | `{}`                    |
+| `externalAccess.enabled`                                      | Enable Kubernetes external cluster access to MongoDB(&reg;) nodes (only for replicaset architecture)                                            | `false`                 |
+| `externalAccess.autoDiscovery.enabled`                        | Enable using an init container to auto-detect external IPs by querying the K8s API                                                              | `false`                 |
+| `externalAccess.autoDiscovery.image.registry`                 | Init container auto-discovery image registry                                                                                                    | `docker.io`             |
+| `externalAccess.autoDiscovery.image.repository`               | Init container auto-discovery image repository                                                                                                  | `bitnami/kubectl`       |
+| `externalAccess.autoDiscovery.image.tag`                      | Init container auto-discovery image tag (immutable tags are recommended)                                                                        | `1.25.11-debian-11-r10` |
+| `externalAccess.autoDiscovery.image.digest`                   | Init container auto-discovery image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                   | `""`                    |
+| `externalAccess.autoDiscovery.image.pullPolicy`               | Init container auto-discovery image pull policy                                                                                                 | `IfNotPresent`          |
+| `externalAccess.autoDiscovery.image.pullSecrets`              | Init container auto-discovery image pull secrets                                                                                                | `[]`                    |
+| `externalAccess.autoDiscovery.resources.limits`               | Init container auto-discovery resource limits                                                                                                   | `{}`                    |
+| `externalAccess.autoDiscovery.resources.requests`             | Init container auto-discovery resource requests                                                                                                 | `{}`                    |
+| `externalAccess.externalMaster.enabled`                       | Use external master for bootstrapping                                                                                                           | `false`                 |
+| `externalAccess.externalMaster.host`                          | External master host to bootstrap from                                                                                                          | `""`                    |
+| `externalAccess.externalMaster.port`                          | Port for MongoDB(&reg;) service external master host                                                                                            | `27017`                 |
+| `externalAccess.service.type`                                 | Kubernetes Service type for external access. Allowed values: NodePort, LoadBalancer or ClusterIP                                                | `LoadBalancer`          |
+| `externalAccess.service.portName`                             | MongoDB(&reg;) port name used for external access when service type is LoadBalancer                                                             | `mongodb`               |
+| `externalAccess.service.ports.mongodb`                        | MongoDB(&reg;) port used for external access when service type is LoadBalancer                                                                  | `27017`                 |
+| `externalAccess.service.loadBalancerIPs`                      | Array of load balancer IPs for MongoDB(&reg;) nodes                                                                                             | `[]`                    |
+| `externalAccess.service.loadBalancerClass`                    | loadBalancerClass when service type is LoadBalancer                                                                                             | `""`                    |
+| `externalAccess.service.loadBalancerSourceRanges`             | Address(es) that are allowed when service is LoadBalancer                                                                                       | `[]`                    |
+| `externalAccess.service.allocateLoadBalancerNodePorts`        | Wheter to allocate node ports when service type is LoadBalancer                                                                                 | `true`                  |
+| `externalAccess.service.externalTrafficPolicy`                | MongoDB(&reg;) service external traffic policy                                                                                                  | `Local`                 |
+| `externalAccess.service.nodePorts`                            | Array of node ports used to configure MongoDB(&reg;) advertised hostname when service type is NodePort                                          | `[]`                    |
+| `externalAccess.service.domain`                               | Domain or external IP used to configure MongoDB(&reg;) advertised hostname when service type is NodePort                                        | `""`                    |
+| `externalAccess.service.extraPorts`                           | Extra ports to expose (normally used with the `sidecar` value)                                                                                  | `[]`                    |
+| `externalAccess.service.annotations`                          | Service annotations for external access                                                                                                         | `{}`                    |
+| `externalAccess.service.sessionAffinity`                      | Control where client requests go, to the same pod or round-robin                                                                                | `None`                  |
+| `externalAccess.service.sessionAffinityConfig`                | Additional settings for the sessionAffinity                                                                                                     | `{}`                    |
+| `externalAccess.hidden.enabled`                               | Enable Kubernetes external cluster access to MongoDB(&reg;) hidden nodes                                                                        | `false`                 |
+| `externalAccess.hidden.service.type`                          | Kubernetes Service type for external access. Allowed values: NodePort or LoadBalancer                                                           | `LoadBalancer`          |
+| `externalAccess.hidden.service.portName`                      | MongoDB(&reg;) port name used for external access when service type is LoadBalancer                                                             | `mongodb`               |
+| `externalAccess.hidden.service.ports.mongodb`                 | MongoDB(&reg;) port used for external access when service type is LoadBalancer                                                                  | `27017`                 |
+| `externalAccess.hidden.service.loadBalancerIPs`               | Array of load balancer IPs for MongoDB(&reg;) nodes                                                                                             | `[]`                    |
+| `externalAccess.hidden.service.loadBalancerClass`             | loadBalancerClass when service type is LoadBalancer                                                                                             | `""`                    |
+| `externalAccess.hidden.service.loadBalancerSourceRanges`      | Address(es) that are allowed when service is LoadBalancer                                                                                       | `[]`                    |
+| `externalAccess.hidden.service.allocateLoadBalancerNodePorts` | Wheter to allocate node ports when service type is LoadBalancer                                                                                 | `true`                  |
+| `externalAccess.hidden.service.externalTrafficPolicy`         | MongoDB(&reg;) service external traffic policy                                                                                                  | `Local`                 |
+| `externalAccess.hidden.service.nodePorts`                     | Array of node ports used to configure MongoDB(&reg;) advertised hostname when service type is NodePort. Length must be the same as replicaCount | `[]`                    |
+| `externalAccess.hidden.service.domain`                        | Domain or external IP used to configure MongoDB(&reg;) advertised hostname when service type is NodePort                                        | `""`                    |
+| `externalAccess.hidden.service.extraPorts`                    | Extra ports to expose (normally used with the `sidecar` value)                                                                                  | `[]`                    |
+| `externalAccess.hidden.service.annotations`                   | Service annotations for external access                                                                                                         | `{}`                    |
+| `externalAccess.hidden.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin                                                                                | `None`                  |
+| `externalAccess.hidden.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                                                                     | `{}`                    |
 
 ### Persistence parameters
 
@@ -323,184 +327,192 @@ Refer to the [chart documentation for more information on each of these architec
 
 ### Volume Permissions parameters
 
-| Name                                          | Description                                                                                                                       | Value                   |
-| --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
-| `volumePermissions.enabled`                   | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup`              | `false`                 |
-| `volumePermissions.image.registry`            | Init container volume-permissions image registry                                                                                  | `docker.io`             |
-| `volumePermissions.image.repository`          | Init container volume-permissions image repository                                                                                | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`                 | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r131`     |
-| `volumePermissions.image.digest`              | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
-| `volumePermissions.image.pullPolicy`          | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`          |
-| `volumePermissions.image.pullSecrets`         | Specify docker-registry secret names as an array                                                                                  | `[]`                    |
-| `volumePermissions.resources.limits`          | Init container volume-permissions resource limits                                                                                 | `{}`                    |
-| `volumePermissions.resources.requests`        | Init container volume-permissions resource requests                                                                               | `{}`                    |
-| `volumePermissions.securityContext.runAsUser` | User ID for the volumePermissions container                                                                                       | `0`                     |
+| Name                                          | Description                                                                                                                       | Value              |
+| --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ------------------ |
+| `volumePermissions.enabled`                   | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup`              | `false`            |
+| `volumePermissions.image.registry`            | Init container volume-permissions image registry                                                                                  | `docker.io`        |
+| `volumePermissions.image.repository`          | Init container volume-permissions image repository                                                                                | `bitnami/os-shell` |
+| `volumePermissions.image.tag`                 | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r2`  |
+| `volumePermissions.image.digest`              | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`               |
+| `volumePermissions.image.pullPolicy`          | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`     |
+| `volumePermissions.image.pullSecrets`         | Specify docker-registry secret names as an array                                                                                  | `[]`               |
+| `volumePermissions.resources.limits`          | Init container volume-permissions resource limits                                                                                 | `{}`               |
+| `volumePermissions.resources.requests`        | Init container volume-permissions resource requests                                                                               | `{}`               |
+| `volumePermissions.securityContext.runAsUser` | User ID for the volumePermissions container                                                                                       | `0`                |
 
 ### Arbiter parameters
 
-| Name                                            | Description                                                                                       | Value           |
-| ----------------------------------------------- | ------------------------------------------------------------------------------------------------- | --------------- |
-| `arbiter.enabled`                               | Enable deploying the arbiter                                                                      | `true`          |
-| `arbiter.hostAliases`                           | Add deployment host aliases                                                                       | `[]`            |
-| `arbiter.configuration`                         | Arbiter configuration file to be used                                                             | `""`            |
-| `arbiter.existingConfigmap`                     | Name of existing ConfigMap with Arbiter configuration                                             | `""`            |
-| `arbiter.command`                               | Override default container command (useful when using custom images)                              | `[]`            |
-| `arbiter.args`                                  | Override default container args (useful when using custom images)                                 | `[]`            |
-| `arbiter.extraFlags`                            | Arbiter additional command line flags                                                             | `[]`            |
-| `arbiter.extraEnvVars`                          | Extra environment variables to add to Arbiter pods                                                | `[]`            |
-| `arbiter.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars                                              | `""`            |
-| `arbiter.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars (in case of sensitive data)                     | `""`            |
-| `arbiter.annotations`                           | Additional labels to be added to the Arbiter statefulset                                          | `{}`            |
-| `arbiter.labels`                                | Annotations to be added to the Arbiter statefulset                                                | `{}`            |
-| `arbiter.topologySpreadConstraints`             | MongoDB(&reg;) Spread Constraints for arbiter Pods                                                | `[]`            |
-| `arbiter.lifecycleHooks`                        | LifecycleHook for the Arbiter container to automate configuration before or after startup         | `{}`            |
-| `arbiter.terminationGracePeriodSeconds`         | Arbiter Termination Grace Period                                                                  | `""`            |
-| `arbiter.updateStrategy.type`                   | Strategy that will be employed to update Pods in the StatefulSet                                  | `RollingUpdate` |
-| `arbiter.podManagementPolicy`                   | Pod management policy for MongoDB(&reg;)                                                          | `OrderedReady`  |
-| `arbiter.schedulerName`                         | Name of the scheduler (other than default) to dispatch pods                                       | `""`            |
-| `arbiter.podAffinityPreset`                     | Arbiter Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`            |
-| `arbiter.podAntiAffinityPreset`                 | Arbiter Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`          |
-| `arbiter.nodeAffinityPreset.type`               | Arbiter Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`            |
-| `arbiter.nodeAffinityPreset.key`                | Arbiter Node label key to match Ignored if `affinity` is set.                                     | `""`            |
-| `arbiter.nodeAffinityPreset.values`             | Arbiter Node label values to match. Ignored if `affinity` is set.                                 | `[]`            |
-| `arbiter.affinity`                              | Arbiter Affinity for pod assignment                                                               | `{}`            |
-| `arbiter.nodeSelector`                          | Arbiter Node labels for pod assignment                                                            | `{}`            |
-| `arbiter.tolerations`                           | Arbiter Tolerations for pod assignment                                                            | `[]`            |
-| `arbiter.podLabels`                             | Arbiter pod labels                                                                                | `{}`            |
-| `arbiter.podAnnotations`                        | Arbiter Pod annotations                                                                           | `{}`            |
-| `arbiter.priorityClassName`                     | Name of the existing priority class to be used by Arbiter pod(s)                                  | `""`            |
-| `arbiter.runtimeClassName`                      | Name of the runtime class to be used by Arbiter pod(s)                                            | `""`            |
-| `arbiter.podSecurityContext.enabled`            | Enable Arbiter pod(s)' Security Context                                                           | `true`          |
-| `arbiter.podSecurityContext.fsGroup`            | Group ID for the volumes of the Arbiter pod(s)                                                    | `1001`          |
-| `arbiter.podSecurityContext.sysctls`            | sysctl settings of the Arbiter pod(s)'                                                            | `[]`            |
-| `arbiter.containerSecurityContext.enabled`      | Enable Arbiter container(s)' Security Context                                                     | `true`          |
-| `arbiter.containerSecurityContext.runAsUser`    | User ID for the Arbiter container                                                                 | `1001`          |
-| `arbiter.containerSecurityContext.runAsNonRoot` | Set Arbiter containers' Security Context runAsNonRoot                                             | `true`          |
-| `arbiter.resources.limits`                      | The resources limits for Arbiter containers                                                       | `{}`            |
-| `arbiter.resources.requests`                    | The requested resources for Arbiter containers                                                    | `{}`            |
-| `arbiter.containerPorts.mongodb`                | MongoDB(&reg;) arbiter container port                                                             | `27017`         |
-| `arbiter.livenessProbe.enabled`                 | Enable livenessProbe                                                                              | `true`          |
-| `arbiter.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                           | `30`            |
-| `arbiter.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                  | `20`            |
-| `arbiter.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                 | `10`            |
-| `arbiter.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                               | `6`             |
-| `arbiter.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                               | `1`             |
-| `arbiter.readinessProbe.enabled`                | Enable readinessProbe                                                                             | `true`          |
-| `arbiter.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                          | `5`             |
-| `arbiter.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                 | `20`            |
-| `arbiter.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                | `10`            |
-| `arbiter.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                              | `6`             |
-| `arbiter.readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                              | `1`             |
-| `arbiter.startupProbe.enabled`                  | Enable startupProbe                                                                               | `false`         |
-| `arbiter.startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                            | `5`             |
-| `arbiter.startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                   | `10`            |
-| `arbiter.startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                  | `5`             |
-| `arbiter.startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                | `30`            |
-| `arbiter.startupProbe.successThreshold`         | Success threshold for startupProbe                                                                | `1`             |
-| `arbiter.customLivenessProbe`                   | Override default liveness probe for Arbiter containers                                            | `{}`            |
-| `arbiter.customReadinessProbe`                  | Override default readiness probe for Arbiter containers                                           | `{}`            |
-| `arbiter.customStartupProbe`                    | Override default startup probe for Arbiter containers                                             | `{}`            |
-| `arbiter.initContainers`                        | Add additional init containers for the Arbiter pod(s)                                             | `[]`            |
-| `arbiter.sidecars`                              | Add additional sidecar containers for the Arbiter pod(s)                                          | `[]`            |
-| `arbiter.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the Arbiter container(s)             | `[]`            |
-| `arbiter.extraVolumes`                          | Optionally specify extra list of additional volumes to the Arbiter statefulset                    | `[]`            |
-| `arbiter.pdb.create`                            | Enable/disable a Pod Disruption Budget creation for Arbiter pod(s)                                | `false`         |
-| `arbiter.pdb.minAvailable`                      | Minimum number/percentage of Arbiter pods that should remain scheduled                            | `1`             |
-| `arbiter.pdb.maxUnavailable`                    | Maximum number/percentage of Arbiter pods that may be made unavailable                            | `""`            |
-| `arbiter.service.nameOverride`                  | The arbiter service name                                                                          | `""`            |
-| `arbiter.service.ports.mongodb`                 | MongoDB(&reg;) service port                                                                       | `27017`         |
-| `arbiter.service.extraPorts`                    | Extra ports to expose (normally used with the `sidecar` value)                                    | `[]`            |
-| `arbiter.service.annotations`                   | Provide any additional annotations that may be required                                           | `{}`            |
-| `arbiter.service.headless.annotations`          | Annotations for the headless service.                                                             | `{}`            |
+| Name                                                        | Description                                                                                       | Value            |
+| ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------- | ---------------- |
+| `arbiter.enabled`                                           | Enable deploying the arbiter                                                                      | `true`           |
+| `arbiter.hostAliases`                                       | Add deployment host aliases                                                                       | `[]`             |
+| `arbiter.configuration`                                     | Arbiter configuration file to be used                                                             | `""`             |
+| `arbiter.existingConfigmap`                                 | Name of existing ConfigMap with Arbiter configuration                                             | `""`             |
+| `arbiter.command`                                           | Override default container command (useful when using custom images)                              | `[]`             |
+| `arbiter.args`                                              | Override default container args (useful when using custom images)                                 | `[]`             |
+| `arbiter.extraFlags`                                        | Arbiter additional command line flags                                                             | `[]`             |
+| `arbiter.extraEnvVars`                                      | Extra environment variables to add to Arbiter pods                                                | `[]`             |
+| `arbiter.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars                                              | `""`             |
+| `arbiter.extraEnvVarsSecret`                                | Name of existing Secret containing extra env vars (in case of sensitive data)                     | `""`             |
+| `arbiter.annotations`                                       | Additional labels to be added to the Arbiter statefulset                                          | `{}`             |
+| `arbiter.labels`                                            | Annotations to be added to the Arbiter statefulset                                                | `{}`             |
+| `arbiter.topologySpreadConstraints`                         | MongoDB(&reg;) Spread Constraints for arbiter Pods                                                | `[]`             |
+| `arbiter.lifecycleHooks`                                    | LifecycleHook for the Arbiter container to automate configuration before or after startup         | `{}`             |
+| `arbiter.terminationGracePeriodSeconds`                     | Arbiter Termination Grace Period                                                                  | `""`             |
+| `arbiter.updateStrategy.type`                               | Strategy that will be employed to update Pods in the StatefulSet                                  | `RollingUpdate`  |
+| `arbiter.podManagementPolicy`                               | Pod management policy for MongoDB(&reg;)                                                          | `OrderedReady`   |
+| `arbiter.schedulerName`                                     | Name of the scheduler (other than default) to dispatch pods                                       | `""`             |
+| `arbiter.podAffinityPreset`                                 | Arbiter Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`             |
+| `arbiter.podAntiAffinityPreset`                             | Arbiter Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`           |
+| `arbiter.nodeAffinityPreset.type`                           | Arbiter Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`             |
+| `arbiter.nodeAffinityPreset.key`                            | Arbiter Node label key to match Ignored if `affinity` is set.                                     | `""`             |
+| `arbiter.nodeAffinityPreset.values`                         | Arbiter Node label values to match. Ignored if `affinity` is set.                                 | `[]`             |
+| `arbiter.affinity`                                          | Arbiter Affinity for pod assignment                                                               | `{}`             |
+| `arbiter.nodeSelector`                                      | Arbiter Node labels for pod assignment                                                            | `{}`             |
+| `arbiter.tolerations`                                       | Arbiter Tolerations for pod assignment                                                            | `[]`             |
+| `arbiter.podLabels`                                         | Arbiter pod labels                                                                                | `{}`             |
+| `arbiter.podAnnotations`                                    | Arbiter Pod annotations                                                                           | `{}`             |
+| `arbiter.priorityClassName`                                 | Name of the existing priority class to be used by Arbiter pod(s)                                  | `""`             |
+| `arbiter.runtimeClassName`                                  | Name of the runtime class to be used by Arbiter pod(s)                                            | `""`             |
+| `arbiter.podSecurityContext.enabled`                        | Enable Arbiter pod(s)' Security Context                                                           | `true`           |
+| `arbiter.podSecurityContext.fsGroup`                        | Group ID for the volumes of the Arbiter pod(s)                                                    | `1001`           |
+| `arbiter.podSecurityContext.sysctls`                        | sysctl settings of the Arbiter pod(s)'                                                            | `[]`             |
+| `arbiter.containerSecurityContext.enabled`                  | Enable Arbiter container(s)' Security Context                                                     | `true`           |
+| `arbiter.containerSecurityContext.runAsUser`                | User ID for the Arbiter container                                                                 | `1001`           |
+| `arbiter.containerSecurityContext.runAsGroup`               | Group ID for the Arbiter container                                                                | `0`              |
+| `arbiter.containerSecurityContext.runAsNonRoot`             | Set Arbiter containers' Security Context runAsNonRoot                                             | `true`           |
+| `arbiter.containerSecurityContext.allowPrivilegeEscalation` | Is it possible to escalate Arbiter pod(s) privileges                                              | `false`          |
+| `arbiter.containerSecurityContext.seccompProfile.type`      | Set Arbiter container's Security Context seccompProfile type                                      | `RuntimeDefault` |
+| `arbiter.containerSecurityContext.capabilities.drop`        | Set Arbiter container's Security Context capabilities to drop                                     | `["ALL"]`        |
+| `arbiter.resources.limits`                                  | The resources limits for Arbiter containers                                                       | `{}`             |
+| `arbiter.resources.requests`                                | The requested resources for Arbiter containers                                                    | `{}`             |
+| `arbiter.containerPorts.mongodb`                            | MongoDB(&reg;) arbiter container port                                                             | `27017`          |
+| `arbiter.livenessProbe.enabled`                             | Enable livenessProbe                                                                              | `true`           |
+| `arbiter.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                           | `30`             |
+| `arbiter.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                  | `20`             |
+| `arbiter.livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                 | `10`             |
+| `arbiter.livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                               | `6`              |
+| `arbiter.livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                               | `1`              |
+| `arbiter.readinessProbe.enabled`                            | Enable readinessProbe                                                                             | `true`           |
+| `arbiter.readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                          | `5`              |
+| `arbiter.readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                 | `20`             |
+| `arbiter.readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                | `10`             |
+| `arbiter.readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                              | `6`              |
+| `arbiter.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                              | `1`              |
+| `arbiter.startupProbe.enabled`                              | Enable startupProbe                                                                               | `false`          |
+| `arbiter.startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                            | `5`              |
+| `arbiter.startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                   | `10`             |
+| `arbiter.startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                                  | `5`              |
+| `arbiter.startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                | `30`             |
+| `arbiter.startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                | `1`              |
+| `arbiter.customLivenessProbe`                               | Override default liveness probe for Arbiter containers                                            | `{}`             |
+| `arbiter.customReadinessProbe`                              | Override default readiness probe for Arbiter containers                                           | `{}`             |
+| `arbiter.customStartupProbe`                                | Override default startup probe for Arbiter containers                                             | `{}`             |
+| `arbiter.initContainers`                                    | Add additional init containers for the Arbiter pod(s)                                             | `[]`             |
+| `arbiter.sidecars`                                          | Add additional sidecar containers for the Arbiter pod(s)                                          | `[]`             |
+| `arbiter.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Arbiter container(s)             | `[]`             |
+| `arbiter.extraVolumes`                                      | Optionally specify extra list of additional volumes to the Arbiter statefulset                    | `[]`             |
+| `arbiter.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation for Arbiter pod(s)                                | `false`          |
+| `arbiter.pdb.minAvailable`                                  | Minimum number/percentage of Arbiter pods that should remain scheduled                            | `1`              |
+| `arbiter.pdb.maxUnavailable`                                | Maximum number/percentage of Arbiter pods that may be made unavailable                            | `""`             |
+| `arbiter.service.nameOverride`                              | The arbiter service name                                                                          | `""`             |
+| `arbiter.service.ports.mongodb`                             | MongoDB(&reg;) service port                                                                       | `27017`          |
+| `arbiter.service.extraPorts`                                | Extra ports to expose (normally used with the `sidecar` value)                                    | `[]`             |
+| `arbiter.service.annotations`                               | Provide any additional annotations that may be required                                           | `{}`             |
+| `arbiter.service.headless.annotations`                      | Annotations for the headless service.                                                             | `{}`             |
 
 ### Hidden Node parameters
 
-| Name                                                 | Description                                                                                          | Value               |
-| ---------------------------------------------------- | ---------------------------------------------------------------------------------------------------- | ------------------- |
-| `hidden.enabled`                                     | Enable deploying the hidden nodes                                                                    | `false`             |
-| `hidden.hostAliases`                                 | Add deployment host aliases                                                                          | `[]`                |
-| `hidden.configuration`                               | Hidden node configuration file to be used                                                            | `""`                |
-| `hidden.existingConfigmap`                           | Name of existing ConfigMap with Hidden node configuration                                            | `""`                |
-| `hidden.command`                                     | Override default container command (useful when using custom images)                                 | `[]`                |
-| `hidden.args`                                        | Override default container args (useful when using custom images)                                    | `[]`                |
-| `hidden.extraFlags`                                  | Hidden node additional command line flags                                                            | `[]`                |
-| `hidden.extraEnvVars`                                | Extra environment variables to add to Hidden node pods                                               | `[]`                |
-| `hidden.extraEnvVarsCM`                              | Name of existing ConfigMap containing extra env vars                                                 | `""`                |
-| `hidden.extraEnvVarsSecret`                          | Name of existing Secret containing extra env vars (in case of sensitive data)                        | `""`                |
-| `hidden.annotations`                                 | Additional labels to be added to thehidden node statefulset                                          | `{}`                |
-| `hidden.labels`                                      | Annotations to be added to the hidden node statefulset                                               | `{}`                |
-| `hidden.topologySpreadConstraints`                   | MongoDB(&reg;) Spread Constraints for hidden Pods                                                    | `[]`                |
-| `hidden.lifecycleHooks`                              | LifecycleHook for the Hidden container to automate configuration before or after startup             | `{}`                |
-| `hidden.replicaCount`                                | Number of hidden nodes (only when `architecture=replicaset`)                                         | `1`                 |
-| `hidden.terminationGracePeriodSeconds`               | Hidden Termination Grace Period                                                                      | `""`                |
-| `hidden.updateStrategy.type`                         | Strategy that will be employed to update Pods in the StatefulSet                                     | `RollingUpdate`     |
-| `hidden.podManagementPolicy`                         | Pod management policy for hidden node                                                                | `OrderedReady`      |
-| `hidden.schedulerName`                               | Name of the scheduler (other than default) to dispatch pods                                          | `""`                |
-| `hidden.podAffinityPreset`                           | Hidden node Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`      | `""`                |
-| `hidden.podAntiAffinityPreset`                       | Hidden node Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `soft`              |
-| `hidden.nodeAffinityPreset.type`                     | Hidden Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`     | `""`                |
-| `hidden.nodeAffinityPreset.key`                      | Hidden Node label key to match Ignored if `affinity` is set.                                         | `""`                |
-| `hidden.nodeAffinityPreset.values`                   | Hidden Node label values to match. Ignored if `affinity` is set.                                     | `[]`                |
-| `hidden.affinity`                                    | Hidden node Affinity for pod assignment                                                              | `{}`                |
-| `hidden.nodeSelector`                                | Hidden node Node labels for pod assignment                                                           | `{}`                |
-| `hidden.tolerations`                                 | Hidden node Tolerations for pod assignment                                                           | `[]`                |
-| `hidden.podLabels`                                   | Hidden node pod labels                                                                               | `{}`                |
-| `hidden.podAnnotations`                              | Hidden node Pod annotations                                                                          | `{}`                |
-| `hidden.priorityClassName`                           | Name of the existing priority class to be used by hidden node pod(s)                                 | `""`                |
-| `hidden.runtimeClassName`                            | Name of the runtime class to be used by hidden node pod(s)                                           | `""`                |
-| `hidden.podSecurityContext.enabled`                  | Enable Hidden pod(s)' Security Context                                                               | `true`              |
-| `hidden.podSecurityContext.fsGroup`                  | Group ID for the volumes of the Hidden pod(s)                                                        | `1001`              |
-| `hidden.podSecurityContext.sysctls`                  | sysctl settings of the Hidden pod(s)'                                                                | `[]`                |
-| `hidden.containerSecurityContext.enabled`            | Enable Hidden container(s)' Security Context                                                         | `true`              |
-| `hidden.containerSecurityContext.runAsUser`          | User ID for the Hidden container                                                                     | `1001`              |
-| `hidden.containerSecurityContext.runAsNonRoot`       | Set Hidden containers' Security Context runAsNonRoot                                                 | `true`              |
-| `hidden.resources.limits`                            | The resources limits for hidden node containers                                                      | `{}`                |
-| `hidden.resources.requests`                          | The requested resources for hidden node containers                                                   | `{}`                |
-| `hidden.containerPorts.mongodb`                      | MongoDB(&reg;) hidden container port                                                                 | `27017`             |
-| `hidden.livenessProbe.enabled`                       | Enable livenessProbe                                                                                 | `true`              |
-| `hidden.livenessProbe.initialDelaySeconds`           | Initial delay seconds for livenessProbe                                                              | `30`                |
-| `hidden.livenessProbe.periodSeconds`                 | Period seconds for livenessProbe                                                                     | `20`                |
-| `hidden.livenessProbe.timeoutSeconds`                | Timeout seconds for livenessProbe                                                                    | `10`                |
-| `hidden.livenessProbe.failureThreshold`              | Failure threshold for livenessProbe                                                                  | `6`                 |
-| `hidden.livenessProbe.successThreshold`              | Success threshold for livenessProbe                                                                  | `1`                 |
-| `hidden.readinessProbe.enabled`                      | Enable readinessProbe                                                                                | `true`              |
-| `hidden.readinessProbe.initialDelaySeconds`          | Initial delay seconds for readinessProbe                                                             | `5`                 |
-| `hidden.readinessProbe.periodSeconds`                | Period seconds for readinessProbe                                                                    | `20`                |
-| `hidden.readinessProbe.timeoutSeconds`               | Timeout seconds for readinessProbe                                                                   | `10`                |
-| `hidden.readinessProbe.failureThreshold`             | Failure threshold for readinessProbe                                                                 | `6`                 |
-| `hidden.readinessProbe.successThreshold`             | Success threshold for readinessProbe                                                                 | `1`                 |
-| `hidden.startupProbe.enabled`                        | Enable startupProbe                                                                                  | `false`             |
-| `hidden.startupProbe.initialDelaySeconds`            | Initial delay seconds for startupProbe                                                               | `5`                 |
-| `hidden.startupProbe.periodSeconds`                  | Period seconds for startupProbe                                                                      | `10`                |
-| `hidden.startupProbe.timeoutSeconds`                 | Timeout seconds for startupProbe                                                                     | `5`                 |
-| `hidden.startupProbe.failureThreshold`               | Failure threshold for startupProbe                                                                   | `30`                |
-| `hidden.startupProbe.successThreshold`               | Success threshold for startupProbe                                                                   | `1`                 |
-| `hidden.customLivenessProbe`                         | Override default liveness probe for hidden node containers                                           | `{}`                |
-| `hidden.customReadinessProbe`                        | Override default readiness probe for hidden node containers                                          | `{}`                |
-| `hidden.customStartupProbe`                          | Override default startup probe for MongoDB(&reg;) containers                                         | `{}`                |
-| `hidden.initContainers`                              | Add init containers to the MongoDB(&reg;) Hidden pods.                                               | `[]`                |
-| `hidden.sidecars`                                    | Add additional sidecar containers for the hidden node pod(s)                                         | `[]`                |
-| `hidden.extraVolumeMounts`                           | Optionally specify extra list of additional volumeMounts for the hidden node container(s)            | `[]`                |
-| `hidden.extraVolumes`                                | Optionally specify extra list of additional volumes to the hidden node statefulset                   | `[]`                |
-| `hidden.pdb.create`                                  | Enable/disable a Pod Disruption Budget creation for hidden node pod(s)                               | `false`             |
-| `hidden.pdb.minAvailable`                            | Minimum number/percentage of hidden node pods that should remain scheduled                           | `1`                 |
-| `hidden.pdb.maxUnavailable`                          | Maximum number/percentage of hidden node pods that may be made unavailable                           | `""`                |
-| `hidden.persistence.enabled`                         | Enable hidden node data persistence using PVC                                                        | `true`              |
-| `hidden.persistence.medium`                          | Provide a medium for `emptyDir` volumes.                                                             | `""`                |
-| `hidden.persistence.storageClass`                    | PVC Storage Class for hidden node data volume                                                        | `""`                |
-| `hidden.persistence.accessModes`                     | PV Access Mode                                                                                       | `["ReadWriteOnce"]` |
-| `hidden.persistence.size`                            | PVC Storage Request for hidden node data volume                                                      | `8Gi`               |
-| `hidden.persistence.annotations`                     | PVC annotations                                                                                      | `{}`                |
-| `hidden.persistence.mountPath`                       | The path the volume will be mounted at, useful when using different MongoDB(&reg;) images.           | `/bitnami/mongodb`  |
-| `hidden.persistence.subPath`                         | The subdirectory of the volume to mount to, useful in dev environments                               | `""`                |
-| `hidden.persistence.volumeClaimTemplates.selector`   | A label query over volumes to consider for binding (e.g. when using local volumes)                   | `{}`                |
-| `hidden.persistence.volumeClaimTemplates.requests`   | Custom PVC requests attributes                                                                       | `{}`                |
-| `hidden.persistence.volumeClaimTemplates.dataSource` | Set volumeClaimTemplate dataSource                                                                   | `{}`                |
-| `hidden.service.portName`                            | MongoDB(&reg;) service port name                                                                     | `mongodb`           |
-| `hidden.service.ports.mongodb`                       | MongoDB(&reg;) service port                                                                          | `27017`             |
-| `hidden.service.extraPorts`                          | Extra ports to expose (normally used with the `sidecar` value)                                       | `[]`                |
-| `hidden.service.annotations`                         | Provide any additional annotations that may be required                                              | `{}`                |
-| `hidden.service.headless.annotations`                | Annotations for the headless service.                                                                | `{}`                |
+| Name                                                       | Description                                                                                          | Value               |
+| ---------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- | ------------------- |
+| `hidden.enabled`                                           | Enable deploying the hidden nodes                                                                    | `false`             |
+| `hidden.hostAliases`                                       | Add deployment host aliases                                                                          | `[]`                |
+| `hidden.configuration`                                     | Hidden node configuration file to be used                                                            | `""`                |
+| `hidden.existingConfigmap`                                 | Name of existing ConfigMap with Hidden node configuration                                            | `""`                |
+| `hidden.command`                                           | Override default container command (useful when using custom images)                                 | `[]`                |
+| `hidden.args`                                              | Override default container args (useful when using custom images)                                    | `[]`                |
+| `hidden.extraFlags`                                        | Hidden node additional command line flags                                                            | `[]`                |
+| `hidden.extraEnvVars`                                      | Extra environment variables to add to Hidden node pods                                               | `[]`                |
+| `hidden.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars                                                 | `""`                |
+| `hidden.extraEnvVarsSecret`                                | Name of existing Secret containing extra env vars (in case of sensitive data)                        | `""`                |
+| `hidden.annotations`                                       | Additional labels to be added to thehidden node statefulset                                          | `{}`                |
+| `hidden.labels`                                            | Annotations to be added to the hidden node statefulset                                               | `{}`                |
+| `hidden.topologySpreadConstraints`                         | MongoDB(&reg;) Spread Constraints for hidden Pods                                                    | `[]`                |
+| `hidden.lifecycleHooks`                                    | LifecycleHook for the Hidden container to automate configuration before or after startup             | `{}`                |
+| `hidden.replicaCount`                                      | Number of hidden nodes (only when `architecture=replicaset`)                                         | `1`                 |
+| `hidden.terminationGracePeriodSeconds`                     | Hidden Termination Grace Period                                                                      | `""`                |
+| `hidden.updateStrategy.type`                               | Strategy that will be employed to update Pods in the StatefulSet                                     | `RollingUpdate`     |
+| `hidden.podManagementPolicy`                               | Pod management policy for hidden node                                                                | `OrderedReady`      |
+| `hidden.schedulerName`                                     | Name of the scheduler (other than default) to dispatch pods                                          | `""`                |
+| `hidden.podAffinityPreset`                                 | Hidden node Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`      | `""`                |
+| `hidden.podAntiAffinityPreset`                             | Hidden node Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `soft`              |
+| `hidden.nodeAffinityPreset.type`                           | Hidden Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`     | `""`                |
+| `hidden.nodeAffinityPreset.key`                            | Hidden Node label key to match Ignored if `affinity` is set.                                         | `""`                |
+| `hidden.nodeAffinityPreset.values`                         | Hidden Node label values to match. Ignored if `affinity` is set.                                     | `[]`                |
+| `hidden.affinity`                                          | Hidden node Affinity for pod assignment                                                              | `{}`                |
+| `hidden.nodeSelector`                                      | Hidden node Node labels for pod assignment                                                           | `{}`                |
+| `hidden.tolerations`                                       | Hidden node Tolerations for pod assignment                                                           | `[]`                |
+| `hidden.podLabels`                                         | Hidden node pod labels                                                                               | `{}`                |
+| `hidden.podAnnotations`                                    | Hidden node Pod annotations                                                                          | `{}`                |
+| `hidden.priorityClassName`                                 | Name of the existing priority class to be used by hidden node pod(s)                                 | `""`                |
+| `hidden.runtimeClassName`                                  | Name of the runtime class to be used by hidden node pod(s)                                           | `""`                |
+| `hidden.podSecurityContext.enabled`                        | Enable Hidden pod(s)' Security Context                                                               | `true`              |
+| `hidden.podSecurityContext.fsGroup`                        | Group ID for the volumes of the Hidden pod(s)                                                        | `1001`              |
+| `hidden.podSecurityContext.sysctls`                        | sysctl settings of the Hidden pod(s)'                                                                | `[]`                |
+| `hidden.containerSecurityContext.enabled`                  | Enable Hidden container(s)' Security Context                                                         | `true`              |
+| `hidden.containerSecurityContext.runAsUser`                | User ID for the Hidden container                                                                     | `1001`              |
+| `hidden.containerSecurityContext.runAsGroup`               | Group ID for the Hidden container                                                                    | `0`                 |
+| `hidden.containerSecurityContext.runAsNonRoot`             | Set Hidden containers' Security Context runAsNonRoot                                                 | `true`              |
+| `hidden.containerSecurityContext.allowPrivilegeEscalation` | Set Hidden containers' Security Context allowPrivilegeEscalation                                     | `false`             |
+| `hidden.containerSecurityContext.seccompProfile.type`      | Set Hidden container's Security Context seccompProfile type                                          | `RuntimeDefault`    |
+| `hidden.containerSecurityContext.capabilities.drop`        | Set Hidden container's Security Context capabilities to drop                                         | `["ALL"]`           |
+| `hidden.resources.limits`                                  | The resources limits for hidden node containers                                                      | `{}`                |
+| `hidden.resources.requests`                                | The requested resources for hidden node containers                                                   | `{}`                |
+| `hidden.containerPorts.mongodb`                            | MongoDB(&reg;) hidden container port                                                                 | `27017`             |
+| `hidden.livenessProbe.enabled`                             | Enable livenessProbe                                                                                 | `true`              |
+| `hidden.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                              | `30`                |
+| `hidden.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                     | `20`                |
+| `hidden.livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                    | `10`                |
+| `hidden.livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                  | `6`                 |
+| `hidden.livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                  | `1`                 |
+| `hidden.readinessProbe.enabled`                            | Enable readinessProbe                                                                                | `true`              |
+| `hidden.readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                             | `5`                 |
+| `hidden.readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                    | `20`                |
+| `hidden.readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                   | `10`                |
+| `hidden.readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                 | `6`                 |
+| `hidden.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                 | `1`                 |
+| `hidden.startupProbe.enabled`                              | Enable startupProbe                                                                                  | `false`             |
+| `hidden.startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                               | `5`                 |
+| `hidden.startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                      | `10`                |
+| `hidden.startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                                     | `5`                 |
+| `hidden.startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                   | `30`                |
+| `hidden.startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                   | `1`                 |
+| `hidden.customLivenessProbe`                               | Override default liveness probe for hidden node containers                                           | `{}`                |
+| `hidden.customReadinessProbe`                              | Override default readiness probe for hidden node containers                                          | `{}`                |
+| `hidden.customStartupProbe`                                | Override default startup probe for MongoDB(&reg;) containers                                         | `{}`                |
+| `hidden.initContainers`                                    | Add init containers to the MongoDB(&reg;) Hidden pods.                                               | `[]`                |
+| `hidden.sidecars`                                          | Add additional sidecar containers for the hidden node pod(s)                                         | `[]`                |
+| `hidden.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the hidden node container(s)            | `[]`                |
+| `hidden.extraVolumes`                                      | Optionally specify extra list of additional volumes to the hidden node statefulset                   | `[]`                |
+| `hidden.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation for hidden node pod(s)                               | `false`             |
+| `hidden.pdb.minAvailable`                                  | Minimum number/percentage of hidden node pods that should remain scheduled                           | `1`                 |
+| `hidden.pdb.maxUnavailable`                                | Maximum number/percentage of hidden node pods that may be made unavailable                           | `""`                |
+| `hidden.persistence.enabled`                               | Enable hidden node data persistence using PVC                                                        | `true`              |
+| `hidden.persistence.medium`                                | Provide a medium for `emptyDir` volumes.                                                             | `""`                |
+| `hidden.persistence.storageClass`                          | PVC Storage Class for hidden node data volume                                                        | `""`                |
+| `hidden.persistence.accessModes`                           | PV Access Mode                                                                                       | `["ReadWriteOnce"]` |
+| `hidden.persistence.size`                                  | PVC Storage Request for hidden node data volume                                                      | `8Gi`               |
+| `hidden.persistence.annotations`                           | PVC annotations                                                                                      | `{}`                |
+| `hidden.persistence.mountPath`                             | The path the volume will be mounted at, useful when using different MongoDB(&reg;) images.           | `/bitnami/mongodb`  |
+| `hidden.persistence.subPath`                               | The subdirectory of the volume to mount to, useful in dev environments                               | `""`                |
+| `hidden.persistence.volumeClaimTemplates.selector`         | A label query over volumes to consider for binding (e.g. when using local volumes)                   | `{}`                |
+| `hidden.persistence.volumeClaimTemplates.requests`         | Custom PVC requests attributes                                                                       | `{}`                |
+| `hidden.persistence.volumeClaimTemplates.dataSource`       | Set volumeClaimTemplate dataSource                                                                   | `{}`                |
+| `hidden.service.portName`                                  | MongoDB(&reg;) service port name                                                                     | `mongodb`           |
+| `hidden.service.ports.mongodb`                             | MongoDB(&reg;) service port                                                                          | `27017`             |
+| `hidden.service.extraPorts`                                | Extra ports to expose (normally used with the `sidecar` value)                                       | `[]`                |
+| `hidden.service.annotations`                               | Provide any additional annotations that may be required                                              | `{}`                |
+| `hidden.service.headless.annotations`                      | Annotations for the headless service.                                                                | `{}`                |
 
 ### Metrics parameters
 
@@ -509,7 +521,7 @@ Refer to the [chart documentation for more information on each of these architec
 | `metrics.enabled`                            | Enable using a sidecar Prometheus exporter                                                                                    | `false`                    |
 | `metrics.image.registry`                     | MongoDB(&reg;) Prometheus exporter image registry                                                                             | `docker.io`                |
 | `metrics.image.repository`                   | MongoDB(&reg;) Prometheus exporter image repository                                                                           | `bitnami/mongodb-exporter` |
-| `metrics.image.tag`                          | MongoDB(&reg;) Prometheus exporter image tag (immutable tags are recommended)                                                 | `0.39.0-debian-11-r10`     |
+| `metrics.image.tag`                          | MongoDB(&reg;) Prometheus exporter image tag (immutable tags are recommended)                                                 | `0.39.0-debian-11-r14`     |
 | `metrics.image.digest`                       | MongoDB(&reg;) image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                | `""`                       |
 | `metrics.image.pullPolicy`                   | MongoDB(&reg;) Prometheus exporter image pull policy                                                                          | `IfNotPresent`             |
 | `metrics.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                              | `[]`                       |

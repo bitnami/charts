@@ -55,7 +55,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/apache
-  tag: 2.4.57-debian-11-r34
+  tag: 2.4.57-debian-11-r36
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -85,7 +85,7 @@ image:
 git:
   registry: docker.io
   repository: bitnami/git
-  tag: 2.41.0-debian-11-r11
+  tag: 2.41.0-debian-11-r14
   digest: ""
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -492,6 +492,7 @@ ingress:
   ##
   hostname: example.local
   ## @param ingress.path Default path for the ingress record
+  ## NOTE: You may need to set this to '/*' in order to use this with ALB ingress controllers
   ##
   path: /
   ## @param ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
@@ -506,25 +507,15 @@ ingress:
   ##   cert-manager.io/cluster-issuer: cluster-issuer-name
   ##
   annotations: {}
-  ## @param ingress.tls [array] Enable TLS configuration for the hosts defined
-  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/#tls
+  ## @param ingress.tls Enable TLS configuration for the host defined at `ingress.hostname` parameter
+  ## TLS certificates will be retrieved from a TLS secret with name: `{{- printf "%s-tls" .Values.ingress.hostname }}`
+  ## You can:
+  ##   - Use the `ingress.secrets` parameter to create this TLS secret
+  ##   - Rely on cert-manager to create it by setting the corresponding annotations
+  ##   - Rely on Helm to create self-signed certificates by setting `ingress.selfSigned=true`
   ##
-  tls:
-    - hosts:
-        - example.local
-      secretName: example.local-tls
-  ## DEPRECATED: Use ingress.annotations instead of ingress.certManager
-  ## certManager: false
-  ##
+  tls: false
 
-  ## @param ingress.hosts An array with additional hostname(s) to be covered with the ingress record
-  ## Most likely the hostname above will be enough, but in the event more hosts are needed, this is an array
-  ## e.g:
-  ## hosts:
-  ##   - name: example.local
-  ##     path: /
-  ##
-  hosts: []
   ## @param ingress.extraHosts An array with additional hostname(s) to be covered with the ingress record
   ## e.g:
   ## extraHosts:
@@ -604,7 +595,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.13.4-debian-11-r11
+    tag: 0.13.4-debian-11-r14
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
