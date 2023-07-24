@@ -1,0 +1,77 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if .Values.ingest.networkPolicy.enabled }}
+kind: NetworkPolicy
+apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
+metadata:
+  name: {{ template "opensearch.ingest.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/part-of: opensearch
+    app.kubernetes.io/component: ingest
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  podSelector:
+    matchLabels: {{ include "common.labels.matchLabels" . | nindent 6 }}
+    app.kubernetes.io/part-of: opensearch
+    app.kubernetes.io/component: ingest
+  policyTypes:
+    - Ingress
+    - Egress
+  egress:
+    # Allow dns resolution
+    - ports:
+        - port: 53
+          protocol: UDP
+        - port: 53
+          protocol: TCP
+    # Allow outbound connections to other cluster pods
+    - ports:
+        - port: {{ .Values.service.ports.restAPI }}
+        - port: {{ .Values.service.ports.transport }}
+        - port: {{ .Values.dashboards.service.ports.http }}
+      to:
+        - podSelector:
+            matchLabels: {{- include "common.labels.standard" . | nindent 14 }}
+              {{- if .Values.ingest.podLabels }}
+              {{- include "common.tplvalues.render" (dict "value" .Values.ingest.podLabels "context" $) | nindent 14 }}
+              {{- end }}
+    {{- if .Values.ingest.networkPolicy.extraEgress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.ingest.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
+    {{- end }}
+  ingress:
+    - ports:
+        - port: {{ .Values.service.ports.restAPI }}
+        - port: {{ .Values.service.ports.transport }}
+      {{- if not .Values.ingest.networkPolicy.allowExternal }}
+      from:
+        - podSelector:
+            matchLabels:
+              {{ template "common.names.fullname" . }}-client: "true"
+      {{- end }}
+        {{- if .Values.ingest.networkPolicy.ingressNSMatchLabels }}
+        - namespaceSelector:
+            matchLabels:
+              {{- range $key, $value := .Values.ingest.networkPolicy.ingressNSMatchLabels }}
+              {{ $key | quote }}: {{ $value | quote }}
+              {{- end }}
+          {{- if .Values.ingest.networkPolicy.ingressNSPodMatchLabels }}
+          podSelector:
+            matchLabels:
+              {{- range $key, $value := .Values.ingest.networkPolicy.ingressNSPodMatchLabels }}
+              {{ $key | quote }}: {{ $value | quote }}
+              {{- end }}
+          {{- end }}
+        {{- end }}
+    {{- if .Values.ingest.networkPolicy.extraIngress }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.ingest.networkPolicy.extraIngress "context" $ ) | nindent 4 }}
+    {{- end }}
+{{- end }}

@@ -1,0 +1,52 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and (include "opensearch.ingest.enabled" .) .Values.ingest.autoscaling.hpa.enabled }}
+apiVersion: {{ include "common.capabilities.hpa.apiVersion" ( dict "context" $ ) }}
+kind: HorizontalPodAutoscaler
+metadata:
+  name: {{ include "opensearch.ingest.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: ingest
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  scaleTargetRef:
+    apiVersion: {{ template "common.capabilities.statefulset.apiVersion" . }}
+    kind: StatefulSet
+    name: {{ include "opensearch.ingest.fullname" . }}
+  minReplicas: {{ .Values.ingest.autoscaling.hpa.minReplicas }}
+  maxReplicas: {{ .Values.ingest.autoscaling.hpa.maxReplicas }}
+  metrics:
+    {{- if .Values.ingest.autoscaling.hpa.targetCPU }}
+    - type: Resource
+      resource:
+        name: cpu
+        {{- if semverCompare "<1.23-0" (include "common.capabilities.kubeVersion" .) }}
+        targetAverageUtilization: {{ .Values.ingest.autoscaling.hpa.targetCPU }}
+        {{- else }}
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.ingest.autoscaling.hpa.targetCPU }}
+        {{- end }}
+    {{- end }}
+    {{- if .Values.ingest.autoscaling.hpa.targetMemory }}
+    - type: Resource
+      resource:
+        name: memory
+        {{- if semverCompare "<1.23-0" (include "common.capabilities.kubeVersion" .) }}
+        targetAverageUtilization: {{ .Values.ingest.autoscaling.hpa.targetMemory }}
+        {{- else }}
+        target:
+          type: Utilization
+          averageUtilization: {{ .Values.ingest.autoscaling.hpa.targetMemory }}
+        {{- end }}
+    {{- end }}
+{{- end }}

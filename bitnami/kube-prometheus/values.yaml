@@ -2040,10 +2040,10 @@ alertmanager:
   ## @param alertmanager.portName Port name used for the pods and governing service. This defaults to web
   ##
   portName: web
-  ## @param alertmanager.configNamespaceSelector AlertmanagerConfigs to be selected for to merge and configure Alertmanager with. This defaults to {}
+  ## @param alertmanager.configNamespaceSelector Namespaces to be selected for AlertmanagerConfig discovery. If nil, only check own namespace. This defaults to {}
   ##
   configNamespaceSelector: {}
-  ## @param alertmanager.configSelector Namespaces to be selected for AlertmanagerConfig discovery. If nil, only check own namespace. This defaults to {}
+  ## @param alertmanager.configSelector AlertmanagerConfigs to be selected for to merge and configure Alertmanager with. This defaults to {}
   ##
   configSelector: {}
   ## @param alertmanager.configuration EXPERIMENTAL: alertmanagerConfiguration specifies the global Alertmanager configuration. If defined, it takes precedence over the `configSecret` field. This field may change in future releases. The specified global alertmanager config will not force add a namespace label in routes and inhibitRules

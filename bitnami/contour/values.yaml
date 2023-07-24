@@ -589,6 +589,16 @@ envoy:
       ## memory: 16Mi
       ##
       requests: {}
+    ## Shutdown Manager container security context
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+    ## @param envoy.shutdownManager.containerSecurityContext.enabled Shutdown Manager Container securityContext
+    ## @param envoy.shutdownManager.containerSecurityContext.runAsUser User ID for the Shutdown Manager container (to change this, http and https containerPorts must be set to >1024)
+    ## @param envoy.shutdownManager.containerSecurityContext.runAsNonRoot Run as non root
+    ##
+    containerSecurityContext:
+      enabled: true
+      runAsUser: 1001
+      runAsNonRoot: true
   ## @param envoy.kind Install as deployment or daemonset
   ##
   kind: daemonset
@@ -691,6 +701,16 @@ envoy:
   ## @param envoy.containerSecurityContext.runAsNonRoot Run as non root
   ##
   containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
+  ## Envoy Initconfig initcontainer security context
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param envoy.containerSecurityContextEnvoyInit.enabled EnvoyInit Container securityContext
+  ## @param envoy.containerSecurityContextEnvoyInit.runAsUser User ID for the EnvoyInit container (to change this, http and https containerPorts must be set to >1024)
+  ## @param envoy.containerSecurityContextEnvoyInit.runAsNonRoot Run as non root
+  ##
+  containerSecurityContextEnvoyInit:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true

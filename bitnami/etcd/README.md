@@ -167,6 +167,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `customStartupProbe`                                | Override default startup probe                                                            | `{}`            |
 | `extraVolumes`                                      | Optionally specify extra list of additional volumes for etcd pods                         | `[]`            |
 | `extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for etcd container(s)            | `[]`            |
+| `extraVolumeClaimTemplates`                         | Optionally specify extra list of additional volumeClaimTemplates for etcd container(s)    | `[]`            |
 | `initContainers`                                    | Add additional init containers to the etcd pods                                           | `[]`            |
 | `sidecars`                                          | Add additional sidecar containers to the etcd pods                                        | `[]`            |
 | `podAnnotations`                                    | Annotations for etcd pods                                                                 | `{}`            |
@@ -491,7 +492,7 @@ This version introduces several features and performance improvements:
 - New parameters/features were added:
   - `extraDeploy` to deploy any extra desired object.
   - `initContainers` and `sidecars` to define custom init containers and sidecars.
-  - `extraVolumes` and `extraVolumeMounts` to define custom volumes and mount points.
+  - `extraVolumes`, `extraVolumeMounts` and `extraVolumeClaimTemplates` to define custom volumes, mount points and volume claim templates.
   - Probes can be now customized, and support to startup probes is added.
   - LifecycleHooks can be customized using `lifecycleHooks` parameter.
   - The default command/args can be customized using `command` and `args` parameters.

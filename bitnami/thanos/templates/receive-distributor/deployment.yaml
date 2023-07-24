@@ -115,7 +115,7 @@ spec:
             - --http.config=/conf/http/http-config.yml
             {{- end }}
             {{- if .Values.receiveDistributor.extraFlags }}
-            {{- .Values.receiveDistributor.extraFlags | toYaml | nindent 12 }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.receiveDistributor.extraFlags "context" $) | nindent 12 }}
             {{- end }}
             {{- end }}
           env:
