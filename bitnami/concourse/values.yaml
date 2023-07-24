@@ -71,7 +71,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/concourse
-  tag: 7.9.1-debian-11-r111
+  tag: 7.9.1-debian-11-r113
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -609,7 +609,7 @@ worker:
   ##
   enabled: true
   ## @param worker.runtime Set CONCURSE_RUNTIME in worker nodes. Please note the default runtime (guardian) only supports cgroupsv1.
-  ## ref: https://concourse-ci.org/concourse-worker.html#configuring-runtimes
+  ## ref: https://concourse-ci.org/concourse-worker.html#configuring-runtimes
   ## ref: https://github.com/concourse/docs/pull/444
   runtime: containerd
   ## @param worker.logLevel Minimum level of logs to see. Possible options: debug, info, error
