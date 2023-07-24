@@ -61,7 +61,7 @@
             "endpoint": "lb-vault-server-active-http",
             "app_protocol": "HTTP",
             "env": {
-              "email": "vib-user",
+              "username": "vib-user",
               "password": "ComplicatedPassword123!4"
             }
           }
