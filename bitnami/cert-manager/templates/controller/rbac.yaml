@@ -225,6 +225,9 @@ rules:
   - apiGroups: [""]
     resources: ["secrets"]
     verbs: ["get", "list", "watch"]
+  - apiGroups: [ "gateway.networking.k8s.io" ]
+    resources: [ "httproutes" ]
+    verbs: ["get", "list", "watch", "create", "delete", "update"]
 ---
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
@@ -254,6 +257,12 @@ rules:
   - apiGroups: [""]
     resources: ["events"]
     verbs: ["create", "patch"]
+  - apiGroups: ["gateway.networking.k8s.io"]
+    resources: ["gateways", "httproutes"]
+    verbs: ["get", "list", "watch"]
+  - apiGroups: ["gateway.networking.k8s.io"]
+    resources: ["gateways/finalizers", "httproutes/finalizers"]
+    verbs: ["update"]
 ---
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRoleBinding
