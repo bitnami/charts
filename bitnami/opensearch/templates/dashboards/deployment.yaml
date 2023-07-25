@@ -1,0 +1,195 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
+kind: Deployment
+metadata:
+  name: {{ template "opensearch.dashboards.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: dashboards
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if not .Values.dashboards.autoscaling.hpa.enabled }}
+  replicas: {{ .Values.dashboards.replicaCount }}
+  {{- end }}
+  {{- if .Values.dashboards.updateStrategy }}
+  strategy: {{- toYaml .Values.dashboards.updateStrategy | nindent 4 }}
+  {{- end }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: dashboards
+  template:
+    metadata:
+      {{- if .Values.dashboards.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.dashboards.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
+        app.kubernetes.io/component: dashboards
+        {{- if .Values.dashboards.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.dashboards.podLabels "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.commonLabels }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
+        {{- end }}
+    spec:
+      serviceAccountName: {{ template "opensearch.dashboards.serviceAccountName" . }}
+      {{- include "opensearch.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.dashboards.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.dashboards.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.dashboards.affinity }}
+      affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.dashboards.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.dashboards.podAffinityPreset "component" "dashboards" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.dashboards.podAntiAffinityPreset "component" "dashboards" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.dashboards.nodeAffinityPreset.type "key" .Values.dashboards.nodeAffinityPreset.key "values" .Values.dashboards.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.dashboards.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" ( dict "value" .Values.dashboards.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.dashboards.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.dashboards.tolerations "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.dashboards.priorityClassName }}
+      priorityClassName: {{ .Values.dashboards.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.dashboards.schedulerName }}
+      schedulerName: {{ .Values.dashboards.schedulerName | quote }}
+      {{- end }}
+      {{- if .Values.dashboards.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.dashboards.topologySpreadConstraints "context" .) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.dashboards.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.dashboards.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      {{- if .Values.dashboards.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.dashboards.terminationGracePeriodSeconds }}
+      {{- end }}
+      containers:
+        - name: {{ include "opensearch.dashboards.fullname" . }}
+          image: {{ template "opensearch.dashboards.image" . }}
+          imagePullPolicy: {{ .Values.dashboards.image.pullPolicy }}
+          {{- if .Values.dashboards.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.dashboards.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.dashboards.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.dashboards.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.dashboards.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.dashboards.args "context" $) | nindent 12 }}
+          {{- end }}
+          env:
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" (or .Values.dashboards.image.debug .Values.diagnosticMode.enabled) | quote }}
+            {{- if .Values.security.enabled }}
+            - name: OPENSEARCH_DASHBOARDS_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "opensearch.secretName" . }}
+                  key: opensearch-dashboards-password
+            {{- end }}
+            {{- if .Values.dashboards.tls.enabled }}
+            - name: OPENSEARCH_DASHBOARDS_SERVER_ENABLE_TLS
+              value: "true"
+            - name: OPENSEARCH_DASHBOARDS_SERVER_TLS_USE_PEM
+              value: "true"
+            {{- end }}
+            - name: OPENSEARCH_DASHBOARDS_OPENSEARCH_URL
+              value: {{ (include "opensearch.url" .) }}
+            {{- if .Values.dashboards.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.dashboards.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          envFrom:
+            {{- if .Values.dashboards.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.dashboards.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.dashboards.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.dashboards.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- if .Values.dashboards.resources }}
+          resources: {{- toYaml .Values.dashboards.resources | nindent 12 }}
+          {{- end }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.dashboards.containerPorts.http }}
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.dashboards.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.dashboards.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.dashboards.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.dashboards.livenessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: "/"
+              port: {{ .Values.dashboards.containerPorts.http }}
+          {{- end }}
+          {{- if .Values.dashboards.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.dashboards.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.dashboards.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.dashboards.readinessProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: "/"
+              port: {{ .Values.dashboards.containerPorts.http }}
+          {{- end }}
+          {{- if .Values.dashboards.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.dashboards.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.dashboards.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.dashboards.startupProbe "enabled") "context" $) | nindent 12 }}
+            httpGet:
+              path: "/"
+              port: {{ .Values.dashboards.containerPorts.http }}
+          {{- end }}
+          {{- end }}
+          {{- if .Values.dashboards.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.dashboards.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            {{- if .Values.security.enabled }}
+            - name: opensearch-certificates
+              mountPath: /opt/bitnami/opensearch-dashboards/config/certs/opensearch
+              readOnly: true
+            {{- end }}
+            {{- if .Values.dashboards.tls.enabled }}
+            - name: opensearch-dashboard-certificates
+              mountPath: /opt/bitnami/opensearch-dashboards/config/certs/server
+              readOnly: true
+            {{- end }}
+            {{- if .Values.dashboards.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.dashboards.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
+        {{- if .Values.dashboards.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.dashboards.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+        {{- if .Values.security.enabled }}
+        - name: opensearch-certificates
+          secret:
+            secretName: {{ include "opensearch.master.tlsSecretName" . }}
+            items:
+              - key: ca.crt
+                path: ca.crt
+        {{- end }}
+        {{- if .Values.dashboards.tls.enabled }}
+        - name: opensearch-dashboard-certificates
+          projected:
+            defaultMode: 256
+            sources:
+              - secret:
+                  name: {{ include "opensearch.dashboards.tlsSecretName" . }}
+        {{- end }}
+        {{- if .Values.dashboards.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.dashboards.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
