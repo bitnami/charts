@@ -1,0 +1,70 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and (include "opensearch.ingest.enabled" .) .Values.ingest.service.enabled .Values.ingest.ingress.enabled }}
+apiVersion: {{ include "common.capabilities.ingress.apiVersion" . }}
+kind: Ingress
+metadata:
+  name: {{ include "opensearch.ingest.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: ingest
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if or .Values.ingest.ingress.annotations .Values.commonAnnotations }}
+  annotations:
+    {{- if .Values.ingest.ingress.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.ingest.ingress.annotations "context" $) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+spec:
+  {{- if and .Values.ingest.ingress.ingressClassName (eq "true" (include "common.ingress.supportsIngressClassname" .)) }}
+  ingressClassName: {{ .Values.ingest.ingress.ingressClassName | quote }}
+  {{- end }}
+  rules:
+    {{- if .Values.ingest.ingress.hostname }}
+    - http:
+        paths:
+          {{- if .Values.ingest.ingress.extraPaths }}
+          {{- toYaml .Values.ingest.ingress.extraPaths | nindent 10 }}
+          {{- end }}
+          - path: {{ .Values.ingest.ingress.path }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" .) }}
+            pathType: {{ .Values.ingest.ingress.pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "opensearch.ingest.fullname" .) "servicePort" "tcp-rest-api" "context" $)  | nindent 14 }}
+      {{- if ne .Values.ingest.ingress.hostname "*" }}
+      host: {{ .Values.ingest.ingress.hostname }}
+      {{- end }}
+    {{- end }}
+    {{- range .Values.ingest.ingress.extraHosts }}
+    - host: {{ .name }}
+      http:
+        paths:
+          - path: {{ default "/" .path }}
+            {{- if eq "true" (include "common.ingress.supportsPathType" $) }}
+            pathType: {{ default "ImplementationSpecific" .pathType }}
+            {{- end }}
+            backend: {{- include "common.ingress.backend" (dict "serviceName" (include "opensearch.ingest.fullname" $) "servicePort" "tcp-rest-api" "context" $) | nindent 14 }}
+    {{- end }}
+    {{- if .Values.ingest.ingress.extraRules }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.ingest.ingress.extraRules "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if or (and .Values.ingest.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.ingest.ingress.annotations )) .Values.ingest.ingress.selfSigned)) .Values.ingest.ingress.extraTls }}
+  tls:
+    {{- if and .Values.ingest.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.ingest.ingress.annotations )) .Values.ingest.ingress.selfSigned) }}
+    - hosts:
+        - {{ .Values.ingest.ingress.hostname | quote }}
+      secretName: {{ printf "%s-tls" .Values.ingest.ingress.hostname }}
+    {{- end }}
+    {{- if .Values.ingest.ingress.extraTls }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.ingest.ingress.extraTls "context" $) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+{{- end }}

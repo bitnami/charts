@@ -1,0 +1,368 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if (include "opensearch.data.enabled" .) }}
+apiVersion: {{ template "common.capabilities.statefulset.apiVersion" . }}
+kind: StatefulSet
+metadata:
+  name: {{ include "opensearch.data.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: data
+    {{- if .Values.useIstioLabels }}
+    ## Istio Labels: https://istio.io/docs/ops/deployment/requirements/
+    app: data
+    {{- end }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if or .Values.data.annotations .Values.commonAnnotations }}
+  annotations:
+    {{- if .Values.data.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.data.annotations "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+spec:
+  {{- if not .Values.data.autoscaling.hpa.enabled }}
+  replicas: {{ .Values.data.replicaCount }}
+  {{- end }}
+  podManagementPolicy: {{ .Values.data.podManagementPolicy }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: data
+  serviceName: {{ include "opensearch.data.servicename" . }}
+  {{- if .Values.data.updateStrategy }}
+  updateStrategy: {{- toYaml .Values.data.updateStrategy | nindent 4 }}
+  {{- end }}
+  template:
+    metadata:
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
+        app.kubernetes.io/component: data
+        {{- if .Values.useIstioLabels }}
+        ## Istio Labels: https://istio.io/docs/ops/deployment/requirements/
+        app: data
+        {{- end }}
+        {{- if .Values.data.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.data.podLabels "context" $) | nindent 8 }}
+        {{- end }}
+      annotations:
+        {{- if and (include "opensearch.createTlsSecret" .) (not .Values.security.tls.data.existingSecret) }}
+        checksum/tls: {{ include (print $.Template.BasePath "/tls-secret.yaml") . | sha256sum }}
+        {{- end }}
+        {{- if .Values.data.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.data.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+    spec:
+      serviceAccountName: {{ template "opensearch.data.serviceAccountName" . }}
+      {{- include "opensearch.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.data.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.data.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.data.affinity }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.data.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.data.podAffinityPreset "component" "data" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.data.podAntiAffinityPreset "component" "data" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.data.nodeAffinityPreset.type "key" .Values.data.nodeAffinityPreset.key "values" .Values.data.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.data.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.data.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.data.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.data.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.data.schedulerName }}
+      schedulerName: {{ .Values.data.schedulerName }}
+      {{- end }}
+      {{- if .Values.data.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.data.topologySpreadConstraints "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.data.priorityClassName }}
+      priorityClassName: {{ .Values.data.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.data.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.data.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      {{- if .Values.data.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.data.terminationGracePeriodSeconds }}
+      {{- end }}
+      {{- if or .Values.data.initContainers .Values.sysctlImage.enabled (and .Values.volumePermissions.enabled .Values.data.persistence.enabled) }}
+      initContainers:
+        {{- if .Values.sysctlImage.enabled }}
+          {{- include "opensearch.sysctl.initContainer" .  | nindent 8}}
+        {{- end }}
+        {{- if and .Values.volumePermissions.enabled .Values.data.persistence.enabled }}
+        - name: volume-permissions
+          image: {{ include "opensearch.volumePermissions.image" . }}
+          imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
+          command:
+            - /bin/bash
+            - -ec
+            - |
+              mkdir -p /bitnami/opensearch/data
+              chown {{ .Values.data.containerSecurityContext.runAsUser }}:{{ .Values.data.podSecurityContext.fsGroup }} /bitnami/opensearch/data
+              find /bitnami/opensearch/data -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs -r chown -R {{ .Values.data.containerSecurityContext.runAsUser }}:{{ .Values.data.podSecurityContext.fsGroup }}
+          securityContext:
+            runAsUser: 0
+          {{- if .Values.volumePermissions.resources }}
+          resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: data
+              mountPath: /bitnami/opensearch/data
+        {{- end }}
+        {{- if .Values.data.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.data.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+      {{- end }}
+      containers:
+        - name: opensearch
+          image: {{ include "opensearch.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if .Values.data.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.data.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.data.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.data.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.data.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.data.args "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.data.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.data.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          env:
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
+            - name: MY_POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: OPENSEARCH_IS_DEDICATED_NODE
+              value: "yes"
+            {{- $roles := ternary "data" (list "data" .Values.data.extraRoles) (empty .Values.data.extraRoles) }}
+            - name: OPENSEARCH_NODE_ROLES
+              value: {{ join "," $roles | quote }}
+            - name: OPENSEARCH_TRANSPORT_PORT_NUMBER
+              value: {{ .Values.containerPorts.transport | quote }}
+            - name: OPENSEARCH_HTTP_PORT_NUMBER
+              value: {{ .Values.containerPorts.restAPI | quote }}
+            - name: OPENSEARCH_CLUSTER_NAME
+              value: {{ .Values.clusterName | quote }}
+            - name: OPENSEARCH_CLUSTER_HOSTS
+              value: {{ include "opensearch.hosts" . | quote }}
+            - name: OPENSEARCH_TOTAL_NODES
+              value: {{ add (ternary .Values.master.autoscaling.hpa.minReplicas .Values.master.replicaCount .Values.master.autoscaling.hpa.enabled) (ternary .Values.data.autoscaling.hpa.minReplicas .Values.data.replicaCount .Values.data.autoscaling.hpa.enabled) | quote }}
+            - name: OPENSEARCH_CLUSTER_MASTER_HOSTS
+              {{- $opensearchMasterFullname := include "opensearch.master.fullname" . }}
+              {{- $replicas := int (ternary .Values.master.autoscaling.hpa.minReplicas .Values.master.replicaCount .Values.master.autoscaling.hpa.enabled) }}
+              value: {{ range $i, $e := until $replicas }}{{ printf "%s-%d" $opensearchMasterFullname $e }} {{ end }}
+            - name: OPENSEARCH_MINIMUM_MASTER_NODES
+              value: {{ add (div (ternary .Values.master.autoscaling.hpa.minReplicas .Values.master.replicaCount .Values.master.autoscaling.hpa.enabled) 2) 1 | quote }}
+            - name: OPENSEARCH_ADVERTISED_HOSTNAME
+              value: "$(MY_POD_NAME).{{ (include "opensearch.data.servicename" .)}}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}"
+            {{- if .Values.plugins }}
+            - name: OPENSEARCH_PLUGINS
+              value: {{ .Values.plugins | quote }}
+            {{- end }}
+            {{- if .Values.snapshotRepoPath }}
+            - name: OPENSEARCH_FS_SNAPSHOT_REPO_PATH
+              value: {{ .Values.snapshotRepoPath | quote }}
+            {{- end }}
+            {{- if .Values.data.heapSize }}
+            - name: OPENSEARCH_HEAP_SIZE
+              value: {{ .Values.data.heapSize | quote }}
+            {{- end }}
+            {{- if .Values.security.enabled }}
+            {{- include "opensearch.configure.security" . | nindent 12 }}
+            {{- end }}
+            {{- if .Values.data.extraEnvVars }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.data.extraEnvVars "context" $ ) | nindent 12 }}
+            {{- end }}
+            {{- if .Values.extraEnvVars }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.extraEnvVars "context" $ ) | nindent 12 }}
+            {{- end }}
+          {{- if or .Values.extraEnvVarsCM .Values.extraEnvVarsSecret .Values.data.extraEnvVarsCM .Values.data.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" ( dict "value" .Values.extraEnvVarsCM "context" $ ) }}
+            {{- end }}
+            {{- if .Values.data.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" ( dict "value" .Values.data.extraEnvVarsCM "context" $ ) }}
+            {{- end }}
+            {{- if .Values.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" ( dict "value" .Values.extraEnvVarsSecret "context" $ ) }}
+            {{- end }}
+            {{- if .Values.data.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" ( dict "value" .Values.data.extraEnvVarsSecret "context" $ ) }}
+            {{- end }}
+          {{- end }}
+          ports:
+            - name: rest-api
+              containerPort: {{ .Values.containerPorts.restAPI }}
+            - name: transport
+              containerPort: {{ .Values.containerPorts.transport }}
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.data.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.data.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.data.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.data.startupProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: rest-api
+          {{- end }}
+          {{- if .Values.data.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.data.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.data.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.data.livenessProbe "enabled") "context" $) | nindent 12 }}
+            exec:
+              command:
+                - /opt/bitnami/scripts/opensearch/healthcheck.sh
+          {{- end }}
+          {{- if .Values.data.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.data.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.data.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.data.readinessProbe "enabled") "context" $) | nindent 12 }}
+            exec:
+              command:
+                - /opt/bitnami/scripts/opensearch/healthcheck.sh
+          {{- end }}
+          {{- end }}
+          {{- if .Values.data.resources }}
+          resources: {{- toYaml .Values.data.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: data
+              mountPath: /bitnami/opensearch/data
+            {{- if .Values.config }}
+            - mountPath: /opt/bitnami/opensearch/config/opensearch.yml
+              name: config
+              subPath: opensearch.yml
+            {{- end }}
+            {{- if .Values.extraConfig }}
+            - mountPath: /opt/bitnami/opensearch/config/my_opensearch.yml
+              name: config
+              subPath: my_opensearch.yml
+            {{- end }}
+            {{- if .Values.security.enabled }}
+            - name: opensearch-certificates
+              mountPath: /opt/bitnami/opensearch/config/certs
+              readOnly: true
+            {{- end }}
+            {{- if .Values.initScripts }}
+            - name: custom-init-scripts
+              mountPath: /docker-entrypoint-initdb.d/init-scripts
+            {{- end }}
+            {{- if .Values.initScriptsCM }}
+            - name: custom-init-scripts-cm
+              mountPath: /docker-entrypoint-initdb.d/init-scripts-cm
+            {{- end }}
+            {{- if .Values.initScriptsSecret }}
+            - name: custom-init-scripts-secret
+              mountPath: /docker-entrypoint-initdb.d/init-scripts-secret
+            {{- end }}
+            {{- if .Values.data.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.data.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
+            {{- if .Values.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
+        {{- if .Values.data.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.data.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+        {{- if or .Values.config .Values.extraConfig }}
+        - name: config
+          configMap:
+            name: {{ template "common.names.fullname" . }}
+        {{- end }}
+        {{- if .Values.security.enabled }}
+        - name: opensearch-certificates
+          projected:
+            defaultMode: 256
+            sources:
+              - secret:
+                  name: {{ include "opensearch.master.tlsSecretName" . }}
+              - secret:
+                  name: {{ include "opensearch.admin.tlsSecretName" . }}
+        {{- end }}
+        {{- if .Values.initScripts }}
+        - name: custom-init-scripts
+          configMap:
+            name: {{ template "opensearch.initScripts" . }}
+        {{- end }}
+        {{- if .Values.initScriptsCM }}
+        - name: custom-init-scripts-cm
+          configMap:
+            name: {{ template "opensearch.initScriptsCM" . }}
+        {{- end }}
+        {{- if .Values.initScriptsSecret }}
+        - name: custom-init-scripts-secret
+          secret:
+            secretName: {{ template "opensearch.initScriptsSecret" . }}
+            defaultMode: 0755
+        {{- end }}
+        {{- if .Values.data.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.data.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+  {{- if not .Values.data.persistence.enabled }}
+        - name: "data"
+          emptyDir: {}
+  {{- else if .Values.data.persistence.existingClaim }}
+        - name: "data"
+          persistentVolumeClaim:
+            claimName: {{ .Values.data.persistence.existingClaim }}
+  {{- else }}
+  volumeClaimTemplates:
+    - metadata:
+        name: "data"
+        annotations:
+          {{- if .Values.data.persistence.annotations }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.data.persistence.annotations "context" $) | nindent 10 }}
+          {{- end }}
+          {{- if .Values.commonAnnotations }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 10 }}
+          {{- end }}
+        {{- if .Values.commonLabels }}
+        labels: {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 10 }}
+        {{- end }}
+      spec:
+        accessModes:
+          {{- range .Values.data.persistence.accessModes }}
+          - {{ . | quote }}
+          {{- end }}
+        resources:
+          requests:
+            storage: {{ .Values.data.persistence.size | quote }}
+        {{- if .Values.data.persistence.selector }}
+        selector: {{- include "common.tplvalues.render" (dict "value" .Values.data.persistence.selector "context" $) | nindent 10 }}
+        {{- else if .Values.data.persistence.existingVolume }}
+        selector:
+          matchLabels:
+            volume: {{ .Values.data.persistence.existingVolume }}
+        {{- end }}
+        {{- include "common.storage.class" (dict "persistence" .Values.data.persistence "global" .Values.global) | nindent 8 }}
+  {{- end }}
+{{- end }}

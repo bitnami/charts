@@ -1,0 +1,121 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
+{{- if contains .Values.service.type "LoadBalancer" }}
+
+-------------------------------------------------------------------------------
+ WARNING
+
+    By specifying "service.type=LoadBalancer" you have most likely
+    exposed the Opensearch service externally.
+
+    Please note that Opensearch does not implement a authentication
+    mechanism to secure your cluster. For security reasons, we strongly
+    suggest that you switch to "ClusterIP" or "NodePort".
+-------------------------------------------------------------------------------
+{{- end }}
+{{- if not .Values.sysctlImage.enabled }}
+
+-------------------------------------------------------------------------------
+ WARNING
+
+    Opensearch requires some changes in the kernel of the host machine to
+    work as expected. If those values are not set in the underlying operating
+    system, the OS containers fail to boot with ERROR messages.
+
+    To check whether the host machine meets the requirements, run the command
+    below:
+
+      kubectl logs --namespace {{ include "common.names.namespace" . }} $(kubectl get --namespace {{ include "common.names.namespace" . }} \
+        pods -l app={{ template "common.names.name" . }},role=master -o jsonpath='{.items[0].metadata.name}') \
+	opensearch
+
+    You can adapt the Kernel parameters on you cluster as described in the
+    official documentation:
+
+      https://kubernetes.io/docs/tasks/administer-cluster/sysctl-cluster
+
+    As an alternative, you can specify "sysctlImage.enabled=true" to use a
+    privileged initContainer to change those settings in the Kernel:
+
+      helm upgrade --namespace {{ include "common.names.namespace" . }} {{ .Release.Name }} oci://registry-1.docker.io/bitnamicharts/opensearch --set sysctlImage.enabled=true
+
+    Note that this requires the ability to run privileged containers, which is likely not
+    the case on many secure clusters. To cover this use case, you can also set some parameters
+    in the config file to customize the default settings:
+
+      https://www.open.co/guide/en/opensearch/reference/current/index-modules-store.html
+      https://www.open.co/guide/en/cloud-on-k8s/master/k8s-virtual-memory.html
+
+    For that, you can place the desired parameters by using the "config" block present in the values.yaml
+
+{{- else if .Values.sysctlImage.enabled }}
+
+-------------------------------------------------------------------------------
+ WARNING
+
+    Opensearch requires some changes in the kernel of the host machine to
+    work as expected. If those values are not set in the underlying operating
+    system, the OS containers fail to boot with ERROR messages.
+
+    More information about these requirements can be found in the links below:
+
+      https://www.open.co/guide/en/opensearch/reference/current/file-descriptors.html
+      https://www.open.co/guide/en/opensearch/reference/current/vm-max-map-count.html
+
+    This chart uses a privileged initContainer to change those settings in the Kernel
+    by running: sysctl -w vm.max_map_count=262144 && sysctl -w fs.file-max=65536
+
+{{- end }}
+
+** Please be patient while the chart is being deployed **
+
+{{- if .Values.diagnosticMode.enabled }}
+The chart has been deployed in diagnostic mode. All probes have been disabled and the command has been overwritten with:
+
+  command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 4 }}
+  args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 4 }}
+
+Get the list of pods by executing:
+
+  kubectl get pods --namespace {{ include "common.names.namespace" . }} -l app.kubernetes.io/instance={{ .Release.Name }}
+
+Access the pod you want to debug by executing
+
+  kubectl exec --namespace {{ include "common.names.namespace" . }} -ti <NAME OF THE POD> -- bash
+
+In order to replicate the container startup scripts execute this command:
+
+    /opt/bitnami/scripts/opensearch/entrypoint.sh /opt/bitnami/scripts/opensearch/run.sh
+
+{{- else }}
+
+  Opensearch can be accessed within the cluster on port {{ include "opensearch.service.ports.restAPI" . }} at {{ template "opensearch.service.name" . }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}
+
+  To access from outside the cluster execute the following commands:
+
+{{- if contains "NodePort" .Values.service.type }}
+
+    export NODE_PORT=$(kubectl get --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.spec.ports[0].nodePort}" services {{ template "opensearch.service.name" . }})
+    export NODE_IP=$(kubectl get nodes --namespace {{ include "common.names.namespace" . }} -o jsonpath="{.items[0].status.addresses[0].address}")
+    curl http://$NODE_IP:$NODE_PORT/
+{{- else if contains "LoadBalancer" .Values.service.type }}
+
+  NOTE: It may take a few minutes for the LoadBalancer IP to be available.
+        Watch the status with: 'kubectl get svc --namespace {{ include "common.names.namespace" . }} -w {{ template "opensearch.service.name" . }}'
+
+    export SERVICE_IP=$(kubectl get svc --namespace {{ include "common.names.namespace" . }} {{ template "opensearch.service.name" . }} --template "{{ "{{ range (index .status.loadBalancer.ingress 0) }}{{ . }}{{ end }}" }}")
+    curl http://$SERVICE_IP:{{ include "opensearch.service.ports.restAPI" . }}/
+{{- else if contains "ClusterIP"  .Values.service.type }}
+
+    kubectl port-forward --namespace {{ include "common.names.namespace" . }} svc/{{ template "opensearch.service.name" . }} {{ include "opensearch.service.ports.restAPI" . }}:9200 &
+    curl http://127.0.0.1:9200/
+{{- end }}
+
+{{- include "common.warnings.rollingTag" .Values.image }}
+{{- include "common.warnings.rollingTag" .Values.volumePermissions.image }}
+{{- include "common.warnings.rollingTag" .Values.sysctlImage }}
+
+{{- end }}
+{{ include "opensearch.validateValues" . }}
