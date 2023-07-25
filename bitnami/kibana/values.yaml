@@ -73,7 +73,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/kibana
-  tag: 8.8.2-debian-11-r4
+  tag: 8.8.2-debian-11-r23
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -195,7 +195,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r2
+    tag: 11-debian-11-r16
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
