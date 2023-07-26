@@ -306,7 +306,7 @@ spec:
               if [[ -f "${MARIADB_ROOT_PASSWORD_FILE:-}" ]]; then
                   password_aux=$(cat "$MARIADB_ROOT_PASSWORD_FILE")
               fi
-              DATA_SOURCE_NAME="root:${password_aux}@(localhost:3306)/" /bin/mysqld_exporter {{- range .Values.metrics.extraArgs.primary }} {{ . }} {{- end }}
+              /bin/mysqld_exporter --mysqld.username="root:${password_aux}" --mysqld.address="localhost:3306" {{- range .Values.metrics.extraArgs.primary }} {{ . }} {{- end }}
           {{- end }}
           ports:
             - name: metrics
