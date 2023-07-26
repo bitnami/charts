@@ -30,7 +30,7 @@ agent:
       args:
         - all
     - name: trace-generator
-      image: bitnami/bitnami-shell:11-debian-11-r57
+      image: bitnami/os-shell:11-debian-11-r2
       command:
         - /bin/bash
         - -ec

@@ -40,6 +40,12 @@ spec:
   {{- if .Values.metrics.serviceMonitor.podTargetLabels }}
   podTargetLabels: {{- toYaml .Values.metrics.serviceMonitor.podTargetLabels | nindent 4 }}
   {{- end }}
+  {{ with .Values.metrics.serviceMonitor.sampleLimit }}
+  sampleLimit: {{ . }}
+  {{- end }}
+  {{ with .Values.metrics.serviceMonitor.targetLimit }}
+  targetLimit: {{ . }}
+  {{- end }}
   namespaceSelector:
     matchNames:
       - {{ .Release.Namespace }}

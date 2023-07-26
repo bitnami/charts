@@ -91,7 +91,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/redis
-  tag: 7.0.11-debian-11-r20
+  tag: 7.0.12-debian-11-r2
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -279,10 +279,23 @@ master:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param master.containerSecurityContext.enabled Enabled Redis&reg; master containers' Security Context
   ## @param master.containerSecurityContext.runAsUser Set Redis&reg; master containers' Security Context runAsUser
+  ## @param master.containerSecurityContext.runAsGroup Set Redis&reg; master containers' Security Context runAsGroup
+  ## @param master.containerSecurityContext.runAsNonRoot Set Redis&reg; master containers' Security Context runAsNonRoot
+  ## @param master.containerSecurityContext.allowPrivilegeEscalation Is it possible to escalate Redis&reg; pod(s) privileges
+  ## @param master.containerSecurityContext.seccompProfile.type Set Redis&reg; master containers' Security Context seccompProfile
+  ## @param master.containerSecurityContext.capabilities.drop Set Redis&reg; master containers' Security Context capabilities to drop
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
+    runAsGroup: 0
+    runAsNonRoot: true
+    allowPrivilegeEscalation: false
+    seccompProfile:
+      type: RuntimeDefault
+    capabilities:
+      drop:
+        - ALL
   ## @param master.kind Use either Deployment or StatefulSet (default)
   ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/
   ##
@@ -696,10 +709,23 @@ replica:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param replica.containerSecurityContext.enabled Enabled Redis&reg; replicas containers' Security Context
   ## @param replica.containerSecurityContext.runAsUser Set Redis&reg; replicas containers' Security Context runAsUser
+  ## @param replica.containerSecurityContext.runAsGroup Set Redis&reg; replicas containers' Security Context runAsGroup
+  ## @param replica.containerSecurityContext.runAsNonRoot Set Redis&reg; replicas containers' Security Context runAsNonRoot
+  ## @param replica.containerSecurityContext.allowPrivilegeEscalation Set Redis&reg; replicas pod's Security Context allowPrivilegeEscalation
+  ## @param replica.containerSecurityContext.seccompProfile.type Set Redis&reg; replicas containers' Security Context seccompProfile
+  ## @param replica.containerSecurityContext.capabilities.drop Set Redis&reg; replicas containers' Security Context capabilities to drop
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
+    runAsGroup: 0
+    runAsNonRoot: true
+    allowPrivilegeEscalation: false
+    seccompProfile:
+      type: RuntimeDefault
+    capabilities:
+      drop:
+        - ALL
   ## @param replica.schedulerName Alternate scheduler for Redis&reg; replicas pods
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
@@ -1004,7 +1030,7 @@ sentinel:
   image:
     registry: docker.io
     repository: bitnami/redis-sentinel
-    tag: 7.0.11-debian-11-r18
+    tag: 7.0.12-debian-11-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1197,10 +1223,23 @@ sentinel:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param sentinel.containerSecurityContext.enabled Enabled Redis&reg; Sentinel containers' Security Context
   ## @param sentinel.containerSecurityContext.runAsUser Set Redis&reg; Sentinel containers' Security Context runAsUser
+  ## @param sentinel.containerSecurityContext.runAsGroup Set Redis&reg; Sentinel containers' Security Context runAsGroup
+  ## @param sentinel.containerSecurityContext.runAsNonRoot Set Redis&reg; Sentinel containers' Security Context runAsNonRoot
+  ## @param sentinel.containerSecurityContext.allowPrivilegeEscalation Set Redis&reg; Sentinel containers' Security Context allowPrivilegeEscalation
+  ## @param sentinel.containerSecurityContext.seccompProfile.type Set Redis&reg; Sentinel containers' Security Context seccompProfile
+  ## @param sentinel.containerSecurityContext.capabilities.drop Set Redis&reg; Sentinel containers' Security Context capabilities to drop
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
+    runAsGroup: 0
+    runAsNonRoot: true
+    allowPrivilegeEscalation: false
+    seccompProfile:
+      type: RuntimeDefault
+    capabilities:
+      drop:
+        - ALL
   ## @param sentinel.lifecycleHooks for the Redis&reg; sentinel container(s) to automate configuration before or after startup
   ##
   lifecycleHooks: {}
@@ -1446,7 +1485,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/redis-exporter
-    tag: 1.50.0-debian-11-r21
+    tag: 1.51.0-debian-11-r11
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1534,10 +1573,23 @@ metrics:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param metrics.containerSecurityContext.enabled Enabled Redis&reg; exporter containers' Security Context
   ## @param metrics.containerSecurityContext.runAsUser Set Redis&reg; exporter containers' Security Context runAsUser
+  ## @param metrics.containerSecurityContext.runAsGroup Set Redis&reg; exporter containers' Security Context runAsGroup
+  ## @param metrics.containerSecurityContext.runAsNonRoot Set Redis&reg; exporter containers' Security Context runAsNonRoot
+  ## @param metrics.containerSecurityContext.allowPrivilegeEscalation Set Redis&reg; exporter containers' Security Context allowPrivilegeEscalation
+  ## @param metrics.containerSecurityContext.seccompProfile.type Set Redis&reg; exporter containers' Security Context seccompProfile
+  ## @param metrics.containerSecurityContext.capabilities.drop Set Redis&reg; exporter containers' Security Context capabilities to drop
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
+    runAsGroup: 0
+    runAsNonRoot: true
+    allowPrivilegeEscalation: false
+    seccompProfile:
+      type: RuntimeDefault
+    capabilities:
+      drop:
+        - ALL
   ## @param metrics.extraVolumes Optionally specify extra list of additional volumes for the Redis&reg; metrics sidecar
   ##
   extraVolumes: []
@@ -1627,6 +1679,13 @@ metrics:
     ## @param metrics.serviceMonitor.podTargetLabels Labels from the Kubernetes pod to be transferred to the created metrics
     ##
     podTargetLabels: []
+    ## @param metrics.serviceMonitor.sampleLimit Limit of how many samples should be scraped from every Pod
+    ##
+    sampleLimit: false
+    ## @param metrics.serviceMonitor.targetLimit Limit of how many targets should be scraped
+    ##
+    targetLimit: false
+
   ## Custom PrometheusRule to be defined
   ## ref: https://github.com/coreos/prometheus-operator#customresourcedefinitions
   ##
@@ -1688,19 +1747,19 @@ volumePermissions:
   ## @param volumePermissions.enabled Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`
   ##
   enabled: false
-  ## Bitnami Shell image
-  ## ref: https://hub.docker.com/r/bitnami/bitnami-shell/tags/
-  ## @param volumePermissions.image.registry Bitnami Shell image registry
-  ## @param volumePermissions.image.repository Bitnami Shell image repository
-  ## @param volumePermissions.image.tag Bitnami Shell image tag (immutable tags are recommended)
-  ## @param volumePermissions.image.digest Bitnami Shell image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
-  ## @param volumePermissions.image.pullPolicy Bitnami Shell image pull policy
-  ## @param volumePermissions.image.pullSecrets Bitnami Shell image pull secrets
+  ## OS Shell + Utility image
+  ## ref: https://hub.docker.com/r/bitnami/os-shell/tags/
+  ## @param volumePermissions.image.registry OS Shell + Utility image registry
+  ## @param volumePermissions.image.repository OS Shell + Utility image repository
+  ## @param volumePermissions.image.tag OS Shell + Utility image tag (immutable tags are recommended)
+  ## @param volumePermissions.image.digest OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## @param volumePermissions.image.pullPolicy OS Shell + Utility image pull policy
+  ## @param volumePermissions.image.pullSecrets OS Shell + Utility image pull secrets
   ##
   image:
     registry: docker.io
-    repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r125
+    repository: bitnami/os-shell
+    tag: 11-debian-11-r3
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1736,19 +1795,19 @@ sysctl:
   ## @param sysctl.enabled Enable init container to modify Kernel settings
   ##
   enabled: false
-  ## Bitnami Shell image
-  ## ref: https://hub.docker.com/r/bitnami/bitnami-shell/tags/
-  ## @param sysctl.image.registry Bitnami Shell image registry
-  ## @param sysctl.image.repository Bitnami Shell image repository
-  ## @param sysctl.image.tag Bitnami Shell image tag (immutable tags are recommended)
-  ## @param sysctl.image.digest Bitnami Shell image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
-  ## @param sysctl.image.pullPolicy Bitnami Shell image pull policy
-  ## @param sysctl.image.pullSecrets Bitnami Shell image pull secrets
+  ## OS Shell + Utility image
+  ## ref: https://hub.docker.com/r/bitnami/os-shell/tags/
+  ## @param sysctl.image.registry OS Shell + Utility image registry
+  ## @param sysctl.image.repository OS Shell + Utility image repository
+  ## @param sysctl.image.tag OS Shell + Utility image tag (immutable tags are recommended)
+  ## @param sysctl.image.digest OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## @param sysctl.image.pullPolicy OS Shell + Utility image pull policy
+  ## @param sysctl.image.pullSecrets OS Shell + Utility image pull secrets
   ##
   image:
     registry: docker.io
-    repository: bitnami/bitnami-shell
-    tag: 11-debian-11-r125
+    repository: bitnami/os-shell
+    tag: 11-debian-11-r3
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
