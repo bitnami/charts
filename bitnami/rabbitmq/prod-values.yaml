@@ -29,7 +29,7 @@ global:
 ## @param image.debug Set to true if you would like to see extra information on logs
 ##
 image: 
-  registry: 172.27.15.130/repository/bravo-eg/
+  registry: 172.27.15.130/repository/bravo-eg
   repository: rabbitmq-prod
   tag: latest
   digest: ""
