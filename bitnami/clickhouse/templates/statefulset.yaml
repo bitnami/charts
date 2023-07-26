@@ -45,6 +45,7 @@ spec:
         {{- if $.Values.podLabels }}
         {{- include "common.tplvalues.render" (dict "value" $.Values.podLabels "context" $) | nindent 8 }}
         {{- end }}
+        shard: {{ $i | quote }}
     spec:
       serviceAccountName: {{ template "clickhouse.serviceAccountName" $ }}
       {{- include "clickhouse.imagePullSecrets" $ | nindent 6 }}
