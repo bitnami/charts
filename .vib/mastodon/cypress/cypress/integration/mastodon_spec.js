@@ -20,9 +20,7 @@ it('allows to publish a tweet with an image', () => {
     cy.get('.item-list').contains(`${tweet.text} ${random}`);
     // The image will get renamed so we can only check if the new post contains an image
     cy.contains('.status-public', `${tweet.text} ${random}`).within(() => {
-      cy.get('.media-gallery').within(() => {
-        cy.get('[href*="jpeg"]');
-      })
+      cy.get('[href*="jpeg"]');
     })
   });
 });
