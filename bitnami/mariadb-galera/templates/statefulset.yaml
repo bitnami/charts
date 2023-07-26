@@ -390,7 +390,7 @@ spec:
               if [[ -f "${MARIADB_ROOT_PASSWORD_FILE:-}" ]]; then
                   password_aux=$(cat "$MARIADB_ROOT_PASSWORD_FILE")
               fi
-              DATA_SOURCE_NAME="${MARIADB_ROOT_USER}:${password_aux}@(localhost:3306)/" /bin/mysqld_exporter $MARIADB_METRICS_EXTRA_FLAGS
+              /bin/mysqld_exporter --mysqld.username="root:${password_aux}" --mysqld.address="localhost:3306" $MARIADB_METRICS_EXTRA_FLAGS
           {{- end }}
           {{- if .Values.diagnosticMode.enabled }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
