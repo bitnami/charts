@@ -922,7 +922,7 @@ service:
     amqp: ""
     amqpTls: ""
     dist: ""
-    manager: ""
+    manager: "32200"
     epmd: ""
     metrics: ""
   ## @param service.extraPorts Extra ports to expose in the service
