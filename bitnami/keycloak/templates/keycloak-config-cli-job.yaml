@@ -6,8 +6,8 @@ SPDX-License-Identifier: APACHE-2.0
 {{- if .Values.keycloakConfigCli.enabled }}
 apiVersion: batch/v1
 kind: Job
-metadata:
-  name: {{ template "common.names.fullname" . }}-keycloak-config-cli
+metadata:  
+  name: {{ printf "%s-keycloak-config-cli" (template "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: keycloak-config-cli
