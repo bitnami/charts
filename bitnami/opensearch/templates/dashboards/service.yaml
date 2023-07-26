@@ -1,0 +1,59 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "opensearch.dashboards.servicename" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: dashboards
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if or .Values.dashboards.service.annotations .Values.commonAnnotations }}
+  annotations:
+    {{- if .Values.dashboards.service.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.dashboards.service.annotations "context" $) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+spec:
+  type: {{ .Values.dashboards.service.type }}
+  {{- if and .Values.dashboards.service.clusterIP (eq .Values.dashboards.service.type "ClusterIP") }}
+  clusterIP: {{ .Values.dashboards.service.clusterIP }}
+  {{- end }}
+  {{- if .Values.dashboards.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.dashboards.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.dashboards.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.dashboards.service.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if or (eq .Values.dashboards.service.type "LoadBalancer") (eq .Values.dashboards.service.type "NodePort") }}
+  externalTrafficPolicy: {{ .Values.dashboards.service.externalTrafficPolicy | quote }}
+  {{- end }}
+  {{- if and (eq .Values.dashboards.service.type "LoadBalancer") (not (empty .Values.dashboards.service.loadBalancerSourceRanges)) }}
+  loadBalancerSourceRanges: {{ .Values.dashboards.service.loadBalancerSourceRanges }}
+  {{- end }}
+  {{- if and (eq .Values.dashboards.service.type "LoadBalancer") (not (empty .Values.dashboards.service.loadBalancerIP)) }}
+  loadBalancerIP: {{ .Values.dashboards.service.loadBalancerIP }}
+  {{- end }}
+  ports:
+    - name: http
+      port: {{ .Values.dashboards.service.ports.http }}
+      protocol: TCP
+      targetPort: http
+      {{- if and (or (eq .Values.dashboards.service.type "NodePort") (eq .Values.dashboards.service.type "LoadBalancer")) (not (empty .Values.dashboards.service.nodePorts.http)) }}
+      nodePort: {{ .Values.dashboards.service.nodePorts.http }}
+      {{- else if eq .Values.dashboards.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    {{- if .Values.dashboards.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.dashboards.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
+    app.kubernetes.io/component: dashboards

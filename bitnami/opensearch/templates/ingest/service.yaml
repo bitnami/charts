@@ -1,0 +1,65 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and (include "opensearch.ingest.enabled" .) .Values.ingest.service.enabled }}
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "opensearch.ingest.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: ingest
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  annotations:
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.ingest.service.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.ingest.service.annotations "context" $) | nindent 4 }}
+    {{- end }}
+spec:
+  type: {{ .Values.ingest.service.type }}
+  {{- if and .Values.ingest.service.clusterIP (eq .Values.ingest.service.type "ClusterIP") }}
+  clusterIP: {{ .Values.ingest.service.clusterIP }}
+  {{- end }}
+  {{- if or (eq .Values.ingest.service.type "LoadBalancer") (eq .Values.ingest.service.type "NodePort") }}
+  externalTrafficPolicy: {{ .Values.ingest.service.externalTrafficPolicy | quote }}
+  {{- end }}
+  {{- if and (eq .Values.ingest.service.type "LoadBalancer") .Values.ingest.service.loadBalancerSourceRanges }}
+  loadBalancerSourceRanges: {{- toYaml .Values.ingest.service.loadBalancerSourceRanges | nindent 4 }}
+  {{- end }}
+  {{- if (and (eq .Values.ingest.service.type "LoadBalancer") (not (empty .Values.ingest.service.loadBalancerIP))) }}
+  loadBalancerIP: {{ .Values.ingest.service.loadBalancerIP }}
+  {{- end }}
+  {{- if .Values.ingest.service.sessionAffinity }}
+  sessionAffinity: {{ .Values.ingest.service.sessionAffinity }}
+  {{- end }}
+  {{- if .Values.ingest.service.sessionAffinityConfig }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" .Values.ingest.service.sessionAffinityConfig "context" $) | nindent 4 }}
+  {{- end }}
+  ports:
+    - name: tcp-rest-api
+      port: {{ .Values.ingest.service.ports.restAPI }}
+      targetPort: rest-api
+      {{- if and (or (eq .Values.ingest.service.type "NodePort") (eq .Values.ingest.service.type "LoadBalancer")) (not (empty .Values.ingest.service.nodePorts.restAPI)) }}
+      nodePort: {{ .Values.ingest.service.nodePorts.restAPI }}
+      {{- else if eq .Values.ingest.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    - name: tcp-transport
+      port: {{ .Values.ingest.service.ports.transport }}
+      {{- if and (or (eq .Values.ingest.service.type "NodePort") (eq .Values.ingest.service.type "LoadBalancer")) (not (empty .Values.ingest.service.nodePorts.transport)) }}
+      nodePort: {{ .Values.ingest.service.nodePorts.transport }}
+      {{- else if eq .Values.ingest.service.type "ClusterIP" }}
+      nodePort: null
+      {{- end }}
+    {{- if .Values.ingest.service.extraPorts }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.ingest.service.extraPorts "context" $) | nindent 4 }}
+    {{- end }}
+  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
+    app.kubernetes.io/component: ingest
+{{- end }}
