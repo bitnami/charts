@@ -158,198 +158,208 @@ kubectl delete pvc -l release=my-release
 
 ### PostgreSQL Primary parameters
 
-| Name                                         | Description                                                                                                              | Value                 |
-| -------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | --------------------- |
-| `primary.name`                               | Name of the primary database (eg primary, master, leader, ...)                                                           | `primary`             |
-| `primary.configuration`                      | PostgreSQL Primary main configuration to be injected as ConfigMap                                                        | `""`                  |
-| `primary.pgHbaConfiguration`                 | PostgreSQL Primary client authentication configuration                                                                   | `""`                  |
-| `primary.existingConfigmap`                  | Name of an existing ConfigMap with PostgreSQL Primary configuration                                                      | `""`                  |
-| `primary.extendedConfiguration`              | Extended PostgreSQL Primary configuration (appended to main or default configuration)                                    | `""`                  |
-| `primary.existingExtendedConfigmap`          | Name of an existing ConfigMap with PostgreSQL Primary extended configuration                                             | `""`                  |
-| `primary.initdb.args`                        | PostgreSQL initdb extra arguments                                                                                        | `""`                  |
-| `primary.initdb.postgresqlWalDir`            | Specify a custom location for the PostgreSQL transaction log                                                             | `""`                  |
-| `primary.initdb.scripts`                     | Dictionary of initdb scripts                                                                                             | `{}`                  |
-| `primary.initdb.scriptsConfigMap`            | ConfigMap with scripts to be run at first boot                                                                           | `""`                  |
-| `primary.initdb.scriptsSecret`               | Secret with scripts to be run at first boot (in case it contains sensitive information)                                  | `""`                  |
-| `primary.initdb.user`                        | Specify the PostgreSQL username to execute the initdb scripts                                                            | `""`                  |
-| `primary.initdb.password`                    | Specify the PostgreSQL password to execute the initdb scripts                                                            | `""`                  |
-| `primary.standby.enabled`                    | Whether to enable current cluster's primary as standby server of another cluster or not                                  | `false`               |
-| `primary.standby.primaryHost`                | The Host of replication primary in the other cluster                                                                     | `""`                  |
-| `primary.standby.primaryPort`                | The Port of replication primary in the other cluster                                                                     | `""`                  |
-| `primary.extraEnvVars`                       | Array with extra environment variables to add to PostgreSQL Primary nodes                                                | `[]`                  |
-| `primary.extraEnvVarsCM`                     | Name of existing ConfigMap containing extra env vars for PostgreSQL Primary nodes                                        | `""`                  |
-| `primary.extraEnvVarsSecret`                 | Name of existing Secret containing extra env vars for PostgreSQL Primary nodes                                           | `""`                  |
-| `primary.command`                            | Override default container command (useful when using custom images)                                                     | `[]`                  |
-| `primary.args`                               | Override default container args (useful when using custom images)                                                        | `[]`                  |
-| `primary.livenessProbe.enabled`              | Enable livenessProbe on PostgreSQL Primary containers                                                                    | `true`                |
-| `primary.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                                                  | `30`                  |
-| `primary.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                                         | `10`                  |
-| `primary.livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                                                        | `5`                   |
-| `primary.livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                                                      | `6`                   |
-| `primary.livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                                                      | `1`                   |
-| `primary.readinessProbe.enabled`             | Enable readinessProbe on PostgreSQL Primary containers                                                                   | `true`                |
-| `primary.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                                                 | `5`                   |
-| `primary.readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                                                        | `10`                  |
-| `primary.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                                       | `5`                   |
-| `primary.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                                                     | `6`                   |
-| `primary.readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                                                     | `1`                   |
-| `primary.startupProbe.enabled`               | Enable startupProbe on PostgreSQL Primary containers                                                                     | `false`               |
-| `primary.startupProbe.initialDelaySeconds`   | Initial delay seconds for startupProbe                                                                                   | `30`                  |
-| `primary.startupProbe.periodSeconds`         | Period seconds for startupProbe                                                                                          | `10`                  |
-| `primary.startupProbe.timeoutSeconds`        | Timeout seconds for startupProbe                                                                                         | `1`                   |
-| `primary.startupProbe.failureThreshold`      | Failure threshold for startupProbe                                                                                       | `15`                  |
-| `primary.startupProbe.successThreshold`      | Success threshold for startupProbe                                                                                       | `1`                   |
-| `primary.customLivenessProbe`                | Custom livenessProbe that overrides the default one                                                                      | `{}`                  |
-| `primary.customReadinessProbe`               | Custom readinessProbe that overrides the default one                                                                     | `{}`                  |
-| `primary.customStartupProbe`                 | Custom startupProbe that overrides the default one                                                                       | `{}`                  |
-| `primary.lifecycleHooks`                     | for the PostgreSQL Primary container to automate configuration before or after startup                                   | `{}`                  |
-| `primary.resources.limits`                   | The resources limits for the PostgreSQL Primary containers                                                               | `{}`                  |
-| `primary.resources.requests.memory`          | The requested memory for the PostgreSQL Primary containers                                                               | `256Mi`               |
-| `primary.resources.requests.cpu`             | The requested cpu for the PostgreSQL Primary containers                                                                  | `250m`                |
-| `primary.podSecurityContext.enabled`         | Enable security context                                                                                                  | `true`                |
-| `primary.podSecurityContext.fsGroup`         | Group ID for the pod                                                                                                     | `1001`                |
-| `primary.containerSecurityContext.enabled`   | Enable container security context                                                                                        | `true`                |
-| `primary.containerSecurityContext.runAsUser` | User ID for the container                                                                                                | `1001`                |
-| `primary.hostAliases`                        | PostgreSQL primary pods host aliases                                                                                     | `[]`                  |
-| `primary.hostNetwork`                        | Specify if host network should be enabled for PostgreSQL pod (postgresql primary)                                        | `false`               |
-| `primary.hostIPC`                            | Specify if host IPC should be enabled for PostgreSQL pod (postgresql primary)                                            | `false`               |
-| `primary.labels`                             | Map of labels to add to the statefulset (postgresql primary)                                                             | `{}`                  |
-| `primary.annotations`                        | Annotations for PostgreSQL primary pods                                                                                  | `{}`                  |
-| `primary.podLabels`                          | Map of labels to add to the pods (postgresql primary)                                                                    | `{}`                  |
-| `primary.podAnnotations`                     | Map of annotations to add to the pods (postgresql primary)                                                               | `{}`                  |
-| `primary.podAffinityPreset`                  | PostgreSQL primary pod affinity preset. Ignored if `primary.affinity` is set. Allowed values: `soft` or `hard`           | `""`                  |
-| `primary.podAntiAffinityPreset`              | PostgreSQL primary pod anti-affinity preset. Ignored if `primary.affinity` is set. Allowed values: `soft` or `hard`      | `soft`                |
-| `primary.nodeAffinityPreset.type`            | PostgreSQL primary node affinity preset type. Ignored if `primary.affinity` is set. Allowed values: `soft` or `hard`     | `""`                  |
-| `primary.nodeAffinityPreset.key`             | PostgreSQL primary node label key to match Ignored if `primary.affinity` is set.                                         | `""`                  |
-| `primary.nodeAffinityPreset.values`          | PostgreSQL primary node label values to match. Ignored if `primary.affinity` is set.                                     | `[]`                  |
-| `primary.affinity`                           | Affinity for PostgreSQL primary pods assignment                                                                          | `{}`                  |
-| `primary.nodeSelector`                       | Node labels for PostgreSQL primary pods assignment                                                                       | `{}`                  |
-| `primary.tolerations`                        | Tolerations for PostgreSQL primary pods assignment                                                                       | `[]`                  |
-| `primary.topologySpreadConstraints`          | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`                  |
-| `primary.priorityClassName`                  | Priority Class to use for each pod (postgresql primary)                                                                  | `""`                  |
-| `primary.schedulerName`                      | Use an alternate scheduler, e.g. "stork".                                                                                | `""`                  |
-| `primary.terminationGracePeriodSeconds`      | Seconds PostgreSQL primary pod needs to terminate gracefully                                                             | `""`                  |
-| `primary.updateStrategy.type`                | PostgreSQL Primary statefulset strategy type                                                                             | `RollingUpdate`       |
-| `primary.updateStrategy.rollingUpdate`       | PostgreSQL Primary statefulset rolling update configuration parameters                                                   | `{}`                  |
-| `primary.extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for the PostgreSQL Primary container(s)                         | `[]`                  |
-| `primary.extraVolumes`                       | Optionally specify extra list of additional volumes for the PostgreSQL Primary pod(s)                                    | `[]`                  |
-| `primary.sidecars`                           | Add additional sidecar containers to the PostgreSQL Primary pod(s)                                                       | `[]`                  |
-| `primary.initContainers`                     | Add additional init containers to the PostgreSQL Primary pod(s)                                                          | `[]`                  |
-| `primary.extraPodSpec`                       | Optionally specify extra PodSpec for the PostgreSQL Primary pod(s)                                                       | `{}`                  |
-| `primary.service.type`                       | Kubernetes Service type                                                                                                  | `ClusterIP`           |
-| `primary.service.ports.postgresql`           | PostgreSQL service port                                                                                                  | `5432`                |
-| `primary.service.nodePorts.postgresql`       | Node port for PostgreSQL                                                                                                 | `""`                  |
-| `primary.service.clusterIP`                  | Static clusterIP or None for headless services                                                                           | `""`                  |
-| `primary.service.annotations`                | Annotations for PostgreSQL primary service                                                                               | `{}`                  |
-| `primary.service.loadBalancerIP`             | Load balancer IP if service type is `LoadBalancer`                                                                       | `""`                  |
-| `primary.service.externalTrafficPolicy`      | Enable client source IP preservation                                                                                     | `Cluster`             |
-| `primary.service.loadBalancerSourceRanges`   | Addresses that are allowed when service is LoadBalancer                                                                  | `[]`                  |
-| `primary.service.extraPorts`                 | Extra ports to expose in the PostgreSQL primary service                                                                  | `[]`                  |
-| `primary.service.sessionAffinity`            | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                     | `None`                |
-| `primary.service.sessionAffinityConfig`      | Additional settings for the sessionAffinity                                                                              | `{}`                  |
-| `primary.service.headless.annotations`       | Additional custom annotations for headless PostgreSQL primary service                                                    | `{}`                  |
-| `primary.persistence.enabled`                | Enable PostgreSQL Primary data persistence using PVC                                                                     | `true`                |
-| `primary.persistence.existingClaim`          | Name of an existing PVC to use                                                                                           | `""`                  |
-| `primary.persistence.mountPath`              | The path the volume will be mounted at                                                                                   | `/bitnami/postgresql` |
-| `primary.persistence.subPath`                | The subdirectory of the volume to mount to                                                                               | `""`                  |
-| `primary.persistence.storageClass`           | PVC Storage Class for PostgreSQL Primary data volume                                                                     | `""`                  |
-| `primary.persistence.accessModes`            | PVC Access Mode for PostgreSQL volume                                                                                    | `["ReadWriteOnce"]`   |
-| `primary.persistence.size`                   | PVC Storage Request for PostgreSQL volume                                                                                | `8Gi`                 |
-| `primary.persistence.annotations`            | Annotations for the PVC                                                                                                  | `{}`                  |
-| `primary.persistence.labels`                 | Labels for the PVC                                                                                                       | `{}`                  |
-| `primary.persistence.selector`               | Selector to match an existing Persistent Volume (this value is evaluated as a template)                                  | `{}`                  |
-| `primary.persistence.dataSource`             | Custom PVC data source                                                                                                   | `{}`                  |
+| Name                                                        | Description                                                                                                              | Value                 |
+| ----------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | --------------------- |
+| `primary.name`                                              | Name of the primary database (eg primary, master, leader, ...)                                                           | `primary`             |
+| `primary.configuration`                                     | PostgreSQL Primary main configuration to be injected as ConfigMap                                                        | `""`                  |
+| `primary.pgHbaConfiguration`                                | PostgreSQL Primary client authentication configuration                                                                   | `""`                  |
+| `primary.existingConfigmap`                                 | Name of an existing ConfigMap with PostgreSQL Primary configuration                                                      | `""`                  |
+| `primary.extendedConfiguration`                             | Extended PostgreSQL Primary configuration (appended to main or default configuration)                                    | `""`                  |
+| `primary.existingExtendedConfigmap`                         | Name of an existing ConfigMap with PostgreSQL Primary extended configuration                                             | `""`                  |
+| `primary.initdb.args`                                       | PostgreSQL initdb extra arguments                                                                                        | `""`                  |
+| `primary.initdb.postgresqlWalDir`                           | Specify a custom location for the PostgreSQL transaction log                                                             | `""`                  |
+| `primary.initdb.scripts`                                    | Dictionary of initdb scripts                                                                                             | `{}`                  |
+| `primary.initdb.scriptsConfigMap`                           | ConfigMap with scripts to be run at first boot                                                                           | `""`                  |
+| `primary.initdb.scriptsSecret`                              | Secret with scripts to be run at first boot (in case it contains sensitive information)                                  | `""`                  |
+| `primary.initdb.user`                                       | Specify the PostgreSQL username to execute the initdb scripts                                                            | `""`                  |
+| `primary.initdb.password`                                   | Specify the PostgreSQL password to execute the initdb scripts                                                            | `""`                  |
+| `primary.standby.enabled`                                   | Whether to enable current cluster's primary as standby server of another cluster or not                                  | `false`               |
+| `primary.standby.primaryHost`                               | The Host of replication primary in the other cluster                                                                     | `""`                  |
+| `primary.standby.primaryPort`                               | The Port of replication primary in the other cluster                                                                     | `""`                  |
+| `primary.extraEnvVars`                                      | Array with extra environment variables to add to PostgreSQL Primary nodes                                                | `[]`                  |
+| `primary.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars for PostgreSQL Primary nodes                                        | `""`                  |
+| `primary.extraEnvVarsSecret`                                | Name of existing Secret containing extra env vars for PostgreSQL Primary nodes                                           | `""`                  |
+| `primary.command`                                           | Override default container command (useful when using custom images)                                                     | `[]`                  |
+| `primary.args`                                              | Override default container args (useful when using custom images)                                                        | `[]`                  |
+| `primary.livenessProbe.enabled`                             | Enable livenessProbe on PostgreSQL Primary containers                                                                    | `true`                |
+| `primary.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                  | `30`                  |
+| `primary.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                         | `10`                  |
+| `primary.livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                                        | `5`                   |
+| `primary.livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                                      | `6`                   |
+| `primary.livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                                      | `1`                   |
+| `primary.readinessProbe.enabled`                            | Enable readinessProbe on PostgreSQL Primary containers                                                                   | `true`                |
+| `primary.readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                                 | `5`                   |
+| `primary.readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                                        | `10`                  |
+| `primary.readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                                       | `5`                   |
+| `primary.readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                                     | `6`                   |
+| `primary.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                                     | `1`                   |
+| `primary.startupProbe.enabled`                              | Enable startupProbe on PostgreSQL Primary containers                                                                     | `false`               |
+| `primary.startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                                                   | `30`                  |
+| `primary.startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                                          | `10`                  |
+| `primary.startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                                                         | `1`                   |
+| `primary.startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                                       | `15`                  |
+| `primary.startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                                       | `1`                   |
+| `primary.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                      | `{}`                  |
+| `primary.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                     | `{}`                  |
+| `primary.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                       | `{}`                  |
+| `primary.lifecycleHooks`                                    | for the PostgreSQL Primary container to automate configuration before or after startup                                   | `{}`                  |
+| `primary.resources.limits`                                  | The resources limits for the PostgreSQL Primary containers                                                               | `{}`                  |
+| `primary.resources.requests.memory`                         | The requested memory for the PostgreSQL Primary containers                                                               | `256Mi`               |
+| `primary.resources.requests.cpu`                            | The requested cpu for the PostgreSQL Primary containers                                                                  | `250m`                |
+| `primary.podSecurityContext.enabled`                        | Enable security context                                                                                                  | `true`                |
+| `primary.podSecurityContext.fsGroup`                        | Group ID for the pod                                                                                                     | `1001`                |
+| `primary.containerSecurityContext.enabled`                  | Enable container security context                                                                                        | `true`                |
+| `primary.containerSecurityContext.runAsUser`                | User ID for the container                                                                                                | `1001`                |
+| `primary.containerSecurityContext.runAsGroup`               | Group ID for the container                                                                                               | `0`                   |
+| `primary.containerSecurityContext.runAsNonRoot`             | Set runAsNonRoot for the container                                                                                       | `true`                |
+| `primary.containerSecurityContext.allowPrivilegeEscalation` | Set allowPrivilegeEscalation for the container                                                                           | `false`               |
+| `primary.containerSecurityContext.seccompProfile.type`      | Set seccompProfile.type for the container                                                                                | `RuntimeDefault`      |
+| `primary.containerSecurityContext.capabilities.drop`        | Set capabilities.drop for the container                                                                                  | `["ALL"]`             |
+| `primary.hostAliases`                                       | PostgreSQL primary pods host aliases                                                                                     | `[]`                  |
+| `primary.hostNetwork`                                       | Specify if host network should be enabled for PostgreSQL pod (postgresql primary)                                        | `false`               |
+| `primary.hostIPC`                                           | Specify if host IPC should be enabled for PostgreSQL pod (postgresql primary)                                            | `false`               |
+| `primary.labels`                                            | Map of labels to add to the statefulset (postgresql primary)                                                             | `{}`                  |
+| `primary.annotations`                                       | Annotations for PostgreSQL primary pods                                                                                  | `{}`                  |
+| `primary.podLabels`                                         | Map of labels to add to the pods (postgresql primary)                                                                    | `{}`                  |
+| `primary.podAnnotations`                                    | Map of annotations to add to the pods (postgresql primary)                                                               | `{}`                  |
+| `primary.podAffinityPreset`                                 | PostgreSQL primary pod affinity preset. Ignored if `primary.affinity` is set. Allowed values: `soft` or `hard`           | `""`                  |
+| `primary.podAntiAffinityPreset`                             | PostgreSQL primary pod anti-affinity preset. Ignored if `primary.affinity` is set. Allowed values: `soft` or `hard`      | `soft`                |
+| `primary.nodeAffinityPreset.type`                           | PostgreSQL primary node affinity preset type. Ignored if `primary.affinity` is set. Allowed values: `soft` or `hard`     | `""`                  |
+| `primary.nodeAffinityPreset.key`                            | PostgreSQL primary node label key to match Ignored if `primary.affinity` is set.                                         | `""`                  |
+| `primary.nodeAffinityPreset.values`                         | PostgreSQL primary node label values to match. Ignored if `primary.affinity` is set.                                     | `[]`                  |
+| `primary.affinity`                                          | Affinity for PostgreSQL primary pods assignment                                                                          | `{}`                  |
+| `primary.nodeSelector`                                      | Node labels for PostgreSQL primary pods assignment                                                                       | `{}`                  |
+| `primary.tolerations`                                       | Tolerations for PostgreSQL primary pods assignment                                                                       | `[]`                  |
+| `primary.topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`                  |
+| `primary.priorityClassName`                                 | Priority Class to use for each pod (postgresql primary)                                                                  | `""`                  |
+| `primary.schedulerName`                                     | Use an alternate scheduler, e.g. "stork".                                                                                | `""`                  |
+| `primary.terminationGracePeriodSeconds`                     | Seconds PostgreSQL primary pod needs to terminate gracefully                                                             | `""`                  |
+| `primary.updateStrategy.type`                               | PostgreSQL Primary statefulset strategy type                                                                             | `RollingUpdate`       |
+| `primary.updateStrategy.rollingUpdate`                      | PostgreSQL Primary statefulset rolling update configuration parameters                                                   | `{}`                  |
+| `primary.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the PostgreSQL Primary container(s)                         | `[]`                  |
+| `primary.extraVolumes`                                      | Optionally specify extra list of additional volumes for the PostgreSQL Primary pod(s)                                    | `[]`                  |
+| `primary.sidecars`                                          | Add additional sidecar containers to the PostgreSQL Primary pod(s)                                                       | `[]`                  |
+| `primary.initContainers`                                    | Add additional init containers to the PostgreSQL Primary pod(s)                                                          | `[]`                  |
+| `primary.extraPodSpec`                                      | Optionally specify extra PodSpec for the PostgreSQL Primary pod(s)                                                       | `{}`                  |
+| `primary.service.type`                                      | Kubernetes Service type                                                                                                  | `ClusterIP`           |
+| `primary.service.ports.postgresql`                          | PostgreSQL service port                                                                                                  | `5432`                |
+| `primary.service.nodePorts.postgresql`                      | Node port for PostgreSQL                                                                                                 | `""`                  |
+| `primary.service.clusterIP`                                 | Static clusterIP or None for headless services                                                                           | `""`                  |
+| `primary.service.annotations`                               | Annotations for PostgreSQL primary service                                                                               | `{}`                  |
+| `primary.service.loadBalancerIP`                            | Load balancer IP if service type is `LoadBalancer`                                                                       | `""`                  |
+| `primary.service.externalTrafficPolicy`                     | Enable client source IP preservation                                                                                     | `Cluster`             |
+| `primary.service.loadBalancerSourceRanges`                  | Addresses that are allowed when service is LoadBalancer                                                                  | `[]`                  |
+| `primary.service.extraPorts`                                | Extra ports to expose in the PostgreSQL primary service                                                                  | `[]`                  |
+| `primary.service.sessionAffinity`                           | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                     | `None`                |
+| `primary.service.sessionAffinityConfig`                     | Additional settings for the sessionAffinity                                                                              | `{}`                  |
+| `primary.service.headless.annotations`                      | Additional custom annotations for headless PostgreSQL primary service                                                    | `{}`                  |
+| `primary.persistence.enabled`                               | Enable PostgreSQL Primary data persistence using PVC                                                                     | `true`                |
+| `primary.persistence.existingClaim`                         | Name of an existing PVC to use                                                                                           | `""`                  |
+| `primary.persistence.mountPath`                             | The path the volume will be mounted at                                                                                   | `/bitnami/postgresql` |
+| `primary.persistence.subPath`                               | The subdirectory of the volume to mount to                                                                               | `""`                  |
+| `primary.persistence.storageClass`                          | PVC Storage Class for PostgreSQL Primary data volume                                                                     | `""`                  |
+| `primary.persistence.accessModes`                           | PVC Access Mode for PostgreSQL volume                                                                                    | `["ReadWriteOnce"]`   |
+| `primary.persistence.size`                                  | PVC Storage Request for PostgreSQL volume                                                                                | `8Gi`                 |
+| `primary.persistence.annotations`                           | Annotations for the PVC                                                                                                  | `{}`                  |
+| `primary.persistence.labels`                                | Labels for the PVC                                                                                                       | `{}`                  |
+| `primary.persistence.selector`                              | Selector to match an existing Persistent Volume (this value is evaluated as a template)                                  | `{}`                  |
+| `primary.persistence.dataSource`                            | Custom PVC data source                                                                                                   | `{}`                  |
 
 ### PostgreSQL read only replica parameters (only used when `architecture` is set to `replication`)
 
-| Name                                              | Description                                                                                                              | Value                 |
-| ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | --------------------- |
-| `readReplicas.name`                               | Name of the read replicas database (eg secondary, slave, ...)                                                            | `read`                |
-| `readReplicas.replicaCount`                       | Number of PostgreSQL read only replicas                                                                                  | `1`                   |
-| `readReplicas.extendedConfiguration`              | Extended PostgreSQL read only replicas configuration (appended to main or default configuration)                         | `""`                  |
-| `readReplicas.extraEnvVars`                       | Array with extra environment variables to add to PostgreSQL read only nodes                                              | `[]`                  |
-| `readReplicas.extraEnvVarsCM`                     | Name of existing ConfigMap containing extra env vars for PostgreSQL read only nodes                                      | `""`                  |
-| `readReplicas.extraEnvVarsSecret`                 | Name of existing Secret containing extra env vars for PostgreSQL read only nodes                                         | `""`                  |
-| `readReplicas.command`                            | Override default container command (useful when using custom images)                                                     | `[]`                  |
-| `readReplicas.args`                               | Override default container args (useful when using custom images)                                                        | `[]`                  |
-| `readReplicas.livenessProbe.enabled`              | Enable livenessProbe on PostgreSQL read only containers                                                                  | `true`                |
-| `readReplicas.livenessProbe.initialDelaySeconds`  | Initial delay seconds for livenessProbe                                                                                  | `30`                  |
-| `readReplicas.livenessProbe.periodSeconds`        | Period seconds for livenessProbe                                                                                         | `10`                  |
-| `readReplicas.livenessProbe.timeoutSeconds`       | Timeout seconds for livenessProbe                                                                                        | `5`                   |
-| `readReplicas.livenessProbe.failureThreshold`     | Failure threshold for livenessProbe                                                                                      | `6`                   |
-| `readReplicas.livenessProbe.successThreshold`     | Success threshold for livenessProbe                                                                                      | `1`                   |
-| `readReplicas.readinessProbe.enabled`             | Enable readinessProbe on PostgreSQL read only containers                                                                 | `true`                |
-| `readReplicas.readinessProbe.initialDelaySeconds` | Initial delay seconds for readinessProbe                                                                                 | `5`                   |
-| `readReplicas.readinessProbe.periodSeconds`       | Period seconds for readinessProbe                                                                                        | `10`                  |
-| `readReplicas.readinessProbe.timeoutSeconds`      | Timeout seconds for readinessProbe                                                                                       | `5`                   |
-| `readReplicas.readinessProbe.failureThreshold`    | Failure threshold for readinessProbe                                                                                     | `6`                   |
-| `readReplicas.readinessProbe.successThreshold`    | Success threshold for readinessProbe                                                                                     | `1`                   |
-| `readReplicas.startupProbe.enabled`               | Enable startupProbe on PostgreSQL read only containers                                                                   | `false`               |
-| `readReplicas.startupProbe.initialDelaySeconds`   | Initial delay seconds for startupProbe                                                                                   | `30`                  |
-| `readReplicas.startupProbe.periodSeconds`         | Period seconds for startupProbe                                                                                          | `10`                  |
-| `readReplicas.startupProbe.timeoutSeconds`        | Timeout seconds for startupProbe                                                                                         | `1`                   |
-| `readReplicas.startupProbe.failureThreshold`      | Failure threshold for startupProbe                                                                                       | `15`                  |
-| `readReplicas.startupProbe.successThreshold`      | Success threshold for startupProbe                                                                                       | `1`                   |
-| `readReplicas.customLivenessProbe`                | Custom livenessProbe that overrides the default one                                                                      | `{}`                  |
-| `readReplicas.customReadinessProbe`               | Custom readinessProbe that overrides the default one                                                                     | `{}`                  |
-| `readReplicas.customStartupProbe`                 | Custom startupProbe that overrides the default one                                                                       | `{}`                  |
-| `readReplicas.lifecycleHooks`                     | for the PostgreSQL read only container to automate configuration before or after startup                                 | `{}`                  |
-| `readReplicas.resources.limits`                   | The resources limits for the PostgreSQL read only containers                                                             | `{}`                  |
-| `readReplicas.resources.requests.memory`          | The requested memory for the PostgreSQL read only containers                                                             | `256Mi`               |
-| `readReplicas.resources.requests.cpu`             | The requested cpu for the PostgreSQL read only containers                                                                | `250m`                |
-| `readReplicas.podSecurityContext.enabled`         | Enable security context                                                                                                  | `true`                |
-| `readReplicas.podSecurityContext.fsGroup`         | Group ID for the pod                                                                                                     | `1001`                |
-| `readReplicas.containerSecurityContext.enabled`   | Enable container security context                                                                                        | `true`                |
-| `readReplicas.containerSecurityContext.runAsUser` | User ID for the container                                                                                                | `1001`                |
-| `readReplicas.hostAliases`                        | PostgreSQL read only pods host aliases                                                                                   | `[]`                  |
-| `readReplicas.hostNetwork`                        | Specify if host network should be enabled for PostgreSQL pod (PostgreSQL read only)                                      | `false`               |
-| `readReplicas.hostIPC`                            | Specify if host IPC should be enabled for PostgreSQL pod (postgresql primary)                                            | `false`               |
-| `readReplicas.labels`                             | Map of labels to add to the statefulset (PostgreSQL read only)                                                           | `{}`                  |
-| `readReplicas.annotations`                        | Annotations for PostgreSQL read only pods                                                                                | `{}`                  |
-| `readReplicas.podLabels`                          | Map of labels to add to the pods (PostgreSQL read only)                                                                  | `{}`                  |
-| `readReplicas.podAnnotations`                     | Map of annotations to add to the pods (PostgreSQL read only)                                                             | `{}`                  |
-| `readReplicas.podAffinityPreset`                  | PostgreSQL read only pod affinity preset. Ignored if `primary.affinity` is set. Allowed values: `soft` or `hard`         | `""`                  |
-| `readReplicas.podAntiAffinityPreset`              | PostgreSQL read only pod anti-affinity preset. Ignored if `primary.affinity` is set. Allowed values: `soft` or `hard`    | `soft`                |
-| `readReplicas.nodeAffinityPreset.type`            | PostgreSQL read only node affinity preset type. Ignored if `primary.affinity` is set. Allowed values: `soft` or `hard`   | `""`                  |
-| `readReplicas.nodeAffinityPreset.key`             | PostgreSQL read only node label key to match Ignored if `primary.affinity` is set.                                       | `""`                  |
-| `readReplicas.nodeAffinityPreset.values`          | PostgreSQL read only node label values to match. Ignored if `primary.affinity` is set.                                   | `[]`                  |
-| `readReplicas.affinity`                           | Affinity for PostgreSQL read only pods assignment                                                                        | `{}`                  |
-| `readReplicas.nodeSelector`                       | Node labels for PostgreSQL read only pods assignment                                                                     | `{}`                  |
-| `readReplicas.tolerations`                        | Tolerations for PostgreSQL read only pods assignment                                                                     | `[]`                  |
-| `readReplicas.topologySpreadConstraints`          | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`                  |
-| `readReplicas.priorityClassName`                  | Priority Class to use for each pod (PostgreSQL read only)                                                                | `""`                  |
-| `readReplicas.schedulerName`                      | Use an alternate scheduler, e.g. "stork".                                                                                | `""`                  |
-| `readReplicas.terminationGracePeriodSeconds`      | Seconds PostgreSQL read only pod needs to terminate gracefully                                                           | `""`                  |
-| `readReplicas.updateStrategy.type`                | PostgreSQL read only statefulset strategy type                                                                           | `RollingUpdate`       |
-| `readReplicas.updateStrategy.rollingUpdate`       | PostgreSQL read only statefulset rolling update configuration parameters                                                 | `{}`                  |
-| `readReplicas.extraVolumeMounts`                  | Optionally specify extra list of additional volumeMounts for the PostgreSQL read only container(s)                       | `[]`                  |
-| `readReplicas.extraVolumes`                       | Optionally specify extra list of additional volumes for the PostgreSQL read only pod(s)                                  | `[]`                  |
-| `readReplicas.sidecars`                           | Add additional sidecar containers to the PostgreSQL read only pod(s)                                                     | `[]`                  |
-| `readReplicas.initContainers`                     | Add additional init containers to the PostgreSQL read only pod(s)                                                        | `[]`                  |
-| `readReplicas.extraPodSpec`                       | Optionally specify extra PodSpec for the PostgreSQL read only pod(s)                                                     | `{}`                  |
-| `readReplicas.service.type`                       | Kubernetes Service type                                                                                                  | `ClusterIP`           |
-| `readReplicas.service.ports.postgresql`           | PostgreSQL service port                                                                                                  | `5432`                |
-| `readReplicas.service.nodePorts.postgresql`       | Node port for PostgreSQL                                                                                                 | `""`                  |
-| `readReplicas.service.clusterIP`                  | Static clusterIP or None for headless services                                                                           | `""`                  |
-| `readReplicas.service.annotations`                | Annotations for PostgreSQL read only service                                                                             | `{}`                  |
-| `readReplicas.service.loadBalancerIP`             | Load balancer IP if service type is `LoadBalancer`                                                                       | `""`                  |
-| `readReplicas.service.externalTrafficPolicy`      | Enable client source IP preservation                                                                                     | `Cluster`             |
-| `readReplicas.service.loadBalancerSourceRanges`   | Addresses that are allowed when service is LoadBalancer                                                                  | `[]`                  |
-| `readReplicas.service.extraPorts`                 | Extra ports to expose in the PostgreSQL read only service                                                                | `[]`                  |
-| `readReplicas.service.sessionAffinity`            | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                     | `None`                |
-| `readReplicas.service.sessionAffinityConfig`      | Additional settings for the sessionAffinity                                                                              | `{}`                  |
-| `readReplicas.service.headless.annotations`       | Additional custom annotations for headless PostgreSQL read only service                                                  | `{}`                  |
-| `readReplicas.persistence.enabled`                | Enable PostgreSQL read only data persistence using PVC                                                                   | `true`                |
-| `readReplicas.persistence.existingClaim`          | Name of an existing PVC to use                                                                                           | `""`                  |
-| `readReplicas.persistence.mountPath`              | The path the volume will be mounted at                                                                                   | `/bitnami/postgresql` |
-| `readReplicas.persistence.subPath`                | The subdirectory of the volume to mount to                                                                               | `""`                  |
-| `readReplicas.persistence.storageClass`           | PVC Storage Class for PostgreSQL read only data volume                                                                   | `""`                  |
-| `readReplicas.persistence.accessModes`            | PVC Access Mode for PostgreSQL volume                                                                                    | `["ReadWriteOnce"]`   |
-| `readReplicas.persistence.size`                   | PVC Storage Request for PostgreSQL volume                                                                                | `8Gi`                 |
-| `readReplicas.persistence.annotations`            | Annotations for the PVC                                                                                                  | `{}`                  |
-| `readReplicas.persistence.labels`                 | Labels for the PVC                                                                                                       | `{}`                  |
-| `readReplicas.persistence.selector`               | Selector to match an existing Persistent Volume (this value is evaluated as a template)                                  | `{}`                  |
-| `readReplicas.persistence.dataSource`             | Custom PVC data source                                                                                                   | `{}`                  |
+| Name                                                             | Description                                                                                                              | Value                 |
+| ---------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | --------------------- |
+| `readReplicas.name`                                              | Name of the read replicas database (eg secondary, slave, ...)                                                            | `read`                |
+| `readReplicas.replicaCount`                                      | Number of PostgreSQL read only replicas                                                                                  | `1`                   |
+| `readReplicas.extendedConfiguration`                             | Extended PostgreSQL read only replicas configuration (appended to main or default configuration)                         | `""`                  |
+| `readReplicas.extraEnvVars`                                      | Array with extra environment variables to add to PostgreSQL read only nodes                                              | `[]`                  |
+| `readReplicas.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars for PostgreSQL read only nodes                                      | `""`                  |
+| `readReplicas.extraEnvVarsSecret`                                | Name of existing Secret containing extra env vars for PostgreSQL read only nodes                                         | `""`                  |
+| `readReplicas.command`                                           | Override default container command (useful when using custom images)                                                     | `[]`                  |
+| `readReplicas.args`                                              | Override default container args (useful when using custom images)                                                        | `[]`                  |
+| `readReplicas.livenessProbe.enabled`                             | Enable livenessProbe on PostgreSQL read only containers                                                                  | `true`                |
+| `readReplicas.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                  | `30`                  |
+| `readReplicas.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                         | `10`                  |
+| `readReplicas.livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                                        | `5`                   |
+| `readReplicas.livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                                      | `6`                   |
+| `readReplicas.livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                                      | `1`                   |
+| `readReplicas.readinessProbe.enabled`                            | Enable readinessProbe on PostgreSQL read only containers                                                                 | `true`                |
+| `readReplicas.readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                                 | `5`                   |
+| `readReplicas.readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                                        | `10`                  |
+| `readReplicas.readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                                       | `5`                   |
+| `readReplicas.readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                                     | `6`                   |
+| `readReplicas.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                                     | `1`                   |
+| `readReplicas.startupProbe.enabled`                              | Enable startupProbe on PostgreSQL read only containers                                                                   | `false`               |
+| `readReplicas.startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                                                   | `30`                  |
+| `readReplicas.startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                                          | `10`                  |
+| `readReplicas.startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                                                         | `1`                   |
+| `readReplicas.startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                                       | `15`                  |
+| `readReplicas.startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                                       | `1`                   |
+| `readReplicas.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                                      | `{}`                  |
+| `readReplicas.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                     | `{}`                  |
+| `readReplicas.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                                       | `{}`                  |
+| `readReplicas.lifecycleHooks`                                    | for the PostgreSQL read only container to automate configuration before or after startup                                 | `{}`                  |
+| `readReplicas.resources.limits`                                  | The resources limits for the PostgreSQL read only containers                                                             | `{}`                  |
+| `readReplicas.resources.requests.memory`                         | The requested memory for the PostgreSQL read only containers                                                             | `256Mi`               |
+| `readReplicas.resources.requests.cpu`                            | The requested cpu for the PostgreSQL read only containers                                                                | `250m`                |
+| `readReplicas.podSecurityContext.enabled`                        | Enable security context                                                                                                  | `true`                |
+| `readReplicas.podSecurityContext.fsGroup`                        | Group ID for the pod                                                                                                     | `1001`                |
+| `readReplicas.containerSecurityContext.enabled`                  | Enable container security context                                                                                        | `true`                |
+| `readReplicas.containerSecurityContext.runAsUser`                | User ID for the container                                                                                                | `1001`                |
+| `readReplicas.containerSecurityContext.runAsGroup`               | Group ID for the container                                                                                               | `0`                   |
+| `readReplicas.containerSecurityContext.runAsNonRoot`             | Set runAsNonRoot for the container                                                                                       | `true`                |
+| `readReplicas.containerSecurityContext.allowPrivilegeEscalation` | Set allowPrivilegeEscalation for the container                                                                           | `false`               |
+| `readReplicas.containerSecurityContext.seccompProfile.type`      | Set seccompProfile.type for the container                                                                                | `RuntimeDefault`      |
+| `readReplicas.containerSecurityContext.capabilities.drop`        | Set capabilities.drop for the container                                                                                  | `["ALL"]`             |
+| `readReplicas.hostAliases`                                       | PostgreSQL read only pods host aliases                                                                                   | `[]`                  |
+| `readReplicas.hostNetwork`                                       | Specify if host network should be enabled for PostgreSQL pod (PostgreSQL read only)                                      | `false`               |
+| `readReplicas.hostIPC`                                           | Specify if host IPC should be enabled for PostgreSQL pod (postgresql primary)                                            | `false`               |
+| `readReplicas.labels`                                            | Map of labels to add to the statefulset (PostgreSQL read only)                                                           | `{}`                  |
+| `readReplicas.annotations`                                       | Annotations for PostgreSQL read only pods                                                                                | `{}`                  |
+| `readReplicas.podLabels`                                         | Map of labels to add to the pods (PostgreSQL read only)                                                                  | `{}`                  |
+| `readReplicas.podAnnotations`                                    | Map of annotations to add to the pods (PostgreSQL read only)                                                             | `{}`                  |
+| `readReplicas.podAffinityPreset`                                 | PostgreSQL read only pod affinity preset. Ignored if `primary.affinity` is set. Allowed values: `soft` or `hard`         | `""`                  |
+| `readReplicas.podAntiAffinityPreset`                             | PostgreSQL read only pod anti-affinity preset. Ignored if `primary.affinity` is set. Allowed values: `soft` or `hard`    | `soft`                |
+| `readReplicas.nodeAffinityPreset.type`                           | PostgreSQL read only node affinity preset type. Ignored if `primary.affinity` is set. Allowed values: `soft` or `hard`   | `""`                  |
+| `readReplicas.nodeAffinityPreset.key`                            | PostgreSQL read only node label key to match Ignored if `primary.affinity` is set.                                       | `""`                  |
+| `readReplicas.nodeAffinityPreset.values`                         | PostgreSQL read only node label values to match. Ignored if `primary.affinity` is set.                                   | `[]`                  |
+| `readReplicas.affinity`                                          | Affinity for PostgreSQL read only pods assignment                                                                        | `{}`                  |
+| `readReplicas.nodeSelector`                                      | Node labels for PostgreSQL read only pods assignment                                                                     | `{}`                  |
+| `readReplicas.tolerations`                                       | Tolerations for PostgreSQL read only pods assignment                                                                     | `[]`                  |
+| `readReplicas.topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`                  |
+| `readReplicas.priorityClassName`                                 | Priority Class to use for each pod (PostgreSQL read only)                                                                | `""`                  |
+| `readReplicas.schedulerName`                                     | Use an alternate scheduler, e.g. "stork".                                                                                | `""`                  |
+| `readReplicas.terminationGracePeriodSeconds`                     | Seconds PostgreSQL read only pod needs to terminate gracefully                                                           | `""`                  |
+| `readReplicas.updateStrategy.type`                               | PostgreSQL read only statefulset strategy type                                                                           | `RollingUpdate`       |
+| `readReplicas.updateStrategy.rollingUpdate`                      | PostgreSQL read only statefulset rolling update configuration parameters                                                 | `{}`                  |
+| `readReplicas.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the PostgreSQL read only container(s)                       | `[]`                  |
+| `readReplicas.extraVolumes`                                      | Optionally specify extra list of additional volumes for the PostgreSQL read only pod(s)                                  | `[]`                  |
+| `readReplicas.sidecars`                                          | Add additional sidecar containers to the PostgreSQL read only pod(s)                                                     | `[]`                  |
+| `readReplicas.initContainers`                                    | Add additional init containers to the PostgreSQL read only pod(s)                                                        | `[]`                  |
+| `readReplicas.extraPodSpec`                                      | Optionally specify extra PodSpec for the PostgreSQL read only pod(s)                                                     | `{}`                  |
+| `readReplicas.service.type`                                      | Kubernetes Service type                                                                                                  | `ClusterIP`           |
+| `readReplicas.service.ports.postgresql`                          | PostgreSQL service port                                                                                                  | `5432`                |
+| `readReplicas.service.nodePorts.postgresql`                      | Node port for PostgreSQL                                                                                                 | `""`                  |
+| `readReplicas.service.clusterIP`                                 | Static clusterIP or None for headless services                                                                           | `""`                  |
+| `readReplicas.service.annotations`                               | Annotations for PostgreSQL read only service                                                                             | `{}`                  |
+| `readReplicas.service.loadBalancerIP`                            | Load balancer IP if service type is `LoadBalancer`                                                                       | `""`                  |
+| `readReplicas.service.externalTrafficPolicy`                     | Enable client source IP preservation                                                                                     | `Cluster`             |
+| `readReplicas.service.loadBalancerSourceRanges`                  | Addresses that are allowed when service is LoadBalancer                                                                  | `[]`                  |
+| `readReplicas.service.extraPorts`                                | Extra ports to expose in the PostgreSQL read only service                                                                | `[]`                  |
+| `readReplicas.service.sessionAffinity`                           | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                     | `None`                |
+| `readReplicas.service.sessionAffinityConfig`                     | Additional settings for the sessionAffinity                                                                              | `{}`                  |
+| `readReplicas.service.headless.annotations`                      | Additional custom annotations for headless PostgreSQL read only service                                                  | `{}`                  |
+| `readReplicas.persistence.enabled`                               | Enable PostgreSQL read only data persistence using PVC                                                                   | `true`                |
+| `readReplicas.persistence.existingClaim`                         | Name of an existing PVC to use                                                                                           | `""`                  |
+| `readReplicas.persistence.mountPath`                             | The path the volume will be mounted at                                                                                   | `/bitnami/postgresql` |
+| `readReplicas.persistence.subPath`                               | The subdirectory of the volume to mount to                                                                               | `""`                  |
+| `readReplicas.persistence.storageClass`                          | PVC Storage Class for PostgreSQL read only data volume                                                                   | `""`                  |
+| `readReplicas.persistence.accessModes`                           | PVC Access Mode for PostgreSQL volume                                                                                    | `["ReadWriteOnce"]`   |
+| `readReplicas.persistence.size`                                  | PVC Storage Request for PostgreSQL volume                                                                                | `8Gi`                 |
+| `readReplicas.persistence.annotations`                           | Annotations for the PVC                                                                                                  | `{}`                  |
+| `readReplicas.persistence.labels`                                | Labels for the PVC                                                                                                       | `{}`                  |
+| `readReplicas.persistence.selector`                              | Selector to match an existing Persistent Volume (this value is evaluated as a template)                                  | `{}`                  |
+| `readReplicas.persistence.dataSource`                            | Custom PVC data source                                                                                                   | `{}`                  |
 
 ### NetworkPolicy parameters
 
@@ -372,18 +382,21 @@ kubectl delete pvc -l release=my-release
 
 ### Volume Permissions parameters
 
-| Name                                                   | Description                                                                                                                       | Value              |
-| ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------- | ------------------ |
-| `volumePermissions.enabled`                            | Enable init container that changes the owner and group of the persistent volume                                                   | `false`            |
-| `volumePermissions.image.registry`                     | Init container volume-permissions image registry                                                                                  | `docker.io`        |
-| `volumePermissions.image.repository`                   | Init container volume-permissions image repository                                                                                | `bitnami/os-shell` |
-| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r16` |
-| `volumePermissions.image.digest`                       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`               |
-| `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`     |
-| `volumePermissions.image.pullSecrets`                  | Init container volume-permissions image pull secrets                                                                              | `[]`               |
-| `volumePermissions.resources.limits`                   | Init container volume-permissions resource limits                                                                                 | `{}`               |
-| `volumePermissions.resources.requests`                 | Init container volume-permissions resource requests                                                                               | `{}`               |
-| `volumePermissions.containerSecurityContext.runAsUser` | User ID for the init container                                                                                                    | `0`                |
+| Name                                                             | Description                                                                                                                       | Value              |
+| ---------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ------------------ |
+| `volumePermissions.enabled`                                      | Enable init container that changes the owner and group of the persistent volume                                                   | `false`            |
+| `volumePermissions.image.registry`                               | Init container volume-permissions image registry                                                                                  | `docker.io`        |
+| `volumePermissions.image.repository`                             | Init container volume-permissions image repository                                                                                | `bitnami/os-shell` |
+| `volumePermissions.image.tag`                                    | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r16` |
+| `volumePermissions.image.digest`                                 | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`               |
+| `volumePermissions.image.pullPolicy`                             | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`     |
+| `volumePermissions.image.pullSecrets`                            | Init container volume-permissions image pull secrets                                                                              | `[]`               |
+| `volumePermissions.resources.limits`                             | Init container volume-permissions resource limits                                                                                 | `{}`               |
+| `volumePermissions.resources.requests`                           | Init container volume-permissions resource requests                                                                               | `{}`               |
+| `volumePermissions.containerSecurityContext.runAsUser`           | User ID for the init container                                                                                                    | `0`                |
+| `volumePermissions.containerSecurityContext.runAsGroup`          | Group ID for the init container                                                                                                   | `0`                |
+| `volumePermissions.containerSecurityContext.runAsNonRoot`        | runAsNonRoot for the init container                                                                                               | `false`            |
+| `volumePermissions.containerSecurityContext.seccompProfile.type` | seccompProfile.type for the init container                                                                                        | `RuntimeDefault`   |
 
 ### Other Parameters
 
@@ -400,62 +413,66 @@ kubectl delete pvc -l release=my-release
 
 ### Metrics Parameters
 
-| Name                                            | Description                                                                                                | Value                       |
-| ----------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | --------------------------- |
-| `metrics.enabled`                               | Start a prometheus exporter                                                                                | `false`                     |
-| `metrics.image.registry`                        | PostgreSQL Prometheus Exporter image registry                                                              | `docker.io`                 |
-| `metrics.image.repository`                      | PostgreSQL Prometheus Exporter image repository                                                            | `bitnami/postgres-exporter` |
-| `metrics.image.tag`                             | PostgreSQL Prometheus Exporter image tag (immutable tags are recommended)                                  | `0.13.2-debian-11-r0`       |
-| `metrics.image.digest`                          | PostgreSQL image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                        |
-| `metrics.image.pullPolicy`                      | PostgreSQL Prometheus Exporter image pull policy                                                           | `IfNotPresent`              |
-| `metrics.image.pullSecrets`                     | Specify image pull secrets                                                                                 | `[]`                        |
-| `metrics.customMetrics`                         | Define additional custom metrics                                                                           | `{}`                        |
-| `metrics.extraEnvVars`                          | Extra environment variables to add to PostgreSQL Prometheus exporter                                       | `[]`                        |
-| `metrics.containerSecurityContext.enabled`      | Enable PostgreSQL Prometheus exporter containers' Security Context                                         | `true`                      |
-| `metrics.containerSecurityContext.runAsUser`    | Set PostgreSQL Prometheus exporter containers' Security Context runAsUser                                  | `1001`                      |
-| `metrics.containerSecurityContext.runAsNonRoot` | Set PostgreSQL Prometheus exporter containers' Security Context runAsNonRoot                               | `true`                      |
-| `metrics.livenessProbe.enabled`                 | Enable livenessProbe on PostgreSQL Prometheus exporter containers                                          | `true`                      |
-| `metrics.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                    | `5`                         |
-| `metrics.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                           | `10`                        |
-| `metrics.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                          | `5`                         |
-| `metrics.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                        | `6`                         |
-| `metrics.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                        | `1`                         |
-| `metrics.readinessProbe.enabled`                | Enable readinessProbe on PostgreSQL Prometheus exporter containers                                         | `true`                      |
-| `metrics.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                   | `5`                         |
-| `metrics.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                          | `10`                        |
-| `metrics.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                         | `5`                         |
-| `metrics.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                       | `6`                         |
-| `metrics.readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                       | `1`                         |
-| `metrics.startupProbe.enabled`                  | Enable startupProbe on PostgreSQL Prometheus exporter containers                                           | `false`                     |
-| `metrics.startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                     | `10`                        |
-| `metrics.startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                            | `10`                        |
-| `metrics.startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                           | `1`                         |
-| `metrics.startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                         | `15`                        |
-| `metrics.startupProbe.successThreshold`         | Success threshold for startupProbe                                                                         | `1`                         |
-| `metrics.customLivenessProbe`                   | Custom livenessProbe that overrides the default one                                                        | `{}`                        |
-| `metrics.customReadinessProbe`                  | Custom readinessProbe that overrides the default one                                                       | `{}`                        |
-| `metrics.customStartupProbe`                    | Custom startupProbe that overrides the default one                                                         | `{}`                        |
-| `metrics.containerPorts.metrics`                | PostgreSQL Prometheus exporter metrics container port                                                      | `9187`                      |
-| `metrics.resources.limits`                      | The resources limits for the PostgreSQL Prometheus exporter container                                      | `{}`                        |
-| `metrics.resources.requests`                    | The requested resources for the PostgreSQL Prometheus exporter container                                   | `{}`                        |
-| `metrics.service.ports.metrics`                 | PostgreSQL Prometheus Exporter service port                                                                | `9187`                      |
-| `metrics.service.clusterIP`                     | Static clusterIP or None for headless services                                                             | `""`                        |
-| `metrics.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin                                           | `None`                      |
-| `metrics.service.annotations`                   | Annotations for Prometheus to auto-discover the metrics endpoint                                           | `{}`                        |
-| `metrics.serviceMonitor.enabled`                | Create ServiceMonitor Resource for scraping metrics using Prometheus Operator                              | `false`                     |
-| `metrics.serviceMonitor.namespace`              | Namespace for the ServiceMonitor Resource (defaults to the Release Namespace)                              | `""`                        |
-| `metrics.serviceMonitor.interval`               | Interval at which metrics should be scraped.                                                               | `""`                        |
-| `metrics.serviceMonitor.scrapeTimeout`          | Timeout after which the scrape is ended                                                                    | `""`                        |
-| `metrics.serviceMonitor.labels`                 | Additional labels that can be used so ServiceMonitor will be discovered by Prometheus                      | `{}`                        |
-| `metrics.serviceMonitor.selector`               | Prometheus instance selector labels                                                                        | `{}`                        |
-| `metrics.serviceMonitor.relabelings`            | RelabelConfigs to apply to samples before scraping                                                         | `[]`                        |
-| `metrics.serviceMonitor.metricRelabelings`      | MetricRelabelConfigs to apply to samples before ingestion                                                  | `[]`                        |
-| `metrics.serviceMonitor.honorLabels`            | Specify honorLabels parameter to add the scrape endpoint                                                   | `false`                     |
-| `metrics.serviceMonitor.jobLabel`               | The name of the label on the target service to use as the job name in prometheus.                          | `""`                        |
-| `metrics.prometheusRule.enabled`                | Create a PrometheusRule for Prometheus Operator                                                            | `false`                     |
-| `metrics.prometheusRule.namespace`              | Namespace for the PrometheusRule Resource (defaults to the Release Namespace)                              | `""`                        |
-| `metrics.prometheusRule.labels`                 | Additional labels that can be used so PrometheusRule will be discovered by Prometheus                      | `{}`                        |
-| `metrics.prometheusRule.rules`                  | PrometheusRule definitions                                                                                 | `[]`                        |
+| Name                                                        | Description                                                                                                | Value                       |
+| ----------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | --------------------------- |
+| `metrics.enabled`                                           | Start a prometheus exporter                                                                                | `false`                     |
+| `metrics.image.registry`                                    | PostgreSQL Prometheus Exporter image registry                                                              | `docker.io`                 |
+| `metrics.image.repository`                                  | PostgreSQL Prometheus Exporter image repository                                                            | `bitnami/postgres-exporter` |
+| `metrics.image.tag`                                         | PostgreSQL Prometheus Exporter image tag (immutable tags are recommended)                                  | `0.13.2-debian-11-r0`       |
+| `metrics.image.digest`                                      | PostgreSQL image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                        |
+| `metrics.image.pullPolicy`                                  | PostgreSQL Prometheus Exporter image pull policy                                                           | `IfNotPresent`              |
+| `metrics.image.pullSecrets`                                 | Specify image pull secrets                                                                                 | `[]`                        |
+| `metrics.customMetrics`                                     | Define additional custom metrics                                                                           | `{}`                        |
+| `metrics.extraEnvVars`                                      | Extra environment variables to add to PostgreSQL Prometheus exporter                                       | `[]`                        |
+| `metrics.containerSecurityContext.enabled`                  | Enable PostgreSQL Prometheus exporter containers' Security Context                                         | `true`                      |
+| `metrics.containerSecurityContext.runAsUser`                | Set PostgreSQL Prometheus exporter containers' Security Context runAsUser                                  | `1001`                      |
+| `metrics.containerSecurityContext.runAsGroup`               | Set PostgreSQL Prometheus exporter containers' Security Context runAsGroup                                 | `0`                         |
+| `metrics.containerSecurityContext.runAsNonRoot`             | Set PostgreSQL Prometheus exporter containers' Security Context runAsNonRoot                               | `true`                      |
+| `metrics.containerSecurityContext.allowPrivilegeEscalation` | Set PostgreSQL Prometheus exporter containers' Security Context allowPrivilegeEscalation                   | `false`                     |
+| `metrics.containerSecurityContext.seccompProfile.type`      | Set PostgreSQL Prometheus exporter containers' Security Context seccompProfile.type                        | `RuntimeDefault`            |
+| `metrics.containerSecurityContext.capabilities.drop`        | Set PostgreSQL Prometheus exporter containers' Security Context capabilities.drop                          | `["ALL"]`                   |
+| `metrics.livenessProbe.enabled`                             | Enable livenessProbe on PostgreSQL Prometheus exporter containers                                          | `true`                      |
+| `metrics.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                    | `5`                         |
+| `metrics.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                           | `10`                        |
+| `metrics.livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                          | `5`                         |
+| `metrics.livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                        | `6`                         |
+| `metrics.livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                        | `1`                         |
+| `metrics.readinessProbe.enabled`                            | Enable readinessProbe on PostgreSQL Prometheus exporter containers                                         | `true`                      |
+| `metrics.readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                   | `5`                         |
+| `metrics.readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                          | `10`                        |
+| `metrics.readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                         | `5`                         |
+| `metrics.readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                       | `6`                         |
+| `metrics.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                       | `1`                         |
+| `metrics.startupProbe.enabled`                              | Enable startupProbe on PostgreSQL Prometheus exporter containers                                           | `false`                     |
+| `metrics.startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                                     | `10`                        |
+| `metrics.startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                            | `10`                        |
+| `metrics.startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                                           | `1`                         |
+| `metrics.startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                         | `15`                        |
+| `metrics.startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                         | `1`                         |
+| `metrics.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                        | `{}`                        |
+| `metrics.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                       | `{}`                        |
+| `metrics.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                         | `{}`                        |
+| `metrics.containerPorts.metrics`                            | PostgreSQL Prometheus exporter metrics container port                                                      | `9187`                      |
+| `metrics.resources.limits`                                  | The resources limits for the PostgreSQL Prometheus exporter container                                      | `{}`                        |
+| `metrics.resources.requests`                                | The requested resources for the PostgreSQL Prometheus exporter container                                   | `{}`                        |
+| `metrics.service.ports.metrics`                             | PostgreSQL Prometheus Exporter service port                                                                | `9187`                      |
+| `metrics.service.clusterIP`                                 | Static clusterIP or None for headless services                                                             | `""`                        |
+| `metrics.service.sessionAffinity`                           | Control where client requests go, to the same pod or round-robin                                           | `None`                      |
+| `metrics.service.annotations`                               | Annotations for Prometheus to auto-discover the metrics endpoint                                           | `{}`                        |
+| `metrics.serviceMonitor.enabled`                            | Create ServiceMonitor Resource for scraping metrics using Prometheus Operator                              | `false`                     |
+| `metrics.serviceMonitor.namespace`                          | Namespace for the ServiceMonitor Resource (defaults to the Release Namespace)                              | `""`                        |
+| `metrics.serviceMonitor.interval`                           | Interval at which metrics should be scraped.                                                               | `""`                        |
+| `metrics.serviceMonitor.scrapeTimeout`                      | Timeout after which the scrape is ended                                                                    | `""`                        |
+| `metrics.serviceMonitor.labels`                             | Additional labels that can be used so ServiceMonitor will be discovered by Prometheus                      | `{}`                        |
+| `metrics.serviceMonitor.selector`                           | Prometheus instance selector labels                                                                        | `{}`                        |
+| `metrics.serviceMonitor.relabelings`                        | RelabelConfigs to apply to samples before scraping                                                         | `[]`                        |
+| `metrics.serviceMonitor.metricRelabelings`                  | MetricRelabelConfigs to apply to samples before ingestion                                                  | `[]`                        |
+| `metrics.serviceMonitor.honorLabels`                        | Specify honorLabels parameter to add the scrape endpoint                                                   | `false`                     |
+| `metrics.serviceMonitor.jobLabel`                           | The name of the label on the target service to use as the job name in prometheus.                          | `""`                        |
+| `metrics.prometheusRule.enabled`                            | Create a PrometheusRule for Prometheus Operator                                                            | `false`                     |
+| `metrics.prometheusRule.namespace`                          | Namespace for the PrometheusRule Resource (defaults to the Release Namespace)                              | `""`                        |
+| `metrics.prometheusRule.labels`                             | Additional labels that can be used so PrometheusRule will be discovered by Prometheus                      | `{}`                        |
+| `metrics.prometheusRule.rules`                              | PrometheusRule definitions                                                                                 | `[]`                        |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
