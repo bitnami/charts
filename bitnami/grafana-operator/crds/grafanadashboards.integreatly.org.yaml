@@ -1,151 +1,144 @@
 # Copyright VMware, Inc.
 # SPDX-License-Identifier: APACHE-2.0
 
-# !kustomize build https://github.com/grafana-operator/grafana-operator/tree/v4.9.0/config/crd
+# !kustomize build https://github.com/grafana-operator/grafana-operator/blob/v5.0.2/deploy/helm/grafana-operator/crds/
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.6.2
-  name: grafanadashboards.integreatly.org
+    controller-gen.kubebuilder.io/version: v0.10.0
+  name: grafanadashboards.grafana.integreatly.org
 spec:
-  group: integreatly.org
+  group: grafana.integreatly.org
   names:
     kind: GrafanaDashboard
     listKind: GrafanaDashboardList
     plural: grafanadashboards
     singular: grafanadashboard
-  preserveUnknownFields: false
   scope: Namespaced
   versions:
-    - name: v1alpha1
-      schema:
-        openAPIV3Schema:
-          description: GrafanaDashboard is the Schema for the grafanadashboards API
-          properties:
-            apiVersion:
-              description: 'APIVersion defines the versioned schema of this representation of an object. Servers should convert recognized schemas to the latest internal value, and may reject unrecognized values. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources'
-              type: string
-            kind:
-              description: 'Kind is a string value representing the REST resource this object represents. Servers may infer this from the endpoint the client submits requests to. Cannot be updated. In CamelCase. More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds'
-              type: string
-            metadata:
-              type: object
-            spec:
-              description: GrafanaDashboardSpec defines the desired state of GrafanaDashboard
-              properties:
-                configMapRef:
-                  description: ConfigMapRef is a reference to a ConfigMap data field containing the dashboard's JSON
+  - additionalPrinterColumns:
+    - jsonPath: .status.NoMatchingInstances
+      name: No matching instances
+      type: boolean
+    - format: date-time
+      jsonPath: .status.lastResync
+      name: Last resync
+      type: date
+    - jsonPath: .metadata.creationTimestamp
+      name: Age
+      type: date
+    name: v1beta1
+    schema:
+      openAPIV3Schema:
+        properties:
+          apiVersion:
+            type: string
+          kind:
+            type: string
+          metadata:
+            type: object
+          spec:
+            properties:
+              allowCrossNamespaceImport:
+                type: boolean
+              contentCacheDuration:
+                type: string
+              datasources:
+                items:
                   properties:
-                    key:
-                      description: The key to select.
+                    datasourceName:
                       type: string
-                    name:
-                      description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names TODO: Add other useful fields. apiVersion, kind, uid?'
+                    inputName:
                       type: string
-                    optional:
-                      description: Specify whether the ConfigMap or its key must be defined
-                      type: boolean
                   required:
-                    - key
+                  - datasourceName
+                  - inputName
                   type: object
-                contentCacheDuration:
-                  description: ContentCacheDuration sets how often the operator should resync with the external source when using the `grafanaCom.id` or `url` field to specify the source of the dashboard. The default value is decided by the `dashboardContentCacheDuration` field in the `Grafana` resource. The default is 0 which is interpreted as never refetching.
-                  type: string
-                customFolderName:
-                  type: string
-                datasources:
-                  items:
-                    properties:
-                      datasourceName:
-                        type: string
-                      inputName:
-                        type: string
-                    required:
-                      - datasourceName
-                      - inputName
+                type: array
+              folder:
+                type: string
+              grafanaCom:
+                properties:
+                  id:
+                    type: integer
+                  revision:
+                    type: integer
+                required:
+                - id
+                type: object
+              gzipJson:
+                format: byte
+                type: string
+              instanceSelector:
+                properties:
+                  matchExpressions:
+                    items:
+                      properties:
+                        key:
+                          type: string
+                        operator:
+                          type: string
+                        values:
+                          items:
+                            type: string
+                          type: array
+                      required:
+                      - key
+                      - operator
+                      type: object
+                    type: array
+                  matchLabels:
+                    additionalProperties:
+                      type: string
                     type: object
-                  type: array
-                grafanaCom:
+                type: object
+                x-kubernetes-map-type: atomic
+              json:
+                type: string
+              jsonnet:
+                type: string
+              plugins:
+                items:
                   properties:
-                    id:
-                      type: integer
-                    revision:
-                      type: integer
-                  required:
-                    - id
-                  type: object
-                gzipConfigMapRef:
-                  description: GzipConfigMapRef is a reference to a ConfigMap binaryData field containing the dashboard's JSON, compressed with Gzip.
-                  properties:
-                    key:
-                      description: The key to select.
-                      type: string
                     name:
-                      description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names TODO: Add other useful fields. apiVersion, kind, uid?'
                       type: string
-                    optional:
-                      description: Specify whether the ConfigMap or its key must be defined
-                      type: boolean
-                  required:
-                    - key
-                  type: object
-                gzipJson:
-                  description: GzipJson the dashboard's JSON compressed with Gzip. Base64-encoded when in YAML.
-                  format: byte
-                  type: string
-                json:
-                  description: Json is the dashboard's JSON
-                  type: string
-                jsonnet:
-                  type: string
-                plugins:
-                  items:
-                    description: GrafanaPlugin contains information about a single plugin
-                    properties:
-                      name:
-                        type: string
-                      version:
-                        type: string
-                    required:
-                      - name
-                      - version
-                    type: object
-                  type: array
-                url:
-                  type: string
-              type: object
-            status:
-              properties:
-                contentCache:
-                  format: byte
-                  type: string
-                contentTimestamp:
-                  format: date-time
-                  type: string
-                contentUrl:
-                  type: string
-                error:
-                  properties:
-                    code:
-                      type: integer
-                    error:
+                    version:
                       type: string
-                    retries:
-                      type: integer
                   required:
-                    - code
-                    - error
+                  - name
+                  - version
                   type: object
-              type: object
-          type: object
-      served: true
-      storage: true
-      subresources:
-        status: {}
-status:
-  acceptedNames:
-    kind: ""
-    plural: ""
-  conditions: []
-  storedVersions: []
+                type: array
+              resyncPeriod:
+                type: string
+              url:
+                type: string
+            required:
+            - instanceSelector
+            type: object
+          status:
+            properties:
+              NoMatchingInstances:
+                type: boolean
+              contentCache:
+                format: byte
+                type: string
+              contentTimestamp:
+                format: date-time
+                type: string
+              contentUrl:
+                type: string
+              hash:
+                type: string
+              lastResync:
+                format: date-time
+                type: string
+              uid:
+                type: string
+            type: object
+        type: object
+    served: true
+    storage: true
+    subresources:
+      status: {}

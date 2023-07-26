@@ -1,7 +1,7 @@
 # Copyright VMware, Inc.
 # SPDX-License-Identifier: APACHE-2.0
 
-name: '[Support] Update README metadata'
+name: '[CI/CD] Update README metadata'
 
 on:
   pull_request_target:

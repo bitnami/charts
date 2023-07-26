@@ -32,4 +32,4 @@ maintainers:
 name: oauth2-proxy
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/oauth2-proxy
-version: 3.7.4
+version: 3.7.6

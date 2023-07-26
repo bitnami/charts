@@ -1,0 +1,88 @@
+{
+  "phases": {
+    "package": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/milvus"
+        }
+      },
+      "actions": [
+        {
+          "action_id": "helm-package"
+        },
+        {
+          "action_id": "helm-lint"
+        }
+      ]
+    },
+    "verify": {
+      "context": {
+        "resources": {
+          "url": "{SHA_ARCHIVE}",
+          "path": "/bitnami/milvus"
+        },
+        "target_platform": {
+          "target_platform_id": "{VIB_ENV_ALTERNATIVE_TARGET_PLATFORM}",
+          "size": {
+            "name": "S4"
+          }
+        }
+      },
+      "actions": [
+        {
+          "action_id": "health-check",
+          "params": {
+            "endpoint": "lb-milvus-attu-http"
+          }
+        },
+        {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib"
+            },
+            "tests_file": "milvus/goss/goss.yaml",
+            "vars_file": "milvus/runtime-parameters.yaml",
+            "remote": {
+              "pod": {
+                "workload": "deploy-milvus-proxy"
+              }
+            }
+          }
+        },
+        {
+          "action_id": "cypress",
+          "params": {
+            "resources": {
+              "path": "/.vib/milvus/cypress"
+            },
+            "endpoint": "lb-milvus-attu-http",
+            "app_protocol": "HTTP",
+            "env": {
+              "username": "root",
+              "password": "ComplicatedPassword123!4"
+            }
+          }
+        }
+      ]
+    },
+    "publish": {
+      "actions": [
+        {
+          "action_id": "helm-publish",
+          "params": {
+            "repository": {
+              "kind": "S3",
+              "url": "{VIB_ENV_S3_URL}",
+              "authn": {
+                "access_key_id": "{VIB_ENV_S3_ACCESS_KEY_ID}",
+                "secret_access_key": "{VIB_ENV_S3_SECRET_ACCESS_KEY}"
+              }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

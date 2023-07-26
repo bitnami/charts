@@ -24,7 +24,7 @@ Return the proper the name of the secret with the auth credentials for the gatew
 {{- if not .Values.gateway.auth.existingSecret }}
   {{- include "grafana-mimir.gateway.fullname" . }}
 {{- else }}
-  {{- include "" .Values.gateway.auth.existingSecret }}
+  {{- printf "%s" .Values.gateway.auth.existingSecret -}}
 {{- end }}
 {{- end -}}
 

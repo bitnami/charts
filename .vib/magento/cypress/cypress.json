@@ -4,7 +4,7 @@
     "password": "ComplicatedPassword123!4"
   },
   "hosts": {
-    "vmware-magento.my": "{{ TARGET_IP }}"
+    "magento.my": "{{ TARGET_IP }}"
   },
   "defaultCommandTimeout": 50000,
   "pageLoadTimeout": 500000

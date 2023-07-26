@@ -150,7 +150,7 @@ spec:
             - --query={{ . }}
             {{- end }}
             {{- if .Values.ruler.extraFlags }}
-            {{- .Values.ruler.extraFlags | toYaml | nindent 12 }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.ruler.extraFlags "context" $) | nindent 12 }}
             {{- end }}
             {{- end }}
           env:

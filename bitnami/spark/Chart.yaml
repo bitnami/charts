@@ -24,4 +24,4 @@ maintainers:
 name: spark
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/spark
-version: 7.1.0
+version: 7.1.1

@@ -1,0 +1,41 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
+name: '[CI/CD] Validate VIB pipeline files'
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - '.vib/*/vib-publish.json'
+      - '.vib/*/vib-verify.json'
+# Remove all permissions by default
+permissions: {}
+jobs:
+  validate-vib-files:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout project
+        uses: actions/checkout@v3
+      - name: Get changed VIB pipeline files
+        id: changed-files
+        uses: tj-actions/changed-files@v37
+        with:
+          dir_names: "true"
+          dir_names_max_depth: "2"
+          files: |
+            .vib/**
+      - name: Validate VIB pipeline files
+        if: ${{ steps.changed-files.outputs.any_changed == 'true' }}
+        shell: bash
+        run: |
+          exit_code=0
+          for dir in ${{ steps.changed-files.outputs.all_changed_files }}; do
+            diff <(jq .phases.verify < "${dir}/vib-publish.json") <(jq .phases.verify < "${dir}/vib-verify.json") || exit_code=$?
+          done
+          if [[ $exit_code -ne 0 ]]; then
+            echo "::error:: Please ensure the VIB's verify phase is aligned both in vib-verify and vib-publish pipeline files"
+            exit "$exit_code"
+          fi
