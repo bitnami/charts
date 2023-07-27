@@ -18,6 +18,7 @@ it('allows creating a project', () => {
 });
 
 it('allows creating a registry', () => {
+  cy.skipIfAirgapped();
   cy.login();
   cy.visit('/harbor/registries');
   cy.fixture('registries').then((registry) => {

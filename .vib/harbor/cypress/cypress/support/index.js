@@ -23,12 +23,3 @@ import "./commands";
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
-
-// Function to verify that there is internet connectivity
-beforeEach(function() {
-  cy.on("fail", (err, runnable) => {
-    console.log('There is not internet connectivity')
-    this.skip()
-  });
-  cy.request('http://myip.bitnami.com');
-})
