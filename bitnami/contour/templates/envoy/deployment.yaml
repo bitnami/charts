@@ -286,7 +286,11 @@ spec:
           image: {{ include "common.images.image" ( dict "imageRoot" .Values.contour.image "global" .Values.global) }}
           imagePullPolicy: {{ .Values.contour.image.pullPolicy }}
           name: envoy-initconfig
+          {{- if .Values.envoy.contour.resources }}
+          resources: {{ toYaml .Values.envoy.contour.resources | nindent 12 }}
+          {{- else }}
           resources: {{ toYaml .Values.contour.resources | nindent 12 }}
+          {{- end }}
           volumeMounts:
             - name: envoy-config
               mountPath: /config
