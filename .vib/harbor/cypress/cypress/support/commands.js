@@ -26,13 +26,3 @@ Cypress.Commands.add(
     cy.get('button[type="submit"]').should('not.be.disabled').click();
   }
 );
-
-Cypress.Commands.add(
-  'skipIfAirgapped', function() {
-    if (Cypress.env('AIRGAPPED_ENVIRONMENT')) {
-      cy.log('Airgapped')
-      cy.wait(5000)
-      this.skip();
-    }
-  }
-);
