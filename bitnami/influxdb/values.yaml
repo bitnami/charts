@@ -279,12 +279,24 @@ influxdb:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param influxdb.containerSecurityContext.enabled Enabled InfluxDB&trade; containers' Security Context
   ## @param influxdb.containerSecurityContext.runAsUser Set InfluxDB&trade; containers' Security Context runAsUser
+  ## @param influxdb.containerSecurityContext.runAsGroup Set InfluxDB&trade; containers' Security Context runAsGroup
   ## @param influxdb.containerSecurityContext.runAsNonRoot Set Controller container's Security Context runAsNonRoot
+  ## @param influxdb.containerSecurityContext.allowPrivilegeEscalation Set Controller container's Security Context allowPrivilegeEscalation
+  ## @param influxdb.containerSecurityContext.seccompProfile.type Set Controller container's Security Context seccompProfile
+  ## @param influxdb.containerSecurityContext.capabilities.drop Set Controller container's Security Context capabilities to drop
+  #
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
+    runAsGroup: 0
     runAsNonRoot: true
+    allowPrivilegeEscalation: false
+    seccompProfile:
+      type: RuntimeDefault
+    capabilities:
+      drop:
+        - ALL
   ## InfluxDB&trade; pods' resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -879,14 +891,34 @@ backup:
     podAnnotations: {}
     ## K8s Security Context for Backup Cronjob pods
     ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
-    ## @param backup.cronjob.securityContext.enabled Enable security context for InfluxDB&trade;
+    ## @param backup.cronjob.securityContext.enabled Enable security context for InfluxDB&trade; backup pods
     ## @param backup.cronjob.securityContext.fsGroup Group ID for the InfluxDB&trade; filesystem
-    ## @param backup.cronjob.securityContext.runAsUser Group ID for the InfluxDB&trade; filesystem
+    ## @param backup.cronjob.securityContext.runAsUser User ID for the InfluxDB&trade; filesystem
+    ## @param backup.cronjob.securityContext.runAsGroup Group ID for the InfluxDB&trade; runAsGroup
+    ## @param backup.cronjob.securityContext.runAsNonRoot Setting for the InfluxDB&trade; runAsNonRoot
+    ## @param backup.cronjob.securityContext.seccompProfile.type Setting for the InfluxDB&trade; seccompProfile.type
     ##
     securityContext:
       enabled: true
       fsGroup: 1001
       runAsUser: 1001
+      runAsGroup: 0
+      runAsNonRoot: true
+      seccompProfile:
+        type: RuntimeDefault
+
+    ## K8s Security Context for Backup Cronjob containers
+    ## https://kubernetes.io/docs/tasks/configure-pod-container/security-context/
+    ## @param backup.cronjob.containerSecurityContext.enabled Enable security context for InfluxDB&trade; backup containers
+    ## @param backup.cronjob.containerSecurityContext.readOnlyRootFilesystem readOnlyRootFilesystem for InfluxDB&trade;
+    ## @param backup.cronjob.containerSecurityContext.allowPrivilegeEscalation allowPrivilegeEscalation for InfluxDB&trade;
+    ## @param backup.cronjob.containerSecurityContext.capabilities.drop Capabilities to drop for InfluxDB&trade;
+    containerSecurityContext:
+      enabled: true
+      readOnlyRootFilesystem: true
+      allowPrivilegeEscalation: false
+      capabilities:
+        drop: [ "ALL" ]
   ## @param backup.podAffinityPreset Backup &trade; Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ##
