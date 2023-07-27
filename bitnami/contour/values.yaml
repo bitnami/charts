@@ -566,6 +566,30 @@ envoy:
   ## @param envoy.args Override default args
   ##
   args: []
+  ## Envoy Contour init container resource requests and limits
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://projectcontour.io/guides/resource-limits/
+  ## We usually recommend not to specify default resources and to leave this as a conscious
+  ## choice for the user. This also increases chances charts run on environments with little
+  ## resources, such as Minikube. If you do want to specify resources, uncomment the following
+  ## lines, adjust them as necessary, and remove the curly braces after 'resources:'.
+  ## @param envoy.contour.resources.limits [object] Specify resource limits which the container is not allowed to succeed.
+  ## @param envoy.contour.resources.requests [object] Specify resource requests which the container needs to spawn.
+  ##
+  contour:
+    resources:
+    ## Example:
+    ## limits:
+    ##   cpu: 50m
+    ##   memory: 32Mi
+    ##
+    limits: {}
+    ## Examples:
+    ## requests:
+    ## cpu: 10m
+    ## memory: 16Mi
+    ##
+    requests: {}
   ## @param envoy.shutdownManager.enabled Contour shutdownManager sidecar
   ## @param envoy.shutdownManager.extraArgs [array] Extra arguments passed to shutdown container
   ## @param envoy.shutdownManager.port Specify Port for shutdown container
