@@ -746,7 +746,9 @@ speaker:
   ## @param speaker.customReadinessProbe Custom readiness probe for the Web component
   ##
   customReadinessProbe: {}
-
+  ## @param speaker.logLevel sets the speaker log level. Does not work if the args are overridden
+  ##
+  logLevel: "info"
   ## @section Speaker Prometheus metrics export
   metrics:
     ## @param speaker.metrics.enabled Enable the export of Prometheus metrics
