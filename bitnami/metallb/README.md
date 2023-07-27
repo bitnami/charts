@@ -257,6 +257,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `speaker.customStartupProbe`                                | Custom liveness probe for the Web component                                                                                                 | `{}`                      |
 | `speaker.customLivenessProbe`                               | Custom liveness probe for the Web component                                                                                                 | `{}`                      |
 | `speaker.customReadinessProbe`                              | Custom readiness probe for the Web component                                                                                                | `{}`                      |
+| `speaker.logLevel`                                          | sets the speaker log level. Does not work if the args are overridden                                                                        | `info`                    |
 
 ### Speaker Prometheus metrics export
 
