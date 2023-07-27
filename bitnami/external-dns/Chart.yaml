@@ -4,9 +4,6 @@
 annotations:
   category: DeveloperTools
   licenses: Apache-2.0
-  images: |-
-    - name: external-dns
-      image: registry-1.docker.io/bitnami/external-dns:0.13.5-debian-11-r55
 apiVersion: v2
 appVersion: 0.13.5
 dependencies:
