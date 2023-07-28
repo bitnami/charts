@@ -9,6 +9,8 @@ SPDX-License-Identifier: APACHE-2.0
 {{- $totalNodes := mul $shards $replicas }}
 {{- range $shard, $e := until $shards }}
 {{- range $i, $_e := until $replicas }}
+{{- $loadBalancerAnnotationPosOffset := mul $shard $replicas }}
+{{- $loadBalancerAnnotationPosition := add $loadBalancerAnnotationPosOffset $i }}
 {{- $targetPod := printf "%s-shard%d-%d" (include "common.names.fullname" $) $shard $i }}
 apiVersion: v1
 kind: Service
@@ -22,7 +24,7 @@ metadata:
   {{- if or $.Values.externalAccess.service.annotations $.Values.commonAnnotations $.Values.externalAccess.service.loadBalancerAnnotations }}
   annotations:
     {{- if and (not (empty $.Values.externalAccess.service.loadBalancerAnnotations)) (eq (len $.Values.externalAccess.service.loadBalancerAnnotations) $totalNodes) }}
-    {{ include "common.tplvalues.render" ( dict "value" (index $.Values.externalAccess.service.loadBalancerAnnotations $i) "context" $) | nindent 4 }}
+    {{ include "common.tplvalues.render" ( dict "value" (index $.Values.externalAccess.service.loadBalancerAnnotations $loadBalancerAnnotationPosition) "context" $) | nindent 4 }}
     {{- end }}
     {{- if $.Values.externalAccess.service.annotations }}
     {{- include "common.tplvalues.render" ( dict "value" $.Values.externalAccess.service.annotations "context" $) | nindent 4 }}
