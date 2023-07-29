@@ -106,6 +106,26 @@ spec:
           args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
           {{- else if .Values.redis.args }}
           args: {{- include "common.tplvalues.render" (dict "value" .Values.redis.args "context" $) | nindent 12 }}
+          {{- else if and .Values.cluster.externalAccess.enabled .Values.cluster.externalAccess.hostMode }}
+          args:
+            - |
+              # Backwards compatibility change
+              if ! [[ -f /opt/bitnami/redis/etc/redis.conf ]]; then
+                  cp /opt/bitnami/redis/etc/redis-default.conf /opt/bitnami/redis/etc/redis.conf
+              fi
+              pod_index=($(echo "$POD_NAME" | tr "-" "\n"))
+              pod_index="${pod_index[-1]}"
+              ips=($(echo "{{ .Values.cluster.externalAccess.service.loadBalancerIP }}" | cut -d [ -f2 | cut -d ] -f 1))
+              export REDIS_CLUSTER_ANNOUNCE_HOST="${ips[$pod_index]}"
+              export REDIS_NODES="${ips[@]}"
+              export REDIS_CLUSTER_PREFERRED_ENDPOINT_TYPE=hostname
+              {{- if .Values.cluster.init }}
+              if [[ "$pod_index" == "0" ]]; then
+                export REDIS_CLUSTER_CREATOR="yes"
+                export REDIS_CLUSTER_REPLICAS="{{ .Values.cluster.replicas }}"
+              fi
+              {{- end }}
+              /opt/bitnami/scripts/redis-cluster/entrypoint.sh /opt/bitnami/scripts/redis-cluster/run.sh
           {{- else if .Values.cluster.externalAccess.enabled }}
           args:
             - |
@@ -148,7 +168,10 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
-            {{- if .Values.cluster.externalAccess.enabled }}
+            {{- if and .Values.cluster.externalAccess.enabled .Values.cluster.externalAccess.hostMode }}
+            - name: REDIS_CLUSTER_DYNAMIC_IPS
+              value: "yes"
+            {{- else if .Values.cluster.externalAccess.enabled }}
             - name: REDIS_CLUSTER_DYNAMIC_IPS
               value: "no"
             {{- else }}
