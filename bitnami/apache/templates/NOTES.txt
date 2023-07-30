@@ -13,11 +13,6 @@ APP VERSION: {{ .Chart.AppVersion }}
   {{- if .Values.ingress.hostname }}
       - http://{{ .Values.ingress.hostname }}
   {{- end }}
-  {{- range $host := .Values.ingress.hosts }}
-    {{- range .paths }}
-      - http://{{ $host.name }}{{ . }}
-    {{- end }}
-  {{- end }}
 
 {{- else if contains "NodePort" .Values.service.type }}
 

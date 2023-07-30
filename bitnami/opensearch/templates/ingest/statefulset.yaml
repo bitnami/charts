@@ -1,0 +1,308 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if (include "opensearch.ingest.enabled" . ) }}
+apiVersion: {{ template "common.capabilities.statefulset.apiVersion" . }}
+kind: StatefulSet
+metadata:
+  name: {{ include "opensearch.ingest.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: ingest
+    {{- if .Values.useIstioLabels }}
+    ## Istio Labels: https://istio.io/docs/ops/deployment/requirements/
+    app: ingest
+    {{- end }}
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if or .Values.ingest.annotations .Values.commonAnnotations }}
+  annotations:
+    {{- if .Values.ingest.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.ingest.annotations "context" $ ) | nindent 4 }}
+    {{- end }}
+    {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- end }}
+spec:
+  {{- if not .Values.ingest.autoscaling.hpa.enabled }}
+  replicas: {{ .Values.ingest.replicaCount }}
+  {{- end }}
+  podManagementPolicy: {{ .Values.ingest.podManagementPolicy }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: ingest
+  serviceName: {{ include "opensearch.ingest.servicename" . }}
+  {{- if .Values.ingest.updateStrategy }}
+  updateStrategy: {{- toYaml .Values.ingest.updateStrategy | nindent 4 }}
+  {{- end }}
+  template:
+    metadata:
+      labels: {{- include "common.labels.standard" . | nindent 8 }}
+        app.kubernetes.io/component: ingest
+        {{- if .Values.useIstioLabels }}
+        ## Istio Labels: https://istio.io/docs/ops/deployment/requirements/
+        app: ingest
+        {{- end }}
+        {{- if .Values.ingest.podLabels }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.ingest.podLabels "context" $) | nindent 8 }}
+        {{- end }}
+      annotations:
+        {{- if and (include "opensearch.createTlsSecret" .) (not .Values.security.tls.ingest.existingSecret) }}
+        checksum/tls: {{ include (print $.Template.BasePath "/tls-secret.yaml") . | sha256sum }}
+        {{- end }}
+        {{- if .Values.ingest.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.ingest.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+    spec:
+      serviceAccountName: {{ template "opensearch.ingest.serviceAccountName" . }}
+      {{- include "opensearch.imagePullSecrets" . | nindent 6 }}
+      {{- if .Values.ingest.hostAliases }}
+      hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.ingest.hostAliases "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.ingest.affinity }}
+      affinity: {{- include "common.tplvalues.render" (dict "value" .Values.ingest.affinity "context" $) | nindent 8 }}
+      {{- else }}
+      affinity:
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.ingest.podAffinityPreset "component" "ingest" "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.ingest.podAntiAffinityPreset "component" "ingest" "context" $) | nindent 10 }}
+        nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.ingest.nodeAffinityPreset.type "key" .Values.ingest.nodeAffinityPreset.key "values" .Values.ingest.nodeAffinityPreset.values) | nindent 10 }}
+      {{- end }}
+      {{- if .Values.ingest.nodeSelector }}
+      nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.ingest.nodeSelector "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.ingest.tolerations }}
+      tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.ingest.tolerations "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.ingest.schedulerName }}
+      schedulerName: {{ .Values.ingest.schedulerName }}
+      {{- end }}
+      {{- if .Values.ingest.topologySpreadConstraints }}
+      topologySpreadConstraints: {{- include "common.tplvalues.render" (dict "value" .Values.ingest.topologySpreadConstraints "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.ingest.priorityClassName }}
+      priorityClassName: {{ .Values.ingest.priorityClassName | quote }}
+      {{- end }}
+      {{- if .Values.ingest.podSecurityContext.enabled }}
+      securityContext: {{- omit .Values.ingest.podSecurityContext "enabled" | toYaml | nindent 8 }}
+      {{- end }}
+      {{- if .Values.ingest.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.ingest.terminationGracePeriodSeconds }}
+      {{- end }}
+      {{- if or .Values.ingest.initContainers  .Values.sysctlImage.enabled }}
+      initContainers:
+        {{- if .Values.sysctlImage.enabled }}
+          {{- include "opensearch.sysctl.initContainer" .  | nindent 8}}
+        {{- end }}
+        {{- if .Values.ingest.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.ingest.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.initContainers }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
+        {{- end }}
+      {{- end }}
+      containers:
+        - name: opensearch
+          image: {{ include "opensearch.image" . }}
+          imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
+          {{- if .Values.ingest.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.ingest.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.ingest.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.ingest.command "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.ingest.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.ingest.args "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.ingest.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.ingest.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          env:
+            - name: BITNAMI_DEBUG
+              value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
+            - name: MY_POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: OPENSEARCH_IS_DEDICATED_NODE
+              value: "yes"
+            {{- $roles := ternary "ingest" (list "ingest" .Values.ingest.extraRoles) (empty .Values.ingest.extraRoles) }}
+            - name: OPENSEARCH_NODE_ROLES
+              value: {{ join "," $roles | quote }}
+            - name: OPENSEARCH_TRANSPORT_PORT_NUMBER
+              value: {{ .Values.containerPorts.transport | quote }}
+            - name: OPENSEARCH_HTTP_PORT_NUMBER
+              value: {{ .Values.containerPorts.restAPI | quote }}
+            - name: OPENSEARCH_CLUSTER_NAME
+              value: {{ .Values.clusterName | quote }}
+            - name: OPENSEARCH_CLUSTER_HOSTS
+              value: {{ include "opensearch.hosts" . | quote }}
+            - name: OPENSEARCH_TOTAL_NODES
+              value: {{ add (ternary .Values.master.autoscaling.hpa.minReplicas .Values.master.replicaCount .Values.master.autoscaling.hpa.enabled) (ternary .Values.data.autoscaling.hpa.minReplicas .Values.data.replicaCount .Values.data.autoscaling.hpa.enabled) | quote }}
+            - name: OPENSEARCH_CLUSTER_MASTER_HOSTS
+              {{- $opensearchMasterFullname := include "opensearch.master.fullname" . }}
+              {{- $replicas := int (ternary .Values.master.autoscaling.hpa.minReplicas .Values.master.replicaCount .Values.master.autoscaling.hpa.enabled) }}
+              value: {{ range $i, $e := until $replicas }}{{ printf "%s-%d" $opensearchMasterFullname $e }} {{ end }}
+            - name: OPENSEARCH_MINIMUM_MASTER_NODES
+              value: {{ add (div (ternary .Values.master.autoscaling.hpa.minReplicas .Values.master.replicaCount .Values.master.autoscaling.hpa.enabled) 2) 1 | quote }}
+            - name: OPENSEARCH_ADVERTISED_HOSTNAME
+              value: "$(MY_POD_NAME).{{ (include "opensearch.ingest.servicename" .)}}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}"
+            {{- if .Values.plugins }}
+            - name: OPENSEARCH_PLUGINS
+              value: {{ .Values.plugins | quote }}
+            {{- end }}
+            {{- if .Values.ingest.heapSize }}
+            - name: OPENSEARCH_HEAP_SIZE
+              value: {{ .Values.ingest.heapSize | quote }}
+            {{- end }}
+            {{- if .Values.security.enabled }}
+            {{- include "opensearch.configure.security" . | nindent 12 }}
+            {{- end }}
+            {{- if .Values.ingest.extraEnvVars }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.ingest.extraEnvVars "context" $ ) | nindent 12 }}
+            {{- end }}
+            {{- if .Values.extraEnvVars }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.extraEnvVars "context" $ ) | nindent 12 }}
+            {{- end }}
+          {{- if or .Values.extraEnvVarsCM .Values.extraEnvVarsSecret .Values.ingest.extraEnvVarsCM .Values.ingest.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" ( dict "value" .Values.extraEnvVarsCM "context" $ ) }}
+            {{- end }}
+            {{- if .Values.ingest.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" ( dict "value" .Values.ingest.extraEnvVarsCM "context" $ ) }}
+            {{- end }}
+            {{- if .Values.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" ( dict "value" .Values.extraEnvVarsSecret "context" $ ) }}
+            {{- end }}
+            {{- if .Values.ingest.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" ( dict "value" .Values.ingest.extraEnvVarsSecret "context" $ ) }}
+            {{- end }}
+          {{- end }}
+          ports:
+            - name: rest-api
+              containerPort: {{ .Values.containerPorts.restAPI }}
+            - name: transport
+              containerPort: {{ .Values.containerPorts.transport }}
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.ingest.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ingest.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.ingest.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.ingest.startupProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: rest-api
+          {{- end }}
+          {{- if .Values.ingest.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ingest.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.ingest.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.ingest.livenessProbe "enabled") "context" $) | nindent 12 }}
+            exec:
+              command:
+                - /opt/bitnami/scripts/opensearch/healthcheck.sh
+          {{- end }}
+          {{- if .Values.ingest.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ingest.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.ingest.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.ingest.readinessProbe "enabled") "context" $) | nindent 12 }}
+            exec:
+              command:
+                - /opt/bitnami/scripts/opensearch/healthcheck.sh
+          {{- end }}
+          {{- end }}
+          {{- if .Values.ingest.resources }}
+          resources: {{- toYaml .Values.ingest.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+            - name: data
+              mountPath: /bitnami/opensearch/data
+            {{- if .Values.config }}
+            - mountPath: /opt/bitnami/opensearch/config/opensearch.yml
+              name: config
+              subPath: opensearch.yml
+            {{- end }}
+            {{- if .Values.extraConfig }}
+            - mountPath: /opt/bitnami/opensearch/config/my_opensearch.yml
+              name: config
+              subPath: my_opensearch.yml
+            {{- end }}
+            {{- if .Values.security.enabled }}
+            - name: opensearch-certificates
+              mountPath: /opt/bitnami/opensearch/config/certs
+              readOnly: true
+            {{- end }}
+            {{- if .Values.initScripts }}
+            - name: custom-init-scripts
+              mountPath: /docker-entrypoint-initdb.d/init-scripts
+            {{- end }}
+            {{- if .Values.initScriptsCM }}
+            - name: custom-init-scripts-cm
+              mountPath: /docker-entrypoint-initdb.d/init-scripts-cm
+            {{- end }}
+            {{- if .Values.initScriptsSecret }}
+            - name: custom-init-scripts-secret
+              mountPath: /docker-entrypoint-initdb.d/init-scripts-secret
+            {{- end }}
+            {{- if .Values.ingest.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.ingest.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
+            {{- if .Values.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
+        {{- if .Values.ingest.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.ingest.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.sidecars }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.sidecars "context" $) | nindent 8 }}
+        {{- end }}
+      volumes:
+        - name: "data"
+          emptyDir: {}
+        {{- if or .Values.config .Values.extraConfig }}
+        - name: config
+          configMap:
+            name: {{ template "common.names.fullname" . }}
+        {{- end }}
+        {{- if .Values.security.enabled }}
+        - name: opensearch-certificates
+          projected:
+            defaultMode: 256
+            sources:
+              - secret:
+                  name: {{ include "opensearch.master.tlsSecretName" . }}
+              - secret:
+                  name: {{ include "opensearch.admin.tlsSecretName" . }}
+        {{- end }}
+        {{- if .Values.initScripts }}
+        - name: custom-init-scripts
+          configMap:
+            name: {{ template "opensearch.initScripts" . }}
+        {{- end }}
+        {{- if .Values.initScriptsCM }}
+        - name: custom-init-scripts-cm
+          configMap:
+            name: {{ template "opensearch.initScriptsCM" . }}
+        {{- end }}
+        {{- if .Values.initScriptsSecret }}
+        - name: custom-init-scripts-secret
+          secret:
+            secretName: {{ template "opensearch.initScriptsSecret" . }}
+            defaultMode: 0755
+        {{- end }}
+        {{- if .Values.ingest.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.ingest.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
+{{- end }}

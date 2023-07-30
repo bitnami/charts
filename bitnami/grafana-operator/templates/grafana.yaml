@@ -98,8 +98,9 @@ spec:
       replicas: {{ .Values.grafana.replicaCount }}
       template:
         spec:
+          {{- include "common.images.pullSecrets" (dict "images" (list .Values.grafana.image) "global" .Values.global) | nindent 10 }}
           {{- if .Values.grafana.affinity }}
-          affinity: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.affinity "context" $) | nindent 6 }}
+          affinity: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.affinity "context" $) | nindent 12 }}
           {{- else }}
           affinity:
             {{- if not (empty .Values.grafana.podAffinityPreset) }}
@@ -115,6 +116,16 @@ spec:
           {{- if .Values.grafana.podSecurityContext.enabled }}
           securityContext: {{- omit .Values.grafana.podSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
+          containers:
+            - name: grafana
+              image: {{ include "common.images.image" (dict "imageRoot" .Values.grafana.image "global" .Values.global) }}
+              imagePullPolicy: {{ .Values.grafana.image.pullPolicy }}
+              {{- if .Values.grafana.containerSecurityContext.enabled }}
+              securityContext: {{- omit .Values.grafana.containerSecurityContext "enabled" | toYaml | nindent 16 }}
+              {{- end }}
+              {{- if .Values.grafana.resources }}
+              resources: {{- toYaml .Values.grafana.resources | nindent 16 }}
+              {{- end }}
     {{- if .Values.grafana.tolerations }}
     tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.tolerations "context" $) | nindent 6 }}
     {{- end }}
@@ -133,8 +144,8 @@ spec:
       {{- include "common.tplvalues.render" (dict "value" .Values.grafana.extraVolumes "context" $) | nindent 6 }}
     {{- end }}
   {{- if .Values.grafana.ingress.enabled }}
-  ingress: 
-    spec: 
+  ingress:
+    spec:
       {{- if and .Values.grafana.ingress.ingressClassName (include "common.ingress.supportsIngressClassname" .) }}
       ingressClassName: {{ .Values.grafana.ingress.ingressClassName | quote }}
       {{- end }}
@@ -142,12 +153,19 @@ spec:
       tlsSecretName: {{ .Values.grafana.ingress.tlsSecret }}
       rules:
         {{- if .Values.grafana.ingress.host }}
-        host: {{ include "common.tplvalues.render" (dict "value" .Values.grafana.ingress.host "context" $) }}
-        {{- end }}
+        - host: {{ include "common.tplvalues.render" (dict "value" .Values.grafana.ingress.host "context" $) }}
+          http:
+        {{- else }}
         - http:
-          paths:
-            - path: {{ include "common.tplvalues.render" (dict "value" .Values.grafana.ingress.path "context" $) }}
-            - pathType: {{ include "common.tplvalues.render" (dict "value" .Values.grafana.ingress.pathType "context" $) }}
+        {{- end }}
+            paths:
+              - path: {{ include "common.tplvalues.render" (dict "value" .Values.grafana.ingress.path "context" $) }}
+                pathType: {{ include "common.tplvalues.render" (dict "value" .Values.grafana.ingress.pathType "context" $) }}
+                backend:
+                  service:
+                    name: {{ printf "%s-grafana-service" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+                    port:
+                      number: 3000
     {{- if or .Values.commonLabels .Values.grafana.ingress.labels .Values.grafana.labels }}
     labels:
       {{- if .Values.commonLabels }}
