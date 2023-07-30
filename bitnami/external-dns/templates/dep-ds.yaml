@@ -587,7 +587,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ template "external-dns.secretName" . }}
-                  key: rfc2136_tsig_secret
+                  key: {{ .Values.rfc2136.tsigKeyname }}
             {{- end }}
             {{- end }}
             {{- if eq .Values.provider "pdns" }}
