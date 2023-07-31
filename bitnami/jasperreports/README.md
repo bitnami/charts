@@ -199,6 +199,10 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                                        | Description                                                               | Value                   |
 | ------------------------------------------- | ------------------------------------------------------------------------- | ----------------------- |
+| `mariadb.image.registry`                    | Testing                                                                   | `docker.io`             |
+| `mariadb.image.repository`                  | Testing                                                                   | `bitnami/mariadb`       |
+| `mariadb.image.tag`                         | Testing                                                                   | `11.0.2-debian-11-r2`   |
+| `mariadb.image.digest`                      | Testing                                                                   | `""`                    |
 | `mariadb.enabled`                           | Whether to use the MariaDB chart                                          | `true`                  |
 | `mariadb.architecture`                      | MariaDB architecture (`standalone` or `replication`)                      | `standalone`            |
 | `mariadb.auth.rootPassword`                 | Password for the MariaDB `root` user                                      | `""`                    |
