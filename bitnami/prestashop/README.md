@@ -204,26 +204,30 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Database parameters
 
-| Name                                        | Description                                                                              | Value                |
-| ------------------------------------------- | ---------------------------------------------------------------------------------------- | -------------------- |
-| `mariadb.enabled`                           | Whether to deploy a mariadb server to satisfy the applications database requirements     | `true`               |
-| `mariadb.architecture`                      | MariaDB architecture. Allowed values: `standalone` or `replication`                      | `standalone`         |
-| `mariadb.auth.rootPassword`                 | Password for the MariaDB `root` user                                                     | `""`                 |
-| `mariadb.auth.database`                     | Database name to create                                                                  | `bitnami_prestashop` |
-| `mariadb.auth.username`                     | Database user to create                                                                  | `bn_prestashop`      |
-| `mariadb.auth.password`                     | Password for the database                                                                | `""`                 |
-| `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                                                    | `true`               |
-| `mariadb.primary.persistence.storageClass`  | MariaDB primary persistent volume storage Class                                          | `""`                 |
-| `mariadb.primary.persistence.accessModes`   | Database Persistent Volume Access Modes                                                  | `["ReadWriteOnce"]`  |
-| `mariadb.primary.persistence.size`          | Database Persistent Volume Size                                                          | `8Gi`                |
-| `mariadb.primary.persistence.hostPath`      | Set path in case you want to use local host path volumes (not recommended in production) | `""`                 |
-| `mariadb.primary.persistence.existingClaim` | Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas                 | `""`                 |
-| `externalDatabase.host`                     | Host of the existing database                                                            | `""`                 |
-| `externalDatabase.port`                     | Port of the existing database                                                            | `3306`               |
-| `externalDatabase.user`                     | Existing username in the existing database                                               | `bn_prestashop`      |
-| `externalDatabase.password`                 | Password for the above username                                                          | `""`                 |
-| `externalDatabase.database`                 | Name of the existing database                                                            | `bitnami_prestashop` |
-| `externalDatabase.existingSecret`           | Name of an existing secret resource containing the DB password                           | `""`                 |
+| Name                                        | Description                                                                              | Value                 |
+| ------------------------------------------- | ---------------------------------------------------------------------------------------- | --------------------- |
+| `mariadb.image.registry`                    | Testing                                                                                  | `docker.io`           |
+| `mariadb.image.repository`                  | Testing                                                                                  | `bitnami/mariadb`     |
+| `mariadb.image.tag`                         | Testing                                                                                  | `11.0.2-debian-11-r2` |
+| `mariadb.image.digest`                      | Testing                                                                                  | `""`                  |
+| `mariadb.enabled`                           | Whether to deploy a mariadb server to satisfy the applications database requirements     | `true`                |
+| `mariadb.architecture`                      | MariaDB architecture. Allowed values: `standalone` or `replication`                      | `standalone`          |
+| `mariadb.auth.rootPassword`                 | Password for the MariaDB `root` user                                                     | `""`                  |
+| `mariadb.auth.database`                     | Database name to create                                                                  | `bitnami_prestashop`  |
+| `mariadb.auth.username`                     | Database user to create                                                                  | `bn_prestashop`       |
+| `mariadb.auth.password`                     | Password for the database                                                                | `""`                  |
+| `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                                                    | `true`                |
+| `mariadb.primary.persistence.storageClass`  | MariaDB primary persistent volume storage Class                                          | `""`                  |
+| `mariadb.primary.persistence.accessModes`   | Database Persistent Volume Access Modes                                                  | `["ReadWriteOnce"]`   |
+| `mariadb.primary.persistence.size`          | Database Persistent Volume Size                                                          | `8Gi`                 |
+| `mariadb.primary.persistence.hostPath`      | Set path in case you want to use local host path volumes (not recommended in production) | `""`                  |
+| `mariadb.primary.persistence.existingClaim` | Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas                 | `""`                  |
+| `externalDatabase.host`                     | Host of the existing database                                                            | `""`                  |
+| `externalDatabase.port`                     | Port of the existing database                                                            | `3306`                |
+| `externalDatabase.user`                     | Existing username in the existing database                                               | `bn_prestashop`       |
+| `externalDatabase.password`                 | Password for the above username                                                          | `""`                  |
+| `externalDatabase.database`                 | Name of the existing database                                                            | `bitnami_prestashop`  |
+| `externalDatabase.existingSecret`           | Name of an existing secret resource containing the DB password                           | `""`                  |
 
 ### Volume Permissions parameters
 
