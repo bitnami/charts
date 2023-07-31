@@ -1,0 +1,51 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and (.Capabilities.APIVersions.Has "autoscaling.k8s.io/v1/VerticalPodAutoscaler") .Values.coordinating.autoscaling.vpa.enabled }}
+apiVersion: {{ include "common.capabilities.vpa.apiVersion" . }}
+kind: VerticalPodAutoscaler
+metadata:
+  name: {{ include "opensearch.coordinating.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/part-of: opensearch
+    app.kubernetes.io/component: coordinating-only
+   {{- if .Values.commonLabels }}
+   {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+   {{- end }}
+  annotations:
+  {{- if .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.coordinating.autoscaling.vpa.annotations }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.coordinating.autoscaling.vpa.annotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  resourcePolicy:
+    containerPolicies:
+    - containerName: opensearch
+      {{- with .Values.coordinating.autoscaling.vpa.controlledResources }}
+      controlledResources:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.coordinating.autoscaling.vpa.maxAllowed }}
+      maxAllowed:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.coordinating.autoscaling.vpa.minAllowed }}
+      minAllowed:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+  targetRef:
+    apiVersion: {{ (include "common.capabilities.statefulset.apiVersion" .) }}
+    kind: StatefulSet
+    name: {{ include "opensearch.coordinating.fullname" . }}
+  {{- if .Values.coordinating.autoscaling.vpa.updatePolicy }}
+  updatePolicy:
+    {{- with .Values.coordinating.autoscaling.vpa.updatePolicy.updateMode }}
+    updateMode: {{ . }}
+    {{- end }}
+  {{- end }}
+{{- end }}
