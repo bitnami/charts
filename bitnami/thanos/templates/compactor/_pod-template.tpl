@@ -41,6 +41,9 @@ spec:
   {{- if .Values.compactor.dnsConfig }}
   dnsConfig: {{- include "common.tplvalues.render" (dict "value" .Values.compactor.dnsConfig "context" $) | nindent 4 }}
   {{- end }}
+  {{- if .Values.compactor.dnsPolicy }}
+  dnsPolicy: {{ .Values.compactor.dnsPolicy | quote }}
+  {{- end }}
   {{- if .Values.compactor.nodeSelector }}
   nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.compactor.nodeSelector "context" $) | nindent 4 }}
   {{- end }}

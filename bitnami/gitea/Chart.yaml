@@ -5,7 +5,7 @@ annotations:
   category: Analytics
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 1.19.4
+appVersion: 1.20.2
 dependencies:
   - condition: postgresql.enabled
     name: postgresql
@@ -32,4 +32,4 @@ maintainers:
 name: gitea
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/gitea
-version: 0.3.6
+version: 0.3.7
