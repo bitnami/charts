@@ -204,6 +204,8 @@ spec:
               value: "/bitnami/concourse/concourse-keys/worker_key.pub"
             - name: CONCOURSE_SESSION_SIGNING_KEY
               value: "/bitnami/concourse/concourse-keys/session_signing_key"
+            - name: CONCOURSE_WEB_PUBLIC_DIR
+              value: "/opt/bitnami/concourse/web/public"
             {{- if .Values.web.logLevel }}
             - name: CONCOURSE_LOG_LEVEL
               value: {{ .Values.web.logLevel | quote }}
@@ -383,7 +385,7 @@ spec:
               path: {{ .Values.web.baseUrl | trimSuffix "/" }}/api/v1/info
               port: http
           {{- end }}
-          {{- end }}     
+          {{- end }}
           volumeMounts:
             - name: concourse-keys
               mountPath: /bitnami/concourse/concourse-keys
