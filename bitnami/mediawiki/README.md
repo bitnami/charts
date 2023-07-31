@@ -205,26 +205,30 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Database parameters
 
-| Name                                        | Description                                                                           | Value               |
-| ------------------------------------------- | ------------------------------------------------------------------------------------- | ------------------- |
-| `mariadb.enabled`                           | Whether to deploy a mariadb server to satisfy the applications database requirements. | `true`              |
-| `mariadb.architecture`                      | MariaDB architecture (`standalone` or `replication`)                                  | `standalone`        |
-| `mariadb.auth.rootPassword`                 | Password for the MariaDB `root` user                                                  | `""`                |
-| `mariadb.auth.database`                     | Database name to create                                                               | `bitnami_mediawiki` |
-| `mariadb.auth.username`                     | Database user to create                                                               | `bn_mediawiki`      |
-| `mariadb.auth.password`                     | Password for the database                                                             | `""`                |
-| `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                                                 | `true`              |
-| `mariadb.primary.persistence.storageClass`  | PVC Storage Class                                                                     | `""`                |
-| `mariadb.primary.persistence.accessModes`   | Persistent Volume Access Mode                                                         | `["ReadWriteOnce"]` |
-| `mariadb.primary.persistence.size`          | Database Persistent Volume Size                                                       | `8Gi`               |
-| `mariadb.primary.persistence.hostPath`      | Host mount path for MariaDB volume                                                    | `""`                |
-| `mariadb.primary.persistence.existingClaim` | Enable persistence using an existing PVC                                              | `""`                |
-| `externalDatabase.existingSecret`           | Use existing secret (ignores previous password)                                       | `""`                |
-| `externalDatabase.host`                     | Host of the existing database                                                         | `""`                |
-| `externalDatabase.port`                     | Port of the existing database                                                         | `3306`              |
-| `externalDatabase.user`                     | Existing username in the external db                                                  | `bn_mediawiki`      |
-| `externalDatabase.password`                 | Password for the above username                                                       | `""`                |
-| `externalDatabase.database`                 | Name of the existing database                                                         | `bitnami_mediawiki` |
+| Name                                        | Description                                                                           | Value                 |
+| ------------------------------------------- | ------------------------------------------------------------------------------------- | --------------------- |
+| `mariadb.image.registry`                    | Testing                                                                               | `docker.io`           |
+| `mariadb.image.repository`                  | Testing                                                                               | `bitnami/mariadb`     |
+| `mariadb.image.tag`                         | Testing                                                                               | `11.0.2-debian-11-r2` |
+| `mariadb.image.digest`                      | Testing                                                                               | `""`                  |
+| `mariadb.enabled`                           | Whether to deploy a mariadb server to satisfy the applications database requirements. | `true`                |
+| `mariadb.architecture`                      | MariaDB architecture (`standalone` or `replication`)                                  | `standalone`          |
+| `mariadb.auth.rootPassword`                 | Password for the MariaDB `root` user                                                  | `""`                  |
+| `mariadb.auth.database`                     | Database name to create                                                               | `bitnami_mediawiki`   |
+| `mariadb.auth.username`                     | Database user to create                                                               | `bn_mediawiki`        |
+| `mariadb.auth.password`                     | Password for the database                                                             | `""`                  |
+| `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                                                 | `true`                |
+| `mariadb.primary.persistence.storageClass`  | PVC Storage Class                                                                     | `""`                  |
+| `mariadb.primary.persistence.accessModes`   | Persistent Volume Access Mode                                                         | `["ReadWriteOnce"]`   |
+| `mariadb.primary.persistence.size`          | Database Persistent Volume Size                                                       | `8Gi`                 |
+| `mariadb.primary.persistence.hostPath`      | Host mount path for MariaDB volume                                                    | `""`                  |
+| `mariadb.primary.persistence.existingClaim` | Enable persistence using an existing PVC                                              | `""`                  |
+| `externalDatabase.existingSecret`           | Use existing secret (ignores previous password)                                       | `""`                  |
+| `externalDatabase.host`                     | Host of the existing database                                                         | `""`                  |
+| `externalDatabase.port`                     | Port of the existing database                                                         | `3306`                |
+| `externalDatabase.user`                     | Existing username in the external db                                                  | `bn_mediawiki`        |
+| `externalDatabase.password`                 | Password for the above username                                                       | `""`                  |
+| `externalDatabase.database`                 | Name of the existing database                                                         | `bitnami_mediawiki`   |
 
 ### Metrics parameters
 
