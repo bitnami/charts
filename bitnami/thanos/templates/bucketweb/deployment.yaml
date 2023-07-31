@@ -60,6 +60,9 @@ spec:
       {{- if .Values.bucketweb.dnsConfig }}
       dnsConfig: {{- include "common.tplvalues.render" (dict "value" .Values.bucketweb.dnsConfig "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.bucketweb.dnsPolicy }}
+      dnsPolicy: {{ .Values.bucketweb.dnsPolicy | quote }}
+      {{- end }}
       {{- if .Values.bucketweb.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.bucketweb.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
@@ -115,7 +118,7 @@ spec:
             - --http.config=/conf/http/http-config.yml
             {{- end }}
             {{- if .Values.bucketweb.extraFlags }}
-            {{- .Values.bucketweb.extraFlags | toYaml | nindent 12 }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.bucketweb.extraFlags "context" $) | nindent 12 }}
             {{- end }}
             {{- end }}
           {{- if .Values.bucketweb.extraEnvVars }}

@@ -14,6 +14,9 @@ metadata:
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
+    {{- if .Values.receive.statefulsetLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.receive.statefulsetLabels "context" $ ) | nindent 4 }}
+    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -64,6 +67,9 @@ spec:
       {{- end }}
       {{- if .Values.receive.dnsConfig }}
       dnsConfig: {{- include "common.tplvalues.render" (dict "value" .Values.receive.dnsConfig "context" $) | nindent 8 }}
+      {{- end }}
+      {{- if .Values.receive.dnsPolicy }}
+      dnsPolicy: {{ .Values.receive.dnsPolicy | quote }}
       {{- end }}
       {{- if .Values.receive.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.receive.nodeSelector "context" $) | nindent 8 }}
@@ -153,7 +159,7 @@ spec:
             - --grpc-server-tls-client-ca=/certs/{{ include "common.secrets.key" (dict "existingSecret" .Values.receive.grpc.server.tls.existingSecret "key" "ca-cert") }}
             {{- end }}
             {{- if .Values.receive.extraFlags }}
-            {{- .Values.receive.extraFlags | toYaml | nindent 12 }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.receive.extraFlags "context" $) | nindent 12 }}
             {{- end }}
             {{- end }}
           env:

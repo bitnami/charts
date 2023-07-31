@@ -3,6 +3,7 @@ Copyright VMware, Inc.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
+{{- if .Values.msgTopologyOperator.enabled }}
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
@@ -174,3 +175,4 @@ spec:
         {{- if .Values.msgTopologyOperator.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.msgTopologyOperator.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
+{{- end }}

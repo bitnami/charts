@@ -17,10 +17,10 @@ it('allows to create a collection', () => {
   cy.fixture('collection').then((c) => {
     cy.get('[data-cy="collection_name"]').type(`${c.collection.name}${random}`);
     cy.get('[data-cy="collection_name"]').type(`${c.collection.name}${random}`);
-    cy.get('div[class*="MuiTextField"]').contains('div', 'ID Name').within(() => {
+    cy.get('div[class*="MuiTextField"]').contains('div', 'Primary Key').within(() => {
       cy.get('input').type(`${c.collection.idName}${random}`)
     });
-    cy.get('div[class*="MuiTextField"]').contains('div','Vector Name').within(() => {
+    cy.get('div[class*="MuiTextField"]').contains('div','Vector Field').within(() => {
       cy.get('input').type(`${c.collection.vectorName}${random}{enter}`);
     });
     cy.visit('/');
