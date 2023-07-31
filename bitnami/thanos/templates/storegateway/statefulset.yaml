@@ -65,6 +65,9 @@ spec:
       {{- if .Values.storegateway.dnsConfig }}
       dnsConfig: {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.dnsConfig "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.storegateway.dnsPolicy }}
+      dnsPolicy: {{ .Values.storegateway.dnsPolicy | quote }}
+      {{- end }}
       {{- if .Values.storegateway.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
