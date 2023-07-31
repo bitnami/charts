@@ -1443,6 +1443,11 @@ waitForBackends:
 ## https://github.com/bitnami/charts/blob/main/bitnami/mariadb/values.yaml
 ##
 mariadb:
+  image:
+    registry: docker.io
+    repository: bitnami/mariadb
+    tag: 11.0
+    digest: ""
   ## @param mariadb.enabled Enable/disable MariaDB chart installation
   ##
   enabled: true
