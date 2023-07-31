@@ -1,0 +1,7 @@
+{
+  "baseUrl": "http://localhost",
+  "responseTimeout": 30000,
+  "env": {
+    "nodeNumber": 4
+  }
+}

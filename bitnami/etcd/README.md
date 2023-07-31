@@ -81,7 +81,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------- | ----------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`                       | etcd image registry                                                                                         | `docker.io`           |
 | `image.repository`                     | etcd image name                                                                                             | `bitnami/etcd`        |
-| `image.tag`                            | etcd image tag                                                                                              | `3.5.9-debian-11-r24` |
+| `image.tag`                            | etcd image tag                                                                                              | `3.5.9-debian-11-r76` |
 | `image.digest`                         | etcd image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag        | `""`                  |
 | `image.pullPolicy`                     | etcd image pull policy                                                                                      | `IfNotPresent`        |
 | `image.pullSecrets`                    | etcd image pull secrets                                                                                     | `[]`                  |
@@ -167,6 +167,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `customStartupProbe`                                | Override default startup probe                                                            | `{}`            |
 | `extraVolumes`                                      | Optionally specify extra list of additional volumes for etcd pods                         | `[]`            |
 | `extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for etcd container(s)            | `[]`            |
+| `extraVolumeClaimTemplates`                         | Optionally specify extra list of additional volumeClaimTemplates for etcd container(s)    | `[]`            |
 | `initContainers`                                    | Add additional init containers to the etcd pods                                           | `[]`            |
 | `sidecars`                                          | Add additional sidecar containers to the etcd pods                                        | `[]`            |
 | `podAnnotations`                                    | Annotations for etcd pods                                                                 | `{}`            |
@@ -231,7 +232,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup`              | `false`            |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                  | `docker.io`        |
 | `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                                      | `bitnami/os-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                       | `11-debian-11-r2`  |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                       | `11-debian-11-r16` |
 | `volumePermissions.image.digest`       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`               |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`     |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                  | `[]`               |
@@ -491,7 +492,7 @@ This version introduces several features and performance improvements:
 - New parameters/features were added:
   - `extraDeploy` to deploy any extra desired object.
   - `initContainers` and `sidecars` to define custom init containers and sidecars.
-  - `extraVolumes` and `extraVolumeMounts` to define custom volumes and mount points.
+  - `extraVolumes`, `extraVolumeMounts` and `extraVolumeClaimTemplates` to define custom volumes, mount points and volume claim templates.
   - Probes can be now customized, and support to startup probes is added.
   - LifecycleHooks can be customized using `lifecycleHooks` parameter.
   - The default command/args can be customized using `command` and `args` parameters.

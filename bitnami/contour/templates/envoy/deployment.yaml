@@ -103,6 +103,9 @@ spec:
                 name: {{ include "common.tplvalues.render" ( dict "value" .Values.contour.extraEnvVarsSecret "context" $ ) }}
             {{- end }}
           {{- end }}
+          {{- if .Values.envoy.shutdownManager.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.envoy.shutdownManager.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
           lifecycle:
             preStop:
               exec:
@@ -313,6 +316,9 @@ spec:
             - secretRef:
                 name: {{ include "common.tplvalues.render" ( dict "value" .Values.contour.extraEnvVarsSecret "context" $ ) }}
             {{- end }}
+          {{- end }}
+          {{- if .Values.envoy.containerSecurityContextEnvoyInit.enabled }}
+          securityContext: {{- omit .Values.envoy.containerSecurityContextEnvoyInit "enabled" | toYaml | nindent 12 }}
           {{- end }}
       {{- if .Values.envoy.initContainers }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.envoy.initContainers "context" $ ) | nindent 8 }}
