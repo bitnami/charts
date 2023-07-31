@@ -648,10 +648,15 @@ databaseType: mariadb
 ## @param mariadb.architecture MariaDB architecture. Allowed values: `standalone` or `replication`
 ##
 mariadb:
+  ## @param mariadb.image.registry Testing
+  ## @param mariadb.image.repository Testing
+  ## @param mariadb.image.tag Testing
+  ## @param mariadb.image.digest Testing
+  ##
   image:
     registry: docker.io
     repository: bitnami/mariadb
-    tag: 11.0
+    tag: 11.0.2-debian-11-r2
     digest: ""
   enabled: true
   auth:
