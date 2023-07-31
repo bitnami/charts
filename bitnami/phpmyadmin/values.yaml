@@ -552,7 +552,6 @@ mariadb:
     repository: bitnami/mariadb
     tag: 11.0.2-debian-11-r2
     digest: ""
-    digest: ""
 
 ## @section Other Parameters
 
