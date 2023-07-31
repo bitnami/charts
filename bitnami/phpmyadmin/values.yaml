@@ -541,7 +541,12 @@ db:
 ## @param mariadb MariaDB chart configuration
 ## https://github.com/bitnami/charts/blob/main/bitnami/mariadb/values.yaml
 ##
-mariadb: {}
+mariadb:
+  image:
+    registry: docker.io
+    repository: bitnami/mariadb
+    tag: 11.0
+    digest: ""
 
 ## @section Other Parameters
 
