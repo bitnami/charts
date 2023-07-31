@@ -1093,6 +1093,11 @@ networkPolicy:
 ## ref: https://github.com/bitnami/charts/blob/main/bitnami/mariadb/values.yaml
 ##
 mariadb:
+  image:
+    registry: docker.io
+    repository: bitnami/mariadb
+    tag: 11.0
+    digest: ""
   ## @param mariadb.enabled Deploy a MariaDB server to satisfy the applications database requirements
   ## To use an external database set this to false and configure the `externalDatabase.*` parameters
   ##
