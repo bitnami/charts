@@ -494,7 +494,7 @@ mariadb:
   image:
     registry: docker.io
     repository: bitnami/mariadb
-    tag: 10.4.30-debian-11-r46
+    tag: 11.0
     digest: ""
   ## @param mariadb.architecture MariaDB architecture. Allowed values: `standalone` or `replication`
   ##
