@@ -198,26 +198,30 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Database parameters
 
-| Name                                        | Description                                                                                | Value           |
-| ------------------------------------------- | ------------------------------------------------------------------------------------------ | --------------- |
-| `mariadb.enabled`                           | Whether to deploy a mariadb server to satisfy the applications database requirements.      | `true`          |
-| `mariadb.architecture`                      | MariaDB architecture (`standalone` or `replication`)                                       | `standalone`    |
-| `mariadb.auth.rootPassword`                 | Password for the MariaDB `root` user                                                       | `""`            |
-| `mariadb.auth.database`                     | Database name to create                                                                    | `bitnami_ejbca` |
-| `mariadb.auth.username`                     | Database user to create                                                                    | `bn_ejbca`      |
-| `mariadb.auth.password`                     | Password for the database                                                                  | `""`            |
-| `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                                                      | `true`          |
-| `mariadb.primary.persistence.storageClass`  | MariaDB primary persistent volume storage Class                                            | `""`            |
-| `mariadb.primary.persistence.accessMode`    | Persistent Volume access mode                                                              | `ReadWriteOnce` |
-| `mariadb.primary.persistence.size`          | Database Persistent Volume Size                                                            | `8Gi`           |
-| `mariadb.primary.persistence.hostPath`      | Set path in case you want to use local host path volumes (not recommended in production)   | `""`            |
-| `mariadb.primary.persistence.existingClaim` | Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas                   | `""`            |
-| `externalDatabase.host`                     | Host of the external database                                                              | `localhost`     |
-| `externalDatabase.user`                     | non-root Username for EJBCA Database                                                       | `bn_ejbca`      |
-| `externalDatabase.password`                 | Password for the above username                                                            | `""`            |
-| `externalDatabase.existingSecret`           | Name of an existing secret resource containing the DB password in a 'mariadb-password' key | `""`            |
-| `externalDatabase.database`                 | Name of the existing database                                                              | `bitnami_ejbca` |
-| `externalDatabase.port`                     | Database port number                                                                       | `3306`          |
+| Name                                        | Description                                                                                | Value                 |
+| ------------------------------------------- | ------------------------------------------------------------------------------------------ | --------------------- |
+| `mariadb.image.registry`                    | Testing                                                                                    | `docker.io`           |
+| `mariadb.image.repository`                  | Testing                                                                                    | `bitnami/mariadb`     |
+| `mariadb.image.tag`                         | Testing                                                                                    | `11.0.2-debian-11-r2` |
+| `mariadb.image.digest`                      | Testing                                                                                    | `""`                  |
+| `mariadb.enabled`                           | Whether to deploy a mariadb server to satisfy the applications database requirements.      | `true`                |
+| `mariadb.architecture`                      | MariaDB architecture (`standalone` or `replication`)                                       | `standalone`          |
+| `mariadb.auth.rootPassword`                 | Password for the MariaDB `root` user                                                       | `""`                  |
+| `mariadb.auth.database`                     | Database name to create                                                                    | `bitnami_ejbca`       |
+| `mariadb.auth.username`                     | Database user to create                                                                    | `bn_ejbca`            |
+| `mariadb.auth.password`                     | Password for the database                                                                  | `""`                  |
+| `mariadb.primary.persistence.enabled`       | Enable database persistence using PVC                                                      | `true`                |
+| `mariadb.primary.persistence.storageClass`  | MariaDB primary persistent volume storage Class                                            | `""`                  |
+| `mariadb.primary.persistence.accessMode`    | Persistent Volume access mode                                                              | `ReadWriteOnce`       |
+| `mariadb.primary.persistence.size`          | Database Persistent Volume Size                                                            | `8Gi`                 |
+| `mariadb.primary.persistence.hostPath`      | Set path in case you want to use local host path volumes (not recommended in production)   | `""`                  |
+| `mariadb.primary.persistence.existingClaim` | Name of an existing `PersistentVolumeClaim` for MariaDB primary replicas                   | `""`                  |
+| `externalDatabase.host`                     | Host of the external database                                                              | `localhost`           |
+| `externalDatabase.user`                     | non-root Username for EJBCA Database                                                       | `bn_ejbca`            |
+| `externalDatabase.password`                 | Password for the above username                                                            | `""`                  |
+| `externalDatabase.existingSecret`           | Name of an existing secret resource containing the DB password in a 'mariadb-password' key | `""`                  |
+| `externalDatabase.database`                 | Name of the existing database                                                              | `bitnami_ejbca`       |
+| `externalDatabase.port`                     | Database port number                                                                       | `3306`                |
 
 ### NetworkPolicy parameters
 
