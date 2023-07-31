@@ -247,28 +247,32 @@ helm install my-release oci://registry-1.docker.io/bitnamicharts/redmine --set d
 
 ### Database Parameters
 
-| Name                                         | Description                                                             | Value             |
-| -------------------------------------------- | ----------------------------------------------------------------------- | ----------------- |
-| `databaseType`                               | Redmine database type. Allowed values: `mariadb` and `postgresql`       | `mariadb`         |
-| `mariadb.enabled`                            | Switch to enable or disable the MariaDB helm chart                      | `true`            |
-| `mariadb.auth.rootPassword`                  | MariaDB root password                                                   | `""`              |
-| `mariadb.auth.username`                      | MariaDB username                                                        | `bn_redmine`      |
-| `mariadb.auth.password`                      | MariaDB password                                                        | `""`              |
-| `mariadb.auth.existingSecret`                | Name of existing secret to use for MariaDB credentials                  | `""`              |
-| `mariadb.architecture`                       | MariaDB architecture. Allowed values: `standalone` or `replication`     | `standalone`      |
-| `postgresql.enabled`                         | Switch to enable or disable the PostgreSQL helm chart                   | `true`            |
-| `postgresql.auth.username`                   | Name for a custom user to create                                        | `bn_redmine`      |
-| `postgresql.auth.password`                   | Password for the custom user to create                                  | `""`              |
-| `postgresql.auth.database`                   | Name for a custom database to create                                    | `bitnami_redmine` |
-| `postgresql.auth.existingSecret`             | Name of existing secret to use for PostgreSQL credentials               | `""`              |
-| `postgresql.architecture`                    | PostgreSQL architecture (`standalone` or `replication`)                 | `standalone`      |
-| `externalDatabase.host`                      | Database host                                                           | `""`              |
-| `externalDatabase.port`                      | Database port number                                                    | `5432`            |
-| `externalDatabase.user`                      | Non-root username for Redmine                                           | `bn_redmine`      |
-| `externalDatabase.password`                  | Password for the non-root username for Redmine                          | `""`              |
-| `externalDatabase.database`                  | Redmine database name                                                   | `bitnami_redmine` |
-| `externalDatabase.existingSecret`            | Name of an existing secret resource containing the database credentials | `""`              |
-| `externalDatabase.existingSecretPasswordKey` | Name of an existing secret key containing the database credentials      | `""`              |
+| Name                                         | Description                                                             | Value                 |
+| -------------------------------------------- | ----------------------------------------------------------------------- | --------------------- |
+| `databaseType`                               | Redmine database type. Allowed values: `mariadb` and `postgresql`       | `mariadb`             |
+| `mariadb.enabled`                            | Switch to enable or disable the MariaDB helm chart                      | `true`                |
+| `mariadb.auth.rootPassword`                  | MariaDB root password                                                   | `""`                  |
+| `mariadb.auth.username`                      | MariaDB username                                                        | `bn_redmine`          |
+| `mariadb.auth.password`                      | MariaDB password                                                        | `""`                  |
+| `mariadb.auth.existingSecret`                | Name of existing secret to use for MariaDB credentials                  | `""`                  |
+| `mariadb.architecture`                       | MariaDB architecture. Allowed values: `standalone` or `replication`     | `standalone`          |
+| `mariadb.image.registry`                     | Testing                                                                 | `docker.io`           |
+| `mariadb.image.repository`                   | Testing                                                                 | `bitnami/mariadb`     |
+| `mariadb.image.tag`                          | Testing                                                                 | `11.0.2-debian-11-r2` |
+| `mariadb.image.digest`                       | Testing                                                                 | `""`                  |
+| `postgresql.enabled`                         | Switch to enable or disable the PostgreSQL helm chart                   | `true`                |
+| `postgresql.auth.username`                   | Name for a custom user to create                                        | `bn_redmine`          |
+| `postgresql.auth.password`                   | Password for the custom user to create                                  | `""`                  |
+| `postgresql.auth.database`                   | Name for a custom database to create                                    | `bitnami_redmine`     |
+| `postgresql.auth.existingSecret`             | Name of existing secret to use for PostgreSQL credentials               | `""`                  |
+| `postgresql.architecture`                    | PostgreSQL architecture (`standalone` or `replication`)                 | `standalone`          |
+| `externalDatabase.host`                      | Database host                                                           | `""`                  |
+| `externalDatabase.port`                      | Database port number                                                    | `5432`                |
+| `externalDatabase.user`                      | Non-root username for Redmine                                           | `bn_redmine`          |
+| `externalDatabase.password`                  | Password for the non-root username for Redmine                          | `""`                  |
+| `externalDatabase.database`                  | Redmine database name                                                   | `bitnami_redmine`     |
+| `externalDatabase.existingSecret`            | Name of an existing secret resource containing the database credentials | `""`                  |
+| `externalDatabase.existingSecretPasswordKey` | Name of an existing secret key containing the database credentials      | `""`                  |
 
 ### Mail Receiver/Cron Job Parameters
 
