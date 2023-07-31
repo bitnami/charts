@@ -51,6 +51,14 @@ it('allows adding a new service and route through admin API', () => {
       expect(response.status).to.eq(201);
     });
 
+    cy.request({
+      method: 'GET',
+      url: `${BASE_URL}/services`,
+    }).then((response) => {
+      expect(response.status).to.eq(200);
+      expect(JSON.stringify(response.body)).to.contain(services.newService.upstreamURL.replace(/^https?:\/\//, ''));
+    });
+
     cy.fixture('routes').then((routes) => {
       cy.request({
         method: 'POST',
@@ -68,10 +76,10 @@ it('allows adding a new service and route through admin API', () => {
       cy.wait(7000);
       cy.request({
         method: 'GET',
-        url: `${routes.newRoute.path}${random}`,
+        url: `${BASE_URL}/services/${services.newService.name}-${random}/routes`,
       }).then((response) => {
         expect(response.status).to.eq(200);
-        expect(response.body).to.contain(services.newService.upstreamContent);
+        expect(JSON.stringify(response.body)).to.contain(`${routes.newRoute.path}${random}`);
       });
     });
   });

@@ -109,7 +109,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | -------------------- |
 | `image.registry`                              | Thanos image registry                                                                                               | `docker.io`          |
 | `image.repository`                            | Thanos image repository                                                                                             | `bitnami/thanos`     |
-| `image.tag`                                   | Thanos image tag (immutable tags are recommended)                                                                   | `0.31.0-scratch-r10` |
+| `image.tag`                                   | Thanos image tag (immutable tags are recommended)                                                                   | `0.31.0-scratch-r12` |
 | `image.digest`                                | Thanos image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag              | `""`                 |
 | `image.pullPolicy`                            | Thanos image pull policy                                                                                            | `IfNotPresent`       |
 | `image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                    | `[]`                 |
@@ -959,6 +959,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `receive.affinity`                                          | Thanos Receive affinity for pod assignment                                                                                       | `{}`                     |
 | `receive.nodeSelector`                                      | Thanos Receive node labels for pod assignment                                                                                    | `{}`                     |
 | `receive.tolerations`                                       | Thanos Receive tolerations for pod assignment                                                                                    | `[]`                     |
+| `receive.statefulsetLabels`                                 | Thanos Receive statefulset labels                                                                                                | `{}`                     |
 | `receive.podLabels`                                         | Thanos Receive pod labels                                                                                                        | `{}`                     |
 | `receive.podAnnotations`                                    | Annotations for Thanos Receive pods                                                                                              | `{}`                     |
 | `receive.dnsConfig`                                         | Deployment pod DNS config                                                                                                        | `{}`                     |
@@ -1183,7 +1184,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `volumePermissions.enabled`           | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`                                   | `false`            |
 | `volumePermissions.image.registry`    | Init container volume-permissions image registry                                                                                  | `docker.io`        |
 | `volumePermissions.image.repository`  | Init container volume-permissions image repository                                                                                | `bitnami/os-shell` |
-| `volumePermissions.image.tag`         | Init container volume-permissions image tag                                                                                       | `11-debian-11-r11` |
+| `volumePermissions.image.tag`         | Init container volume-permissions image tag                                                                                       | `11-debian-11-r16` |
 | `volumePermissions.image.digest`      | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`               |
 | `volumePermissions.image.pullPolicy`  | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`     |
 | `volumePermissions.image.pullSecrets` | Specify docker-registry secret names as an array                                                                                  | `[]`               |

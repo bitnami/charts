@@ -98,8 +98,9 @@ spec:
       replicas: {{ .Values.grafana.replicaCount }}
       template:
         spec:
+          {{- include "common.images.pullSecrets" (dict "images" (list .Values.grafana.image) "global" .Values.global) | nindent 10 }}
           {{- if .Values.grafana.affinity }}
-          affinity: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.affinity "context" $) | nindent 6 }}
+          affinity: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.affinity "context" $) | nindent 12 }}
           {{- else }}
           affinity:
             {{- if not (empty .Values.grafana.podAffinityPreset) }}
