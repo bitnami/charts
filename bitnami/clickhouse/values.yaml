@@ -903,6 +903,9 @@ persistence:
   ## @param persistence.enabled Enable persistence using Persistent Volume Claims
   ##
   enabled: true
+  ## @param persistence.existingClaim Name of an existing PVC to use
+  ##
+  existingClaim: ""
   ## @param persistence.storageClass Storage class of backing PVC
   ## If defined, storageClassName: <storageClass>
   ## If set to "-", storageClassName: "", which disables dynamic provisioning

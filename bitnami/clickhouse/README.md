@@ -283,6 +283,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                       | Description                                                            | Value               |
 | -------------------------- | ---------------------------------------------------------------------- | ------------------- |
 | `persistence.enabled`      | Enable persistence using Persistent Volume Claims                      | `true`              |
+| `persistence.existingClaim`| Name of an existing PVC to use                                         | `""`                |
 | `persistence.storageClass` | Storage class of backing PVC                                           | `""`                |
 | `persistence.labels`       | Persistent Volume Claim labels                                         | `{}`                |
 | `persistence.annotations`  | Persistent Volume Claim annotations                                    | `{}`                |
