@@ -60,11 +60,12 @@ Return a topologyKey definition
 
 {{/*
 Return a soft podAffinity/podAntiAffinity definition
-{{ include "common.affinities.pods.soft" (dict "component" "FOO" "extraMatchLabels" .Values.extraMatchLabels "topologyKey" "BAR" "context" $) -}}
+{{ include "common.affinities.pods.soft" (dict "component" "FOO" "extraMatchLabels" .Values.extraMatchLabels "topologyKey" "BAR" "extraLabelSelectors" .Values.additionalExtraMatchLabels "context" $) -}}
 */}}
 {{- define "common.affinities.pods.soft" -}}
 {{- $component := default "" .component -}}
 {{- $extraMatchLabels := default (dict) .extraMatchLabels -}}
+{{- $extraLabelSelectors := default (list) .extraLabelSelectors -}}
 preferredDuringSchedulingIgnoredDuringExecution:
   - podAffinityTerm:
       labelSelector:
@@ -77,15 +78,29 @@ preferredDuringSchedulingIgnoredDuringExecution:
           {{- end }}
       topologyKey: {{ include "common.affinities.topologyKey" (dict "topologyKey" .topologyKey) }}
     weight: 1
+  {{- range $extraLabelSelectors }}
+  - podAffinityTerm:
+      labelSelector:
+        matchLabels: {{- (include "common.labels.matchLabels" $.context) | nindent 10 }}
+          {{- if not (empty $component) }}
+          {{ printf "app.kubernetes.io/component: %s" $component }}
+          {{- end }}
+          {{- range $key, $value := .extraMatchLabels }}
+          {{ $key }}: {{ $value | quote }}
+          {{- end }}
+      topologyKey: {{ include "common.affinities.topologyKey" (dict "topologyKey" .topologyKey) }}
+    weight: {{ .weight | default 1 -}}
+  {{- end -}}
 {{- end -}}
 
 {{/*
 Return a hard podAffinity/podAntiAffinity definition
-{{ include "common.affinities.pods.hard" (dict "component" "FOO" "extraMatchLabels" .Values.extraMatchLabels "topologyKey" "BAR" "context" $) -}}
+{{ include "common.affinities.pods.hard" (dict "component" "FOO" "extraMatchLabels" .Values.extraMatchLabels "topologyKey" "BAR" "extraLabelSelectors" .Values.additionalExtraMatchLabels "context" $) -}}
 */}}
 {{- define "common.affinities.pods.hard" -}}
 {{- $component := default "" .component -}}
 {{- $extraMatchLabels := default (dict) .extraMatchLabels -}}
+{{- $extraLabelSelectors := default (list) .extraLabelSelectors -}}
 requiredDuringSchedulingIgnoredDuringExecution:
   - labelSelector:
       matchLabels: {{- (include "common.labels.matchLabels" .context) | nindent 8 }}
@@ -96,6 +111,17 @@ requiredDuringSchedulingIgnoredDuringExecution:
         {{ $key }}: {{ $value | quote }}
         {{- end }}
     topologyKey: {{ include "common.affinities.topologyKey" (dict "topologyKey" .topologyKey) }}
+  {{- range $extraLabelSelectors }}
+  - labelSelector:
+      matchLabels: {{- (include "common.labels.matchLabels" $.context) | nindent 8 }}
+        {{- if not (empty $component) }}
+        {{ printf "app.kubernetes.io/component: %s" $component }}
+        {{- end }}
+        {{- range $key, $value := .extraMatchLabels }}
+        {{ $key }}: {{ $value | quote }}
+        {{- end }}
+    topologyKey: {{ include "common.affinities.topologyKey" (dict "topologyKey" .topologyKey) }}
+  {{- end -}}
 {{- end -}}
 
 {{/*
