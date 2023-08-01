@@ -149,8 +149,6 @@ spec:
       {{- if and .Values.grafana.ingress.ingressClassName (include "common.ingress.supportsIngressClassname" .) }}
       ingressClassName: {{ .Values.grafana.ingress.ingressClassName | quote }}
       {{- end }}
-      tlsEnabled: {{ .Values.grafana.ingress.tls }}
-      tlsSecretName: {{ .Values.grafana.ingress.tlsSecret }}
       rules:
         {{- if .Values.grafana.ingress.host }}
         - host: {{ include "common.tplvalues.render" (dict "value" .Values.grafana.ingress.host "context" $) }}
@@ -166,6 +164,12 @@ spec:
                     name: {{ printf "%s-grafana-service" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
                     port:
                       number: 3000
+      {{- if .Values.grafana.ingress.tls }}
+      tls:
+        - hosts:
+            - {{ include "common.tplvalues.render" (dict "value" .Values.grafana.ingress.host "context" $) }}
+          secretName: {{ .Values.grafana.ingress.tlsSecret }}
+      {{- end }}
     {{- if or .Values.commonLabels .Values.grafana.ingress.labels .Values.grafana.labels }}
     labels:
       {{- if .Values.commonLabels }}
