@@ -105,7 +105,8 @@ spec:
                   -srcstoretype PKCS12 \
                   -srcstorepass "$SPARK_SSL_KEYSTORE_PASSWORD" \
                   -deststorepass "$SPARK_SSL_KEYSTORE_PASSWORD" \
-                  -destkeystore "/opt/bitnami/spark/conf/certs/spark-keystore.jks"
+                  -destkeystore "/opt/bitnami/spark/conf/certs/spark-keystore.jks" \
+                  -noprompt
               rm "/tmp/keystore.p12"
               keytool -import -file "/certs/ca.crt" \
                       -keystore "/opt/bitnami/spark/conf/certs/spark-truststore.jks" \
