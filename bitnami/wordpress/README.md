@@ -82,7 +82,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | --------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`    | WordPress image registry                                                                                  | `docker.io`           |
 | `image.repository`  | WordPress image repository                                                                                | `bitnami/wordpress`   |
-| `image.tag`         | WordPress image tag (immutable tags are recommended)                                                      | `6.2.2-debian-11-r72` |
+| `image.tag`         | WordPress image tag (immutable tags are recommended)                                                      | `6.2.2-debian-11-r75` |
 | `image.digest`      | WordPress image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
 | `image.pullPolicy`  | WordPress image pull policy                                                                               | `IfNotPresent`        |
 | `image.pullSecrets` | WordPress image pull secrets                                                                              | `[]`                  |
@@ -249,7 +249,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`                    | `false`            |
 | `volumePermissions.image.registry`                     | OS Shell + Utility image registry                                                                                  | `docker.io`        |
 | `volumePermissions.image.repository`                   | OS Shell + Utility image repository                                                                                | `bitnami/os-shell` |
-| `volumePermissions.image.tag`                          | OS Shell + Utility image tag (immutable tags are recommended)                                                      | `11-debian-11-r19` |
+| `volumePermissions.image.tag`                          | OS Shell + Utility image tag (immutable tags are recommended)                                                      | `11-debian-11-r25` |
 | `volumePermissions.image.digest`                       | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`               |
 | `volumePermissions.image.pullPolicy`                   | OS Shell + Utility image pull policy                                                                               | `IfNotPresent`     |
 | `volumePermissions.image.pullSecrets`                  | OS Shell + Utility image pull secrets                                                                              | `[]`               |
@@ -281,7 +281,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                            | Start a sidecar prometheus exporter to expose metrics                                                           | `false`                   |
 | `metrics.image.registry`                     | Apache exporter image registry                                                                                  | `docker.io`               |
 | `metrics.image.repository`                   | Apache exporter image repository                                                                                | `bitnami/apache-exporter` |
-| `metrics.image.tag`                          | Apache exporter image tag (immutable tags are recommended)                                                      | `0.13.4-debian-11-r55`    |
+| `metrics.image.tag`                          | Apache exporter image tag (immutable tags are recommended)                                                      | `0.13.4-debian-11-r60`    |
 | `metrics.image.digest`                       | Apache exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
 | `metrics.image.pullPolicy`                   | Apache exporter image pull policy                                                                               | `IfNotPresent`            |
 | `metrics.image.pullSecrets`                  | Apache exporter image pull secrets                                                                              | `[]`                      |
@@ -512,6 +512,10 @@ In addition, several new features have been implemented:
 To enable the new features, it is not possible to do it by upgrading an existing deployment. Instead, it is necessary to perform a fresh deploy.
 
 ## Upgrading
+
+### To 17.0.0
+
+This major release bumps the MariaDB version to 11.0. Follow the [upstream instructions](https://mariadb.com/kb/en/upgrading-from-mariadb-10-11-to-mariadb-11-0/) for upgrading from MariaDB 10.11 to 11.0. No major issues are expected during the upgrade.
 
 ### To 16.0.0
 
