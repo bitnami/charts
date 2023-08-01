@@ -584,6 +584,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Notable changes
 
+### To 23.0.0
+
+This major release bumps the MariaDB version to 10.6. Follow the [upstream instructions](https://mariadb.com/kb/en/upgrading/) for upgrading to MariaDB 10.6. No major issues are expected during the upgrade.
+
 ### 21.0.0
 
 This major updates the Elasticsearch subchart to its newest major, 19.0.0, which removes support for elasticsearch-curator. Check [Elasticsearch Upgrading Notes](https://github.com/bitnami/charts/tree/main/bitnami/elasticsearch#to-1900) for more information.
