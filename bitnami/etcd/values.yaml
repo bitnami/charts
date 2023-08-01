@@ -209,7 +209,7 @@ autoCompactionRetention: ""
 ## - 'existing': when upgrading the chart ('helm upgrade ...')
 ##
 initialClusterState: ""
-## @param initialClusterToken Initial cluster token can protect etcd from cross-cluster-interaction, which might corrupt the clusters.
+## @param initialClusterToken Initial cluster token. Can be used to protect etcd from cross-cluster-interaction, which might corrupt the clusters.
 ## If spinning up multiple clusters (or creating and destroying a single cluster)
 ## with same configuration for testing purpose, it is highly recommended that each cluster is given a unique initial-cluster-token.
 ## By doing this, etcd can generate unique cluster IDs and member IDs for the clusters even if they otherwise have the exact same configuration.
