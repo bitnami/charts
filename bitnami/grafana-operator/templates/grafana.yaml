@@ -123,7 +123,7 @@ spec:
                 failureThreshold: {{ .Values.grafana.readinessProbe.failureThreshold }}
               {{- end }}
             {{- if .Values.grafana.sidecars }}
-            {{- include "common.tplvalues.render" ( dict "value" .Values.grafana.sidecars "context" $) | nindent 14 }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.grafana.sidecars "context" $) | nindent 12 }}
             {{- end }}
     {{- if .Values.grafana.tolerations }}
     tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.tolerations "context" $) | nindent 6 }}
