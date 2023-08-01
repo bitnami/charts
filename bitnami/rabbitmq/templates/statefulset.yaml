@@ -414,7 +414,7 @@ spec:
         {{- if .Values.loadDefinition.enabled }}
         - name: load-definition-volume
           secret:
-            secretName: {{ ternary (printf "%s-%s" $.Release.Name $key) $key $.Values.extraSecretsPrependReleaseName }}
+            secretName: {{ ternary (printf "%s-%s" .Release.Name .Values.loadDefinition.existingSecret) .Values.loadDefinition.existingSecret .Values.extraSecretsPrependReleaseName }}
         {{- end }}
         {{- if .Values.initScripts }}
         - name: custom-init-scripts
