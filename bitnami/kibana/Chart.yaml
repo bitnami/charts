@@ -5,7 +5,7 @@ annotations:
   category: Analytics
   licenses: Apache-2.0
 apiVersion: v2
-appVersion: 8.8.2
+appVersion: 8.9.0
 dependencies:
   - name: common
     repository: oci://registry-1.docker.io/bitnamicharts
@@ -27,4 +27,4 @@ maintainers:
 name: kibana
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/kibana
-version: 10.4.6
+version: 10.4.7
