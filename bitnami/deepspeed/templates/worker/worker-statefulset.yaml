@@ -7,7 +7,7 @@ SPDX-License-Identifier: APACHE-2.0
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: {{ include "deepspeed.worker.fullname.v1" . }}
+  name: {{ include "deepspeed.v0.worker.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/part-of: deepspeed
@@ -30,7 +30,7 @@ metadata:
 spec:
   replicas: {{ .Values.worker.replicaCount }}
   podManagementPolicy: {{ .Values.worker.podManagementPolicy | quote }}
-  serviceName: {{ printf "%s-headless" (include "deepspeed.worker.fullname.v1" .) }}
+  serviceName: {{ printf "%s-headless" (include "deepspeed.v0.worker.fullname" .) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/part-of: deepspeed
@@ -57,8 +57,8 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 8 }}
         {{- end }}
     spec:
-      serviceAccountName: {{ template "deepspeed.worker.serviceAccountName.v1" . }}
-      {{- include "deepspeed.imagePullSecrets.v1" . | nindent 6 }}
+      serviceAccountName: {{ template "deepspeed.v0.worker.serviceAccountName" . }}
+      {{- include "deepspeed.v0.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.worker.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.worker.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -96,17 +96,17 @@ spec:
       {{- end }}
       initContainers:
         {{- if .Values.worker.enableDefaultInitContainers }}
-        {{- include "deepspeed.ssh.serverInitContainer.v1" . | nindent 8 }}
+        {{- include "deepspeed.v0.ssh.serverInitContainer" . | nindent 8 }}
         {{- end }}
         {{- if eq .Values.source.type "git" }}
-        {{- include "deespeed.git.cloneInitContainer.v1" . | nindent 8 }}
+        {{- include "deespeed.git.cloneInitContainer" . | nindent 8 }}
         {{- end }}
         {{- if .Values.worker.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.worker.initContainers "context" $) | nindent 8 }}
         {{- end }}
       containers:
         - name: deepspeed
-          image: {{ include "deepspeed.image.v1" . }}
+          image: {{ include "deepspeed.v0.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.worker.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.worker.containerSecurityContext "enabled" | toYaml | nindent 12 }}
@@ -129,8 +129,9 @@ spec:
             - |
               #!/bin/bash
               [[ -f "/opt/bitnami/scripts/deepspeed/entrypoint.sh" ]] && source "/opt/bitnami/scripts/deepspeed/entrypoint.sh"
+              ## sshd requires the absolute path
               SSHD_PATH="$(command -v sshd)"
-              exec "$SSHD_PATH" -D -h "/bitnami/ssh/server-private-key/ssh_host_rsa_key" -E /tmp/ssh_log
+              exec "$SSHD_PATH" -D -h "/bitnami/ssh/server-private-key/ssh_host_rsa_key" -e
           {{- end }}
           ports:
             - name: tcp-ssh
@@ -192,6 +193,8 @@ spec:
               mountPath: /run
             - name: deepspeed-cache
               mountPath: /home/deepspeed/.cache
+            - name: deepspeed-local
+              mountPath: /home/deepspeed/.local
             - name: source
               mountPath: /app
             {{- if .Values.worker.extraVolumeMounts }}
@@ -203,14 +206,14 @@ spec:
       volumes:
         - name: ssh-client-private-key
           secret:
-            secretName: {{ include "deepspeed.ssh.keySecretName.v1" . }}
+            secretName: {{ include "deepspeed.v0.ssh.keySecretName" . }}
         # As we are disabling host key verification from the client, we can
         # auto-generate the worker private key
         - name: ssh-worker-private-key
           emptyDir: {}
         - name: ssh-server-config
           configMap:
-            name: {{ include "deepspeed.ssh.serverConfigMapName.v1" . }}
+            name: {{ include "deepspeed.v0.ssh.serverConfigMapName" . }}
         - name: worker-home
           emptyDir: {}
         - name: tmp
@@ -219,10 +222,12 @@ spec:
           emptyDir: {}
         - name: deepspeed-cache
           emptyDir: {}
+        - name: deepspeed-local
+          emptyDir: {}
         - name: source
-          {{- if or (.Values.source.existingConfigMap) (include "deepspeed.source.createConfigMap.v1" .) }}
+          {{- if or (.Values.source.existingConfigMap) (include "deepspeed.v0.source.createConfigMap" .) }}
           configMap:
-            name: {{ include "deepspeed.sourceConfigMapName.v1" . }}
+            name: {{ include "deepspeed.v0.source.configMapName" . }}
           {{- else }}
           emptyDir: {}
           {{- end }}

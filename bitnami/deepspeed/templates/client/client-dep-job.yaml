@@ -7,7 +7,7 @@ SPDX-License-Identifier: APACHE-2.0
 apiVersion: {{ ternary "batch/v1" "apps/v1" .Values.client.useJob }}
 kind: {{ ternary "Job" "Deployment" .Values.client.useJob }}
 metadata:
-  name: {{ include "deepspeed.client.fullname.v1" . }}
+  name: {{ include "deepspeed.v0.client.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
   annotations:
     {{- if .Values.client.annotations }}
@@ -49,8 +49,8 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.client.podLabels "context" $) | nindent 8 }}
         {{- end }}
     spec:
-      {{- include "deepspeed.imagePullSecrets.v1" . | nindent 6 }}
-      serviceAccountName: {{ template "deepspeed.client.serviceAccountName.v1" . }}
+      {{- include "deepspeed.v0.imagePullSecrets" . | nindent 6 }}
+      serviceAccountName: {{ template "deepspeed.v0.client.serviceAccountName" . }}
       {{- if .Values.client.hostAliases }}
       hostAliases: {{- include "common.tplvalues.render" (dict "value" .Values.client.hostAliases "context" $) | nindent 8 }}
       {{- end }}
@@ -88,12 +88,12 @@ spec:
       {{- end }}
       initContainers:
         {{- if .Values.client.enableDefaultInitContainers }}
-        {{- include "deepspeed.client.waitForWorkers.v1" . | nindent 8 }}
+        {{- include "deepspeed.v0.client.waitForWorkers" . | nindent 8 }}
         {{- if eq .Values.source.type "git" }}
-        {{- include "deespeed.git.cloneInitContainer.v1" . | nindent 8 }}
+        {{- include "deespeed.git.cloneInitContainer" . | nindent 8 }}
         {{- end }}
         {{- if and .Values.volumePermissions.enabled .Values.client.persistence.enabled }}
-        {{- include "deepspeed.volumePermissionsInitContainer.v1" . | nindent 8 }}
+        {{- include "deepspeed.v0.volumePermissionsInitContainer" . | nindent 8 }}
         {{- end }}
         {{- end }}
         {{- if .Values.client.initContainers }}
@@ -101,7 +101,7 @@ spec:
         {{- end }}
       containers:
         - name: deepspeed
-          image: {{ include "deepspeed.image.v1" . }}
+          image: {{ include "deepspeed.v0.image" . }}
           imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
           {{- if .Values.client.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.client.containerSecurityContext "enabled" | toYaml | nindent 12 }}
@@ -198,6 +198,8 @@ spec:
               mountPath: /tmp
             - name: deepspeed-cache
               mountPath: /opt/bitnami/deepspeed/.cache
+            - name: deepspeed-local
+              mountPath: /home/deepspeed/.local
             - name: data
               mountPath: {{ .Values.client.persistence.mountPath }}
             {{- if .Values.client.extraVolumeMounts }}
@@ -209,30 +211,32 @@ spec:
       volumes:
         - name: ssh-client-config
           configMap:
-            name: {{ include "deepspeed.ssh.clientConfigMapName.v1" . }}
+            name: {{ include "deepspeed.v0.ssh.clientConfigMapName" . }}
         - name: ssh-client-private-key
           secret:
-            secretName: {{ include "deepspeed.ssh.keySecretName.v1" . }}
+            secretName: {{ include "deepspeed.v0.ssh.keySecretName" . }}
         - name: source
-          {{- if or (.Values.source.existingConfigMap) (include "deepspeed.source.createConfigMap.v1" .) }}
+          {{- if or (.Values.source.existingConfigMap) (include "deepspeed.v0.source.createConfigMap" .) }}
           configMap:
-            name: {{ include "deepspeed.sourceConfigMapName.v1" . }}
+            name: {{ include "deepspeed.v0.source.configMapName" . }}
           {{- else }}
           emptyDir: {}
           {{- end }}
         - name: hostfile
           configMap:
-            name: {{ include "deepspeed.hostfileConfigMapName.v1" . }}
+            name: {{ include "deepspeed.v0.hostfileConfigMapName" . }}
         - name: ssh-local-folder
           emptyDir: {}
         - name: tmp
           emptyDir: {}
         - name: deepspeed-cache
           emptyDir: {}
+        - name: deepspeed-local
+          emptyDir: {}
         - name: data
           {{- if .Values.client.persistence.enabled }}
           persistentVolumeClaim:
-            claimName: {{ .Values.client.persistence.existingClaim | default (include "deepspeed.client.fullname.v1" .) }}
+            claimName: {{ .Values.client.persistence.existingClaim | default (include "deepspeed.v0.client.fullname" .) }}
           {{- else }}
           emptyDir: {}
           {{- end }}

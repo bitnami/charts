@@ -7,7 +7,7 @@ SPDX-License-Identifier: APACHE-2.0
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: {{ include "deepspeed.client.fullname.v1" . }}
+  name: {{ include "deepspeed.v0.client.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/part-of: deepspeed

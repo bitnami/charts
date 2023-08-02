@@ -129,7 +129,7 @@ config:
   defaultHostFile: |
     {{- $workers := $.Values.worker.replicaCount | int }}
     {{- range $i, $e := until $workers }}
-    {{ include "deepspeed.worker.fullname.v1" $ }}-{{ $i }}.{{ printf "%s-headless" (include "deepspeed.worker.fullname.v1" $) }} slots={{ $.Values.worker.slotsPerNode }}
+    {{ include "deepspeed.v0.worker.fullname" $ }}-{{ $i }}.{{ printf "%s-headless" (include "deepspeed.v0.worker.fullname" $) }} slots={{ $.Values.worker.slotsPerNode }}
     {{- end }}
 
   ## @param config.overrideHostFile Override default host file with the content in this value
@@ -145,7 +145,7 @@ config:
   defaultSSHClient: |
     {{- $workers := $.Values.worker.replicaCount | int }}
     {{- range $i, $e := until $workers }}
-    Host {{ include "deepspeed.worker.fullname.v1" $ }}-{{ $i }}.{{ printf "%s-headless" (include "deepspeed.worker.fullname.v1" $) }}
+    Host {{ include "deepspeed.v0.worker.fullname" $ }}-{{ $i }}.{{ printf "%s-headless" (include "deepspeed.v0.worker.fullname" $) }}
       Port {{ $.Values.worker.containerPorts.ssh }}
       IdentityFile /bitnami/ssh/client-private-key/id_rsa
       StrictHostKeyChecking no
@@ -294,6 +294,7 @@ client:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param client.containerSecurityContext.enabled Enabled Client containers' Security Context
   ## @param client.containerSecurityContext.runAsUser Set Client containers' Security Context runAsUser
+  ## @param client.containerSecurityContext.runAsGroup Set Client containers' Security Context runAsGroup
   ## @param client.containerSecurityContext.runAsNonRoot Set Client containers' Security Context runAsNonRoot
   ## @param client.containerSecurityContext.readOnlyRootFilesystem Set Client containers' Security Context runAsNonRoot
   ## @param client.containerSecurityContext.allowPrivilegeEscalation Set Client container's privilege escalation
@@ -302,6 +303,7 @@ client:
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false
@@ -625,6 +627,7 @@ worker:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param worker.containerSecurityContext.enabled Enabled Worker containers' Security Context
   ## @param worker.containerSecurityContext.runAsUser Set Worker containers' Security Context runAsUser
+  ## @param worker.containerSecurityContext.runAsGroup Set Worker containers' Security Context runAsGroup
   ## @param worker.containerSecurityContext.runAsNonRoot Set Worker containers' Security Context runAsNonRoot
   ## @param worker.containerSecurityContext.readOnlyRootFilesystem Set Worker containers' Security Context runAsNonRoot
   ## @param worker.containerSecurityContext.allowPrivilegeEscalation Set Worker container's privilege escalation
@@ -633,6 +636,7 @@ worker:
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
+    runAsGroup: 1001
     runAsNonRoot: true
     readOnlyRootFilesystem: true
     allowPrivilegeEscalation: false

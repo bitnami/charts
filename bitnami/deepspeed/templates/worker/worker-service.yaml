@@ -4,7 +4,7 @@ SPDX-License-Identifier: APACHE-2.0
 */}}
 
 {{- if and .Values.worker.enabled .Values.worker.externalAccess.enabled }}
-{{- $fullName := include "deepspeed.worker.fullname.v1" . }}
+{{- $fullName := include "deepspeed.v0.worker.fullname" . }}
 {{- $replicaCount := .Values.worker.replicaCount | int }}
 {{- $root := . }}
 
@@ -14,7 +14,7 @@ SPDX-License-Identifier: APACHE-2.0
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ printf "%s-%d-external" (include "deepspeed.worker.fullname.v1" $) $i | trunc 63 | trimSuffix "-" }}
+  name: {{ printf "%s-%d-external" (include "deepspeed.v0.worker.fullname" $) $i | trunc 63 | trimSuffix "-" }}
   namespace: {{ include "common.names.namespace" $ | quote }}
   labels: {{- include "common.labels.standard" $ | nindent 4 }}
     app.kubernetes.io/part-of: deepspeed

@@ -47,5 +47,5 @@ To run it, you can either deploy again using the `source.launchCommand` option t
 3. Execute your script as you would normally do.
 {{- end }}
 {{- end }}
-{{ include "deepspeed.validateValues.v1" . }}
-{{ include "deepspeed.checkRollingTags.v1" . }}
+{{ include "deepspeed.v0.validateValues" . }}
+{{ include "deepspeed.v0.checkRollingTags" . }}

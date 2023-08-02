@@ -148,6 +148,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `client.podSecurityContext.seccompProfile.type`            | Set Client container's Security Context seccomp profile                                          | `RuntimeDefault` |
 | `client.containerSecurityContext.enabled`                  | Enabled Client containers' Security Context                                                      | `true`           |
 | `client.containerSecurityContext.runAsUser`                | Set Client containers' Security Context runAsUser                                                | `1001`           |
+| `client.containerSecurityContext.runAsGroup`               | Set Client containers' Security Context runAsGroup                                               | `1001`           |
 | `client.containerSecurityContext.runAsNonRoot`             | Set Client containers' Security Context runAsNonRoot                                             | `true`           |
 | `client.containerSecurityContext.readOnlyRootFilesystem`   | Set Client containers' Security Context runAsNonRoot                                             | `true`           |
 | `client.containerSecurityContext.allowPrivilegeEscalation` | Set Client container's privilege escalation                                                      | `false`          |
@@ -239,6 +240,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `worker.podSecurityContext.seccompProfile.type`            | Set Worker container's Security Context seccomp profile                                            | `RuntimeDefault` |
 | `worker.containerSecurityContext.enabled`                  | Enabled Worker containers' Security Context                                                        | `true`           |
 | `worker.containerSecurityContext.runAsUser`                | Set Worker containers' Security Context runAsUser                                                  | `1001`           |
+| `worker.containerSecurityContext.runAsGroup`               | Set Worker containers' Security Context runAsGroup                                                 | `1001`           |
 | `worker.containerSecurityContext.runAsNonRoot`             | Set Worker containers' Security Context runAsNonRoot                                               | `true`           |
 | `worker.containerSecurityContext.readOnlyRootFilesystem`   | Set Worker containers' Security Context runAsNonRoot                                               | `true`           |
 | `worker.containerSecurityContext.allowPrivilegeEscalation` | Set Worker container's privilege escalation                                                        | `false`          |

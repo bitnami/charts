@@ -3,7 +3,7 @@ Copyright VMware, Inc.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if (include "deepspeed.source.createConfigMap.v1" .) }}
+{{- if (include "deepspeed.v0.source.createConfigMap" .) }}
 apiVersion: v1
 kind: ConfigMap
 metadata:

@@ -8,6 +8,7 @@ client:
     fsGroup: 1002
   containerSecurityContext:
     runAsUser: 1002
+    runAsGroup: 1002
   serviceAccount:
     create: true
     automountServiceAccountToken: true

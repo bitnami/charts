@@ -8,23 +8,23 @@ SPDX-License-Identifier: APACHE-2.0
 {{/*
 Return the proper Deepspeed client fullname
 */}}
-{{- define "deepspeed.client.fullname.v1" -}}
+{{- define "deepspeed.v0.client.fullname" -}}
 {{- printf "%s-%s" (include "common.names.fullname" .) "client" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
-Return the proper Deepspeed worker fullname
+Return the proper deepspeed.v0.worker.fullname
 */}}
-{{- define "deepspeed.worker.fullname.v1" -}}
+{{- define "deepspeed.v0.worker.fullname" -}}
 {{- printf "%s-%s" (include "common.names.fullname" .) "worker" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
 Name of the Deepspeed client service account to use
 */}}
-{{- define "deepspeed.client.serviceAccountName.v1" -}}
+{{- define "deepspeed.v0.client.serviceAccountName" -}}
 {{- if .Values.client.serviceAccount.create -}}
-    {{ default (printf "%s" (include "deepspeed.client.fullname.v1" .)) .Values.client.serviceAccount.name }}
+    {{ default (printf "%s" (include "deepspeed.v0.client.fullname" .)) .Values.client.serviceAccount.name }}
 {{- else -}}
     {{ default "default" .Values.client.serviceAccount.name }}
 {{- end -}}
@@ -33,9 +33,9 @@ Name of the Deepspeed client service account to use
 {{/*
 Name of the Deepspeed worker service account to use
 */}}
-{{- define "deepspeed.worker.serviceAccountName.v1" -}}
+{{- define "deepspeed.v0.worker.serviceAccountName" -}}
 {{- if .Values.worker.serviceAccount.create -}}
-    {{ default (printf "%s" (include "deepspeed.worker.fullname.v1" .)) .Values.worker.serviceAccount.name }}
+    {{ default (printf "%s" (include "deepspeed.v0.worker.fullname" .)) .Values.worker.serviceAccount.name }}
 {{- else -}}
     {{ default "default" .Values.worker.serviceAccount.name }}
 {{- end -}}
@@ -45,28 +45,28 @@ Name of the Deepspeed worker service account to use
 {{/*
 Return the proper Deepspeed image name
 */}}
-{{- define "deepspeed.image.v1" -}}
+{{- define "deepspeed.v0.image" -}}
 {{ include "common.images.image" (dict "imageRoot" .Values.image "global" .Values.global) }}
 {{- end -}}
 
 {{/*
 Return the proper git image name
 */}}
-{{- define "deepspeed.git.image.v1" -}}
+{{- define "deepspeed.v0.git.image" -}}
 {{ include "common.images.image" (dict "imageRoot" .Values.gitImage "global" .Values.global) }}
 {{- end -}}
 
 {{/*
 Return the proper image name (for the init container volume-permissions image)
 */}}
-{{- define "deepspeed.volumePermissions.image.v1" -}}
+{{- define "deepspeed.v0.volumePermissions.image" -}}
 {{ include "common.images.image" (dict "imageRoot" .Values.volumePermissions.image "global" .Values.global) }}
 {{- end -}}
 
 {{/*
 Get the hostfile configmap.
 */}}
-{{- define "deepspeed.hostfileConfigMapName.v1" -}}
+{{- define "deepspeed.v0.hostfileConfigMapName" -}}
 {{- if .Values.config.existingHostFileConfigMap -}}
     {{- include "common.tplvalues.render" (dict "value" .Values.config.existingHostFileConfigMap "context" $) -}}
 {{- else }}
@@ -77,7 +77,7 @@ Get the hostfile configmap.
 {{/*
 Get the ssh client configmap.
 */}}
-{{- define "deepspeed.ssh.clientConfigMapName.v1" -}}
+{{- define "deepspeed.v0.ssh.clientConfigMapName" -}}
 {{- if .Values.config.existingSSHClientConfigMap -}}
     {{- include "common.tplvalues.render" (dict "value" .Values.config.existingSSHClientConfigMap "context" $) -}}
 {{- else }}
@@ -88,7 +88,7 @@ Get the ssh client configmap.
 {{/*
 Get the ssh worker configmap.
 */}}
-{{- define "deepspeed.ssh.serverConfigMapName.v1" -}}
+{{- define "deepspeed.v0.ssh.serverConfigMapName" -}}
 {{- if .Values.config.existingSSHServerConfigMap -}}
     {{- include "common.tplvalues.render" (dict "value" .Values.config.existingSSHServerConfigMap "context" $) -}}
 {{- else }}
@@ -99,7 +99,7 @@ Get the ssh worker configmap.
 {{/*
 Get the source configmap.
 */}}
-{{- define "deepspeed.sourceConfigMapName.v1" -}}
+{{- define "deepspeed.v0.source.configMapName" -}}
 {{- if .Values.source.existingConfigMap -}}
     {{- include "common.tplvalues.render" (dict "value" .Values.source.existingConfigMap "context" $) -}}
 {{- else }}
@@ -110,7 +110,7 @@ Get the source configmap.
 {{/*
 Get the ssh key secret.
 */}}
-{{- define "deepspeed.ssh.keySecretName.v1" -}}
+{{- define "deepspeed.v0.ssh.keySecretName" -}}
 {{- if .Values.config.existingSSHKeySecret -}}
     {{- include "common.tplvalues.render" (dict "value" .Values.config.existingSSHKeySecret "context" $) -}}
 {{- else }}
@@ -121,14 +121,14 @@ Get the ssh key secret.
 {{/*
 Return the proper Docker Image Registry Secret Names
 */}}
-{{- define "deepspeed.imagePullSecrets.v1" -}}
+{{- define "deepspeed.v0.imagePullSecrets" -}}
 {{- include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.gitImage .Values.volumePermissions.image) "global" .Values.global) -}}
 {{- end -}}
 
 {{/*
 Return true if the source configmap should be created
 */}}
-{{- define "deepspeed.source.createConfigMap.v1" -}}
+{{- define "deepspeed.v0.source.createConfigMap" -}}
 {{- if and .Values.client.enabled (eq .Values.source.type "configmap") .Values.source.configMap (not .Values.source.existingConfigMap) -}}
 {{- true -}}
 {{- end }}
@@ -137,9 +137,9 @@ Return true if the source configmap should be created
 {{/*
 Return the definition of wait for workers init container
 */}}
-{{- define "deepspeed.client.waitForWorkers.v1" -}}
+{{- define "deepspeed.v0.client.waitForWorkers" -}}
 - name: wait-for-workers
-  image: {{ include "deepspeed.image.v1" . }}
+  image: {{ include "deepspeed.v0.image" . }}
   imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
   command:
     - /bin/bash
@@ -150,7 +150,7 @@ Return the definition of wait for workers init container
       worker_hosts=(
       {{- $workers := .Values.worker.replicaCount | int }}
       {{- range $i, $e := until $workers }}
-        {{ include "deepspeed.worker.fullname.v1" $ }}-{{ $i }}.{{ printf "%s-headless" (include "deepspeed.worker.fullname.v1" $) }}
+        {{ include "deepspeed.v0.worker.fullname" $ }}-{{ $i }}.{{ printf "%s-headless" (include "deepspeed.v0.worker.fullname" $) }}
       {{- end }}
       )
 
@@ -191,9 +191,9 @@ Return the definition of wait for workers init container
 {{/*
 Return the definition of the ssh server configuration init container
 */}}
-{{- define "deepspeed.ssh.serverInitContainer.v1" -}}
+{{- define "deepspeed.v0.ssh.serverInitContainer" -}}
 - name: ssh-server-configure
-  image: {{ include "deepspeed.image.v1" . }}
+  image: {{ include "deepspeed.v0.image" . }}
   imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
   command:
     - /bin/bash
@@ -225,9 +225,9 @@ Return the definition of the ssh server configuration init container
 {{/*
 Return the definition of the git clone init container
 */}}
-{{- define "deespeed.git.cloneInitContainer.v1" -}}
+{{- define "deespeed.git.cloneInitContainer" -}}
 - name: git-clone-repository
-  image: {{ include "deepspeed.git.image.v1" . }}
+  image: {{ include "deepspeed.v0.git.image" . }}
   imagePullPolicy: {{ .Values.gitImage.pullPolicy | quote }}
   command:
     - /bin/bash
@@ -248,9 +248,9 @@ Return the definition of the git clone init container
 {{/*
 Return the volume-permissions init container
 */}}
-{{- define "deepspeed.volumePermissionsInitContainer.v1" -}}
+{{- define "deepspeed.v0.volumePermissionsInitContainer" -}}
 - name: volume-permissions
-  image: {{ include "deepspeed.volumePermissions.image.v1" . }}
+  image: {{ include "deepspeed.v0.volumePermissions.image" . }}
   imagePullPolicy: {{ default "" .Values.volumePermissions.image.pullPolicy | quote }}
   command:
     - /bin/bash
@@ -274,9 +274,9 @@ Return the volume-permissions init container
 {{/*
 Compile all warnings into a single message, and call fail.
 */}}
-{{- define "deepspeed.validateValues.v1" -}}
+{{- define "deepspeed.v0.validateValues" -}}
 {{- $messages := list -}}
-{{- $messages := append $messages (include "deepspeed.validateValues.job.v1" .) -}}
+{{- $messages := append $messages (include "deepspeed.v0.validateValues.job" .) -}}
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 {{- if $message -}}
@@ -286,14 +286,14 @@ Compile all warnings into a single message, and call fail.
 
 
 {{/* Check if there are rolling tags in the images */}}
-{{- define "deepspeed.checkRollingTags.v1" -}}
+{{- define "deepspeed.v0.checkRollingTags" -}}
 {{- include "common.warnings.rollingTag" .Values.image -}}
 {{- include "common.warnings.rollingTag" .Values.gitImage -}}
 {{- include "common.warnings.rollingTag" .Values.volumePermissions.image -}}
 {{- end -}}
 
 {{/* Check that a command has been defined when using a job */}}
-{{- define "deepspeed.validateValues.job.v1" -}}
+{{- define "deepspeed.v0.validateValues.job" -}}
 {{- if and .Values.client.useJob (not .Values.source.launchCommand) (not .Values.client.args) }}
 deepspeed: no-job-command
 
