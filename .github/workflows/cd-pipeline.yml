@@ -22,6 +22,7 @@ on: # rebuild any PRs and main branch changes
       - 'bitnami/consul/**'
       - 'bitnami/contour-operator/**'
       - 'bitnami/contour/**'
+      - 'bitnami/deepspeed/**'
       - 'bitnami/discourse/**'
       - 'bitnami/dokuwiki/**'
       - 'bitnami/drupal/**'
