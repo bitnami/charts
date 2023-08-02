@@ -162,6 +162,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.customStartupProbe`                                | Custom liveness probe for the Web component                                                                                                 | `{}`                         |
 | `controller.customLivenessProbe`                               | Custom liveness probe for the Web component                                                                                                 | `{}`                         |
 | `controller.customReadinessProbe`                              | Custom readiness probe for the Web component                                                                                                | `{}`                         |
+| `controller.logLevel`                                          | Sets the controller log level. Does not work if the args are overridden                                                                     | `info`                       |
 
 ### Metallb controller Prometheus metrics export
 
@@ -257,6 +258,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `speaker.customStartupProbe`                                | Custom liveness probe for the Web component                                                                                                 | `{}`                      |
 | `speaker.customLivenessProbe`                               | Custom liveness probe for the Web component                                                                                                 | `{}`                      |
 | `speaker.customReadinessProbe`                              | Custom readiness probe for the Web component                                                                                                | `{}`                      |
+| `speaker.logLevel`                                          | Sets the speaker log level. Does not work if the args are overridden                                                                        | `info`                    |
 
 ### Speaker Prometheus metrics export
 
