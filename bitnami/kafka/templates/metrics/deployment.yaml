@@ -4,8 +4,7 @@ SPDX-License-Identifier: APACHE-2.0
 */}}
 
 {{- if .Values.metrics.kafka.enabled }}
-{{- $replicaCount := int .Values.replicaCount -}}
-{{- $releaseNamespace := .Release.Namespace -}}
+{{- $releaseNamespace := include "common.names.namespace" . -}}
 {{- $clusterDomain := .Values.clusterDomain -}}
 {{- $fullname := include "common.names.fullname" . -}}
 {{- $servicePort := int .Values.service.ports.client -}}
@@ -13,7 +12,7 @@ apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ include "kafka.metrics.kafka.fullname" . }}
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: cluster-metrics
     {{- if .Values.commonLabels }}
@@ -97,16 +96,19 @@ spec:
             - -ce
             - |
               kafka_exporter \
-              {{- range $i, $e := until $replicaCount }}
-              --kafka.server={{ $fullname }}-{{ $i }}.{{ $fullname }}-headless.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ $servicePort }} \
+              {{- range $i := until (int .Values.controller.replicaCount) }}
+              --kafka.server={{ $fullname }}-controller-{{ $i }}.{{ $fullname }}-controller-headless.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ $servicePort }} \
               {{- end }}
-              {{- if (include "kafka.client.saslAuthentication" .) }}
+              {{- range $i := until (int .Values.broker.replicaCount) }}
+              --kafka.server={{ $fullname }}-broker-{{ $i }}.{{ $fullname }}-broker-headless.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ $servicePort }} \
+              {{- end }}
+              {{- if regexFind "SASL" (upper .Values.listeners.client.protocol) }}
               --sasl.enabled \
               --sasl.username=$SASL_USERNAME \
               --sasl.password=$SASL_USER_PASSWORD \
               --sasl.mechanism={{ include "kafka.metrics.kafka.saslMechanism" . }} \
               {{- end }}
-              {{- if (include "kafka.client.tlsEncryption" .) }}
+              {{- if regexFind "SSL" (upper .Values.listeners.client.protocol) }}
               --tls.enabled \
               {{- if .Values.metrics.kafka.certificatesSecret }}
               --tls.key-file=/opt/bitnami/kafka-exporter/certs/{{ .Values.metrics.kafka.tlsKey }} \
@@ -123,17 +125,16 @@ spec:
               {{- end }}
               --web.listen-address=:{{ .Values.metrics.kafka.containerPorts.metrics }}
           {{- end }}
-          {{- if (include "kafka.client.saslAuthentication" .) }}
-          {{- $clientUsers := .Values.auth.sasl.jaas.clientUsers }}
+          {{- if regexFind "SASL" (upper .Values.listeners.client.protocol) }}
           env:
             - name: SASL_USERNAME
-              value: {{ index $clientUsers 0 | quote }}
+              value: {{ index .Values.sasl.client.users 0 | quote }}
             - name: SASL_USER_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "kafka.jaasSecretName" . }}
+                  name: {{ include "kafka.saslSecretName" . }}
                   key: system-user-password
-          {{- end }}
+            {{- end }}
           ports:
             - name: metrics
               containerPort: {{ .Values.metrics.kafka.containerPorts.metrics }}
@@ -144,7 +145,7 @@ spec:
             {{- if .Values.metrics.kafka.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.metrics.kafka.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
-            {{- if and (include "kafka.client.tlsEncryption" .) .Values.metrics.kafka.certificatesSecret }}
+            {{- if and (regexFind "SSL" (upper .Values.listeners.client.protocol)) .Values.metrics.kafka.certificatesSecret }}
             - name: kafka-exporter-certificates
               mountPath: /opt/bitnami/kafka-exporter/certs/
               readOnly: true
@@ -161,7 +162,7 @@ spec:
         {{- if .Values.metrics.kafka.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.metrics.kafka.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
-        {{- if and (include "kafka.client.tlsEncryption" .) .Values.metrics.kafka.certificatesSecret }}
+        {{- if and (regexFind "SSL" (upper .Values.listeners.client.protocol)) .Values.metrics.kafka.certificatesSecret }}
         - name: kafka-exporter-certificates
           secret:
             secretName: {{ .Values.metrics.kafka.certificatesSecret }}

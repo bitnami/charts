@@ -8,7 +8,7 @@ kind: NetworkPolicy
 apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
 metadata:
   name: {{ printf "%s-ingress" (include "common.names.fullname" .) }}
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -25,7 +25,7 @@ spec:
   ingress:
     # Allow client connections
     - ports:
-        - port: {{ .Values.containerPorts.client }}
+        - port: {{ .Values.listeners.client.containerPort }}
       {{- if not .Values.networkPolicy.allowExternal }}
       from:
         - podSelector:
@@ -37,7 +37,7 @@ spec:
       {{- end }}
     # Allow communication inter-broker
     - ports:
-        - port: {{ .Values.containerPorts.internal }}
+        - port: {{ .Values.listeners.interbroker.containerPort }}
       from:
         - podSelector:
             matchLabels:
@@ -45,7 +45,7 @@ spec:
     # Allow External connection
     {{- if .Values.externalAccess.enabled }}
     - ports:
-        - port: {{ .Values.containerPorts.external }}
+        - port: {{ .Values.listeners.external.containerPort }}
     {{- if .Values.networkPolicy.externalAccess.from }}
       from: {{- include "common.tplvalues.render" ( dict "value" .Values.networkPolicy.externalAccess.from "context" $ ) | nindent 8 }}
     {{- end }}
