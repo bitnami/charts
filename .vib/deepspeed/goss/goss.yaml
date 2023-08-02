@@ -27,7 +27,7 @@ command:
   run-git-example:
     exec: bash -c ". /opt/bitnami/scripts/deepspeed/entrypoint.sh && cd /app/benchmarks/communication/ && deepspeed all_reduce.py"
     exit-status: 0
-    timeout: 200000
+    timeout: 900000
   {{- $uid := .Vars.client.containerSecurityContext.runAsUser }}
   {{- $gid := .Vars.client.podSecurityContext.fsGroup }}
   check-user-info:
