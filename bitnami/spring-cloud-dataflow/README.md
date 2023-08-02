@@ -399,32 +399,36 @@ helm uninstall my-release
 
 ### Database parameters
 
-| Name                                      | Description                                                                                         | Value        |
-| ----------------------------------------- | --------------------------------------------------------------------------------------------------- | ------------ |
-| `mariadb.enabled`                         | Enable/disable MariaDB chart installation                                                           | `true`       |
-| `mariadb.architecture`                    | MariaDB architecture. Allowed values: `standalone` or `replication`                                 | `standalone` |
-| `mariadb.auth.rootPassword`               | Password for the MariaDB `root` user                                                                | `""`         |
-| `mariadb.auth.username`                   | Username of new user to create                                                                      | `dataflow`   |
-| `mariadb.auth.password`                   | Password for the new user                                                                           | `change-me`  |
-| `mariadb.auth.database`                   | Database name to create                                                                             | `dataflow`   |
-| `mariadb.auth.forcePassword`              | Force users to specify required passwords in the database                                           | `false`      |
-| `mariadb.auth.usePasswordFiles`           | Mount credentials as a file instead of using an environment variable                                | `false`      |
-| `mariadb.initdbScripts`                   | Specify dictionary of scripts to be run at first boot                                               | `{}`         |
-| `flyway.enabled`                          | Enable/disable flyway running Dataflow and Skipper Database creation scripts on startup             | `true`       |
-| `externalDatabase.host`                   | Host of the external database                                                                       | `localhost`  |
-| `externalDatabase.port`                   | External database port number                                                                       | `3306`       |
-| `externalDatabase.driver`                 | The fully qualified name of the JDBC Driver class                                                   | `""`         |
-| `externalDatabase.scheme`                 | The scheme is a vendor-specific or shared protocol string that follows the "jdbc:" of the URL       | `""`         |
-| `externalDatabase.password`               | Password for the above username                                                                     | `""`         |
-| `externalDatabase.existingPasswordSecret` | Existing secret with database password                                                              | `""`         |
-| `externalDatabase.existingPasswordKey`    | Key of the existing secret with database password, defaults to `datasource-password`                | `""`         |
-| `externalDatabase.dataflow.url`           | JDBC URL for dataflow server. Overrides external scheme, host, port, database, and jdbc parameters. | `""`         |
-| `externalDatabase.dataflow.database`      | Name of the existing database to be used by Dataflow server                                         | `dataflow`   |
-| `externalDatabase.dataflow.username`      | Existing username in the external db to be used by Dataflow server                                  | `dataflow`   |
-| `externalDatabase.skipper.url`            | JDBC URL for skipper. Overrides external scheme, host, port, database, and jdbc parameters.         | `""`         |
-| `externalDatabase.skipper.database`       | Name of the existing database to be used by Skipper server                                          | `skipper`    |
-| `externalDatabase.skipper.username`       | Existing username in the external db to be used by Skipper server                                   | `skipper`    |
-| `externalDatabase.hibernateDialect`       | Hibernate Dialect used by Dataflow/Skipper servers                                                  | `""`         |
+| Name                                      | Description                                                                                             | Value                   |
+| ----------------------------------------- | ------------------------------------------------------------------------------------------------------- | ----------------------- |
+| `mariadb.enabled`                         | Enable/disable MariaDB chart installation                                                               | `true`                  |
+| `mariadb.image.registry`                  | MariaDB image registry                                                                                  | `docker.io`             |
+| `mariadb.image.repository`                | MariaDB image repository                                                                                | `bitnami/mariadb`       |
+| `mariadb.image.tag`                       | MariaDB image tag (immutable tags are recommended)                                                      | `10.11.4-debian-11-r51` |
+| `mariadb.image.digest`                    | MariaDB image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
+| `mariadb.architecture`                    | MariaDB architecture. Allowed values: `standalone` or `replication`                                     | `standalone`            |
+| `mariadb.auth.rootPassword`               | Password for the MariaDB `root` user                                                                    | `""`                    |
+| `mariadb.auth.username`                   | Username of new user to create                                                                          | `dataflow`              |
+| `mariadb.auth.password`                   | Password for the new user                                                                               | `change-me`             |
+| `mariadb.auth.database`                   | Database name to create                                                                                 | `dataflow`              |
+| `mariadb.auth.forcePassword`              | Force users to specify required passwords in the database                                               | `false`                 |
+| `mariadb.auth.usePasswordFiles`           | Mount credentials as a file instead of using an environment variable                                    | `false`                 |
+| `mariadb.initdbScripts`                   | Specify dictionary of scripts to be run at first boot                                                   | `{}`                    |
+| `flyway.enabled`                          | Enable/disable flyway running Dataflow and Skipper Database creation scripts on startup                 | `true`                  |
+| `externalDatabase.host`                   | Host of the external database                                                                           | `localhost`             |
+| `externalDatabase.port`                   | External database port number                                                                           | `3306`                  |
+| `externalDatabase.driver`                 | The fully qualified name of the JDBC Driver class                                                       | `""`                    |
+| `externalDatabase.scheme`                 | The scheme is a vendor-specific or shared protocol string that follows the "jdbc:" of the URL           | `""`                    |
+| `externalDatabase.password`               | Password for the above username                                                                         | `""`                    |
+| `externalDatabase.existingPasswordSecret` | Existing secret with database password                                                                  | `""`                    |
+| `externalDatabase.existingPasswordKey`    | Key of the existing secret with database password, defaults to `datasource-password`                    | `""`                    |
+| `externalDatabase.dataflow.url`           | JDBC URL for dataflow server. Overrides external scheme, host, port, database, and jdbc parameters.     | `""`                    |
+| `externalDatabase.dataflow.database`      | Name of the existing database to be used by Dataflow server                                             | `dataflow`              |
+| `externalDatabase.dataflow.username`      | Existing username in the external db to be used by Dataflow server                                      | `dataflow`              |
+| `externalDatabase.skipper.url`            | JDBC URL for skipper. Overrides external scheme, host, port, database, and jdbc parameters.             | `""`                    |
+| `externalDatabase.skipper.database`       | Name of the existing database to be used by Skipper server                                              | `skipper`               |
+| `externalDatabase.skipper.username`       | Existing username in the external db to be used by Skipper server                                       | `skipper`               |
+| `externalDatabase.hibernateDialect`       | Hibernate Dialect used by Dataflow/Skipper servers                                                      | `""`                    |
 
 ### RabbitMQ chart parameters
 
