@@ -89,7 +89,7 @@ spec:
             {{- end }}
         {{- end }}
         {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
-p        - name: volume-permissions
+        - name: volume-permissions
           image: "{{ template "mxnet.volumePermissions.image" . }}"
           imagePullPolicy: {{ default "" .Values.volumePermissions.image.pullPolicy | quote }}
           command:
