@@ -37,6 +37,7 @@ controller:
   containerSecurityContext:
     enabled: true
     runAsUser: 1002
+    readOnlyRootFilesystem: false
 serviceAccount:
   create: true
   automountServiceAccountToken: true
