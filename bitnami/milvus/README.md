@@ -1463,14 +1463,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### kafka sub-chart paramaters
 
-| Name                              | Description                                           | Value            |
-| --------------------------------- | ----------------------------------------------------- | ---------------- |
-| `kafka.enabled`                   | Enable/disable Kafka chart installation               | `true`           |
-| `kafka.controller.replicaCount`   | Number of Kafka brokers                               | `1`              |
-| `kafka.service.ports.client`      | Kafka svc port for client connections                 | `9092`           |
-| `kafka.listeners.client.protocol` | Kafka authentication protocol for the client listener | `SASL_PLAINTEXT` |
-| `kafka.sasl.enabledMechanisms`    | Kafka enabled SASL mechanisms                         | `PLAIN`          |
-| `kafka.sasl.client.users`         | Kafka client users                                    | `["user"]`       |
+| Name                              | Description                                                   | Value            |
+| --------------------------------- | ------------------------------------------------------------- | ---------------- |
+| `kafka.enabled`                   | Enable/disable Kafka chart installation                       | `true`           |
+| `kafka.controller.replicaCount`   | Number of Kafka controller eligible (controller+broker) nodes | `1`              |
+| `kafka.service.ports.client`      | Kafka svc port for client connections                         | `9092`           |
+| `kafka.listeners.client.protocol` | Kafka authentication protocol for the client listener         | `SASL_PLAINTEXT` |
+| `kafka.sasl.enabledMechanisms`    | Kafka enabled SASL mechanisms                                 | `PLAIN`          |
+| `kafka.sasl.client.users`         | Kafka client users                                            | `["user"]`       |
 
 See <https://github.com/bitnami-labs/readme-generator-for-helm> to create the table.
 
