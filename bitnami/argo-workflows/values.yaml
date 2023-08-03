@@ -644,7 +644,9 @@ controller:
     ##  configuration: {}
     ##
     {{- if .Values.controller.metrics.enabled }}
-    metricsConfig: {{- include "common.tplvalues.render" (dict "value" .Values.controller.metrics "context" $) | nindent 2 }}
+    metricsConfig:
+      enabled: {{ include "common.tplvalues.render" (dict "value" .Values.controller.metrics.enabled "context" $) }}
+      path: {{ include "common.tplvalues.render" (dict "value" .Values.controller.metrics.path "context" $) }}
     {{- end }}
     {{- if .Values.controller.telemetry.enabled }}
     telemetryConfig: {{- include "common.tplvalues.render" (dict "value" .Values.controller.telemetry "context" $) | nindent 2 }}
