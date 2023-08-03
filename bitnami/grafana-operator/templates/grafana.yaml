@@ -113,6 +113,10 @@ spec:
                 timeoutSeconds: {{ .Values.grafana.livenessProbe.timeoutSeconds }}
                 successThreshold: {{ .Values.grafana.livenessProbe.successThreshold }}
                 failureThreshold: {{ .Values.grafana.livenessProbe.failureThreshold }}
+                httpGet:
+                  path: /api/health
+                  port: 3000
+                  scheme: HTTP
               {{- end }}
               {{- if .Values.grafana.readinessProbe.enabled }}
               readinessProbe:
@@ -121,6 +125,10 @@ spec:
                 timeoutSeconds: {{ .Values.grafana.readinessProbe.timeoutSeconds }}
                 successThreshold: {{ .Values.grafana.readinessProbe.successThreshold }}
                 failureThreshold: {{ .Values.grafana.readinessProbe.failureThreshold }}
+                httpGet:
+                  path: /api/health
+                  port: 3000
+                  scheme: HTTP
               {{- end }}
             {{- if .Values.grafana.sidecars }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.grafana.sidecars "context" $) | nindent 12 }}
