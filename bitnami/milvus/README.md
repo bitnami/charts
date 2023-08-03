@@ -95,6 +95,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `milvus.auth.password`                                      | Milvus username password                                                                                                                            | `""`                   |
 | `milvus.auth.rootPassword`                                  | Milvus root password                                                                                                                                | `""`                   |
 | `milvus.auth.existingSecret`                                | Name of a secret containing the Milvus password                                                                                                     | `""`                   |
+| `milvus.auth.existingSecretPasswordKey`                     | Name of the secret key containing the Milvus password                                                                                               | `""`                   |
 | `milvus.defaultConfig`                                      | Milvus components default configuration                                                                                                             | `""`                   |
 | `milvus.extraConfig`                                        | Extra configuration parameters                                                                                                                      | `{}`                   |
 | `milvus.existingConfigMap`                                  | name of a ConfigMap with existing configuration for the default configuration                                                                       | `""`                   |
@@ -1422,10 +1423,16 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### External Kafka parameters
 
-| Name                    | Description            | Value           |
-| ----------------------- | ---------------------- | --------------- |
-| `externalKafka.servers` | External Kafka brokers | `["localhost"]` |
-| `externalKafka.port`    | External Kafka port    | `9092`          |
+| Name                                           | Description                                                                                                        | Value                 |
+| ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | --------------------- |
+| `externalKafka.servers`                        | External Kafka brokers                                                                                             | `["localhost"]`       |
+| `externalKafka.port`                           | External Kafka port                                                                                                | `9092`                |
+| `externalKafka.listener.protocol`              | Kafka listener protocol. Allowed protocols: PLAINTEXT, SASL_PLAINTEXT, SASL_SSL and SSL                            | `PLAINTEXT`           |
+| `externalKafka.sasl.user`                      | User for SASL authentication                                                                                       | `user`                |
+| `externalKafka.sasl.password`                  | Password for SASL authentication                                                                                   | `""`                  |
+| `externalKafka.sasl.existingSecret`            | Name of the existing secret containing a password for SASL authentication (under the key named "client-passwords") | `""`                  |
+| `externalKafka.sasl.existingSecretPasswordKey` | Name of the secret key containing the Kafka client user password                                                   | `kafka-root-password` |
+| `externalKafka.sasl.enabledMechanisms`         | Kafka enabled SASL mechanisms                                                                                      | `PLAIN`               |
 
 ### etcd sub-chart parameters
 
@@ -1462,6 +1469,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `kafka.controller.replicaCount`   | Number of Kafka brokers                               | `1`              |
 | `kafka.service.ports.client`      | Kafka svc port for client connections                 | `9092`           |
 | `kafka.listeners.client.protocol` | Kafka authentication protocol for the client listener | `SASL_PLAINTEXT` |
+| `kafka.sasl.enabledMechanisms`    | Kafka enabled SASL mechanisms                         | `PLAIN`          |
 | `kafka.sasl.client.users`         | Kafka client users                                    | `["user"]`       |
 
 See <https://github.com/bitnami-labs/readme-generator-for-helm> to create the table.
