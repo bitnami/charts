@@ -906,7 +906,44 @@ worker:
     ##
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
-
+  ## @section Deepspeed Worker persistence paramaters
+  ## Enable persistence using Persistent Volume Claims
+  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+  ##
+  persistence:
+    ## @param worker.persistence.enabled Use a PVC to persist data
+    ##
+    enabled: false
+    ## @param worker.persistence.storageClass discourse & sidekiq data Persistent Volume Storage Class
+    ## If defined, storageClassName: <storageClass>
+    ## If set to "-", storageClassName: "", which disables dynamic provisioning
+    ## If undefined (the default) or set to null, no storageClassName spec is
+    ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
+    ##   GKE, AWS & OpenStack)
+    ##
+    storageClass: ""
+    ## @param worker.persistence.existingClaim Use a existing PVC which must be created manually before bound
+    ##
+    existingClaim: ""
+    ## @param worker.persistence.mountPath Path to mount the volume at
+    ##
+    mountPath: /bitnami/deepspeed/data
+    ## @param worker.persistence.accessModes Persistent Volume Access Mode
+    ##
+    accessModes:
+      - ReadWriteOnce
+    ## @param worker.persistence.dataSource Custom PVC data source
+    ##
+    dataSource: {}
+    ## @param worker.persistence.size Size of data volume
+    ##
+    size: 8Gi
+    ## @param worker.persistence.labels Persistent Volume labels
+    ##
+    labels: {}
+    ## @param worker.persistence.annotations Persistent Volume annotations
+    ##
+    annotations: {}
 
 ## Bitnami git image version
 ## ref: https://hub.docker.com/r/bitnami/git/tags/

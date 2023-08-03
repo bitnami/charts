@@ -105,7 +105,7 @@
                 "tag": {
                     "type": "string",
                     "description": "Deepspeed image tag (immutable tags are recommended)",
-                    "default": "0.10.0-debian-11-r15"
+                    "default": "0.10.0-debian-11-r17"
                 },
                 "digest": {
                     "type": "string",
@@ -1303,6 +1303,61 @@
                             "description": "Add extra ingress rules to the NetworkPolicy",
                             "default": [],
                             "items": {}
+                        }
+                    }
+                },
+                "persistence": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Use a PVC to persist data",
+                            "default": false
+                        },
+                        "storageClass": {
+                            "type": "string",
+                            "description": "discourse & sidekiq data Persistent Volume Storage Class",
+                            "default": ""
+                        },
+                        "existingClaim": {
+                            "type": "string",
+                            "description": "Use a existing PVC which must be created manually before bound",
+                            "default": ""
+                        },
+                        "mountPath": {
+                            "type": "string",
+                            "description": "Path to mount the volume at",
+                            "default": "/bitnami/deepspeed/data"
+                        },
+                        "accessModes": {
+                            "type": "array",
+                            "description": "Persistent Volume Access Mode",
+                            "default": [
+                                "ReadWriteOnce"
+                            ],
+                            "items": {
+                                "type": "string"
+                            }
+                        },
+                        "dataSource": {
+                            "type": "object",
+                            "description": "Custom PVC data source",
+                            "default": {}
+                        },
+                        "size": {
+                            "type": "string",
+                            "description": "Size of data volume",
+                            "default": "8Gi"
+                        },
+                        "labels": {
+                            "type": "object",
+                            "description": "Persistent Volume labels",
+                            "default": {}
+                        },
+                        "annotations": {
+                            "type": "object",
+                            "description": "Persistent Volume annotations",
+                            "default": {}
                         }
                     }
                 }

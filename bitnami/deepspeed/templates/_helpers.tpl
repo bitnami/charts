@@ -249,26 +249,27 @@ Return the definition of the git clone init container
 Return the volume-permissions init container
 */}}
 {{- define "deepspeed.v0.volumePermissionsInitContainer" -}}
+{{- $block := index .context.Values .component }}
 - name: volume-permissions
-  image: {{ include "deepspeed.v0.volumePermissions.image" . }}
-  imagePullPolicy: {{ default "" .Values.volumePermissions.image.pullPolicy | quote }}
+  image: {{ include "deepspeed.v0.volumePermissions.image" .context }}
+  imagePullPolicy: {{ default "" .context.Values.volumePermissions.image.pullPolicy | quote }}
   command:
     - /bin/bash
   args:
     - -ec
     - |
       #!/bin/bash
-      mkdir -p {{ .Values.client.persistence.mountPath }}
-      chown {{ .Values.client.containerSecurityContext.runAsUser }}:{{ .Values.client.podSecurityContext.fsGroup }} {{ .Values.persistence.mountPath }}
-      find {{ .Values.client.persistence.mountPath }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs chown -R {{ .Values.client.containerSecurityContext.runAsUser }}:{{ .Values.client.podSecurityContext.fsGroup }}
+      mkdir -p {{ $block.persistence.mountPath }}
+      chown {{ $block.containerSecurityContext.runAsUser }}:{{ $block.podSecurityContext.fsGroup }} {{ .context.Values.persistence.mountPath }}
+      find {{ $block.client.persistence.mountPath }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs chown -R {{ $block.containerSecurityContext.runAsUser }}:{{ $block.podSecurityContext.fsGroup }}
   securityContext:
     runAsUser: 0
-  {{- if .Values.volumePermissions.resources }}
-  resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+  {{- if .context.Values.volumePermissions.resources }}
+  resources: {{- toYaml .context.Values.volumePermissions.resources | nindent 12 }}
   {{- end }}
   volumeMounts:
     - name: data
-      mountPath: {{ .Values.client.persistence.mountPath }}
+      mountPath: {{ $block.persistence.mountPath }}
 {{- end -}}
 
 {{/*

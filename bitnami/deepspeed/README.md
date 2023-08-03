@@ -275,48 +275,62 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Worker Traffic Exposure Parameters
 
-| Name                                                     | Description                                                                                                                               | Value                  |
-| -------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
-| `worker.externalAccess.enabled`                          | Create a service per worker node                                                                                                          | `false`                |
-| `worker.externalAccess.service.type`                     | Worker service type                                                                                                                       | `ClusterIP`            |
-| `worker.externalAccess.service.loadBalancerIPs`          | Array of load balancer IPs for each Kafka broker. Length must be the same as replicaCount                                                 | `[]`                   |
-| `worker.externalAccess.service.externalIPs`              | Use distinct service host IPs to configure Kafka external listener when service type is NodePort. Length must be the same as replicaCount | `[]`                   |
-| `worker.externalAccess.service.loadBalancerAnnotations`  | Array of load balancer annotations for each Kafka broker. Length must be the same as replicaCount                                         | `[]`                   |
-| `worker.externalAccess.service.publishNotReadyAddresses` | Indicates that any agent which deals with endpoints for this Service should disregard any indications of ready/not-ready                  | `false`                |
-| `worker.externalAccess.service.ports.ssh`                | Worker GRPC service port                                                                                                                  | `22`                   |
-| `worker.externalAccess.service.nodePorts`                | Array of node ports used for each Kafka broker. Length must be the same as replicaCount                                                   | `[]`                   |
-| `worker.externalAccess.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                               | `{}`                   |
-| `worker.externalAccess.service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin                                                                          | `None`                 |
-| `worker.externalAccess.service.loadBalancerSourceRanges` | Worker service Load Balancer sources                                                                                                      | `[]`                   |
-| `worker.externalAccess.service.externalTrafficPolicy`    | Worker service external traffic policy                                                                                                    | `Cluster`              |
-| `worker.externalAccess.service.labels`                   | Additional custom labels for Worker service                                                                                               | `{}`                   |
-| `worker.externalAccess.service.annotations`              | Additional custom annotations for Worker service                                                                                          | `{}`                   |
-| `worker.externalAccess.service.extraPorts`               | Extra ports to expose in the Worker service                                                                                               | `[]`                   |
-| `worker.serviceAccount.create`                           | Enable creation of ServiceAccount for Data Coordinator pods                                                                               | `false`                |
-| `worker.serviceAccount.name`                             | The name of the ServiceAccount to use                                                                                                     | `""`                   |
-| `worker.serviceAccount.automountServiceAccountToken`     | Allows auto mount of ServiceAccountToken on the serviceAccount created                                                                    | `false`                |
-| `worker.serviceAccount.annotations`                      | Additional custom annotations for the ServiceAccount                                                                                      | `{}`                   |
-| `worker.networkPolicy.enabled`                           | Enable creation of NetworkPolicy resources                                                                                                | `false`                |
-| `worker.networkPolicy.allowExternal`                     | The Policy model to apply                                                                                                                 | `true`                 |
-| `worker.networkPolicy.extraIngress`                      | Add extra ingress rules to the NetworkPolicy                                                                                              | `[]`                   |
-| `worker.networkPolicy.extraEgress`                       | Add extra ingress rules to the NetworkPolicy                                                                                              | `[]`                   |
-| `worker.networkPolicy.ingressNSMatchLabels`              | Labels to match to allow traffic from other namespaces                                                                                    | `{}`                   |
-| `worker.networkPolicy.ingressNSPodMatchLabels`           | Pod labels to match to allow traffic from other namespaces                                                                                | `{}`                   |
-| `gitImage.registry`                                      | Git image registry                                                                                                                        | `docker.io`            |
-| `gitImage.repository`                                    | Git image repository                                                                                                                      | `bitnami/git`          |
-| `gitImage.tag`                                           | Git image tag (immutable tags are recommended)                                                                                            | `2.41.0-debian-11-r16` |
-| `gitImage.digest`                                        | Git image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                       | `""`                   |
-| `gitImage.pullPolicy`                                    | Git image pull policy                                                                                                                     | `IfNotPresent`         |
-| `gitImage.pullSecrets`                                   | Specify docker-registry secret names as an array                                                                                          | `[]`                   |
-| `volumePermissions.enabled`                              | Enable init container that changes volume permissions in the data directory                                                               | `false`                |
-| `volumePermissions.image.registry`                       | Init container volume-permissions image registry                                                                                          | `docker.io`            |
-| `volumePermissions.image.repository`                     | Init container volume-permissions image repository                                                                                        | `bitnami/os-shell`     |
-| `volumePermissions.image.tag`                            | Init container volume-permissions image tag (immutable tags are recommended)                                                              | `11-debian-11-r16`     |
-| `volumePermissions.image.digest`                         | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag         | `""`                   |
-| `volumePermissions.image.pullPolicy`                     | Init container volume-permissions image pull policy                                                                                       | `IfNotPresent`         |
-| `volumePermissions.image.pullSecrets`                    | Specify docker-registry secret names as an array                                                                                          | `[]`                   |
-| `volumePermissions.resources.limits`                     | The resources limits for the container                                                                                                    | `{}`                   |
-| `volumePermissions.resources.requests`                   | The requested resources for the container                                                                                                 | `{}`                   |
+| Name                                                     | Description                                                                                                                               | Value       |
+| -------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| `worker.externalAccess.enabled`                          | Create a service per worker node                                                                                                          | `false`     |
+| `worker.externalAccess.service.type`                     | Worker service type                                                                                                                       | `ClusterIP` |
+| `worker.externalAccess.service.loadBalancerIPs`          | Array of load balancer IPs for each Kafka broker. Length must be the same as replicaCount                                                 | `[]`        |
+| `worker.externalAccess.service.externalIPs`              | Use distinct service host IPs to configure Kafka external listener when service type is NodePort. Length must be the same as replicaCount | `[]`        |
+| `worker.externalAccess.service.loadBalancerAnnotations`  | Array of load balancer annotations for each Kafka broker. Length must be the same as replicaCount                                         | `[]`        |
+| `worker.externalAccess.service.publishNotReadyAddresses` | Indicates that any agent which deals with endpoints for this Service should disregard any indications of ready/not-ready                  | `false`     |
+| `worker.externalAccess.service.ports.ssh`                | Worker GRPC service port                                                                                                                  | `22`        |
+| `worker.externalAccess.service.nodePorts`                | Array of node ports used for each Kafka broker. Length must be the same as replicaCount                                                   | `[]`        |
+| `worker.externalAccess.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                               | `{}`        |
+| `worker.externalAccess.service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin                                                                          | `None`      |
+| `worker.externalAccess.service.loadBalancerSourceRanges` | Worker service Load Balancer sources                                                                                                      | `[]`        |
+| `worker.externalAccess.service.externalTrafficPolicy`    | Worker service external traffic policy                                                                                                    | `Cluster`   |
+| `worker.externalAccess.service.labels`                   | Additional custom labels for Worker service                                                                                               | `{}`        |
+| `worker.externalAccess.service.annotations`              | Additional custom annotations for Worker service                                                                                          | `{}`        |
+| `worker.externalAccess.service.extraPorts`               | Extra ports to expose in the Worker service                                                                                               | `[]`        |
+| `worker.serviceAccount.create`                           | Enable creation of ServiceAccount for Data Coordinator pods                                                                               | `false`     |
+| `worker.serviceAccount.name`                             | The name of the ServiceAccount to use                                                                                                     | `""`        |
+| `worker.serviceAccount.automountServiceAccountToken`     | Allows auto mount of ServiceAccountToken on the serviceAccount created                                                                    | `false`     |
+| `worker.serviceAccount.annotations`                      | Additional custom annotations for the ServiceAccount                                                                                      | `{}`        |
+| `worker.networkPolicy.enabled`                           | Enable creation of NetworkPolicy resources                                                                                                | `false`     |
+| `worker.networkPolicy.allowExternal`                     | The Policy model to apply                                                                                                                 | `true`      |
+| `worker.networkPolicy.extraIngress`                      | Add extra ingress rules to the NetworkPolicy                                                                                              | `[]`        |
+| `worker.networkPolicy.extraEgress`                       | Add extra ingress rules to the NetworkPolicy                                                                                              | `[]`        |
+| `worker.networkPolicy.ingressNSMatchLabels`              | Labels to match to allow traffic from other namespaces                                                                                    | `{}`        |
+| `worker.networkPolicy.ingressNSPodMatchLabels`           | Pod labels to match to allow traffic from other namespaces                                                                                | `{}`        |
+
+### Deepspeed Worker persistence paramaters
+
+| Name                                   | Description                                                                                                                       | Value                     |
+| -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
+| `worker.persistence.enabled`           | Use a PVC to persist data                                                                                                         | `false`                   |
+| `worker.persistence.storageClass`      | discourse & sidekiq data Persistent Volume Storage Class                                                                          | `""`                      |
+| `worker.persistence.existingClaim`     | Use a existing PVC which must be created manually before bound                                                                    | `""`                      |
+| `worker.persistence.mountPath`         | Path to mount the volume at                                                                                                       | `/bitnami/deepspeed/data` |
+| `worker.persistence.accessModes`       | Persistent Volume Access Mode                                                                                                     | `["ReadWriteOnce"]`       |
+| `worker.persistence.dataSource`        | Custom PVC data source                                                                                                            | `{}`                      |
+| `worker.persistence.size`              | Size of data volume                                                                                                               | `8Gi`                     |
+| `worker.persistence.labels`            | Persistent Volume labels                                                                                                          | `{}`                      |
+| `worker.persistence.annotations`       | Persistent Volume annotations                                                                                                     | `{}`                      |
+| `gitImage.registry`                    | Git image registry                                                                                                                | `docker.io`               |
+| `gitImage.repository`                  | Git image repository                                                                                                              | `bitnami/git`             |
+| `gitImage.tag`                         | Git image tag (immutable tags are recommended)                                                                                    | `2.41.0-debian-11-r16`    |
+| `gitImage.digest`                      | Git image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                               | `""`                      |
+| `gitImage.pullPolicy`                  | Git image pull policy                                                                                                             | `IfNotPresent`            |
+| `gitImage.pullSecrets`                 | Specify docker-registry secret names as an array                                                                                  | `[]`                      |
+| `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory                                                       | `false`                   |
+| `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                  | `docker.io`               |
+| `volumePermissions.image.repository`   | Init container volume-permissions image repository                                                                                | `bitnami/os-shell`        |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r16`        |
+| `volumePermissions.image.digest`       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
+| `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`            |
+| `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                  | `[]`                      |
+| `volumePermissions.resources.limits`   | The resources limits for the container                                                                                            | `{}`                      |
+| `volumePermissions.resources.requests` | The requested resources for the container                                                                                         | `{}`                      |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 

@@ -39,9 +39,19 @@ spec:
   {{- end }}
   template:
     metadata:
-      {{- if .Values.client.podAnnotations }}
-      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.client.podAnnotations "context" $) | nindent 8 }}
-      {{- end }}
+      annotations:
+        checksum/hostfile: {{ include (print $.Template.BasePath "/client/hostfile-configmap.yaml") . | sha256sum }}
+        checksum/ssh-private-key: {{ include (print $.Template.BasePath "/ssh-keys-secret.yaml") . | sha256sum }}
+        checksum/ssh-client-conf: {{ include (print $.Template.BasePath "/client/ssh-client-configmap.yaml") . | sha256sum }}
+        {{- if (include "deepspeed.v0.source.createConfigMap" .) }}
+        checksum/source: {{ include (print $.Template.BasePath "/client/source-configmap.yaml") . | sha256sum }}
+        {{- end }}
+        {{- if .Values.client.podAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.client.podAnnotations "context" $) | nindent 8 }}
+        {{- end }}
+        {{- if .Values.commonAnnotations }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 8 }}
+        {{- end }}
       labels: {{- include "common.labels.standard" . | nindent 8 }}
         app.kubernetes.io/part-of: deepspeed
         app.kubernetes.io/component: client
@@ -93,7 +103,7 @@ spec:
         {{- include "deespeed.git.cloneInitContainer" . | nindent 8 }}
         {{- end }}
         {{- if and .Values.volumePermissions.enabled .Values.client.persistence.enabled }}
-        {{- include "deepspeed.v0.volumePermissionsInitContainer" . | nindent 8 }}
+        {{- include "deepspeed.v0.volumePermissionsInitContainer" (dict "component" "client" "context" $) | nindent 8 }}
         {{- end }}
         {{- end }}
         {{- if .Values.client.initContainers }}
