@@ -222,7 +222,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                | Description                                                                                                                  | Value                            |
 | ----------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | -------------------------------- |
 | `kafka.enabled`                     | Enable/disable Kafka chart installation                                                                                      | `true`                           |
-| `kafka.controller.replicaCount`     | Number of Kafka brokers                                                                                                      | `1`                              |
+| `kafka.controller.replicaCount`     | Number of Kafka controller-eligible (controller+broker) nodes                                                                | `1`                              |
 | `kafka.listeners.client.protocol`   | Authentication protocol for communications with clients. Allowed protocols: `PLAINTEXT`, `SASL_PLAINTEXT`, `SASL_SSL`, `SSL` | `PLAINTEXT`                      |
 | `kafka.service.ports.client`        | Kafka svc port for client connections                                                                                        | `9092`                           |
 | `externalKafka.brokers`             | Array of Kafka brokers to connect to. Format: protocol://broker_hostname:port                                                | `["PLAINTEXT://localhost:9092"]` |
