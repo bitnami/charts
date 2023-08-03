@@ -231,7 +231,7 @@ client:
     enabled: true
     initialDelaySeconds: 5
     periodSeconds: 10
-    timeoutSeconds: 5
+    timeoutSeconds: 20
     failureThreshold: 5
     successThreshold: 1
   ## @param client.readinessProbe.enabled Enable readinessProbe on Client nodes
@@ -245,7 +245,7 @@ client:
     enabled: true
     initialDelaySeconds: 5
     periodSeconds: 10
-    timeoutSeconds: 5
+    timeoutSeconds: 20
     failureThreshold: 5
     successThreshold: 1
   ## @param client.startupProbe.enabled Enable startupProbe on Client containers

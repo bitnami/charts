@@ -308,7 +308,7 @@
                         "timeoutSeconds": {
                             "type": "number",
                             "description": "Timeout seconds for livenessProbe",
-                            "default": 5
+                            "default": 20
                         },
                         "failureThreshold": {
                             "type": "number",
@@ -343,7 +343,7 @@
                         "timeoutSeconds": {
                             "type": "number",
                             "description": "Timeout seconds for readinessProbe",
-                            "default": 5
+                            "default": 20
                         },
                         "failureThreshold": {
                             "type": "number",

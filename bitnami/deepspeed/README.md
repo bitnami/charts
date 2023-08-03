@@ -123,13 +123,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `client.livenessProbe.enabled`                             | Enable livenessProbe on Client nodes                                                             | `true`           |
 | `client.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                          | `5`              |
 | `client.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                 | `10`             |
-| `client.livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                | `5`              |
+| `client.livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                | `20`             |
 | `client.livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                              | `5`              |
 | `client.livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                              | `1`              |
 | `client.readinessProbe.enabled`                            | Enable readinessProbe on Client nodes                                                            | `true`           |
 | `client.readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                         | `5`              |
 | `client.readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                | `10`             |
-| `client.readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                               | `5`              |
+| `client.readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                               | `20`             |
 | `client.readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                             | `5`              |
 | `client.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                             | `1`              |
 | `client.startupProbe.enabled`                              | Enable startupProbe on Client containers                                                         | `false`          |
