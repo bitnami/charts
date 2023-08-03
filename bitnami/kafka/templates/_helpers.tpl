@@ -497,15 +497,6 @@ ssl.truststore.location=/opt/bitnami/kafka/config/certs/kafka.truststore.jks
 ssl.client.auth={{ .Values.tls.sslClientAuth }}
 ssl.endpoint.identification.algorithm={{ .Values.tls.endpointIdentificationAlgorithm }}
 {{- end }}
-{{- if .Values.acl.authorizerClassName }}
-authorizer.class.name={{ .Values.acl.authorizerClassName }}
-{{- end }}
-{{- if .Values.acl.superUsers }}
-super.users={{ .Values.acl.superUsers }}
-{{- end }}
-{{- if not (empty .Values.acl.allowEveryoneIfNoAclFound) }}
-allow.everyone.if.no.acl.found={{ .Values.acl.allowEveryoneIfNoAclFound }}
-{{- end }}
 {{- if (include "kafka.saslEnabled" .) }}
 # Listeners SASL JAAS configuration
 {{- $listeners := list .Values.listeners.client .Values.listeners.interbroker }}
