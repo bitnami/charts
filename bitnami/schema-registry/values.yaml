@@ -661,27 +661,16 @@ externalKafka:
   ##
   brokers:
     - PLAINTEXT://localhost:9092
-  ## Authentication parameters
-  ## @param externalKafka.auth.protocol                   Authentication protocol. Allowed protocols: plaintext, tls, sasl and sasl_tls
-  ## @param externalKafka.auth.jaas.user                  User for SASL authentication
-  ## @param externalKafka.auth.jaas.password              Password for SASL authentication
-  ## @param externalKafka.auth.jaas.existingSecret        Name of the existing secret containing a password for SASL authentication (under the key named "client-passwords")
+  ## @param externalKafka.listener.protocol Kafka listener protocol. Allowed protocols: PLAINTEXT, SASL_PLAINTEXT, SASL_SSL and SSL
   ##
-  auth:
-    ## Authentication protocol
-    ## Supported values: 'plaintext', 'tls', sasl' and 'sasl_tls'
-    ## This table shows the security provided on each protocol:
-    ## | Method    | Authentication                | Encryption via TLS |
-    ## | plaintext | None                          | No                 |
-    ## | tls       | None                          | Yes                |
-    ## | sasl      | Yes (via SASL)                | No                 |
-    ## | sasl_tls  | Yes (via SASL)                | Yes                |
-    ##
-    protocol: plaintext
-    ## JAAS configuration for SASL authentication
-    ## MANDATORY when protocol is 'sasl' or 'sasl_tls'
-    ##
-    jaas:
-      user: user
-      password: ""
-      existingSecret: ""
+  listener:
+    protocol: PLAINTEXT
+  ## Authentication parameters
+  ## @param externalKafka.sasl.user User for SASL authentication
+  ## @param externalKafka.sasl.password Password for SASL authentication
+  ## @param externalKafka.sasl.existingSecret Name of the existing secret containing a password for SASL authentication (under the key named "client-passwords")
+  ##
+  sasl:
+    user: user
+    password: ""
+    existingSecret: ""
