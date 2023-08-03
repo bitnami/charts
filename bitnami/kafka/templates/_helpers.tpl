@@ -171,9 +171,8 @@ Return true if SASL connections should be configured
 Return the Kafka SASL credentials secret
 */}}
 {{- define "kafka.saslSecretName" -}}
-{{- $secretName := .Values.sasl.existingSecret -}}
-{{- if $secretName -}}
-    {{- printf "%s" (tpl $secretName $) -}}
+{{- if .Values.sasl.existingSecret -}}
+    {{- include "common.tplvalues.render" (dict "value" .Values.sasl.existingSecret "context" $) -}}
 {{- else -}}
     {{- printf "%s-user-passwords" (include "common.names.fullname" .) -}}
 {{- end -}}
@@ -193,9 +192,8 @@ Return true if a SASL credentials secret object should be created
 Return true if a TLS credentials secret object should be created
 */}}
 {{- define "kafka.tlsSecretName" -}}
-{{- $secretName := .Values.tls.existingSecret -}}
-{{- if $secretName -}}
-    {{- printf "%s" (tpl $secretName $) -}}
+{{- if .Values.tls.existingSecret -}}
+    {{- include "common.tplvalues.render" (dict "value" .Values.tls.existingSecret "context" $) -}}
 {{- else -}}
     {{- printf "%s-tls" (include "common.names.fullname" .) -}}
 {{- end -}}
@@ -214,9 +212,8 @@ Return true if a TLS credentials secret object should be created
 Return the Kafka TLS credentials secret
 */}}
 {{- define "kafka.tlsPasswordsSecretName" -}}
-{{- $secretName := .Values.tls.passwordsSecret -}}
-{{- if $secretName -}}
-    {{- printf "%s" (tpl $secretName $) -}}
+{{- if .Values.tls.passwordsSecret -}}
+    {{- include "common.tplvalues.render" (dict "value" .Values.tls.passwordsSecret "context" $) -}}
 {{- else -}}
     {{- printf "%s-tls-passwords" (include "common.names.fullname" .) -}}
 {{- end -}}
@@ -236,9 +233,8 @@ Return true if a TLS credentials secret object should be created
 Return the Kafka TLS credentials secret
 */}}
 {{- define "kafka.zookeeper.tlsPasswordsSecretName" -}}
-{{- $secretName := .Values.tls.zookeeper.passwordsSecret -}}
-{{- if $secretName -}}
-    {{- printf "%s" (tpl $secretName $) -}}
+{{- if .Values.tls.zookeeper.passwordsSecret -}}
+    {{- include "common.tplvalues.render" (dict "value" .Values.tls.zookeeper.passwordsSecret "context" $) -}}
 {{- else -}}
     {{- printf "%s-zookeeper-tls-passwords" (include "common.names.fullname" .) -}}
 {{- end -}}
@@ -259,7 +255,7 @@ Returns the secret name for the Kafka Provisioning client
 */}}
 {{- define "kafka.client.passwordsSecretName" -}}
 {{- if .Values.provisioning.auth.tls.passwordsSecret -}}
-    {{- printf "%s" (tpl .Values.provisioning.auth.tls.passwordsSecret $) -}}
+    {{- include "common.tplvalues.render" (dict "value" .Values.provisioning.auth.tls.passwordsSecret "context" $) -}}
 {{- else -}}
     {{- printf "%s-client-secret" (include "common.names.fullname" .) -}}
 {{- end -}}
@@ -281,9 +277,9 @@ Return the Kafka controller-eligible configuration configmap
 */}}
 {{- define "kafka.controller.configmapName" -}}
 {{- if .Values.controller.existingConfigmap -}}
-    {{- printf "%s" (tpl .Values.controller.existingConfigmap $) -}}
+    {{- include "common.tplvalues.render" (dict "value" .Values.controller.existingConfigmap "context" $) -}}
 {{- else if .Values.existingConfigmap -}}
-    {{- printf "%s" (tpl .Values.existingConfigmap $) -}}
+    {{- include "common.tplvalues.render" (dict "value" .Values.existingConfigmap "context" $) -}}
 {{- else -}}
     {{- printf "%s-controller-configuration" (include "common.names.fullname" .) -}}
 {{- end -}}
@@ -325,7 +321,7 @@ Return the Kafka log4j ConfigMap name.
 */}}
 {{- define "kafka.log4j.configMapName" -}}
 {{- if .Values.existingLog4jConfigMap -}}
-    {{- printf "%s" (tpl .Values.existingLog4jConfigMap $) -}}
+    {{- include "common.tplvalues.render" (dict "value" .Values.existingLog4jConfigMap "context" $) -}}
 {{- else -}}
     {{- printf "%s-log4j-configuration" (include "common.names.fullname" .) -}}
 {{- end -}}
@@ -351,7 +347,7 @@ Return the Kafka configuration configmap
 */}}
 {{- define "kafka.metrics.jmx.configmapName" -}}
 {{- if .Values.metrics.jmx.existingConfigmap -}}
-    {{- printf "%s" (tpl .Values.metrics.jmx.existingConfigmap $) -}}
+    {{- include "common.tplvalues.render" (dict "value" .Values.metrics.jmx.existingConfigmap "context" $) -}}
 {{- else -}}
     {{ printf "%s-jmx-configuration" (include "common.names.fullname" .) -}}
 {{- end -}}
@@ -462,7 +458,7 @@ Returns the controller quorum voters based on the number of controller-eligible 
 */}}
 {{- define "kafka.kraft.controllerQuorumVoters" -}}
 {{- if .Values.kraft.controllerQuorumVoters -}}
-  {{ printf "%s" (tpl .Values.kraft.controllerQuorumVoters $) }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.kraft.controllerQuorumVoters "context" $) -}}
 {{- else -}}
   {{- $controllerVoters := list -}}
   {{- $fullname := include "common.names.fullname" . -}}
