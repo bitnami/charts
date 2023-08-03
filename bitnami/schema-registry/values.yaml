@@ -637,7 +637,7 @@ kafka:
   ## @param kafka.enabled Enable/disable Kafka chart installation
   ##
   enabled: true
-  ## @param kafka.controller.replicaCount Number of Kafka brokers
+  ## @param kafka.controller.replicaCount Number of Kafka controller-eligible (controller+broker) nodes
   ##
   controller:
     replicaCount: 1
