@@ -243,7 +243,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                          | Start a exporter side-car                                                                                       | `false`                   |
 | `metrics.image.registry`                   | Apache exporter image registry                                                                                  | `docker.io`               |
 | `metrics.image.repository`                 | Apache exporter image repository                                                                                | `bitnami/apache-exporter` |
-| `metrics.image.tag`                        | Apache exporter image tag                                                                                       | `0.13.4-debian-11-r60`    |
+| `metrics.image.tag`                        | Apache exporter image tag                                                                                       | `1.0.1-debian-11-r2`      |
 | `metrics.image.digest`                     | Apache exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
 | `metrics.image.pullPolicy`                 | Image pull policy                                                                                               | `IfNotPresent`            |
 | `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                                                                | `[]`                      |
