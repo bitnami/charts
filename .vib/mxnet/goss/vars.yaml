@@ -1,7 +1,0 @@
-features:
-  enabled:
-    - "BLAS_OPEN"
-    - "DIST_KVSTORE"
-  disabled:
-    - "CUDA"
-    - "MKLDNN"
