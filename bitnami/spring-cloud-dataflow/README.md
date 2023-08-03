@@ -666,6 +666,11 @@ If you enabled RabbitMQ chart to be used as the messaging solution for Skipper t
 
 This major updates the Kafka subchart to its newest major, 24.0.0. This new version refactors the Kafka chart architecture and requires manual actions during the upgrade. For more information on this subchart's major, please refer to [Kafka upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/kafka#to-2400).
 
+Most notable changes affecting the default values of the spring-cloud-dataflow chart are:
+
+- The value `kafka.replicaCount` has been renamed as `kafka.controller.replicaCount`.
+- The value `kafka.offsetsTopicReplicationFactor`, with default value `1` is now configured using the new value `kafka.extraConfig`.
+
 ### To 18.0.0
 
 This major updates the Kafka subchart to its newest major, 22.0.0. This new version of Kafka uses Kraft by default. For more information on this subchart's major, please refer to [Kafka upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/kafka#to-2200).
