@@ -387,6 +387,10 @@ controller:
   ##
   customReadinessProbe: {}
 
+  ## @param controller.logLevel Sets the controller log level. Does not work if the args are overridden
+  ##
+  logLevel: "info"
+
   ## @section Metallb controller Prometheus metrics export
   ##
   metrics:
@@ -746,7 +750,9 @@ speaker:
   ## @param speaker.customReadinessProbe Custom readiness probe for the Web component
   ##
   customReadinessProbe: {}
-
+  ## @param speaker.logLevel Sets the speaker log level. Does not work if the args are overridden
+  ##
+  logLevel: "info"
   ## @section Speaker Prometheus metrics export
   metrics:
     ## @param speaker.metrics.enabled Enable the export of Prometheus metrics

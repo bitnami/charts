@@ -55,7 +55,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/apache
-  tag: 2.4.57-debian-11-r113
+  tag: 2.4.57-debian-11-r116
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -85,7 +85,7 @@ image:
 git:
   registry: docker.io
   repository: bitnami/git
-  tag: 2.41.0-debian-11-r53
+  tag: 2.41.0-debian-11-r58
   digest: ""
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -595,7 +595,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 0.13.4-debian-11-r55
+    tag: 1.0.1-debian-11-r2
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

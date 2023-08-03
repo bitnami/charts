@@ -88,6 +88,7 @@ spec:
           {{- else }}
           args:
             - --port={{ .Values.speaker.containerPorts.metrics }}
+            - --log-level={{ .Values.speaker.logLevel }}
           {{- end }}
           {{- if .Values.speaker.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.speaker.lifecycleHooks "context" $) | nindent 12 }}

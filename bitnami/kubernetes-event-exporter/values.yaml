@@ -56,6 +56,11 @@ extraDeploy: []
 
 ## @param replicaCount Desired number of pod replicas
 replicaCount: 1
+##
+## @param revisionHistoryLimit Desired number of old ReplicaSets to retain 
+## Defaults to 10, if set to 0 old ReplicaSets will be garbage-collected
+revisionHistoryLimit: 10
+##
 ## @param containerPorts.http HTTP container port
 ##
 containerPorts:
