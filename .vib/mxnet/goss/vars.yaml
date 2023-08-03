@@ -1,0 +1,15 @@
+binaries:
+  - python
+directories:
+  - mode: "0775"
+    paths:
+      - /app
+      - /opt/bitnami/python
+features:
+  enabled:
+    - "BLAS_OPEN"
+    - "DIST_KVSTORE"
+  disabled:
+    - "CUDA"
+    - "MKLDNN"
+root_dir: /opt/bitnami
