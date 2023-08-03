@@ -4959,24 +4959,23 @@ kafka:
   ## @param kafka.enabled Enable/disable Kafka chart installation
   ##
   enabled: true
-  ## @param kafka.replicaCount Number of Kafka brokers
+  ## @param kafka.controller.replicaCount Number of Kafka brokers
   ##
-  replicaCount: 1
+  controller:
+    replicaCount: 1
+  ## @param kafka.service.ports.client Kafka svc port for client connections
+  ##
   service:
-    ## @param kafka.service.ports.client Kafka svc port for client connections
-    ##
     ports:
       client: 9092
-  auth:
-    ## @param kafka.auth.clientProtocol Kafka authentication protocol for the client
+  ## @param kafka.listeners.client.protocol Kafka authentication protocol for the client listener
+  ##
+  listeners:
+    client:
+      protocol: SASL_PLAINTEXT
+  sasl:
+    ## @param kafka.sasl.client.users Kafka client users
     ##
-    clientProtocol: sasl
-    sasl:
-      ## @param kafka.auth.sasl.mechanisms Kafka authentication mechanisms for SASL
-      ##
-      mechanisms: plain
-      jaas:
-        ## @param kafka.auth.sasl.jaas.clientUsers Kafka client users
-        ##
-        clientUsers:
-          - user
+    client:
+      users:
+        - user
