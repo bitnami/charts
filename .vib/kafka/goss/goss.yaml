@@ -17,7 +17,6 @@ file:
     filetype: file
     mode: "0644"
     contains:
-      - super.users={{ .Vars.acl.superUsers }}
       - listeners=CLIENT://:{{ .Vars.listeners.client.containerPort }},INTERNAL://:{{ .Vars.listeners.interbroker.containerPort }},EXTERNAL://:{{ .Vars.listeners.external.containerPort }},CONTROLLER://:{{ .Vars.listeners.controller.containerPort }}
 command:
   create-kafka-topic:
