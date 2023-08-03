@@ -4,12 +4,11 @@ SPDX-License-Identifier: APACHE-2.0
 */}}
 
 {{- if .Values.provisioning.enabled }}
-{{- $replicaCount := int .Values.replicaCount }}
 kind: Job
 apiVersion: batch/v1
 metadata:
   name: {{ printf "%s-provisioning" (include "common.names.fullname" .) }}
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/component: kafka-provisioning
     {{- if .Values.commonLabels }}
@@ -107,8 +106,8 @@ spec:
               if [ ! -f "$CLIENT_CONF" ]; then
                 touch $CLIENT_CONF
 
-                kafka_common_conf_set "$CLIENT_CONF" security.protocol {{ include "kafka.listenerType" ( dict "protocol" .Values.auth.clientProtocol ) | quote }}
-                {{- if (include "kafka.client.tlsEncryption" .) }}
+                kafka_common_conf_set "$CLIENT_CONF" security.protocol {{ .Values.listeners.client.protocol | quote }}
+                {{- if (regexFind "SSL" (upper .Values.listeners.client.protocol)) }}
                 kafka_common_conf_set "$CLIENT_CONF" ssl.keystore.type {{ upper .Values.provisioning.auth.tls.type | quote }}
                 kafka_common_conf_set "$CLIENT_CONF" ssl.truststore.type {{ upper .Values.provisioning.auth.tls.type | quote }}
                 ! is_empty_value "$KAFKA_CLIENT_KEY_PASSWORD" && kafka_common_conf_set "$CLIENT_CONF" ssl.key.password "$KAFKA_CLIENT_KEY_PASSWORD"
@@ -131,14 +130,14 @@ spec:
                 ! is_empty_value "$KAFKA_CLIENT_TRUSTSTORE_PASSWORD" && kafka_common_conf_set "$CLIENT_CONF" ssl.truststore.password "$KAFKA_CLIENT_TRUSTSTORE_PASSWORD"
                 {{- end }}
                 {{- end }}
-                {{- if (include "kafka.client.saslAuthentication" .) }}
-                {{- if contains "plain" .Values.auth.sasl.mechanisms }}
+                {{- if regexFind "SASL" (upper .Values.listeners.client.protocol) }}
+                {{- if regexFind "PLAIN" ( upper .Values.sasl.enabledMechanisms) }}
                 kafka_common_conf_set "$CLIENT_CONF" sasl.mechanism PLAIN
                 kafka_common_conf_set "$CLIENT_CONF" sasl.jaas.config "org.apache.kafka.common.security.plain.PlainLoginModule required username=\"$SASL_USERNAME\" password=\"$SASL_USER_PASSWORD\";"
-                {{- else if contains "scram-sha-256" .Values.auth.sasl.mechanisms }}
+                {{- else if regexFind "SCRAM-SHA-256" ( upper .Values.sasl.enabledMechanisms) }}
                 kafka_common_conf_set "$CLIENT_CONF" sasl.mechanism SCRAM-SHA-256
                 kafka_common_conf_set "$CLIENT_CONF" sasl.jaas.config "org.apache.kafka.common.security.scram.ScramLoginModule required username=\"$SASL_USERNAME\" password=\"$SASL_USER_PASSWORD\";"
-                {{- else if contains "scram-sha-512" .Values.auth.sasl.mechanisms }}
+                {{- else if regexFind "SCRAM-SHA-512" ( upper .Values.sasl.enabledMechanisms) }}
                 kafka_common_conf_set "$CLIENT_CONF" sasl.mechanism SCRAM-SHA-512
                 kafka_common_conf_set "$CLIENT_CONF" sasl.jaas.config "org.apache.kafka.common.security.scram.ScramLoginModule required username=\"$SASL_USERNAME\" password=\"$SASL_USER_PASSWORD\";"
                 {{- end }}
@@ -154,8 +153,8 @@ spec:
                     --create \
                     --if-not-exists \
                     --bootstrap-server ${KAFKA_SERVICE} \
-                    --replication-factor {{ $topic.replicationFactor | default $.Values.provisioning.replicationFactor }} \
-                    --partitions {{ $topic.partitions | default $.Values.provisioning.numPartitions }} \
+                    --replication-factor {{ $topic.replicationFactor | default .context.Values.provisioning.replicationFactor }} \
+                    --partitions {{ $topic.partitions | default .context.Values.provisioning.numPartitions }} \
                     {{- range $name, $value := $topic.config }}
                     --config {{ $name }}={{ $value }} \
                     {{- end }}
@@ -185,7 +184,7 @@ spec:
           env:
             - name: BITNAMI_DEBUG
               value: {{ ternary "true" "false" (or .Values.image.debug .Values.diagnosticMode.enabled) | quote }}
-            {{- if (include "kafka.client.tlsEncryption" .) }}
+            {{- if (regexFind "SSL" (upper .Values.listeners.client.protocol)) }}
             - name: KAFKA_CLIENT_KEY_PASSWORD
               valueFrom:
                 secretKeyRef:
@@ -204,14 +203,13 @@ spec:
             {{- end }}
             - name: KAFKA_SERVICE
               value: {{ printf "%s:%d" (include "common.names.fullname" .) (.Values.service.ports.client | int64) }}
-            {{- if (include "kafka.client.saslAuthentication" .) }}
-            {{- $clientUsers := .Values.auth.sasl.jaas.clientUsers }}
+            {{- if regexFind "SASL" (upper .Values.listeners.client.protocol) }}
             - name: SASL_USERNAME
-              value: {{ index $clientUsers 0 | quote }}
+              value: {{ index .Values.sasl.client.users 0 | quote }}
             - name: SASL_USER_PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "kafka.jaasSecretName" . }}
+                  name: {{ include "kafka.saslSecretName" . }}
                   key: system-user-password
             {{- end }}
             {{- if .Values.provisioning.extraEnvVars }}
@@ -234,10 +232,10 @@ spec:
           volumeMounts:
             {{- if or .Values.log4j .Values.existingLog4jConfigMap }}
             - name: log4j-config
-              mountPath: {{ .Values.persistence.mountPath }}/config/log4j.properties
+              mountPath: /opt/bitnami/kafka/config/log4j.properties
               subPath: log4j.properties
             {{- end }}
-            {{- if (include "kafka.client.tlsEncryption" .) }}
+            {{- if (regexFind "SSL" (upper .Values.listeners.client.protocol)) }}
             {{- if not (empty .Values.provisioning.auth.tls.certificatesSecret) }}
             - name: kafka-client-certs
               mountPath: /certs
@@ -255,8 +253,8 @@ spec:
         - name: log4j-config
           configMap:
             name: {{ include "kafka.log4j.configMapName" . }}
-        {{ end }}
-        {{- if (include "kafka.client.tlsEncryption" .) }}
+        {{- end }}
+        {{- if (regexFind "SSL" (upper .Values.listeners.client.protocol)) }}
         {{- if not (empty .Values.provisioning.auth.tls.certificatesSecret) }}
         - name: kafka-client-certs
           secret:

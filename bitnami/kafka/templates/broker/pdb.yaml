@@ -3,15 +3,16 @@ Copyright VMware, Inc.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- $replicaCount := int .Values.replicaCount }}
-{{- if and .Values.pdb.create (gt $replicaCount 1) }}
+{{- $replicaCount := int .Values.broker.replicaCount }}
+{{- if and .Values.broker.pdb.create (gt $replicaCount 0) }}
 apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
 kind: PodDisruptionBudget
 metadata:
   name: {{ include "common.names.fullname" . }}
-  namespace: {{ .Release.Namespace | quote }}
+  namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
-    app.kubernetes.io/component: kafka
+    app.kubernetes.io/component: broker
+    app.kubernetes.io/part-of: kafka
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
     {{- end }}
@@ -19,13 +20,14 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  {{- if .Values.pdb.minAvailable }}
-  minAvailable: {{ .Values.pdb.minAvailable }}
+  {{- if .Values.broker.pdb.minAvailable }}
+  minAvailable: {{ .Values.broker.pdb.minAvailable }}
   {{- end }}
-  {{- if .Values.pdb.maxUnavailable }}
-  maxUnavailable: {{ .Values.pdb.maxUnavailable }}
+  {{- if .Values.broker.pdb.maxUnavailable }}
+  maxUnavailable: {{ .Values.broker.pdb.maxUnavailable }}
   {{- end }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
-      app.kubernetes.io/component: kafka
+      app.kubernetes.io/component: broker
+      app.kubernetes.io/part-of: kafka
 {{- end }}
