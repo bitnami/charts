@@ -353,24 +353,6 @@ tls:
     ##
     truststorePassword: ""
 
-## @section Kafka ACL settings
-## Kafka ACL authorization settings. Ref.: https://docs.confluent.io/platform/current/kafka/authorization.html
-##
-acl:
-  ## @param acl.authorizerClassName Sets the value for "authorizer.class.name" in Kafka server.properties.
-  ## In Zookeeper mode, the Authorizer is configured by setting this value to 'kafka.security.authorizer.AclAuthorizer'
-  ## In Kraft mode, the Authorizer is configured by setting this value to 'org.apache.kafka.metadata.authorizer.StandardAuthorizer'
-  ##
-  authorizerClassName: ""
-  ## @param acl.allowEveryoneIfNoAclFound Sets the value for "allow.everyone.if.no.acl.found" in Kafka server.properties
-  ##
-  allowEveryoneIfNoAclFound: ""
-  ## @param acl.superUsers You can add super users in server.properties
-  ## e.g.:
-  ## superUsers: "User:admin,User:controller_user"
-  ##
-  superUsers: ""
-
 ## @param extraEnvVars Extra environment variables to add to Kafka pods
 ## ref: https://github.com/bitnami/containers/tree/main/bitnami/kafka#configuration
 ## e.g:

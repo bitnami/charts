@@ -1128,6 +1128,9 @@ The changes introduced in this version are:
     - `socketRequestMaxBytes`
     - `socketSendBufferBytes`
     - `zookeeperConnectionTimeoutMs`
+    - `authorizerClassName`
+    - `allowEveryoneIfNoAclFound`
+    - `superUsers`
 - All listeners are configured with protocol 'SASL_PLAINTEXT' by default.
 - Support for SCRAM authentication in KRaft mode
 - All statefulset settings have been moved from values' root to `controller.*` and `broker.*`.

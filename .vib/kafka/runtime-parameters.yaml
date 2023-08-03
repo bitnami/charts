@@ -9,8 +9,6 @@ externalAccess:
       type: LoadBalancer
 rbac:
   create: true
-acl:
-  superUsers: User:admin,User:test_user
 listeners:
   client:
     containerPort: 9192
