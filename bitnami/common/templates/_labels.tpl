@@ -29,12 +29,12 @@ app.kubernetes.io/managed-by: {{ .context.Release.Service }}
 {{- end -}}
 
 {{/*
-Labels to use on inmutable fields such as deploy.spec.selector.matchLabels or svc.spec.selector
+Labels used on immutable fields such as deploy.spec.selector.matchLabels or svc.spec.selector
 {{ include "common.labels.matchLabels" (dict "customLabels" .Values.podLabels "context" $) -}}
 
 We don't want to loop over custom labels appending them to the selector
 since it's very likely that it will break deployemnts, services, etc.
-However, it's important to overwrite the standard labels to if the user
+However, it's important to overwrite the standard labels if the user
 overwrote them on metadata.labels fields.
 */}}
 {{- define "common.labels.matchLabels" -}}
