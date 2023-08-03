@@ -10,7 +10,7 @@ dependencies:
   - condition: mariadb.enabled
     name: mariadb
     repository: oci://registry-1.docker.io/bitnamicharts
-    version: 12.x.x
+    version: 13.x.x
   - name: common
     repository: oci://registry-1.docker.io/bitnamicharts
     tags:
@@ -31,4 +31,4 @@ maintainers:
 name: prestashop
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/prestashop
-version: 17.1.6
+version: 18.0.0
