@@ -16,7 +16,7 @@ client:
     enabled: true
     mountPath: /bitnami/deepspeed/vib-test
 worker:
-  replicaCount: 3
+  replicaCount: 2
   containerPorts:
     ssh: 3333
   externalAccess:

@@ -204,6 +204,15 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.worker.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        # Depending on the application, the source needs to be in the worker host
+        - name: source
+          {{- if or (.Values.source.existingConfigMap) (include "deepspeed.v0.source.createConfigMap" .) }}
+          configMap:
+            name: {{ include "deepspeed.v0.source.configMapName" . }}
+          {{- else }}
+          emptyDir: {}
+          {{- end }}
+        # We need the client private key for generating the public key and updating the authorized_keys file
         - name: ssh-client-private-key
           secret:
             secretName: {{ include "deepspeed.v0.ssh.keySecretName" . }}
@@ -211,11 +220,15 @@ spec:
         # auto-generate the worker private key
         - name: ssh-worker-private-key
           emptyDir: {}
+        # SSH Server configuration
         - name: ssh-server-config
           configMap:
             name: {{ include "deepspeed.v0.ssh.serverConfigMapName" . }}
+        # We need to use /home because of the permission
+        # limitations of sshd
         - name: worker-home
           emptyDir: {}
+        # Temporary folders
         - name: tmp
           emptyDir: {}
         - name: run
@@ -224,13 +237,6 @@ spec:
           emptyDir: {}
         - name: deepspeed-local
           emptyDir: {}
-        - name: source
-          {{- if or (.Values.source.existingConfigMap) (include "deepspeed.v0.source.createConfigMap" .) }}
-          configMap:
-            name: {{ include "deepspeed.v0.source.configMapName" . }}
-          {{- else }}
-          emptyDir: {}
-          {{- end }}
         {{- if .Values.worker.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.worker.extraVolumes "context" $) | nindent 8 }}
         {{- end }}

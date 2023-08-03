@@ -190,16 +190,16 @@ spec:
               subPath: deepspeed_ssh_client.conf
             - name: hostfile
               mountPath: /job
+            - name: deepspeed-local
+              mountPath: /home/deepspeed/.local
             - name: ssh-local-folder
-              mountPath: /opt/bitnami/deepspeed/.ssh
+              mountPath: /home/deepspeed/.ssh
             - name: ssh-client-private-key
               mountPath: /bitnami/ssh/client-private-key
             - name: tmp
               mountPath: /tmp
             - name: deepspeed-cache
-              mountPath: /opt/bitnami/deepspeed/.cache
-            - name: deepspeed-local
-              mountPath: /home/deepspeed/.local
+              mountPath: /home/deepspeed/.cache
             - name: data
               mountPath: {{ .Values.client.persistence.mountPath }}
             {{- if .Values.client.extraVolumeMounts }}
@@ -209,12 +209,14 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.client.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        # SSH client settings for connecting to the worker nodes
         - name: ssh-client-config
           configMap:
             name: {{ include "deepspeed.v0.ssh.clientConfigMapName" . }}
         - name: ssh-client-private-key
           secret:
             secretName: {{ include "deepspeed.v0.ssh.keySecretName" . }}
+        # Source code of the application
         - name: source
           {{- if or (.Values.source.existingConfigMap) (include "deepspeed.v0.source.createConfigMap" .) }}
           configMap:
@@ -222,17 +224,16 @@ spec:
           {{- else }}
           emptyDir: {}
           {{- end }}
+        # hostfile for connecting to the worker nodes
         - name: hostfile
           configMap:
             name: {{ include "deepspeed.v0.hostfileConfigMapName" . }}
-        - name: ssh-local-folder
-          emptyDir: {}
-        - name: tmp
-          emptyDir: {}
+        # These folders are necessary for building and pip install operations
         - name: deepspeed-cache
           emptyDir: {}
         - name: deepspeed-local
           emptyDir: {}
+        # Optional data folder in case the application requires storing data
         - name: data
           {{- if .Values.client.persistence.enabled }}
           persistentVolumeClaim:
@@ -240,6 +241,11 @@ spec:
           {{- else }}
           emptyDir: {}
           {{- end }}
+        # Temporary folders: /tmp and .ssh
+        - name: ssh-local-folder
+          emptyDir: {}
+        - name: tmp
+          emptyDir: {}
         {{- if .Values.client.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.client.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
