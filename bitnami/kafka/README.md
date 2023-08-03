@@ -162,21 +162,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `tls.zookeeper.passwordsSecretTruststoreKey` | The secret key from the tls.zookeeper.passwordsSecret containing the password for the Truststore.                                       | `truststore-password`      |
 | `tls.zookeeper.keystorePassword`             | Password to access the JKS keystore when it is password-protected. Ignored when 'tls.passwordsSecret' is provided.                      | `""`                       |
 | `tls.zookeeper.truststorePassword`           | Password to access the JKS truststore when it is password-protected. Ignored when 'tls.passwordsSecret' is provided.                    | `""`                       |
-
-### Kafka ACL settings
-
-| Name                            | Description                                                                         | Value |
-| ------------------------------- | ----------------------------------------------------------------------------------- | ----- |
-| `acl.authorizerClassName`       | Sets the value for "authorizer.class.name" in Kafka server.properties.              | `""`  |
-| `acl.allowEveryoneIfNoAclFound` | Sets the value for "allow.everyone.if.no.acl.found" in Kafka server.properties      | `""`  |
-| `acl.superUsers`                | You can add super users in server.properties                                        | `""`  |
-| `extraEnvVars`                  | Extra environment variables to add to Kafka pods                                    | `[]`  |
-| `extraEnvVarsCM`                | ConfigMap with extra environment variables                                          | `""`  |
-| `extraEnvVarsSecret`            | Secret with extra environment variables                                             | `""`  |
-| `extraVolumes`                  | Optionally specify extra list of additional volumes for the Kafka pod(s)            | `[]`  |
-| `extraVolumeMounts`             | Optionally specify extra list of additional volumeMounts for the Kafka container(s) | `[]`  |
-| `sidecars`                      | Add additional sidecar containers to the Kafka pod(s)                               | `[]`  |
-| `initContainers`                | Add additional Add init containers to the Kafka pod(s)                              | `[]`  |
+| `extraEnvVars`                               | Extra environment variables to add to Kafka pods                                                                                        | `[]`                       |
+| `extraEnvVarsCM`                             | ConfigMap with extra environment variables                                                                                              | `""`                       |
+| `extraEnvVarsSecret`                         | Secret with extra environment variables                                                                                                 | `""`                       |
+| `extraVolumes`                               | Optionally specify extra list of additional volumes for the Kafka pod(s)                                                                | `[]`                       |
+| `extraVolumeMounts`                          | Optionally specify extra list of additional volumeMounts for the Kafka container(s)                                                     | `[]`                       |
+| `sidecars`                                   | Add additional sidecar containers to the Kafka pod(s)                                                                                   | `[]`                       |
+| `initContainers`                             | Add additional Add init containers to the Kafka pod(s)                                                                                  | `[]`                       |
 
 ### Controller-eligible statefulset parameters
 
