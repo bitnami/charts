@@ -4,5 +4,5 @@
 
 ```bash
 cd .vib/wildfly/goss/testfiles
-docker run -u root --rm --entrypoint=/bin/bash -v .:/app bitnami/java:11 /app/helloworld.sh WILDFLY_VERSION
+docker run --rm --entrypoint=/bin/bash -v .:/app bitnami/java:11 /app/helloworld.sh WILDFLY_VERSION
 ```
