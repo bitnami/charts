@@ -272,7 +272,7 @@ sasl.mechanism=SCRAM-SHA-512
 {{- else }}
 sasl.mechanism=PLAIN
 {{- end }}
-{{- $securityModule := ternary "org.apache.kafka.common.security.scram.ScramLoginModule required" "org.apache.kafka.common.security.plain.PlainLoginModule required" (regexFind "SCRAM" (upper .Values.sasl.enabledMechanisms)) }}
+{{- $securityModule := ternary "org.apache.kafka.common.security.scram.ScramLoginModule required" "org.apache.kafka.common.security.plain.PlainLoginModule required" (regexMatch "SCRAM" (upper .Values.sasl.enabledMechanisms)) }}
 sasl.jaas.config={{ $securityModule }} \
     username="{{ index .Values.sasl.client.users 0 }}" \
     password="$(kubectl get secret {{ $fullname }}-user-passwords --namespace {{ $releaseNamespace }} -o jsonpath='{.data.client-passwords}' | base64 -d | cut -d , -f 1)";
