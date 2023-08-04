@@ -446,14 +446,14 @@ helm uninstall my-release
 
 ### Kafka chart parameters
 
-| Name                                  | Description                             | Value            |
-| ------------------------------------- | --------------------------------------- | ---------------- |
-| `kafka.enabled`                       | Enable/disable Kafka chart installation | `false`          |
-| `kafka.replicaCount`                  | Number of Kafka brokers                 | `1`              |
-| `kafka.offsetsTopicReplicationFactor` | Kafka Secret Key                        | `1`              |
-| `externalKafka.enabled`               | Enable/disable external Kafka           | `false`          |
-| `externalKafka.brokers`               | External Kafka brokers                  | `localhost:9092` |
-| `externalKafka.zkNodes`               | External Zookeeper nodes                | `localhost:2181` |
+| Name                            | Description                                                  | Value                                |
+| ------------------------------- | ------------------------------------------------------------ | ------------------------------------ |
+| `kafka.enabled`                 | Enable/disable Kafka chart installation                      | `false`                              |
+| `kafka.controller.replicaCount` | Number of Kafka controller+brokers nodes                     | `1`                                  |
+| `kafka.extraConfig`             | Kafka extra configuration to be appended to dynamic settings | `offsets.topic.replication.factor=1` |
+| `externalKafka.enabled`         | Enable/disable external Kafka                                | `false`                              |
+| `externalKafka.brokers`         | External Kafka brokers                                       | `localhost:9092`                     |
+| `externalKafka.zkNodes`         | External Zookeeper nodes                                     | `localhost:2181`                     |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -661,6 +661,15 @@ Find more information about how to deal with common errors related to Bitnami He
 ## Upgrading
 
 If you enabled RabbitMQ chart to be used as the messaging solution for Skipper to manage streaming content, then it's necessary to set the `rabbitmq.auth.password` and `rabbitmq.auth.erlangCookie` parameters when upgrading for readiness/liveness probes to work properly. Inspect the RabbitMQ secret to obtain the password and the Erlang cookie, then you can upgrade your chart using the command below:
+
+### To 22.0.0
+
+This major updates the Kafka subchart to its newest major, 24.0.0. This new version refactors the Kafka chart architecture and requires manual actions during the upgrade. For more information on this subchart's major, please refer to [Kafka upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/kafka#to-2400).
+
+Most notable changes affecting the default values of the spring-cloud-dataflow chart are:
+
+- The value `kafka.replicaCount` has been renamed as `kafka.controller.replicaCount`.
+- The value `kafka.offsetsTopicReplicationFactor`, with default value `1` is now configured using the new value `kafka.extraConfig`.
 
 ### To 18.0.0
 
