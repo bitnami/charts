@@ -219,17 +219,18 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Kafka chart parameters
 
-| Name                                | Description                                                                                                                  | Value                            |
-| ----------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | -------------------------------- |
-| `kafka.enabled`                     | Enable/disable Kafka chart installation                                                                                      | `true`                           |
-| `kafka.controller.replicaCount`     | Number of Kafka controller-eligible (controller+broker) nodes                                                                | `1`                              |
-| `kafka.listeners.client.protocol`   | Authentication protocol for communications with clients. Allowed protocols: `PLAINTEXT`, `SASL_PLAINTEXT`, `SASL_SSL`, `SSL` | `PLAINTEXT`                      |
-| `kafka.service.ports.client`        | Kafka svc port for client connections                                                                                        | `9092`                           |
-| `externalKafka.brokers`             | Array of Kafka brokers to connect to. Format: protocol://broker_hostname:port                                                | `["PLAINTEXT://localhost:9092"]` |
-| `externalKafka.listener.protocol`   | Kafka listener protocol. Allowed protocols: PLAINTEXT, SASL_PLAINTEXT, SASL_SSL and SSL                                      | `PLAINTEXT`                      |
-| `externalKafka.sasl.user`           | User for SASL authentication                                                                                                 | `user`                           |
-| `externalKafka.sasl.password`       | Password for SASL authentication                                                                                             | `""`                             |
-| `externalKafka.sasl.existingSecret` | Name of the existing secret containing a password for SASL authentication (under the key named "client-passwords")           | `""`                             |
+| Name                                | Description                                                                                                                  | Value                                |
+| ----------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | ------------------------------------ |
+| `kafka.enabled`                     | Enable/disable Kafka chart installation                                                                                      | `true`                               |
+| `kafka.controller.replicaCount`     | Number of Kafka controller-eligible (controller+broker) nodes                                                                | `1`                                  |
+| `kafka.listeners.client.protocol`   | Authentication protocol for communications with clients. Allowed protocols: `PLAINTEXT`, `SASL_PLAINTEXT`, `SASL_SSL`, `SSL` | `PLAINTEXT`                          |
+| `kafka.service.ports.client`        | Kafka svc port for client connections                                                                                        | `9092`                               |
+| `kafka.extraConfig`                 | Additional configuration to be appended at the end of the generated Kafka configuration file.                                | `offsets.topic.replication.factor=1` |
+| `externalKafka.brokers`             | Array of Kafka brokers to connect to. Format: protocol://broker_hostname:port                                                | `["PLAINTEXT://localhost:9092"]`     |
+| `externalKafka.listener.protocol`   | Kafka listener protocol. Allowed protocols: PLAINTEXT, SASL_PLAINTEXT, SASL_SSL and SSL                                      | `PLAINTEXT`                          |
+| `externalKafka.sasl.user`           | User for SASL authentication                                                                                                 | `user`                               |
+| `externalKafka.sasl.password`       | Password for SASL authentication                                                                                             | `""`                                 |
+| `externalKafka.sasl.existingSecret` | Name of the existing secret containing a password for SASL authentication (under the key named "client-passwords")           | `""`                                 |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
