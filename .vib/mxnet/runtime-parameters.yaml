@@ -1,10 +1,6 @@
 entrypoint:
   workDir: /app
 mode: standalone
-cloneFilesFromGit:
-  enabled: true
-  repository: https://github.com/apache/incubator-mxnet.git
-  revision: v1.2.0
 persistence:
   mountPath: /bitnami/mxnet
 standalone:

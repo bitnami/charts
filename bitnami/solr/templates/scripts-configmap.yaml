@@ -35,7 +35,8 @@ data:
             -srcstoretype PKCS12 \
             -srcstorepass "${SOLR_SSL_KEY_STORE_PASSWORD}" \
             -deststorepass "${SOLR_SSL_KEY_STORE_PASSWORD}" \
-            -destkeystore "/opt/bitnami/solr/certs/keystore.p12"
+            -destkeystore "/opt/bitnami/solr/certs/keystore.p12" \
+            -noprompt
         rm "/tmp/keystore.p12"
         keytool -import -file "/certs/ca.crt" -keystore "/opt/bitnami/solr/certs/truststore.p12" -storepass "${SOLR_SSL_TRUST_STORE_PASSWORD}" -noprompt
     else

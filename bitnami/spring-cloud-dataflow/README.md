@@ -74,7 +74,7 @@ helm uninstall my-release
 | --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------- |
 | `server.image.registry`                             | Spring Cloud Dataflow image registry                                                                                                       | `docker.io`                                          |
 | `server.image.repository`                           | Spring Cloud Dataflow image repository                                                                                                     | `bitnami/spring-cloud-dataflow`                      |
-| `server.image.tag`                                  | Spring Cloud Dataflow image tag (immutable tags are recommended)                                                                           | `2.10.3-debian-11-r4`                                |
+| `server.image.tag`                                  | Spring Cloud Dataflow image tag (immutable tags are recommended)                                                                           | `2.10.3-debian-11-r69`                               |
 | `server.image.digest`                               | Spring Cloud Dataflow image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                      | `""`                                                 |
 | `server.image.pullPolicy`                           | Spring Cloud Dataflow image pull policy                                                                                                    | `IfNotPresent`                                       |
 | `server.image.pullSecrets`                          | Specify docker-registry secret names as an array                                                                                           | `[]`                                                 |
@@ -82,7 +82,7 @@ helm uninstall my-release
 | `server.hostAliases`                                | Deployment pod host aliases                                                                                                                | `[]`                                                 |
 | `server.composedTaskRunner.image.registry`          | Spring Cloud Dataflow Composed Task Runner image registry                                                                                  | `docker.io`                                          |
 | `server.composedTaskRunner.image.repository`        | Spring Cloud Dataflow Composed Task Runner image repository                                                                                | `bitnami/spring-cloud-dataflow-composed-task-runner` |
-| `server.composedTaskRunner.image.tag`               | Spring Cloud Dataflow Composed Task Runner image tag (immutable tags are recommended)                                                      | `2.10.3-debian-11-r1`                                |
+| `server.composedTaskRunner.image.tag`               | Spring Cloud Dataflow Composed Task Runner image tag (immutable tags are recommended)                                                      | `2.10.3-debian-11-r76`                               |
 | `server.composedTaskRunner.image.digest`            | Spring Cloud Dataflow Composed Task Runner image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                                                 |
 | `server.configuration.streamingEnabled`             | Enables or disables streaming data processing                                                                                              | `true`                                               |
 | `server.configuration.batchEnabled`                 | Enables or disables batch data (tasks and schedules) processing                                                                            | `true`                                               |
@@ -192,7 +192,7 @@ helm uninstall my-release
 | `skipper.hostAliases`                        | Deployment pod host aliases                                                                                          | `[]`                           |
 | `skipper.image.registry`                     | Spring Cloud Skipper image registry                                                                                  | `docker.io`                    |
 | `skipper.image.repository`                   | Spring Cloud Skipper image repository                                                                                | `bitnami/spring-cloud-skipper` |
-| `skipper.image.tag`                          | Spring Cloud Skipper image tag (immutable tags are recommended)                                                      | `2.9.3-debian-11-r2`           |
+| `skipper.image.tag`                          | Spring Cloud Skipper image tag (immutable tags are recommended)                                                      | `2.9.3-debian-11-r81`          |
 | `skipper.image.digest`                       | Spring Cloud Skipper image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                           |
 | `skipper.image.pullPolicy`                   | Spring Cloud Skipper image pull policy                                                                               | `IfNotPresent`                 |
 | `skipper.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                     | `[]`                           |
@@ -313,7 +313,7 @@ helm uninstall my-release
 | `metrics.enabled`                            | Enable Prometheus metrics                                                                                                  | `false`                            |
 | `metrics.image.registry`                     | Prometheus Rsocket Proxy image registry                                                                                    | `docker.io`                        |
 | `metrics.image.repository`                   | Prometheus Rsocket Proxy image repository                                                                                  | `bitnami/prometheus-rsocket-proxy` |
-| `metrics.image.tag`                          | Prometheus Rsocket Proxy image tag (immutable tags are recommended)                                                        | `1.5.0-debian-11-r87`              |
+| `metrics.image.tag`                          | Prometheus Rsocket Proxy image tag (immutable tags are recommended)                                                        | `1.5.2-debian-11-r22`              |
 | `metrics.image.digest`                       | Prometheus Rsocket Proxy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag   | `""`                               |
 | `metrics.image.pullPolicy`                   | Prometheus Rsocket Proxy image pull policy                                                                                 | `IfNotPresent`                     |
 | `metrics.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                           | `[]`                               |
@@ -385,46 +385,50 @@ helm uninstall my-release
 
 ### Init Container parameters
 
-| Name                                 | Description                                                                                                                     | Value                 |
-| ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
-| `waitForBackends.enabled`            | Wait for the database and other services (such as Kafka or RabbitMQ) used when enabling streaming                               | `true`                |
-| `waitForBackends.image.registry`     | Init container wait-for-backend image registry                                                                                  | `docker.io`           |
-| `waitForBackends.image.repository`   | Init container wait-for-backend image name                                                                                      | `bitnami/kubectl`     |
-| `waitForBackends.image.tag`          | Init container wait-for-backend image tag                                                                                       | `1.25.9-debian-11-r9` |
-| `waitForBackends.image.digest`       | Init container wait-for-backend image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
-| `waitForBackends.image.pullPolicy`   | Init container wait-for-backend image pull policy                                                                               | `IfNotPresent`        |
-| `waitForBackends.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                | `[]`                  |
-| `waitForBackends.resources.limits`   | Init container wait-for-backend resource limits                                                                                 | `{}`                  |
-| `waitForBackends.resources.requests` | Init container wait-for-backend resource requests                                                                               | `{}`                  |
+| Name                                 | Description                                                                                                                     | Value                   |
+| ------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
+| `waitForBackends.enabled`            | Wait for the database and other services (such as Kafka or RabbitMQ) used when enabling streaming                               | `true`                  |
+| `waitForBackends.image.registry`     | Init container wait-for-backend image registry                                                                                  | `docker.io`             |
+| `waitForBackends.image.repository`   | Init container wait-for-backend image name                                                                                      | `bitnami/kubectl`       |
+| `waitForBackends.image.tag`          | Init container wait-for-backend image tag                                                                                       | `1.25.12-debian-11-r11` |
+| `waitForBackends.image.digest`       | Init container wait-for-backend image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
+| `waitForBackends.image.pullPolicy`   | Init container wait-for-backend image pull policy                                                                               | `IfNotPresent`          |
+| `waitForBackends.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                | `[]`                    |
+| `waitForBackends.resources.limits`   | Init container wait-for-backend resource limits                                                                                 | `{}`                    |
+| `waitForBackends.resources.requests` | Init container wait-for-backend resource requests                                                                               | `{}`                    |
 
 ### Database parameters
 
-| Name                                      | Description                                                                                         | Value        |
-| ----------------------------------------- | --------------------------------------------------------------------------------------------------- | ------------ |
-| `mariadb.enabled`                         | Enable/disable MariaDB chart installation                                                           | `true`       |
-| `mariadb.architecture`                    | MariaDB architecture. Allowed values: `standalone` or `replication`                                 | `standalone` |
-| `mariadb.auth.rootPassword`               | Password for the MariaDB `root` user                                                                | `""`         |
-| `mariadb.auth.username`                   | Username of new user to create                                                                      | `dataflow`   |
-| `mariadb.auth.password`                   | Password for the new user                                                                           | `change-me`  |
-| `mariadb.auth.database`                   | Database name to create                                                                             | `dataflow`   |
-| `mariadb.auth.forcePassword`              | Force users to specify required passwords in the database                                           | `false`      |
-| `mariadb.auth.usePasswordFiles`           | Mount credentials as a file instead of using an environment variable                                | `false`      |
-| `mariadb.initdbScripts`                   | Specify dictionary of scripts to be run at first boot                                               | `{}`         |
-| `flyway.enabled`                          | Enable/disable flyway running Dataflow and Skipper Database creation scripts on startup             | `true`       |
-| `externalDatabase.host`                   | Host of the external database                                                                       | `localhost`  |
-| `externalDatabase.port`                   | External database port number                                                                       | `3306`       |
-| `externalDatabase.driver`                 | The fully qualified name of the JDBC Driver class                                                   | `""`         |
-| `externalDatabase.scheme`                 | The scheme is a vendor-specific or shared protocol string that follows the "jdbc:" of the URL       | `""`         |
-| `externalDatabase.password`               | Password for the above username                                                                     | `""`         |
-| `externalDatabase.existingPasswordSecret` | Existing secret with database password                                                              | `""`         |
-| `externalDatabase.existingPasswordKey`    | Key of the existing secret with database password, defaults to `datasource-password`                | `""`         |
-| `externalDatabase.dataflow.url`           | JDBC URL for dataflow server. Overrides external scheme, host, port, database, and jdbc parameters. | `""`         |
-| `externalDatabase.dataflow.database`      | Name of the existing database to be used by Dataflow server                                         | `dataflow`   |
-| `externalDatabase.dataflow.username`      | Existing username in the external db to be used by Dataflow server                                  | `dataflow`   |
-| `externalDatabase.skipper.url`            | JDBC URL for skipper. Overrides external scheme, host, port, database, and jdbc parameters.         | `""`         |
-| `externalDatabase.skipper.database`       | Name of the existing database to be used by Skipper server                                          | `skipper`    |
-| `externalDatabase.skipper.username`       | Existing username in the external db to be used by Skipper server                                   | `skipper`    |
-| `externalDatabase.hibernateDialect`       | Hibernate Dialect used by Dataflow/Skipper servers                                                  | `""`         |
+| Name                                      | Description                                                                                             | Value                   |
+| ----------------------------------------- | ------------------------------------------------------------------------------------------------------- | ----------------------- |
+| `mariadb.enabled`                         | Enable/disable MariaDB chart installation                                                               | `true`                  |
+| `mariadb.image.registry`                  | MariaDB image registry                                                                                  | `docker.io`             |
+| `mariadb.image.repository`                | MariaDB image repository                                                                                | `bitnami/mariadb`       |
+| `mariadb.image.tag`                       | MariaDB image tag (immutable tags are recommended)                                                      | `10.11.4-debian-11-r51` |
+| `mariadb.image.digest`                    | MariaDB image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
+| `mariadb.architecture`                    | MariaDB architecture. Allowed values: `standalone` or `replication`                                     | `standalone`            |
+| `mariadb.auth.rootPassword`               | Password for the MariaDB `root` user                                                                    | `""`                    |
+| `mariadb.auth.username`                   | Username of new user to create                                                                          | `dataflow`              |
+| `mariadb.auth.password`                   | Password for the new user                                                                               | `change-me`             |
+| `mariadb.auth.database`                   | Database name to create                                                                                 | `dataflow`              |
+| `mariadb.auth.forcePassword`              | Force users to specify required passwords in the database                                               | `false`                 |
+| `mariadb.auth.usePasswordFiles`           | Mount credentials as a file instead of using an environment variable                                    | `false`                 |
+| `mariadb.initdbScripts`                   | Specify dictionary of scripts to be run at first boot                                                   | `{}`                    |
+| `flyway.enabled`                          | Enable/disable flyway running Dataflow and Skipper Database creation scripts on startup                 | `true`                  |
+| `externalDatabase.host`                   | Host of the external database                                                                           | `localhost`             |
+| `externalDatabase.port`                   | External database port number                                                                           | `3306`                  |
+| `externalDatabase.driver`                 | The fully qualified name of the JDBC Driver class                                                       | `""`                    |
+| `externalDatabase.scheme`                 | The scheme is a vendor-specific or shared protocol string that follows the "jdbc:" of the URL           | `""`                    |
+| `externalDatabase.password`               | Password for the above username                                                                         | `""`                    |
+| `externalDatabase.existingPasswordSecret` | Existing secret with database password                                                                  | `""`                    |
+| `externalDatabase.existingPasswordKey`    | Key of the existing secret with database password, defaults to `datasource-password`                    | `""`                    |
+| `externalDatabase.dataflow.url`           | JDBC URL for dataflow server. Overrides external scheme, host, port, database, and jdbc parameters.     | `""`                    |
+| `externalDatabase.dataflow.database`      | Name of the existing database to be used by Dataflow server                                             | `dataflow`              |
+| `externalDatabase.dataflow.username`      | Existing username in the external db to be used by Dataflow server                                      | `dataflow`              |
+| `externalDatabase.skipper.url`            | JDBC URL for skipper. Overrides external scheme, host, port, database, and jdbc parameters.             | `""`                    |
+| `externalDatabase.skipper.database`       | Name of the existing database to be used by Skipper server                                              | `skipper`               |
+| `externalDatabase.skipper.username`       | Existing username in the external db to be used by Skipper server                                       | `skipper`               |
+| `externalDatabase.hibernateDialect`       | Hibernate Dialect used by Dataflow/Skipper servers                                                      | `""`                    |
 
 ### RabbitMQ chart parameters
 
@@ -442,14 +446,14 @@ helm uninstall my-release
 
 ### Kafka chart parameters
 
-| Name                                  | Description                             | Value            |
-| ------------------------------------- | --------------------------------------- | ---------------- |
-| `kafka.enabled`                       | Enable/disable Kafka chart installation | `false`          |
-| `kafka.replicaCount`                  | Number of Kafka brokers                 | `1`              |
-| `kafka.offsetsTopicReplicationFactor` | Kafka Secret Key                        | `1`              |
-| `externalKafka.enabled`               | Enable/disable external Kafka           | `false`          |
-| `externalKafka.brokers`               | External Kafka brokers                  | `localhost:9092` |
-| `externalKafka.zkNodes`               | External Zookeeper nodes                | `localhost:2181` |
+| Name                            | Description                                                  | Value                                |
+| ------------------------------- | ------------------------------------------------------------ | ------------------------------------ |
+| `kafka.enabled`                 | Enable/disable Kafka chart installation                      | `false`                              |
+| `kafka.controller.replicaCount` | Number of Kafka controller+brokers nodes                     | `1`                                  |
+| `kafka.extraConfig`             | Kafka extra configuration to be appended to dynamic settings | `offsets.topic.replication.factor=1` |
+| `externalKafka.enabled`         | Enable/disable external Kafka                                | `false`                              |
+| `externalKafka.brokers`         | External Kafka brokers                                       | `localhost:9092`                     |
+| `externalKafka.zkNodes`         | External Zookeeper nodes                                     | `localhost:2181`                     |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -657,6 +661,15 @@ Find more information about how to deal with common errors related to Bitnami He
 ## Upgrading
 
 If you enabled RabbitMQ chart to be used as the messaging solution for Skipper to manage streaming content, then it's necessary to set the `rabbitmq.auth.password` and `rabbitmq.auth.erlangCookie` parameters when upgrading for readiness/liveness probes to work properly. Inspect the RabbitMQ secret to obtain the password and the Erlang cookie, then you can upgrade your chart using the command below:
+
+### To 22.0.0
+
+This major updates the Kafka subchart to its newest major, 24.0.0. This new version refactors the Kafka chart architecture and requires manual actions during the upgrade. For more information on this subchart's major, please refer to [Kafka upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/kafka#to-2400).
+
+Most notable changes affecting the default values of the spring-cloud-dataflow chart are:
+
+- The value `kafka.replicaCount` has been renamed as `kafka.controller.replicaCount`.
+- The value `kafka.offsetsTopicReplicationFactor`, with default value `1` is now configured using the new value `kafka.extraConfig`.
 
 ### To 18.0.0
 
