@@ -18,12 +18,8 @@ Access the pod you want to debug by executing
 
   kubectl exec --namespace {{ include "common.names.namespace" . }} -ti <NAME OF THE POD> -- bash
 
-In order to replicate the container startup scripts execute this command:
-
-    %%ENTRYPOINT and CMD from main container%%
-
 {{- else }}
-
+{{- if .Values.client.enabled }}
 {{- if .Values.source.launchCommand }}
 The following command will be executed:
 
@@ -45,6 +41,37 @@ To run it, you can either deploy again using the `source.launchCommand` option t
     kubectl exec -ti [POD_NAME] bash
 
 3. Execute your script as you would normally do.
+{{- end }}
+
+The worker nodes have been deployed and are accessible as follows:
+
+From inside the cluster:
+
+      {{- $workers := .Values.worker.replicaCount | int }}
+      {{- range $i, $e := until $workers }}
+        {{ include "deepspeed.v0.worker.fullname" $ }}-{{ $i }}.{{ printf "%s-headless" (include "deepspeed.v0.worker.fullname" $) }}:{{ $.Values.worker.containerPorts.ssh }}
+      {{- end }}
+
+{{- if and .Values.worker.externalAccess.enabled (eq .Values.worker.externalAccess.service.type "LoadBalancer") }}
+
+From outside the cluster:
+
+NOTE: It may take a few minutes for the LoadBalancer IPs to be available.
+        Watch the status with: 'kubectl get svc --namespace {{ include "common.names.namespace" . }} -l "app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=worker,pod" -w'
+
+    Worker domain: You will have a different external IP for each Kafka broker. You can get the list of external IPs using the command below:
+
+        echo "$(kubectl get svc --namespace {{ include "common.names.namespace" . }} -l "app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=worker,pod" -o jsonpath='{.items[*].status.loadBalancer.ingress[0].ip}' | tr ' ' '\n')"
+
+    Worker port: {{ .Values.worker.externalAccess.service.ports.ssh }}
+
+{{- end }}
+
+For accessing via ssh get the SSH private key as follows:
+
+kubectl get secret --namespace {{ include "common.names.namespace" . }} {{ include "deepspeed.v0.ssh.keySecretName" . }} -o jsonpath="{.data.id_rsa}" | base64 -d > id_rsa
+
+Then configure your SSH client to use that key.
 {{- end }}
 {{- end }}
 {{ include "deepspeed.v0.validateValues" . }}

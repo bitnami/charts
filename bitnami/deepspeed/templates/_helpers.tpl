@@ -235,6 +235,7 @@ Return the definition of the git clone init container
     - -ec
     - |
       #!/bin/bash
+      rm -rf /app/*
       [[ -f "/opt/bitnami/scripts/git/entrypoint.sh" ]] && source "/opt/bitnami/scripts/git/entrypoint.sh"
       git clone {{ .Values.source.git.repository }} {{ if .Values.source.git.revision }}--branch {{ .Values.source.git.revision }}{{ end }} /app
   volumeMounts:
