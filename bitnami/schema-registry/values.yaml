@@ -655,6 +655,13 @@ kafka:
   ##
   extraConfig: |-
     offsets.topic.replication.factor=1
+  ## @param kafka.sasl.client.users Comma-separated list of usernames for Kafka client listener when SASL is enabled
+  ## @param kafka.sasl.client.passwords Comma-separated list of passwords for client listener when SASL is enabled, must match the number of client.users
+  ##
+  client:
+    users:
+      - user
+    passwords: ""
 ##
 ## External Kafka Configuration
 ## All of these values are only used when kafka.enabled is set to false
