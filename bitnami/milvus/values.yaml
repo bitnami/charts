@@ -156,10 +156,10 @@ milvus:
           {{- $controllerReplicas = $.Values.kafka.controller.replicaCount | int }}
           {{- end }}
           {{- range $i, $_e := until $brokerReplicas }}
-        - {{ printf "%s-%d.%s:%v" (include "milvus.kafka.fullname" $ ) $i (include "milvus.kafka.broker.headlessServiceName" $) ( include "milvus.kafka.port" $ ) }}
+        - {{ printf "%s-broker-%d.%s:%v" (include "milvus.kafka.fullname" $ ) $i (include "milvus.kafka.broker.headlessServiceName" $) ( include "milvus.kafka.port" $ ) }}
           {{- end }}
           {{- range $i, $_e := until $controllerReplicas }}
-        - {{ printf "%s-%d.%s:%v" (include "milvus.kafka.fullname" $ ) $i (include "milvus.kafka.controller.headlessServiceName" $) ( include "milvus.kafka.port" $ ) }}
+        - {{ printf "%s-controller-%d.%s:%v" (include "milvus.kafka.fullname" $ ) $i (include "milvus.kafka.controller.headlessServiceName" $) ( include "milvus.kafka.port" $ ) }}
           {{- end }}
         {{- else }}
         {{- range $node := .Values.externalKafka.servers }}
