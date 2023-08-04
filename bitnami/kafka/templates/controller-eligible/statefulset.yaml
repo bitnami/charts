@@ -273,6 +273,8 @@ spec:
             - name: kafka-config
               mountPath: /opt/bitnami/kafka/config/server.properties
               subPath: server.properties
+            - name: tmp
+              mountPath: /tmp
             {{- if or .Values.log4j .Values.existingLog4jConfigMap }}
             - name: log4j-config
               mountPath: /opt/bitnami/kafka/config/log4j.properties
@@ -331,6 +333,8 @@ spec:
           configMap:
             name: {{ include "kafka.controller.configmapName" . }}
         - name: kafka-config
+          emptyDir: {}
+        - name: tmp
           emptyDir: {}
         - name: scripts
           configMap:
