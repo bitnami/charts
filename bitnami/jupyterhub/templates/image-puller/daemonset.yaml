@@ -71,8 +71,8 @@ spec:
       initContainers:
       {{- range $index, $image := (list .Values.singleuser.image .Values.auxiliaryImage.image) }}
         - name: pull-{{ $index }}
-          image: {{ include "common.images.image" (dict "imageRoot" $image "global" $.Values.global) }}
-          imagePullPolicy: {{ $image.pullPolicy }}
+          image: {{ include "common.images.image" (dict "imageRoot" . "global" $.Values.global) }}
+          imagePullPolicy: {{ .pullPolicy }}
           {{- if $.Values.imagePuller.resources }}
           resources: {{- toYaml $.Values.imagePuller.resources | nindent 12 }}
           {{- end }}

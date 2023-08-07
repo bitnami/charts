@@ -576,7 +576,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ### To 5.0.0
 
-This major version adds the ability to pre-pull extra images through the imagePuller daemonset, which previously supported pulling only a few fixed images. extraImages can be specified through the auxiliaryImage.extraImages configuration.
+This major version adds the ability to pre-pull extra images through the imagePuller daemonset, which previously supported pulling only a few fixed images. extraImages can be specified through the auxiliaryImage.extraImages configuration. The auxiliaryImage values section to specify the singular image previously has been modified to auxiliaryImage.image.
 
 ### To 3.0.0
 
