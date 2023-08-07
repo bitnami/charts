@@ -8,7 +8,7 @@ SPDX-License-Identifier: APACHE-2.0
 {{- $clusterDomain := .Values.clusterDomain }}
 {{- $kafkaProtocol := upper (ternary .Values.kafka.listeners.client.protocol .Values.externalKafka.listener.protocol .Values.kafka.enabled) }}
 {{- $kafkaBrokerReplicaCount := int .Values.kafka.broker.replicaCount }}
-{{- $kafkaControllerReplicaCount := ternary 0 (int .Values.kafka.broker.replicaCount) (or (not .Values.kafka.kraft.enabled) (.Values.kafka.controller.controllerOnly)) }}
+{{- $kafkaControllerReplicaCount := ternary 0 (int .Values.kafka.controller.replicaCount) (or (not .Values.kafka.kraft.enabled) (.Values.kafka.controller.controllerOnly)) }}
 {{- $kafkaFullname := include "schema-registry.kafka.fullname" . }}
 {{- $kafkaPort := int .Values.kafka.service.ports.client }}
 apiVersion: {{ include "common.capabilities.statefulset.apiVersion" $ }}
