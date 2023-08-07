@@ -219,17 +219,20 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Kafka chart parameters
 
-| Name                                     | Description                                                                                                                   | Value                            |
-| ---------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | -------------------------------- |
-| `kafka.enabled`                          | Enable/disable Kafka chart installation                                                                                       | `true`                           |
-| `kafka.replicaCount`                     | Number of Kafka brokers                                                                                                       | `1`                              |
-| `kafka.auth.clientProtocol`              | Authentication protocol for communications with clients. Allowed protocols: `plaintext`, `tls`, `mtls`, `sasl` and `sasl_tls` | `plaintext`                      |
-| `kafka.service.ports.client`             | Kafka svc port for client connections                                                                                         | `9092`                           |
-| `externalKafka.brokers`                  | Array of Kafka brokers to connect to. Format: protocol://broker_hostname:port                                                 | `["PLAINTEXT://localhost:9092"]` |
-| `externalKafka.auth.protocol`            | Authentication protocol. Allowed protocols: plaintext, tls, sasl and sasl_tls                                                 | `plaintext`                      |
-| `externalKafka.auth.jaas.user`           | User for SASL authentication                                                                                                  | `user`                           |
-| `externalKafka.auth.jaas.password`       | Password for SASL authentication                                                                                              | `""`                             |
-| `externalKafka.auth.jaas.existingSecret` | Name of the existing secret containing a password for SASL authentication (under the key named "client-passwords")            | `""`                             |
+| Name                                | Description                                                                                                                  | Value                                |
+| ----------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | ------------------------------------ |
+| `kafka.enabled`                     | Enable/disable Kafka chart installation                                                                                      | `true`                               |
+| `kafka.controller.replicaCount`     | Number of Kafka controller-eligible (controller+broker) nodes                                                                | `1`                                  |
+| `kafka.listeners.client.protocol`   | Authentication protocol for communications with clients. Allowed protocols: `PLAINTEXT`, `SASL_PLAINTEXT`, `SASL_SSL`, `SSL` | `PLAINTEXT`                          |
+| `kafka.service.ports.client`        | Kafka svc port for client connections                                                                                        | `9092`                               |
+| `kafka.extraConfig`                 | Additional configuration to be appended at the end of the generated Kafka configuration file.                                | `offsets.topic.replication.factor=1` |
+| `kafka.sasl.client.users`           | Comma-separated list of usernames for Kafka client listener when SASL is enabled                                             | `["user"]`                           |
+| `kafka.sasl.client.passwords`       | Comma-separated list of passwords for client listener when SASL is enabled, must match the number of client.users            | `""`                                 |
+| `externalKafka.brokers`             | Array of Kafka brokers to connect to. Format: protocol://broker_hostname:port                                                | `["PLAINTEXT://localhost:9092"]`     |
+| `externalKafka.listener.protocol`   | Kafka listener protocol. Allowed protocols: PLAINTEXT, SASL_PLAINTEXT, SASL_SSL and SSL                                      | `PLAINTEXT`                          |
+| `externalKafka.sasl.user`           | User for SASL authentication                                                                                                 | `user`                               |
+| `externalKafka.sasl.password`       | Password for SASL authentication                                                                                             | `""`                                 |
+| `externalKafka.sasl.existingSecret` | Name of the existing secret containing a password for SASL authentication (under the key named "client-passwords")           | `""`                                 |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -400,6 +403,17 @@ For each host indicated at `ingress.extraHosts`, please indicate a `name`, `path
 For annotations, please see [this document](https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md). Not all annotations are supported by all ingress controllers, but this document does a good job of indicating which annotation is supported by many popular ingress controllers.
 
 ## Upgrading
+
+### To 13.0.0
+
+This major updates the Kafka subchart to its newest major, 24.0.0. This new version refactors the Kafka chart architecture and requires manual actions during the upgrade. For more information on this subchart's major, please refer to [Kafka upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/kafka#to-2400).
+
+Additionally, `externalKafka` parameters have been renamed to match the new kafka format:
+
+- `externalKafka.auth.protocol` has been renamed as `externalKafka.listener.protocol`.
+- `externalKafka.auth.jaas.user` has been renamed as `externalKafka.sasl.user`.
+- `externalKafka.auth.jaas.password` has been renamed as `externalKafka.sasl.password`.
+- `externalKafka.auth.jaas.existingSecret` has been renamed as `externalKafka.sasl.existingSecret`.
 
 ### To 10.0.0
 

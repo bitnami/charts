@@ -69,26 +69,6 @@ spec:
     {{- toYaml . | nindent 4 }}
   {{- end }}
   {{- end }}
-  {{- if .Values.grafana.sidecars }}
-  containers:
-    {{- include "common.tplvalues.render" ( dict "value" .Values.grafana.sidecars "context" $) | nindent 4 }}
-    {{- if .Values.grafana.livenessProbe.enabled }}
-    livenessProbeSpec:
-      initialDelaySeconds: {{ .Values.grafana.livenessProbe.initialDelaySeconds }}
-      periodSeconds: {{ .Values.grafana.livenessProbe.periodSeconds }}
-      timeoutSeconds: {{ .Values.grafana.livenessProbe.timeoutSeconds }}
-      successThreshold: {{ .Values.grafana.livenessProbe.successThreshold }}
-      failureThreshold: {{ .Values.grafana.livenessProbe.failureThreshold }}
-    {{- end }}
-    {{- if .Values.grafana.readinessProbe.enabled }}
-    readinessProbeSpec:
-      initialDelaySeconds: {{ .Values.grafana.readinessProbe.initialDelaySeconds }}
-      periodSeconds: {{ .Values.grafana.readinessProbe.periodSeconds }}
-      timeoutSeconds: {{ .Values.grafana.readinessProbe.timeoutSeconds }}
-      successThreshold: {{ .Values.grafana.readinessProbe.successThreshold }}
-      failureThreshold: {{ .Values.grafana.readinessProbe.failureThreshold }}
-    {{- end }}
-  {{- end }}
   deployment:
     metadata:
       {{- if .Values.commonAnnotations }}
@@ -120,15 +100,42 @@ spec:
             - name: grafana
               image: {{ include "common.images.image" (dict "imageRoot" .Values.grafana.image "global" .Values.global) }}
               imagePullPolicy: {{ .Values.grafana.image.pullPolicy }}
+              {{- if .Values.grafana.envFrom }}
+              envFrom: {{- toYaml .Values.grafana.envFrom | nindent 16 }}
+              {{- end }}
               {{- if .Values.grafana.containerSecurityContext.enabled }}
               securityContext: {{- omit .Values.grafana.containerSecurityContext "enabled" | toYaml | nindent 16 }}
               {{- end }}
               {{- if .Values.grafana.resources }}
               resources: {{- toYaml .Values.grafana.resources | nindent 16 }}
               {{- end }}
-              {{- if .Values.grafana.envFrom }}
-              envFrom: {{- toYaml .Values.grafana.envFrom | nindent 16 }}
+              {{- if .Values.grafana.livenessProbe.enabled }}
+              livenessProbe:
+                initialDelaySeconds: {{ .Values.grafana.livenessProbe.initialDelaySeconds }}
+                periodSeconds: {{ .Values.grafana.livenessProbe.periodSeconds }}
+                timeoutSeconds: {{ .Values.grafana.livenessProbe.timeoutSeconds }}
+                successThreshold: {{ .Values.grafana.livenessProbe.successThreshold }}
+                failureThreshold: {{ .Values.grafana.livenessProbe.failureThreshold }}
+                httpGet:
+                  path: /api/health
+                  port: 3000
+                  scheme: HTTP
               {{- end }}
+              {{- if .Values.grafana.readinessProbe.enabled }}
+              readinessProbe:
+                initialDelaySeconds: {{ .Values.grafana.readinessProbe.initialDelaySeconds }}
+                periodSeconds: {{ .Values.grafana.readinessProbe.periodSeconds }}
+                timeoutSeconds: {{ .Values.grafana.readinessProbe.timeoutSeconds }}
+                successThreshold: {{ .Values.grafana.readinessProbe.successThreshold }}
+                failureThreshold: {{ .Values.grafana.readinessProbe.failureThreshold }}
+                httpGet:
+                  path: /api/health
+                  port: 3000
+                  scheme: HTTP
+              {{- end }}
+            {{- if .Values.grafana.sidecars }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.grafana.sidecars "context" $) | nindent 12 }}
+            {{- end }}
     {{- if .Values.grafana.tolerations }}
     tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.tolerations "context" $) | nindent 6 }}
     {{- end }}
