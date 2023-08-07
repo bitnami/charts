@@ -21,8 +21,8 @@ metadata:
 spec:
   podSelector:
     matchLabels: {{ include "common.labels.matchLabels" . | nindent 6 }}
-    app.kubernetes.io/part-of: deepspeed
-    app.kubernetes.io/component: client
+      app.kubernetes.io/part-of: deepspeed
+      app.kubernetes.io/component: client
   policyTypes:
     - Ingress
     - Egress

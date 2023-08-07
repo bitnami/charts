@@ -303,7 +303,7 @@
                         "periodSeconds": {
                             "type": "number",
                             "description": "Period seconds for livenessProbe",
-                            "default": 10
+                            "default": 30
                         },
                         "timeoutSeconds": {
                             "type": "number",
@@ -338,7 +338,7 @@
                         "periodSeconds": {
                             "type": "number",
                             "description": "Period seconds for readinessProbe",
-                            "default": 10
+                            "default": 30
                         },
                         "timeoutSeconds": {
                             "type": "number",
@@ -373,7 +373,7 @@
                         "periodSeconds": {
                             "type": "number",
                             "description": "Period seconds for startupProbe",
-                            "default": 10
+                            "default": 30
                         },
                         "timeoutSeconds": {
                             "type": "number",
@@ -811,7 +811,7 @@
                         "periodSeconds": {
                             "type": "number",
                             "description": "Period seconds for livenessProbe",
-                            "default": 10
+                            "default": 30
                         },
                         "timeoutSeconds": {
                             "type": "number",
@@ -846,7 +846,7 @@
                         "periodSeconds": {
                             "type": "number",
                             "description": "Period seconds for readinessProbe",
-                            "default": 10
+                            "default": 30
                         },
                         "timeoutSeconds": {
                             "type": "number",
@@ -881,7 +881,7 @@
                         "periodSeconds": {
                             "type": "number",
                             "description": "Period seconds for startupProbe",
-                            "default": 10
+                            "default": 30
                         },
                         "timeoutSeconds": {
                             "type": "number",

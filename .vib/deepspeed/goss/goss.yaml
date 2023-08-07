@@ -6,7 +6,7 @@ file:
   /job/hostfile:
     exists: true
     contains:
-    {{ range $e, $i := until $nodes }}
+    {{- range $i, $e := until $nodes }}
       - /deepspeed-worker-{{ $i }}/
     {{ end }}
   {{ .Vars.client.persistence.mountPath }}:

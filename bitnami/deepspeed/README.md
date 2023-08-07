@@ -122,19 +122,19 @@ The command removes all the Kubernetes components associated with the chart and 
 | `client.terminationGracePeriodSeconds`                     | Client termination grace period (in seconds)                                                     | `""`             |
 | `client.livenessProbe.enabled`                             | Enable livenessProbe on Client nodes                                                             | `true`           |
 | `client.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                          | `5`              |
-| `client.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                 | `10`             |
+| `client.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                 | `30`             |
 | `client.livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                | `20`             |
 | `client.livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                              | `5`              |
 | `client.livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                              | `1`              |
 | `client.readinessProbe.enabled`                            | Enable readinessProbe on Client nodes                                                            | `true`           |
 | `client.readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                         | `5`              |
-| `client.readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                | `10`             |
+| `client.readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                | `30`             |
 | `client.readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                               | `20`             |
 | `client.readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                             | `5`              |
 | `client.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                             | `1`              |
 | `client.startupProbe.enabled`                              | Enable startupProbe on Client containers                                                         | `false`          |
 | `client.startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                           | `5`              |
-| `client.startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                  | `10`             |
+| `client.startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                  | `30`             |
 | `client.startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                                 | `5`              |
 | `client.startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                               | `5`              |
 | `client.startupProbe.successThreshold`                     | Success threshold for startupProbe                                                               | `1`              |
@@ -214,19 +214,19 @@ The command removes all the Kubernetes components associated with the chart and 
 | `worker.containerPorts.ssh`                                | SSH port for Worker                                                                                | `2222`           |
 | `worker.livenessProbe.enabled`                             | Enable livenessProbe on Worker nodes                                                               | `true`           |
 | `worker.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                            | `5`              |
-| `worker.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                   | `10`             |
+| `worker.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                   | `30`             |
 | `worker.livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                  | `5`              |
 | `worker.livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                | `5`              |
 | `worker.livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                | `1`              |
 | `worker.readinessProbe.enabled`                            | Enable readinessProbe on Worker nodes                                                              | `true`           |
 | `worker.readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                           | `5`              |
-| `worker.readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                  | `10`             |
+| `worker.readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                  | `30`             |
 | `worker.readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                 | `5`              |
 | `worker.readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                               | `5`              |
 | `worker.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                               | `1`              |
 | `worker.startupProbe.enabled`                              | Enable startupProbe on Worker containers                                                           | `false`          |
 | `worker.startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                             | `5`              |
-| `worker.startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                    | `10`             |
+| `worker.startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                    | `30`             |
 | `worker.startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                                   | `5`              |
 | `worker.startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                 | `5`              |
 | `worker.startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                 | `1`              |
