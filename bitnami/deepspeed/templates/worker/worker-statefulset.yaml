@@ -13,7 +13,7 @@ metadata:
     app.kubernetes.io/part-of: deepspeed
     app.kubernetes.io/component: worker
     {{- if .Values.worker.labels }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.labels "context" $) | nindent 4 }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.worker.labels "context" $) | nindent 4 }}
     {{- end }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
