@@ -320,6 +320,10 @@ client:
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
+  ## @param client.labels Extra labels for the client deployment
+  ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+  ##
+  labels: {}
   ## @param client.podLabels Extra labels for client pods
   ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
   ##

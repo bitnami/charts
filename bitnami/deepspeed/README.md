@@ -156,6 +156,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `client.lifecycleHooks`                                    | for the client container(s) to automate configuration before or after startup                    | `{}`             |
 | `client.runtimeClassName`                                  | Name of the runtime class to be used by pod(s)                                                   | `""`             |
 | `client.hostAliases`                                       | client pods host aliases                                                                         | `[]`             |
+| `client.labels`                                            | Extra labels for the client deployment                                                           | `{}`             |
 | `client.podLabels`                                         | Extra labels for client pods                                                                     | `{}`             |
 | `client.podAnnotations`                                    | Annotations for client pods                                                                      | `{}`             |
 | `client.podAffinityPreset`                                 | Pod affinity preset. Ignored if `client.affinity` is set. Allowed values: `soft` or `hard`       | `""`             |

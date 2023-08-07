@@ -513,6 +513,11 @@
                     "default": [],
                     "items": {}
                 },
+                "labels": {
+                    "type": "object",
+                    "description": "Extra labels for the client deployment",
+                    "default": {}
+                },
                 "podLabels": {
                     "type": "object",
                     "description": "Extra labels for client pods",
