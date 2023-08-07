@@ -463,14 +463,15 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Auxiliary image parameters
 
-| Name                         | Description                                                                                               | Value              |
-| ---------------------------- | --------------------------------------------------------------------------------------------------------- | ------------------ |
-| `auxiliaryImage.registry`    | Auxiliary image registry                                                                                  | `docker.io`        |
-| `auxiliaryImage.repository`  | Auxiliary image repository                                                                                | `bitnami/os-shell` |
-| `auxiliaryImage.tag`         | Auxiliary image tag (immutabe tags are recommended)                                                       | `11-debian-11-r25` |
-| `auxiliaryImage.digest`      | Auxiliary image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`               |
-| `auxiliaryImage.pullPolicy`  | Auxiliary image pull policy                                                                               | `IfNotPresent`     |
-| `auxiliaryImage.pullSecrets` | Auxiliary image pull secrets                                                                              | `[]`               |
+| Name                               | Description                                                                                               | Value              |
+| ---------------------------------- | --------------------------------------------------------------------------------------------------------- | ------------------ |
+| `auxiliaryImage.image.registry`    | Auxiliary image registry                                                                                  | `docker.io`        |
+| `auxiliaryImage.image.repository`  | Auxiliary image repository                                                                                | `bitnami/os-shell` |
+| `auxiliaryImage.image.tag`         | Auxiliary image tag (immutabe tags are recommended)                                                       | `11-debian-11-r25` |
+| `auxiliaryImage.image.digest`      | Auxiliary image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`               |
+| `auxiliaryImage.image.pullPolicy`  | Auxiliary image pull policy                                                                               | `IfNotPresent`     |
+| `auxiliaryImage.image.pullSecrets` | Auxiliary image pull secrets                                                                              | `[]`               |
+| `auxiliaryImage.extraImages`       | Extra Images that should be pulled by imagePuller                                                         | `[]`               |
 
 ### JupyterHub database parameters
 
@@ -572,6 +573,10 @@ There are cases where you may want to deploy extra objects, such a ConfigMap con
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 5.0.0
+
+This major version adds the ability to pre-pull extra images through the imagePuller daemonset, which previously supported pulling only a few fixed images. extraImages can be specified through the auxiliaryImage.extraImages configuration.
 
 ### To 3.0.0
 

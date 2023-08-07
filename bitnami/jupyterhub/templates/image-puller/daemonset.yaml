@@ -69,11 +69,26 @@ spec:
       terminationGracePeriodSeconds: {{ .Values.imagePuller.terminationGracePeriodSeconds }}
       {{- end }}
       initContainers:
-      {{- range $index, $image := (list .Values.singleuser.image .Values.auxiliaryImage) }}
+      {{- range $index, $image := (list .Values.singleuser.image .Values.auxiliaryImage.image) }}
         - name: pull-{{ $index }}
-          image: {{ include "common.images.image" (dict "imageRoot" . "global" $.Values.global) }}
-          imagePullPolicy: {{ .pullPolicy }}
+          image: {{ include "common.images.image" (dict "imageRoot" $image "global" $.Values.global) }}
+          imagePullPolicy: {{ $image.pullPolicy }}
           {{- if $.Values.imagePuller.resources }}
+          resources: {{- toYaml $.Values.imagePuller.resources | nindent 12 }}
+          {{- end }}
+          command:
+            - /bin/sh
+            - -c
+            - echo "Pulling complete"
+          {{- if $.Values.imagePuller.containerSecurityContext.enabled }}
+          securityContext: {{- omit $.Values.imagePuller.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+      {{- end }}
+      {{- range $index, $image := .Values.auxiliaryImage.extraImages }}
+        - name: extra-pull-{{$index}}
+          image: {{ include "common.images.image" (dict "imageRoot" $image "global" $.Values.global) }}
+          imagePullPolicy: {{$image.pullPolicy}}
+                    {{- if $.Values.imagePuller.resources }}
           resources: {{- toYaml $.Values.imagePuller.resources | nindent 12 }}
           {{- end }}
           command:
@@ -90,7 +105,7 @@ spec:
       containers:
         - name: pause
           image: {{ template "jupyterhub.auxiliary.image" . }}
-          imagePullPolicy: {{ .Values.auxiliaryImage.pullPolicy }}
+          imagePullPolicy: {{ .Values.auxiliaryImage.image.pullPolicy }}
           {{- if .Values.imagePuller.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.imagePuller.lifecycleHooks "context" $) | nindent 12 }}
           {{- end }}

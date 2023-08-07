@@ -108,14 +108,14 @@ Return the proper hub image name
 Return the proper hub image name
 */}}
 {{- define "jupyterhub.auxiliary.image" -}}
-{{ include "common.images.image" (dict "imageRoot" .Values.auxiliaryImage "global" .Values.global) }}
+{{ include "common.images.image" (dict "imageRoot" .Values.auxiliaryImage.image "global" .Values.global) }}
 {{- end -}}
 
 {{/*
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "jupyterhub.imagePullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.hub.image .Values.proxy.image .Values.auxiliaryImage) "global" .Values.global) -}}
+{{- include "common.images.pullSecrets" (dict "images" (list .Values.hub.image .Values.proxy.image .Values.auxiliaryImage.image) "global" .Values.global) -}}
 {{- end -}}
 
 {{/*
@@ -148,7 +148,7 @@ Return the proper Docker Image Registry Secret Names
 Return the proper Docker Image Registry Secret Names list
 */}}
 {{- define "jupyterhub.imagePullSecrets.list" -}}
-{{- include "jupyterhub.imagePullSecretsList" (dict "images" (list .Values.hub.image .Values.proxy.image .Values.auxiliaryImage) "global" .Values.global) -}}
+{{- include "jupyterhub.imagePullSecretsList" (dict "images" (list .Values.hub.image .Values.proxy.image .Values.auxiliaryImage.image) "global" .Values.global) -}}
 {{- end -}}
 
 {{/*
