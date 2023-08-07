@@ -8,6 +8,7 @@ import { random } from '../support/utils';
 import body from '../fixtures/documents.json';
 
 it('can check cluster health', () => {
+  cy.wait(15000);
   cy.request({
     method: 'GET',
     url: '/_cluster/health',
