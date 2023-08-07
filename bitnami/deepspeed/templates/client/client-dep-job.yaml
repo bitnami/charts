@@ -19,8 +19,8 @@ metadata:
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/part-of: deepspeed
     app.kubernetes.io/component: client
-    {{- if .Values.worker.labels }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.worker.labels "context" $) | nindent 4 }}
+    {{- if .Values.client.labels }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.client.labels "context" $) | nindent 4 }}
     {{- end }}
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
@@ -30,7 +30,7 @@ spec:
     matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
       app.kubernetes.io/part-of: deepspeed
       app.kubernetes.io/component: client
-  {{- if .Values.useJob }}
+  {{- if .Values.client.useJob }}
   backoffLimit: {{ .Values.client.backoffLimit }}
   {{- else }}
   {{- if .Values.client.updateStrategy }}

@@ -55,7 +55,7 @@ spec:
   sessionAffinity: {{ $root.Values.worker.externalAccess.service.sessionAffinity }}
   {{- end }}
   {{- if $root.Values.worker.externalAccess.service.sessionAffinityConfig }}
-  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" $root.Values.service.sessionAffinityConfig "context" $root) | nindent 4 }}
+  sessionAffinityConfig: {{- include "common.tplvalues.render" (dict "value" $root.Values.externalAccess.service.sessionAffinityConfig "context" $root) | nindent 4 }}
   {{- end }}
   ports:
     - name: tcp-ssh

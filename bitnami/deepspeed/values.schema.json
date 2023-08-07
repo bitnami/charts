@@ -715,6 +715,11 @@
                             "description": "Custom PVC data source",
                             "default": {}
                         },
+                        "selector": {
+                            "type": "object",
+                            "description": "Selector to match an existing Persistent Volume for the client data PVC",
+                            "default": {}
+                        },
                         "size": {
                             "type": "string",
                             "description": "Size of data volume",
@@ -1338,6 +1343,11 @@
                             "items": {
                                 "type": "string"
                             }
+                        },
+                        "selector": {
+                            "type": "object",
+                            "description": "Selector to match an existing Persistent Volume for the worker data PVC",
+                            "default": {}
                         },
                         "dataSource": {
                             "type": "object",

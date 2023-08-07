@@ -40,8 +40,10 @@ spec:
       to:
         - podSelector:
             matchLabels: {{- include "common.labels.standard" . | nindent 14 }}
-              {{- if .Values.podLabels }}
-              {{- include "common.tplvalues.render" (dict "value" .Values.podLabels "context" $) | nindent 14 }}
+              app.kubernetes.io/part-of: deepspeed
+              app.kubernetes.io/component: worker
+              {{- if .Values.worker.podLabels }}
+              {{- include "common.tplvalues.render" (dict "value" .Values.worker.podLabels "context" $) | nindent 14 }}
               {{- end }}
     {{- if .Values.worker.networkPolicy.extraEgress }}
     {{- include "common.tplvalues.render" (dict "value" .Values.worker.networkPolicy.extraEgress "context" $) | nindent 4 }}

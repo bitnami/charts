@@ -20,9 +20,9 @@ metadata:
   {{- end }}
 data:
   hostfile: |
-    {{- if .Values.overrideHostFile }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.config.overrideHostFile "context" $) | indent 4 }}
+    {{- if .Values.config.overrideHostFile }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.config.overrideHostFile "context" $) | nindent 4 }}
     {{- else }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.config.defaultHostFile "context" $) | indent 4 }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.config.defaultHostFile "context" $) | nindent 4 }}
     {{- end }}
 {{- end }}

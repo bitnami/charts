@@ -186,17 +186,18 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Deepspeed Client persistence paramaters
 
-| Name                               | Description                                                    | Value                     |
-| ---------------------------------- | -------------------------------------------------------------- | ------------------------- |
-| `client.persistence.enabled`       | Use a PVC to persist data                                      | `false`                   |
-| `client.persistence.storageClass`  | discourse & sidekiq data Persistent Volume Storage Class       | `""`                      |
-| `client.persistence.existingClaim` | Use a existing PVC which must be created manually before bound | `""`                      |
-| `client.persistence.mountPath`     | Path to mount the volume at                                    | `/bitnami/deepspeed/data` |
-| `client.persistence.accessModes`   | Persistent Volume Access Mode                                  | `["ReadWriteOnce"]`       |
-| `client.persistence.dataSource`    | Custom PVC data source                                         | `{}`                      |
-| `client.persistence.size`          | Size of data volume                                            | `8Gi`                     |
-| `client.persistence.labels`        | Persistent Volume labels                                       | `{}`                      |
-| `client.persistence.annotations`   | Persistent Volume annotations                                  | `{}`                      |
+| Name                               | Description                                                             | Value                     |
+| ---------------------------------- | ----------------------------------------------------------------------- | ------------------------- |
+| `client.persistence.enabled`       | Use a PVC to persist data                                               | `false`                   |
+| `client.persistence.storageClass`  | discourse & sidekiq data Persistent Volume Storage Class                | `""`                      |
+| `client.persistence.existingClaim` | Use a existing PVC which must be created manually before bound          | `""`                      |
+| `client.persistence.mountPath`     | Path to mount the volume at                                             | `/bitnami/deepspeed/data` |
+| `client.persistence.accessModes`   | Persistent Volume Access Mode                                           | `["ReadWriteOnce"]`       |
+| `client.persistence.dataSource`    | Custom PVC data source                                                  | `{}`                      |
+| `client.persistence.selector`      | Selector to match an existing Persistent Volume for the client data PVC | `{}`                      |
+| `client.persistence.size`          | Size of data volume                                                     | `8Gi`                     |
+| `client.persistence.labels`        | Persistent Volume labels                                                | `{}`                      |
+| `client.persistence.annotations`   | Persistent Volume annotations                                           | `{}`                      |
 
 ### Worker Deployment Parameters
 
@@ -312,6 +313,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `worker.persistence.existingClaim`     | Use a existing PVC which must be created manually before bound                                                                    | `""`                      |
 | `worker.persistence.mountPath`         | Path to mount the volume at                                                                                                       | `/bitnami/deepspeed/data` |
 | `worker.persistence.accessModes`       | Persistent Volume Access Mode                                                                                                     | `["ReadWriteOnce"]`       |
+| `worker.persistence.selector`          | Selector to match an existing Persistent Volume for the worker data PVC                                                           | `{}`                      |
 | `worker.persistence.dataSource`        | Custom PVC data source                                                                                                            | `{}`                      |
 | `worker.persistence.size`              | Size of data volume                                                                                                               | `8Gi`                     |
 | `worker.persistence.labels`            | Persistent Volume labels                                                                                                          | `{}`                      |

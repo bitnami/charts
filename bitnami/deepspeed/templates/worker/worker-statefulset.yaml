@@ -12,7 +12,7 @@ metadata:
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     app.kubernetes.io/part-of: deepspeed
     app.kubernetes.io/component: worker
-    {{- if .Values.labels }}
+    {{- if .Values.worker.labels }}
     {{- include "common.tplvalues.render" (dict "value" .Values.labels "context" $) | nindent 4 }}
     {{- end }}
     {{- if .Values.commonLabels }}

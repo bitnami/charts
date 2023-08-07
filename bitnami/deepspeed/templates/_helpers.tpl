@@ -261,7 +261,7 @@ Return the volume-permissions init container
     - |
       #!/bin/bash
       mkdir -p {{ $block.persistence.mountPath }}
-      chown {{ $block.containerSecurityContext.runAsUser }}:{{ $block.podSecurityContext.fsGroup }} {{ .context.Values.persistence.mountPath }}
+      chown {{ $block.containerSecurityContext.runAsUser }}:{{ $block.podSecurityContext.fsGroup }} {{ $block.persistence.mountPath }}
       find {{ $block.client.persistence.mountPath }} -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs chown -R {{ $block.containerSecurityContext.runAsUser }}:{{ $block.podSecurityContext.fsGroup }}
   securityContext:
     runAsUser: 0

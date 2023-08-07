@@ -502,6 +502,14 @@ client:
     ## @param client.persistence.dataSource Custom PVC data source
     ##
     dataSource: {}
+    ## @param client.persistence.selector Selector to match an existing Persistent Volume for the client data PVC
+    ## If set, the PVC can't have a PV dynamically provisioned for it
+    ## E.g.
+    ## selector:
+    ##   matchLabels:
+    ##     app: my-app
+    ##
+    selector: {}
     ## @param client.persistence.size Size of data volume
     ##
     size: 8Gi
@@ -932,6 +940,14 @@ worker:
     ##
     accessModes:
       - ReadWriteOnce
+    ## @param worker.persistence.selector Selector to match an existing Persistent Volume for the worker data PVC
+    ## If set, the PVC can't have a PV dynamically provisioned for it
+    ## E.g.
+    ## selector:
+    ##   matchLabels:
+    ##     app: my-app
+    ##
+    selector: {}
     ## @param worker.persistence.dataSource Custom PVC data source
     ##
     dataSource: {}
