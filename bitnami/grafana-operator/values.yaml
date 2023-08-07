@@ -761,7 +761,7 @@ grafana:
   ## @param grafana.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the grafana container
   ##
   extraVolumeMounts: []
-  ## @param grafana.extraVolumeMounts Optionally specify a list of secrets to be mounted to the grafana pod(s)
+  ## @param grafana.secrets Optionally specify a list of secrets to be mounted to the grafana pod(s)
   ##
   secrets: []
   ## @param grafana.sidecars Add additional sidecar containers to the grafana pod(s)
