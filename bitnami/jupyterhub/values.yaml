@@ -1611,23 +1611,20 @@ auxiliaryImage:
     ##   - myRegistryKeySecretName
     ##
     pullSecrets: []
-    # pullSecrets:
-    #   - myRegistryKeySecretName
-    #   - myAnotherRegistryKeySecretName
-    #   - yetAnotherRegistryKeySecretName
   ## @param auxiliaryImage.extraImages Extra Images that should be pulled by imagePuller
+  ## e.g:
+  ## extraImages:
+  ##   - registry: docker.io
+  ##     repository: bitnami/os-shell
+  ##     tag: 11-debian-11-r24
+  ##     digest: ""
+  ##     pullPolicy: IfNotPresent
+  ##   - registry: docker.io
+  ##     repository: bitnami/os-shell
+  ##     tag: 11-debian-11-r23
+  ##     digest: ""
+  ##     pullPolicy: IfNotPresent
   extraImages: []
-  # extraImages:
-  #   - registry: docker.io
-  #     repository: bitnami/os-shell
-  #     tag: 11-debian-11-r24
-  #     digest: ""
-  #     pullPolicy: IfNotPresent
-  #   - registry: docker.io
-  #     repository: bitnami/os-shell
-  #     tag: 11-debian-11-r23
-  #     digest: ""
-  #     pullPolicy: IfNotPresent
 
 ## @section JupyterHub database parameters
 
