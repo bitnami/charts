@@ -3,7 +3,7 @@ master:
 coordinating:
   replicaCount: 1
 data:
-  replicaCount: 1
+  replicaCount: 2
 ingest:
   enabled: true
   replicaCount: 1
