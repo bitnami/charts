@@ -15,7 +15,7 @@ it('can check cluster health', () => {
     form: true,
   }).then((response) => {
     expect(response.status).to.eq(200);
-    expect(response.body.status).to.contain('green');
+    expect(response.body).to.eq('green');
     expect(response.body.number_of_nodes).to.eq(Cypress.env('nodeNumber'));
   });
 });
