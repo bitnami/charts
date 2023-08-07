@@ -1606,6 +1606,15 @@ The chart also facilitates the creation of TLS secrets for use with the Ingress 
 
 This major updates the Kafka subchart to its newest major, 24.0.0. This new version refactors the Kafka chart architecture and requires manual actions during the upgrade. For more information on this subchart's major, please refer to [Kafka upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/kafka#to-2400).
 
+Additionally, the following values have been modified:
+
+- `externalKafka.securityProtocol` has been replaced with `externalKafka.listener.protocol`, which now allows Kafka security protocols 'PLAINTEXT','SASL_PLAINTEXT', 'SSL', 'SASL_SSL'.
+- `externalKafka.user` has been replaced with `externalAccess.sasl.user`.
+- `externalKafka.password` has been replaced with `externalAccess.sasl.password`.
+- `externalKafka.existingSecret` has been replaced with `externalAccess.sasl.existingSecret`.
+- `externalKafka.existingSecretPasswordKey` has been replaced with `externalAccess.sasl.existingSecretPasswordKey`.
+- `externalKafka.saslMechanisms` has been replaced with `externalAccess.sasl.enabledMechanisms`.
+
 ### To 1.0.0
 
 This major updates the Kafka subchart to its newest major, 23.0.0. For more information on this subchart's major, please refer to [Kafka upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/kafka#to-2300).
