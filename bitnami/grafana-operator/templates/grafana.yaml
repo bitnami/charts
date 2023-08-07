@@ -132,6 +132,10 @@ spec:
                   port: 3000
                   scheme: HTTP
               {{- end }}
+              {{- if .Values.grafana.extraVolumeMounts }}
+              volumeMounts:
+                {{- include "common.tplvalues.render" (dict "value" .Values.grafana.extraVolumeMounts "context" $) | nindent 16 }}
+              {{- end }}
             {{- if .Values.grafana.sidecars }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.grafana.sidecars "context" $) | nindent 12 }}
             {{- end }}
@@ -143,6 +147,19 @@ spec:
           {{- end }}
           {{- if .Values.grafana.updateStrategy }}
           strategy: {{ toYaml .Values.grafana.updateStrategy | nindent 10 }}
+          {{- end }}
+          {{- if .Values.grafana.extraVolumes | or .Values.grafana.secrets }}
+          volumes:
+            {{- range .Values.grafana.secrets }}
+            - name: '{{.}}'
+              secret:
+                defaultMode: 420
+                optional: true
+                secretName: '{{.}}'
+            {{- end }}
+            {{- if .Values.grafana.extraVolumes }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.grafana.extraVolumes "context" $) | nindent 12 }}
+            {{- end }}
           {{- end }}
   {{- if .Values.grafana.ingress.enabled }}
   ingress:
