@@ -56,7 +56,7 @@ rules:
       - probes
       - prometheusrules
       - scrapeconfigs
-      - prometheusagent
+      - prometheusagents
       - prometheusagents/finalizers
       - prometheusagents/status
     verbs:

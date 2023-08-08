@@ -95,6 +95,7 @@ spec:
           args:
             - --port={{ .Values.controller.containerPorts.metrics }}
             - --cert-service-name=metallb-webhook-service
+            - --log-level={{ .Values.controller.logLevel }}
           {{- end }}
           {{- if .Values.controller.lifecycleHooks }}
           lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.controller.lifecycleHooks "context" $) | nindent 12 }}

@@ -1,10 +1,10 @@
-<!--- app-name: Opensearch -->
+<!--- app-name: OpenSearch -->
 
-# Bitnami Opensearch Stack
+# OpenSearch packaged by Bitnami
 
-Opensearch is a distributed search and analytics engine. It is used for web search, log monitoring, and real-time analytics. Ideal for Big Data applications.
+OpenSearch is a scalable open-source solution for search, analytics, and observability. Features full-text queries, natural language processing, custom dictionaries, amongst others.
 
-[Overview of Opensearch](https://www.open.co/products/opensearch)
+[Overview of OpenSearch](https://opensearch.org/)
 
 Trademarks: This software listing is packaged by Bitnami. The respective trademarks mentioned in the offering are owned by the respective companies, and use of them does not imply any affiliation or endorsement.
 
@@ -16,11 +16,11 @@ helm install my-release oci://registry-1.docker.io/bitnamicharts/opensearch
 
 ## Introduction
 
-This chart bootstraps a [Opensearch](https://github.com/bitnami/containers/tree/main/bitnami/opensearch) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
+This chart bootstraps a [OpenSearch](https://github.com/bitnami/containers/tree/main/bitnami/opensearch) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
-Looking to use Opensearch in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use OpenSearch in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -36,7 +36,7 @@ To install the chart with the release name `my-release`:
 helm install my-release oci://registry-1.docker.io/bitnamicharts/opensearch
 ```
 
-These commands deploy Opensearch on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
+These commands deploy OpenSearch on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
 > **Tip**: List all releases using `helm list`
 
@@ -80,13 +80,13 @@ helm delete --purge my-release
 | `diagnosticMode.command` | Command to override all containers in the deployment                                    | `["sleep"]`     |
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                       | `["infinity"]`  |
 
-### Opensearch cluster Parameters
+### OpenSearch cluster Parameters
 
 | Name                        | Description                                                                                                                                         | Value                |
 | --------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------- |
-| `clusterName`               | Opensearch cluster name                                                                                                                             | `open`               |
-| `containerPorts.restAPI`    | Opensearch REST API port                                                                                                                            | `9200`               |
-| `containerPorts.transport`  | Opensearch Transport port                                                                                                                           | `9300`               |
+| `clusterName`               | OpenSearch cluster name                                                                                                                             | `open`               |
+| `containerPorts.restAPI`    | OpenSearch REST API port                                                                                                                            | `9200`               |
+| `containerPorts.transport`  | OpenSearch Transport port                                                                                                                           | `9300`               |
 | `plugins`                   | Comma, semi-colon or space separated list of plugins to install at initialization                                                                   | `""`                 |
 | `snapshotRepoPath`          | File System snapshot repository path                                                                                                                | `""`                 |
 | `config`                    | Override opensearch configuration                                                                                                                   | `{}`                 |
@@ -103,25 +103,25 @@ helm delete --purge my-release
 | `sidecars`                  | Add additional sidecar containers to the all opensearch node pod(s)                                                                                 | `[]`                 |
 | `initContainers`            | Add additional init containers to the all opensearch node pod(s)                                                                                    | `[]`                 |
 | `useIstioLabels`            | Use this variable to add Istio labels to all pods                                                                                                   | `true`               |
-| `image.registry`            | Opensearch image registry                                                                                                                           | `docker.io`          |
-| `image.repository`          | Opensearch image repository                                                                                                                         | `bitnami/opensearch` |
-| `image.tag`                 | Opensearch image tag (immutable tags are recommended)                                                                                               | `2.8.0-debian-11-r0` |
-| `image.digest`              | Opensearch image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                          | `""`                 |
-| `image.pullPolicy`          | Opensearch image pull policy                                                                                                                        | `IfNotPresent`       |
-| `image.pullSecrets`         | Opensearch image pull secrets                                                                                                                       | `[]`                 |
-| `image.debug`               | Enable Opensearch image debug mode                                                                                                                  | `false`              |
+| `image.registry`            | OpenSearch image registry                                                                                                                           | `docker.io`          |
+| `image.repository`          | OpenSearch image repository                                                                                                                         | `bitnami/opensearch` |
+| `image.tag`                 | OpenSearch image tag (immutable tags are recommended)                                                                                               | `2.9.0-debian-11-r8` |
+| `image.digest`              | OpenSearch image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                          | `""`                 |
+| `image.pullPolicy`          | OpenSearch image pull policy                                                                                                                        | `IfNotPresent`       |
+| `image.pullSecrets`         | OpenSearch image pull secrets                                                                                                                       | `[]`                 |
+| `image.debug`               | Enable OpenSearch image debug mode                                                                                                                  | `false`              |
 | `security.enabled`          | Enable X-Pack Security settings                                                                                                                     | `false`              |
 | `security.adminPassword`    | Password for 'admin' user                                                                                                                           | `""`                 |
 | `security.logstashPassword` | Password for Logstash                                                                                                                               | `""`                 |
-| `security.existingSecret`   | Name of the existing secret containing the Opensearch password and                                                                                  | `""`                 |
+| `security.existingSecret`   | Name of the existing secret containing the OpenSearch password and                                                                                  | `""`                 |
 | `security.fipsMode`         | Configure opensearch with FIPS 140 compliant mode                                                                                                   | `false`              |
 
-### Opensearch admin parameters
+### OpenSearch admin parameters
 
 | Name                                       | Description                                                                                             | Value                       |
 | ------------------------------------------ | ------------------------------------------------------------------------------------------------------- | --------------------------- |
 | `security.tls.admin.existingSecret`        | Existing secret containing the certificates for admin                                                   | `""`                        |
-| `security.tls.restEncryption`              | Enable SSL/TLS encryption for Opensearch REST API.                                                      | `false`                     |
+| `security.tls.restEncryption`              | Enable SSL/TLS encryption for OpenSearch REST API.                                                      | `false`                     |
 | `security.tls.autoGenerated`               | Create self-signed TLS certificates.                                                                    | `true`                      |
 | `security.tls.verificationMode`            | Verification mode for SSL communications.                                                               | `full`                      |
 | `security.tls.master.existingSecret`       | Existing secret containing the certificates for the master nodes                                        | `""`                        |
@@ -145,20 +145,20 @@ helm delete --purge my-release
 
 | Name                               | Description                                                                                                                      | Value                    |
 | ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `service.type`                     | Opensearch service type                                                                                                          | `ClusterIP`              |
-| `service.ports.restAPI`            | Opensearch service REST API port                                                                                                 | `9200`                   |
-| `service.ports.transport`          | Opensearch service transport port                                                                                                | `9300`                   |
+| `service.type`                     | OpenSearch service type                                                                                                          | `ClusterIP`              |
+| `service.ports.restAPI`            | OpenSearch service REST API port                                                                                                 | `9200`                   |
+| `service.ports.transport`          | OpenSearch service transport port                                                                                                | `9300`                   |
 | `service.nodePorts.restAPI`        | Node port for REST API                                                                                                           | `""`                     |
 | `service.nodePorts.transport`      | Node port for REST API                                                                                                           | `""`                     |
-| `service.clusterIP`                | Opensearch service Cluster IP                                                                                                    | `""`                     |
-| `service.loadBalancerIP`           | Opensearch service Load Balancer IP                                                                                              | `""`                     |
-| `service.loadBalancerSourceRanges` | Opensearch service Load Balancer sources                                                                                         | `[]`                     |
-| `service.externalTrafficPolicy`    | Opensearch service external traffic policy                                                                                       | `Cluster`                |
-| `service.annotations`              | Additional custom annotations for Opensearch service                                                                             | `{}`                     |
-| `service.extraPorts`               | Extra ports to expose in Opensearch service (normally used with the `sidecars` value)                                            | `[]`                     |
+| `service.clusterIP`                | OpenSearch service Cluster IP                                                                                                    | `""`                     |
+| `service.loadBalancerIP`           | OpenSearch service Load Balancer IP                                                                                              | `""`                     |
+| `service.loadBalancerSourceRanges` | OpenSearch service Load Balancer sources                                                                                         | `[]`                     |
+| `service.externalTrafficPolicy`    | OpenSearch service external traffic policy                                                                                       | `Cluster`                |
+| `service.annotations`              | Additional custom annotations for OpenSearch service                                                                             | `{}`                     |
+| `service.extraPorts`               | Extra ports to expose in OpenSearch service (normally used with the `sidecars` value)                                            | `[]`                     |
 | `service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                             | `None`                   |
 | `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
-| `ingress.enabled`                  | Enable ingress record generation for Opensearch                                                                                  | `false`                  |
+| `ingress.enabled`                  | Enable ingress record generation for OpenSearch                                                                                  | `false`                  |
 | `ingress.pathType`                 | Ingress path type                                                                                                                | `ImplementationSpecific` |
 | `ingress.apiVersion`               | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
 | `ingress.hostname`                 | Default host for the ingress record                                                                                              | `opensearch.local`       |
@@ -177,7 +177,7 @@ helm delete --purge my-release
 
 | Name                                                 | Description                                                                                                                                                            | Value               |
 | ---------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
-| `master.masterOnly`                                  | Deploy the Opensearch master-elegible nodes as master-only nodes. Recommended for high-demand deployments.                                                             | `true`              |
+| `master.masterOnly`                                  | Deploy the OpenSearch master-elegible nodes as master-only nodes. Recommended for high-demand deployments.                                                             | `true`              |
 | `master.replicaCount`                                | Number of master-elegible replicas to deploy                                                                                                                           | `2`                 |
 | `master.extraRoles`                                  | Append extra roles to the node role                                                                                                                                    | `[]`                |
 | `master.pdb.create`                                  | Enable/disable a Pod Disruption Budget creation                                                                                                                        | `false`             |
@@ -190,7 +190,7 @@ helm delete --purge my-release
 | `master.updateStrategy.type`                         | Master-elegible nodes statefulset stategy type                                                                                                                         | `RollingUpdate`     |
 | `master.resources.limits`                            | The resources limits for opensearch containers                                                                                                                         | `{}`                |
 | `master.resources.requests`                          | The requested resources for opensearch containers                                                                                                                      | `{}`                |
-| `master.heapSize`                                    | Opensearch master-eligible node heap size.                                                                                                                             | `128m`              |
+| `master.heapSize`                                    | OpenSearch master-eligible node heap size.                                                                                                                             | `128m`              |
 | `master.podSecurityContext.enabled`                  | Enabled master-elegible pods' Security Context                                                                                                                         | `true`              |
 | `master.podSecurityContext.fsGroup`                  | Set master-elegible pod's Security Context fsGroup                                                                                                                     | `1001`              |
 | `master.podSecurityContext.seccompProfile.type`      | Set Proxy container's Security Context seccomp profile                                                                                                                 | `RuntimeDefault`    |
@@ -211,9 +211,9 @@ helm delete --purge my-release
 | `master.tolerations`                                 | Tolerations for master-elegible pods assignment                                                                                                                        | `[]`                |
 | `master.priorityClassName`                           | master-elegible pods' priorityClassName                                                                                                                                | `""`                |
 | `master.schedulerName`                               | Name of the k8s scheduler (other than default) for master-elegible pods                                                                                                | `""`                |
-| `master.terminationGracePeriodSeconds`               | In seconds, time the given to the Opensearch Master pod needs to terminate gracefully                                                                                  | `""`                |
+| `master.terminationGracePeriodSeconds`               | In seconds, time the given to the OpenSearch Master pod needs to terminate gracefully                                                                                  | `""`                |
 | `master.topologySpreadConstraints`                   | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template                                               | `[]`                |
-| `master.podManagementPolicy`                         | podManagementPolicy to manage scaling operation of Opensearch master pods                                                                                              | `Parallel`          |
+| `master.podManagementPolicy`                         | podManagementPolicy to manage scaling operation of OpenSearch master pods                                                                                              | `Parallel`          |
 | `master.startupProbe.enabled`                        | Enable/disable the startup probe (master nodes pod)                                                                                                                    | `false`             |
 | `master.startupProbe.initialDelaySeconds`            | Delay before startup probe is initiated (master nodes pod)                                                                                                             | `90`                |
 | `master.startupProbe.periodSeconds`                  | How often to perform the probe (master nodes pod)                                                                                                                      | `10`                |
@@ -291,7 +291,7 @@ helm delete --purge my-release
 | `data.updateStrategy.type`                         | Data-only nodes statefulset stategy type                                                                                                                               | `RollingUpdate`     |
 | `data.resources.limits`                            | The resources limits for the data containers                                                                                                                           | `{}`                |
 | `data.resources.requests`                          | The requested resources for the data containers                                                                                                                        | `{}`                |
-| `data.heapSize`                                    | Opensearch data node heap size.                                                                                                                                        | `1024m`             |
+| `data.heapSize`                                    | OpenSearch data node heap size.                                                                                                                                        | `1024m`             |
 | `data.podSecurityContext.enabled`                  | Enabled data pods' Security Context                                                                                                                                    | `true`              |
 | `data.podSecurityContext.fsGroup`                  | Set data pod's Security Context fsGroup                                                                                                                                | `1001`              |
 | `data.podSecurityContext.seccompProfile.type`      | Set Proxy container's Security Context seccomp profile                                                                                                                 | `RuntimeDefault`    |
@@ -312,9 +312,9 @@ helm delete --purge my-release
 | `data.tolerations`                                 | Tolerations for data pods assignment                                                                                                                                   | `[]`                |
 | `data.priorityClassName`                           | data pods' priorityClassName                                                                                                                                           | `""`                |
 | `data.schedulerName`                               | Name of the k8s scheduler (other than default) for data pods                                                                                                           | `""`                |
-| `data.terminationGracePeriodSeconds`               | In seconds, time the given to the Opensearch data pod needs to terminate gracefully                                                                                    | `""`                |
+| `data.terminationGracePeriodSeconds`               | In seconds, time the given to the OpenSearch data pod needs to terminate gracefully                                                                                    | `""`                |
 | `data.topologySpreadConstraints`                   | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template                                               | `[]`                |
-| `data.podManagementPolicy`                         | podManagementPolicy to manage scaling operation of Opensearch data pods                                                                                                | `Parallel`          |
+| `data.podManagementPolicy`                         | podManagementPolicy to manage scaling operation of OpenSearch data pods                                                                                                | `Parallel`          |
 | `data.startupProbe.enabled`                        | Enable/disable the startup probe (data nodes pod)                                                                                                                      | `false`             |
 | `data.startupProbe.initialDelaySeconds`            | Delay before startup probe is initiated (data nodes pod)                                                                                                               | `90`                |
 | `data.startupProbe.periodSeconds`                  | How often to perform the probe (data nodes pod)                                                                                                                        | `10`                |
@@ -392,7 +392,7 @@ helm delete --purge my-release
 | `coordinating.updateStrategy.type`                         | Coordinating-only nodes statefulset stategy type                                                                                                                       | `RollingUpdate`  |
 | `coordinating.resources.limits`                            | The resources limits for the coordinating-only containers                                                                                                              | `{}`             |
 | `coordinating.resources.requests`                          | The requested resources for the coordinating-only containers                                                                                                           | `{}`             |
-| `coordinating.heapSize`                                    | Opensearch coordinating node heap size.                                                                                                                                | `128m`           |
+| `coordinating.heapSize`                                    | OpenSearch coordinating node heap size.                                                                                                                                | `128m`           |
 | `coordinating.podSecurityContext.enabled`                  | Enabled coordinating-only pods' Security Context                                                                                                                       | `true`           |
 | `coordinating.podSecurityContext.fsGroup`                  | Set coordinating-only pod's Security Context fsGroup                                                                                                                   | `1001`           |
 | `coordinating.podSecurityContext.seccompProfile.type`      | Set Proxy container's Security Context seccomp profile                                                                                                                 | `RuntimeDefault` |
@@ -413,9 +413,9 @@ helm delete --purge my-release
 | `coordinating.tolerations`                                 | Tolerations for coordinating-only pods assignment                                                                                                                      | `[]`             |
 | `coordinating.priorityClassName`                           | coordinating-only pods' priorityClassName                                                                                                                              | `""`             |
 | `coordinating.schedulerName`                               | Name of the k8s scheduler (other than default) for coordinating-only pods                                                                                              | `""`             |
-| `coordinating.terminationGracePeriodSeconds`               | In seconds, time the given to the Opensearch coordinating pod needs to terminate gracefully                                                                            | `""`             |
+| `coordinating.terminationGracePeriodSeconds`               | In seconds, time the given to the OpenSearch coordinating pod needs to terminate gracefully                                                                            | `""`             |
 | `coordinating.topologySpreadConstraints`                   | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template                                               | `[]`             |
-| `coordinating.podManagementPolicy`                         | podManagementPolicy to manage scaling operation of Opensearch coordinating pods                                                                                        | `Parallel`       |
+| `coordinating.podManagementPolicy`                         | podManagementPolicy to manage scaling operation of OpenSearch coordinating pods                                                                                        | `Parallel`       |
 | `coordinating.startupProbe.enabled`                        | Enable/disable the startup probe (coordinating-only nodes pod)                                                                                                         | `false`          |
 | `coordinating.startupProbe.initialDelaySeconds`            | Delay before startup probe is initiated (coordinating-only nodes pod)                                                                                                  | `90`             |
 | `coordinating.startupProbe.periodSeconds`                  | How often to perform the probe (coordinating-only nodes pod)                                                                                                           | `10`             |
@@ -486,7 +486,7 @@ helm delete --purge my-release
 | `ingest.updateStrategy.type`                         | Ingest-only nodes statefulset stategy type                                                                                                                             | `RollingUpdate`           |
 | `ingest.resources.limits`                            | The resources limits for the ingest-only containers                                                                                                                    | `{}`                      |
 | `ingest.resources.requests`                          | The requested resources for the ingest-only containers                                                                                                                 | `{}`                      |
-| `ingest.heapSize`                                    | Opensearch ingest-only node heap size.                                                                                                                                 | `128m`                    |
+| `ingest.heapSize`                                    | OpenSearch ingest-only node heap size.                                                                                                                                 | `128m`                    |
 | `ingest.podSecurityContext.enabled`                  | Enabled ingest-only pods' Security Context                                                                                                                             | `true`                    |
 | `ingest.podSecurityContext.fsGroup`                  | Set ingest-only pod's Security Context fsGroup                                                                                                                         | `1001`                    |
 | `ingest.podSecurityContext.seccompProfile.type`      | Set Proxy container's Security Context seccomp profile                                                                                                                 | `RuntimeDefault`          |
@@ -507,9 +507,9 @@ helm delete --purge my-release
 | `ingest.tolerations`                                 | Tolerations for ingest-only pods assignment                                                                                                                            | `[]`                      |
 | `ingest.priorityClassName`                           | ingest-only pods' priorityClassName                                                                                                                                    | `""`                      |
 | `ingest.schedulerName`                               | Name of the k8s scheduler (other than default) for ingest-only pods                                                                                                    | `""`                      |
-| `ingest.terminationGracePeriodSeconds`               | In seconds, time the given to the Opensearch ingest pod needs to terminate gracefully                                                                                  | `""`                      |
+| `ingest.terminationGracePeriodSeconds`               | In seconds, time the given to the OpenSearch ingest pod needs to terminate gracefully                                                                                  | `""`                      |
 | `ingest.topologySpreadConstraints`                   | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template                                               | `[]`                      |
-| `ingest.podManagementPolicy`                         | podManagementPolicy to manage scaling operation of Opensearch ingest pods                                                                                              | `Parallel`                |
+| `ingest.podManagementPolicy`                         | podManagementPolicy to manage scaling operation of OpenSearch ingest pods                                                                                              | `Parallel`                |
 | `ingest.startupProbe.enabled`                        | Enable/disable the startup probe (ingest-only nodes pod)                                                                                                               | `false`                   |
 | `ingest.startupProbe.initialDelaySeconds`            | Delay before startup probe is initiated (ingest-only nodes pod)                                                                                                        | `90`                      |
 | `ingest.startupProbe.periodSeconds`                  | How often to perform the probe (ingest-only nodes pod)                                                                                                                 | `10`                      |
@@ -563,20 +563,20 @@ helm delete --purge my-release
 | `ingest.autoscaling.hpa.targetCPU`                   | Target CPU utilization percentage                                                                                                                                      | `""`                      |
 | `ingest.autoscaling.hpa.targetMemory`                | Target Memory utilization percentage                                                                                                                                   | `""`                      |
 | `ingest.service.enabled`                             | Enable Ingest-only service                                                                                                                                             | `false`                   |
-| `ingest.service.type`                                | Opensearch ingest-only service type                                                                                                                                    | `ClusterIP`               |
-| `ingest.service.ports.restAPI`                       | Opensearch service REST API port                                                                                                                                       | `9200`                    |
-| `ingest.service.ports.transport`                     | Opensearch service transport port                                                                                                                                      | `9300`                    |
+| `ingest.service.type`                                | OpenSearch ingest-only service type                                                                                                                                    | `ClusterIP`               |
+| `ingest.service.ports.restAPI`                       | OpenSearch service REST API port                                                                                                                                       | `9200`                    |
+| `ingest.service.ports.transport`                     | OpenSearch service transport port                                                                                                                                      | `9300`                    |
 | `ingest.service.nodePorts.restAPI`                   | Node port for REST API                                                                                                                                                 | `""`                      |
 | `ingest.service.nodePorts.transport`                 | Node port for REST API                                                                                                                                                 | `""`                      |
-| `ingest.service.clusterIP`                           | Opensearch ingest-only service Cluster IP                                                                                                                              | `""`                      |
-| `ingest.service.loadBalancerIP`                      | Opensearch ingest-only service Load Balancer IP                                                                                                                        | `""`                      |
-| `ingest.service.loadBalancerSourceRanges`            | Opensearch ingest-only service Load Balancer sources                                                                                                                   | `[]`                      |
-| `ingest.service.externalTrafficPolicy`               | Opensearch ingest-only service external traffic policy                                                                                                                 | `Cluster`                 |
+| `ingest.service.clusterIP`                           | OpenSearch ingest-only service Cluster IP                                                                                                                              | `""`                      |
+| `ingest.service.loadBalancerIP`                      | OpenSearch ingest-only service Load Balancer IP                                                                                                                        | `""`                      |
+| `ingest.service.loadBalancerSourceRanges`            | OpenSearch ingest-only service Load Balancer sources                                                                                                                   | `[]`                      |
+| `ingest.service.externalTrafficPolicy`               | OpenSearch ingest-only service external traffic policy                                                                                                                 | `Cluster`                 |
 | `ingest.service.extraPorts`                          | Extra ports to expose (normally used with the `sidecar` value)                                                                                                         | `[]`                      |
-| `ingest.service.annotations`                         | Additional custom annotations for Opensearch ingest-only service                                                                                                       | `{}`                      |
+| `ingest.service.annotations`                         | Additional custom annotations for OpenSearch ingest-only service                                                                                                       | `{}`                      |
 | `ingest.service.sessionAffinity`                     | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                                                                   | `None`                    |
 | `ingest.service.sessionAffinityConfig`               | Additional settings for the sessionAffinity                                                                                                                            | `{}`                      |
-| `ingest.ingress.enabled`                             | Enable ingress record generation for Opensearch                                                                                                                        | `false`                   |
+| `ingest.ingress.enabled`                             | Enable ingress record generation for OpenSearch                                                                                                                        | `false`                   |
 | `ingest.ingress.pathType`                            | Ingress path type                                                                                                                                                      | `ImplementationSpecific`  |
 | `ingest.ingress.apiVersion`                          | Force Ingress API version (automatically detected if not set)                                                                                                          | `""`                      |
 | `ingest.ingress.hostname`                            | Default host for the ingress record                                                                                                                                    | `opensearch-ingest.local` |
@@ -593,52 +593,52 @@ helm delete --purge my-release
 
 ### Init Container Parameters
 
-| Name                                   | Description                                                                                                                                               | Value                   |
-| -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
-| `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
-| `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                                          | `docker.io`             |
-| `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                                                              | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `11-debian-11-r131`     |
-| `volumePermissions.image.digest`       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                         | `""`                    |
-| `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`          |
-| `volumePermissions.image.pullSecrets`  | Init container volume-permissions image pull secrets                                                                                                      | `[]`                    |
-| `volumePermissions.resources.limits`   | The resources limits for the container                                                                                                                    | `{}`                    |
-| `volumePermissions.resources.requests` | The requested resources for the container                                                                                                                 | `{}`                    |
-| `sysctlImage.enabled`                  | Enable kernel settings modifier image                                                                                                                     | `true`                  |
-| `sysctlImage.registry`                 | Kernel settings modifier image registry                                                                                                                   | `docker.io`             |
-| `sysctlImage.repository`               | Kernel settings modifier image repository                                                                                                                 | `bitnami/bitnami-shell` |
-| `sysctlImage.tag`                      | Kernel settings modifier image tag                                                                                                                        | `11-debian-11-r131`     |
-| `sysctlImage.digest`                   | Kernel settings modifier image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                  | `""`                    |
-| `sysctlImage.pullPolicy`               | Kernel settings modifier image pull policy                                                                                                                | `IfNotPresent`          |
-| `sysctlImage.pullSecrets`              | Kernel settings modifier image pull secrets                                                                                                               | `[]`                    |
-| `sysctlImage.resources.limits`         | The resources limits for the container                                                                                                                    | `{}`                    |
-| `sysctlImage.resources.requests`       | The requested resources for the container                                                                                                                 | `{}`                    |
+| Name                                   | Description                                                                                                                                               | Value              |
+| -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ |
+| `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`            |
+| `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                                          | `docker.io`        |
+| `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                                                              | `bitnami/os-shell` |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `11-debian-11-r25` |
+| `volumePermissions.image.digest`       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                         | `""`               |
+| `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`     |
+| `volumePermissions.image.pullSecrets`  | Init container volume-permissions image pull secrets                                                                                                      | `[]`               |
+| `volumePermissions.resources.limits`   | The resources limits for the container                                                                                                                    | `{}`               |
+| `volumePermissions.resources.requests` | The requested resources for the container                                                                                                                 | `{}`               |
+| `sysctlImage.enabled`                  | Enable kernel settings modifier image                                                                                                                     | `true`             |
+| `sysctlImage.registry`                 | Kernel settings modifier image registry                                                                                                                   | `docker.io`        |
+| `sysctlImage.repository`               | Kernel settings modifier image repository                                                                                                                 | `bitnami/os-shell` |
+| `sysctlImage.tag`                      | Kernel settings modifier image tag                                                                                                                        | `11-debian-11-r25` |
+| `sysctlImage.digest`                   | Kernel settings modifier image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                  | `""`               |
+| `sysctlImage.pullPolicy`               | Kernel settings modifier image pull policy                                                                                                                | `IfNotPresent`     |
+| `sysctlImage.pullSecrets`              | Kernel settings modifier image pull secrets                                                                                                               | `[]`               |
+| `sysctlImage.resources.limits`         | The resources limits for the container                                                                                                                    | `{}`               |
+| `sysctlImage.resources.requests`       | The requested resources for the container                                                                                                                 | `{}`               |
 
-### Opensearch Dashborads Parameters
+### OpenSearch Dashborads Parameters
 
 | Name                                                     | Description                                                                                                                                                            | Value                           |
 | -------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------- |
-| `dashboards.enabled`                                     | Enables Opensearch Dashboards deployment                                                                                                                               | `false`                         |
-| `dashboards.image.registry`                              | Opensearch Dashboards image registry                                                                                                                                   | `docker.io`                     |
-| `dashboards.image.repository`                            | Opensearch Dashboards image repository                                                                                                                                 | `bitnami/opensearch-dashboards` |
-| `dashboards.image.tag`                                   | Opensearch Dashboards image tag (immutable tags are recommended)                                                                                                       | `2.8.0-debian-11-r0`            |
-| `dashboards.image.digest`                                | Opensearch Dashboards image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                  | `""`                            |
-| `dashboards.image.pullPolicy`                            | Opensearch Dashboards image pull policy                                                                                                                                | `IfNotPresent`                  |
-| `dashboards.image.pullSecrets`                           | Opensearch Dashboards image pull secrets                                                                                                                               | `[]`                            |
-| `dashboards.image.debug`                                 | Enable Opensearch Dashboards image debug mode                                                                                                                          | `false`                         |
-| `dashboards.service.type`                                | Opensearch Dashboards service type                                                                                                                                     | `ClusterIP`                     |
-| `dashboards.service.ports.http`                          | Opensearch Dashboards service web UI port                                                                                                                              | `5601`                          |
+| `dashboards.enabled`                                     | Enables OpenSearch Dashboards deployment                                                                                                                               | `false`                         |
+| `dashboards.image.registry`                              | OpenSearch Dashboards image registry                                                                                                                                   | `docker.io`                     |
+| `dashboards.image.repository`                            | OpenSearch Dashboards image repository                                                                                                                                 | `bitnami/opensearch-dashboards` |
+| `dashboards.image.tag`                                   | OpenSearch Dashboards image tag (immutable tags are recommended)                                                                                                       | `2.9.0-debian-11-r8`            |
+| `dashboards.image.digest`                                | OpenSearch Dashboards image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                  | `""`                            |
+| `dashboards.image.pullPolicy`                            | OpenSearch Dashboards image pull policy                                                                                                                                | `IfNotPresent`                  |
+| `dashboards.image.pullSecrets`                           | OpenSearch Dashboards image pull secrets                                                                                                                               | `[]`                            |
+| `dashboards.image.debug`                                 | Enable OpenSearch Dashboards image debug mode                                                                                                                          | `false`                         |
+| `dashboards.service.type`                                | OpenSearch Dashboards service type                                                                                                                                     | `ClusterIP`                     |
+| `dashboards.service.ports.http`                          | OpenSearch Dashboards service web UI port                                                                                                                              | `5601`                          |
 | `dashboards.service.nodePorts.http`                      | Node port for web UI                                                                                                                                                   | `""`                            |
-| `dashboards.service.clusterIP`                           | Opensearch Dashboards service Cluster IP                                                                                                                               | `""`                            |
-| `dashboards.service.loadBalancerIP`                      | Opensearch Dashboards service Load Balancer IP                                                                                                                         | `""`                            |
-| `dashboards.service.loadBalancerSourceRanges`            | Opensearch Dashboards service Load Balancer sources                                                                                                                    | `[]`                            |
-| `dashboards.service.externalTrafficPolicy`               | Opensearch Dashboards service external traffic policy                                                                                                                  | `Cluster`                       |
-| `dashboards.service.annotations`                         | Additional custom annotations for Opensearch Dashboards service                                                                                                        | `{}`                            |
-| `dashboards.service.extraPorts`                          | Extra ports to expose in Opensearch Dashboards service (normally used with the `sidecars` value)                                                                       | `[]`                            |
+| `dashboards.service.clusterIP`                           | OpenSearch Dashboards service Cluster IP                                                                                                                               | `""`                            |
+| `dashboards.service.loadBalancerIP`                      | OpenSearch Dashboards service Load Balancer IP                                                                                                                         | `""`                            |
+| `dashboards.service.loadBalancerSourceRanges`            | OpenSearch Dashboards service Load Balancer sources                                                                                                                    | `[]`                            |
+| `dashboards.service.externalTrafficPolicy`               | OpenSearch Dashboards service external traffic policy                                                                                                                  | `Cluster`                       |
+| `dashboards.service.annotations`                         | Additional custom annotations for OpenSearch Dashboards service                                                                                                        | `{}`                            |
+| `dashboards.service.extraPorts`                          | Extra ports to expose in OpenSearch Dashboards service (normally used with the `sidecars` value)                                                                       | `[]`                            |
 | `dashboards.service.sessionAffinity`                     | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                                                                   | `None`                          |
 | `dashboards.service.sessionAffinityConfig`               | Additional settings for the sessionAffinity                                                                                                                            | `{}`                            |
-| `dashboards.containerPorts.http`                         | Opensearch Dashboards HTTP port                                                                                                                                        | `5601`                          |
-| `dashboards.password`                                    | Password for Opensearch Dashboards                                                                                                                                     | `""`                            |
+| `dashboards.containerPorts.http`                         | OpenSearch Dashboards HTTP port                                                                                                                                        | `5601`                          |
+| `dashboards.password`                                    | Password for OpenSearch Dashboards                                                                                                                                     | `""`                            |
 | `dashboards.replicaCount`                                | Number of data-only replicas to deploy                                                                                                                                 | `1`                             |
 | `dashboards.pdb.create`                                  | Enable/disable a Pod Disruption Budget creation                                                                                                                        | `false`                         |
 | `dashboards.pdb.minAvailable`                            | Minimum number/percentage of pods that should remain scheduled                                                                                                         | `1`                             |
@@ -649,7 +649,7 @@ helm delete --purge my-release
 | `dashboards.updateStrategy.type`                         | Data-only nodes statefulset stategy type                                                                                                                               | `RollingUpdate`                 |
 | `dashboards.resources.limits`                            | The resources limits for the data containers                                                                                                                           | `{}`                            |
 | `dashboards.resources.requests`                          | The requested resources for the data containers                                                                                                                        | `{}`                            |
-| `dashboards.heapSize`                                    | Opensearch data node heap size.                                                                                                                                        | `1024m`                         |
+| `dashboards.heapSize`                                    | OpenSearch data node heap size.                                                                                                                                        | `1024m`                         |
 | `dashboards.podSecurityContext.enabled`                  | Enabled data pods' Security Context                                                                                                                                    | `true`                          |
 | `dashboards.podSecurityContext.fsGroup`                  | Set dashboards pod's Security Context fsGroup                                                                                                                          | `1001`                          |
 | `dashboards.podSecurityContext.seccompProfile.type`      | Set Proxy container's Security Context seccomp profile                                                                                                                 | `RuntimeDefault`                |
@@ -670,7 +670,7 @@ helm delete --purge my-release
 | `dashboards.tolerations`                                 | Tolerations for data pods assignment                                                                                                                                   | `[]`                            |
 | `dashboards.priorityClassName`                           | data pods' priorityClassName                                                                                                                                           | `""`                            |
 | `dashboards.schedulerName`                               | Name of the k8s scheduler (other than default) for data pods                                                                                                           | `""`                            |
-| `dashboards.terminationGracePeriodSeconds`               | In seconds, time the given to the Opensearch data pod needs to terminate gracefully                                                                                    | `""`                            |
+| `dashboards.terminationGracePeriodSeconds`               | In seconds, time the given to the OpenSearch data pod needs to terminate gracefully                                                                                    | `""`                            |
 | `dashboards.topologySpreadConstraints`                   | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template                                               | `[]`                            |
 | `dashboards.startupProbe.enabled`                        | Enable/disable the startup probe (data nodes pod)                                                                                                                      | `false`                         |
 | `dashboards.startupProbe.initialDelaySeconds`            | Delay before startup probe is initiated (data nodes pod)                                                                                                               | `120`                           |
@@ -724,8 +724,8 @@ helm delete --purge my-release
 | `dashboards.autoscaling.hpa.maxReplicas`                 | Maximum number of APISIX Data Plane replicas                                                                                                                           | `11`                            |
 | `dashboards.autoscaling.hpa.targetCPU`                   | Target CPU utilization percentage                                                                                                                                      | `""`                            |
 | `dashboards.autoscaling.hpa.targetMemory`                | Target Memory utilization percentage                                                                                                                                   | `""`                            |
-| `dashboards.tls.enabled`                                 | Enable TLS for Opensearch Dashboards webserver                                                                                                                         | `false`                         |
-| `dashboards.tls.existingSecret`                          | Existing secret containing the certificates for Opensearch Dashboards webserver                                                                                        | `""`                            |
+| `dashboards.tls.enabled`                                 | Enable TLS for OpenSearch Dashboards webserver                                                                                                                         | `false`                         |
+| `dashboards.tls.existingSecret`                          | Existing secret containing the certificates for OpenSearch Dashboards webserver                                                                                        | `""`                            |
 | `dashboards.tls.autoGenerated`                           | Create self-signed TLS certificates.                                                                                                                                   | `true`                          |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
@@ -736,7 +736,7 @@ helm install my-release \
   oci://registry-1.docker.io/bitnamicharts/opensearch
 ```
 
-The above command sets the Opensearch cluster name to `my-open` and REST port number to `8080`.
+The above command sets the OpenSearch cluster name to `my-open` and REST port number to `8080`.
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
@@ -760,7 +760,7 @@ To modify the OpenSearch version used in this chart you can specify a [valid ima
 
 ### Default kernel settings
 
-Currently, Opensearch requires some changes in the kernel of the host machine to work as expected. If those values are not set in the underlying operating system, the OS containers fail to boot with ERROR messages. More information about these requirements can be found in the links below:
+Currently, OpenSearch requires some changes in the kernel of the host machine to work as expected. If those values are not set in the underlying operating system, the OS containers fail to boot with ERROR messages. More information about these requirements can be found in the links below:
 
 - [File Descriptor requirements](https://www.open.co/guide/en/opensearch/reference/current/file-descriptors.html)
 - [Virtual memory requirements](https://www.open.co/guide/en/opensearch/reference/current/vm-max-map-count.html)
@@ -770,12 +770,12 @@ You can disable the initContainer using the `sysctlImage.enabled=false` paramete
 
 ### Enable bundled Kibana
 
-This Opensearch chart contains Kibana as subchart, you can enable it just setting the `global.kibanaEnabled=true` parameter.
+This OpenSearch chart contains Kibana as subchart, you can enable it just setting the `global.kibanaEnabled=true` parameter.
 To see the notes with some operational instructions from the Kibana chart, please use the `--render-subchart-notes` as part of your `helm install` command, in this way you can see the Kibana and OS notes in your terminal.
 
 When enabling the bundled kibana subchart, there are a few gotchas that you should be aware of listed below.
 
-#### Opensearch rest Encryption
+#### OpenSearch rest Encryption
 
 When enabling opensearch' rest endpoint encryption you will also need to set `kibana.opensearch.security.tls.enabled` to the SAME value along with some additional values shown below for an "out of the box experience":
 
@@ -834,7 +834,7 @@ Alternatively, you can use a ConfigMap or a Secret with the environment variable
 
 ### Using custom init scripts
 
-For advanced operations, the Bitnami Opensearch charts allows using custom init scripts that will be mounted inside `/docker-entrypoint.init-db`. You can include the file directly in your `values.yaml` with `initScripts`, or use a ConfigMap or a Secret (in case of sensitive data) for mounting these extra scripts. In this case you use the `initScriptsCM` and `initScriptsSecret` values.
+For advanced operations, the Bitnami OpenSearch charts allows using custom init scripts that will be mounted inside `/docker-entrypoint.init-db`. You can include the file directly in your `values.yaml` with `initScripts`, or use a ConfigMap or a Secret (in case of sensitive data) for mounting these extra scripts. In this case you use the `initScriptsCM` and `initScriptsSecret` values.
 
 ```console
 initScriptsCM=special-scripts
@@ -845,7 +845,7 @@ initScriptsSecret=special-scripts-sensitive
 
 As it's described in the [official documentation](https://www.open.co/guide/en/opensearch/reference/current/snapshots-register-repository.html#snapshots-filesystem-repository), it's necessary to register a snapshot repository before you can perform snapshot and restore operations.
 
-This chart allows you to configure Opensearch to use a shared file system to store snapshots. To do so, you need to mount a RWX volume on every Opensearch node, and set the parameter `snapshotRepoPath` with the path where the volume is mounted. In the example below, you can find the values to set when using a NFS Perstitent Volume:
+This chart allows you to configure OpenSearch to use a shared file system to store snapshots. To do so, you need to mount a RWX volume on every OpenSearch node, and set the parameter `snapshotRepoPath` with the path where the volume is mounted. In the example below, you can find the values to set when using a NFS Perstitent Volume:
 
 ```yaml
 extraVolumes:
@@ -861,7 +861,7 @@ snapshotRepoPath: "/snapshots"
 
 ### Sidecars and Init Containers
 
-If you have a need for additional containers to run within the same pod as Opensearch components (e.g. an additional metrics or logging exporter), you can do so via the `XXX.sidecars` parameter(s), where XXX is placeholder you need to replace with the actual component(s). Simply define your container according to the Kubernetes container spec.
+If you have a need for additional containers to run within the same pod as OpenSearch components (e.g. an additional metrics or logging exporter), you can do so via the `XXX.sidecars` parameter(s), where XXX is placeholder you need to replace with the actual component(s). Simply define your container according to the Kubernetes container spec.
 
 ```yaml
 sidecars:
@@ -892,7 +892,7 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 
 ## Persistence
 
-The [Bitnami Opensearch](https://github.com/bitnami/containers/tree/main/bitnami/opensearch) image stores the Opensearch data at the `/bitnami/opensearch/data` path of the container.
+The [Bitnami OpenSearch](https://github.com/bitnami/containers/tree/main/bitnami/opensearch) image stores the OpenSearch data at the `/bitnami/opensearch/data` path of the container.
 
 By default, the chart mounts a [Persistent Volume](https://kubernetes.io/docs/concepts/storage/persistent-volumes/) at this location. The volume is created using dynamic volume provisioning. See the [Parameters](#parameters) section to configure the PVC.
 

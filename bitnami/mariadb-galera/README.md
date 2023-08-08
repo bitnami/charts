@@ -574,6 +574,10 @@ helm upgrade my-release oci://registry-1.docker.io/bitnamicharts/mariadb-galera 
 
 | Note: you need to substitute the placeholders _[ROOT_PASSWORD]_, _[MARIADB_PASSWORD]_ and _[MARIABACKUP_PASSWORD]_ with the values obtained from instructions in the installation notes.
 
+### To 9.0.0
+
+This major release bumps the MariaDB version to 11.0. Follow the [upstream instructions](https://mariadb.com/kb/en/upgrading-from-mariadb-10-11-to-mariadb-11-0/) for upgrading from MariaDB 10.11 to 11.0. No major issues are expected during the upgrade.
+
 ### To 7.0.0
 
 This major release renames several values in this chart and adds missing features, in order to be inline with the rest of assets in the Bitnami charts repository. Also, this release address issues related to cluster initialization and node's restarts.
