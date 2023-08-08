@@ -41,13 +41,10 @@ jobs:
             local -r path="${1:?missing path}"
             local -r excluded_paths=("/crds/")
             for excluded_path in "${excluded_paths[@]}"; do
-              echo "Checking if ${path} includes ${excluded_path}"
               if [[ "${path}" =~ ${excluded_path} ]]; then
-                echo "included!"
                 return 0
               fi
             done
-            echo "not included"
             return 1
           }
           while read -r file_changed; do
