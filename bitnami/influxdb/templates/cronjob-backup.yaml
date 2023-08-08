@@ -32,9 +32,7 @@ spec:
             {{- include "common.tplvalues.render" (dict "value" .Values.backup.cronjob.podAnnotations "context" $) | nindent 12 }}
         spec:
           {{- if .Values.backup.cronjob.securityContext.enabled }}
-          securityContext:
-            fsGroup: {{ .Values.backup.cronjob.securityContext.fsGroup }}
-            runAsUser: {{ .Values.backup.cronjob.securityContext.runAsUser }}
+          securityContext: {{- omit .Values.backup.cronjob.securityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
           restartPolicy: OnFailure
           volumes:
@@ -94,6 +92,9 @@ spec:
                 - name: backup-scripts
                   mountPath: /tmp/backup.sh
                   subPath: backup.sh
+              {{- if .Values.backup.cronjob.containerSecurityContext.enabled }}
+              securityContext: {{- omit .Values.backup.cronjob.containerSecurityContext "enabled" | toYaml | nindent 16 }}
+              {{- end }}
           containers:
             - name: influxdb-backup-dummy-container
               image: {{ include "influxdb.image" . | quote }}
@@ -103,6 +104,9 @@ spec:
               {{- else }}
               command:
                 - "/bin/true"
+              {{- end }}
+              {{- if .Values.backup.cronjob.containerSecurityContext.enabled }}
+              securityContext: {{- omit .Values.backup.cronjob.containerSecurityContext "enabled" | toYaml | nindent 16 }}
               {{- end }}
             {{- if .Values.backup.uploadProviders.google.enabled }}
             - name: gsutil-cp
@@ -122,6 +126,9 @@ spec:
                   subPath: upload-google.sh
                 - name: google-cloud-key
                   mountPath: /var/secrets/google/
+              {{- if .Values.backup.cronjob.containerSecurityContext.enabled }}
+              securityContext: {{- omit .Values.backup.cronjob.containerSecurityContext "enabled" | toYaml | nindent 16 }}
+              {{- end }}
             {{- end }}
             {{- if .Values.backup.uploadProviders.azure.enabled }}
             - name: azure-cli
@@ -149,6 +156,9 @@ spec:
                 - name: backup-scripts
                   mountPath: /tmp/upload-azure.sh
                   subPath: upload-azure.sh
+              {{- if .Values.backup.cronjob.containerSecurityContext.enabled }}
+              securityContext: {{- omit .Values.backup.cronjob.containerSecurityContext "enabled" | toYaml | nindent 16 }}
+              {{- end }}
             {{- end }}
             {{- if .Values.backup.uploadProviders.aws.enabled }}
             - name: aws-cli
@@ -194,5 +204,8 @@ spec:
                 - name: backup-scripts
                   mountPath: /tmp/upload-aws.sh
                   subPath: upload-aws.sh
+              {{- if .Values.backup.cronjob.containerSecurityContext.enabled }}
+              securityContext: {{- omit .Values.backup.cronjob.containerSecurityContext "enabled" | toYaml | nindent 16 }}
+              {{- end }}
             {{- end }}
 {{- end }}

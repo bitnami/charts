@@ -43,7 +43,7 @@ spec:
   externalTrafficPolicy: {{ .externalTrafficPolicy | quote }}
   {{- end }}
   {{- if and (eq .type "LoadBalancer") (not (empty .loadBalancerSourceRanges)) }}
-  loadBalancerSourceRanges: {{ .loadBalancerSourceRanges }}
+  loadBalancerSourceRanges: {{ .loadBalancerSourceRanges | toJson }}
   {{- end }}
   {{- if and (eq .type "LoadBalancer") (not (empty .loadBalancerIP)) }}
   loadBalancerIP: {{ .loadBalancerIP }}

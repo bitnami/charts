@@ -8,8 +8,9 @@ file:
     mode: "2777"
     owner: root
 command:
-  run-git-example:
-    exec: python {{ .Vars.entrypoint.workDir }}/example/memcost/inception_memcost.py
+  # From: https://mxnet.apache.org/versions/1.8.0/api/python/docs/tutorials/packages/ndarray/02-ndarray-operations.html
+  check-mxnet-operation:
+    exec: python -c 'import mxnet as mx; a = mx.nd.ones((2, 3)); b = a * 2 + 1; b.asnumpy()'
     exit-status: 0
   {{- $uid := .Vars.standalone.containerSecurityContext.runAsUser }}
   {{- $gid := .Vars.standalone.podSecurityContext.fsGroup }}

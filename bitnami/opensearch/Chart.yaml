@@ -4,23 +4,30 @@
 annotations:
   category: Analytics
   licenses: Apache-2.0
+  images: |
+    - name: opensearch-dashboards
+      image: docker.io/bitnami/opensearch-dashboards:2.9.0-debian-11-r8
+    - name: opensearch
+      image: docker.io/bitnami/opensearch:2.9.0-debian-11-r8
+    - name: os-shell
+      image: docker.io/bitnami/os-shell:11-debian-11-r25
 apiVersion: v2
-appVersion: 2.8.0
+appVersion: 2.9.0
 dependencies:
-  - name: common
-    repository: oci://registry-1.docker.io/bitnamicharts
-    tags:
-      - bitnami-common
-    version: 2.x.x
-description: Opensearch is a distributed search and analytics engine. It is used for web search, log monitoring, and real-time analytics. Ideal for Big Data applications.
+- name: common
+  repository: oci://registry-1.docker.io/bitnamicharts
+  tags:
+  - bitnami-common
+  version: 2.x.x
+description: OpenSearch is a scalable open-source solution for search, analytics, and observability. Features full-text queries, natural language processing, custom dictionaries, amongst others.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/opensearch/img/opensearch-stack-220x234.png
 keywords:
-  - opensearch
+- opensearch
 maintainers:
-  - name: VMware, Inc.
-    url: https://github.com/bitnami/charts
+- name: VMware, Inc.
+  url: https://github.com/bitnami/charts
 name: opensearch
 sources:
-  - https://github.com/bitnami/charts/tree/main/bitnami/opensearch
-version: 0.1.0
+- https://github.com/bitnami/charts/tree/main/bitnami/opensearch
+version: 0.1.1

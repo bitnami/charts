@@ -104,7 +104,7 @@ controller:
   image:
     registry: docker.io
     repository: bitnami/metallb-controller
-    tag: 0.13.10-debian-11-r13
+    tag: 0.13.10-debian-11-r53
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -387,6 +387,10 @@ controller:
   ##
   customReadinessProbe: {}
 
+  ## @param controller.logLevel Sets the controller log level. Does not work if the args are overridden
+  ##
+  logLevel: "info"
+
   ## @section Metallb controller Prometheus metrics export
   ##
   metrics:
@@ -466,7 +470,7 @@ speaker:
   image:
     registry: docker.io
     repository: bitnami/metallb-speaker
-    tag: 0.13.10-debian-11-r13
+    tag: 0.13.10-debian-11-r53
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -746,7 +750,9 @@ speaker:
   ## @param speaker.customReadinessProbe Custom readiness probe for the Web component
   ##
   customReadinessProbe: {}
-
+  ## @param speaker.logLevel Sets the speaker log level. Does not work if the args are overridden
+  ##
+  logLevel: "info"
   ## @section Speaker Prometheus metrics export
   metrics:
     ## @param speaker.metrics.enabled Enable the export of Prometheus metrics

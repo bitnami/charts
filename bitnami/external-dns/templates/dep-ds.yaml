@@ -163,6 +163,12 @@ spec:
             {{- if .Values.labelFilter }}
             - --label-filter={{ .Values.labelFilter }}
             {{- end }}
+            {{- range .Values.ingressClassFilters }}
+            - --ingress-class={{ . }}
+            {{- end }}
+            {{- range .Values.managedRecordTypesFilters }}
+            - --managed-record-types={{ . }}
+            {{- end }}
             {{- if .Values.crd.apiversion }}
             - --crd-source-apiversion={{ .Values.crd.apiversion }}
             {{- end }}
@@ -584,7 +590,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ template "external-dns.secretName" . }}
-                  key: rfc2136_tsig_secret
+                  key: {{ .Values.rfc2136.tsigKeyname }}
             {{- end }}
             {{- end }}
             {{- if eq .Values.provider "pdns" }}

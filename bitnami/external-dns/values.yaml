@@ -67,7 +67,7 @@ useDaemonset: false
 image:
   registry: docker.io
   repository: bitnami/external-dns
-  tag: 0.13.4-debian-11-r19
+  tag: 0.13.5-debian-11-r55
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -597,7 +597,7 @@ rfc2136:
   tsigSecretAlg: hmac-sha256
   ## @param rfc2136.tsigKeyname When using the rfc2136 provider, specify the tsig keyname to enable security (optional)
   ##
-  tsigKeyname: externaldns-key
+  tsigKeyname: rfc2136_tsig_secret
   ## @param rfc2136.tsigAxfr When using the rfc2136 provider, enable AFXR to enable security (optional)
   ##
   tsigAxfr: true
@@ -682,6 +682,12 @@ annotationFilter: ""
 ## @param labelFilter Select sources managed by external-dns using label selector (optional)
 ##
 labelFilter: ""
+## @param ingressClassFilters Filter sources managed by external-dns via IngressClass (optional)
+##
+ingressClassFilters: []
+## @param managedRecordTypesFilters Filter record types managed by external-dns (optional)
+##
+managedRecordTypesFilters: []
 ## @param dryRun When enabled, prints DNS record changes rather than actually performing them (optional)
 ##
 dryRun: false

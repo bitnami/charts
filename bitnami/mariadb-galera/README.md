@@ -89,7 +89,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
 | `image.registry`                              | MariaDB Galera image registry                                                                                                                                                                 | `docker.io`               |
 | `image.repository`                            | MariaDB Galera image repository                                                                                                                                                               | `bitnami/mariadb-galera`  |
-| `image.tag`                                   | MariaDB Galera image tag (immutable tags are recommended)                                                                                                                                     | `10.11.4-debian-11-r11`   |
+| `image.tag`                                   | MariaDB Galera image tag (immutable tags are recommended)                                                                                                                                     | `11.0.2-debian-11-r1`     |
 | `image.digest`                                | MariaDB Galera image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                | `""`                      |
 | `image.pullPolicy`                            | MariaDB Galera image pull policy                                                                                                                                                              | `IfNotPresent`            |
 | `image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                                                                                              | `[]`                      |
@@ -227,7 +227,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                             | Start a side-car prometheus exporter                                                                                                                                                          | `false`                   |
 | `metrics.image.registry`                      | MariaDB Prometheus exporter image registry                                                                                                                                                    | `docker.io`               |
 | `metrics.image.repository`                    | MariaDB Prometheus exporter image repository                                                                                                                                                  | `bitnami/mysqld-exporter` |
-| `metrics.image.tag`                           | MariaDB Prometheus exporter image tag (immutable tags are recommended)                                                                                                                        | `0.14.0-debian-11-r138`   |
+| `metrics.image.tag`                           | MariaDB Prometheus exporter image tag (immutable tags are recommended)                                                                                                                        | `0.15.0-debian-11-r5`     |
 | `metrics.image.digest`                        | MariaDB Prometheus exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                   | `""`                      |
 | `metrics.image.pullPolicy`                    | MariaDB Prometheus exporter image pull policy                                                                                                                                                 | `IfNotPresent`            |
 | `metrics.image.pullSecrets`                   | MariaDB Prometheus exporter image pull secrets                                                                                                                                                | `[]`                      |
@@ -573,6 +573,10 @@ helm upgrade my-release oci://registry-1.docker.io/bitnamicharts/mariadb-galera 
 ```
 
 | Note: you need to substitute the placeholders _[ROOT_PASSWORD]_, _[MARIADB_PASSWORD]_ and _[MARIABACKUP_PASSWORD]_ with the values obtained from instructions in the installation notes.
+
+### To 9.0.0
+
+This major release bumps the MariaDB version to 11.0. Follow the [upstream instructions](https://mariadb.com/kb/en/upgrading-from-mariadb-10-11-to-mariadb-11-0/) for upgrading from MariaDB 10.11 to 11.0. No major issues are expected during the upgrade.
 
 ### To 7.0.0
 

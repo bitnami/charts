@@ -45,6 +45,7 @@ spec:
         {{- if $.Values.podLabels }}
         {{- include "common.tplvalues.render" (dict "value" $.Values.podLabels "context" $) | nindent 8 }}
         {{- end }}
+        shard: {{ $i | quote }}
     spec:
       serviceAccountName: {{ template "clickhouse.serviceAccountName" $ }}
       {{- include "clickhouse.imagePullSecrets" $ | nindent 6 }}
@@ -388,6 +389,10 @@ spec:
         {{- if not $.Values.persistence.enabled }}
         - name: data
           emptyDir: {}
+        {{- else if $.Values.persistence.existingClaim }}
+        - name: data
+          persistentVolumeClaim:
+            claimName: {{ tpl $.Values.persistence.existingClaim $ }}
         {{- end }}
         {{- if  $.Values.tls.enabled }}
         - name: raw-certificates
@@ -399,7 +404,7 @@ spec:
         {{- if $.Values.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" $.Values.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
-  {{- if $.Values.persistence.enabled }}
+  {{- if and $.Values.persistence.enabled (not $.Values.persistence.existingClaim) }}
   volumeClaimTemplates:
     - metadata:
         name: data

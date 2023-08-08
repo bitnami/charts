@@ -489,61 +489,59 @@ Return kafka port
 {{- end -}}
 
 {{/*
-Return the kafka headless service name
+Return the kafka broker-only nodes headless service name
 */}}
-{{- define "milvus.kafka.headlessServiceName" -}}
-{{- printf "%s-headless" (include "milvus.kafka.fullname" .) -}}
+{{- define "milvus.kafka.broker.headlessServiceName" -}}
+{{- printf "%s-broker-headless" (include "milvus.kafka.fullname" .) -}}
+{{- end -}}
+
+{{/*
+Return the kafka controller-eligible nodes headless service name
+*/}}
+{{- define "milvus.kafka.controller.headlessServiceName" -}}
+{{- printf "%s-controller-headless" (include "milvus.kafka.fullname" .) -}}
 {{- end -}}
 
 {{/*
 Return true if kafka authentication is enabled
 */}}
-{{- define "milvus.kafka.authEnabled" }}
-{{- if .Values.kafka.enabled -}}
-    {{- if contains "sasl" .Values.kafka.auth.clientProtocol -}}
-        {{- true -}}
-    {{- end -}}
-{{- else if .Values.externalKafka.servers -}}
-    {{- if or .Values.externalKafka.existingSecret .Values.externalKafka.password -}}
-        {{- true -}}
-    {{- end -}}
-{{- end }}
-{{- end }}
+{{- define "milvus.kafka.authEnabled" -}}
+{{- $protocol := include "milvus.kafka.securityProtocol" . -}}
+{{- if contains "SASL" $protocol -}}
+    {{- true -}}
+{{- end -}}
+{{- end -}}
 
 {{/*
 Return Kafka authentication SASL mechanisms
 */}}
-{{- define "milvus.kafka.saslMechanisms" }}
+{{- define "milvus.kafka.saslMechanisms" -}}
 {{- if .Values.kafka.enabled -}}
-    {{- upper .Values.kafka.auth.sasl.mechanisms -}}
+    {{- print (upper .Values.kafka.sasl.enabledMechanisms) -}}
 {{- else -}}
-    {{- .Values.externalKafka.saslMechanisms -}}
-{{- end }}
-{{- end }}
+    {{- print (upper .Values.externalKafka.sasl.enabledMechanisms) -}}
+{{- end -}}
+{{- end -}}
 
 {{/*
 Return Kafka security protocol
 */}}
-{{- define "milvus.kafka.securityProtocol" }}
+{{- define "milvus.kafka.securityProtocol" -}}
 {{- if .Values.kafka.enabled -}}
-    {{- if eq .Values.kafka.auth.clientProtocol "sasl" -}}
-        {{- print "SASL_PLAINTEXT" -}}
-    {{- else -}}
-        {{- print .Values.kafka.auth.clientProtocol -}}
-    {{- end -}}
+    {{- print (upper .Values.kafka.listeners.client.protocol) -}}
 {{- else -}}
-    {{- print .Values.externalKafka.securityProtocol -}}
-{{- end }}
-{{- end }}
+    {{- print (upper .Values.externalKafka.listener.protocol) -}}
+{{- end -}}
+{{- end -}}
 
 {{/*
 Return kafka credential secret name
 */}}
 {{- define "milvus.kafka.secretName" -}}
 {{- if .Values.kafka.enabled -}}
-    {{- printf "%s-jaas" (include "milvus.kafka.fullname" .) -}}
-{{- else if .Values.externalKafka.existingSecret -}}
-    {{- print .Values.externalKafka.existingSecret -}}
+    {{- printf "%s-user-passwords" (include "milvus.kafka.fullname" .) -}}
+{{- else if .Values.externalKafka.sasl.existingSecret -}}
+    {{- print .Values.externalKafka.sasl.existingSecret -}}
 {{- else -}}
     {{- printf "%s-external-kafka" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
@@ -556,7 +554,7 @@ Return kafka secret password key
 {{- if .Values.kafka.enabled -}}
     {{- print "system-user-password" -}}
 {{- else -}}
-    {{- print .Values.externalKafka.existingSecretPasswordKey -}}
+    {{- print .Values.externalKafka.sasl.existingSecretPasswordKey -}}
 {{- end -}}
 {{- end -}}
 
@@ -565,9 +563,9 @@ Return kafka username
 */}}
 {{- define "milvus.kafka.user" -}}
 {{- if .Values.kafka.enabled -}}
-    {{- print (index .Values.kafka.auth.sasl.jaas.clientUsers 0) -}}
+    {{- print (index .Values.kafka.sasl.client.users 0) -}}
 {{- else -}}
-    {{- print .Values.externalKafka.user -}}
+    {{- print .Values.externalKafka.sasl.user -}}
 {{- end -}}
 {{- end -}}
 
