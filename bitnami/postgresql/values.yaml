@@ -698,6 +698,19 @@ primary:
     ## @param primary.persistence.dataSource Custom PVC data source
     ##
     dataSource: {}
+  ## PostgreSQL Primary Persistent Volume Claim Retention Policy
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#persistentvolumeclaim-retention
+  ##
+  persistentVolumeClaimRetentionPolicy:
+    ## @param primary.persistentVolumeClaimRetentionPolicy.enabled Enable Persistent volume retention policy for Primary Statefulset
+    ##
+    enabled: false
+    ## @param primary.persistentVolumeClaimRetentionPolicy.whenScaled Volume retention behavior when the replica count of the StatefulSet is reduced
+    ##
+    whenScaled: Retain
+    ## @param primary.persistentVolumeClaimRetentionPolicy.whenDeleted Volume retention behavior that applies when the StatefulSet is deleted
+    ##
+    whenDeleted: Retain
 
 ## @section PostgreSQL read only replica parameters (only used when `architecture` is set to `replication`)
 ##
@@ -1048,6 +1061,19 @@ readReplicas:
     ## @param readReplicas.persistence.dataSource Custom PVC data source
     ##
     dataSource: {}
+  ## PostgreSQL Read only Persistent Volume Claim Retention Policy
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#persistentvolumeclaim-retention
+  ##
+  persistentVolumeClaimRetentionPolicy:
+    ## @param readReplicas.persistentVolumeClaimRetentionPolicy.enabled Enable Persistent volume retention policy for read only Statefulset
+    ##
+    enabled: false
+    ## @param readReplicas.persistentVolumeClaimRetentionPolicy.whenScaled Volume retention behavior when the replica count of the StatefulSet is reduced
+    ##
+    whenScaled: Retain
+    ## @param readReplicas.persistentVolumeClaimRetentionPolicy.whenDeleted Volume retention behavior that applies when the StatefulSet is deleted
+    ##
+    whenDeleted: Retain
 
 
 ## @section Backup parameters
