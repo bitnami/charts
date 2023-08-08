@@ -170,7 +170,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.type`                     | Kubernetes Service type                                                                 | `ClusterIP` |
 | `service.ports.memcached`          | Memcached service port                                                                  | `11211`     |
 | `service.nodePorts.memcached`      | Node port for Memcached                                                                 | `""`        |
-| `service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin                        | `None`      |
+| `service.sessionAffinity`          | Control where client requests go, to the same pod or round-robin                        | `""`        |
 | `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                             | `{}`        |
 | `service.clusterIP`                | Memcached service Cluster IP                                                            | `""`        |
 | `service.loadBalancerIP`           | Memcached service Load Balancer IP                                                      | `""`        |
