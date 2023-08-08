@@ -110,7 +110,7 @@ For more information, refer to the [documentation on the differences between the
 | `operator.updateStrategy.type`                               | Set up update strategy for Grafana Operator installation.                                                                                 | `Recreate`                 |
 | `operator.image.registry`                                    | Grafana Operator image registry                                                                                                           | `docker.io`                |
 | `operator.image.repository`                                  | Grafana Operator image name                                                                                                               | `bitnami/grafana-operator` |
-| `operator.image.tag`                                         | Grafana Operator image tag                                                                                                                | `5.2.0-debian-11-r10`      |
+| `operator.image.tag`                                         | Grafana Operator image tag                                                                                                                | `5.3.0-debian-11-r0`       |
 | `operator.image.digest`                                      | Grafana Operator image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                          | `""`                       |
 | `operator.image.pullPolicy`                                  | Grafana Operator image pull policy                                                                                                        | `IfNotPresent`             |
 | `operator.image.pullSecrets`                                 | Grafana Operator image pull secrets                                                                                                       | `[]`                       |
@@ -191,7 +191,7 @@ For more information, refer to the [documentation on the differences between the
 | `grafana.enabled`                                           | Enabled the deployment of the Grafana CRD object into the cluster                                       | `true`                   |
 | `grafana.image.registry`                                    | Grafana image registry                                                                                  | `docker.io`              |
 | `grafana.image.repository`                                  | Grafana image name                                                                                      | `bitnami/grafana`        |
-| `grafana.image.tag`                                         | Grafana image tag                                                                                       | `10.0.2-debian-11-r9`    |
+| `grafana.image.tag`                                         | Grafana image tag                                                                                       | `10.0.2-debian-11-r12`   |
 | `grafana.image.digest`                                      | Grafana image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                     |
 | `grafana.image.pullPolicy`                                  | Grafana image pull policy                                                                               | `IfNotPresent`           |
 | `grafana.image.pullSecrets`                                 | Grafana image pull secrets                                                                              | `[]`                     |
@@ -242,11 +242,7 @@ For more information, refer to the [documentation on the differences between the
 | `grafana.persistence.annotations`                           | Add annotations to the persistent volume                                                                | `{}`                     |
 | `grafana.persistence.size`                                  | Define the size of the PersistentVolumeClaim to request for                                             | `10Gi`                   |
 | `grafana.config`                                            | grafana.ini configuration for the instance for this to configure please look at upstream docs           | `{}`                     |
-| `grafana.configMaps`                                        | Extra configMaps to mount into the grafana pod                                                          | `[]`                     |
-| `grafana.secrets`                                           | Extra secrets to mount into the grafana pod                                                             | `[]`                     |
 | `grafana.jsonnetLibrarySelector`                            | Configuring the read for jsonnetLibraries to pull in.                                                   | `{}`                     |
-| `grafana.dashboardLabelSelectors`                           | This selects dashboards on the label.                                                                   | `{}`                     |
-| `grafana.dashboardNamespaceSelector`                        | Watch for dashboards only in the Namespaces that have the specified namespace label                     | `{}`                     |
 | `grafana.livenessProbe.enabled`                             | Enable livenessProbe                                                                                    | `true`                   |
 | `grafana.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                 | `120`                    |
 | `grafana.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                        | `10`                     |

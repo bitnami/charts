@@ -1,0 +1,33 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- $replicaCount := int .Values.controller.replicaCount }}
+{{- if and .Values.controller.pdb.create .Values.kraft.enabled (gt $replicaCount 0) }}
+apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
+kind: PodDisruptionBudget
+metadata:
+  name: {{ printf "%s-controller" (include "common.names.fullname" .) }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" . | nindent 4 }}
+    app.kubernetes.io/component: controller-eligible
+    app.kubernetes.io/part-of: kafka
+    {{- if .Values.commonLabels }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
+    {{- end }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+spec:
+  {{- if .Values.controller.pdb.minAvailable }}
+  minAvailable: {{ .Values.controller.pdb.minAvailable }}
+  {{- end }}
+  {{- if .Values.controller.pdb.maxUnavailable }}
+  maxUnavailable: {{ .Values.controller.pdb.maxUnavailable }}
+  {{- end }}
+  selector:
+    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+      app.kubernetes.io/component: controller-only
+      app.kubernetes.io/part-of: kafka
+{{- end }}

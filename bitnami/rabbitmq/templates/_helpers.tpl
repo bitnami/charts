@@ -198,13 +198,14 @@ rabbitmq: memoryHighWatermark
 Validate values of rabbitmq - TLS configuration for Ingress
 */}}
 {{- define "rabbitmq.validateValues.ingress.tls" -}}
-{{- if and .Values.ingress.enabled .Values.ingress.tls (not (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.ingress.annotations ))) (not .Values.ingress.selfSigned) (empty .Values.ingress.extraTls) }}
+{{- if and .Values.ingress.enabled .Values.ingress.tls (not (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.ingress.annotations ))) (not .Values.ingress.selfSigned) (not .Values.ingress.existingSecret) (empty .Values.ingress.extraTls) }}
 rabbitmq: ingress.tls
     You enabled the TLS configuration for the default ingress hostname but
     you did not enable any of the available mechanisms to create the TLS secret
     to be used by the Ingress Controller.
     Please use any of these alternatives:
       - Use the `ingress.extraTls` and `ingress.secrets` parameters to provide your custom TLS certificates.
+      - Use the `ingress.existingSecret` to provide your custom TLS certificates.
       - Rely on cert-manager to create it by setting the corresponding annotations
       - Rely on Helm to create self-signed certificates by setting `ingress.selfSigned=true`
 {{- end -}}

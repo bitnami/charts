@@ -14,7 +14,7 @@ dependencies:
   - condition: mariadb.enabled
     name: mariadb
     repository: oci://registry-1.docker.io/bitnamicharts
-    version: 12.x.x
+    version: 13.x.x
   - name: common
     repository: oci://registry-1.docker.io/bitnamicharts
     tags:
@@ -38,4 +38,4 @@ maintainers:
 name: redmine
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/redmine
-version: 22.1.7
+version: 23.0.0

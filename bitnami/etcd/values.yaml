@@ -73,7 +73,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/etcd
-  tag: 3.5.9-debian-11-r24
+  tag: 3.5.9-debian-11-r76
   digest: ""
   ## @param image.pullPolicy etcd image pull policy
   ## Specify a imagePullPolicy
@@ -209,6 +209,12 @@ autoCompactionRetention: ""
 ## - 'existing': when upgrading the chart ('helm upgrade ...')
 ##
 initialClusterState: ""
+## @param initialClusterToken Initial cluster token. Can be used to protect etcd from cross-cluster-interaction, which might corrupt the clusters.
+## If spinning up multiple clusters (or creating and destroying a single cluster)
+## with same configuration for testing purpose, it is highly recommended that each cluster is given a unique initial-cluster-token.
+## By doing this, etcd can generate unique cluster IDs and member IDs for the clusters even if they otherwise have the exact same configuration.
+##
+initialClusterToken: "etcd-cluster-k8s"
 ## @param logLevel Sets the log level for the etcd process. Allowed values: 'debug', 'info', 'warn', 'error', 'panic', 'fatal'
 ##
 logLevel: "info"
@@ -627,7 +633,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r2
+    tag: 11-debian-11-r16
     digest: ""
     ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
     ##

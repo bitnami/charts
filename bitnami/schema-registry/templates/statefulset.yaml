@@ -6,8 +6,9 @@ SPDX-License-Identifier: APACHE-2.0
 {{- $fullname := include "common.names.fullname" .  }}
 {{- $releaseNamespace := .Release.Namespace }}
 {{- $clusterDomain := .Values.clusterDomain }}
-{{- $kafkaProtocol := include "schema-registry.listenerType" ( dict "protocol" (ternary .Values.kafka.auth.clientProtocol .Values.externalKafka.auth.protocol .Values.kafka.enabled) ) -}}
-{{- $kafkaReplicaCount := int .Values.kafka.replicaCount }}
+{{- $kafkaProtocol := upper (ternary .Values.kafka.listeners.client.protocol .Values.externalKafka.listener.protocol .Values.kafka.enabled) }}
+{{- $kafkaBrokerReplicaCount := int .Values.kafka.broker.replicaCount }}
+{{- $kafkaControllerReplicaCount := ternary 0 (int .Values.kafka.controller.replicaCount) (or (not .Values.kafka.kraft.enabled) (.Values.kafka.controller.controllerOnly)) }}
 {{- $kafkaFullname := include "schema-registry.kafka.fullname" . }}
 {{- $kafkaPort := int .Values.kafka.service.ports.client }}
 apiVersion: {{ include "common.capabilities.statefulset.apiVersion" $ }}
@@ -150,8 +151,11 @@ spec:
             - name: SCHEMA_REGISTRY_KAFKA_BROKERS
               {{- if .Values.kafka.enabled }}
               {{- $brokers := list }}
-              {{- range $e, $i := until $kafkaReplicaCount }}
-              {{- $brokers = append $brokers (printf "%s://%s-%d.%s-headless.%s.svc.%s:%d" $kafkaProtocol $kafkaFullname $i $kafkaFullname $releaseNamespace $clusterDomain $kafkaPort) }}
+              {{- range $e, $i := until $kafkaBrokerReplicaCount }}
+              {{- $brokers = append $brokers (printf "%s://%s-broker-%d.%s-broker-headless.%s.svc.%s:%d" $kafkaProtocol $kafkaFullname $i $kafkaFullname $releaseNamespace $clusterDomain $kafkaPort) }}
+              {{- end }}
+              {{- range $e, $i := until $kafkaControllerReplicaCount }}
+              {{- $brokers = append $brokers (printf "%s://%s-controller-%d.%s-controller-headless.%s.svc.%s:%d" $kafkaProtocol $kafkaFullname $i $kafkaFullname $releaseNamespace $clusterDomain $kafkaPort) }}
               {{- end }}
               value: {{ join "," $brokers | quote }}
               {{- else }}
@@ -162,14 +166,14 @@ spec:
               value: {{ .Values.auth.kafka.saslMechanism }}
             - name: SCHEMA_REGISTRY_KAFKA_SASL_USERS
               {{- if .Values.kafka.enabled }}
-              value: {{ join "," .Values.kafka.auth.sasl.jaas.clientUsers | quote }}
+              value: {{ join "," .Values.kafka.sasl.client.users | quote }}
               {{- else }}
-              value: {{ .Values.externalKafka.auth.jaas.user | quote }}
+              value: {{ .Values.externalKafka.sasl.user | quote }}
               {{- end }}
             - name: SCHEMA_REGISTRY_KAFKA_SASL_PASSWORDS
               valueFrom:
                 secretKeyRef:
-                  name: {{ include "schema-registry.jaasSecretName" . }}
+                  name: {{ include "schema-registry.secretName" . }}
                   key: client-passwords
             {{- end }}
             {{- if contains "SSL" $kafkaProtocol }}
