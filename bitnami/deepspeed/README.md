@@ -2,7 +2,7 @@
 
 # DeepSpeed packaged by Bitnami
 
-DeepSpeed is a deep learning platform that accelerates the transition from research prototyping to production deployment. Bitnami image includes Torchvision for specific computer vision support.
+DeepSpeed is deep learning software suite for empowering ChatGPT-like model training. Features dense or sparse model inference, high throughput and high compression.
 
 [Overview of DeepSpeed](https://www.deepspeed.ai/)
 
