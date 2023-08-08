@@ -293,6 +293,7 @@ helm uninstall my-release
 | `envoy.service.loadBalancerSourceRanges`                      | List of IP CIDRs allowed access to load balancer (if supported)                                                       | `[]`                  |
 | `envoy.service.loadBalancerClass`                             | Envoy service Load Balancer Class                                                                                     | `""`                  |
 | `envoy.service.ipFamilyPolicy`                                | , support SingleStack, PreferDualStack and RequireDualStack                                                           | `""`                  |
+| `envoy.service.ipFamilies`                                    | List of IP families (e.g. IPv4, IPv6) assigned to the service.                                                        | `[]`                  |
 | `envoy.service.annotations`                                   | Annotations for Envoy service                                                                                         | `{}`                  |
 | `envoy.service.ports.http`                                    | Sets service http port                                                                                                | `80`                  |
 | `envoy.service.ports.https`                                   | Sets service https port                                                                                               | `443`                 |
