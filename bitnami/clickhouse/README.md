@@ -327,6 +327,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.serviceMonitor.metricRelabelings`    | Specify additional relabeling of metrics                                                               | `[]`    |
 | `metrics.serviceMonitor.relabelings`          | Specify general relabeling                                                                             | `[]`    |
 | `metrics.serviceMonitor.selector`             | Prometheus instance selector labels                                                                    | `{}`    |
+| `metrics.prometheusRule.enabled`              | Create a PrometheusRule for Prometheus Operator                                                        | `false` |
+| `metrics.prometheusRule.namespace`            | Namespace for the PrometheusRule Resource (defaults to the Release Namespace)                          | `""`    |
+| `metrics.prometheusRule.additionalLabels`     | Additional labels that can be used so PrometheusRule will be discovered by Prometheus                  | `{}`    |
+| `metrics.prometheusRule.rules`                | PrometheusRule definitions                                                                             | `[]`    |
 
 ### External Zookeeper paramaters
 

@@ -30,6 +30,9 @@ spec:
   {{- if .Values.service.externalIPs }}
   externalIPs: {{ toYaml .Values.service.externalIPs | nindent 4 }}
   {{- end }}
+  {{- if and (eq .Values.service.type "ExternalName") .Values.service.externalName }}
+  externalName: {{ .Values.service.externalName }}
+  {{- end }}
   {{- if and (eq .Values.service.type "LoadBalancer") (not (empty .Values.service.loadBalancerIP)) }}
   loadBalancerIP: {{ .Values.service.loadBalancerIP }}
   {{- end }}

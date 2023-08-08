@@ -121,7 +121,6 @@ extraVolumeMounts: []
 ##   my_init_script.sh: |
 ##      #!/bin/sh
 ##      echo "Do something."
-##
 initScripts: {}
 ## @param initScriptsCM ConfigMap with the init scripts. Evaluated as a template.
 ## Note: This will override initScripts
