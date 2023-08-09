@@ -82,39 +82,39 @@ helm delete --purge my-release
 
 ### OpenSearch cluster Parameters
 
-| Name                        | Description                                                                                                                                         | Value                |
-| --------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------- |
-| `clusterName`               | OpenSearch cluster name                                                                                                                             | `open`               |
-| `containerPorts.restAPI`    | OpenSearch REST API port                                                                                                                            | `9200`               |
-| `containerPorts.transport`  | OpenSearch Transport port                                                                                                                           | `9300`               |
-| `plugins`                   | Comma, semi-colon or space separated list of plugins to install at initialization                                                                   | `""`                 |
-| `snapshotRepoPath`          | File System snapshot repository path                                                                                                                | `""`                 |
-| `config`                    | Override opensearch configuration                                                                                                                   | `{}`                 |
-| `extraConfig`               | Append extra configuration to the opensearch node configuration                                                                                     | `{}`                 |
-| `extraHosts`                | A list of external hosts which are part of this cluster                                                                                             | `[]`                 |
-| `extraVolumes`              | A list of volumes to be added to the pod                                                                                                            | `[]`                 |
-| `extraVolumeMounts`         | A list of volume mounts to be added to the pod                                                                                                      | `[]`                 |
-| `initScripts`               | Dictionary of init scripts. Evaluated as a template.                                                                                                | `{}`                 |
-| `initScriptsCM`             | ConfigMap with the init scripts. Evaluated as a template.                                                                                           | `""`                 |
-| `initScriptsSecret`         | Secret containing `/docker-entrypoint-initdb.d` scripts to be executed at initialization time that contain sensitive data. Evaluated as a template. | `""`                 |
-| `extraEnvVars`              | Array containing extra env vars to be added to all pods (evaluated as a template)                                                                   | `[]`                 |
-| `extraEnvVarsCM`            | ConfigMap containing extra env vars to be added to all pods (evaluated as a template)                                                               | `""`                 |
-| `extraEnvVarsSecret`        | Secret containing extra env vars to be added to all pods (evaluated as a template)                                                                  | `""`                 |
-| `sidecars`                  | Add additional sidecar containers to the all opensearch node pod(s)                                                                                 | `[]`                 |
-| `initContainers`            | Add additional init containers to the all opensearch node pod(s)                                                                                    | `[]`                 |
-| `useIstioLabels`            | Use this variable to add Istio labels to all pods                                                                                                   | `true`               |
-| `image.registry`            | OpenSearch image registry                                                                                                                           | `docker.io`          |
-| `image.repository`          | OpenSearch image repository                                                                                                                         | `bitnami/opensearch` |
-| `image.tag`                 | OpenSearch image tag (immutable tags are recommended)                                                                                               | `2.9.0-debian-11-r8` |
-| `image.digest`              | OpenSearch image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                          | `""`                 |
-| `image.pullPolicy`          | OpenSearch image pull policy                                                                                                                        | `IfNotPresent`       |
-| `image.pullSecrets`         | OpenSearch image pull secrets                                                                                                                       | `[]`                 |
-| `image.debug`               | Enable OpenSearch image debug mode                                                                                                                  | `false`              |
-| `security.enabled`          | Enable X-Pack Security settings                                                                                                                     | `false`              |
-| `security.adminPassword`    | Password for 'admin' user                                                                                                                           | `""`                 |
-| `security.logstashPassword` | Password for Logstash                                                                                                                               | `""`                 |
-| `security.existingSecret`   | Name of the existing secret containing the OpenSearch password and                                                                                  | `""`                 |
-| `security.fipsMode`         | Configure opensearch with FIPS 140 compliant mode                                                                                                   | `false`              |
+| Name                        | Description                                                                                                                                         | Value                 |
+| --------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
+| `clusterName`               | OpenSearch cluster name                                                                                                                             | `open`                |
+| `containerPorts.restAPI`    | OpenSearch REST API port                                                                                                                            | `9200`                |
+| `containerPorts.transport`  | OpenSearch Transport port                                                                                                                           | `9300`                |
+| `plugins`                   | Comma, semi-colon or space separated list of plugins to install at initialization                                                                   | `""`                  |
+| `snapshotRepoPath`          | File System snapshot repository path                                                                                                                | `""`                  |
+| `config`                    | Override opensearch configuration                                                                                                                   | `{}`                  |
+| `extraConfig`               | Append extra configuration to the opensearch node configuration                                                                                     | `{}`                  |
+| `extraHosts`                | A list of external hosts which are part of this cluster                                                                                             | `[]`                  |
+| `extraVolumes`              | A list of volumes to be added to the pod                                                                                                            | `[]`                  |
+| `extraVolumeMounts`         | A list of volume mounts to be added to the pod                                                                                                      | `[]`                  |
+| `initScripts`               | Dictionary of init scripts. Evaluated as a template.                                                                                                | `{}`                  |
+| `initScriptsCM`             | ConfigMap with the init scripts. Evaluated as a template.                                                                                           | `""`                  |
+| `initScriptsSecret`         | Secret containing `/docker-entrypoint-initdb.d` scripts to be executed at initialization time that contain sensitive data. Evaluated as a template. | `""`                  |
+| `extraEnvVars`              | Array containing extra env vars to be added to all pods (evaluated as a template)                                                                   | `[]`                  |
+| `extraEnvVarsCM`            | ConfigMap containing extra env vars to be added to all pods (evaluated as a template)                                                               | `""`                  |
+| `extraEnvVarsSecret`        | Secret containing extra env vars to be added to all pods (evaluated as a template)                                                                  | `""`                  |
+| `sidecars`                  | Add additional sidecar containers to the all opensearch node pod(s)                                                                                 | `[]`                  |
+| `initContainers`            | Add additional init containers to the all opensearch node pod(s)                                                                                    | `[]`                  |
+| `useIstioLabels`            | Use this variable to add Istio labels to all pods                                                                                                   | `true`                |
+| `image.registry`            | OpenSearch image registry                                                                                                                           | `docker.io`           |
+| `image.repository`          | OpenSearch image repository                                                                                                                         | `bitnami/opensearch`  |
+| `image.tag`                 | OpenSearch image tag (immutable tags are recommended)                                                                                               | `2.9.0-debian-11-r11` |
+| `image.digest`              | OpenSearch image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                          | `""`                  |
+| `image.pullPolicy`          | OpenSearch image pull policy                                                                                                                        | `IfNotPresent`        |
+| `image.pullSecrets`         | OpenSearch image pull secrets                                                                                                                       | `[]`                  |
+| `image.debug`               | Enable OpenSearch image debug mode                                                                                                                  | `false`               |
+| `security.enabled`          | Enable X-Pack Security settings                                                                                                                     | `false`               |
+| `security.adminPassword`    | Password for 'admin' user                                                                                                                           | `""`                  |
+| `security.logstashPassword` | Password for Logstash                                                                                                                               | `""`                  |
+| `security.existingSecret`   | Name of the existing secret containing the OpenSearch password and                                                                                  | `""`                  |
+| `security.fipsMode`         | Configure opensearch with FIPS 140 compliant mode                                                                                                   | `false`               |
 
 ### OpenSearch admin parameters
 
@@ -598,7 +598,7 @@ helm delete --purge my-release
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`            |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                                          | `docker.io`        |
 | `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                                                              | `bitnami/os-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `11-debian-11-r25` |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `11-debian-11-r31` |
 | `volumePermissions.image.digest`       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                         | `""`               |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`     |
 | `volumePermissions.image.pullSecrets`  | Init container volume-permissions image pull secrets                                                                                                      | `[]`               |
@@ -607,7 +607,7 @@ helm delete --purge my-release
 | `sysctlImage.enabled`                  | Enable kernel settings modifier image                                                                                                                     | `true`             |
 | `sysctlImage.registry`                 | Kernel settings modifier image registry                                                                                                                   | `docker.io`        |
 | `sysctlImage.repository`               | Kernel settings modifier image repository                                                                                                                 | `bitnami/os-shell` |
-| `sysctlImage.tag`                      | Kernel settings modifier image tag                                                                                                                        | `11-debian-11-r25` |
+| `sysctlImage.tag`                      | Kernel settings modifier image tag                                                                                                                        | `11-debian-11-r31` |
 | `sysctlImage.digest`                   | Kernel settings modifier image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                  | `""`               |
 | `sysctlImage.pullPolicy`               | Kernel settings modifier image pull policy                                                                                                                | `IfNotPresent`     |
 | `sysctlImage.pullSecrets`              | Kernel settings modifier image pull secrets                                                                                                               | `[]`               |
@@ -621,7 +621,7 @@ helm delete --purge my-release
 | `dashboards.enabled`                                     | Enables OpenSearch Dashboards deployment                                                                                                                               | `false`                         |
 | `dashboards.image.registry`                              | OpenSearch Dashboards image registry                                                                                                                                   | `docker.io`                     |
 | `dashboards.image.repository`                            | OpenSearch Dashboards image repository                                                                                                                                 | `bitnami/opensearch-dashboards` |
-| `dashboards.image.tag`                                   | OpenSearch Dashboards image tag (immutable tags are recommended)                                                                                                       | `2.9.0-debian-11-r8`            |
+| `dashboards.image.tag`                                   | OpenSearch Dashboards image tag (immutable tags are recommended)                                                                                                       | `2.9.0-debian-11-r12`           |
 | `dashboards.image.digest`                                | OpenSearch Dashboards image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                  | `""`                            |
 | `dashboards.image.pullPolicy`                            | OpenSearch Dashboards image pull policy                                                                                                                                | `IfNotPresent`                  |
 | `dashboards.image.pullSecrets`                           | OpenSearch Dashboards image pull secrets                                                                                                                               | `[]`                            |

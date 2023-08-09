@@ -121,7 +121,6 @@ extraVolumeMounts: []
 ##   my_init_script.sh: |
 ##      #!/bin/sh
 ##      echo "Do something."
-##
 initScripts: {}
 ## @param initScriptsCM ConfigMap with the init scripts. Evaluated as a template.
 ## Note: This will override initScripts
@@ -180,7 +179,7 @@ useIstioLabels: true
 image:
   registry: docker.io
   repository: bitnami/opensearch
-  tag: 2.9.0-debian-11-r8
+  tag: 2.9.0-debian-11-r11
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2167,7 +2166,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r25
+    tag: 11-debian-11-r31
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -2214,7 +2213,7 @@ sysctlImage:
   ##
   registry: docker.io
   repository: bitnami/os-shell
-  tag: 11-debian-11-r25
+  tag: 11-debian-11-r31
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2268,7 +2267,7 @@ dashboards:
   image:
     registry: docker.io
     repository: bitnami/opensearch-dashboards
-    tag: 2.9.0-debian-11-r8
+    tag: 2.9.0-debian-11-r12
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
