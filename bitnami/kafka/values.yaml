@@ -637,6 +637,11 @@ controller:
   ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
   ##
   runtimeClassName: ""
+  ## @param controller.enableServiceLinks Whether information about services should be injected into pod's environment variable
+  ## The environment variables injected by service links are not used, but can lead to slow kafka boot times or slow running of the scripts when there are many services in the current namespace.
+  ## If you experience slow pod startups or slow running of the scripts you probably want to set this to `false`.
+  ##
+  enableServiceLinks: true
   ## @param controller.schedulerName Name of the k8s scheduler (other than default)
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
@@ -1002,6 +1007,11 @@ broker:
   ## ref: https://kubernetes.io/docs/concepts/containers/runtime-class/
   ##
   runtimeClassName: ""
+  ## @param broker.enableServiceLinks Whether information about services should be injected into pod's environment variable
+  ## The environment variables injected by service links are not used, but can lead to slow kafka boot times or slow running of the scripts when there are many services in the current namespace.
+  ## If you experience slow pod startups or slow running of the scripts you probably want to set this to `false`.
+  ##
+  enableServiceLinks: true
   ## @param broker.schedulerName Name of the k8s scheduler (other than default)
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
@@ -1722,6 +1732,11 @@ metrics:
     ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
     ##
     schedulerName: ""
+    ## @param metrics.kafka.enableServiceLinks Whether information about services should be injected into pod's environment variable
+    ## The environment variables injected by service links are not used, but can lead to slow kafka boot times or slow running of the scripts when there are many services in the current namespace.
+    ## If you experience slow pod startups or slow running of the scripts you probably want to set this to `false`.
+    ##
+    enableServiceLinks: true
     ## @param metrics.kafka.priorityClassName Kafka exporter pods' priorityClassName
     ##
     priorityClassName: ""
@@ -2187,6 +2202,11 @@ provisioning:
   ## ref: https://kubernetes.io/docs/tasks/administer-cluster/configure-multiple-schedulers/
   ##
   schedulerName: ""
+  ## @param provisioning.enableServiceLinks Whether information about services should be injected into pod's environment variable
+  ## The environment variables injected by service links are not used, but can lead to slow kafka boot times or slow running of the scripts when there are many services in the current namespace.
+  ## If you experience slow pod startups or slow running of the scripts you probably want to set this to `false`.
+  ##
+  enableServiceLinks: true
   ## @param provisioning.extraVolumes Optionally specify extra list of additional volumes for the Kafka provisioning pod(s)
   ## e.g:
   ## extraVolumes:
