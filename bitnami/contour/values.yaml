@@ -840,6 +840,13 @@ envoy:
     ## @param envoy.service.ipFamilyPolicy [string], support SingleStack, PreferDualStack and RequireDualStack
     ##
     ipFamilyPolicy: ""
+    ## @param envoy.service.ipFamilies [array] List of IP families (e.g. IPv4, IPv6) assigned to the service.
+    ## Ref: https://kubernetes.io/docs/concepts/services-networking/dual-stack/
+    ## E.g.
+    ## ipFamilies:
+    ##   - IPv6
+    ##
+    ipFamilies: []
     ## @param envoy.service.annotations [object] Annotations for Envoy service
     ##
     annotations: {}
