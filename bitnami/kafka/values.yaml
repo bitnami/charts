@@ -1153,10 +1153,10 @@ service:
   ## @param service.ports.external Kafka svc port for external connections
   ##
   ports:
-    client: 19092
-    controller: 19093
-    interbroker: 19094
-    external: 19095
+    client: 9092
+    controller: 9093
+    interbroker: 9094
+    external: 9095
   ## @param service.extraPorts Extra ports to expose in the Kafka service (normally used with the `sidecar` value)
   ##
   extraPorts: []
