@@ -91,7 +91,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`                                    | ClickHouse image registry                                                                                  | `docker.io`           |
 | `image.repository`                                  | ClickHouse image repository                                                                                | `bitnami/clickhouse`  |
-| `image.tag`                                         | ClickHouse image tag (immutable tags are recommended)                                                      | `23.6.2-debian-11-r1` |
+| `image.tag`                                         | ClickHouse image tag (immutable tags are recommended)                                                      | `23.7.3-debian-11-r0` |
 | `image.digest`                                      | ClickHouse image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
 | `image.pullPolicy`                                  | ClickHouse image pull policy                                                                               | `IfNotPresent`        |
 | `image.pullSecrets`                                 | ClickHouse image pull secrets                                                                              | `[]`                  |
@@ -280,16 +280,17 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Persistence Parameters
 
-| Name                       | Description                                                            | Value               |
-| -------------------------- | ---------------------------------------------------------------------- | ------------------- |
-| `persistence.enabled`      | Enable persistence using Persistent Volume Claims                      | `true`              |
-| `persistence.storageClass` | Storage class of backing PVC                                           | `""`                |
-| `persistence.labels`       | Persistent Volume Claim labels                                         | `{}`                |
-| `persistence.annotations`  | Persistent Volume Claim annotations                                    | `{}`                |
-| `persistence.accessModes`  | Persistent Volume Access Modes                                         | `["ReadWriteOnce"]` |
-| `persistence.size`         | Size of data volume                                                    | `8Gi`               |
-| `persistence.selector`     | Selector to match an existing Persistent Volume for WordPress data PVC | `{}`                |
-| `persistence.dataSource`   | Custom PVC data source                                                 | `{}`                |
+| Name                        | Description                                                            | Value               |
+| --------------------------- | ---------------------------------------------------------------------- | ------------------- |
+| `persistence.enabled`       | Enable persistence using Persistent Volume Claims                      | `true`              |
+| `persistence.existingClaim` | Name of an existing PVC to use                                         | `""`                |
+| `persistence.storageClass`  | Storage class of backing PVC                                           | `""`                |
+| `persistence.labels`        | Persistent Volume Claim labels                                         | `{}`                |
+| `persistence.annotations`   | Persistent Volume Claim annotations                                    | `{}`                |
+| `persistence.accessModes`   | Persistent Volume Access Modes                                         | `["ReadWriteOnce"]` |
+| `persistence.size`          | Size of data volume                                                    | `8Gi`               |
+| `persistence.selector`      | Selector to match an existing Persistent Volume for WordPress data PVC | `{}`                |
+| `persistence.dataSource`    | Custom PVC data source                                                 | `{}`                |
 
 ### Init Container Parameters
 
@@ -298,7 +299,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`            |
 | `volumePermissions.image.registry`                     | OS Shell + Utility image registry                                                               | `docker.io`        |
 | `volumePermissions.image.repository`                   | OS Shell + Utility image repository                                                             | `bitnami/os-shell` |
-| `volumePermissions.image.tag`                          | OS Shell + Utility image tag (immutable tags are recommended)                                   | `11-debian-11-r2`  |
+| `volumePermissions.image.tag`                          | OS Shell + Utility image tag (immutable tags are recommended)                                   | `11-debian-11-r28` |
 | `volumePermissions.image.pullPolicy`                   | OS Shell + Utility image pull policy                                                            | `IfNotPresent`     |
 | `volumePermissions.image.pullSecrets`                  | OS Shell + Utility image pull secrets                                                           | `[]`               |
 | `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`               |
@@ -326,6 +327,10 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.serviceMonitor.metricRelabelings`    | Specify additional relabeling of metrics                                                               | `[]`    |
 | `metrics.serviceMonitor.relabelings`          | Specify general relabeling                                                                             | `[]`    |
 | `metrics.serviceMonitor.selector`             | Prometheus instance selector labels                                                                    | `{}`    |
+| `metrics.prometheusRule.enabled`              | Create a PrometheusRule for Prometheus Operator                                                        | `false` |
+| `metrics.prometheusRule.namespace`            | Namespace for the PrometheusRule Resource (defaults to the Release Namespace)                          | `""`    |
+| `metrics.prometheusRule.additionalLabels`     | Additional labels that can be used so PrometheusRule will be discovered by Prometheus                  | `{}`    |
+| `metrics.prometheusRule.rules`                | PrometheusRule definitions                                                                             | `[]`    |
 
 ### External Zookeeper paramaters
 

@@ -81,7 +81,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | -------------------------------------------------------------------------------------------------------- | ----------------------- |
 | `image.registry`                        | OpenCart image registry                                                                                  | `docker.io`             |
 | `image.repository`                      | OpenCart image repository                                                                                | `bitnami/opencart`      |
-| `image.tag`                             | OpenCart image tag (immutable tags are recommended)                                                      | `4.0.2-1-debian-11-r21` |
+| `image.tag`                             | OpenCart image tag (immutable tags are recommended)                                                      | `4.0.2-2-debian-11-r18` |
 | `image.digest`                          | OpenCart image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `image.pullPolicy`                      | OpenCart image pull policy                                                                               | `IfNotPresent`          |
 | `image.pullSecrets`                     | Specify docker-registry secret names as an array                                                         | `[]`                    |
@@ -221,17 +221,17 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Volume Permissions parameters
 
-| Name                                   | Description                                                                                                                                               | Value                   |
-| -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
-| `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
-| `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                                          | `docker.io`             |
-| `volumePermissions.image.repository`   | Init container volume-permissions image repository                                                                                                        | `bitnami/bitnami-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                                                                              | `11-debian-11-r127`     |
-| `volumePermissions.image.digest`       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                         | `""`                    |
-| `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`          |
-| `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                                          | `[]`                    |
-| `volumePermissions.resources.limits`   | The resources limits for the container                                                                                                                    | `{}`                    |
-| `volumePermissions.resources.requests` | The requested resources for the container                                                                                                                 | `{}`                    |
+| Name                                   | Description                                                                                                                                               | Value              |
+| -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ |
+| `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`            |
+| `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                                          | `docker.io`        |
+| `volumePermissions.image.repository`   | Init container volume-permissions image repository                                                                                                        | `bitnami/os-shell` |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                                                                              | `11-debian-11-r25` |
+| `volumePermissions.image.digest`       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                         | `""`               |
+| `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`     |
+| `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                                          | `[]`               |
+| `volumePermissions.resources.limits`   | The resources limits for the container                                                                                                                    | `{}`               |
+| `volumePermissions.resources.requests` | The requested resources for the container                                                                                                                 | `{}`               |
 
 ### Metrics parameters
 
@@ -240,7 +240,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`           | Start a side-car prometheus exporter                                                                            | `false`                   |
 | `metrics.image.registry`    | Apache exporter image registry                                                                                  | `docker.io`               |
 | `metrics.image.repository`  | Apache exporter image repository                                                                                | `bitnami/apache-exporter` |
-| `metrics.image.tag`         | Apache exporter image tag (immutable tags are recommended)                                                      | `0.13.4-debian-11-r6`     |
+| `metrics.image.tag`         | Apache exporter image tag (immutable tags are recommended)                                                      | `1.0.1-debian-11-r2`      |
 | `metrics.image.digest`      | Apache exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
 | `metrics.image.pullPolicy`  | Image pull policy                                                                                               | `IfNotPresent`            |
 | `metrics.image.pullSecrets` | Specify docker-registry secret names as an array                                                                | `[]`                      |
@@ -264,8 +264,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `certificates.extraEnvVarsCM`                        | ConfigMap with extra environment variables                                                                        | `""`                                     |
 | `certificates.extraEnvVarsSecret`                    | Secret with extra environment variables                                                                           | `""`                                     |
 | `certificates.image.registry`                        | Container sidecar registry                                                                                        | `docker.io`                              |
-| `certificates.image.repository`                      | Container sidecar image repository                                                                                | `bitnami/bitnami-shell`                  |
-| `certificates.image.tag`                             | Container sidecar image tag (immutable tags are recommended)                                                      | `11-debian-11-r127`                      |
+| `certificates.image.repository`                      | Container sidecar image repository                                                                                | `bitnami/os-shell`                       |
+| `certificates.image.tag`                             | Container sidecar image tag (immutable tags are recommended)                                                      | `11-debian-11-r25`                       |
 | `certificates.image.digest`                          | Container sidecar image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                                     |
 | `certificates.image.pullPolicy`                      | Container sidecar image pull policy                                                                               | `IfNotPresent`                           |
 | `certificates.image.pullSecrets`                     | Container sidecar image pull secrets                                                                              | `[]`                                     |
@@ -399,6 +399,10 @@ helm install my-release --set persistence.existingClaim=PVC_NAME oci://registry-
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 15.0.0
+
+This major release bumps the MariaDB version to 11.0. Follow the [upstream instructions](https://mariadb.com/kb/en/upgrading-from-mariadb-10-11-to-mariadb-11-0/) for upgrading from MariaDB 10.11 to 11.0. No major issues are expected during the upgrade.
 
 ### To 14.0.0
 

@@ -1,0 +1,26 @@
+source:
+  type: "git"
+  git:
+    repository: https://github.com/microsoft/DeepSpeedExamples
+    revision: master
+client:
+  podSecurityContext:
+    fsGroup: 1002
+  containerSecurityContext:
+    runAsUser: 1002
+    runAsGroup: 1002
+  serviceAccount:
+    create: true
+    automountServiceAccountToken: true
+  persistence:
+    enabled: true
+    mountPath: /bitnami/deepspeed/vib-test
+worker:
+  replicaCount: 2
+  containerPorts:
+    ssh: 3333
+  externalAccess:
+    enabled: true
+    service:
+      ports:
+        ssh: 4444

@@ -12,7 +12,7 @@ dependencies:
     repository: oci://registry-1.docker.io/bitnamicharts
     tags:
       - ejbca-database
-    version: 12.x.x
+    version: 13.x.x
   - name: common
     repository: oci://registry-1.docker.io/bitnamicharts
     tags:
@@ -32,4 +32,4 @@ maintainers:
 name: ejbca
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/ejbca
-version: 7.1.4
+version: 8.0.0
