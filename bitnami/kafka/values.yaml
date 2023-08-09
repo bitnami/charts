@@ -80,7 +80,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/kafka
-  tag: 3.5.1-debian-11-r14
+  tag: 3.5.1-debian-11-r16
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1494,7 +1494,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r28
+    tag: 11-debian-11-r31
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
