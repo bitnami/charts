@@ -852,6 +852,9 @@ service:
   ## @param service.externalIPs Service external IP addresses
   ##
   externalIPs: []
+  ## @param service.externalName Service external name
+  ##
+  externalName: ""
   ## @param service.loadBalancerIP IP address to assign to load balancer (if supported)
   ##
   loadBalancerIP: ""

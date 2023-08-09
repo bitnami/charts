@@ -36,9 +36,20 @@ jobs:
           files_changed="$(sed -nr 's/[\-\+]{3} [ab]\/(.*)/\1/p' $TEMP_FILE | sort | uniq)"
           templates=()
           regular_files=()
+          is_excluded() {
+            # Check if a given path contains one of the excluded paths
+            local -r path="${1:?missing path}"
+            local -r excluded_paths=("/crds/")
+            for excluded_path in "${excluded_paths[@]}"; do
+              if [[ "${path}" =~ ${excluded_path} ]]; then
+                return 0
+              fi
+            done
+            return 1
+          }
           while read -r file_changed; do
-            # Avoid removed files
-            if [[ -f "${file_changed}" ]]; then
+            # Avoid removed files and excluded files
+            if [[ -f "${file_changed}" ]] && ! is_excluded "${file_changed}"; then
               if [[ "${file_changed}" =~ \/templates\/ ]]; then
                 templates+=("${file_changed}")
               else

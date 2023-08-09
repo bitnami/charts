@@ -95,6 +95,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `milvus.auth.password`                                      | Milvus username password                                                                                                                            | `""`                   |
 | `milvus.auth.rootPassword`                                  | Milvus root password                                                                                                                                | `""`                   |
 | `milvus.auth.existingSecret`                                | Name of a secret containing the Milvus password                                                                                                     | `""`                   |
+| `milvus.auth.existingSecretPasswordKey`                     | Name of the secret key containing the Milvus password                                                                                               | `""`                   |
 | `milvus.defaultConfig`                                      | Milvus components default configuration                                                                                                             | `""`                   |
 | `milvus.extraConfig`                                        | Extra configuration parameters                                                                                                                      | `{}`                   |
 | `milvus.existingConfigMap`                                  | name of a ConfigMap with existing configuration for the default configuration                                                                       | `""`                   |
@@ -1422,10 +1423,16 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### External Kafka parameters
 
-| Name                    | Description            | Value           |
-| ----------------------- | ---------------------- | --------------- |
-| `externalKafka.servers` | External Kafka brokers | `["localhost"]` |
-| `externalKafka.port`    | External Kafka port    | `9092`          |
+| Name                                           | Description                                                                                                        | Value                 |
+| ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | --------------------- |
+| `externalKafka.servers`                        | External Kafka brokers                                                                                             | `["localhost"]`       |
+| `externalKafka.port`                           | External Kafka port                                                                                                | `9092`                |
+| `externalKafka.listener.protocol`              | Kafka listener protocol. Allowed protocols: PLAINTEXT, SASL_PLAINTEXT, SASL_SSL and SSL                            | `PLAINTEXT`           |
+| `externalKafka.sasl.user`                      | User for SASL authentication                                                                                       | `user`                |
+| `externalKafka.sasl.password`                  | Password for SASL authentication                                                                                   | `""`                  |
+| `externalKafka.sasl.existingSecret`            | Name of the existing secret containing a password for SASL authentication (under the key named "client-passwords") | `""`                  |
+| `externalKafka.sasl.existingSecretPasswordKey` | Name of the secret key containing the Kafka client user password                                                   | `kafka-root-password` |
+| `externalKafka.sasl.enabledMechanisms`         | Kafka enabled SASL mechanisms                                                                                      | `PLAIN`               |
 
 ### etcd sub-chart parameters
 
@@ -1456,14 +1463,15 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### kafka sub-chart paramaters
 
-| Name                               | Description                                  | Value      |
-| ---------------------------------- | -------------------------------------------- | ---------- |
-| `kafka.enabled`                    | Enable/disable Kafka chart installation      | `true`     |
-| `kafka.replicaCount`               | Number of Kafka brokers                      | `1`        |
-| `kafka.service.ports.client`       | Kafka svc port for client connections        | `9092`     |
-| `kafka.auth.clientProtocol`        | Kafka authentication protocol for the client | `sasl`     |
-| `kafka.auth.sasl.mechanisms`       | Kafka authentication mechanisms for SASL     | `plain`    |
-| `kafka.auth.sasl.jaas.clientUsers` | Kafka client users                           | `["user"]` |
+| Name                              | Description                                                                                   | Value                                |
+| --------------------------------- | --------------------------------------------------------------------------------------------- | ------------------------------------ |
+| `kafka.enabled`                   | Enable/disable Kafka chart installation                                                       | `true`                               |
+| `kafka.controller.replicaCount`   | Number of Kafka controller eligible (controller+broker) nodes                                 | `1`                                  |
+| `kafka.service.ports.client`      | Kafka svc port for client connections                                                         | `9092`                               |
+| `kafka.extraConfig`               | Additional configuration to be appended at the end of the generated Kafka configuration file. | `offsets.topic.replication.factor=1` |
+| `kafka.listeners.client.protocol` | Kafka authentication protocol for the client listener                                         | `SASL_PLAINTEXT`                     |
+| `kafka.sasl.enabledMechanisms`    | Kafka enabled SASL mechanisms                                                                 | `PLAIN`                              |
+| `kafka.sasl.client.users`         | Kafka client users                                                                            | `["user"]`                           |
 
 See <https://github.com/bitnami-labs/readme-generator-for-helm> to create the table.
 
@@ -1591,6 +1599,25 @@ To enable Ingress integration, set `attu.ingress.enabled` to `true`. The `attu.i
 ### TLS secrets
 
 The chart also facilitates the creation of TLS secrets for use with the Ingress controller, with different options for certificate management. [Learn more about TLS secrets](https://docs.bitnami.com/kubernetes/apps/mastodon/administration/enable-tls-ingress/).
+
+## Upgrading
+
+### To 2.0.0
+
+This major updates the Kafka subchart to its newest major, 24.0.0. This new version refactors the Kafka chart architecture and requires manual actions during the upgrade. For more information on this subchart's major, please refer to [Kafka upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/kafka#to-2400).
+
+Additionally, the following values have been modified:
+
+- `externalKafka.securityProtocol` has been replaced with `externalKafka.listener.protocol`, which now allows Kafka security protocols 'PLAINTEXT','SASL_PLAINTEXT', 'SSL', 'SASL_SSL'.
+- `externalKafka.user` has been replaced with `externalAccess.sasl.user`.
+- `externalKafka.password` has been replaced with `externalAccess.sasl.password`.
+- `externalKafka.existingSecret` has been replaced with `externalAccess.sasl.existingSecret`.
+- `externalKafka.existingSecretPasswordKey` has been replaced with `externalAccess.sasl.existingSecretPasswordKey`.
+- `externalKafka.saslMechanisms` has been replaced with `externalAccess.sasl.enabledMechanisms`.
+
+### To 1.0.0
+
+This major updates the Kafka subchart to its newest major, 23.0.0. For more information on this subchart's major, please refer to [Kafka upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/kafka#to-2300).
 
 ## Troubleshooting
 

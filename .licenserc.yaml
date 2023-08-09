@@ -18,6 +18,9 @@ header:
     paths:
       - "bitnami/**/templates/**/*.yml"
       - "bitnami/**/templates/**/*.yaml"
+    paths-ignore:
+      - "bitnami/**/templates/crds/**/*.yml"
+      - "bitnami/**/templates/crds/**/*.yaml"
 
   # License format for all other YAML files
   - comment: on-failure
