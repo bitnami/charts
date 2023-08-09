@@ -364,10 +364,7 @@ extraDeploy: |-
     kind: ConfigMap
     metadata:
       name: aspnet-core-configuration
-      labels: {{- include "common.labels.standard" . | nindent 6 }}
-        {{- if .Values.commonLabels }}
-        {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 6 }}
-        {{- end }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 6 }}
       {{- if .Values.commonAnnotations }}
       annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 6 }}
       {{- end }}
