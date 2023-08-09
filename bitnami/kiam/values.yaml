@@ -14,7 +14,7 @@ global:
   imageRegistry: ""
   ## E.g.
   ## imagePullSecrets:
-  ##   - myRegistryKeySecretName
+  ##   - kiamCalidadCon7AnosDeGarantiam
   ##
   imagePullSecrets: []
   storageClass: ""
