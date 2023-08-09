@@ -1,7 +1,5 @@
-# Copyright VMware, Inc.
-# SPDX-License-Identifier: APACHE-2.0
-
-# https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.65.1/example/prometheus-operator-crd/monitoring.coreos.com_probes.yaml
+# https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.67.1/example/prometheus-operator-crd/monitoring.coreos.com_probes.yaml
+---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
@@ -47,8 +45,8 @@ spec:
                 description: Authorization section for this endpoint
                 properties:
                   credentials:
-                    description: The secret's key that contains the credentials of
-                      the request
+                    description: Selects a key of a Secret in the namespace that contains
+                      the credentials for authentication.
                     properties:
                       key:
                         description: The key of the secret to select from.  Must be
@@ -67,8 +65,8 @@ spec:
                     type: object
                     x-kubernetes-map-type: atomic
                   type:
-                    description: Set the authentication type. Defaults to Bearer,
-                      Basic will cause an error
+                    description: "Defines the authentication type. The value is case-insensitive.
+                      \n \"Basic\" is not a supported value. \n Default: \"Bearer\""
                     type: string
                 type: object
               basicAuth:
@@ -164,15 +162,16 @@ spec:
               metricRelabelings:
                 description: MetricRelabelConfigs to apply to samples before ingestion.
                 items:
-                  description: 'RelabelConfig allows dynamic rewriting of the label
-                    set, being applied to samples before ingestion. It defines `<metric_relabel_configs>`-section
-                    of Prometheus configuration. More info: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#metric_relabel_configs'
+                  description: "RelabelConfig allows dynamic rewriting of the label
+                    set for targets, alerts, scraped samples and remote write samples.
+                    \n More info: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config"
                   properties:
                     action:
                       default: replace
-                      description: Action to perform based on regex matching. Default
-                        is 'replace'. uppercase and lowercase actions require Prometheus
-                        >= 2.36.
+                      description: "Action to perform based on the regex matching.
+                        \n `Uppercase` and `Lowercase` actions require Prometheus
+                        >= v2.36.0. `DropEqual` and `KeepEqual` actions require Prometheus
+                        >= v2.41.0. \n Default: \"Replace\""
                       enum:
                       - replace
                       - Replace
@@ -198,28 +197,26 @@ spec:
                       - DropEqual
                       type: string
                     modulus:
-                      description: Modulus to take of the hash of the source label
-                        values.
+                      description: "Modulus to take of the hash of the source label
+                        values. \n Only applicable when the action is `HashMod`."
                       format: int64
                       type: integer
                     regex:
                       description: Regular expression against which the extracted
-                        value is matched. Default is '(.*)'
+                        value is matched.
                       type: string
                     replacement:
-                      description: Replacement value against which a regex replace
-                        is performed if the regular expression matches. Regex capture
-                        groups are available. Default is '$1'
+                      description: "Replacement value against which a Replace action
+                        is performed if the regular expression matches. \n Regex capture
+                        groups are available."
                       type: string
                     separator:
-                      description: Separator placed between concatenated source label
-                        values. default is ';'.
+                      description: Separator is the string between concatenated SourceLabels.
                       type: string
                     sourceLabels:
                       description: The source labels select values from existing labels.
-                        Their content is concatenated using the configured separator
-                        and matched against the configured regular expression for
-                        the replace, keep, and drop actions.
+                        Their content is concatenated using the configured Separator
+                        and matched against the configured regular expression.
                       items:
                         description: LabelName is a valid Prometheus label name which
                           may only contain ASCII letters, numbers, as well as underscores.
@@ -227,9 +224,10 @@ spec:
                         type: string
                       type: array
                     targetLabel:
-                      description: Label to which the resulting value is written in
-                        a replace action. It is mandatory for replace actions. Regex
-                        capture groups are available.
+                      description: "Label to which the resulting string is written
+                        in a replacement. \n It is mandatory for `Replace`, `HashMod`,
+                        `Lowercase`, `Uppercase`, `KeepEqual` and `DropEqual` actions.
+                        \n Regex capture groups are available."
                       type: string
                   type: object
                 type: array
@@ -394,16 +392,16 @@ spec:
                           scrape job''s name is available via the `__tmp_prometheus_job_name`
                           label. More info: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config'
                         items:
-                          description: 'RelabelConfig allows dynamic rewriting of
-                            the label set, being applied to samples before ingestion.
-                            It defines `<metric_relabel_configs>`-section of Prometheus
-                            configuration. More info: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#metric_relabel_configs'
+                          description: "RelabelConfig allows dynamic rewriting of
+                            the label set for targets, alerts, scraped samples and
+                            remote write samples. \n More info: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config"
                           properties:
                             action:
                               default: replace
-                              description: Action to perform based on regex matching.
-                                Default is 'replace'. uppercase and lowercase actions
-                                require Prometheus >= 2.36.
+                              description: "Action to perform based on the regex matching.
+                                \n `Uppercase` and `Lowercase` actions require Prometheus
+                                >= v2.36.0. `DropEqual` and `KeepEqual` actions require
+                                Prometheus >= v2.41.0. \n Default: \"Replace\""
                               enum:
                               - replace
                               - Replace
@@ -429,28 +427,29 @@ spec:
                               - DropEqual
                               type: string
                             modulus:
-                              description: Modulus to take of the hash of the source
-                                label values.
+                              description: "Modulus to take of the hash of the source
+                                label values. \n Only applicable when the action is
+                                `HashMod`."
                               format: int64
                               type: integer
                             regex:
                               description: Regular expression against which the extracted
-                                value is matched. Default is '(.*)'
+                                value is matched.
                               type: string
                             replacement:
-                              description: Replacement value against which a regex
-                                replace is performed if the regular expression matches.
-                                Regex capture groups are available. Default is '$1'
+                              description: "Replacement value against which a Replace
+                                action is performed if the regular expression matches.
+                                \n Regex capture groups are available."
                               type: string
                             separator:
-                              description: Separator placed between concatenated source
-                                label values. default is ';'.
+                              description: Separator is the string between concatenated
+                                SourceLabels.
                               type: string
                             sourceLabels:
                               description: The source labels select values from existing
                                 labels. Their content is concatenated using the configured
-                                separator and matched against the configured regular
-                                expression for the replace, keep, and drop actions.
+                                Separator and matched against the configured regular
+                                expression.
                               items:
                                 description: LabelName is a valid Prometheus label
                                   name which may only contain ASCII letters, numbers,
@@ -459,9 +458,10 @@ spec:
                                 type: string
                               type: array
                             targetLabel:
-                              description: Label to which the resulting value is written
-                                in a replace action. It is mandatory for replace actions.
-                                Regex capture groups are available.
+                              description: "Label to which the resulting string is
+                                written in a replacement. \n It is mandatory for `Replace`,
+                                `HashMod`, `Lowercase`, `Uppercase`, `KeepEqual` and
+                                `DropEqual` actions. \n Regex capture groups are available."
                               type: string
                           type: object
                         type: array
@@ -527,16 +527,16 @@ spec:
                         description: 'RelabelConfigs to apply to the label set of
                           the targets before it gets scraped. More info: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config'
                         items:
-                          description: 'RelabelConfig allows dynamic rewriting of
-                            the label set, being applied to samples before ingestion.
-                            It defines `<metric_relabel_configs>`-section of Prometheus
-                            configuration. More info: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#metric_relabel_configs'
+                          description: "RelabelConfig allows dynamic rewriting of
+                            the label set for targets, alerts, scraped samples and
+                            remote write samples. \n More info: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config"
                           properties:
                             action:
                               default: replace
-                              description: Action to perform based on regex matching.
-                                Default is 'replace'. uppercase and lowercase actions
-                                require Prometheus >= 2.36.
+                              description: "Action to perform based on the regex matching.
+                                \n `Uppercase` and `Lowercase` actions require Prometheus
+                                >= v2.36.0. `DropEqual` and `KeepEqual` actions require
+                                Prometheus >= v2.41.0. \n Default: \"Replace\""
                               enum:
                               - replace
                               - Replace
@@ -562,28 +562,29 @@ spec:
                               - DropEqual
                               type: string
                             modulus:
-                              description: Modulus to take of the hash of the source
-                                label values.
+                              description: "Modulus to take of the hash of the source
+                                label values. \n Only applicable when the action is
+                                `HashMod`."
                               format: int64
                               type: integer
                             regex:
                               description: Regular expression against which the extracted
-                                value is matched. Default is '(.*)'
+                                value is matched.
                               type: string
                             replacement:
-                              description: Replacement value against which a regex
-                                replace is performed if the regular expression matches.
-                                Regex capture groups are available. Default is '$1'
+                              description: "Replacement value against which a Replace
+                                action is performed if the regular expression matches.
+                                \n Regex capture groups are available."
                               type: string
                             separator:
-                              description: Separator placed between concatenated source
-                                label values. default is ';'.
+                              description: Separator is the string between concatenated
+                                SourceLabels.
                               type: string
                             sourceLabels:
                               description: The source labels select values from existing
                                 labels. Their content is concatenated using the configured
-                                separator and matched against the configured regular
-                                expression for the replace, keep, and drop actions.
+                                Separator and matched against the configured regular
+                                expression.
                               items:
                                 description: LabelName is a valid Prometheus label
                                   name which may only contain ASCII letters, numbers,
@@ -592,9 +593,10 @@ spec:
                                 type: string
                               type: array
                             targetLabel:
-                              description: Label to which the resulting value is written
-                                in a replace action. It is mandatory for replace actions.
-                                Regex capture groups are available.
+                              description: "Label to which the resulting string is
+                                written in a replacement. \n It is mandatory for `Replace`,
+                                `HashMod`, `Lowercase`, `Uppercase`, `KeepEqual` and
+                                `DropEqual` actions. \n Regex capture groups are available."
                               type: string
                           type: object
                         type: array

@@ -1,7 +1,5 @@
-# Copyright VMware, Inc.
-# SPDX-License-Identifier: APACHE-2.0
-
-# https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.65.1/example/prometheus-operator-crd/monitoring.coreos.com_prometheusagents.yaml
+# https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.67.1/example/prometheus-operator-crd/monitoring.coreos.com_prometheusagents.yaml
+---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
@@ -71,15 +69,15 @@ spec:
               agent. More info: https://github.com/kubernetes/community/blob/master/contributors/devel/sig-architecture/api-conventions.md#spec-and-status'
             properties:
               additionalArgs:
-                description: AdditionalArgs allows setting additional arguments for
-                  the Prometheus container. It is intended for e.g. activating hidden
-                  flags which are not supported by the dedicated configuration options
-                  yet. The arguments are passed as-is to the Prometheus container
+                description: "AdditionalArgs allows setting additional arguments for
+                  the 'prometheus' container. \n It is intended for e.g. activating
+                  hidden flags which are not supported by the dedicated configuration
+                  options yet. The arguments are passed as-is to the Prometheus container
                   which may cause issues if they are invalid or not supported by the
-                  given Prometheus version. In case of an argument conflict (e.g.
+                  given Prometheus version. \n In case of an argument conflict (e.g.
                   an argument which is already set by the operator itself) or when
-                  providing an invalid argument the reconciliation will fail and an
-                  error will be logged.
+                  providing an invalid argument, the reconciliation will fail and
+                  an error will be logged."
                 items:
                   description: Argument as part of the AdditionalArgs list.
                   properties:
@@ -124,7 +122,7 @@ spec:
                 type: object
                 x-kubernetes-map-type: atomic
               affinity:
-                description: If specified, the pod's scheduling constraints.
+                description: Defines the Pods' affinity scheduling rules if specified.
                 properties:
                   nodeAffinity:
                     description: Describes node affinity scheduling rules for the
@@ -952,17 +950,18 @@ spec:
                     type: object
                 type: object
               apiserverConfig:
-                description: APIServerConfig allows specifying a host and auth methods
-                  to access apiserver. If left empty, Prometheus is assumed to run
-                  inside of the cluster and will discover API servers automatically
-                  and use the pod's CA certificate and bearer token file at /var/run/secrets/kubernetes.io/serviceaccount/.
+                description: 'APIServerConfig allows specifying a host and auth methods
+                  to access the Kuberntees API server. If null, Prometheus is assumed
+                  to run inside of the cluster: it will discover the API servers automatically
+                  and use the Pod''s CA certificate and bearer token file at /var/run/secrets/kubernetes.io/serviceaccount/.'
                 properties:
                   authorization:
-                    description: Authorization section for accessing apiserver
+                    description: "Authorization section for the API server. \n Cannot
+                      be set at the same time as `basicAuth`, `bearerToken`, or `bearerTokenFile`."
                     properties:
                       credentials:
-                        description: The secret's key that contains the credentials
-                          of the request
+                        description: Selects a key of a Secret in the namespace that
+                          contains the credentials for authentication.
                         properties:
                           key:
                             description: The key of the secret to select from.  Must
@@ -982,16 +981,18 @@ spec:
                         x-kubernetes-map-type: atomic
                       credentialsFile:
                         description: File to read a secret from, mutually exclusive
-                          with Credentials (from SafeAuthorization)
+                          with `credentials`.
                         type: string
                       type:
-                        description: Set the authentication type. Defaults to Bearer,
-                          Basic will cause an error
+                        description: "Defines the authentication type. The value is
+                          case-insensitive. \n \"Basic\" is not a supported value.
+                          \n Default: \"Bearer\""
                         type: string
                     type: object
                   basicAuth:
-                    description: BasicAuth allow an endpoint to authenticate over
-                      basic authentication
+                    description: "BasicAuth configuration for the API server. \n Cannot
+                      be set at the same time as `authorization`, `bearerToken`, or
+                      `bearerTokenFile`."
                     properties:
                       password:
                         description: The secret in the service monitor namespace that
@@ -1035,17 +1036,22 @@ spec:
                         x-kubernetes-map-type: atomic
                     type: object
                   bearerToken:
-                    description: Bearer token for accessing apiserver.
+                    description: "*Warning: this field shouldn't be used because the
+                      token value appears in clear-text. Prefer using `authorization`.*
+                      \n *Deprecated: this will be removed in a future release.*"
                     type: string
                   bearerTokenFile:
-                    description: File to read bearer token for accessing apiserver.
+                    description: "File to read bearer token for accessing apiserver.
+                      \n Cannot be set at the same time as `basicAuth`, `authorization`,
+                      or `bearerToken`. \n *Deprecated: this will be removed in a
+                      future release. Prefer using `authorization`.*"
                     type: string
                   host:
-                    description: Host of apiserver. A valid string consisting of a
-                      hostname or IP followed by an optional port number
+                    description: Kubernetes API address consisting of a hostname or
+                      IP address followed by an optional port number.
                     type: string
                   tlsConfig:
-                    description: TLS Config to use for accessing apiserver.
+                    description: TLS Config to use for the API server.
                     properties:
                       ca:
                         description: Certificate authority used when verifying server
@@ -1179,13 +1185,23 @@ spec:
                 - host
                 type: object
               arbitraryFSAccessThroughSMs:
-                description: ArbitraryFSAccessThroughSMs configures whether configuration
-                  based on a service monitor can access arbitrary files on the file
-                  system of the Prometheus container e.g. bearer token files.
+                description: When true, ServiceMonitor, PodMonitor and Probe object
+                  are forbidden to reference arbitrary files on the file system of
+                  the 'prometheus' container. When a ServiceMonitor's endpoint specifies
+                  a `bearerTokenFile` value (e.g.  '/var/run/secrets/kubernetes.io/serviceaccount/token'),
+                  a malicious target can get access to the Prometheus service account's
+                  token in the Prometheus' scrape request. Setting `spec.arbitraryFSAccessThroughSM`
+                  to 'true' would prevent the attack. Users should instead provide
+                  the credentials using the `spec.bearerTokenSecret` field.
                 properties:
                   deny:
                     type: boolean
                 type: object
+              bodySizeLimit:
+                description: BodySizeLimit defines per-scrape on response body size.
+                  Only valid in Prometheus versions 2.45.0 and newer.
+                pattern: (^0|([0-9]*[.])?[0-9]+((K|M|G|T|E|P)i?)?B)$
+                type: string
               configMaps:
                 description: ConfigMaps is a list of ConfigMaps in the same namespace
                   as the Prometheus object, which shall be mounted into the Prometheus
@@ -1197,16 +1213,16 @@ spec:
                   type: string
                 type: array
               containers:
-                description: 'Containers allows injecting additional containers or
+                description: "Containers allows injecting additional containers or
                   modifying operator generated containers. This can be used to allow
-                  adding an authentication proxy to a Prometheus pod or to change
-                  the behavior of an operator generated container. Containers described
-                  here modify an operator generated container if they share the same
-                  name and modifications are done via a strategic merge patch. The
-                  current container names are: `prometheus`, `config-reloader`, and
-                  `thanos-sidecar`. Overriding containers is entirely outside the
-                  scope of what the maintainers will support and by doing so, you
-                  accept that this behaviour may break at any time without notice.'
+                  adding an authentication proxy to the Pods or to change the behavior
+                  of an operator generated container. Containers described here modify
+                  an operator generated container if they share the same name and
+                  modifications are done via a strategic merge patch. \n The names
+                  of containers managed by the operator are: * `prometheus` * `config-reloader`
+                  * `thanos-sidecar` \n Overriding containers is entirely outside
+                  the scope of what the maintainers will support and by doing so,
+                  you accept that this behaviour may break at any time without notice."
                 items:
                   description: A single application container that you want to run
                     within a pod.
@@ -1457,7 +1473,9 @@ spec:
                                       to be used in HTTP probes
                                     properties:
                                       name:
-                                        description: The header field name
+                                        description: The header field name. This will
+                                          be canonicalized upon output, so case-variant
+                                          names will be understood as the same header.
                                         type: string
                                       value:
                                         description: The header field value
@@ -1553,7 +1571,9 @@ spec:
                                       to be used in HTTP probes
                                     properties:
                                       name:
-                                        description: The header field name
+                                        description: The header field name. This will
+                                          be canonicalized upon output, so case-variant
+                                          names will be understood as the same header.
                                         type: string
                                       value:
                                         description: The header field value
@@ -1664,7 +1684,9 @@ spec:
                                   to be used in HTTP probes
                                 properties:
                                   name:
-                                    description: The header field name
+                                    description: The header field name. This will
+                                      be canonicalized upon output, so case-variant
+                                      names will be understood as the same header.
                                     type: string
                                   value:
                                     description: The header field value
@@ -1864,7 +1886,9 @@ spec:
                                   to be used in HTTP probes
                                 properties:
                                   name:
-                                    description: The header field name
+                                    description: The header field name. This will
+                                      be canonicalized upon output, so case-variant
+                                      names will be understood as the same header.
                                     type: string
                                   value:
                                     description: The header field value
@@ -2264,7 +2288,9 @@ spec:
                                   to be used in HTTP probes
                                 properties:
                                   name:
-                                    description: The header field name
+                                    description: The header field name. This will
+                                      be canonicalized upon output, so case-variant
+                                      names will be understood as the same header.
                                     type: string
                                   value:
                                     description: The header field value
@@ -2465,88 +2491,93 @@ spec:
                   type: object
                 type: array
               enableFeatures:
-                description: Enable access to Prometheus disabled features. By default,
-                  no features are enabled. Enabling disabled features is entirely
-                  outside the scope of what the maintainers will support and by doing
-                  so, you accept that this behaviour may break at any time without
-                  notice. For more information see https://prometheus.io/docs/prometheus/latest/disabled_features/
+                description: "Enable access to Prometheus feature flags. By default,
+                  no features are enabled. \n Enabling features which are disabled
+                  by default is entirely outside the scope of what the maintainers
+                  will support and by doing so, you accept that this behaviour may
+                  break at any time without notice. \n For more information see https://prometheus.io/docs/prometheus/latest/feature_flags/"
                 items:
                   type: string
                 type: array
               enableRemoteWriteReceiver:
-                description: 'Enable Prometheus to be used as a receiver for the Prometheus
-                  remote write protocol. Defaults to the value of `false`. WARNING:
-                  This is not considered an efficient way of ingesting samples. Use
-                  it with caution for specific low-volume use cases. It is not suitable
-                  for replacing the ingestion via scraping and turning Prometheus
-                  into a push-based metrics collection system. For more information
-                  see https://prometheus.io/docs/prometheus/latest/querying/api/#remote-write-receiver
-                  Only valid in Prometheus versions 2.33.0 and newer.'
+                description: "Enable Prometheus to be used as a receiver for the Prometheus
+                  remote write protocol. \n WARNING: This is not considered an efficient
+                  way of ingesting samples. Use it with caution for specific low-volume
+                  use cases. It is not suitable for replacing the ingestion via scraping
+                  and turning Prometheus into a push-based metrics collection system.
+                  For more information see https://prometheus.io/docs/prometheus/latest/querying/api/#remote-write-receiver
+                  \n It requires Prometheus >= v2.33.0."
                 type: boolean
               enforcedBodySizeLimit:
-                description: 'EnforcedBodySizeLimit defines the maximum size of uncompressed
-                  response body that will be accepted by Prometheus. Targets responding
-                  with a body larger than this many bytes will cause the scrape to
-                  fail. Example: 100MB. If defined, the limit will apply to all service/pod
-                  monitors and probes. This is an experimental feature, this behaviour
-                  could change or be removed in the future. Only valid in Prometheus
-                  versions 2.28.0 and newer.'
+                description: "When defined, enforcedBodySizeLimit specifies a global
+                  limit on the size of uncompressed response body that will be accepted
+                  by Prometheus. Targets responding with a body larger than this many
+                  bytes will cause the scrape to fail. \n It requires Prometheus >=
+                  v2.28.0."
                 pattern: (^0|([0-9]*[.])?[0-9]+((K|M|G|T|E|P)i?)?B)$
                 type: string
               enforcedLabelLimit:
-                description: Per-scrape limit on number of labels that will be accepted
-                  for a sample. If more than this number of labels are present post
-                  metric-relabeling, the entire scrape will be treated as failed.
-                  0 means no limit. Only valid in Prometheus versions 2.27.0 and newer.
+                description: "When defined, enforcedLabelLimit specifies a global
+                  limit on the number of labels per sample. The value overrides any
+                  `spec.labelLimit` set by ServiceMonitor, PodMonitor, Probe objects
+                  unless `spec.labelLimit` is greater than zero and less than `spec.enforcedLabelLimit`.
+                  \n It requires Prometheus >= v2.27.0."
                 format: int64
                 type: integer
               enforcedLabelNameLengthLimit:
-                description: Per-scrape limit on length of labels name that will be
-                  accepted for a sample. If a label name is longer than this number
-                  post metric-relabeling, the entire scrape will be treated as failed.
-                  0 means no limit. Only valid in Prometheus versions 2.27.0 and newer.
+                description: "When defined, enforcedLabelNameLengthLimit specifies
+                  a global limit on the length of labels name per sample. The value
+                  overrides any `spec.labelNameLengthLimit` set by ServiceMonitor,
+                  PodMonitor, Probe objects unless `spec.labelNameLengthLimit` is
+                  greater than zero and less than `spec.enforcedLabelNameLengthLimit`.
+                  \n It requires Prometheus >= v2.27.0."
                 format: int64
                 type: integer
               enforcedLabelValueLengthLimit:
-                description: Per-scrape limit on length of labels value that will
-                  be accepted for a sample. If a label value is longer than this number
-                  post metric-relabeling, the entire scrape will be treated as failed.
-                  0 means no limit. Only valid in Prometheus versions 2.27.0 and newer.
+                description: "When not null, enforcedLabelValueLengthLimit defines
+                  a global limit on the length of labels value per sample. The value
+                  overrides any `spec.labelValueLengthLimit` set by ServiceMonitor,
+                  PodMonitor, Probe objects unless `spec.labelValueLengthLimit` is
+                  greater than zero and less than `spec.enforcedLabelValueLengthLimit`.
+                  \n It requires Prometheus >= v2.27.0."
                 format: int64
                 type: integer
               enforcedNamespaceLabel:
-                description: "EnforcedNamespaceLabel If set, a label will be added
-                  to \n 1. all user-metrics (created by `ServiceMonitor`, `PodMonitor`
-                  and `Probe` objects) and 2. in all `PrometheusRule` objects (except
-                  the ones excluded in `prometheusRulesExcludedFromEnforce`) to *
-                  alerting & recording rules and * the metrics used in their expressions
-                  (`expr`). \n Label name is this field's value. Label value is the
-                  namespace of the created object (mentioned above)."
+                description: "When not empty, a label will be added to \n 1. All metrics
+                  scraped from `ServiceMonitor`, `PodMonitor`, `Probe` and `ScrapeConfig`
+                  objects. 2. All metrics generated from recording rules defined in
+                  `PrometheusRule` objects. 3. All alerts generated from alerting
+                  rules defined in `PrometheusRule` objects. 4. All vector selectors
+                  of PromQL expressions defined in `PrometheusRule` objects. \n The
+                  label will not added for objects referenced in `spec.excludedFromEnforcement`.
+                  \n The label's name is this field's value. The label's value is
+                  the namespace of the `ServiceMonitor`, `PodMonitor`, `Probe` or
+                  `PrometheusRule` object."
                 type: string
               enforcedSampleLimit:
-                description: EnforcedSampleLimit defines global limit on number of
-                  scraped samples that will be accepted. This overrides any SampleLimit
-                  set per ServiceMonitor or/and PodMonitor. It is meant to be used
-                  by admins to enforce the SampleLimit to keep overall number of samples/series
-                  under the desired limit. Note that if SampleLimit is lower that
-                  value will be taken instead.
+                description: "When defined, enforcedSampleLimit specifies a global
+                  limit on the number of scraped samples that will be accepted. This
+                  overrides any `spec.sampleLimit` set by ServiceMonitor, PodMonitor,
+                  Probe objects unless `spec.sampleLimit` is greater than zero and
+                  less than than `spec.enforcedSampleLimit`. \n It is meant to be
+                  used by admins to keep the overall number of samples/series under
+                  a desired limit."
                 format: int64
                 type: integer
               enforcedTargetLimit:
-                description: EnforcedTargetLimit defines a global limit on the number
-                  of scraped targets.  This overrides any TargetLimit set per ServiceMonitor
-                  or/and PodMonitor.  It is meant to be used by admins to enforce
-                  the TargetLimit to keep the overall number of targets under the
-                  desired limit. Note that if TargetLimit is lower, that value will
-                  be taken instead, except if either value is zero, in which case
-                  the non-zero value will be used.  If both values are zero, no limit
-                  is enforced.
+                description: "When defined, enforcedTargetLimit specifies a global
+                  limit on the number of scraped targets. The value overrides any
+                  `spec.targetLimit` set by ServiceMonitor, PodMonitor, Probe objects
+                  unless `spec.targetLimit` is greater than zero and less than `spec.enforcedTargetLimit`.
+                  \n It is meant to be used by admins to to keep the overall number
+                  of targets under a desired limit."
                 format: int64
                 type: integer
               excludedFromEnforcement:
-                description: List of references to PodMonitor, ServiceMonitor, Probe
+                description: "List of references to PodMonitor, ServiceMonitor, Probe
                   and PrometheusRule objects to be excluded from enforcing a namespace
-                  label of origin. Applies only if enforcedNamespaceLabel set to true.
+                  label of origin. \n It is only applicable if `spec.enforcedNamespaceLabel`
+                  set to true."
                 items:
                   description: ObjectReference references a PodMonitor, ServiceMonitor,
                     Probe or PrometheusRule object.
@@ -2560,7 +2591,7 @@ spec:
                       type: string
                     name:
                       description: Name of the referent. When not set, all resources
-                        are matched.
+                        in the namespace are matched.
                       type: string
                     namespace:
                       description: 'Namespace of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/namespaces/'
@@ -2573,6 +2604,7 @@ spec:
                       - servicemonitors
                       - podmonitors
                       - probes
+                      - scrapeconfigs
                       type: string
                   required:
                   - namespace
@@ -2584,14 +2616,17 @@ spec:
                   type: string
                 description: The labels to add to any time series or alerts when communicating
                   with external systems (federation, remote storage, Alertmanager).
+                  Labels defined by `spec.replicaExternalLabelName` and `spec.prometheusExternalLabelName`
+                  take precedence over this list.
                 type: object
               externalUrl:
-                description: The external URL the Prometheus instances will be available
-                  under. This is necessary to generate correct URLs. This is necessary
-                  if Prometheus is not served from root of a DNS name.
+                description: The external URL under which the Prometheus service is
+                  externally available. This is necessary to generate correct URLs
+                  (for instance if Prometheus is accessible behind an Ingress resource).
                 type: string
               hostAliases:
-                description: Pods' hostAliases configuration
+                description: Optional list of hosts and IPs that will be injected
+                  into the Pod's hosts file if specified.
                 items:
                   description: HostAlias holds the mapping between IP and hostnames
                     that will be injected as an entry in the pod's hosts file.
@@ -2613,22 +2648,26 @@ spec:
                 - ip
                 x-kubernetes-list-type: map
               hostNetwork:
-                description: Use the host's network namespace if true. Make sure to
-                  understand the security implications if you want to enable it. When
-                  hostNetwork is enabled, this will set dnsPolicy to ClusterFirstWithHostNet
-                  automatically.
+                description: "Use the host's network namespace if true. \n Make sure
+                  to understand the security implications if you want to enable it
+                  (https://kubernetes.io/docs/concepts/configuration/overview/). \n
+                  When hostNetwork is enabled, this will set the DNS policy to `ClusterFirstWithHostNet`
+                  automatically."
                 type: boolean
               ignoreNamespaceSelectors:
-                description: IgnoreNamespaceSelectors if set to true will ignore NamespaceSelector
-                  settings from all PodMonitor, ServiceMonitor and Probe objects.
-                  They will only discover endpoints within the namespace of the PodMonitor,
-                  ServiceMonitor and Probe objects. Defaults to false.
+                description: When true, `spec.namespaceSelector` from all PodMonitor,
+                  ServiceMonitor and Probe objects will be ignored. They will only
+                  discover targets within the namespace of the PodMonitor, ServiceMonitor
+                  and Probe objec.
                 type: boolean
               image:
-                description: Image if specified has precedence over baseImage, tag
-                  and sha combinations. Specifying the version is still necessary
-                  to ensure the Prometheus Operator knows what version of Prometheus
-                  is being configured.
+                description: "Container image name for Prometheus. If specified, it
+                  takes precedence over the `spec.baseImage`, `spec.tag` and `spec.sha`
+                  fields. \n Specifying `spec.version` is still necessary to ensure
+                  the Prometheus Operator knows which version of Prometheus is being
+                  configured. \n If neither `spec.image` nor `spec.baseImage` are
+                  defined, the operator will use the latest upstream version of Prometheus
+                  available at the time when the operator was released."
                 type: string
               imagePullPolicy:
                 description: Image pull policy for the 'prometheus', 'init-config-reloader'
@@ -2641,9 +2680,8 @@ spec:
                 - IfNotPresent
                 type: string
               imagePullSecrets:
-                description: An optional list of references to secrets in the same
-                  namespace to use for pulling prometheus and alertmanager images
-                  from registries see http://kubernetes.io/docs/user-guide/images#specifying-imagepullsecrets-on-a-pod
+                description: An optional list of references to Secrets in the same
+                  namespace to use for pulling images from registries. See http://kubernetes.io/docs/user-guide/images#specifying-imagepullsecrets-on-a-pod
                 items:
                   description: LocalObjectReference contains enough information to
                     let you locate the referenced object inside the same namespace.
@@ -2656,17 +2694,18 @@ spec:
                   x-kubernetes-map-type: atomic
                 type: array
               initContainers:
-                description: 'InitContainers allows adding initContainers to the pod
-                  definition. Those can be used to e.g. fetch secrets for injection
+                description: "InitContainers allows injecting initContainers to the
+                  Pod definition. Those can be used to e.g.  fetch secrets for injection
                   into the Prometheus configuration from external sources. Any errors
                   during the execution of an initContainer will lead to a restart
                   of the Pod. More info: https://kubernetes.io/docs/concepts/workloads/pods/init-containers/
                   InitContainers described here modify an operator generated init
                   containers if they share the same name and modifications are done
-                  via a strategic merge patch. The current init container name is:
-                  `init-config-reloader`. Overriding init containers is entirely outside
-                  the scope of what the maintainers will support and by doing so,
-                  you accept that this behaviour may break at any time without notice.'
+                  via a strategic merge patch. \n The names of init container name
+                  managed by the operator are: * `init-config-reloader`. \n Overriding
+                  init containers is entirely outside the scope of what the maintainers
+                  will support and by doing so, you accept that this behaviour may
+                  break at any time without notice."
                 items:
                   description: A single application container that you want to run
                     within a pod.
@@ -2917,7 +2956,9 @@ spec:
                                       to be used in HTTP probes
                                     properties:
                                       name:
-                                        description: The header field name
+                                        description: The header field name. This will
+                                          be canonicalized upon output, so case-variant
+                                          names will be understood as the same header.
                                         type: string
                                       value:
                                         description: The header field value
@@ -3013,7 +3054,9 @@ spec:
                                       to be used in HTTP probes
                                     properties:
                                       name:
-                                        description: The header field name
+                                        description: The header field name. This will
+                                          be canonicalized upon output, so case-variant
+                                          names will be understood as the same header.
                                         type: string
                                       value:
                                         description: The header field value
@@ -3124,7 +3167,9 @@ spec:
                                   to be used in HTTP probes
                                 properties:
                                   name:
-                                    description: The header field name
+                                    description: The header field name. This will
+                                      be canonicalized upon output, so case-variant
+                                      names will be understood as the same header.
                                     type: string
                                   value:
                                     description: The header field value
@@ -3324,7 +3369,9 @@ spec:
                                   to be used in HTTP probes
                                 properties:
                                   name:
-                                    description: The header field name
+                                    description: The header field name. This will
+                                      be canonicalized upon output, so case-variant
+                                      names will be understood as the same header.
                                     type: string
                                   value:
                                     description: The header field value
@@ -3724,7 +3771,9 @@ spec:
                                   to be used in HTTP probes
                                 properties:
                                   name:
-                                    description: The header field name
+                                    description: The header field name. This will
+                                      be canonicalized upon output, so case-variant
+                                      names will be understood as the same header.
                                     type: string
                                   value:
                                     description: The header field value
@@ -3924,19 +3973,37 @@ spec:
                   - name
                   type: object
                 type: array
+              labelLimit:
+                description: Per-scrape limit on number of labels that will be accepted
+                  for a sample. Only valid in Prometheus versions 2.45.0 and newer.
+                format: int64
+                type: integer
+              labelNameLengthLimit:
+                description: Per-scrape limit on length of labels name that will be
+                  accepted for a sample. Only valid in Prometheus versions 2.45.0
+                  and newer.
+                format: int64
+                type: integer
+              labelValueLengthLimit:
+                description: Per-scrape limit on length of labels value that will
+                  be accepted for a sample. Only valid in Prometheus versions 2.45.0
+                  and newer.
+                format: int64
+                type: integer
               listenLocal:
-                description: ListenLocal makes the Prometheus server listen on loopback,
-                  so that it does not bind against the Pod IP.
+                description: When true, the Prometheus server listens on the loopback
+                  address instead of the Pod IP's address.
                 type: boolean
               logFormat:
-                description: Log format for Prometheus to be configured with.
+                description: Log format for Log level for Prometheus and the config-reloader
+                  sidecar.
                 enum:
                 - ""
                 - logfmt
                 - json
                 type: string
               logLevel:
-                description: Log level for Prometheus to be configured with.
+                description: Log level for Prometheus and the config-reloader sidecar.
                 enum:
                 - ""
                 - debug
@@ -3945,18 +4012,18 @@ spec:
                 - error
                 type: string
               minReadySeconds:
-                description: Minimum number of seconds for which a newly created pod
-                  should be ready without any of its container crashing for it to
-                  be considered available. Defaults to 0 (pod will be considered available
-                  as soon as it is ready) This is an alpha field from kubernetes 1.22
-                  until 1.24 which requires enabling the StatefulSetMinReadySeconds
-                  feature gate.
+                description: "Minimum number of seconds for which a newly created
+                  Pod should be ready without any of its container crashing for it
+                  to be considered available. Defaults to 0 (pod will be considered
+                  available as soon as it is ready) \n This is an alpha field from
+                  kubernetes 1.22 until 1.24 which requires enabling the StatefulSetMinReadySeconds
+                  feature gate."
                 format: int32
                 type: integer
               nodeSelector:
                 additionalProperties:
                   type: string
-                description: Define which Nodes the Pods are scheduled on.
+                description: Defines on which Nodes the Pods are scheduled.
                 type: object
               overrideHonorLabels:
                 description: When true, Prometheus resolves label conflicts by renaming
@@ -3974,8 +4041,8 @@ spec:
                   for deletion will be performed on the underlying objects.
                 type: boolean
               podMetadata:
-                description: PodMetadata configures Labels and Annotations which are
-                  propagated to the prometheus pods.
+                description: PodMetadata configures labels and annotations which are
+                  propagated to the Prometheus pods.
                 properties:
                   annotations:
                     additionalProperties:
@@ -4002,8 +4069,9 @@ spec:
                     type: string
                 type: object
               podMonitorNamespaceSelector:
-                description: Namespace's labels to match for PodMonitor discovery.
-                  If nil, only check own namespace.
+                description: Namespaces to match for PodMonitors discovery. An empty
+                  label selector matches all namespaces. A null label selector matches
+                  the current namespace only.
                 properties:
                   matchExpressions:
                     description: matchExpressions is a list of label selector requirements.
@@ -4049,15 +4117,16 @@ spec:
                 x-kubernetes-map-type: atomic
               podMonitorSelector:
                 description: "*Experimental* PodMonitors to be selected for target
-                  discovery. \n If `spec.serviceMonitorSelector`, `spec.podMonitorSelector`,
-                  `spec.probeSelector` and `spec.scrapeConfigSelector` are null, the
-                  Prometheus configuration is unmanaged. The Prometheus operator will
-                  ensure that the Prometheus configuration's Secret exists, but it
-                  is the responsibility of the user to provide the raw gzipped Prometheus
-                  configuration under the `prometheus.yaml.gz` key. This behavior
-                  is deprecated and will be removed in the next major version of the
-                  custom resource definition. It is recommended to use `spec.additionalScrapeConfigs`
-                  instead."
+                  discovery. An empty label selector matches all objects. A null label
+                  selector matches no objects. \n If `spec.serviceMonitorSelector`,
+                  `spec.podMonitorSelector`, `spec.probeSelector` and `spec.scrapeConfigSelector`
+                  are null, the Prometheus configuration is unmanaged. The Prometheus
+                  operator will ensure that the Prometheus configuration's Secret
+                  exists, but it is the responsibility of the user to provide the
+                  raw gzipped Prometheus configuration under the `prometheus.yaml.gz`
+                  key. This behavior is *deprecated* and will be removed in the next
+                  major version of the custom resource definition. It is recommended
+                  to use `spec.additionalScrapeConfigs` instead."
                 properties:
                   matchExpressions:
                     description: matchExpressions is a list of label selector requirements.
@@ -4102,22 +4171,23 @@ spec:
                 type: object
                 x-kubernetes-map-type: atomic
               podTargetLabels:
-                description: PodTargetLabels are added to all Pod/ServiceMonitors'
-                  podTargetLabels
+                description: PodTargetLabels are appended to the `spec.podTargetLabels`
+                  field of all PodMonitor and ServiceMonitor objects.
                 items:
                   type: string
                 type: array
               portName:
                 default: web
-                description: Port name used for the pods and governing service. Defaults
-                  to `web`.
+                description: 'Port name used for the pods and governing service. Default:
+                  "web"'
                 type: string
               priorityClassName:
-                description: Priority class assigned to the Pods
+                description: Priority class assigned to the Pods.
                 type: string
               probeNamespaceSelector:
-                description: '*Experimental* Namespaces to be selected for Probe discovery.
-                  If nil, only check own namespace.'
+                description: '*Experimental* Namespaces to match for Probe discovery.
+                  An empty label selector matches all namespaces. A null label selector
+                  matches the current namespace only.'
                 properties:
                   matchExpressions:
                     description: matchExpressions is a list of label selector requirements.
@@ -4163,14 +4233,15 @@ spec:
                 x-kubernetes-map-type: atomic
               probeSelector:
                 description: "*Experimental* Probes to be selected for target discovery.
-                  \n If `spec.serviceMonitorSelector`, `spec.podMonitorSelector`,
+                  An empty label selector matches all objects. A null label selector
+                  matches no objects. \n If `spec.serviceMonitorSelector`, `spec.podMonitorSelector`,
                   `spec.probeSelector` and `spec.scrapeConfigSelector` are null, the
                   Prometheus configuration is unmanaged. The Prometheus operator will
                   ensure that the Prometheus configuration's Secret exists, but it
                   is the responsibility of the user to provide the raw gzipped Prometheus
                   configuration under the `prometheus.yaml.gz` key. This behavior
-                  is deprecated and will be removed in the next major version of the
-                  custom resource definition. It is recommended to use `spec.additionalScrapeConfigs`
+                  is *deprecated* and will be removed in the next major version of
+                  the custom resource definition. It is recommended to use `spec.additionalScrapeConfigs`
                   instead."
                 properties:
                   matchExpressions:
@@ -4216,22 +4287,25 @@ spec:
                 type: object
                 x-kubernetes-map-type: atomic
               prometheusExternalLabelName:
-                description: Name of Prometheus external label used to denote Prometheus
-                  instance name. Defaults to the value of `prometheus`. External label
-                  will _not_ be added when value is set to empty string (`""`).
+                description: "Name of Prometheus external label used to denote the
+                  Prometheus instance name. The external label will _not_ be added
+                  when the field is set to the empty string (`\"\"`). \n Default:
+                  \"prometheus\""
                 type: string
               remoteWrite:
-                description: remoteWrite is the list of remote write configurations.
+                description: Defines the list of remote write configurations.
                 items:
                   description: RemoteWriteSpec defines the configuration to write
                     samples from Prometheus to a remote endpoint.
                   properties:
                     authorization:
-                      description: Authorization section for remote write
+                      description: "Authorization section for the URL. \n It requires
+                        Prometheus >= v2.26.0. \n Cannot be set at the same time as
+                        `sigv4`, `basicAuth`, or `oauth2`."
                       properties:
                         credentials:
-                          description: The secret's key that contains the credentials
-                            of the request
+                          description: Selects a key of a Secret in the namespace
+                            that contains the credentials for authentication.
                           properties:
                             key:
                               description: The key of the secret to select from.  Must
@@ -4251,15 +4325,17 @@ spec:
                           x-kubernetes-map-type: atomic
                         credentialsFile:
                           description: File to read a secret from, mutually exclusive
-                            with Credentials (from SafeAuthorization)
+                            with `credentials`.
                           type: string
                         type:
-                          description: Set the authentication type. Defaults to Bearer,
-                            Basic will cause an error
+                          description: "Defines the authentication type. The value
+                            is case-insensitive. \n \"Basic\" is not a supported value.
+                            \n Default: \"Bearer\""
                           type: string
                       type: object
                     basicAuth:
-                      description: BasicAuth for the URL.
+                      description: "BasicAuth configuration for the URL. \n Cannot
+                        be set at the same time as `sigv4`, `authorization`, or `oauth2`."
                       properties:
                         password:
                           description: The secret in the service monitor namespace
@@ -4303,42 +4379,47 @@ spec:
                           x-kubernetes-map-type: atomic
                       type: object
                     bearerToken:
-                      description: Bearer token for remote write.
+                      description: "*Warning: this field shouldn't be used because
+                        the token value appears in clear-text. Prefer using `authorization`.*
+                        \n *Deprecated: this will be removed in a future release.*"
                       type: string
                     bearerTokenFile:
-                      description: File to read bearer token for remote write.
+                      description: "File from which to read bearer token for the URL.
+                        \n *Deprecated: this will be removed in a future release.
+                        Prefer using `authorization`.*"
                       type: string
                     headers:
                       additionalProperties:
                         type: string
-                      description: Custom HTTP headers to be sent along with each
+                      description: "Custom HTTP headers to be sent along with each
                         remote write request. Be aware that headers that are set by
-                        Prometheus itself can't be overwritten. Only valid in Prometheus
-                        versions 2.25.0 and newer.
+                        Prometheus itself can't be overwritten. \n It requires Prometheus
+                        >= v2.25.0."
                       type: object
                     metadataConfig:
                       description: MetadataConfig configures the sending of series
                         metadata to the remote storage.
                       properties:
                         send:
-                          description: Whether metric metadata is sent to the remote
-                            storage or not.
+                          description: Defines whether metric metadata is sent to
+                            the remote storage or not.
                           type: boolean
                         sendInterval:
-                          description: How frequently metric metadata is sent to the
-                            remote storage.
+                          description: Defines how frequently metric metadata is sent
+                            to the remote storage.
                           pattern: ^(0|(([0-9]+)y)?(([0-9]+)w)?(([0-9]+)d)?(([0-9]+)h)?(([0-9]+)m)?(([0-9]+)s)?(([0-9]+)ms)?)$
                           type: string
                       type: object
                     name:
-                      description: The name of the remote write queue, it must be
+                      description: "The name of the remote write queue, it must be
                         unique if specified. The name is used in metrics and logging
-                        in order to differentiate queues. Only valid in Prometheus
-                        versions 2.15.0 and newer.
+                        in order to differentiate queues. \n It requires Prometheus
+                        >= v2.15.0."
                       type: string
                     oauth2:
-                      description: OAuth2 for the URL. Only valid in Prometheus versions
-                        2.27.0 and newer.
+                      description: "OAuth2 configuration for the URL. \n It requires
+                        Prometheus >= v2.27.0. \n Cannot be set at the same time as
+                        `sigv4`, `authorization`, or `basicAuth`."
                       properties:
                         clientId:
                           description: The secret or configmap containing the OAuth2
@@ -4472,23 +4553,25 @@ spec:
                       pattern: ^(0|(([0-9]+)y)?(([0-9]+)w)?(([0-9]+)d)?(([0-9]+)h)?(([0-9]+)m)?(([0-9]+)s)?(([0-9]+)ms)?)$
                       type: string
                     sendExemplars:
-                      description: Enables sending of exemplars over remote write.
+                      description: "Enables sending of exemplars over remote write.
                         Note that exemplar-storage itself must be enabled using the
-                        enableFeature option for exemplars to be scraped in the first
-                        place.  Only valid in Prometheus versions 2.27.0 and newer.
+                        `spec.enableFeature` option for exemplars to be scraped in
+                        the first place. \n It requires Prometheus >= v2.27.0."
                       type: boolean
                     sendNativeHistograms:
-                      description: Enables sending of native histograms, also known
-                        as sparse histograms over remote write. Only valid in Prometheus
-                        versions 2.40.0 and newer.
+                      description: "Enables sending of native histograms, also known
+                        as sparse histograms over remote write. \n It requires Prometheus
+                        >= v2.40.0."
                       type: boolean
                     sigv4:
-                      description: Sigv4 allows to configures AWS's Signature Verification
-                        4
+                      description: "Sigv4 allows to configures AWS's Signature Verification
+                        4 for the URL. \n It requires Prometheus >= v2.26.0. \n Cannot
+                        be set at the same time as `authorization`, `basicAuth`, or
+                        `oauth2`."
                       properties:
                         accessKey:
-                          description: AccessKey is the AWS API key. If blank, the
-                            environment variable `AWS_ACCESS_KEY_ID` is used.
+                          description: AccessKey is the AWS API key. If not specified,
+                            the environment variable `AWS_ACCESS_KEY_ID` is used.
                           properties:
                             key:
                               description: The key of the secret to select from.  Must
@@ -4517,7 +4600,7 @@ spec:
                           description: RoleArn is the named AWS profile used to authenticate.
                           type: string
                         secretKey:
-                          description: SecretKey is the AWS API secret. If blank,
+                          description: SecretKey is the AWS API secret. If not specified,
                             the environment variable `AWS_SECRET_ACCESS_KEY` is used.
                           properties:
                             key:
@@ -4538,7 +4621,7 @@ spec:
                           x-kubernetes-map-type: atomic
                       type: object
                     tlsConfig:
-                      description: TLS Config to use for remote write.
+                      description: TLS Config to use for the URL.
                       properties:
                         ca:
                           description: Certificate authority used when verifying server
@@ -4674,16 +4757,16 @@ spec:
                     writeRelabelConfigs:
                       description: The list of remote write relabel configurations.
                       items:
-                        description: 'RelabelConfig allows dynamic rewriting of the
-                          label set, being applied to samples before ingestion. It
-                          defines `<metric_relabel_configs>`-section of Prometheus
-                          configuration. More info: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#metric_relabel_configs'
+                        description: "RelabelConfig allows dynamic rewriting of the
+                          label set for targets, alerts, scraped samples and remote
+                          write samples. \n More info: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config"
                         properties:
                           action:
                             default: replace
-                            description: Action to perform based on regex matching.
-                              Default is 'replace'. uppercase and lowercase actions
-                              require Prometheus >= 2.36.
+                            description: "Action to perform based on the regex matching.
+                              \n `Uppercase` and `Lowercase` actions require Prometheus
+                              >= v2.36.0. `DropEqual` and `KeepEqual` actions require
+                              Prometheus >= v2.41.0. \n Default: \"Replace\""
                             enum:
                             - replace
                             - Replace
@@ -4709,28 +4792,29 @@ spec:
                             - DropEqual
                             type: string
                           modulus:
-                            description: Modulus to take of the hash of the source
-                              label values.
+                            description: "Modulus to take of the hash of the source
+                              label values. \n Only applicable when the action is
+                              `HashMod`."
                             format: int64
                             type: integer
                           regex:
                             description: Regular expression against which the extracted
-                              value is matched. Default is '(.*)'
+                              value is matched.
                             type: string
                           replacement:
-                            description: Replacement value against which a regex replace
-                              is performed if the regular expression matches. Regex
-                              capture groups are available. Default is '$1'
+                            description: "Replacement value against which a Replace
+                              action is performed if the regular expression matches.
+                              \n Regex capture groups are available."
                             type: string
                           separator:
-                            description: Separator placed between concatenated source
-                              label values. default is ';'.
+                            description: Separator is the string between concatenated
+                              SourceLabels.
                             type: string
                           sourceLabels:
                             description: The source labels select values from existing
                               labels. Their content is concatenated using the configured
-                              separator and matched against the configured regular
-                              expression for the replace, keep, and drop actions.
+                              Separator and matched against the configured regular
+                              expression.
                             items:
                               description: LabelName is a valid Prometheus label name
                                 which may only contain ASCII letters, numbers, as
@@ -4739,9 +4823,10 @@ spec:
                               type: string
                             type: array
                           targetLabel:
-                            description: Label to which the resulting value is written
-                              in a replace action. It is mandatory for replace actions.
-                              Regex capture groups are available.
+                            description: "Label to which the resulting string is written
+                              in a replacement. \n It is mandatory for `Replace`,
+                              `HashMod`, `Lowercase`, `Uppercase`, `KeepEqual` and
+                              `DropEqual` actions. \n Regex capture groups are available."
                             type: string
                         type: object
                       type: array
@@ -4750,18 +4835,19 @@ spec:
                   type: object
                 type: array
               replicaExternalLabelName:
-                description: Name of Prometheus external label used to denote replica
-                  name. Defaults to the value of `prometheus_replica`. External label
-                  will _not_ be added when value is set to empty string (`""`).
+                description: "Name of Prometheus external label used to denote the
+                  replica name. The external label will _not_ be added when the field
+                  is set to the empty string (`\"\"`). \n Default: \"prometheus_replica\""
                 type: string
               replicas:
-                description: Number of replicas of each shard to deploy for a Prometheus
-                  deployment. Number of replicas multiplied by shards is the total
-                  number of Pods created.
+                description: "Number of replicas of each shard to deploy for a Prometheus
+                  deployment. `spec.replicas` multiplied by `spec.shards` is the total
+                  number of Pods created. \n Default: 1"
                 format: int32
                 type: integer
               resources:
-                description: Define resources requests and limits for single Pods.
+                description: Defines the resources requests and limits of the 'prometheus'
+                  container.
                 properties:
                   claims:
                     description: "Claims lists the names of resources, defined in
@@ -4809,15 +4895,22 @@ spec:
                     type: object
                 type: object
               routePrefix:
-                description: The route prefix Prometheus registers HTTP handlers for.
-                  This is useful, if using ExternalURL and a proxy is rewriting HTTP
-                  routes of a request, and the actual ExternalURL is still true, but
-                  the server serves requests under a different route prefix. For example
-                  for use with `kubectl proxy`.
+                description: "The route prefix Prometheus registers HTTP handlers
+                  for. \n This is useful when using `spec.externalURL`, and a proxy
+                  is rewriting HTTP routes of a request, and the actual ExternalURL
+                  is still true, but the server serves requests under a different
+                  route prefix. For example for use with `kubectl proxy`."
                 type: string
+              sampleLimit:
+                description: SampleLimit defines per-scrape limit on number of scraped
+                  samples that will be accepted. Only valid in Prometheus versions
+                  2.45.0 and newer.
+                format: int64
+                type: integer
               scrapeConfigNamespaceSelector:
-                description: Namespace's labels to match for ScrapeConfig discovery.
-                  If nil, only check own namespace.
+                description: Namespaces to match for ScrapeConfig discovery. An empty
+                  label selector matches all namespaces. A null label selector matches
+                  the current current namespace only.
                 properties:
                   matchExpressions:
                     description: matchExpressions is a list of label selector requirements.
@@ -4863,15 +4956,16 @@ spec:
                 x-kubernetes-map-type: atomic
               scrapeConfigSelector:
                 description: "*Experimental* ScrapeConfigs to be selected for target
-                  discovery. \n If `spec.serviceMonitorSelector`, `spec.podMonitorSelector`,
-                  `spec.probeSelector` and `spec.scrapeConfigSelector` are null, the
-                  Prometheus configuration is unmanaged. The Prometheus operator will
-                  ensure that the Prometheus configuration's Secret exists, but it
-                  is the responsibility of the user to provide the raw gzipped Prometheus
-                  configuration under the `prometheus.yaml.gz` key. This behavior
-                  is deprecated and will be removed in the next major version of the
-                  custom resource definition. It is recommended to use `spec.additionalScrapeConfigs`
-                  instead."
+                  discovery. An empty label selector matches all objects. A null label
+                  selector matches no objects. \n If `spec.serviceMonitorSelector`,
+                  `spec.podMonitorSelector`, `spec.probeSelector` and `spec.scrapeConfigSelector`
+                  are null, the Prometheus configuration is unmanaged. The Prometheus
+                  operator will ensure that the Prometheus configuration's Secret
+                  exists, but it is the responsibility of the user to provide the
+                  raw gzipped Prometheus configuration under the `prometheus.yaml.gz`
+                  key. This behavior is *deprecated* and will be removed in the next
+                  major version of the custom resource definition. It is recommended
+                  to use `spec.additionalScrapeConfigs` instead."
                 properties:
                   matchExpressions:
                     description: matchExpressions is a list of label selector requirements.
@@ -4917,12 +5011,12 @@ spec:
                 x-kubernetes-map-type: atomic
               scrapeInterval:
                 default: 30s
-                description: 'Interval between consecutive scrapes. Default: `30s`'
+                description: "Interval between consecutive scrapes. \n Default: \"30s\""
                 pattern: ^(0|(([0-9]+)y)?(([0-9]+)w)?(([0-9]+)d)?(([0-9]+)h)?(([0-9]+)m)?(([0-9]+)s)?(([0-9]+)ms)?)$
                 type: string
               scrapeTimeout:
-                description: Number of seconds to wait for target to respond before
-                  erroring.
+                description: Number of seconds to wait until a scrape request times
+                  out.
                 pattern: ^(0|(([0-9]+)y)?(([0-9]+)w)?(([0-9]+)d)?(([0-9]+)h)?(([0-9]+)m)?(([0-9]+)s)?(([0-9]+)ms)?)$
                 type: string
               secrets:
@@ -5108,8 +5202,9 @@ spec:
                   to use to run the Prometheus Pods.
                 type: string
               serviceMonitorNamespaceSelector:
-                description: Namespace's labels to match for ServiceMonitor discovery.
-                  If nil, only check own namespace.
+                description: Namespaces to match for ServicedMonitors discovery. An
+                  empty label selector matches all namespaces. A null label selector
+                  matches the current namespace only.
                 properties:
                   matchExpressions:
                     description: matchExpressions is a list of label selector requirements.
@@ -5155,14 +5250,15 @@ spec:
                 x-kubernetes-map-type: atomic
               serviceMonitorSelector:
                 description: "ServiceMonitors to be selected for target discovery.
-                  \n If `spec.serviceMonitorSelector`, `spec.podMonitorSelector`,
+                  An empty label selector matches all objects. A null label selector
+                  matches no objects. \n If `spec.serviceMonitorSelector`, `spec.podMonitorSelector`,
                   `spec.probeSelector` and `spec.scrapeConfigSelector` are null, the
                   Prometheus configuration is unmanaged. The Prometheus operator will
                   ensure that the Prometheus configuration's Secret exists, but it
                   is the responsibility of the user to provide the raw gzipped Prometheus
                   configuration under the `prometheus.yaml.gz` key. This behavior
-                  is deprecated and will be removed in the next major version of the
-                  custom resource definition. It is recommended to use `spec.additionalScrapeConfigs`
+                  is *deprecated* and will be removed in the next major version of
+                  the custom resource definition. It is recommended to use `spec.additionalScrapeConfigs`
                   instead."
                 properties:
                   matchExpressions:
@@ -5208,28 +5304,29 @@ spec:
                 type: object
                 x-kubernetes-map-type: atomic
               shards:
-                description: 'EXPERIMENTAL: Number of shards to distribute targets
-                  onto. Number of replicas multiplied by shards is the total number
-                  of Pods created. Note that scaling down shards will not reshard
+                description: "EXPERIMENTAL: Number of shards to distribute targets
+                  onto. `spec.replicas` multiplied by `spec.shards` is the total number
+                  of Pods created. \n Note that scaling down shards will not reshard
                   data onto remaining instances, it must be manually moved. Increasing
                   shards will not reshard data either but it will continue to be available
-                  from the same instances. To query globally use Thanos sidecar and
-                  Thanos querier or remote write data to a central location. Sharding
-                  is done on the content of the `__address__` target meta-label.'
+                  from the same instances. To query globally, use Thanos sidecar and
+                  Thanos querier or remote write data to a central location. \n Sharding
+                  is performed on the content of the `__address__` target meta-label
+                  for PodMonitors and ServiceMonitors and `__param_target__` for Probes.
+                  \n Default: 1"
                 format: int32
                 type: integer
               storage:
-                description: Storage spec to specify how storage shall be used.
+                description: Storage defines the storage used by Prometheus.
                 properties:
                   disableMountSubPath:
-                    description: 'Deprecated: subPath usage will be disabled by default
-                      in a future release, this option will become unnecessary. DisableMountSubPath
-                      allows to remove any subPath usage in volume mounts.'
+                    description: '*Deprecated: subPath usage will be removed in a
+                      future release.*'
                     type: boolean
                   emptyDir:
                     description: 'EmptyDirVolumeSource to be used by the StatefulSet.
-                      If specified, used in place of any volumeClaimTemplate. More
-                      info: https://kubernetes.io/docs/concepts/storage/volumes/#emptydir'
+                      If specified, it takes precedence over `ephemeral` and `volumeClaimTemplate`.
+                      More info: https://kubernetes.io/docs/concepts/storage/volumes/#emptydir'
                     properties:
                       medium:
                         description: 'medium represents what type of storage medium
@@ -5253,8 +5350,8 @@ spec:
                     type: object
                   ephemeral:
                     description: 'EphemeralVolumeSource to be used by the StatefulSet.
-                      This is a beta field in k8s 1.21, for lower versions, starting
-                      with k8s 1.19, it requires enabling the GenericEphemeralVolume
+                      This is a beta field in k8s 1.21 and GA in 1.15. For lower versions,
+                      starting with k8s 1.19, it requires enabling the GenericEphemeralVolume
                       feature gate. More info: https://kubernetes.io/docs/concepts/storage/ephemeral-volumes/#generic-ephemeral-volumes'
                     properties:
                       volumeClaimTemplate:
@@ -5514,10 +5611,10 @@ spec:
                         type: object
                     type: object
                   volumeClaimTemplate:
-                    description: A PVC spec to be used by the StatefulSet. The easiest
-                      way to use a volume that cannot be automatically provisioned
-                      (for whatever reason) is to use a label selector alongside manually
-                      created PersistentVolumes.
+                    description: Defines the PVC spec to be used by the Prometheus
+                      StatefulSets. The easiest way to use a volume that cannot be
+                      automatically provisioned is to use a label selector alongside
+                      manually created PersistentVolumes.
                     properties:
                       apiVersion:
                         description: 'APIVersion defines the versioned schema of this
@@ -5562,8 +5659,8 @@ spec:
                             type: string
                         type: object
                       spec:
-                        description: 'Spec defines the desired characteristics of
-                          a volume requested by a pod author. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#persistentvolumeclaims'
+                        description: 'Defines the desired characteristics of a volume
+                          requested by a pod author. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#persistentvolumeclaims'
                         properties:
                           accessModes:
                             description: 'accessModes contains the desired access
@@ -5776,8 +5873,7 @@ spec:
                             type: string
                         type: object
                       status:
-                        description: 'Status represents the current information/status
-                          of a persistent volume claim. Read-only. More info: https://kubernetes.io/docs/concepts/storage/persistent-volumes#persistentvolumeclaims'
+                        description: '*Deprecated: this field is never set.*'
                         properties:
                           accessModes:
                             description: 'accessModes contains the actual access modes
@@ -5869,8 +5965,14 @@ spec:
                         type: object
                     type: object
                 type: object
+              targetLimit:
+                description: TargetLimit defines a limit on the number of scraped
+                  targets that will be accepted. Only valid in Prometheus versions
+                  2.45.0 and newer.
+                format: int64
+                type: integer
               tolerations:
-                description: If specified, the pod's tolerations.
+                description: Defines the Pods' tolerations if specified.
                 items:
                   description: The pod this Toleration is attached to tolerates any
                     taint that matches the triple <key,value,effect> using the matching
@@ -5910,7 +6012,7 @@ spec:
                   type: object
                 type: array
               topologySpreadConstraints:
-                description: If specified, the pod's topology spread constraints.
+                description: Defines the pod's topology spread constraints if specified.
                 items:
                   description: TopologySpreadConstraint specifies how to spread matching
                     pods among the given topology.
@@ -6081,14 +6183,197 @@ spec:
                   - whenUnsatisfiable
                   type: object
                 type: array
+              tracingConfig:
+                description: 'EXPERIMENTAL: TracingConfig configures tracing in Prometheus.
+                  This is an experimental feature, it may change in any upcoming release
+                  in a breaking way.'
+                properties:
+                  clientType:
+                    description: Client used to export the traces. Supported values
+                      are `http` or `grpc`.
+                    enum:
+                    - http
+                    - grpc
+                    type: string
+                  compression:
+                    description: Compression key for supported compression types.
+                      The only supported value is `gzip`.
+                    enum:
+                    - gzip
+                    type: string
+                  endpoint:
+                    description: Endpoint to send the traces to. Should be provided
+                      in format <host>:<port>.
+                    minLength: 1
+                    type: string
+                  headers:
+                    additionalProperties:
+                      type: string
+                    description: Key-value pairs to be used as headers associated
+                      with gRPC or HTTP requests.
+                    type: object
+                  insecure:
+                    description: If disabled, the client will use a secure connection.
+                    type: boolean
+                  samplingFraction:
+                    anyOf:
+                    - type: integer
+                    - type: string
+                    description: Sets the probability a given trace will be sampled.
+                      Must be a float from 0 through 1.
+                    pattern: ^(\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))(([KMGTPE]i)|[numkMGTPE]|([eE](\+|-)?(([0-9]+(\.[0-9]*)?)|(\.[0-9]+))))?$
+                    x-kubernetes-int-or-string: true
+                  timeout:
+                    description: Maximum time the exporter will wait for each batch
+                      export.
+                    pattern: ^(0|(([0-9]+)y)?(([0-9]+)w)?(([0-9]+)d)?(([0-9]+)h)?(([0-9]+)m)?(([0-9]+)s)?(([0-9]+)ms)?)$
+                    type: string
+                  tlsConfig:
+                    description: TLS Config to use when sending traces.
+                    properties:
+                      ca:
+                        description: Certificate authority used when verifying server
+                          certificates.
+                        properties:
+                          configMap:
+                            description: ConfigMap containing data to use for the
+                              targets.
+                            properties:
+                              key:
+                                description: The key to select.
+                                type: string
+                              name:
+                                description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                  TODO: Add other useful fields. apiVersion, kind,
+                                  uid?'
+                                type: string
+                              optional:
+                                description: Specify whether the ConfigMap or its
+                                  key must be defined
+                                type: boolean
+                            required:
+                            - key
+                            type: object
+                            x-kubernetes-map-type: atomic
+                          secret:
+                            description: Secret containing data to use for the targets.
+                            properties:
+                              key:
+                                description: The key of the secret to select from.  Must
+                                  be a valid secret key.
+                                type: string
+                              name:
+                                description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                  TODO: Add other useful fields. apiVersion, kind,
+                                  uid?'
+                                type: string
+                              optional:
+                                description: Specify whether the Secret or its key
+                                  must be defined
+                                type: boolean
+                            required:
+                            - key
+                            type: object
+                            x-kubernetes-map-type: atomic
+                        type: object
+                      caFile:
+                        description: Path to the CA cert in the Prometheus container
+                          to use for the targets.
+                        type: string
+                      cert:
+                        description: Client certificate to present when doing client-authentication.
+                        properties:
+                          configMap:
+                            description: ConfigMap containing data to use for the
+                              targets.
+                            properties:
+                              key:
+                                description: The key to select.
+                                type: string
+                              name:
+                                description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                  TODO: Add other useful fields. apiVersion, kind,
+                                  uid?'
+                                type: string
+                              optional:
+                                description: Specify whether the ConfigMap or its
+                                  key must be defined
+                                type: boolean
+                            required:
+                            - key
+                            type: object
+                            x-kubernetes-map-type: atomic
+                          secret:
+                            description: Secret containing data to use for the targets.
+                            properties:
+                              key:
+                                description: The key of the secret to select from.  Must
+                                  be a valid secret key.
+                                type: string
+                              name:
+                                description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                                  TODO: Add other useful fields. apiVersion, kind,
+                                  uid?'
+                                type: string
+                              optional:
+                                description: Specify whether the Secret or its key
+                                  must be defined
+                                type: boolean
+                            required:
+                            - key
+                            type: object
+                            x-kubernetes-map-type: atomic
+                        type: object
+                      certFile:
+                        description: Path to the client cert file in the Prometheus
+                          container for the targets.
+                        type: string
+                      insecureSkipVerify:
+                        description: Disable target certificate validation.
+                        type: boolean
+                      keyFile:
+                        description: Path to the client key file in the Prometheus
+                          container for the targets.
+                        type: string
+                      keySecret:
+                        description: Secret containing the client key file for the
+                          targets.
+                        properties:
+                          key:
+                            description: The key of the secret to select from.  Must
+                              be a valid secret key.
+                            type: string
+                          name:
+                            description: 'Name of the referent. More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names
+                              TODO: Add other useful fields. apiVersion, kind, uid?'
+                            type: string
+                          optional:
+                            description: Specify whether the Secret or its key must
+                              be defined
+                            type: boolean
+                        required:
+                        - key
+                        type: object
+                        x-kubernetes-map-type: atomic
+                      serverName:
+                        description: Used to verify the hostname for the targets.
+                        type: string
+                    type: object
+                required:
+                - endpoint
+                type: object
               version:
-                description: Version of Prometheus to be deployed.
+                description: "Version of Prometheus being deployed. The operator uses
+                  this information to generate the Prometheus StatefulSet + configuration
+                  files. \n If not specified, the operator assumes the latest upstream
+                  version of Prometheus available at the time when the version of
+                  the operator was released."
                 type: string
               volumeMounts:
-                description: VolumeMounts allows configuration of additional VolumeMounts
-                  on the output StatefulSet definition. VolumeMounts specified will
-                  be appended to other VolumeMounts in the prometheus container, that
-                  are generated as a result of StorageSpec objects.
+                description: "VolumeMounts allows the configuration of additional
+                  VolumeMounts. \n VolumeMounts will be appended to other VolumeMounts
+                  in the 'prometheus' container, that are generated as a result of
+                  StorageSpec objects."
                 items:
                   description: VolumeMount describes a mounting of a Volume within
                     a container.
@@ -6127,9 +6412,10 @@ spec:
                   type: object
                 type: array
               volumes:
-                description: Volumes allows configuration of additional volumes on
-                  the output StatefulSet definition. Volumes specified will be appended
-                  to other volumes that are generated as a result of StorageSpec objects.
+                description: Volumes allows the configuration of additional volumes
+                  on the output StatefulSet definition. Volumes specified will be
+                  appended to other volumes that are generated as a result of StorageSpec
+                  objects.
                 items:
                   description: Volume represents a named volume in a pod that may
                     be accessed by any container in the pod.
@@ -7688,11 +7974,12 @@ spec:
                   type: object
                 type: array
               walCompression:
-                description: Enable compression of the write-ahead log using Snappy.
-                  This flag is only available in versions of Prometheus >= 2.11.0.
+                description: "Configures compression of the write-ahead log (WAL)
+                  using Snappy. \n WAL compression is enabled by default for Prometheus
+                  >= 2.20.0 \n Requires Prometheus v2.11.0 and above."
                 type: boolean
               web:
-                description: Defines the web command line flags when starting Prometheus.
+                description: Defines the configuration of the Prometheus web server.
                 properties:
                   httpConfig:
                     description: Defines HTTP parameters for web server.
@@ -7749,7 +8036,7 @@ spec:
                     minimum: 0
                     type: integer
                   pageTitle:
-                    description: The prometheus web page title
+                    description: The prometheus web page title.
                     type: string
                   tlsConfig:
                     description: Defines the TLS parameters for HTTPS.
