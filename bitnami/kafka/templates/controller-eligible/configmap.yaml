@@ -21,7 +21,8 @@ metadata:
   {{- end }}
 data:
   {{- if or .Values.config .Values.controller.config }}
-  server.properties: {{- include "common.tplvalues.render" ( dict "value" (coalesce .Values.controller.config .Values.config) "context" $ ) | nindent 4 }}
+  server.properties: | 
+  {{- include "common.tplvalues.render" ( dict "value" (coalesce .Values.controller.config .Values.config) "context" $ ) | nindent 4 }}
   {{- else }}
   server.properties: |-
     # Listeners configuration
