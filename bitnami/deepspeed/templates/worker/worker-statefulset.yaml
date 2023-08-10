@@ -104,7 +104,7 @@ spec:
         {{- include "deepspeed.v0.ssh.serverInitContainer" . | nindent 8 }}
         {{- end }}
         {{- if eq .Values.source.type "git" }}
-        {{- include "deespeed.git.cloneInitContainer" . | nindent 8 }}
+        {{- include "deespeed.git.cloneInitContainer" (dict "component" "worker" "context" $) | nindent 8 }}
         {{- end }}
         {{- if and .Values.volumePermissions.enabled .Values.client.persistence.enabled }}
         {{- include "deepspeed.v0.volumePermissionsInitContainer" (dict "component" "worker" "context" $) | nindent 8 }}
