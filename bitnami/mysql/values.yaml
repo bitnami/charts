@@ -162,6 +162,18 @@ initdbScripts: {}
 ## @param initdbScriptsConfigMap ConfigMap with the initdb scripts (Note: Overrides `initdbScripts`)
 ##
 initdbScriptsConfigMap: ""
+## @param startdbScripts Dictionary of startdb scripts
+## Specify dictionary of scripts to be run every time the container is started
+## Example:
+## startdbScripts:
+##   my_start_script.sh: |
+##      #!/bin/bash
+##      echo "Do something."
+##
+startdbScripts: {}
+## @param startdbScriptsConfigMap ConfigMap with the startdb scripts (Note: Overrides `startdbScripts`)
+##
+startdbScriptsConfigMap: ""
 
 ## @section MySQL Primary parameters
 ##
