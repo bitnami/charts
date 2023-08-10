@@ -80,7 +80,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/kafka
-  tag: 3.5.1-debian-11-r14
+  tag: 3.5.1-debian-11-r16
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1153,10 +1153,10 @@ service:
   ## @param service.ports.external Kafka svc port for external connections
   ##
   ports:
-    client: 19092
-    controller: 19093
-    interbroker: 19094
-    external: 19095
+    client: 9092
+    controller: 9093
+    interbroker: 9094
+    external: 9095
   ## @param service.extraPorts Extra ports to expose in the Kafka service (normally used with the `sidecar` value)
   ##
   extraPorts: []
@@ -1494,7 +1494,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r28
+    tag: 11-debian-11-r31
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
