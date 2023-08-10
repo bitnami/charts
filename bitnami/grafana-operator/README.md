@@ -257,7 +257,8 @@ For more information, refer to the [documentation on the differences between the
 | `grafana.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                    | `1`                      |
 | `grafana.updateStrategy`                                    | Set up update strategy for Grafana installation.                                                        | `{}`                     |
 | `grafana.extraVolumes`                                      | Optionally specify extra list of additional volumes for the grafana pod(s)                              | `[]`                     |
-| `grafana.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the grafana container(s)                   | `[]`                     |
+| `grafana.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the grafana container                      | `[]`                     |
+| `grafana.secrets`                                           | Optionally specify a list of secrets to be mounted to the grafana pod(s)                                | `[]`                     |
 | `grafana.sidecars`                                          | Add additional sidecar containers to the grafana pod(s)                                                 | `[]`                     |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
