@@ -83,7 +83,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------------------- | --------------------------------------------------------------------------------------------------------- | ---------------------- |
 | `image.registry`                    | Deepspeed image registry                                                                                  | `docker.io`            |
 | `image.repository`                  | Deepspeed image repository                                                                                | `bitnami/deepspeed`    |
-| `image.tag`                         | Deepspeed image tag (immutable tags are recommended)                                                      | `0.10.0-debian-11-r19` |
+| `image.tag`                         | Deepspeed image tag (immutable tags are recommended)                                                      | `0.10.0-debian-11-r25` |
 | `image.digest`                      | Deepspeed image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
 | `image.pullPolicy`                  | Deepspeed image pull policy                                                                               | `IfNotPresent`         |
 | `image.pullSecrets`                 | Specify docker-registry secret names as an array                                                          | `[]`                   |
@@ -321,7 +321,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `worker.persistence.annotations`       | Persistent Volume annotations                                                                                                     | `{}`                      |
 | `gitImage.registry`                    | Git image registry                                                                                                                | `docker.io`               |
 | `gitImage.repository`                  | Git image repository                                                                                                              | `bitnami/git`             |
-| `gitImage.tag`                         | Git image tag (immutable tags are recommended)                                                                                    | `2.41.0-debian-11-r64`    |
+| `gitImage.tag`                         | Git image tag (immutable tags are recommended)                                                                                    | `2.41.0-debian-11-r69`    |
 | `gitImage.digest`                      | Git image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                               | `""`                      |
 | `gitImage.pullPolicy`                  | Git image pull policy                                                                                                             | `IfNotPresent`            |
 | `gitImage.pullSecrets`                 | Specify docker-registry secret names as an array                                                                                  | `[]`                      |
