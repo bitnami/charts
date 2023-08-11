@@ -340,6 +340,9 @@ Return the definition of the git clone init container
       mountPath: /app
     - name: tmp
       mountPath: /tmp
+    # It creates at startup ssh in case it performs ssh-based git clone
+    - name: tmp
+      mountPath: /etc/ssh
   {{- if .context.Values.source.git.extraVolumeMounts }}
     {{- include "common.tplvalues.render" (dict "value" .context.Values.source.git.extraVolumeMounts "context" .context) | nindent 12 }}
   {{- end }}
