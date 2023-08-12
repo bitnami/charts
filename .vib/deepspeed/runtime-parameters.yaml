@@ -5,8 +5,10 @@ source:
     revision: master
 client:
   podSecurityContext:
+    enabled: true
     fsGroup: 1002
   containerSecurityContext:
+    enabled: true
     runAsUser: 1002
     runAsGroup: 1002
   serviceAccount:
@@ -22,8 +24,10 @@ worker:
   # We found an issue when the worker belonged to a group
   # different from 1001
   podSecurityContext:
+    enabled: true
     fsGroup: 1004
   containerSecurityContext:
+    enabled: true
     runAsUser: 1004
     runAsGroup: 1004
   externalAccess:
