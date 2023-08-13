@@ -210,6 +210,15 @@ Returns true if at least one ingest-only node replica has been configured.
 {{- end -}}
 
 {{/*
+Returns true if at least one dashboards replica has been configured.
+*/}}
+{{- define "opensearch.dashboards.enabled" -}}
+{{- if and .Values.dashboards.enabled (or .Values.dashboards.autoscaling.hpa.enabled (gt (int .Values.dashboards.replicaCount) 0)) -}}
+    {{- true -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the hostname of every OpenSearch seed node
 */}}
 {{- define "opensearch.hosts" -}}
