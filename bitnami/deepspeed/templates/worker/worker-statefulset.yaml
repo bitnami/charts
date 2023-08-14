@@ -104,7 +104,7 @@ spec:
         {{- include "deepspeed.v0.ssh.serverInitContainer" . | nindent 8 }}
         {{- end }}
         {{- if eq .Values.source.type "git" }}
-        {{- include "deespeed.git.cloneInitContainer" . | nindent 8 }}
+        {{- include "deespeed.git.cloneInitContainer" (dict "component" "worker" "context" $) | nindent 8 }}
         {{- end }}
         {{- if and .Values.volumePermissions.enabled .Values.client.persistence.enabled }}
         {{- include "deepspeed.v0.volumePermissionsInitContainer" (dict "component" "worker" "context" $) | nindent 8 }}
@@ -189,8 +189,10 @@ spec:
           {{- end }}
           volumeMounts:
             - name: ssh-server-config
-              mountPath: /etc/ssh/sshd_config.d/deepspeed_ssh_server.conf
-              subPath: deepspeed_ssh_server.conf
+              mountPath: /etc/ssh/sshd_config.d
+            - name: sshd-config
+              mountPath: /etc/ssh/sshd_config
+              subPath: sshd_config
             - name: ssh-worker-private-key
               mountPath: /bitnami/ssh/server-private-key
             - name: worker-home
@@ -232,6 +234,8 @@ spec:
         - name: ssh-server-config
           configMap:
             name: {{ include "deepspeed.v0.ssh.serverConfigMapName" . }}
+        - name: sshd-config
+          emptyDir: {}
         # We need to use /home because of the permission
         # limitations of sshd
         - name: worker-home

@@ -18,7 +18,7 @@ command:
     ## We need to have the subscriber process running at the same time the publishing is done
     ## The sleep is needed to avoid a race condition where the publishing is done before the subscriber is ready
     ## The subscriber process needs to be timed out so there is no dangling process making goss timeout
-    exec: ( USER={{ $running_user }} timeout 10 nats {{ $auth }} {{ $lb_endpoint }} sub {{ $subject }}; ) & sleep 3 && USER={{ $running_user }} nats {{ $auth }} {{ $lb_endpoint }} pub {{ $subject }} {{ $msg }}
+    exec: ( USER={{ $running_user }} timeout 10 ./nats/goss/testfiles/nats {{ $auth }} {{ $lb_endpoint }} sub {{ $subject }}; ) & sleep 3 && USER={{ $running_user }} ./nats/goss/testfiles/nats {{ $auth }} {{ $lb_endpoint }} pub {{ $subject }} {{ $msg }}
     exit-status: 0
     stdout:
     - /Received on.*{{ $subject }}/
@@ -29,7 +29,7 @@ command:
     {{- $subject := printf "subj_%s" (randAlpha 5) }}
     {{- $msg := printf "msg_%s" (randAlpha 5) }}
     {{- $pod_endpoint := printf "-s nats://nats-%d.nats-headless:%s" $i $client_port }}
-    exec: ( USER={{ $running_user }} timeout 10 nats {{ $auth }} {{ $pod_endpoint }} sub {{ $subject }}; ) & sleep 3 && USER={{ $running_user }} nats {{ $auth }} {{ $lb_endpoint }} pub {{ $subject }} {{ $msg }}
+    exec: ( USER={{ $running_user }} timeout 10 ./nats/goss/testfiles/nats {{ $auth }} {{ $pod_endpoint }} sub {{ $subject }}; ) & sleep 3 && USER={{ $running_user }} ./nats/goss/testfiles/nats {{ $auth }} {{ $lb_endpoint }} pub {{ $subject }} {{ $msg }}
     exit-status: 0
     stdout:
     - /Received on.*{{ $subject }}/

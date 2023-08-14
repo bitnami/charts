@@ -4155,6 +4155,8 @@ metrics:
       ## @extra metrics.prometheusRule.default.replicate Enable replicate rules when metrics.prometheusRule.default.create is false (also requires `metrics.enabled` to be `true`)
       ## @extra metrics.prometheusRule.default.ruler Enable ruler rules when metrics.prometheusRule.default.create is false (also requires `metrics.enabled` to be `true`)
       ## @extra metrics.prometheusRule.default.sidecar Enable sidecar rules when metrics.prometheusRule.default.create is false (also requires `metrics.enabled` to be `true`)
+      ## @param metrics.prometheusRule.default.sidecarJobRegex Allows the customization of the thanos-sidecar job name to use in the sidecar prometheus alerts
+      sidecarJobRegex: ".*thanos-sidecar.*"
       ## @extra metrics.prometheusRule.default.store_gateway Enable store_gateway rules when metrics.prometheusRule.default.create is false (also requires `metrics.enabled` to be `true`)
       ## @param metrics.prometheusRule.default.create would create all default prometheus alerts
       ##
