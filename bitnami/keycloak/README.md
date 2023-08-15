@@ -385,6 +385,23 @@ Sometimes, you may want to have Keycloak connect to an external PostgreSQL datab
 
 Refer to the [chart documentation on using an external database](https://docs.bitnami.com/kubernetes/apps/keycloak/configuration/use-external-database) for more details and an example.
 
+If you are using external database, provide an extra KC_DB_PASSWORD env variable
+
+```yaml
+externalDatabase:
+  host: "postgresql.externaldb.com"
+  port: 5432
+  user: bn_keycloak
+  database: bn_keycloak
+  existingSecret: passwords
+extraEnvVars:
+  - name: KC_DB_PASSWORD
+    valueFrom:
+      secretKeyRef:
+        name: postgres-secrets
+        key: postgres-password
+```
+
 > NOTE: Only PostgreSQL database server is supported as external database
 
 It is not supported but possible to run Keycloak with an external MSSQL database with the following settings:
