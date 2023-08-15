@@ -1055,6 +1055,15 @@ externalDatabase:
   existingSecretUserKey: ""
   existingSecretDatabaseKey: ""
   existingSecretPasswordKey: ""
+## If you are using external database, provide extra KC_DB_PASSWORD env variable to get rid of error with database password:
+# Example:
+# extraEnvVars:
+#   - name: KC_DB_PASSWORD
+#     valueFrom:
+#       secretKeyRef:
+#         name: postgres-secrets
+#         key: postgres-password
+
 
 ## @section Keycloak Cache parameters
 
