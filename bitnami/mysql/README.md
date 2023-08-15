@@ -101,6 +101,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `auth.customPasswordFiles` | Use custom password files when `auth.usePasswordFiles` is set to `true`. Define path for keys `root` and `user`, also define `replicator` if `architecture` is set to `replication` | `{}`                  |
 | `initdbScripts`            | Dictionary of initdb scripts                                                                                                                                                        | `{}`                  |
 | `initdbScriptsConfigMap`   | ConfigMap with the initdb scripts (Note: Overrides `initdbScripts`)                                                                                                                 | `""`                  |
+| `startdbScripts`           | Dictionary of startdb scripts                                                                                                                                                       | `{}`                  |
+| `startdbScriptsConfigMap`  | ConfigMap with the startdb scripts (Note: Overrides `startdbScripts`)                                                                                                               | `""`                  |
 
 ### MySQL Primary parameters
 
