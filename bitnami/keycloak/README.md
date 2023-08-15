@@ -385,7 +385,7 @@ Sometimes, you may want to have Keycloak connect to an external PostgreSQL datab
 
 Refer to the [chart documentation on using an external database](https://docs.bitnami.com/kubernetes/apps/keycloak/configuration/use-external-database) for more details and an example.
 
-If you are using external database, provide an extra KC_DB_PASSWORD env variable
+If you are using external database, provide an extra KC_DB_PASSWORD env variable:
 
 ```yaml
 externalDatabase:
