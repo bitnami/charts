@@ -242,11 +242,7 @@ For more information, refer to the [documentation on the differences between the
 | `grafana.persistence.annotations`                           | Add annotations to the persistent volume                                                                | `{}`                     |
 | `grafana.persistence.size`                                  | Define the size of the PersistentVolumeClaim to request for                                             | `10Gi`                   |
 | `grafana.config`                                            | grafana.ini configuration for the instance for this to configure please look at upstream docs           | `{}`                     |
-| `grafana.configMaps`                                        | Extra configMaps to mount into the grafana pod                                                          | `[]`                     |
-| `grafana.secrets`                                           | Extra secrets to mount into the grafana pod                                                             | `[]`                     |
 | `grafana.jsonnetLibrarySelector`                            | Configuring the read for jsonnetLibraries to pull in.                                                   | `{}`                     |
-| `grafana.dashboardLabelSelectors`                           | This selects dashboards on the label.                                                                   | `{}`                     |
-| `grafana.dashboardNamespaceSelector`                        | Watch for dashboards only in the Namespaces that have the specified namespace label                     | `{}`                     |
 | `grafana.livenessProbe.enabled`                             | Enable livenessProbe                                                                                    | `true`                   |
 | `grafana.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                 | `120`                    |
 | `grafana.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                        | `10`                     |
@@ -261,7 +257,8 @@ For more information, refer to the [documentation on the differences between the
 | `grafana.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                    | `1`                      |
 | `grafana.updateStrategy`                                    | Set up update strategy for Grafana installation.                                                        | `{}`                     |
 | `grafana.extraVolumes`                                      | Optionally specify extra list of additional volumes for the grafana pod(s)                              | `[]`                     |
-| `grafana.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the grafana container(s)                   | `[]`                     |
+| `grafana.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the grafana container                      | `[]`                     |
+| `grafana.secrets`                                           | Optionally specify a list of secrets to be mounted to the grafana pod(s)                                | `[]`                     |
 | `grafana.sidecars`                                          | Add additional sidecar containers to the grafana pod(s)                                                 | `[]`                     |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,

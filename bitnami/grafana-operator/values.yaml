@@ -706,41 +706,12 @@ grafana:
       #   # allowed_domains: example.com
       #   allow_sign_up: "True"
       disable_gravatar: "false"
-  ## @param grafana.configMaps Extra configMaps to mount into the grafana pod
-  ## Ref: https://github.com/integr8ly/grafana-operator/blob/master/documentation/extra_files.md
-  ## e.g:
-  ## configMaps:
-  ##   - myCustomConfigMap
-  ##
-  configMaps: []
-  ## @param grafana.secrets Extra secrets to mount into the grafana pod
-  ## Ref: https://github.com/integr8ly/grafana-operator/blob/master/documentation/extra_files.md
-  ## e.g:
-  ## secrets:
-  ##   - myCustomSecret
-  ##
-  secrets: []
   ## @param grafana.jsonnetLibrarySelector [object] Configuring the read for jsonnetLibraries to pull in.
   ## Ref: https://github.com/integr8ly/grafana-operator/blob/master/documentation/deploy_grafana.md#jsonnet-library-discovery
   ##
   jsonnetLibrarySelector:
     matchLabels:
       app.kubernetes.io/instance: "{{ .Release.Name }}"
-  ## @param grafana.dashboardLabelSelectors [object] This selects dashboards on the label.
-  ## A cachall is not possible so you need to define at least one label selector here.
-  ## Ref: https://github.com/integr8ly/grafana-operator/blob/master/documentation/deploy_grafana.md#deploying-grafana
-  ##
-  dashboardLabelSelectors:
-    - matchLabels:
-        app.kubernetes.io/instance: "{{ .Release.Name }}"
-  ## @param grafana.dashboardNamespaceSelector Watch for dashboards only in the Namespaces that have the specified namespace label
-  ## Ref: https://github.com/grafana-operator/grafana-operator/blob/master/documentation/multi_namespace_support.md#2-dashboardnamespaceselector
-  ## e.g:
-  ## dashboardNamespaceSelector:
-  ##   matchLabels:
-  ##     key: value
-  ##
-  dashboardNamespaceSelector: {}
   ## Grafana containers' liveness probe
   ## Ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
   ## @param grafana.livenessProbe.enabled Enable livenessProbe
@@ -787,9 +758,12 @@ grafana:
   ## @param grafana.extraVolumes Optionally specify extra list of additional volumes for the grafana pod(s)
   ##
   extraVolumes: []
-  ## @param grafana.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the grafana container(s)
+  ## @param grafana.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the grafana container
   ##
   extraVolumeMounts: []
+  ## @param grafana.secrets Optionally specify a list of secrets to be mounted to the grafana pod(s)
+  ##
+  secrets: []
   ## @param grafana.sidecars Add additional sidecar containers to the grafana pod(s)
   ## e.g:
   ## sidecars:

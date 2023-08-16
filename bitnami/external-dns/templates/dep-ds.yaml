@@ -31,8 +31,9 @@ spec:
   template:
     metadata:
       labels: {{ include "external-dns.labels" . | nindent 8 }}
+      {{- if or .Values.podAnnotations (and .Values.metrics.enabled .Values.metrics.podAnnotations) (include "external-dns.createSecret" .) (and (eq .Values.provider "designate") .Values.designate.customCA.enabled) }}
       annotations:
-        {{- if or .Values.podAnnotations .Values.metrics.enabled }}
+        {{- if or .Values.podAnnotations (and .Values.metrics.enabled .Values.metrics.podAnnotations) }}
         {{- include "external-dns.podAnnotations" . | trim | nindent 8 }}
         {{- end }}
         {{- if (include "external-dns.createSecret" .) }}
@@ -41,6 +42,7 @@ spec:
         {{- if and (eq .Values.provider "designate") .Values.designate.customCA.enabled }}
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
         {{- end }}
+      {{- end }}
     spec:
       {{- include "external-dns.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.podSecurityContext.enabled }}
@@ -162,6 +164,12 @@ spec:
             {{- end }}
             {{- if .Values.labelFilter }}
             - --label-filter={{ .Values.labelFilter }}
+            {{- end }}
+            {{- range .Values.ingressClassFilters }}
+            - --ingress-class={{ . }}
+            {{- end }}
+            {{- range .Values.managedRecordTypesFilters }}
+            - --managed-record-types={{ . }}
             {{- end }}
             {{- if .Values.crd.apiversion }}
             - --crd-source-apiversion={{ .Values.crd.apiversion }}
@@ -584,7 +592,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ template "external-dns.secretName" . }}
-                  key: rfc2136_tsig_secret
+                  key: {{ .Values.rfc2136.tsigKeyname }}
             {{- end }}
             {{- end }}
             {{- if eq .Values.provider "pdns" }}

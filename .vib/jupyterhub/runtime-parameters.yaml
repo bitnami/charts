@@ -15,6 +15,9 @@ hub:
     automountServiceAccountToken: true
   rbac:
     create: true
+  # The label is needed for GOSS tests
+  podLabels:
+    hub.jupyter.org/network-access-hub: "true"
   service:
     ports:
       http: 8082

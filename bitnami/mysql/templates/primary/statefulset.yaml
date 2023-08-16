@@ -254,6 +254,10 @@ spec:
             - name: custom-init-scripts
               mountPath: /docker-entrypoint-initdb.d
             {{- end }}
+            {{- if or .Values.startdbScriptsConfigMap .Values.startdbScripts }}
+            - name: custom-start-scripts
+              mountPath: /docker-entrypoint-startdb.d
+            {{- end }}
             {{- if or .Values.primary.configuration .Values.primary.existingConfigmap }}
             - name: config
               mountPath: /opt/bitnami/mysql/conf/my.cnf
@@ -296,7 +300,7 @@ spec:
               if [[ -f "${MYSQL_ROOT_PASSWORD_FILE:-}" ]]; then
                   password_aux=$(cat "$MYSQL_ROOT_PASSWORD_FILE")
               fi
-              DATA_SOURCE_NAME="root:${password_aux}@(localhost:3306)/" /bin/mysqld_exporter {{- range .Values.metrics.extraArgs.primary }} {{ . }} {{- end }}
+              MYSQLD_EXPORTER_PASSWORD=${password_aux} /bin/mysqld_exporter --mysqld.address=localhost:3306 --mysqld.username=root {{- range .Values.metrics.extraArgs.primary }} {{ . }} {{- end }}
           {{- end }}
           ports:
             - name: metrics
@@ -337,6 +341,11 @@ spec:
         - name: custom-init-scripts
           configMap:
             name: {{ include "mysql.initdbScriptsCM" . }}
+        {{- end }}
+        {{- if or .Values.startdbScriptsConfigMap .Values.startdbScripts }}
+        - name: custom-start-scripts
+          configMap:
+            name: {{ include "mysql.startdbScriptsCM" . }}
         {{- end }}
         {{- if and .Values.auth.usePasswordFiles (not .Values.auth.customPasswordFiles) }}
         - name: mysql-credentials
