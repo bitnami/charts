@@ -47,4 +47,13 @@ spec:
     {{- end }}
       port: {{ .Values.containerPorts.peer }}
       targetPort: peer
+    {{- if .Values.metrics.useSeparateEndpoint }}
+    {{- if .Values.service.metricsPortNameOverride }}
+    - name: {{ .Values.service.metricsPortNameOverride }}
+    {{- else }}
+    - name: metrics
+    {{- end }}
+      port: {{ .Values.containerPorts.metrics }}
+      targetPort: metrics
+    {{- end }}
   selector: {{- include "common.labels.matchLabels" . | nindent 4 }}

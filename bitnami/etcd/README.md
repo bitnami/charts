@@ -137,6 +137,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `lifecycleHooks`                                    | Override default etcd container hooks                                                     | `{}`            |
 | `containerPorts.client`                             | Client port to expose at container level                                                  | `2379`          |
 | `containerPorts.peer`                               | Peer port to expose at container level                                                    | `2380`          |
+| `containerPorts.metrics`                            | Metrics port to expose at container level when metrics.useSeparateEndpoint is true        | `9090`          |
 | `podSecurityContext.enabled`                        | Enabled etcd pods' Security Context                                                       | `true`          |
 | `podSecurityContext.fsGroup`                        | Set etcd pod's Security Context fsGroup                                                   | `1001`          |
 | `containerSecurityContext.enabled`                  | Enabled etcd containers' Security Context                                                 | `true`          |
@@ -193,26 +194,29 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Traffic exposure parameters
 
-| Name                               | Description                                                                        | Value       |
-| ---------------------------------- | ---------------------------------------------------------------------------------- | ----------- |
-| `service.type`                     | Kubernetes Service type                                                            | `ClusterIP` |
-| `service.enabled`                  | create second service if equal true                                                | `true`      |
-| `service.clusterIP`                | Kubernetes service Cluster IP                                                      | `""`        |
-| `service.ports.client`             | etcd client port                                                                   | `2379`      |
-| `service.ports.peer`               | etcd peer port                                                                     | `2380`      |
-| `service.nodePorts.client`         | Specify the nodePort client value for the LoadBalancer and NodePort service types. | `""`        |
-| `service.nodePorts.peer`           | Specify the nodePort peer value for the LoadBalancer and NodePort service types.   | `""`        |
-| `service.clientPortNameOverride`   | etcd client port name override                                                     | `""`        |
-| `service.peerPortNameOverride`     | etcd peer port name override                                                       | `""`        |
-| `service.loadBalancerIP`           | loadBalancerIP for the etcd service (optional, cloud specific)                     | `""`        |
-| `service.loadBalancerSourceRanges` | Load Balancer source ranges                                                        | `[]`        |
-| `service.externalIPs`              | External IPs                                                                       | `[]`        |
-| `service.externalTrafficPolicy`    | %%MAIN_CONTAINER_NAME%% service external traffic policy                            | `Cluster`   |
-| `service.extraPorts`               | Extra ports to expose (normally used with the `sidecar` value)                     | `[]`        |
-| `service.annotations`              | Additional annotations for the etcd service                                        | `{}`        |
-| `service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"               | `None`      |
-| `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                        | `{}`        |
-| `service.headless.annotations`     | Annotations for the headless service.                                              | `{}`        |
+| Name                               | Description                                                                                                                                                    | Value       |
+| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| `service.type`                     | Kubernetes Service type                                                                                                                                        | `ClusterIP` |
+| `service.enabled`                  | create second service if equal true                                                                                                                            | `true`      |
+| `service.clusterIP`                | Kubernetes service Cluster IP                                                                                                                                  | `""`        |
+| `service.ports.client`             | etcd client port                                                                                                                                               | `2379`      |
+| `service.ports.peer`               | etcd peer port                                                                                                                                                 | `2380`      |
+| `service.ports.metrics`            | etcd metrics port when metrics.useSeparateEndpoint is true                                                                                                     | `9090`      |
+| `service.nodePorts.client`         | Specify the nodePort client value for the LoadBalancer and NodePort service types.                                                                             | `""`        |
+| `service.nodePorts.peer`           | Specify the nodePort peer value for the LoadBalancer and NodePort service types.                                                                               | `""`        |
+| `service.nodePorts.metrics`        | Specify the nodePort metrics value for the LoadBalancer and NodePort service types. The metrics port is only exposed when metrics.useSeparateEndpoint is true. | `""`        |
+| `service.clientPortNameOverride`   | etcd client port name override                                                                                                                                 | `""`        |
+| `service.peerPortNameOverride`     | etcd peer port name override                                                                                                                                   | `""`        |
+| `service.metricsPortNameOverride`  | etcd metrics port name override. The metrics port is only exposed when metrics.useSeparateEndpoint is true.                                                    | `""`        |
+| `service.loadBalancerIP`           | loadBalancerIP for the etcd service (optional, cloud specific)                                                                                                 | `""`        |
+| `service.loadBalancerSourceRanges` | Load Balancer source ranges                                                                                                                                    | `[]`        |
+| `service.externalIPs`              | External IPs                                                                                                                                                   | `[]`        |
+| `service.externalTrafficPolicy`    | %%MAIN_CONTAINER_NAME%% service external traffic policy                                                                                                        | `Cluster`   |
+| `service.extraPorts`               | Extra ports to expose (normally used with the `sidecar` value)                                                                                                 | `[]`        |
+| `service.annotations`              | Additional annotations for the etcd service                                                                                                                    | `{}`        |
+| `service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                                                           | `None`      |
+| `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                                                    | `{}`        |
+| `service.headless.annotations`     | Annotations for the headless service.                                                                                                                          | `{}`        |
 
 ### Persistence parameters
 
@@ -256,6 +260,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                      | Description                                                                                                                   | Value        |
 | ----------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ------------ |
 | `metrics.enabled`                         | Expose etcd metrics                                                                                                           | `false`      |
+| `metrics.useSeparateEndpoint`             | Use a separate endpoint for exposing metrics                                                                                  | `false`      |
 | `metrics.podAnnotations`                  | Annotations for the Prometheus metrics on etcd pods                                                                           | `{}`         |
 | `metrics.podMonitor.enabled`              | Create PodMonitor Resource for scraping metrics using PrometheusOperator                                                      | `false`      |
 | `metrics.podMonitor.namespace`            | Namespace in which Prometheus is running                                                                                      | `monitoring` |
