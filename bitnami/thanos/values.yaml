@@ -658,7 +658,7 @@ query:
     ##
     hostname: thanos.local
     ## @param query.ingress.secretName Custom secretName for the ingress resource
-    ## If query.ingress.secretName ist not set, the secret will be named as follows: query.ingress.hostname-tls
+    ## If query.ingress.secretName is not set, the secret will be named as follows: query.ingress.hostname-tls
     secretName: ""   
     ## @param query.ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
     ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
