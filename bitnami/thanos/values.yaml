@@ -760,7 +760,7 @@ query:
       ##
       hostname: thanos-grpc.local
       ## @param query.ingress.grpc.secretName Custom secretName for the ingress resource (GRPC)
-      ## If query.ingress.grpc.secretName ist not set, the secret will be named as follows: query.ingress.grpc.hostname-tls
+      ## If query.ingress.grpc.secretName is not set, the secret will be named as follows: query.ingress.grpc.hostname-tls
       secretName: ""         
       ## @param query.ingress.grpc.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
       ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
