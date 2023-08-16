@@ -2503,11 +2503,11 @@ dashboards:
   ##
   livenessProbe:
     enabled: true
-    initialDelaySeconds: 120
-    periodSeconds: 10
+    initialDelaySeconds: 180
+    periodSeconds: 20
     timeoutSeconds: 5
     successThreshold: 1
-    failureThreshold: 5
+    failureThreshold: 8
   ## @param dashboards.readinessProbe.enabled Enable/disable the readiness probe (data nodes pod)
   ## @param dashboards.readinessProbe.initialDelaySeconds Delay before readiness probe is initiated (data nodes pod)
   ## @param dashboards.readinessProbe.periodSeconds How often to perform the probe (data nodes pod)
