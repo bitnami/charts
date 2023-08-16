@@ -112,7 +112,7 @@ data:
         fi
 
         info "about to run the command: $sentinel_info_command"
-        eval $sentinel_info_command
+        retry_while "eval $sentinel_info_command" 2 1
     }
 
     {{- if and .Values.replica.containerSecurityContext.runAsUser (eq (.Values.replica.containerSecurityContext.runAsUser | int) 0) }}
@@ -334,7 +334,7 @@ data:
             sentinel_info_command="{{- if and .Values.auth.enabled .Values.auth.sentinel }}REDISCLI_AUTH="\$REDIS_PASSWORD" {{ end }}timeout {{ .Values.sentinel.getMasterTimeout }} redis-cli -h $REDIS_SERVICE -p $SENTINEL_SERVICE_PORT sentinel get-master-addr-by-name {{ .Values.sentinel.masterSet }}"
         fi
         info "about to run the command: $sentinel_info_command"
-        eval $sentinel_info_command
+        retry_while "eval $sentinel_info_command" 2 1
     }
 
     [[ -f $REDIS_PASSWORD_FILE ]] && export REDIS_PASSWORD="$(< "${REDIS_PASSWORD_FILE}")"
@@ -701,6 +701,7 @@ data:
     }
 
     REDISPORT=$(get_port "$HOSTNAME" "REDIS")
+    HEADLESS_SERVICE="{{ template "common.names.fullname" . }}-headless.{{ .Release.Namespace }}.svc.{{ .Values.clusterDomain }}"
 
     [[ -f $REDIS_PASSWORD_FILE ]] && export REDIS_PASSWORD="$(< "${REDIS_PASSWORD_FILE}")"
     [[ -f $REDIS_MASTER_PASSWORD_FILE ]] && export REDIS_MASTER_PASSWORD="$(< "${REDIS_MASTER_PASSWORD_FILE}")"

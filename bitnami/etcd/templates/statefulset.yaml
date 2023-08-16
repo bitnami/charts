@@ -179,7 +179,7 @@ spec:
               {{- end }}
             {{- end }}
             - name: ETCD_ADVERTISE_CLIENT_URLS
-              value: "{{ $etcdClientProtocol }}://$(MY_POD_NAME).{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.svc.{{ $clusterDomain }}:{{ .Values.containerPorts.client }},{{ $etcdClientProtocol }}://{{ $etcdFullname }}.{{ .Release.Namespace }}.svc.{{ $clusterDomain }}:{{ coalesce .Values.service.ports.client .Values.service.port }}"
+              value: "{{ $etcdClientProtocol }}://$(MY_POD_NAME).{{ $etcdHeadlessServiceName }}.{{ .Release.Namespace }}.svc.{{ $clusterDomain }}:{{ .Values.containerPorts.client }}{{- if .Values.service.enabled }},{{ $etcdClientProtocol }}://{{ $etcdFullname }}.{{ .Release.Namespace }}.svc.{{ $clusterDomain }}:{{ coalesce .Values.service.ports.client .Values.service.port }}{{- end }}"
             - name: ETCD_LISTEN_CLIENT_URLS
               value: "{{ $etcdClientProtocol }}://0.0.0.0:{{ .Values.containerPorts.client }}"
             - name: ETCD_INITIAL_ADVERTISE_PEER_URLS
@@ -200,7 +200,7 @@ spec:
             {{- end }}
             {{- if gt $replicaCount 1 }}
             - name: ETCD_INITIAL_CLUSTER_TOKEN
-              value: "etcd-cluster-k8s"
+              value: {{ .Values.initialClusterToken | quote }}
             - name: ETCD_INITIAL_CLUSTER_STATE
               value: {{ default (ternary "new" "existing" .Release.IsInstall) .Values.initialClusterState | quote }}
             {{- $initialCluster := list }}

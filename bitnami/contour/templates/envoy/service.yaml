@@ -59,6 +59,9 @@ spec:
   {{- if .Values.envoy.service.ipFamilyPolicy }}
   ipFamilyPolicy: {{ .Values.envoy.service.ipFamilyPolicy }}
   {{- end }}
+  {{- if .Values.envoy.service.ipFamilies }}
+  ipFamilies: {{ toYaml .Values.envoy.service.ipFamilies | nindent 4 }}
+  {{- end }}
   {{- if and .Values.envoy.service.loadBalancerClass (eq .Values.envoy.service.type "LoadBalancer") }}
   loadBalancerClass: {{ .Values.envoy.service.loadBalancerClass }}
   {{- end }}

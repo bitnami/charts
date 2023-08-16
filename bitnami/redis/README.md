@@ -97,15 +97,15 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Redis&reg; Image parameters
 
-| Name                | Description                                                                                                | Value                  |
-| ------------------- | ---------------------------------------------------------------------------------------------------------- | ---------------------- |
-| `image.registry`    | Redis&reg; image registry                                                                                  | `docker.io`            |
-| `image.repository`  | Redis&reg; image repository                                                                                | `bitnami/redis`        |
-| `image.tag`         | Redis&reg; image tag (immutable tags are recommended)                                                      | `7.0.12-debian-11-r15` |
-| `image.digest`      | Redis&reg; image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
-| `image.pullPolicy`  | Redis&reg; image pull policy                                                                               | `IfNotPresent`         |
-| `image.pullSecrets` | Redis&reg; image pull secrets                                                                              | `[]`                   |
-| `image.debug`       | Enable image debug mode                                                                                    | `false`                |
+| Name                | Description                                                                                                | Value                |
+| ------------------- | ---------------------------------------------------------------------------------------------------------- | -------------------- |
+| `image.registry`    | Redis&reg; image registry                                                                                  | `docker.io`          |
+| `image.repository`  | Redis&reg; image repository                                                                                | `bitnami/redis`      |
+| `image.tag`         | Redis&reg; image tag (immutable tags are recommended)                                                      | `7.2.0-debian-11-r0` |
+| `image.digest`      | Redis&reg; image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                 |
+| `image.pullPolicy`  | Redis&reg; image pull policy                                                                               | `IfNotPresent`       |
+| `image.pullSecrets` | Redis&reg; image pull secrets                                                                              | `[]`                 |
+| `image.debug`       | Enable image debug mode                                                                                    | `false`              |
 
 ### Redis&reg; common configuration parameters
 
@@ -345,7 +345,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sentinel.enabled`                                           | Use Redis&reg; Sentinel on Redis&reg; pods.                                                                                                 | `false`                  |
 | `sentinel.image.registry`                                    | Redis&reg; Sentinel image registry                                                                                                          | `docker.io`              |
 | `sentinel.image.repository`                                  | Redis&reg; Sentinel image repository                                                                                                        | `bitnami/redis-sentinel` |
-| `sentinel.image.tag`                                         | Redis&reg; Sentinel image tag (immutable tags are recommended)                                                                              | `7.0.12-debian-11-r13`   |
+| `sentinel.image.tag`                                         | Redis&reg; Sentinel image tag (immutable tags are recommended)                                                                              | `7.2.0-debian-11-r0`     |
 | `sentinel.image.digest`                                      | Redis&reg; Sentinel image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                         | `""`                     |
 | `sentinel.image.pullPolicy`                                  | Redis&reg; Sentinel image pull policy                                                                                                       | `IfNotPresent`           |
 | `sentinel.image.pullSecrets`                                 | Redis&reg; Sentinel image pull secrets                                                                                                      | `[]`                     |
@@ -353,7 +353,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sentinel.annotations`                                       | Additional custom annotations for Redis&reg; Sentinel resource                                                                              | `{}`                     |
 | `sentinel.masterSet`                                         | Master set name                                                                                                                             | `mymaster`               |
 | `sentinel.quorum`                                            | Sentinel Quorum                                                                                                                             | `2`                      |
-| `sentinel.getMasterTimeout`                                  | Amount of time to allow before get_sentinel_master_info() times out.                                                                        | `220`                    |
+| `sentinel.getMasterTimeout`                                  | Amount of time to allow before get_sentinel_master_info() times out.                                                                        | `99`                     |
 | `sentinel.automateClusterRecovery`                           | Automate cluster recovery in cases where the last replica is not considered a good replica and Sentinel won't automatically failover to it. | `false`                  |
 | `sentinel.redisShutdownWaitFailover`                         | Whether the Redis&reg; master container waits for the failover at shutdown (in addition to the Redis&reg; Sentinel container).              | `true`                   |
 | `sentinel.downAfterMilliseconds`                             | Timeout for detecting a Redis&reg; node is down                                                                                             | `60000`                  |
@@ -468,7 +468,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                                           | Start a sidecar prometheus exporter to expose Redis&reg; metrics                                                    | `false`                  |
 | `metrics.image.registry`                                    | Redis&reg; Exporter image registry                                                                                  | `docker.io`              |
 | `metrics.image.repository`                                  | Redis&reg; Exporter image repository                                                                                | `bitnami/redis-exporter` |
-| `metrics.image.tag`                                         | Redis&reg; Exporter image tag (immutable tags are recommended)                                                      | `1.52.0-debian-11-r0`    |
+| `metrics.image.tag`                                         | Redis&reg; Exporter image tag (immutable tags are recommended)                                                      | `1.52.0-debian-11-r17`   |
 | `metrics.image.digest`                                      | Redis&reg; Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                     |
 | `metrics.image.pullPolicy`                                  | Redis&reg; Exporter image pull policy                                                                               | `IfNotPresent`           |
 | `metrics.image.pullSecrets`                                 | Redis&reg; Exporter image pull secrets                                                                              | `[]`                     |
@@ -541,7 +541,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`                    | `false`            |
 | `volumePermissions.image.registry`                     | OS Shell + Utility image registry                                                                                  | `docker.io`        |
 | `volumePermissions.image.repository`                   | OS Shell + Utility image repository                                                                                | `bitnami/os-shell` |
-| `volumePermissions.image.tag`                          | OS Shell + Utility image tag (immutable tags are recommended)                                                      | `11-debian-11-r19` |
+| `volumePermissions.image.tag`                          | OS Shell + Utility image tag (immutable tags are recommended)                                                      | `11-debian-11-r37` |
 | `volumePermissions.image.digest`                       | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`               |
 | `volumePermissions.image.pullPolicy`                   | OS Shell + Utility image pull policy                                                                               | `IfNotPresent`     |
 | `volumePermissions.image.pullSecrets`                  | OS Shell + Utility image pull secrets                                                                              | `[]`               |
@@ -551,7 +551,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sysctl.enabled`                                       | Enable init container to modify Kernel settings                                                                    | `false`            |
 | `sysctl.image.registry`                                | OS Shell + Utility image registry                                                                                  | `docker.io`        |
 | `sysctl.image.repository`                              | OS Shell + Utility image repository                                                                                | `bitnami/os-shell` |
-| `sysctl.image.tag`                                     | OS Shell + Utility image tag (immutable tags are recommended)                                                      | `11-debian-11-r19` |
+| `sysctl.image.tag`                                     | OS Shell + Utility image tag (immutable tags are recommended)                                                      | `11-debian-11-r37` |
 | `sysctl.image.digest`                                  | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`               |
 | `sysctl.image.pullPolicy`                              | OS Shell + Utility image pull policy                                                                               | `IfNotPresent`     |
 | `sysctl.image.pullSecrets`                             | OS Shell + Utility image pull secrets                                                                              | `[]`               |

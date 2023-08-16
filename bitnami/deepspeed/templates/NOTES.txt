@@ -1,0 +1,78 @@
+CHART NAME: {{ .Chart.Name }}
+CHART VERSION: {{ .Chart.Version }}
+APP VERSION: {{ .Chart.AppVersion }}
+
+** Please be patient while the chart is being deployed **
+
+{{- if .Values.diagnosticMode.enabled }}
+The chart has been deployed in diagnostic mode. All probes have been disabled and the command has been overwritten with:
+
+  command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 4 }}
+  args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 4 }}
+
+Get the list of pods by executing:
+
+  kubectl get pods --namespace {{ include "common.names.namespace" . }} -l app.kubernetes.io/instance={{ .Release.Name }}
+
+Access the pod you want to debug by executing
+
+  kubectl exec --namespace {{ include "common.names.namespace" . }} -ti <NAME OF THE POD> -- bash
+
+{{- else }}
+{{- if .Values.client.enabled }}
+{{- if .Values.source.launchCommand }}
+The following command will be executed:
+
+  {{- include "common.tplvalues.render" (dict "value" .Values.source.launchCommand "context" $) | nindent 2 }}
+
+You can see the logs of each running node with:
+    kubectl logs [POD_NAME]
+
+and the list of pods:
+    kubectl get pods --namespace {{ include "common.names.namespace" . }} -l "app.kubernetes.io/name={{ include "common.names.name" . }},app.kubernetes.io/instance={{ .Release.Name }}"
+{{- else }}
+You didn't specify any entrypoint to your code.
+To run it, you can either deploy again using the `source.launchCommand` option to specify your entrypoint, or execute it manually by jumping into the pods:
+
+1. Get the running pods
+    kubectl get pods --namespace {{ include "common.names.namespace" . }} -l "app.kubernetes.io/name={{ include "common.names.name" . }},app.kubernetes.io/instance={{ .Release.Name }}"
+
+2. Get into a pod
+    kubectl exec -ti [POD_NAME] bash
+
+3. Execute your script as you would normally do.
+{{- end }}
+
+The worker nodes have been deployed and are accessible as follows:
+
+From inside the cluster:
+
+      {{- $workers := .Values.worker.replicaCount | int }}
+      {{- range $i, $e := until $workers }}
+        {{ include "deepspeed.v0.worker.fullname" $ }}-{{ $i }}.{{ printf "%s-headless" (include "deepspeed.v0.worker.fullname" $) }}:{{ $.Values.worker.containerPorts.ssh }}
+      {{- end }}
+
+{{- if and .Values.worker.externalAccess.enabled (eq .Values.worker.externalAccess.service.type "LoadBalancer") }}
+
+From outside the cluster:
+
+NOTE: It may take a few minutes for the LoadBalancer IPs to be available.
+        Watch the status with: 'kubectl get svc --namespace {{ include "common.names.namespace" . }} -l "app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=worker,pod" -w'
+
+    Worker domain: You will have a different external IP for each Kafka broker. You can get the list of external IPs using the command below:
+
+        echo "$(kubectl get svc --namespace {{ include "common.names.namespace" . }} -l "app.kubernetes.io/instance={{ .Release.Name }},app.kubernetes.io/component=worker,pod" -o jsonpath='{.items[*].status.loadBalancer.ingress[0].ip}' | tr ' ' '\n')"
+
+    Worker port: {{ .Values.worker.externalAccess.service.ports.ssh }}
+
+{{- end }}
+
+For accessing via ssh get the SSH private key as follows:
+
+kubectl get secret --namespace {{ include "common.names.namespace" . }} {{ include "deepspeed.v0.ssh.keySecretName" . }} -o jsonpath="{.data.id_rsa}" | base64 -d > id_rsa
+
+Then configure your SSH client to use that key.
+{{- end }}
+{{- end }}
+{{ include "deepspeed.v0.validateValues" . }}
+{{ include "deepspeed.v0.checkRollingTags" . }}
