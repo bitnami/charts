@@ -230,6 +230,7 @@ helm uninstall my-release
 | `envoy.autoscaling.maxReplicas`                               | Maximum number of Controller replicas                                                                                 | `11`                   |
 | `envoy.autoscaling.targetCPU`                                 | Target CPU utilization percentage                                                                                     | `""`                   |
 | `envoy.autoscaling.targetMemory`                              | Target Memory utilization percentage                                                                                  | `""`                   |
+| `envoy.autoscaling.behavior`                                  | HPA Behavior                                                                                                          | `{}`                   |
 | `envoy.podAffinityPreset`                                     | Envoy Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                             | `""`                   |
 | `envoy.podAntiAffinityPreset`                                 | Envoy Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                        | `""`                   |
 | `envoy.nodeAffinityPreset.type`                               | Envoy Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                       | `""`                   |

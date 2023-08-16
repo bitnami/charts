@@ -631,6 +631,7 @@ envoy:
   ## @param envoy.autoscaling.maxReplicas Maximum number of Controller replicas
   ## @param envoy.autoscaling.targetCPU Target CPU utilization percentage
   ## @param envoy.autoscaling.targetMemory Target Memory utilization percentage
+  ## @param envoy.autoscaling.behavior HPA Behavior
   ##
   autoscaling:
     enabled: false
@@ -638,6 +639,7 @@ envoy:
     maxReplicas: 11
     targetCPU: ""
     targetMemory: ""
+    behavior: {}
   ## @param envoy.podAffinityPreset Envoy Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
   ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#inter-pod-affinity-and-anti-affinity
   ## Allowed values: soft, hard
