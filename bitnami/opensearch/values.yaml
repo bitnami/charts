@@ -2488,12 +2488,12 @@ dashboards:
   ## @param dashboards.startupProbe.failureThreshold Minimum consecutive failures for the probe to be considered failed after having succeeded
   ##
   startupProbe:
-    enabled: false
-    initialDelaySeconds: 120
-    periodSeconds: 10
+    enabled: true
+    initialDelaySeconds: 180
+    periodSeconds: 20
     timeoutSeconds: 5
     successThreshold: 1
-    failureThreshold: 5
+    failureThreshold: 8
   ## @param dashboards.livenessProbe.enabled Enable/disable the liveness probe (data nodes pod)
   ## @param dashboards.livenessProbe.initialDelaySeconds Delay before liveness probe is initiated (data nodes pod)
   ## @param dashboards.livenessProbe.periodSeconds How often to perform the probe (data nodes pod)
@@ -2503,11 +2503,11 @@ dashboards:
   ##
   livenessProbe:
     enabled: true
-    initialDelaySeconds: 120
-    periodSeconds: 10
+    initialDelaySeconds: 180
+    periodSeconds: 20
     timeoutSeconds: 5
     successThreshold: 1
-    failureThreshold: 5
+    failureThreshold: 8
   ## @param dashboards.readinessProbe.enabled Enable/disable the readiness probe (data nodes pod)
   ## @param dashboards.readinessProbe.initialDelaySeconds Delay before readiness probe is initiated (data nodes pod)
   ## @param dashboards.readinessProbe.periodSeconds How often to perform the probe (data nodes pod)
@@ -2517,11 +2517,11 @@ dashboards:
   ##
   readinessProbe:
     enabled: true
-    initialDelaySeconds: 120
-    periodSeconds: 10
+    initialDelaySeconds: 180
+    periodSeconds: 20
     timeoutSeconds: 5
     successThreshold: 1
-    failureThreshold: 5
+    failureThreshold: 8
   ## @param dashboards.customStartupProbe Override default startup probe
   ##
   customStartupProbe: {}
