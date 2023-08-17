@@ -80,7 +80,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
 | `image.registry`                              | Logstash image registry                                                                                                           | `docker.io`              |
 | `image.repository`                            | Logstash image repository                                                                                                         | `bitnami/logstash`       |
-| `image.tag`                                   | Logstash image tag (immutable tags are recommended)                                                                               | `8.9.0-debian-11-r20`    |
+| `image.tag`                                   | Logstash image tag (immutable tags are recommended)                                                                               | `8.9.1-debian-11-r0`     |
 | `image.digest`                                | Logstash image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                          | `""`                     |
 | `image.pullPolicy`                            | Logstash image pull policy                                                                                                        | `IfNotPresent`           |
 | `image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                                  | `[]`                     |
