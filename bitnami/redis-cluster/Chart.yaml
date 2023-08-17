@@ -12,7 +12,7 @@ annotations:
     - name: redis-exporter
       image: docker.io/bitnami/redis-exporter:1.52.0-debian-11-r17
 apiVersion: v2
-appVersion: 7.2.0
+appVersion: 7.3.0
 dependencies:
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
@@ -32,4 +32,4 @@ maintainers:
 name: redis-cluster
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/redis-cluster
-version: 8.6.13
+version: 8.7.0

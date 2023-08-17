@@ -272,6 +272,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cluster.nodes`                                           | The number of master nodes should always be >= 3, otherwise cluster creation will fail        | `6`            |
 | `cluster.replicas`                                        | Number of replicas for every master in the cluster                                            | `1`            |
 | `cluster.externalAccess.enabled`                          | Enable access to the Redis                                                                    | `false`        |
+| `cluster.externalAccess.hostMode`                         | Set cluster preferred endpoint type as hostname                                               | `false`        |
 | `cluster.externalAccess.service.type`                     | Type for the services used to expose every Pod                                                | `LoadBalancer` |
 | `cluster.externalAccess.service.port`                     | Port for the services used to expose every Pod                                                | `6379`         |
 | `cluster.externalAccess.service.loadBalancerIP`           | Array of load balancer IPs for each Redis&reg; node. Length must be the same as cluster.nodes | `[]`           |
