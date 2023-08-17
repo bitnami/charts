@@ -19,6 +19,10 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
+  {{- if $query.autoscaling.behavior }}
+  behavior:
+    {{- toYaml $query.autoscaling.behavior | nindent 4 }}
+  {{- end }}
   scaleTargetRef:
     apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
     kind: Deployment
