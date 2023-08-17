@@ -279,11 +279,11 @@ spec:
             {{- if contains "SSL" $kafkaProtocol }}
             - secret:
                 name: {{ printf "%s" (tpl .Values.auth.kafka.jksSecret $) }}
-            {{ end }}
+            {{- end }}
             {{- if .Values.auth.tls.enabled }}
             - secret:
                 name: {{ printf "%s" (tpl .Values.auth.tls.jksSecret $) }}
-            {{ end }}
+            {{- end }}
         {{- end }}
         {{- if .Values.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
