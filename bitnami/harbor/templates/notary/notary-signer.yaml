@@ -9,31 +9,23 @@ kind: Deployment
 metadata:
   name: {{ include "harbor.notary-signer" . }}
   namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: notary-signer
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
   replicas: {{ .Values.notary.signer.replicaCount }}
+  {{- $podLabels := merge .Values.notary.signer.podLabels .Values.commonLabels }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: notary-signer
   {{- if .Values.notary.signer.updateStrategy }}
   strategy: {{- toYaml .Values.notary.signer.updateStrategy | nindent 4 }}
   {{- end }}
   template:
     metadata:
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
-        {{- if .Values.commonLabels }}
-        {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
-        {{- end }}
-        {{- if .Values.notary.signer.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.notary.signer.podLabels "context" $) | nindent 8 }}
-        {{- end }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: notary-signer
       annotations:
         checksum/secret: {{ include (print $.Template.BasePath "/notary/notary-secret.yaml") . | sha256sum }}
@@ -50,8 +42,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.notary.signer.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.notary.signer.podAffinityPreset "component" "notary-signer" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.notary.signer.podAntiAffinityPreset "component" "notary-signer" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.notary.signer.podAffinityPreset "component" "notary-signer" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.notary.signer.podAntiAffinityPreset "component" "notary-signer" "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.notary.signer.nodeAffinityPreset.type "key" .Values.notary.signer.nodeAffinityPreset.key "values" .Values.notary.signer.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.notary.signer.nodeSelector }}
