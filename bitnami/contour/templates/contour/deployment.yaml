@@ -104,7 +104,7 @@ spec:
             {{- if .Values.contour.configPath }}
             - --config-path=/config/contour.yaml
             {{- else }}
-            - --contour-config-name= {{ .Values.contour.contourConfigName }}
+            - --contour-config-name={{ .Values.contour.contourConfigName }}
             {{- end }}
             {{- if .Values.contour.ingressStatusAddress }}
             - --ingress-status-address={{ .Values.contour.ingressStatusAddress }}
