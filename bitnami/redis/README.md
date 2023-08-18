@@ -468,7 +468,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                                           | Start a sidecar prometheus exporter to expose Redis&reg; metrics                                                    | `false`                  |
 | `metrics.image.registry`                                    | Redis&reg; Exporter image registry                                                                                  | `docker.io`              |
 | `metrics.image.repository`                                  | Redis&reg; Exporter image repository                                                                                | `bitnami/redis-exporter` |
-| `metrics.image.tag`                                         | Redis&reg; Exporter image tag (immutable tags are recommended)                                                      | `1.52.0-debian-11-r17`   |
+| `metrics.image.tag`                                         | Redis&reg; Exporter image tag (immutable tags are recommended)                                                      | `1.52.0-debian-11-r20`   |
 | `metrics.image.digest`                                      | Redis&reg; Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                     |
 | `metrics.image.pullPolicy`                                  | Redis&reg; Exporter image pull policy                                                                               | `IfNotPresent`           |
 | `metrics.image.pullSecrets`                                 | Redis&reg; Exporter image pull secrets                                                                              | `[]`                     |
@@ -541,7 +541,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`                    | `false`            |
 | `volumePermissions.image.registry`                     | OS Shell + Utility image registry                                                                                  | `docker.io`        |
 | `volumePermissions.image.repository`                   | OS Shell + Utility image repository                                                                                | `bitnami/os-shell` |
-| `volumePermissions.image.tag`                          | OS Shell + Utility image tag (immutable tags are recommended)                                                      | `11-debian-11-r37` |
+| `volumePermissions.image.tag`                          | OS Shell + Utility image tag (immutable tags are recommended)                                                      | `11-debian-11-r40` |
 | `volumePermissions.image.digest`                       | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`               |
 | `volumePermissions.image.pullPolicy`                   | OS Shell + Utility image pull policy                                                                               | `IfNotPresent`     |
 | `volumePermissions.image.pullSecrets`                  | OS Shell + Utility image pull secrets                                                                              | `[]`               |
@@ -551,7 +551,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sysctl.enabled`                                       | Enable init container to modify Kernel settings                                                                    | `false`            |
 | `sysctl.image.registry`                                | OS Shell + Utility image registry                                                                                  | `docker.io`        |
 | `sysctl.image.repository`                              | OS Shell + Utility image repository                                                                                | `bitnami/os-shell` |
-| `sysctl.image.tag`                                     | OS Shell + Utility image tag (immutable tags are recommended)                                                      | `11-debian-11-r37` |
+| `sysctl.image.tag`                                     | OS Shell + Utility image tag (immutable tags are recommended)                                                      | `11-debian-11-r40` |
 | `sysctl.image.digest`                                  | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`               |
 | `sysctl.image.pullPolicy`                              | OS Shell + Utility image pull policy                                                                               | `IfNotPresent`     |
 | `sysctl.image.pullSecrets`                             | OS Shell + Utility image pull secrets                                                                              | `[]`               |
