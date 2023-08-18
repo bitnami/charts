@@ -8,7 +8,7 @@ annotations:
     - name: kubectl
       image: docker.io/bitnami/kubectl:1.25.12-debian-11-r26
     - name: mariadb
-      image: docker.io/bitnami/mariadb:10.11.5-debian-11-r0
+      image: docker.io/bitnami/mariadb:10.11.5-debian-11-r2
     - name: prometheus-rsocket-proxy
       image: docker.io/bitnami/prometheus-rsocket-proxy:1.5.2-debian-11-r37
     - name: spring-cloud-dataflow-composed-task-runner
@@ -53,4 +53,4 @@ maintainers:
 name: spring-cloud-dataflow
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/spring-cloud-dataflow
-version: 22.0.1
+version: 22.0.2

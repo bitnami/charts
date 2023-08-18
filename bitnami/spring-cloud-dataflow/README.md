@@ -404,7 +404,7 @@ helm uninstall my-release
 | `mariadb.enabled`                         | Enable/disable MariaDB chart installation                                                               | `true`                 |
 | `mariadb.image.registry`                  | MariaDB image registry                                                                                  | `docker.io`            |
 | `mariadb.image.repository`                | MariaDB image repository                                                                                | `bitnami/mariadb`      |
-| `mariadb.image.tag`                       | MariaDB image tag (immutable tags are recommended)                                                      | `10.11.5-debian-11-r0` |
+| `mariadb.image.tag`                       | MariaDB image tag (immutable tags are recommended)                                                      | `10.11.5-debian-11-r2` |
 | `mariadb.image.digest`                    | MariaDB image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
 | `mariadb.architecture`                    | MariaDB architecture. Allowed values: `standalone` or `replication`                                     | `standalone`           |
 | `mariadb.auth.rootPassword`               | Password for the MariaDB `root` user                                                                    | `""`                   |
