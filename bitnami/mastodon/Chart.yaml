@@ -49,4 +49,4 @@ maintainers:
 name: mastodon
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/mastodon
-version: 1.5.12
+version: 1.6.0
