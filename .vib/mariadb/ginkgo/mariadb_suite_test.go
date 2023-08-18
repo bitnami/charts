@@ -1,4 +1,4 @@
-package postgresql_test
+package mariadb_test
 
 import (
 	"flag"
@@ -14,7 +14,7 @@ var namespace = flag.String("namespace", "", "namespace where the application is
 var username = flag.String("username", "", "database user")
 var password = flag.String("password", "", "database password for username")
 
-func TestPostgreSQL(t *testing.T) {
+func TestMariaDB(t *testing.T) {
 	RegisterFailHandler(Fail)
 	RunSpecs(t, "MariaDB Persistence Test Suite")
 }

@@ -1,4 +1,4 @@
-module test-postgres-chart
+module test-mariadb-chart
 
 go 1.20
 

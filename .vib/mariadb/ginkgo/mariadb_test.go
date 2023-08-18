@@ -1,4 +1,4 @@
-package postgresql_test
+package mariadb_test
 
 import (
 	"context"
