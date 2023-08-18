@@ -79,7 +79,7 @@ If release name contains chart name it will be used as a full name.
 Labels for operator
 */}}
 {{- define "kube-prometheus.operator.labels" -}}
-{{- include "common.labels.standard" . }}
+{{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) }}
 app.kubernetes.io/component: operator
 {{- end -}}
 
@@ -87,7 +87,7 @@ app.kubernetes.io/component: operator
 Labels for prometheus
 */}}
 {{- define "kube-prometheus.prometheus.labels" -}}
-{{- include "common.labels.standard" . }}
+{{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) }}
 app.kubernetes.io/component: prometheus
 {{- end -}}
 
@@ -95,7 +95,7 @@ app.kubernetes.io/component: prometheus
 Labels for alertmanager
 */}}
 {{- define "kube-prometheus.alertmanager.labels" -}}
-{{- include "common.labels.standard" . }}
+{{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) }}
 app.kubernetes.io/component: alertmanager
 {{- end -}}
 
@@ -103,7 +103,43 @@ app.kubernetes.io/component: alertmanager
 Labels for blackbox-exporter
 */}}
 {{- define "kube-prometheus.blackboxExporter.labels" -}}
-{{- include "common.labels.standard" . }}
+{{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) }}
+app.kubernetes.io/component: blackbox-exporter
+{{- end -}}
+
+{{/*
+Labels for operator pods
+*/}}
+{{- define "kube-prometheus.operator.podLabels" -}}
+{{- $podLabels := merge .Values.operator.podLabels .Values.commonLabels }}
+{{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) }}
+app.kubernetes.io/component: operator
+{{- end -}}
+
+{{/*
+Labels for prometheus pods
+*/}}
+{{- define "kube-prometheus.prometheus.podLabels" -}}
+{{- $podLabels := merge .Values.prometheus.podMetadata.labels .Values.commonLabels }}
+{{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) }}
+app.kubernetes.io/component: prometheus
+{{- end -}}
+
+{{/*
+Labels for alertmanager pods
+*/}}
+{{- define "kube-prometheus.alertmanager.podLabels" -}}
+{{- $podLabels := merge .Values.alertmanager.podMetadata.labels .Values.commonLabels }}
+{{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) }}
+app.kubernetes.io/component: alertmanager
+{{- end -}}
+
+{{/*
+Labels for blackbox-exporter pods
+*/}}
+{{- define "kube-prometheus.blackboxExporter.podLabels" -}}
+{{- $podLabels := merge .Values.blackboxExporter.podLabels .Values.commonLabels }}
+{{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) }}
 app.kubernetes.io/component: blackbox-exporter
 {{- end -}}
 
@@ -111,7 +147,8 @@ app.kubernetes.io/component: blackbox-exporter
 matchLabels for operator
 */}}
 {{- define "kube-prometheus.operator.matchLabels" -}}
-{{- include "common.labels.matchLabels" . }}
+{{- $podLabels := merge .Values.operator.podLabels .Values.commonLabels }}
+{{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) }}
 app.kubernetes.io/component: operator
 {{- end -}}
 
@@ -119,7 +156,8 @@ app.kubernetes.io/component: operator
 matchLabels for prometheus
 */}}
 {{- define "kube-prometheus.prometheus.matchLabels" -}}
-{{- include "common.labels.matchLabels" . }}
+{{- $podLabels := merge .Values.prometheus.podMetadata.labels .Values.commonLabels }}
+{{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) }}
 app.kubernetes.io/component: prometheus
 {{- end -}}
 
@@ -127,8 +165,18 @@ app.kubernetes.io/component: prometheus
 matchLabels for alertmanager
 */}}
 {{- define "kube-prometheus.alertmanager.matchLabels" -}}
-{{- include "common.labels.matchLabels" . }}
+{{- $podLabels := merge .Values.alertmanager.podMetadata.labels .Values.commonLabels }}
+{{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) }}
 app.kubernetes.io/component: alertmanager
+{{- end -}}
+
+{{/*
+matchLabels for blackbox-exporter
+*/}}
+{{- define "kube-prometheus.blackboxExporter.matchLabels" -}}
+{{- $podLabels := merge .Values.blackboxExporter.podLabels .Values.commonLabels }}
+{{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) }}
+app.kubernetes.io/component: blackbox-exporter
 {{- end -}}
 
 {{/*
