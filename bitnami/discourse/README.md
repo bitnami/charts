@@ -187,19 +187,19 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sidekiq.extraEnvVarsCM`                        | ConfigMap containing extra environment variables for Sidekiq pods                          | `""`                                                |
 | `sidekiq.extraEnvVarsSecret`                    | Secret containing extra environment variables (in case of sensitive data) for Sidekiq pods | `""`                                                |
 | `sidekiq.livenessProbe.enabled`                 | Enable livenessProbe on Sidekiq containers                                                 | `true`                                              |
-| `sidekiq.livenessProbe.initialDelaySeconds`     | Delay before liveness probe is initiated                                                   | `500`                                               |
+| `sidekiq.livenessProbe.initialDelaySeconds`     | Delay before liveness probe is initiated                                                   | `700`                                               |
 | `sidekiq.livenessProbe.periodSeconds`           | How often to perform the probe                                                             | `10`                                                |
 | `sidekiq.livenessProbe.timeoutSeconds`          | When the probe times out                                                                   | `5`                                                 |
 | `sidekiq.livenessProbe.failureThreshold`        | Minimum consecutive failures for the probe                                                 | `6`                                                 |
 | `sidekiq.livenessProbe.successThreshold`        | Minimum consecutive successes for the probe                                                | `1`                                                 |
 | `sidekiq.readinessProbe.enabled`                | Enable readinessProbe on Sidekiq containers                                                | `true`                                              |
-| `sidekiq.readinessProbe.initialDelaySeconds`    | Delay before readiness probe is initiated                                                  | `30`                                                |
+| `sidekiq.readinessProbe.initialDelaySeconds`    | Delay before readiness probe is initiated                                                  | `60`                                                |
 | `sidekiq.readinessProbe.periodSeconds`          | How often to perform the probe                                                             | `10`                                                |
 | `sidekiq.readinessProbe.timeoutSeconds`         | When the probe times out                                                                   | `5`                                                 |
 | `sidekiq.readinessProbe.failureThreshold`       | Minimum consecutive failures for the probe                                                 | `6`                                                 |
 | `sidekiq.readinessProbe.successThreshold`       | Minimum consecutive successes for the probe                                                | `1`                                                 |
 | `sidekiq.startupProbe.enabled`                  | Enable startupProbe on Sidekiq containers                                                  | `false`                                             |
-| `sidekiq.startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                     | `60`                                                |
+| `sidekiq.startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                     | `90`                                                |
 | `sidekiq.startupProbe.periodSeconds`            | Period seconds for startupProbe                                                            | `10`                                                |
 | `sidekiq.startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                           | `5`                                                 |
 | `sidekiq.startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                         | `15`                                                |
