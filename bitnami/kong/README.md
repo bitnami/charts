@@ -490,7 +490,7 @@ extraDeploy:
     metadata:
       name: {{ include "common.names.fullname" . }}-plugin-correlation
       namespace: {{ .Release.Namespace }}
-      labels: {{- include "common.labels.standard" . | nindent 6 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 6 }}
     config:
       header_name: my-request-id
     plugin: correlation-id
