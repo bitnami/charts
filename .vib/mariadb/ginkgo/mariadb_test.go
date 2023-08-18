@@ -51,7 +51,7 @@ var _ = Describe("MariaDB", Ordered, func() {
 			svc, err := c.CoreV1().Services(*namespace).Get(ctx, *stsName, metav1.GetOptions{})
 			Expect(err).NotTo(HaveOccurred())
 
-			port, err := getPort(svc, "mariadb-primary")
+			port, err := getPort(svc, "mysql")
 			Expect(err).NotTo(HaveOccurred())
 
 			image, err := getContainerImage(ss, "mysql")
