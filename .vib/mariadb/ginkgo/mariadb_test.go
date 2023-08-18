@@ -157,13 +157,13 @@ func createJob(ctx context.Context, c kubernetes.Interface, name, port, image, s
 									Value: *username,
 								},
 								{
-									Name: "MARIADB_HOST",
+									Name:  "MARIADB_HOST",
 									Value: *stsName,
 								},
 								{
-									Name: "MARIADB_PORT",
+									Name:  "MARIADB_PORT",
 									Value: port,
-								}
+								},
 							},
 						},
 					},
