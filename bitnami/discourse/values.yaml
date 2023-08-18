@@ -429,7 +429,7 @@ sidekiq:
   ##
   livenessProbe:
     enabled: true
-    initialDelaySeconds: 500
+    initialDelaySeconds: 700
     periodSeconds: 10
     timeoutSeconds: 5
     failureThreshold: 6
@@ -444,7 +444,7 @@ sidekiq:
   ##
   readinessProbe:
     enabled: true
-    initialDelaySeconds: 30
+    initialDelaySeconds: 60
     periodSeconds: 10
     timeoutSeconds: 5
     failureThreshold: 6
@@ -458,7 +458,7 @@ sidekiq:
   ##
   startupProbe:
     enabled: false
-    initialDelaySeconds: 60
+    initialDelaySeconds: 90
     periodSeconds: 10
     timeoutSeconds: 5
     failureThreshold: 15

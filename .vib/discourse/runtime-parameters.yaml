@@ -12,9 +12,9 @@ service:
     http: 80
 discourse:
   readinessProbe:
-    initialDelaySeconds: 300
-  livenessProbe:
     initialDelaySeconds: 500
+  livenessProbe:
+    initialDelaySeconds: 700
 sidekiq:
   readinessProbe:
-    initialDelaySeconds: 90
+    initialDelaySeconds: 120
