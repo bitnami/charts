@@ -65,6 +65,21 @@
               }
             }
           }
+        },
+        {
+          "action_id": "ginkgo",
+          "params": {
+            "resources": {
+              "path": "/.vib/postgresql-ha/ginkgo"
+            },
+            "params": {
+              "kubeconfig": "{{kubeconfig}}",
+              "namespace": "{{namespace}}",
+              "name": "postgresql-ha",
+              "username": "postgres",
+              "password": "psqlPassword123!4"
+            }
+          }
         }
       ]
     },
