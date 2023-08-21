@@ -954,11 +954,11 @@ cronjobs:
     ##
     moveOnFailure: ""
     ## @param cronjobs.taskScheduler.unknownUserAction Action to perform is an email received from unregistered user
-    ## ref: https://www.redmine.org/projects/redmine/wiki/RedmineReceivingEmails
+    ## ref: https://www.Matomo.org/projects/Matomo/wiki/MatomoReceivingEmails
     ##
     unknownUserAction: ignore
     ## @param cronjobs.taskScheduler.noPermissionCheck Whether skip permission check during creating a new task
-    ## If set to 1 then redmine does not check task creator (source email) permissions for creating a new task
+    ## If set to 1 then Matomo does not check task creator (source email) permissions for creating a new task
     ## If set to 0 then task creator must have permission to create a new task
     ##
     noPermissionCheck: 0
@@ -1015,8 +1015,8 @@ cronjobs:
     extraEnvVarsSecret: ""
     ## Configure Pods Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-    ## @param cronjobs.taskScheduler.podSecurityContext.enabled Enabled Redmine pods' Security Context
-    ## @param cronjobs.taskScheduler.podSecurityContext.fsGroup Set Redmine pod's Security Context fsGroup
+    ## @param cronjobs.taskScheduler.podSecurityContext.enabled Enabled Matomo pods' Security Context
+    ## @param cronjobs.taskScheduler.podSecurityContext.fsGroup Set Matomo pod's Security Context fsGroup
     ##
     podSecurityContext:
       enabled: true
@@ -1083,7 +1083,7 @@ cronjobs:
     ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
     ##
     tolerations: []
-    ## @param cronjobs.taskScheduler.priorityClassName Redmine pods' priority.
+    ## @param cronjobs.taskScheduler.priorityClassName Matomo pods' priority.
     ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
     ##
     priorityClassName: ""
@@ -1160,11 +1160,11 @@ cronjobs:
     ##
     moveOnFailure: ""
     ## @param cronjobs.archive.unknownUserAction Action to perform is an email received from unregistered user
-    ## ref: https://www.redmine.org/projects/redmine/wiki/RedmineReceivingEmails
+    ## ref: https://www.Matomo.org/projects/Matomo/wiki/MatomoReceivingEmails
     ##
     unknownUserAction: ignore
     ## @param cronjobs.archive.noPermissionCheck Whether skip permission check during creating a new task
-    ## If set to 1 then redmine does not check task creator (source email) permissions for creating a new task
+    ## If set to 1 then Matomo does not check task creator (source email) permissions for creating a new task
     ## If set to 0 then task creator must have permission to create a new task
     ##
     noPermissionCheck: 0
@@ -1221,8 +1221,8 @@ cronjobs:
     extraEnvVarsSecret: ""
     ## Configure Pods Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
-    ## @param cronjobs.archive.podSecurityContext.enabled Enabled Redmine pods' Security Context
-    ## @param cronjobs.archive.podSecurityContext.fsGroup Set Redmine pod's Security Context fsGroup
+    ## @param cronjobs.archive.podSecurityContext.enabled Enabled Matomo pods' Security Context
+    ## @param cronjobs.archive.podSecurityContext.fsGroup Set Matomo pod's Security Context fsGroup
     ##
     podSecurityContext:
       enabled: true
@@ -1289,7 +1289,7 @@ cronjobs:
     ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
     ##
     tolerations: []
-    ## @param cronjobs.archive.priorityClassName Redmine pods' priority.
+    ## @param cronjobs.archive.priorityClassName Matomo pods' priority.
     ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/
     ##
     priorityClassName: ""

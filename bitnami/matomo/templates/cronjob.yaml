@@ -34,6 +34,7 @@ spec:
           {{- end }}
         spec:
           {{- include "matomo.imagePullSecrets" . | nindent 10 }}
+          restartPolicy: OnFailure
           initContainers:
             {{- if .Values.initContainers }}
             {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
@@ -220,10 +221,10 @@ spec:
             {{- if .Values.certificates.customCAs }}
             - name: etc-ssl-certs
               emptyDir:
-                medium: "Memory"
+              medium: "Memory"
             - name: etc-ssl-private
               emptyDir:
-                medium: "Memory"
+              medium: "Memory"
             - name: custom-ca-certificates
               projected:
                 defaultMode: 0400
@@ -244,12 +245,12 @@ spec:
             {{- end }}
             {{- end }}
             - name: matomo-data
-                      {{- if .Values.persistence.enabled }}
-                persistentVolumeClaim:
-                  claimName: {{ .Values.persistence.existingClaim | default (printf "%s-matomo" (include "common.names.fullname" .)) }}
-                      {{- else }}
-                emptyDir: { }
-                      {{- end }}
+              {{- if .Values.persistence.enabled }}
+              persistentVolumeClaim:
+                claimName: {{ .Values.persistence.existingClaim | default (printf "%s-matomo" (include "common.names.fullname" .)) }}
+              {{- else }}
+              emptyDir: { }
+              {{- end }}
             {{- if .Values.customPostInitScripts }}
             - name: custom-postinit
               configMap:
@@ -263,7 +264,7 @@ spec:
 apiVersion: {{ include "common.capabilities.cronjob.apiVersion" . }}
 kind: CronJob
 metadata:
-  name: {{ include "common.names.fullname" . }}-archive
+  name: {{ include "common.names.fullname" . }}-scheduled-tasks
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" . | nindent 4 }}
     {{- if .Values.commonLabels }}
@@ -281,7 +282,7 @@ spec:
       template:
         metadata:
           labels: {{- include "common.labels.standard" . | nindent 12 }}
-            app.kubernetes.io/component: archive
+            app.kubernetes.io/component: task-scheduler
             {{- if .Values.cronjobs.archive.podLabels }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.cronjobs.archive.podLabels "context" $ ) | nindent 12 }}
             {{- end }}
@@ -290,6 +291,7 @@ spec:
           {{- end }}
         spec:
           {{- include "matomo.imagePullSecrets" . | nindent 10 }}
+          restartPolicy: OnFailure
           initContainers:
             {{- if .Values.initContainers }}
             {{- include "common.tplvalues.render" (dict "value" .Values.initContainers "context" $) | nindent 8 }}
@@ -362,7 +364,7 @@ spec:
                   readOnly: true
             {{- end }}
           containers:
-            - name: {{ include "common.names.fullname" . }}-archive
+            - name: {{ include "common.names.fullname" . }}-scheduled-tasks
               image: {{ template "matomo.image" . }}
               imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
               {{- if .Values.cronjobs.archive.containerSecurityContext.enabled }}
@@ -476,10 +478,10 @@ spec:
             {{- if .Values.certificates.customCAs }}
             - name: etc-ssl-certs
               emptyDir:
-                medium: "Memory"
+              medium: "Memory"
             - name: etc-ssl-private
               emptyDir:
-                medium: "Memory"
+              medium: "Memory"
             - name: custom-ca-certificates
               projected:
                 defaultMode: 0400
@@ -500,12 +502,12 @@ spec:
             {{- end }}
             {{- end }}
             - name: matomo-data
-                      {{- if .Values.persistence.enabled }}
-                persistentVolumeClaim:
-                  claimName: {{ .Values.persistence.existingClaim | default (printf "%s-matomo" (include "common.names.fullname" .)) }}
-                      {{- else }}
-                emptyDir: { }
-                      {{- end }}
+              {{- if .Values.persistence.enabled }}
+              persistentVolumeClaim:
+                claimName: {{ .Values.persistence.existingClaim | default (printf "%s-matomo" (include "common.names.fullname" .)) }}
+              {{- else }}
+              emptyDir: { }
+              {{- end }}
             {{- if .Values.customPostInitScripts }}
             - name: custom-postinit
               configMap:
