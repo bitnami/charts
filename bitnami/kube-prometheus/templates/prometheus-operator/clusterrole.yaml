@@ -50,6 +50,7 @@ rules:
       - prometheuses/status
       - prometheuses/finalizers
       - thanosrulers
+      - thanosrulers/status
       - thanosrulers/finalizers
       - servicemonitors
       - podmonitors
