@@ -68,6 +68,12 @@ Return a soft podAffinity/podAntiAffinity definition
 preferredDuringSchedulingIgnoredDuringExecution:
   - podAffinityTerm:
       labelSelector:
+        {{- if hasKey . "extraMatchLabels" }}
+        matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .extraMatchLabels "context" .context ) | nindent 10 }}
+          {{- if not (empty $component) }}
+          {{ printf "app.kubernetes.io/component: %s" $component }}
+          {{- end }}
+        {{- else }}
         matchLabels: {{- (include "common.labels.matchLabels" .context) | nindent 10 }}
           {{- if not (empty $component) }}
           {{ printf "app.kubernetes.io/component: %s" $component }}
@@ -75,6 +81,7 @@ preferredDuringSchedulingIgnoredDuringExecution:
           {{- range $key, $value := $extraMatchLabels }}
           {{ $key }}: {{ $value | quote }}
           {{- end }}
+        {{- end }}
       topologyKey: {{ include "common.affinities.topologyKey" (dict "topologyKey" .topologyKey) }}
     weight: 1
 {{- end -}}
@@ -88,6 +95,12 @@ Return a hard podAffinity/podAntiAffinity definition
 {{- $extraMatchLabels := default (dict) .extraMatchLabels -}}
 requiredDuringSchedulingIgnoredDuringExecution:
   - labelSelector:
+      {{- if hasKey . "extraMatchLabels" }}
+      matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .extraMatchLabels "context" .context ) | nindent 8 }}
+        {{- if not (empty $component) }}
+        {{ printf "app.kubernetes.io/component: %s" $component }}
+        {{- end }}
+      {{- else }}
       matchLabels: {{- (include "common.labels.matchLabels" .context) | nindent 8 }}
         {{- if not (empty $component) }}
         {{ printf "app.kubernetes.io/component: %s" $component }}
@@ -95,6 +108,7 @@ requiredDuringSchedulingIgnoredDuringExecution:
         {{- range $key, $value := $extraMatchLabels }}
         {{ $key }}: {{ $value | quote }}
         {{- end }}
+      {{- end }}
     topologyKey: {{ include "common.affinities.topologyKey" (dict "topologyKey" .topologyKey) }}
 {{- end -}}
 
