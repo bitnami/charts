@@ -19,7 +19,7 @@ import (
 )
 
 const (
-	Timeout         = 30 * time.Second
+	Timeout         = 90 * time.Second
 	PollingInterval = 1 * time.Second
 )
 
@@ -146,7 +146,7 @@ func createJob(ctx context.Context, c kubernetes.Interface, name, port, image, s
 						{
 							Name:    "mariadb",
 							Image:   image,
-							Command: []string{"mysql", "-h$MARIADB_HOST", "-p$MARIADB_PASSWORD", "-u$MARIADB_USERNAME", "-P$MARIADB_PORT", "-e", stmt},
+							Command: []string{"mysql", "-h$(MARIADB_HOST)", "-p$(MARIADB_PASSWORD)", "-u$(MARIADB_USERNAME)", "-P$(MARIADB_PORT)", "-e", stmt},
 							Env: []v1.EnvVar{
 								{
 									Name:  "MARIADB_PASSWORD",
