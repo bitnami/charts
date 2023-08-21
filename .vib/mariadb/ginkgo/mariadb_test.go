@@ -54,7 +54,7 @@ var _ = Describe("MariaDB", Ordered, func() {
 			port, err := getPort(svc, "mysql")
 			Expect(err).NotTo(HaveOccurred())
 
-			image, err := getContainerImage(ss, "mysql")
+			image, err := getContainerImage(ss, "mariadb")
 			Expect(err).NotTo(HaveOccurred())
 
 			// Use current time for allowing the test suite to repeat
