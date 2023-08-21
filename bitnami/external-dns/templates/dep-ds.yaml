@@ -361,7 +361,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ .Values.aws.credentials.secretAccessKeySecretRef.name}}
-                  key: {{ .Values.aws.credentials.secretAccessKeySecretRef.key }}  
+                  key: {{ .Values.aws.credentials.secretAccessKeySecretRef.key }}
             {{- end }}
             {{- end }}
             {{- if eq .Values.provider "cloudflare" }}
@@ -592,7 +592,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ template "external-dns.secretName" . }}
-                  key: {{ .Values.rfc2136.tsigKeyname }}
+                  key: rfc2136_tsig_secret
             {{- end }}
             {{- end }}
             {{- if eq .Values.provider "pdns" }}
