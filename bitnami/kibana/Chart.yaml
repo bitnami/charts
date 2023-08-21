@@ -6,11 +6,11 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: kibana
-      image: docker.io/bitnami/kibana:8.9.0-debian-11-r9
+      image: docker.io/bitnami/kibana:8.9.1-debian-11-r0
     - name: os-shell
-      image: docker.io/bitnami/os-shell:11-debian-11-r25
+      image: docker.io/bitnami/os-shell:11-debian-11-r40
 apiVersion: v2
-appVersion: 8.9.0
+appVersion: 8.9.1
 dependencies:
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
@@ -32,4 +32,4 @@ maintainers:
 name: kibana
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/kibana
-version: 10.4.8
+version: 10.4.9
