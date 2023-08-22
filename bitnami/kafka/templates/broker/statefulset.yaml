@@ -92,6 +92,7 @@ spec:
       securityContext: {{- omit .Values.broker.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       serviceAccountName: {{ include "kafka.serviceAccountName" . }}
+      enableServiceLinks: {{ .Values.broker.enableServiceLinks }}
       initContainers:
         {{- if and .Values.volumePermissions.enabled .Values.broker.persistence.enabled }}
         - name: volume-permissions
