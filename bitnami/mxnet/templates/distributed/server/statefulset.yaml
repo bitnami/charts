@@ -251,7 +251,7 @@ spec:
         annotations: {{- include "common.tplvalues.render" ( dict "value" $claimAnnotations "context" $) | nindent 4 }}
         {{- end }}
         {{- if .Values.commonLabels }}
-        labels: {{- include "common.labels.matchLabels" ( dict "customLabels"  .Values.commonLabels "context" $ ) | nindent 10 }}
+        labels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 10 }}
         {{- end }}
       spec:
         accessModes:
