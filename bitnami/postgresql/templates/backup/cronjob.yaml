@@ -13,8 +13,8 @@ metadata:
   {{- $labels := merge .Values.backup.cronjob.labels .Values.commonLabels }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: pg_dumpall
-  {{- if or .Values.backup.cronjob.annotations .Values.commonAnnotations }}
   {{- $annotations := merge .Values.backup.cronjob.annotations .Values.commonAnnotations }}
+  {{- if $annotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
@@ -32,29 +32,10 @@ spec:
       {{- end }}
       template:
         metadata:
-          {{- $labels := merge .Values.backup.cronjob.labels .Values.commonLabels }}
           labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 12 }}
             app.kubernetes.io/component: pg_dumpall
-<<<<<<< HEAD
-          {{- if or .Values.backup.cronjob.annotations .Values.commonAnnotations }}
-          {{- $annotations := merge .Values.backup.cronjob.annotations .Values.commonAnnotations }}
+          {{- if $annotations }}
           annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 12 }}
-=======
-            {{- if .Values.backup.cronjob.labels }}
-            {{- include "common.tplvalues.render" (dict "value" .Values.backup.cronjob.labels "context" $) | nindent 12 }}
-            {{- end }}
-            {{- if .Values.commonLabels }}
-            {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 12 }}
-            {{- end }}
-          {{- if or .Values.backup.cronjob.annotations .Values.commonAnnotations }}
-          annotations:
-            {{- if .Values.backup.cronjob.annotations }}
-            {{- include "common.tplvalues.render" ( dict "value" .Values.backup.cronjob.annotations "context" $) | nindent 12 }}
-            {{- end }}
-            {{- if .Values.commonAnnotations }}
-            {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 12 }}
-            {{- end }}
->>>>>>> main
           {{- end }}
         spec:
           containers:
