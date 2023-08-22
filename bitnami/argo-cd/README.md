@@ -75,15 +75,15 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Argo CD image parameters
 
-| Name                | Description                                                                                             | Value                 |
-| ------------------- | ------------------------------------------------------------------------------------------------------- | --------------------- |
-| `image.registry`    | Argo CD image registry                                                                                  | `docker.io`           |
-| `image.repository`  | Argo CD image repository                                                                                | `bitnami/argo-cd`     |
-| `image.tag`         | Argo CD image tag (immutable tags are recommended)                                                      | `2.8.0-debian-11-r14` |
-| `image.digest`      | Argo CD image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
-| `image.pullPolicy`  | Argo CD image pull policy                                                                               | `IfNotPresent`        |
-| `image.pullSecrets` | Argo CD image pull secrets                                                                              | `[]`                  |
-| `image.debug`       | Enable Argo CD image debug mode                                                                         | `false`               |
+| Name                | Description                                                                                             | Value                |
+| ------------------- | ------------------------------------------------------------------------------------------------------- | -------------------- |
+| `image.registry`    | Argo CD image registry                                                                                  | `docker.io`          |
+| `image.repository`  | Argo CD image repository                                                                                | `bitnami/argo-cd`    |
+| `image.tag`         | Argo CD image tag (immutable tags are recommended)                                                      | `2.8.1-debian-11-r0` |
+| `image.digest`      | Argo CD image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                 |
+| `image.pullPolicy`  | Argo CD image pull policy                                                                               | `IfNotPresent`       |
+| `image.pullSecrets` | Argo CD image pull secrets                                                                              | `[]`                 |
+| `image.debug`       | Enable Argo CD image debug mode                                                                         | `false`              |
 
 ### Argo CD application controller parameters
 
