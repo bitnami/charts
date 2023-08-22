@@ -10,22 +10,23 @@ Kubernetes standard labels
 {{ include "common.labels.standard" (dict "customLabels" .Values.commonLabels "context" $) -}}
 */}}
 {{- define "common.labels.standard" -}}
-{{- $customLabels := default (dict) .customLabels -}}
-{{- if not (hasKey $customLabels "app.kubernetes.io/name") }}
-app.kubernetes.io/name: {{ include "common.names.name" .context }}
-{{- end }}
-{{- if not (hasKey $customLabels "helm.sh/chart") }}
-helm.sh/chart: {{ include "common.names.chart" .context }}
-{{- end }}
-{{- if not (hasKey $customLabels "app.kubernetes.io/instance") }}
-app.kubernetes.io/instance: {{ .context.Release.Name }}
-{{- end }}
-{{- if not (hasKey $customLabels "app.kubernetes.io/managed-by") }}
-app.kubernetes.io/managed-by: {{ .context.Release.Service }}
-{{- end }}
-{{- range $key, $value := $customLabels }}
-{{ $key }}: {{ $value }}
-{{- end }}
+{{- if and (hasKey . "customLabels") (hasKey . "context") -}}
+{{ merge
+        (include "common.tplvalues.render" (dict "value" .customLabels "context" .context) | fromYaml)
+        (dict
+            "app.kubernetes.io/name" (include "common.names.name" .context)
+            "helm.sh/chart" (include "common.names.chart" .context)
+            "app.kubernetes.io/instance" .context.Release.Name
+            "app.kubernetes.io/managed-by" .context.Release.Service
+        )
+    | toYaml
+}}
+{{- else -}}
+app.kubernetes.io/name: {{ include "common.names.name" . }}
+helm.sh/chart: {{ include "common.names.chart" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+app.kubernetes.io/managed-by: {{ .Release.Service }}
+{{- end -}}
 {{- end -}}
 
 {{/*
@@ -38,7 +39,18 @@ However, it's important to overwrite the standard labels if the user
 overwrote them on metadata.labels fields.
 */}}
 {{- define "common.labels.matchLabels" -}}
-{{- $customLabels := default (dict) .customLabels -}}
-app.kubernetes.io/name: {{ ternary (get $customLabels "app.kubernetes.io/name") (include "common.names.name" .context) (hasKey $customLabels "app.kubernetes.io/name") }}
-app.kubernetes.io/instance: {{ ternary (get $customLabels "app.kubernetes.io/instance") .context.Release.Name (hasKey $customLabels "app.kubernetes.io/instance") }}
+{{- if and (hasKey . "customLabels") (hasKey . "context") -}}
+{{- $customLabels := pick .customLabels "app.kubernetes.io/name" "app.kubernetes.io/instance" -}}
+{{ merge
+        (include "common.tplvalues.render" (dict "value" $customLabels "context" .context) | fromYaml)
+        (dict
+            "app.kubernetes.io/name" (include "common.names.name" .context)
+            "app.kubernetes.io/instance" .context.Release.Name
+        )
+    | toYaml
+}}
+{{- else -}}
+app.kubernetes.io/name: {{ include "common.names.name" . }}
+app.kubernetes.io/instance: {{ .Release.Name }}
+{{- end -}}
 {{- end -}}
