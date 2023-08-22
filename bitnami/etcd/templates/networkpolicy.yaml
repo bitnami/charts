@@ -51,7 +51,6 @@ spec:
             matchLabels:
               {{ template "common.names.fullname" . }}-client: "true"
         - podSelector:
-        - podSelector: 
             matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 14 }}
               app.kubernetes.io/component: etcd
         {{- if .Values.networkPolicy.ingressNSMatchLabels }}
