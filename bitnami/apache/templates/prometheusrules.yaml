@@ -11,6 +11,7 @@ metadata:
   namespace: {{ default .Release.Namespace .Values.metrics.prometheusRule.namespace }}
   {{- $labels := merge .Values.metrics.prometheusRule.labels .Values.commonLabels }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: metrics
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
