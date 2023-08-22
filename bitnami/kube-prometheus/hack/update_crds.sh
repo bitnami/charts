@@ -38,7 +38,4 @@ for line in "${FILES[@]}"; do
       echo -e "Failed to download ${URL}!"
       exit 1
     fi
-    sed -i '1s/^/# Copyright VMware, Inc. \n# SPDX-License-Identifier: APACHE-2.0 \n/' "${SCRIPT_DIR}/../crds/${DESTINATION}"
-    # echo "# Copyright VMware, Inc." | cat - "${SCRIPT_DIR}/../crds/${DESTINATION}"
-    # echo "# SPDX-License-Identifier: APACHE-2.0" | cat - "${SCRIPT_DIR}/../crds/${DESTINATION}"
 done
