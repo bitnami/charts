@@ -233,6 +233,10 @@ spec:
             - name: custom-init-scripts
               mountPath: /docker-entrypoint-initdb.d
             {{- end }}
+            {{- if or .Values.startdbScriptsConfigMap .Values.startdbScripts }}
+            - name: custom-start-scripts
+              mountPath: /docker-entrypoint-startdb.d
+            {{- end }}
             {{- if or .Values.secondary.configuration .Values.secondary.existingConfigmap }}
             - name: config
               mountPath: /opt/bitnami/mysql/conf/my.cnf
@@ -311,6 +315,11 @@ spec:
         - name: custom-init-scripts
           configMap:
             name: {{ include "mysql.initdbScriptsCM" . }}
+        {{- end }}
+        {{- if or .Values.startdbScriptsConfigMap .Values.startdbScripts }}
+        - name: custom-start-scripts
+          configMap:
+            name: {{ include "mysql.startdbScriptsCM" . }}
         {{- end }}
         {{- if or .Values.secondary.configuration .Values.secondary.existingConfigmap }}
         - name: config
