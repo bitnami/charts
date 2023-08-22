@@ -103,7 +103,7 @@ spec:
             - |
               echo "Configuring environment"
               . /opt/bitnami/scripts/libkafka.sh
-              export CLIENT_CONF="${CLIENT_CONF:-/opt/bitnami/kafka/config/client.properties}"
+              export CLIENT_CONF="${CLIENT_CONF:-/tmp/client.properties}"
               if [ ! -f "$CLIENT_CONF" ]; then
                 touch $CLIENT_CONF
 
@@ -243,6 +243,8 @@ spec:
               readOnly: true
             {{- end }}
             {{- end }}
+            - name: tmp
+              mountPath: /tmp
             {{- if .Values.provisioning.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.provisioning.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
@@ -263,6 +265,8 @@ spec:
             defaultMode: 256
         {{- end }}
         {{- end }}
+        - name: tmp
+          emptyDir: {}
         {{- if .Values.provisioning.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.provisioning.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
