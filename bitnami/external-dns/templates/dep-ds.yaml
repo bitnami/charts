@@ -28,9 +28,14 @@ spec:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
   template:
     metadata:
+<<<<<<< HEAD
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+=======
+      labels: {{ include "external-dns.labels" . | nindent 8 }}
+      {{- if or .Values.podAnnotations (and .Values.metrics.enabled .Values.metrics.podAnnotations) (include "external-dns.createSecret" .) (and (eq .Values.provider "designate") .Values.designate.customCA.enabled) }}
+>>>>>>> main
       annotations:
-        {{- if or .Values.podAnnotations .Values.metrics.enabled }}
+        {{- if or .Values.podAnnotations (and .Values.metrics.enabled .Values.metrics.podAnnotations) }}
         {{- include "external-dns.podAnnotations" . | trim | nindent 8 }}
         {{- end }}
         {{- if (include "external-dns.createSecret" .) }}
@@ -39,6 +44,7 @@ spec:
         {{- if and (eq .Values.provider "designate") .Values.designate.customCA.enabled }}
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
         {{- end }}
+      {{- end }}
     spec:
       {{- include "external-dns.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.podSecurityContext.enabled }}
