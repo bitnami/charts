@@ -107,6 +107,9 @@ spec:
           {{- else }}
           securityContext: {{- .Values.volumePermissions.podSecurityContext | toYaml | nindent 12 }}
           {{- end }}
+          {{- if .Values.volumePermissions.resources }}
+          resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+          {{- end }}
           volumeMounts:
             - name: raw-certificates
               mountPath: /tmp/certs
