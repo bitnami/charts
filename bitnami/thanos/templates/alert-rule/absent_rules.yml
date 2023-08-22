@@ -108,7 +108,7 @@ spec:
         runbook_url: https://github.com/thanos-io/thanos/tree/main/mixin/runbook.md#alert-name-thanossidecarisdown
         summary: Thanos component has disappeared.
       expr: |
-        absent(up{job=~".*thanos-sidecar.*"} == 1)
+        absent(up{job=~"{{ .Values.metrics.prometheusRule.default.sidecarJobRegex }}"} == 1)
       for: 5m
       labels:
         severity: critical

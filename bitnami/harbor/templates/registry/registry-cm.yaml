@@ -162,6 +162,9 @@ data:
         disable: {{ .Values.persistence.imageChartStorage.disableredirect }}
     redis:
       addr: "{{ template "harbor.redis.host" . }}:{{ template "harbor.redis.port" . }}"
+      {{- if ne "" (include "harbor.redis.sentinel.masterSet" .) }}
+      sentinelMasterSet: "{{ template "harbor.redis.sentinel.masterSet" . }}"
+      {{- end }}
       db: {{ template "harbor.redis.registryDatabaseIndex" . }}
     http:
       relativeurls: {{ .Values.registry.relativeurls }}
