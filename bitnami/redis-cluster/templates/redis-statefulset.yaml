@@ -108,7 +108,11 @@ spec:
               pod_index=($(echo "$POD_NAME" | tr "-" "\n"))
               pod_index="${pod_index[-1]}"
               ips=($(echo "{{ .Values.cluster.externalAccess.service.loadBalancerIP }}" | cut -d [ -f2 | cut -d ] -f 1))
+              {{- if .Values.cluster.externalAccess.hostMode }}
+              export REDIS_CLUSTER_ANNOUNCE_HOSTNAME="${ips[$pod_index]}"
+              {{- else }}
               export REDIS_CLUSTER_ANNOUNCE_IP="${ips[$pod_index]}"
+              {{- end }}
               export REDIS_NODES="${ips[@]}"
               {{- if .Values.cluster.init }}
               if [[ "$pod_index" == "0" ]]; then
@@ -140,7 +144,12 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
-            {{- if .Values.cluster.externalAccess.enabled }}
+            {{- if and .Values.cluster.externalAccess.enabled .Values.cluster.externalAccess.hostMode }}
+            - name: REDIS_CLUSTER_DYNAMIC_IPS
+              value: "yes"
+            - name: REDIS_CLUSTER_PREFERRED_ENDPOINT_TYPE
+              value: "hostname"
+            {{- else if .Values.cluster.externalAccess.enabled }}
             - name: REDIS_CLUSTER_DYNAMIC_IPS
               value: "no"
             {{- else }}
