@@ -130,8 +130,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `master.disableCommands`                                   | Array with Redis&reg; commands to disable on master nodes                                             | `["FLUSHDB","FLUSHALL"]` |
 | `master.command`                                           | Override default container command (useful when using custom images)                                  | `[]`                     |
 | `master.args`                                              | Override default container args (useful when using custom images)                                     | `[]`                     |
-| `master.preExecCmds`                                       | Additional commands to run prior to starting Redis&reg; master                                        | `[]`                     |
 | `master.enableServiceLinks`                                | Whether information about services should be injected into pod's environment variable                 | `true`                   |
+| `master.preExecCmds`                                       | Additional commands to run prior to starting Redis&reg; master                                        | `[]`                     |
 | `master.extraFlags`                                        | Array with additional command line flags for Redis&reg; master                                        | `[]`                     |
 | `master.extraEnvVars`                                      | Array with extra environment variables to add to Redis&reg; master nodes                              | `[]`                     |
 | `master.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars for Redis&reg; master nodes                      | `""`                     |
@@ -236,8 +236,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `replica.disableCommands`                                   | Array with Redis&reg; commands to disable on replicas nodes                                             | `["FLUSHDB","FLUSHALL"]` |
 | `replica.command`                                           | Override default container command (useful when using custom images)                                    | `[]`                     |
 | `replica.args`                                              | Override default container args (useful when using custom images)                                       | `[]`                     |
-| `replica.preExecCmds`                                       | Additional commands to run prior to starting Redis&reg; replicas                                        | `[]`                     |
 | `replica.enableServiceLinks`                                | Whether information about services should be injected into pod's environment variable                   | `true`                   |
+| `replica.preExecCmds`                                       | Additional commands to run prior to starting Redis&reg; replicas                                        | `[]`                     |
 | `replica.extraFlags`                                        | Array with additional command line flags for Redis&reg; replicas                                        | `[]`                     |
 | `replica.extraEnvVars`                                      | Array with extra environment variables to add to Redis&reg; replicas nodes                              | `[]`                     |
 | `replica.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars for Redis&reg; replicas nodes                      | `""`                     |
@@ -364,8 +364,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sentinel.configuration`                                     | Configuration for Redis&reg; Sentinel nodes                                                                                                 | `""`                     |
 | `sentinel.command`                                           | Override default container command (useful when using custom images)                                                                        | `[]`                     |
 | `sentinel.args`                                              | Override default container args (useful when using custom images)                                                                           | `[]`                     |
-| `sentinel.preExecCmds`                                       | Additional commands to run prior to starting Redis&reg; Sentinel                                                                            | `[]`                     |
 | `sentinel.enableServiceLinks`                                | Whether information about services should be injected into pod's environment variable                                                       | `true`                   |
+| `sentinel.preExecCmds`                                       | Additional commands to run prior to starting Redis&reg; Sentinel                                                                            | `[]`                     |
 | `sentinel.extraEnvVars`                                      | Array with extra environment variables to add to Redis&reg; Sentinel nodes                                                                  | `[]`                     |
 | `sentinel.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars for Redis&reg; Sentinel nodes                                                          | `""`                     |
 | `sentinel.extraEnvVarsSecret`                                | Name of existing Secret containing extra env vars for Redis&reg; Sentinel nodes                                                             | `""`                     |
