@@ -110,7 +110,7 @@ For more information, refer to the [documentation on the differences between the
 | `operator.updateStrategy.type`                               | Set up update strategy for Grafana Operator installation.                                                                                 | `Recreate`                 |
 | `operator.image.registry`                                    | Grafana Operator image registry                                                                                                           | `docker.io`                |
 | `operator.image.repository`                                  | Grafana Operator image name                                                                                                               | `bitnami/grafana-operator` |
-| `operator.image.tag`                                         | Grafana Operator image tag                                                                                                                | `5.3.0-debian-11-r0`       |
+| `operator.image.tag`                                         | Grafana Operator image tag                                                                                                                | `5.3.0-debian-11-r24`      |
 | `operator.image.digest`                                      | Grafana Operator image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                          | `""`                       |
 | `operator.image.pullPolicy`                                  | Grafana Operator image pull policy                                                                                                        | `IfNotPresent`             |
 | `operator.image.pullSecrets`                                 | Grafana Operator image pull secrets                                                                                                       | `[]`                       |
@@ -191,7 +191,7 @@ For more information, refer to the [documentation on the differences between the
 | `grafana.enabled`                                           | Enabled the deployment of the Grafana CRD object into the cluster                                       | `true`                   |
 | `grafana.image.registry`                                    | Grafana image registry                                                                                  | `docker.io`              |
 | `grafana.image.repository`                                  | Grafana image name                                                                                      | `bitnami/grafana`        |
-| `grafana.image.tag`                                         | Grafana image tag                                                                                       | `10.0.2-debian-11-r12`   |
+| `grafana.image.tag`                                         | Grafana image tag                                                                                       | `10.0.3-debian-11-r22`   |
 | `grafana.image.digest`                                      | Grafana image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                     |
 | `grafana.image.pullPolicy`                                  | Grafana image pull policy                                                                               | `IfNotPresent`           |
 | `grafana.image.pullSecrets`                                 | Grafana image pull secrets                                                                              | `[]`                     |
@@ -257,7 +257,8 @@ For more information, refer to the [documentation on the differences between the
 | `grafana.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                    | `1`                      |
 | `grafana.updateStrategy`                                    | Set up update strategy for Grafana installation.                                                        | `{}`                     |
 | `grafana.extraVolumes`                                      | Optionally specify extra list of additional volumes for the grafana pod(s)                              | `[]`                     |
-| `grafana.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the grafana container(s)                   | `[]`                     |
+| `grafana.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the grafana container                      | `[]`                     |
+| `grafana.secrets`                                           | Optionally specify a list of secrets to be mounted to the grafana pod(s)                                | `[]`                     |
 | `grafana.sidecars`                                          | Add additional sidecar containers to the grafana pod(s)                                                 | `[]`                     |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,

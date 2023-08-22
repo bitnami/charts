@@ -54,11 +54,11 @@ spec:
         {{- end }}
       annotations:
         {{- if (include "redis.createConfigmap" .) }}
-        checksum/configmap: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
+        checksum/configmap: {{ pick ( include (print $.Template.BasePath "/configmap.yaml") . | fromYaml ) "data" | toYaml | sha256sum }}
         {{- end }}
-        checksum/health: {{ include (print $.Template.BasePath "/health-configmap.yaml") . | sha256sum }}
-        checksum/scripts: {{ include (print $.Template.BasePath "/scripts-configmap.yaml") . | sha256sum }}
-        checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
+        checksum/health: {{ pick ( include (print $.Template.BasePath "/health-configmap.yaml") . | fromYaml ) "data" | toYaml | sha256sum }}
+        checksum/scripts: {{ pick ( include (print $.Template.BasePath "/scripts-configmap.yaml") . | fromYaml ) "data" | toYaml | sha256sum }}
+        checksum/secret: {{ pick ( include (print $.Template.BasePath "/secret.yaml") . | fromYaml ) "data" | toYaml | sha256sum }}
         {{- if .Values.replica.podAnnotations }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.replica.podAnnotations "context" $ ) | nindent 8 }}
         {{- end }}
@@ -724,13 +724,13 @@ spec:
         {{- end }}
   {{- if not .Values.replica.persistence.enabled }}
         - name: redis-data
-          {{- if or .Values.sentinel.persistence.medium .Values.sentinel.persistence.sizeLimit }}
+          {{- if or .Values.replica.persistence.medium .Values.replica.persistence.sizeLimit }}
           emptyDir:
-            {{- if .Values.sentinel.persistence.medium }}
-            medium: {{ .Values.sentinel.persistence.medium | quote }}
+            {{- if .Values.replica.persistence.medium }}
+            medium: {{ .Values.replica.persistence.medium | quote }}
             {{- end }}
-            {{- if .Values.sentinel.persistence.sizeLimit }}
-            sizeLimit: {{ .Values.sentinel.persistence.sizeLimit | quote }}
+            {{- if .Values.replica.persistence.sizeLimit }}
+            sizeLimit: {{ .Values.replica.persistence.sizeLimit | quote }}
             {{- end }}
           {{- else }}
           emptyDir: {}
