@@ -50,7 +50,7 @@ spec:
             {{- if .Values.commonLabels }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 12 }}
             {{- end }}
-          {{- if or .Values.annotations .Values.commonAnnotations }}
+          {{- if or .Values.backup.cronjob.annotations .Values.commonAnnotations }}
           annotations:
             {{- if .Values.backup.cronjob.annotations }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.backup.cronjob.annotations "context" $) | nindent 12 }}
