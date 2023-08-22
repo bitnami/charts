@@ -61,7 +61,7 @@
               "kubeconfig": "{{kubeconfig}}",
               "namespace": "{{namespace}}",
               "name": "mongodb-sharded",
-              "shards": 3,
+              "shards": "3",
               "username": "root",
               "password": "Password123!4"
             }
