@@ -177,7 +177,9 @@ Return the definition of wait for workers init container
 
       echo "Connection success"
       exit 0
-
+  {{- if .Values.client.containerSecurityContext.enabled }}
+  securityContext: {{- omit .Values.client.containerSecurityContext "enabled" | toYaml | nindent 4 }}
+  {{- end }}
   volumeMounts:
     - name: ssh-client-config
       mountPath: /etc/ssh/ssh_config.d/deepspeed_ssh_client.conf
@@ -189,6 +191,8 @@ Return the definition of wait for workers init container
       mountPath: /bitnami/ssh/client-private-key
     - name: ssh-local-folder
       mountPath: /home/deepspeed/.ssh
+    - name: tmp
+      mountPath: /tmp
 {{- end -}}
 
 {{/*
@@ -208,15 +212,21 @@ Return the definition of the ssh client configuration init container
       # /etc/ssh/ssh_config.d. Therefore, we need to copy the ssh_config
       # to a volume and perform modifications to include the configuration
       # from the ConfigMap, as it will not be read
+      [[ -f "/opt/bitnami/scripts/deepspeed/entrypoint.sh" ]] && source "/opt/bitnami/scripts/deepspeed/entrypoint.sh"
       cp /etc/ssh/ssh_config /bitnami/ssh/ssh-config
       if [[ ! -d /etc/ssh/ssh_config.d ]]; then
         # Older version of ssh, add the include directive
         echo "Modifying ssh_config with include directive"
         echo "Include /etc/ssh/ssh_config.d/*.conf" >> /bitnami/ssh/ssh-config/ssh_config
       fi
+  {{- if .Values.client.containerSecurityContext.enabled }}
+  securityContext: {{- omit .Values.client.containerSecurityContext "enabled" | toYaml | nindent 4 }}
+  {{- end }}
   volumeMounts:
     - name: ssh-config
       mountPath: /bitnami/ssh/ssh-config/
+    - name: tmp
+      mountPath: /tmp
 {{- end -}}
 
 {{/*
@@ -232,6 +242,7 @@ Return the definition of the ssh server configuration init container
     - -ec
     - |
       #!/bin/bash
+      [[ -f "/opt/bitnami/scripts/deepspeed/entrypoint.sh" ]] && source "/opt/bitnami/scripts/deepspeed/entrypoint.sh"
       echo "Obtaining public key and generating authorized_keys file"
       mkdir -p /home/deepspeed/.ssh
       ssh-keygen -y -f /bitnami/ssh/client-private-key/id_rsa > /home/deepspeed/.ssh/authorized_keys
@@ -284,6 +295,9 @@ Return the definition of the ssh server configuration init container
           fi
         done < /bitnami/ssh/server-configmap/*.conf
       fi
+  {{- if .Values.worker.containerSecurityContext.enabled }}
+  securityContext: {{- omit .Values.worker.containerSecurityContext "enabled" | toYaml | nindent 4 }}
+  {{- end }}
   volumeMounts:
     - name: ssh-client-private-key
       mountPath: /bitnami/ssh/client-private-key
@@ -296,6 +310,8 @@ Return the definition of the ssh server configuration init container
       mountPath: /bitnami/ssh/sshd-config/
     - name: worker-home
       mountPath: /home/
+    - name: tmp
+      mountPath: /tmp
 {{- end -}}
 
 
@@ -303,9 +319,10 @@ Return the definition of the ssh server configuration init container
 Return the definition of the git clone init container
 */}}
 {{- define "deespeed.git.cloneInitContainer" -}}
+{{- $block := index .context.Values .component }}
 - name: git-clone-repository
-  image: {{ include "deepspeed.v0.git.image" . }}
-  imagePullPolicy: {{ .Values.gitImage.pullPolicy | quote }}
+  image: {{ include "deepspeed.v0.git.image" .context }}
+  imagePullPolicy: {{ .context.Values.gitImage.pullPolicy | quote }}
   command:
     - /bin/bash
   args:
@@ -314,12 +331,20 @@ Return the definition of the git clone init container
       #!/bin/bash
       rm -rf /app/*
       [[ -f "/opt/bitnami/scripts/git/entrypoint.sh" ]] && source "/opt/bitnami/scripts/git/entrypoint.sh"
-      git clone {{ .Values.source.git.repository }} {{ if .Values.source.git.revision }}--branch {{ .Values.source.git.revision }}{{ end }} /app
+      git clone {{ .context.Values.source.git.repository }} {{ if .context.Values.source.git.revision }}--branch {{ .context.Values.source.git.revision }}{{ end }} /app
+  {{- if $block.containerSecurityContext.enabled }}
+  securityContext: {{- omit $block.containerSecurityContext "enabled" | toYaml | nindent 4 }}
+  {{- end }}
   volumeMounts:
     - name: source
       mountPath: /app
-  {{- if .Values.source.git.extraVolumeMounts }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.source.git.extraVolumeMounts "context" $) | nindent 12 }}
+    - name: tmp
+      mountPath: /tmp
+    # It creates at startup ssh in case it performs ssh-based git clone
+    - name: tmp
+      mountPath: /etc/ssh
+  {{- if .context.Values.source.git.extraVolumeMounts }}
+    {{- include "common.tplvalues.render" (dict "value" .context.Values.source.git.extraVolumeMounts "context" .context) | nindent 12 }}
   {{- end }}
 {{- end -}}
 
@@ -348,6 +373,8 @@ Return the volume-permissions init container
   volumeMounts:
     - name: data
       mountPath: {{ $block.persistence.mountPath }}
+    - name: tmp
+      mountPath: /tmp
 {{- end -}}
 
 {{/*
