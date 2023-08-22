@@ -29,7 +29,7 @@ kind: ServiceMonitor
 metadata:
   name: {{ include "common.names.fullname" . }}
   namespace: {{ default (include "common.names.namespace" .) .Values.operator.prometheus.serviceMonitor.namespace }}
-  {{- $labels := merge .Values.operator.prometheus.serviceMonitor.labels .Values.commonAnnotations }}
+  {{- $labels := merge .Values.operator.prometheus.serviceMonitor.labels .Values.commonLabels }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}

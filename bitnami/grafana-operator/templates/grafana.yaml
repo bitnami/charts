@@ -61,15 +61,12 @@ spec:
       {{- end }}
     spec:
       replicas: {{ .Values.grafana.replicaCount }}
-<<<<<<< HEAD
       selector:
         matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 10 }}
           app.kubernetes.io/component: grafana
-=======
       {{- if .Values.grafana.updateStrategy }}
       strategy: {{ toYaml .Values.grafana.updateStrategy | nindent 8 }}
       {{- end }}
->>>>>>> main
       template:
         metadata:
           labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 12 }}
