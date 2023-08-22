@@ -23,6 +23,9 @@ metadata:
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
     {{- end }}
 spec:
+  {{- if .Values.provisioning.cleanupAfterFinished.enabled }} 
+  ttlSecondsAfterFinished: {{ .Values.provisioning.cleanupAfterFinished.seconds }} 
+  {{- end }} 
   parallelism: 1
   template:
     metadata:
