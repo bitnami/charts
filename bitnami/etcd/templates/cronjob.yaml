@@ -9,10 +9,7 @@ kind: CronJob
 metadata:
   name: {{ printf "%s-snapshotter" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -24,19 +21,19 @@ spec:
     spec:
       template:
         metadata:
-          labels: {{- include "common.labels.standard" . | nindent 12 }}
+          labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 12 }}
             app.kubernetes.io/component: snapshotter
           {{- if .Values.disasterRecovery.cronjob.podAnnotations }}
           annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.disasterRecovery.cronjob.podAnnotations "context" $) | nindent 12 }}
           {{- end }}
         spec:
+          {{- include "etcd.imagePullSecrets" . | nindent 10 }}
           {{- if .Values.disasterRecovery.cronjob.nodeSelector }}
           nodeSelector: {{-  toYaml .Values.disasterRecovery.cronjob.nodeSelector | nindent 12  }}
           {{- end }}
           {{- if .Values.disasterRecovery.cronjob.tolerations }}
           tolerations: {{- toYaml .Values.disasterRecovery.cronjob.tolerations | nindent 12 }}
           {{- end }}
-          {{- include "etcd.imagePullSecrets" . | nindent 10 }}
           restartPolicy: OnFailure
           {{- if .Values.podSecurityContext.enabled }}
           securityContext: {{- omit .Values.podSecurityContext "enabled" | toYaml | nindent 12 }}
