@@ -724,13 +724,13 @@ spec:
         {{- end }}
   {{- if not .Values.replica.persistence.enabled }}
         - name: redis-data
-          {{- if or .Values.sentinel.persistence.medium .Values.sentinel.persistence.sizeLimit }}
+          {{- if or .Values.replica.persistence.medium .Values.replica.persistence.sizeLimit }}
           emptyDir:
-            {{- if .Values.sentinel.persistence.medium }}
-            medium: {{ .Values.sentinel.persistence.medium | quote }}
+            {{- if .Values.replica.persistence.medium }}
+            medium: {{ .Values.replica.persistence.medium | quote }}
             {{- end }}
-            {{- if .Values.sentinel.persistence.sizeLimit }}
-            sizeLimit: {{ .Values.sentinel.persistence.sizeLimit | quote }}
+            {{- if .Values.replica.persistence.sizeLimit }}
+            sizeLimit: {{ .Values.replica.persistence.sizeLimit | quote }}
             {{- end }}
           {{- else }}
           emptyDir: {}
