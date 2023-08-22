@@ -40,9 +40,8 @@ overwrote them on metadata.labels fields.
 */}}
 {{- define "common.labels.matchLabels" -}}
 {{- if and (hasKey . "customLabels") (hasKey . "context") -}}
-{{- $customLabels := pick .customLabels "app.kubernetes.io/name" "app.kubernetes.io/instance" -}}
 {{ merge
-        (include "common.tplvalues.render" (dict "value" $customLabels "context" .context) | fromYaml)
+        (pick (include "common.tplvalues.render" (dict "value" .customLabels "context" .context) | fromYaml) "app.kubernetes.io/name" "app.kubernetes.io/instance")
         (dict
             "app.kubernetes.io/name" (include "common.names.name" .context)
             "app.kubernetes.io/instance" .context.Release.Name
