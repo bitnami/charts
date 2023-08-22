@@ -749,6 +749,8 @@ Init container definition for Kafka initialization
       mountPath: /configmaps
     - name: scripts
       mountPath: /scripts
+    - name: tmp
+      mountPath: /tmp
     {{- if and .context.Values.externalAccess.enabled .context.Values.externalAccess.autoDiscovery.enabled }}
     - name: kafka-autodiscovery-shared
       mountPath: /shared

@@ -36,7 +36,7 @@ spec:
         runbook_url: https://github.com/thanos-io/thanos/tree/main/mixin/runbook.md#alert-name-thanossidecarbucketoperationsfailed
         summary: Thanos Sidecar bucket operations are failing
       expr: |
-        sum by (job, instance) (rate(thanos_objstore_bucket_operation_failures_total{job=~".*thanos-sidecar.*"}[5m])) > 0
+        sum by (job, instance) (rate(thanos_objstore_bucket_operation_failures_total{job=~"{{ .Values.metrics.prometheusRule.default.sidecarJobRegex }}"}[5m])) > 0
       for: 5m
       labels:
         severity: critical
@@ -54,7 +54,7 @@ spec:
         runbook_url: https://github.com/thanos-io/thanos/tree/main/mixin/runbook.md#alert-name-thanossidecarnoconnectiontostartedprometheus
         summary: Thanos Sidecar cannot access Prometheus, even though Prometheus seems healthy and has reloaded WAL.
       expr: |
-        thanos_sidecar_prometheus_up{job=~".*thanos-sidecar.*"} == 0
+        thanos_sidecar_prometheus_up{job=~"{{ .Values.metrics.prometheusRule.default.sidecarJobRegex }}"} == 0
         AND on (namespace, pod)
         prometheus_tsdb_data_replay_duration_seconds != 0
       for: 5m
