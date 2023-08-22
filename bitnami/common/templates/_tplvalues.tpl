@@ -11,17 +11,14 @@ Usage:
 {{ include "common.tplvalues.render" ( dict "value" .Values.path.to.the.Value "context" $ "scope" $app ) }}
 */}}
 {{- define "common.tplvalues.render" -}}
-{{- if .scope }}
-  {{- if typeIs "string" .value }}
-    {{- tpl (cat "{{- with $.RelativeScope -}}" .value  "{{- end }}") (merge (dict "RelativeScope" .scope) .context) }}
+{{- $value := typeIs "string" .value | ternary .value (.value | toYaml) }}
+{{- if contains "{{" (toJson .value) }}
+  {{- if .scope }}
+      {{- tpl (cat "{{- with $.RelativeScope -}}" $value "{{- end }}") (merge (dict "RelativeScope" .scope) .context) }}
   {{- else }}
-    {{- tpl (cat "{{- with $.RelativeScope -}}" (.value | toYaml)  "{{- end }}") (merge (dict "RelativeScope" .scope) .context) }}
+    {{- tpl $value .context }}
   {{- end }}
 {{- else }}
-  {{- if typeIs "string" .value }}
-    {{- tpl .value .context }}
-  {{- else }}
-    {{- tpl (.value | toYaml) .context }}
-  {{- end }}
-{{- end -}}
+    {{- $value }}
+{{- end }}
 {{- end -}}
