@@ -194,6 +194,22 @@ rules:
 - apiGroups:
   - configuration.konghq.com
   resources:
+  - kongconsumergroups
+  verbs:
+  - get
+  - list
+  - watch
+- apiGroups:
+  - configuration.konghq.com
+  resources:
+  - kongconsumergroups/status
+  verbs:
+  - get
+  - patch
+  - update
+- apiGroups:
+  - configuration.konghq.com
+  resources:
   - kongingresses
   verbs:
   - get

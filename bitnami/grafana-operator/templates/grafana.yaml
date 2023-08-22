@@ -65,9 +65,7 @@ spec:
       {{- end }}
   {{- if .Values.grafana.serviceAccount }}
   serviceAccount:
-  {{- with .Values.grafana.serviceAccount }}
-    {{- toYaml . | nindent 4 }}
-  {{- end }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.serviceAccount "context" $ ) | nindent 4 }}
   {{- end }}
   deployment:
     metadata:
@@ -76,6 +74,9 @@ spec:
       {{- end }}
     spec:
       replicas: {{ .Values.grafana.replicaCount }}
+      {{- if .Values.grafana.updateStrategy }}
+      strategy: {{ toYaml .Values.grafana.updateStrategy | nindent 8 }}
+      {{- end }}
       template:
         spec:
           {{- include "common.images.pullSecrets" (dict "images" (list .Values.grafana.image) "global" .Values.global) | nindent 10 }}
@@ -95,6 +96,25 @@ spec:
           {{- end }}
           {{- if .Values.grafana.podSecurityContext.enabled }}
           securityContext: {{- omit .Values.grafana.podSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.grafana.tolerations }}
+          tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.tolerations "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.grafana.nodeSelector }}
+          nodeSelector: {{ toYaml .Values.grafana.nodeSelector | nindent 12 }}
+          {{- end }}
+          {{- if .Values.grafana.extraVolumes | or .Values.grafana.secrets }}
+          volumes:
+            {{- range .Values.grafana.secrets }}
+            - name: '{{.}}'
+              secret:
+                defaultMode: 420
+                optional: true
+                secretName: '{{.}}'
+            {{- end }}
+            {{- if .Values.grafana.extraVolumes }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.grafana.extraVolumes "context" $) | nindent 12 }}
+            {{- end }}
           {{- end }}
           containers:
             - name: grafana
@@ -133,26 +153,13 @@ spec:
                   port: 3000
                   scheme: HTTP
               {{- end }}
+              {{- if .Values.grafana.extraVolumeMounts }}
+              volumeMounts:
+                {{- include "common.tplvalues.render" (dict "value" .Values.grafana.extraVolumeMounts "context" $) | nindent 16 }}
+              {{- end }}
             {{- if .Values.grafana.sidecars }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.grafana.sidecars "context" $) | nindent 12 }}
             {{- end }}
-    {{- if .Values.grafana.tolerations }}
-    tolerations: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.tolerations "context" $) | nindent 6 }}
-    {{- end }}
-    {{- if .Values.grafana.nodeSelector }}
-    nodeSelector: {{ toYaml .Values.grafana.nodeSelector | nindent 6 }}
-    {{- end }}
-    {{- if .Values.grafana.updateStrategy }}
-    strategy: {{ toYaml .Values.grafana.updateStrategy | nindent 6 }}
-    {{- end }}
-    {{- if .Values.grafana.extraVolumeMounts }}
-    extraVolumeMounts:
-      {{- include "common.tplvalues.render" (dict "value" .Values.grafana.extraVolumeMounts "context" $) | nindent 6 }}
-    {{- end }}
-    {{- if .Values.grafana.extraVolumes }}
-    extraVolumes:
-      {{- include "common.tplvalues.render" (dict "value" .Values.grafana.extraVolumes "context" $) | nindent 6 }}
-    {{- end }}
   {{- if .Values.grafana.ingress.enabled }}
   ingress:
     spec:
