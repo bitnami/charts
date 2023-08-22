@@ -397,7 +397,14 @@ provisioning:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
-
+  ## Automatic Cleanup for Finished Jobs
+  ## @param provisioning.cleanupAfterFinished.enabled Enables Cleanup for Finished Jobs
+  ## @param provisioning.cleanupAfterFinished.seconds Sets the value of ttlSecondsAfterFinished
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/ttlafterfinished/
+  ##
+  cleanupAfterFinished:
+    enabled: false
+    seconds: 600
 ## @param hostAliases MinIO&reg; pod host aliases
 ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
 ##
