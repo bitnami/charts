@@ -16,8 +16,10 @@ metadata:
     {{- if .Values.ingress.certManager }}
     kubernetes.io/tls-acme: "true"
     {{- end }}
+    {{- if or .Values.ingress.annotations .Values.commonAnnotations }}
     {{- $annotations := merge .Values.ingress.annotations .Values.commonAnnotations }}
     {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+    {{- end }}
   {{- end }}
 spec:
   {{- if and .Values.ingress.ingressClassName (eq "true" (include "common.ingress.supportsIngressClassname" .)) }}
