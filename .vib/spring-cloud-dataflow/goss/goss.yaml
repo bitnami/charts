@@ -12,7 +12,6 @@ file:
     owner: root
     contains:
     - {{ .Vars.server.configuration.accountName }}
-    - /runAsUser.*{{ .Vars.deployer.podSecurityContext.runAsUser }}/
     - /url.*jdbc:mariadb.*{{ .Vars.mariadb.auth.database }}/
     - /username.*{{ .Vars.mariadb.auth.username }}/
   /etc/secrets/database:

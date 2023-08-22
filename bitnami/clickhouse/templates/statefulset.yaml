@@ -415,7 +415,7 @@ spec:
           {{- if $.Values.commonAnnotations }}
           {{- include "common.tplvalues.render" (dict "value" $.Values.commonAnnotations "context" $) | nindent 10 }}
           {{- end }}
-        labels: {{- include "common.labels.standard" $ | nindent 10 }}
+        labels: {{- include "common.labels.matchLabels" $ | nindent 10 }}
           app.kubernetes.io/component: clickhouse
           {{- if $.Values.commonLabels }}
           {{- include "common.tplvalues.render" (dict "value" $.Values.commonLabels "context" $) | nindent 10 }}
