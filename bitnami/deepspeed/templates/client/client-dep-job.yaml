@@ -101,7 +101,7 @@ spec:
         {{- include "deepspeed.v0.ssh.clientInitContainer" . | nindent 8 }}
         {{- include "deepspeed.v0.client.waitForWorkers" . | nindent 8 }}
         {{- if eq .Values.source.type "git" }}
-        {{- include "deespeed.git.cloneInitContainer" . | nindent 8 }}
+        {{- include "deespeed.git.cloneInitContainer" (dict "component" "client" "context" $) | nindent 8 }}
         {{- end }}
         {{- if and .Values.volumePermissions.enabled .Values.client.persistence.enabled }}
         {{- include "deepspeed.v0.volumePermissionsInitContainer" (dict "component" "client" "context" $) | nindent 8 }}
@@ -143,6 +143,8 @@ spec:
               {{- end }}
           {{- end }}
           env:
+            - name: HOME
+              value: /home/deepspeed
             {{- if .Values.client.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.client.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
