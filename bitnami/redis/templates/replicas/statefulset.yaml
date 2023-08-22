@@ -204,6 +204,7 @@ spec:
           ports:
             - name: redis
               containerPort: {{ .Values.replica.containerPorts.redis }}
+          enableServiceLinks: {{ .Values.replica.enableServiceLinks }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.replica.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.replica.customStartupProbe "context" $) | nindent 12 }}
@@ -330,6 +331,7 @@ spec:
           ports:
             - name: metrics
               containerPort: 9121
+          enableServiceLinks: {{ .Values.metrics.enableServiceLinks }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.metrics.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customStartupProbe "context" $) | nindent 12 }}

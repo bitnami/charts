@@ -131,6 +131,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `master.command`                                           | Override default container command (useful when using custom images)                                  | `[]`                     |
 | `master.args`                                              | Override default container args (useful when using custom images)                                     | `[]`                     |
 | `master.preExecCmds`                                       | Additional commands to run prior to starting Redis&reg; master                                        | `[]`                     |
+| `master.enableServiceLinks`                                | Whether information about services should be injected into pod's environment variable                 | `true`                   |
 | `master.extraFlags`                                        | Array with additional command line flags for Redis&reg; master                                        | `[]`                     |
 | `master.extraEnvVars`                                      | Array with extra environment variables to add to Redis&reg; master nodes                              | `[]`                     |
 | `master.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars for Redis&reg; master nodes                      | `""`                     |
@@ -236,6 +237,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `replica.command`                                           | Override default container command (useful when using custom images)                                    | `[]`                     |
 | `replica.args`                                              | Override default container args (useful when using custom images)                                       | `[]`                     |
 | `replica.preExecCmds`                                       | Additional commands to run prior to starting Redis&reg; replicas                                        | `[]`                     |
+| `replica.enableServiceLinks`                                | Whether information about services should be injected into pod's environment variable                   | `true`                   |
 | `replica.extraFlags`                                        | Array with additional command line flags for Redis&reg; replicas                                        | `[]`                     |
 | `replica.extraEnvVars`                                      | Array with extra environment variables to add to Redis&reg; replicas nodes                              | `[]`                     |
 | `replica.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars for Redis&reg; replicas nodes                      | `""`                     |
@@ -363,6 +365,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sentinel.command`                                           | Override default container command (useful when using custom images)                                                                        | `[]`                     |
 | `sentinel.args`                                              | Override default container args (useful when using custom images)                                                                           | `[]`                     |
 | `sentinel.preExecCmds`                                       | Additional commands to run prior to starting Redis&reg; Sentinel                                                                            | `[]`                     |
+| `sentinel.enableServiceLinks`                                | Whether information about services should be injected into pod's environment variable                                                       | `true`                   |
 | `sentinel.extraEnvVars`                                      | Array with extra environment variables to add to Redis&reg; Sentinel nodes                                                                  | `[]`                     |
 | `sentinel.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars for Redis&reg; Sentinel nodes                                                          | `""`                     |
 | `sentinel.extraEnvVarsSecret`                                | Name of existing Secret containing extra env vars for Redis&reg; Sentinel nodes                                                             | `""`                     |
@@ -495,6 +498,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                | `{}`                     |
 | `metrics.command`                                           | Override default metrics container init command (useful when using custom images)                                   | `[]`                     |
 | `metrics.redisTargetHost`                                   | A way to specify an alternative Redis&reg; hostname                                                                 | `localhost`              |
+| `metrics.enableServiceLinks`                                | Whether information about services should be injected into pod's environment variable                               | `true`                   |
 | `metrics.extraArgs`                                         | Extra arguments for Redis&reg; exporter, for example:                                                               | `{}`                     |
 | `metrics.extraEnvVars`                                      | Array with extra environment variables to add to Redis&reg; exporter                                                | `[]`                     |
 | `metrics.containerSecurityContext.enabled`                  | Enabled Redis&reg; exporter containers' Security Context                                                            | `true`                   |
