@@ -24,7 +24,7 @@ spec:
   updateStrategy: {{- toYaml .Values.readReplicas.updateStrategy | nindent 4 }}
   {{- end }}
   {{- $podLabels := merge .Values.readReplicas.podLabels .Values.commonLabels }}
-  podSelector:
+  selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: read
   template:
