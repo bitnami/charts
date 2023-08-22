@@ -32,5 +32,5 @@ maintainers:
   url: https://github.com/bitnami/charts
 name: grafana
 sources:
-  - https://github.com/bitnami/charts/tree/main/bitnami/grafana
+- https://github.com/bitnami/charts/tree/main/bitnami/grafana
 version: 9.1.0
