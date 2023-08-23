@@ -12,16 +12,12 @@ kind: StatefulSet
 metadata:
   name: {{ printf "%s-hidden" (include "mongodb.fullname" .) }}
   namespace: {{ include "mongodb.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  {{- $labels := merge .Values.hidden.labels .Values.commonLabels }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: hidden
-    {{- if .Values.hidden.labels }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.hidden.labels "context" $) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
-  {{- if .Values.hidden.annotations }}
-  annotations: {{- include "common.tplvalues.render" (dict "value" .Values.hidden.annotations "context" $) | nindent 4 }}
+  {{- if or .Values.hidden.annotations .Values.commonAnnotations }}
+  {{- $annotations := merge .Values.hidden.annotations .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
   serviceName: {{ printf "%s-hidden-headless" (include "mongodb.fullname" .) }}
@@ -30,19 +26,14 @@ spec:
   {{- if .Values.hidden.updateStrategy }}
   updateStrategy: {{- toYaml .Values.hidden.updateStrategy | nindent 4 }}
   {{- end }}
+  {{- $podLabels := merge .Values.hidden.podLabels .Values.commonLabels }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: hidden
   template:
     metadata:
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: hidden
-        {{- if .Values.hidden.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.hidden.podLabels "context" $) | nindent 8 }}
-        {{- end }}
-        {{- if .Values.commonLabels }}
-        {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
-        {{- end }}
       {{- if or (include "mongodb.hidden.createConfigmap" .) .Values.hidden.podAnnotations }}
       annotations:
         {{- if (include "mongodb.hidden.createConfigmap" .) }}
@@ -65,8 +56,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.hidden.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.hidden.podAffinityPreset "component" "" "topologyKey" .Values.topologyKey "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.hidden.podAntiAffinityPreset "component" "" "topologyKey" .Values.topologyKey "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.hidden.podAffinityPreset "component" "hidden" "customLabels" $podLabels "topologyKey" .Values.topologyKey "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.hidden.podAntiAffinityPreset "component" "hidden" "customLabels" $podLabels "topologyKey" .Values.topologyKey "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.hidden.nodeAffinityPreset.type "key" .Values.hidden.nodeAffinityPreset.key "values" .Values.hidden.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.hidden.nodeSelector }}
