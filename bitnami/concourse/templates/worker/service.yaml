@@ -23,4 +23,5 @@ spec:
   ports: []
   {{- $podLabels := merge .Values.worker.podLabels .Values.commonLabels }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: worker
 {{- end }}
