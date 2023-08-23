@@ -30,5 +30,5 @@ maintainers:
   url: https://github.com/bitnami/charts
 name: memcached
 sources:
-- https://github.com/bitnami/charts/tree/main/bitnami/memcached
-version: 6.5.9
+  - https://github.com/bitnami/charts/tree/main/bitnami/memcached
+version: 6.6.0
