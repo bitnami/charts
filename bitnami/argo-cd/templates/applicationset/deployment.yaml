@@ -155,6 +155,10 @@ spec:
             - mountPath: /app/config/gpg/source
               name: gpg-keys
             {{- end }}
+            {{- if .Values.config.rbac }}
+            - mountPath: /app/config/rbac
+              name: rbac
+            {{- end }}
             - mountPath: /app/config/gpg/keys
               name: gpg-keyring
             - mountPath: /tmp
@@ -175,6 +179,11 @@ spec:
         - name: gpg-keys
           configMap:
             name: argocd-gpg-keys-cm
+        {{- end }}
+        {{- if .Values.config.rbac }}
+        - name: rbac
+          configMap:
+            name: argocd-rbac-cm
         {{- end }}
         - name: gpg-keyring
           emptyDir: {}
