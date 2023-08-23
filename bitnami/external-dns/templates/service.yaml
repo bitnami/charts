@@ -9,13 +9,8 @@ kind: Service
 metadata:
   name: {{ template "external-dns.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
-  labels: {{ include "external-dns.labels" . | nindent 4 }}
-  {{- if .Values.service.labels -}}
-  {{ toYaml .Values.service.labels | nindent 4 }}
-  {{- end }}
-  {{- if .Values.commonLabels }}
-  {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-  {{- end }}
+  {{- $labels := merge .Values.service.labels .Values.commonLabels }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
   {{- if .Values.service.annotations }}
   annotations: {{ toYaml .Values.service.annotations | nindent 4 }}
   {{- end }}
@@ -56,5 +51,6 @@ spec:
     {{- if .Values.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}
-  selector: {{ include "external-dns.matchLabels" . | nindent 4 }}
+  {{- $podLabels := merge .Values.podLabels .Values.commonLabels }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
 {{- end }}
