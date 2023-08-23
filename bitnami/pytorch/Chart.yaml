@@ -32,5 +32,5 @@ maintainers:
   url: https://github.com/bitnami/charts
 name: pytorch
 sources:
-- https://github.com/bitnami/charts/tree/main/bitnami/pytorch
-version: 3.2.11
+  - https://github.com/bitnami/charts/tree/main/bitnami/pytorch
+version: 3.3.0

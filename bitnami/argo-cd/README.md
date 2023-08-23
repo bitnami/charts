@@ -810,6 +810,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `config.existingStylesConfigmap`               | Use an existing styles configmap                                                                      | `""`   |
 | `config.tlsCerts`                              | TLS certificates used to verify the authenticity of the repository servers                            | `{}`   |
 | `config.gpgKeys`                               | GnuPG public keys to add to the keyring                                                               | `{}`   |
+| `config.rbac`                                  | Role-based authentication configuration                                                               | `{}`   |
 | `config.secret.create`                         | Whether to create or not the secret                                                                   | `true` |
 | `config.secret.annotations`                    | General secret extra annotations                                                                      | `{}`   |
 | `config.secret.githubSecret`                   | GitHub secret to configure webhooks                                                                   | `""`   |
