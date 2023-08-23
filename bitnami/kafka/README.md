@@ -1209,6 +1209,10 @@ kubectl apply -f $NEW_PVC_MANIFEST_FILE
 
 Repeat this process for each replica you had in your Kafka cluster. Once completed, upgrade the cluster and the new Statefulset should reuse the existing PVCs.
 
+### To 25.0.0
+
+This major updates the Zookeeper subchart to it newest major, 12.0.0. For more information on this subchart's major, please refer to [zookeeper upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/zookeeper#to-1200).
+
 ### To 23.0.0
 
 This major updates Kafka to its newest version, 3.5.x. For more information, please refer to [kafka upgrade notes](https://kafka.apache.org/35/documentation.html#upgrade).
