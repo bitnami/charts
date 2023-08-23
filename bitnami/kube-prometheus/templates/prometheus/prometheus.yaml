@@ -98,6 +98,12 @@ spec:
   {{- if .Values.prometheus.scrapeTimeout }}
   scrapeTimeout: {{ .Values.prometheus.scrapeTimeout }}
   {{- end }}
+  {{- if .Values.prometheus.sampleLimit }}
+  sampleLimit: {{ .Values.prometheus.sampleLimit }}
+  {{- end }}
+  {{- if .Values.prometheus.enforcedSampleLimit }}
+  enforcedSampleLimit: {{ .Values.prometheus.enforcedSampleLimit }}
+  {{- end }}
   {{- if .Values.prometheus.resources }}
   resources: {{- toYaml .Values.prometheus.resources | nindent 4 }}
   {{- end }}
