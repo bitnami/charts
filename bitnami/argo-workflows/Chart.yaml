@@ -41,5 +41,5 @@ maintainers:
   url: https://github.com/bitnami/charts
 name: argo-workflows
 sources:
-- https://github.com/bitnami/charts/tree/main/bitnami/argo-workflows
-version: 5.3.12
+  - https://github.com/bitnami/charts/tree/main/bitnami/argo-workflows
+version: 5.4.0
