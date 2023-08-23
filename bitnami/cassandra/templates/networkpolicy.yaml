@@ -9,16 +9,14 @@ apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
 metadata:
   name: {{ include "common.names.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
+  {{- $podLabels := merge .Values.podLabels .Values.commonLabels }}
   podSelector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
   ingress:
     # Allow inbound connections
     # CQL port
@@ -30,8 +28,8 @@ spec:
             matchLabels:
               {{ include "common.names.fullname" . }}-client: "true"
       {{- end }}
-        - podSelector:
-            matchLabels: {{- include "common.labels.matchLabels" . | nindent 14 }}
+        - podSelector: 
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 14 }}
     # Internal ports
     - ports:
         - port: intra
@@ -39,7 +37,7 @@ spec:
         - port: jmx
       from:
         - podSelector:
-            matchLabels: {{- include "common.labels.matchLabels" . | nindent 14 }}
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 14 }}
     {{- if .Values.metrics.enabled }}
     # Allow prometheus scrapes for metrics
     - ports:
