@@ -12,8 +12,8 @@ metadata:
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: vault
     app.kubernetes.io/component: server
-  {{- if or .Values.server.service.annotations .Values.commonAnnotations }}
-  {{- $annotations := merge .Values.server.service.annotations .Values.commonAnnotations }}
+  {{- if or .Values.server.service.general.annotations .Values.commonAnnotations }}
+  {{- $annotations := merge .Values.server.service.general.annotations .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
