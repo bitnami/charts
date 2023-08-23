@@ -7,7 +7,7 @@ apiVersion: admissionregistration.k8s.io/v1
 kind: ValidatingWebhookConfiguration
 metadata:
   name: metallb-webhook-configuration
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
 webhooks:
 - admissionReviewVersions:
   - v1
@@ -154,13 +154,13 @@ kind: Service
 metadata:
   name: metallb-webhook-service
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
 spec:
   ports:
   - port: 443
     targetPort: 9443
-  selector:
-    {{- include "common.labels.matchLabels" . | nindent 4 }}
+  {{- $podLabels := merge .Values.controller.podLabels .Values.commonLabels }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: controller
 ---
 apiVersion: v1
@@ -168,4 +168,4 @@ kind: Secret
 metadata:
   name: webhook-server-cert
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}

@@ -3,6 +3,7 @@ Copyright VMware, Inc.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
+{{- if (include "opensearch.dashboards.enabled" .) }}
 apiVersion: v1
 kind: Service
 metadata:
@@ -50,3 +51,4 @@ spec:
   {{- $podLabels := merge .Values.dashboards.podLabels .Values.commonLabels }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: dashboards
+{{- end }}
