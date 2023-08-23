@@ -146,6 +146,8 @@ spec:
               containerPort: {{ .Values.worker.containerPorts.ssh }}
               protocol: TCP
           env:
+            - name: HOME
+              value: /home/deepspeed
             {{- if .Values.worker.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.worker.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}

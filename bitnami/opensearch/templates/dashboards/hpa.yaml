@@ -3,7 +3,7 @@ Copyright VMware, Inc.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if and (.Values.dashboards.enabled) .Values.dashboards.autoscaling.hpa.enabled }}
+{{- if and (include "opensearch.dashboards.enabled" .) .Values.dashboards.autoscaling.hpa.enabled }}
 apiVersion: {{ include "common.capabilities.hpa.apiVersion" ( dict "context" $ ) }}
 kind: HorizontalPodAutoscaler
 metadata:
