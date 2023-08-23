@@ -18,10 +18,8 @@ metadata:
 spec:
   jobLabel: {{ .Values.server.metrics.serviceMonitor.jobLabel | quote }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 6 }}
-      {{- if .Values.server.metrics.serviceMonitor.selector }}
-      {{- include "common.tplvalues.render" (dict "value" .Values.server.metrics.serviceMonitor.selector "context" $) | nindent 6 }}
-      {{- end }}
+    {{- $svcLabels := merge .Values.server.metrics.serviceMonitor.selector .Values.commonLabels }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $svcLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: server
   endpoints:
     - port: metrics

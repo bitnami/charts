@@ -11,14 +11,16 @@ metadata:
     app.kubernetes.io/component: server
   name: {{ template "common.names.fullname" . }}-server
   namespace: {{ .Release.Namespace | quote }}
-  annotations:
-    {{- if or .Values.server.service.annotations .Values.commonAnnotations }}
-    {{- $annotations := merge .Values.server.serviceAccount.annotations .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
-    {{- end }}
-    {{- if and .Values.server.metrics.enabled .Values.server.metrics.annotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.server.metrics.annotations "context" $ ) | nindent 4 }}
-    {{- end }}
+  {{- if or .Values.server.service.annotations .Values.commonAnnotations (and .Values.agent.metrics.enabled .Values.agent.metrics.annotations) }}
+  {{- $annotations := dict -}}
+  {{- if or .Values.server.service.annotations .Values.commonAnnotations }}
+  {{- $annotations = merge $annotations .Values.server.service.annotations .Values.commonAnnotations -}}
+  {{- end }}
+  {{- if and .Values.agent.metrics.enabled .Values.agent.metrics.annotations }}
+  {{- $annotations = merge $annotations .Values.agent.metrics.annotations }}
+  {{- end }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
 spec:
   type: {{ .Values.server.service.type }}
   {{- if and .Values.server.service.clusterIP (eq .Values.server.service.type "ClusterIP") }}
