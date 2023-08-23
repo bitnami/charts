@@ -9,15 +9,16 @@ kind: Service
 metadata:
   name: {{ printf "%s-metrics" (include "certmanager.controller.fullname" .) | trunc 63 | trimSuffix "-" }}
   namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: controller
 spec:
   type: ClusterIP
-  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
-    app.kubernetes.io/component: controller
   ports:
     - name: controller
       port: {{ .Values.controller.containerPort }}
       protocol: TCP
       targetPort: {{ .Values.metrics.serviceMonitor.targetPort }}
+  {{- $podLabels := merge .Values.webhook.podLabels .Values.commonLabels }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: controller
 {{- end }}

@@ -15,7 +15,7 @@ metadata:
 {{- if $ingressClass.default }}
     ingressclass.kubernetes.io/is-default-class: "true"
 {{- end }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: contour
 spec:
   controller: {{ printf "projectcontour.io/%s/%s-contour" (include "common.names.namespace" .) (include "common.names.fullname" .) }}
