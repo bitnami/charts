@@ -177,7 +177,7 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 Returns true if at least one master-elegible node replica has been configured.
 */}}
 {{- define "opensearch.master.enabled" -}}
-{{- if or .Values.master.autoscaling.enabled (gt (int .Values.master.replicaCount) 0) -}}
+{{- if or .Values.master.autoscaling.hpa.enabled (gt (int .Values.master.replicaCount) 0) -}}
     {{- true -}}
 {{- end -}}
 {{- end -}}
@@ -186,7 +186,7 @@ Returns true if at least one master-elegible node replica has been configured.
 Returns true if at least one coordinating-only node replica has been configured.
 */}}
 {{- define "opensearch.coordinating.enabled" -}}
-{{- if or .Values.coordinating.autoscaling.enabled (gt (int .Values.coordinating.replicaCount) 0) -}}
+{{- if or .Values.coordinating.autoscaling.hpa.enabled (gt (int .Values.coordinating.replicaCount) 0) -}}
     {{- true -}}
 {{- end -}}
 {{- end -}}
@@ -195,7 +195,7 @@ Returns true if at least one coordinating-only node replica has been configured.
 Returns true if at least one data-only node replica has been configured.
 */}}
 {{- define "opensearch.data.enabled" -}}
-{{- if or .Values.data.autoscaling.enabled (gt (int .Values.data.replicaCount) 0) -}}
+{{- if or .Values.data.autoscaling.hpa.enabled (gt (int .Values.data.replicaCount) 0) -}}
     {{- true -}}
 {{- end -}}
 {{- end -}}
@@ -204,7 +204,16 @@ Returns true if at least one data-only node replica has been configured.
 Returns true if at least one ingest-only node replica has been configured.
 */}}
 {{- define "opensearch.ingest.enabled" -}}
-{{- if and .Values.ingest.enabled (or .Values.ingest.autoscaling.enabled (gt (int .Values.ingest.replicaCount) 0)) -}}
+{{- if and .Values.ingest.enabled (or .Values.ingest.autoscaling.hpa.enabled (gt (int .Values.ingest.replicaCount) 0)) -}}
+    {{- true -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Returns true if at least one dashboards replica has been configured.
+*/}}
+{{- define "opensearch.dashboards.enabled" -}}
+{{- if and .Values.dashboards.enabled (or .Values.dashboards.autoscaling.hpa.enabled (gt (int .Values.dashboards.replicaCount) 0)) -}}
     {{- true -}}
 {{- end -}}
 {{- end -}}
