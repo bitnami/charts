@@ -76,7 +76,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/apisix
-  tag: 3.4.1-debian-11-r23
+  tag: 3.4.1-debian-11-r28
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1512,7 +1512,7 @@ dashboard:
   image:
     registry: docker.io
     repository: bitnami/apisix-dashboard
-    tag: 3.0.1-debian-11-r82
+    tag: 3.0.1-debian-11-r87
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2181,7 +2181,7 @@ ingressController:
   image:
     registry: docker.io
     repository: bitnami/apisix-ingress-controller
-    tag: 1.6.1-debian-11-r82
+    tag: 1.6.1-debian-11-r86
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
