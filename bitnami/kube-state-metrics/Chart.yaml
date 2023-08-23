@@ -27,5 +27,5 @@ maintainers:
   url: https://github.com/bitnami/charts
 name: kube-state-metrics
 sources:
-- https://github.com/bitnami/charts/tree/main/bitnami/kube-state-metrics
-version: 3.5.11
+  - https://github.com/bitnami/charts/tree/main/bitnami/kube-state-metrics
+version: 3.6.0
