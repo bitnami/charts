@@ -9,20 +9,18 @@ apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
 metadata:
   name: {{ template "opensearch.dashboards.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: opensearch
     app.kubernetes.io/component: dashboards
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
+  {{- $podLabels := merge .Values.dashboards.podLabels .Values.commonLabels }}
   podSelector:
-    matchLabels: {{ include "common.labels.matchLabels" . | nindent 6 }}
-    app.kubernetes.io/part-of: opensearch
-    app.kubernetes.io/component: dashboards
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
+      app.kubernetes.io/part-of: opensearch
+      app.kubernetes.io/component: dashboards
   policyTypes:
     - Ingress
     - Egress
@@ -40,10 +38,7 @@ spec:
         - port: {{ .Values.dashboards.service.ports.http }}
       to:
         - podSelector:
-            matchLabels: {{- include "common.labels.standard" . | nindent 14 }}
-              {{- if .Values.dashboards.podLabels }}
-              {{- include "common.tplvalues.render" (dict "value" .Values.dashboards.podLabels "context" $) | nindent 14 }}
-              {{- end }}
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 14 }}
     {{- if .Values.dashboards.networkPolicy.extraEgress }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.dashboards.networkPolicy.extraEgress "context" $ ) | nindent 4 }}
     {{- end }}

@@ -8,19 +8,11 @@ kind: Service
 metadata:
   name: {{ include "mysql.primary.fullname" . }}-headless
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: primary
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if or .Values.primary.service.headless.annotations .Values.commonAnnotations }}
-  annotations:
-    {{- if .Values.primary.service.headless.annotations }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.primary.service.headless.annotations "context" $) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-    {{- end }}
+  {{- $annotations := merge .Values.primary.service.headless.annotations .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
   type: ClusterIP
@@ -30,5 +22,6 @@ spec:
     - name: mysql
       port: {{ .Values.primary.service.ports.mysql }}
       targetPort: mysql
-  selector: {{ include "common.labels.matchLabels" . | nindent 4 }}
+  {{- $podLabels := merge .Values.primary.podLabels .Values.commonLabels }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: primary
