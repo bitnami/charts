@@ -9,17 +9,15 @@ kind: Deployment
 metadata:
   name: {{ printf "%s-default-backend" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: default-backend
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
+  {{- $podLabels := merge .Values.defaultBackend.podLabels .Values.commonLabels }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: default-backend
   replicas: {{ .Values.defaultBackend.replicaCount }}
   {{- if .Values.defaultBackend.updateStrategy }}
@@ -28,22 +26,11 @@ spec:
   template:
     metadata:
       {{- if or .Values.defaultBackend.podAnnotations .Values.commonAnnotations }}
-      annotations:
-        {{- if .Values.defaultBackend.podAnnotations }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.defaultBackend.podAnnotations "context" $) | nindent 8 }}
-        {{- end }}
-        {{- if .Values.commonAnnotations }}
-        {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
-        {{- end }}
+      {{- $podAnnotations := merge .Values.defaultBackend.podAnnotations .Values.commonAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" $podAnnotations "context" $) | nindent 8 }}
       {{- end }}
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: default-backend
-        {{- if .Values.defaultBackend.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.defaultBackend.podLabels "context" $) | nindent 8 }}
-        {{- end }}
-        {{- if .Values.commonLabels }}
-        {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
-        {{- end }}
     spec:
       {{- include "common.images.pullSecrets" ( dict "images" (list .Values.defaultBackend.image) "global" .Values.global) | nindent 6 }}
       {{- if .Values.defaultBackend.hostAliases }}
@@ -56,8 +43,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.defaultBackend.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.defaultBackend.podAffinityPreset "component" "default-backend" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.defaultBackend.podAntiAffinityPreset "component" "default-backend" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.defaultBackend.podAffinityPreset "component" "default-backend" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.defaultBackend.podAntiAffinityPreset "component" "default-backend" "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.defaultBackend.nodeAffinityPreset.type "key" .Values.defaultBackend.nodeAffinityPreset.key "values" .Values.defaultBackend.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.defaultBackend.nodeSelector }}
