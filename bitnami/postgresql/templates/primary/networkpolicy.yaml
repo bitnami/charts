@@ -9,17 +9,15 @@ kind: NetworkPolicy
 metadata:
   name: {{ printf "%s-ingress" (include "postgresql.primary.fullname" .) }}
   namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: primary
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
+  {{- $primaryPodLabels := merge .Values.primary.podLabels .Values.commonLabels }}
   podSelector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $primaryPodLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: primary
   ingress:
     {{- if and .Values.metrics.enabled .Values.networkPolicy.metrics.enabled (or .Values.networkPolicy.metrics.namespaceSelector .Values.networkPolicy.metrics.podSelector) }}
@@ -50,8 +48,9 @@ spec:
     {{- end }}
     {{- if and .Values.networkPolicy.ingressRules.primaryAccessOnlyFrom.enabled (eq .Values.architecture "replication") }}
     - from:
+        {{- $readPodLabels := merge .Values.readReplicas.podLabels .Values.commonLabels }}
         - podSelector:
-            matchLabels: {{- include "common.labels.matchLabels" . | nindent 14 }}
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $readPodLabels "context" $ ) | nindent 14 }}
               app.kubernetes.io/component: read
       ports:
         - port: {{ .Values.containerPorts.postgresql }}

@@ -9,19 +9,11 @@ kind: Service
 metadata:
   name: {{ printf "%s-default-backend" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: default-backend
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
-    {{- end }}
   {{- if or .Values.defaultBackend.service.annotations .Values.commonAnnotations }}
-  annotations:
-    {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.defaultBackend.service.annotations }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.defaultBackend.service.annotations "context" $) | nindent 4 }}
-    {{- end }}
+  {{- $annotations := merge .Values.defaultBackend.service.annotations .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
   type: {{ .Values.defaultBackend.service.type }}
@@ -30,6 +22,7 @@ spec:
       port: {{ .Values.defaultBackend.service.ports.http }}
       protocol: TCP
       targetPort: http
-  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
+  {{- $podLabels := merge .Values.defaultBackend.podLabels .Values.commonLabels }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: default-backend
 {{- end }}
