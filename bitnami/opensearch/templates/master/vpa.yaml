@@ -9,18 +9,12 @@ kind: VerticalPodAutoscaler
 metadata:
   name: {{ include "opensearch.master.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: opensearch
     app.kubernetes.io/component: master
-   {{- if .Values.commonLabels }}
-   {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-   {{- end }}
-  annotations:
-  {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-  {{- end }}
-  {{- if .Values.master.autoscaling.vpa.annotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.master.autoscaling.vpa.annotations "context" $ ) | nindent 4 }}
+  {{- if or .Values.ingest.autoscaling.vpa.annotations .Values.commonAnnotations }}
+  {{- $annotations := merge .Values.ingest.autoscaling.vpa.annotations .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
   resourcePolicy:
