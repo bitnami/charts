@@ -9,20 +9,13 @@ kind: Service
 metadata:
   name: {{ include "postgresql.readReplica.svc.headless" . }}
   namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: read
-  {{- if or .Values.readReplicas.service.headless.annotations .Values.commonAnnotations }}
   annotations:
-    {{- if .Values.readReplicas.service.headless.annotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.readReplicas.service.headless.annotations "context" $ ) | nindent 4 }}
+    {{- if or .Values.readReplicas.service.headless.annotations .Values.commonAnnotations }}
+    {{- $annotations := merge .Values.readReplicas.service.headless.annotations .Values.commonAnnotations }}
+    {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
     {{- end }}
-    {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-    {{- end }}
-  {{- end }}
     # Use this annotation in addition to the actual publishNotReadyAddresses
     # field below because the annotation will stop being respected soon but the
     # field is broken in some versions of Kubernetes:
@@ -39,6 +32,7 @@ spec:
     - name: tcp-postgresql
       port: {{ include "postgresql.readReplica.service.port" . }}
       targetPort: tcp-postgresql
-  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
+  {{- $podLabels := merge .Values.readReplicas.podLabels .Values.commonLabels }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: read
 {{- end }}

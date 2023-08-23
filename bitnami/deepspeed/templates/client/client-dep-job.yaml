@@ -131,6 +131,8 @@ spec:
               {{- end }}
           {{- end }}
           env:
+            - name: HOME
+              value: /home/deepspeed
             {{- if .Values.client.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.client.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}

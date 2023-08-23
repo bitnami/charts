@@ -9,19 +9,11 @@ kind: Ingress
 metadata:
   name: {{ include "opensearch.ingest.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: ingest
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if or .Values.ingest.ingress.annotations .Values.commonAnnotations }}
-  annotations:
-    {{- if .Values.ingest.ingress.annotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.ingest.ingress.annotations "context" $) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-    {{- end }}
+  {{- $annotations := merge .Values.ingest.ingress.annotations .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
   {{- if and .Values.ingest.ingress.ingressClassName (eq "true" (include "common.ingress.supportsIngressClassname" .)) }}
