@@ -6,7 +6,7 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: spark
-      image: docker.io/bitnami/spark:3.4.1-debian-11-r45
+      image: docker.io/bitnami/spark:3.4.1-debian-11-r48
 apiVersion: v2
 appVersion: 3.4.1
 dependencies:
