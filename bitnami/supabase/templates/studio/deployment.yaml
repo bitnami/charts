@@ -20,8 +20,9 @@ spec:
   {{- if .Values.studio.updateStrategy }}
   strategy: {{- toYaml .Values.studio.updateStrategy | nindent 4 }}
   {{- end }}
+  {{- $podLabels := merge .Values.studio.podLabels .Values.commonLabels }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: studio
   template:
     metadata:
