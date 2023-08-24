@@ -221,7 +221,7 @@ func (r interruptableReader) Read(p []byte) (int, error) {
 	if err != nil {
 		return n, err
 	}
-	return n, r.ctx.Err()
+	return n, nil
 }
 
 // containsPattern checks that a given pattern is inside an array of string
