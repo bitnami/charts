@@ -5,9 +5,7 @@ import (
 	"context"
 	"fmt"
 	"io"
-	"regexp"
 	"strconv"
-	"time"
 
 	appsv1 "k8s.io/api/apps/v1"
 	batchv1 "k8s.io/api/batch/v1"
@@ -22,9 +20,9 @@ import (
 
 // Cluster initialization functions
 
-// ClusterConfigOrDie builds the Kubernetes rest API configuration handler using a
+// MustBuildClusterConfig builds the Kubernetes rest API configuration handler using a
 // given kubeconfig file
-func ClusterConfigOrDie(kubeconfig string) *rest.Config {
+func MustBuildClusterConfig(kubeconfig string) *rest.Config {
 	if kubeconfig == "" {
 		panic("kubeconfig must be supplied")
 	}
@@ -39,21 +37,19 @@ func ClusterConfigOrDie(kubeconfig string) *rest.Config {
 
 // StatefulSet functions
 
-// StsGetAvailableReplicas returns the available replicas in a
-// StatefulSet instance
-func StsGetAvailableReplicas(ss *appsv1.StatefulSet) int32 {
-	return ss.Status.AvailableReplicas
-}
-
 // StsScale scales a StatefulSet instance to the number of replicas
 func StsScale(ctx context.Context, c kubernetes.Interface, ss *appsv1.StatefulSet, count int32) (*appsv1.StatefulSet, error) {
 	name := ss.Name
 	ns := ss.Namespace
+	maxRetries := 3
 
 	for i := 0; i < maxRetries; i++ {
 		ss, err := c.AppsV1().StatefulSets(ns).Get(ctx, name, metav1.GetOptions{})
 		if err != nil {
 			return nil, fmt.Errorf("failed to get statefulset %q: %v", name, err)
+		}
+		if ss.Status.Replicas == count {
+			return ss, nil
 		}
 		*(ss.Spec.Replicas) = count
 		ss, err = c.AppsV1().StatefulSets(ns).Update(ctx, ss, metav1.UpdateOptions{})
@@ -106,12 +102,6 @@ func DplScale(ctx context.Context, c kubernetes.Interface, dpl *appsv1.Deploymen
 	return nil, fmt.Errorf("too many retries draining statefulset %q", name)
 }
 
-// DplGetAvailableReplicas returns the available replicas in a
-// Deployment instance
-func DplGetAvailableReplicas(dpl *appsv1.Deployment) int32 {
-	return dpl.Status.AvailableReplicas
-}
-
 // DplGetContainerImage returns the image inside a container of a Deployment instance
 func DplGetContainerImage(dpl *appsv1.Deployment, name string) (string, error) {
 	containers := dpl.Spec.Template.Spec.Containers
@@ -135,17 +125,15 @@ func JobGetSucceededPods(j *batchv1.Job) int32 {
 
 // Service functions
 
-// SvcGetPort returns the port number of a Service
-func SvcGetPort(svc *v1.Service, name string) (string, error) {
 // SvcGetPortByName returns the port number of a svc given its name
 func SvcGetPortByName(svc *v1.Service, portName string) (string, error) {
 	for _, p := range svc.Spec.Ports {
 		if p.Name == portName {
-			return strconv.FormatInt(p.Port, 10), nil
+			return strconv.FormatInt(int64(p.Port), 10), nil
 		}
 	}
 
-	return "", fmt.Errorf("port %q not found in service %q", name, svc.Name)
+	return "", fmt.Errorf("port %q not found in service %q", portName, svc.Name)
 }
 
 // Pod functions
@@ -222,35 +210,4 @@ func (r interruptableReader) Read(p []byte) (int, error) {
 		return n, err
 	}
 	return n, nil
-}
-
-// containsPattern checks that a given pattern is inside an array of string
-func containsPattern(haystack []string, pattern string) (bool, error) {
-	var err error
-
-	for _, s := range haystack {
-		match, err := regexp.MatchString(pattern, s)
-		if match {
-			return true, err
-		}
-	}
-	return false, err
-}
-
-// Other functions
-
-// Retry performs an operation a given set of attempts
-func Retry(name string, attempts int, sleep time.Duration, f func() (bool, error)) (res bool, err error) {
-	for i := 0; i < attempts; i++ {
-		fmt.Printf("[retriable] operation %q executing now [attempt %d/%d]\n", name, (i + 1), attempts)
-		res, err = f()
-		if res {
-			fmt.Printf("[retriable] operation %q succedeed [attempt %d/%d]\n", name, (i + 1), attempts)
-			return res, err
-		}
-		fmt.Printf("[retriable] operation %q failed, sleeping for %q now...\n", name, sleep)
-		time.Sleep(sleep)
-	}
-	fmt.Printf("[retriable] operation %q failed [attempt %d/%d]\n", name, attempts, attempts)
-	return res, err
 }
