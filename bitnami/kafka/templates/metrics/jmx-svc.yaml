@@ -27,5 +27,5 @@ spec:
       protocol: TCP
       targetPort: metrics
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
-    app.kubernetes.io/component: kafka
+    app.kubernetes.io/part-of: kafka
 {{- end }}
