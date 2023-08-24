@@ -23,7 +23,7 @@ const (
 	PollingInterval = 1 * time.Second
 )
 
-var _ = Describe("MongoDB", Ordered, func() {
+var _ = Describe("MongoDB Sharded", Ordered, func() {
 	var c *kubernetes.Clientset
 	var ctx context.Context
 	var cancel context.CancelFunc
@@ -38,29 +38,29 @@ var _ = Describe("MongoDB", Ordered, func() {
 	When("a database is created and Mongodb Shards are scaled down to 0 replicas and back up", func() {
 		It("should have access to the created database", func() {
 
-			for i := 0; i < *shards; i++ {
+			for i := 0; i < shards; i++ {
 				By(fmt.Sprintf("checking all the shard %d replicas are available", i))
-				shardName := fmt.Sprintf("%s-shard%d-data", *releaseName, i)
-				ss, err := c.AppsV1().StatefulSets(*namespace).Get(ctx, shardName, metav1.GetOptions{})
+				shardName := fmt.Sprintf("%s-shard%d-data", releaseName, i)
+				ss, err := c.AppsV1().StatefulSets(namespace).Get(ctx, shardName, metav1.GetOptions{})
 				Expect(err).NotTo(HaveOccurred())
 				Expect(ss.Status.Replicas).NotTo(BeZero())
 				origReplicas := *ss.Spec.Replicas
 				Eventually(func() (*appsv1.StatefulSet, error) {
-					return c.AppsV1().StatefulSets(*namespace).Get(ctx, shardName, metav1.GetOptions{})
+					return c.AppsV1().StatefulSets(namespace).Get(ctx, shardName, metav1.GetOptions{})
 				}, Timeout, PollingInterval).Should(WithTransform(getAvailableReplicas, Equal(origReplicas)))
 			}
 
 			By("checking that mongos is available")
-			mongosName := fmt.Sprintf("%s-mongos", *releaseName)
-			ss, err := c.AppsV1().StatefulSets(*namespace).Get(ctx, mongosName, metav1.GetOptions{})
+			mongosName := fmt.Sprintf("%s-mongos", releaseName)
+			ss, err := c.AppsV1().StatefulSets(namespace).Get(ctx, mongosName, metav1.GetOptions{})
 			Expect(err).NotTo(HaveOccurred())
 			Expect(ss.Status.Replicas).NotTo(BeZero())
 			mongosOrigReplicas := *ss.Spec.Replicas
 			Eventually(func() (*appsv1.StatefulSet, error) {
-				return c.AppsV1().StatefulSets(*namespace).Get(ctx, mongosName, metav1.GetOptions{})
+				return c.AppsV1().StatefulSets(namespace).Get(ctx, mongosName, metav1.GetOptions{})
 			}, Timeout, PollingInterval).Should(WithTransform(getAvailableReplicas, Equal(mongosOrigReplicas)))
 
-			svc, err := c.CoreV1().Services(*namespace).Get(ctx, *releaseName, metav1.GetOptions{})
+			svc, err := c.CoreV1().Services(namespace).Get(ctx, releaseName, metav1.GetOptions{})
 			Expect(err).NotTo(HaveOccurred())
 
 			port, err := getPort(svc, "mongodb")
@@ -78,26 +78,26 @@ var _ = Describe("MongoDB", Ordered, func() {
 
 			By("creating a job to create a new test database")
 			createDBJobName := fmt.Sprintf("%s-createdb-%s",
-				*releaseName, jobSuffix)
+				releaseName, jobSuffix)
 			dbName := fmt.Sprintf("test%s", jobSuffix)
 
 			err = createJob(ctx, c, createDBJobName, port, image, fmt.Sprintf("db.createCollection('%s');", dbName))
 			Expect(err).NotTo(HaveOccurred())
 
 			Eventually(func() (*batchv1.Job, error) {
-				return c.BatchV1().Jobs(*namespace).Get(ctx, createDBJobName, metav1.GetOptions{})
+				return c.BatchV1().Jobs(namespace).Get(ctx, createDBJobName, metav1.GetOptions{})
 			}, Timeout, PollingInterval).Should(WithTransform(getSucceededPods, Equal(int32(1))))
 
-			for i := 0; i < *shards; i++ {
+			for i := 0; i < shards; i++ {
 				By(fmt.Sprintf("Scaling shard %d down to 0 replicas", i))
-				shardName := fmt.Sprintf("%s-shard%d-data", *releaseName, i)
-				ss, err := c.AppsV1().StatefulSets(*namespace).Get(ctx, shardName, metav1.GetOptions{})
+				shardName := fmt.Sprintf("%s-shard%d-data", releaseName, i)
+				ss, err := c.AppsV1().StatefulSets(namespace).Get(ctx, shardName, metav1.GetOptions{})
 				shardOrigReplicas := *ss.Spec.Replicas
 				ss, err = scale(ctx, c, ss, 0)
 				Expect(err).NotTo(HaveOccurred())
 				Expect(ss.Status.Replicas).NotTo(BeZero())
 				Eventually(func() (*appsv1.StatefulSet, error) {
-					return c.AppsV1().StatefulSets(*namespace).Get(ctx, shardName, metav1.GetOptions{})
+					return c.AppsV1().StatefulSets(namespace).Get(ctx, shardName, metav1.GetOptions{})
 				}, Timeout, PollingInterval).Should(WithTransform(getAvailableReplicas, BeZero()))
 
 				By(fmt.Sprintf("Scaling shard %d to the original replicas", i))
@@ -105,18 +105,18 @@ var _ = Describe("MongoDB", Ordered, func() {
 				Expect(err).NotTo(HaveOccurred())
 
 				Eventually(func() (*appsv1.StatefulSet, error) {
-					return c.AppsV1().StatefulSets(*namespace).Get(ctx, shardName, metav1.GetOptions{})
+					return c.AppsV1().StatefulSets(namespace).Get(ctx, shardName, metav1.GetOptions{})
 				}, Timeout, PollingInterval).Should(WithTransform(getAvailableReplicas, Equal(shardOrigReplicas)))
 			}
 
 			By("creating a job to drop the test database")
 			deleteDBJobName := fmt.Sprintf("%s-deletedb-%s",
-				*releaseName, jobSuffix)
+				releaseName, jobSuffix)
 			err = createJob(ctx, c, deleteDBJobName, port, image, fmt.Sprintf("db.%s.drop()", dbName))
 			Expect(err).NotTo(HaveOccurred())
 
 			Eventually(func() (*batchv1.Job, error) {
-				return c.BatchV1().Jobs(*namespace).Get(ctx, deleteDBJobName, metav1.GetOptions{})
+				return c.BatchV1().Jobs(namespace).Get(ctx, deleteDBJobName, metav1.GetOptions{})
 			}, Timeout, PollingInterval).Should(WithTransform(getSucceededPods, Equal(int32(1))))
 		})
 	})
@@ -127,11 +127,11 @@ var _ = Describe("MongoDB", Ordered, func() {
 })
 
 func clusterConfigOrDie() *rest.Config {
-	if *kubeconfig == "" {
+	if kubeconfig == "" {
 		panic("kubeconfig must be supplied")
 	}
 
-	config, err := clientcmd.BuildConfigFromFlags("", *kubeconfig)
+	config, err := clientcmd.BuildConfigFromFlags("", kubeconfig)
 	if err != nil {
 		panic(err.Error())
 	}
@@ -163,7 +163,7 @@ func createJob(ctx context.Context, c kubernetes.Interface, name, port, image, s
 						{
 							Name:    "mongodb",
 							Image:   image,
-							Command: []string{"mongosh", "--quiet", "--username", *username, "--password", *password, "--host", *releaseName, "--port", port, "--eval", stmt},
+							Command: []string{"mongosh", "--quiet", "--username", username, "--password", password, "--host", releaseName, "--port", port, "--eval", stmt},
 						},
 					},
 				},
@@ -171,7 +171,7 @@ func createJob(ctx context.Context, c kubernetes.Interface, name, port, image, s
 		},
 	}
 
-	_, err := c.BatchV1().Jobs(*namespace).Create(ctx, job, metav1.CreateOptions{})
+	_, err := c.BatchV1().Jobs(namespace).Create(ctx, job, metav1.CreateOptions{})
 
 	return err
 }

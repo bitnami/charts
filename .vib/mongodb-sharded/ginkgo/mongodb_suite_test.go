@@ -8,12 +8,23 @@ import (
 	. "github.com/onsi/gomega"
 )
 
-var kubeconfig = flag.String("kubeconfig", "", "absolute path to the kubeconfig file")
-var releaseName = flag.String("name", "", "name of the primary statefulset")
-var namespace = flag.String("namespace", "", "namespace where the application is running")
-var username = flag.String("username", "", "database user")
-var password = flag.String("password", "", "database password for username")
-var shards = flag.Int("shards", 3, "number of shards")
+var (
+	kubeconfig  string
+	releaseName string
+	namespace   string
+	username    string
+	password    string
+	shards      int
+)
+
+func init() {
+	flag.StringVar(&kubeconfig, "kubeconfig", "", "absolute path to the kubeconfig file")
+	flag.StringVar(&releaseName, "name", "", "name of the primary statefulset")
+	flag.StringVar(&namespace, "namespace", "", "namespace where the application is running")
+	flag.StringVar(&username, "username", "", "database user")
+	flag.StringVar(&password, "password", "", "database password for username")
+	flag.IntVar(&shards, "shards", 3, "number of shards")
+}
 
 func TestMariaDB(t *testing.T) {
 	RegisterFailHandler(Fail)
