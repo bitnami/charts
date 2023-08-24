@@ -1,9 +1,13 @@
 package ginkgo_utils
 
 import (
+	"bufio"
 	"context"
 	"fmt"
+	"io"
+	"regexp"
 	"strconv"
+	"time"
 
 	appsv1 "k8s.io/api/apps/v1"
 	batchv1 "k8s.io/api/batch/v1"
@@ -11,6 +15,7 @@ import (
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
+	cv1 "k8s.io/client-go/kubernetes/typed/core/v1"
 	"k8s.io/client-go/rest"
 	"k8s.io/client-go/tools/clientcmd"
 )
@@ -141,4 +146,108 @@ func SvcGetPort(svc *v1.Service, name string) (string, error) {
 	}
 
 	return "", fmt.Errorf("port %q not found in service %q", name, svc.Name)
+}
+
+// Pod functions
+
+func IsPodRunning(ctx context.Context, c cv1.PodsGetter, namespace string, podName string) (bool, error) {
+	pod, err := c.Pods(namespace).Get(ctx, podName, metav1.GetOptions{})
+	if err != nil {
+		fmt.Printf("There was an error obtaining the Pod %q", podName)
+		return false, err
+	}
+	if pod.Status.Phase == "Running" {
+		return true, nil
+	} else {
+		return false, nil
+	}
+}
+
+func GetPodsByLabelOrDie(ctx context.Context, c cv1.PodsGetter, namespace string, selector string) v1.PodList {
+	output, err := c.Pods(namespace).List(ctx, metav1.ListOptions{
+		LabelSelector: selector,
+	})
+	if err != nil {
+		panic(err.Error())
+	}
+	fmt.Printf("Obtained list of pods with label %q\n", selector)
+
+	return *output
+}
+
+func GetContainerLogsOrDie(ctx context.Context, c cv1.PodsGetter, namespace string, podName string, containerName string) []string {
+	var output []string
+	tailLines := int64(100)
+
+	readCloser, err := c.Pods(namespace).GetLogs(podName, &v1.PodLogOptions{
+		Container: containerName,
+		Follow:    false,
+		TailLines: &tailLines,
+	}).Stream(ctx)
+	if err != nil {
+		panic(err.Error())
+	}
+	fmt.Printf("Obtained %q pod's logs\n", podName)
+
+	defer readCloser.Close()
+
+	scanner := bufio.NewScanner(interruptableReader{ctx, readCloser})
+	for scanner.Scan() {
+		output = append(output, scanner.Text())
+	}
+	if scanner.Err() != nil {
+		panic(scanner.Err())
+	}
+	return output
+}
+
+func ContainerLogsContainPattern(ctx context.Context, c cv1.PodsGetter, namespace string, podName string, containerName string, pattern string) (bool, error) {
+	containerLogs := GetContainerLogsOrDie(ctx, c, namespace, podName, containerName)
+	return ContainsPattern(containerLogs, pattern)
+}
+
+type interruptableReader struct {
+	ctx context.Context
+	r   io.Reader
+}
+
+func (r interruptableReader) Read(p []byte) (int, error) {
+	if err := r.ctx.Err(); err != nil {
+		return 0, err
+	}
+	n, err := r.r.Read(p)
+	if err != nil {
+		return n, err
+	}
+	return n, r.ctx.Err()
+}
+
+func ContainsPattern(haystack []string, pattern string) (bool, error) {
+	var err error
+
+	for _, s := range haystack {
+		match, err := regexp.MatchString(pattern, s)
+		if match {
+			return true, err
+		}
+	}
+	return false, err
+}
+
+// Other functions
+
+// Retry performs an operation a given set of attempts
+func Retry(name string, attempts int, sleep time.Duration, f func() (bool, error)) (res bool, err error) {
+	for i := 0; i < attempts; i++ {
+		fmt.Printf("[retriable] operation %q executing now [attempt %d/%d]\n", name, (i + 1), attempts)
+		res, err = f()
+		if res {
+			fmt.Printf("[retriable] operation %q succedeed [attempt %d/%d]\n", name, (i + 1), attempts)
+			return res, err
+		}
+		fmt.Printf("[retriable] operation %q failed, sleeping for %q now...\n", name, sleep)
+		time.Sleep(sleep)
+	}
+	fmt.Printf("[retriable] operation %q failed [attempt %d/%d]\n", name, attempts, attempts)
+	return res, err
 }
