@@ -15,7 +15,6 @@ import (
 )
 
 const (
-	Timeout         = 120 * time.Second
 	PollingInterval = 1 * time.Second
 )
 
@@ -46,7 +45,7 @@ var _ = Describe("MongoDB Sharded", Ordered, func() {
 				origReplicas := *ss.Spec.Replicas
 				Eventually(func() (*appsv1.StatefulSet, error) {
 					return c.AppsV1().StatefulSets(namespace).Get(ctx, shardName, metav1.GetOptions{})
-				}, Timeout, PollingInterval).Should(WithTransform(getAvailableReplicas, Equal(origReplicas)))
+				}, timeout, PollingInterval).Should(WithTransform(getAvailableReplicas, Equal(origReplicas)))
 			}
 
 			By("checking that mongos is available")
@@ -57,7 +56,7 @@ var _ = Describe("MongoDB Sharded", Ordered, func() {
 			mongosOrigReplicas := *ss.Spec.Replicas
 			Eventually(func() (*appsv1.StatefulSet, error) {
 				return c.AppsV1().StatefulSets(namespace).Get(ctx, mongosName, metav1.GetOptions{})
-			}, Timeout, PollingInterval).Should(WithTransform(getAvailableReplicas, Equal(mongosOrigReplicas)))
+			}, timeout, PollingInterval).Should(WithTransform(getAvailableReplicas, Equal(mongosOrigReplicas)))
 
 			svc, err := c.CoreV1().Services(namespace).Get(ctx, releaseName, metav1.GetOptions{})
 			Expect(err).NotTo(HaveOccurred())
@@ -85,7 +84,7 @@ var _ = Describe("MongoDB Sharded", Ordered, func() {
 
 			Eventually(func() (*batchv1.Job, error) {
 				return c.BatchV1().Jobs(namespace).Get(ctx, createDBJobName, metav1.GetOptions{})
-			}, Timeout, PollingInterval).Should(WithTransform(getSucceededJobs, Equal(int32(1))))
+			}, timeout, PollingInterval).Should(WithTransform(getSucceededJobs, Equal(int32(1))))
 
 			for i := 0; i < shards; i++ {
 				By(fmt.Sprintf("Scaling shard %d down to 0 replicas", i))
@@ -97,7 +96,7 @@ var _ = Describe("MongoDB Sharded", Ordered, func() {
 				Expect(ss.Status.Replicas).NotTo(BeZero())
 				Eventually(func() (*appsv1.StatefulSet, error) {
 					return c.AppsV1().StatefulSets(namespace).Get(ctx, shardName, metav1.GetOptions{})
-				}, Timeout, PollingInterval).Should(WithTransform(getAvailableReplicas, BeZero()))
+				}, timeout, PollingInterval).Should(WithTransform(getAvailableReplicas, BeZero()))
 
 				By(fmt.Sprintf("Scaling shard %d to the original replicas", i))
 				ss, err = utils.StsScale(ctx, c, ss, shardOrigReplicas)
@@ -105,7 +104,7 @@ var _ = Describe("MongoDB Sharded", Ordered, func() {
 
 				Eventually(func() (*appsv1.StatefulSet, error) {
 					return c.AppsV1().StatefulSets(namespace).Get(ctx, shardName, metav1.GetOptions{})
-				}, Timeout, PollingInterval).Should(WithTransform(getAvailableReplicas, Equal(shardOrigReplicas)))
+				}, timeout, PollingInterval).Should(WithTransform(getAvailableReplicas, Equal(shardOrigReplicas)))
 			}
 
 			By("creating a job to drop the test database")
@@ -116,7 +115,7 @@ var _ = Describe("MongoDB Sharded", Ordered, func() {
 
 			Eventually(func() (*batchv1.Job, error) {
 				return c.BatchV1().Jobs(namespace).Get(ctx, deleteDBJobName, metav1.GetOptions{})
-			}, Timeout, PollingInterval).Should(WithTransform(getSucceededJobs, Equal(int32(1))))
+			}, timeout, PollingInterval).Should(WithTransform(getSucceededJobs, Equal(int32(1))))
 		})
 	})
 

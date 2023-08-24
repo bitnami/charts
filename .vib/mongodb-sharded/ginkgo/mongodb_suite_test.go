@@ -4,6 +4,7 @@ import (
 	"context"
 	"flag"
 	"testing"
+	"time"
 
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
@@ -14,12 +15,14 @@ import (
 )
 
 var (
-	kubeconfig  string
-	releaseName string
-	namespace   string
-	username    string
-	password    string
-	shards      int
+	kubeconfig     string
+	releaseName    string
+	namespace      string
+	username       string
+	password       string
+	shards         int
+	timeoutSeconds int
+	timeout        time.Duration
 )
 
 func init() {
@@ -29,6 +32,8 @@ func init() {
 	flag.StringVar(&username, "username", "", "database user")
 	flag.StringVar(&password, "password", "", "database password for username")
 	flag.IntVar(&shards, "shards", 3, "number of shards")
+	flag.IntVar(&timeoutSeconds, "timeout", 120, "timeout in seconds")
+	timeout = time.Duration(timeoutSeconds) * time.Second
 }
 
 func TestMariaDB(t *testing.T) {
