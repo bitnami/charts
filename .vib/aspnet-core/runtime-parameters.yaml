@@ -11,6 +11,8 @@ containerPorts:
 serviceAccount:
   create: true
   automountServiceAccountToken: true
+containerSecurityContext:
+  enabled: true
 service:
   type: LoadBalancer
   ports:
