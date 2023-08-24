@@ -157,11 +157,7 @@ func IsPodRunning(ctx context.Context, c cv1.PodsGetter, namespace string, podNa
 		fmt.Printf("There was an error obtaining the Pod %q", podName)
 		return false, err
 	}
-	if pod.Status.Phase == "Running" {
-		return true, nil
-	} else {
-		return false, nil
-	}
+	return pod.Status.Phase == "Running", nil
 }
 
 // GetPodsByLabelOrDie returns the list of pods wih a given selector, exiting in case of failure
