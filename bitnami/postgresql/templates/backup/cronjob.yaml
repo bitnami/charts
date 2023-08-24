@@ -10,22 +10,12 @@ kind: CronJob
 metadata:
   name: {{ include "postgresql.primary.fullname" . }}-pgdumpall
   namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  {{- $labels := merge .Values.backup.cronjob.labels .Values.commonLabels }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: pg_dumpall
-    {{- if .Values.backup.cronjob.labels }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.backup.cronjob.labels "context" $) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
-  {{- if or .Values.backup.cronjob.annotations .Values.commonAnnotations }}
-  annotations:
-    {{- if .Values.backup.cronjob.annotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.backup.cronjob.annotations "context" $) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-    {{- end }}
+  {{- $annotations := merge .Values.backup.cronjob.annotations .Values.commonAnnotations }}
+  {{- if $annotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
   schedule: {{ quote .Values.backup.cronjob.schedule }}
@@ -42,22 +32,10 @@ spec:
       {{- end }}
       template:
         metadata:
-          labels: {{- include "common.labels.standard" . | nindent 12 }}
+          labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 12 }}
             app.kubernetes.io/component: pg_dumpall
-            {{- if .Values.backup.cronjob.labels }}
-            {{- include "common.tplvalues.render" (dict "value" .Values.backup.cronjob.labels "context" $) | nindent 12 }}
-            {{- end }}
-            {{- if .Values.commonLabels }}
-            {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 12 }}
-            {{- end }}
-          {{- if or .Values.backup.cronjob.annotations .Values.commonAnnotations }}
-          annotations:
-            {{- if .Values.backup.cronjob.annotations }}
-            {{- include "common.tplvalues.render" ( dict "value" .Values.backup.cronjob.annotations "context" $) | nindent 12 }}
-            {{- end }}
-            {{- if .Values.commonAnnotations }}
-            {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 12 }}
-            {{- end }}
+          {{- if $annotations }}
+          annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 12 }}
           {{- end }}
         spec:
           containers:
