@@ -53,7 +53,7 @@ func StsScale(ctx context.Context, c kubernetes.Interface, ss *appsv1.StatefulSe
 	for i := 0; i < maxRetries; i++ {
 		ss, err := c.AppsV1().StatefulSets(ns).Get(ctx, name, metav1.GetOptions{})
 		if err != nil {
-			return nil, fmt.Errorf("failed to get deployment %q: %v", name, err)
+			return nil, fmt.Errorf("failed to get statefulset %q: %v", name, err)
 		}
 		*(ss.Spec.Replicas) = count
 		ss, err = c.AppsV1().StatefulSets(ns).Update(ctx, ss, metav1.UpdateOptions{})
