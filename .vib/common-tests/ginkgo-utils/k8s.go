@@ -68,8 +68,8 @@ func StsScale(ctx context.Context, c kubernetes.Interface, ss *appsv1.StatefulSe
 	return nil, fmt.Errorf("too many retries draining statefulset %q", name)
 }
 
-// StsGetContainerImage returns the image inside a container of a StatefulSet instance
-func StsGetContainerImage(ss *appsv1.StatefulSet, name string) (string, error) {
+// StsGetContainerImageByName returns the container image given the container name of a StatefulSet instance
+func StsGetContainerImageByName(ss *appsv1.StatefulSet, name string) (string, error) {
 	containers := ss.Spec.Template.Spec.Containers
 
 	for _, c := range containers {
