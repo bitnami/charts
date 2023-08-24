@@ -5,7 +5,7 @@ file:
   /app:
     exists: true
     filetype: directory
-    {{ if .Vars.target_platform_kind != 'OPENSHIFT' }}
+    {{ if ne .Vars.target_platform_kind "OPENSHIFT" }}
     mode: "0777"
     owner: root
     group: root
