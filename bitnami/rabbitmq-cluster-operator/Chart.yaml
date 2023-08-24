@@ -36,5 +36,5 @@ maintainers:
   url: https://github.com/bitnami/charts
 name: rabbitmq-cluster-operator
 sources:
-- https://github.com/bitnami/charts/tree/main/bitnami/rabbitmq-cluster-operator
-version: 3.6.7
+  - https://github.com/bitnami/charts/tree/main/bitnami/rabbitmq-cluster-operator
+version: 3.7.0
