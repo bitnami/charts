@@ -9,7 +9,7 @@ file:
     owner: root
 command:
   run-git-example:
-    exec: python /app/beginner_source/examples_tensor/polynomial_tensor.py
+    exec: python ./pytorch/goss/testfiles/polynomial_tensor.py
     exit-status: 0
   {{- $uid := .Vars.containerSecurityContext.runAsUser }}
   {{- $gid := .Vars.podSecurityContext.fsGroup }}

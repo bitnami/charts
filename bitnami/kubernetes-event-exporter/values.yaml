@@ -56,6 +56,11 @@ extraDeploy: []
 
 ## @param replicaCount Desired number of pod replicas
 replicaCount: 1
+##
+## @param revisionHistoryLimit Desired number of old ReplicaSets to retain 
+## Defaults to 10, if set to 0 old ReplicaSets will be garbage-collected
+revisionHistoryLimit: 10
+##
 ## @param containerPorts.http HTTP container port
 ##
 containerPorts:
@@ -74,7 +79,7 @@ image:
   ##
   registry: docker.io
   repository: bitnami/kubernetes-event-exporter
-  tag: 1.1.0-debian-11-r60
+  tag: 1.4.0-debian-11-r14
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

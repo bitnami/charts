@@ -3596,12 +3596,12 @@
                         "repository": {
                             "type": "string",
                             "description": "Init container wait-container image name",
-                            "default": "bitnami/bitnami-shell"
+                            "default": "bitnami/os-shell"
                         },
                         "tag": {
                             "type": "string",
                             "description": "Init container wait-container image tag",
-                            "default": "11-debian-11-r113"
+                            "default": "11-debian-11-r2"
                         },
                         "digest": {
                             "type": "string",

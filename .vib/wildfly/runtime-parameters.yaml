@@ -1,33 +1,6 @@
 wildflyUsername: user
 wildflyPassword: ComplicatedPassword123!4
 exposeManagementConsole: true
-initContainers:
- # This initContainer builds the sample helloworld.war artifact
- # from the official wildfly/quickstart repository. This is
- # then mounted into de WildFly container to verify the
- # server can deploy a war file.
- - name: build-war
-   image: bitnami/java:11
-   securityContext:
-     runAsUser: 0
-   env:
-     - name: MAVEN_VERSION
-       value: 3.8.6
-     - name: APP_VERSION
-       value: "{{ .Chart.AppVersion }}"
-   command: ['bash', '-c', "cd /opt/bitnami && \
-     install_packages curl ca-certificates && \
-     curl -L \"https://archive.apache.org/dist/maven/maven-3/${MAVEN_VERSION}/binaries/apache-maven-${MAVEN_VERSION}-bin.tar.gz\" -o /opt/bitnami/maven.tar.gz && \
-     tar -xzf /opt/bitnami/maven.tar.gz && \
-     export PATH=\"/opt/bitnami/apache-maven-${MAVEN_VERSION}/bin:$PATH\" && \
-     curl -L \"https://github.com/wildfly/quickstart/archive/refs/tags/${APP_VERSION}.Final.tar.gz\" -o /opt/bitnami/wildfly-quickstart.tar.gz && \
-     tar -xzf /opt/bitnami/wildfly-quickstart.tar.gz && \
-     cd /opt/bitnami/quickstart-${APP_VERSION}.Final/helloworld && \
-     mvn clean package && \
-     cp /opt/bitnami/quickstart-${APP_VERSION}.Final/helloworld/target/helloworld.war /bitnami/wildfly/helloworld.war"]
-   volumeMounts:
-     - name: data
-       mountPath: /bitnami/wildfly
 service:
   type: LoadBalancer
   ports:

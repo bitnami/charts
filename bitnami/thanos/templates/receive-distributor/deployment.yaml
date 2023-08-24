@@ -63,6 +63,9 @@ spec:
       {{- if .Values.receiveDistributor.dnsConfig }}
       dnsConfig: {{- include "common.tplvalues.render" (dict "value" .Values.receiveDistributor.dnsConfig "context" $) | nindent 8 }}
       {{- end }}
+      {{- if .Values.receiveDistributor.dnsPolicy }}
+      dnsPolicy: {{ .Values.receiveDistributor.dnsPolicy | quote }}
+      {{- end }}
       {{- if .Values.receiveDistributor.nodeSelector }}
       nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.receiveDistributor.nodeSelector "context" $) | nindent 8 }}
       {{- end }}
@@ -115,7 +118,7 @@ spec:
             - --http.config=/conf/http/http-config.yml
             {{- end }}
             {{- if .Values.receiveDistributor.extraFlags }}
-            {{- .Values.receiveDistributor.extraFlags | toYaml | nindent 12 }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.receiveDistributor.extraFlags "context" $) | nindent 12 }}
             {{- end }}
             {{- end }}
           env:

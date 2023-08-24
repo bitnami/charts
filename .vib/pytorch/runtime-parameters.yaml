@@ -5,10 +5,6 @@ podSecurityContext:
 containerSecurityContext:
   enabled: true
   runAsUser: 1002
-cloneFilesFromGit:
-  enabled: true
-  repository: https://github.com/pytorch/tutorials.git
-  revision: main
 persistence:
   enabled: true
   mountPath: /bitnami/pytorch

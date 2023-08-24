@@ -59,11 +59,11 @@
               "path": "/.vib/kubeapps/cypress"
             },
             "endpoint": "lb-kubeapps-http",
-            "app_protocol": "HTTP",
             "env": {
               "repoName": "bitnami",
               "repoURL": "oci://registry-1.docker.io/bitnamicharts"
-            }
+            },
+            "app_protocol": "HTTP"
           }
         }
       ]
