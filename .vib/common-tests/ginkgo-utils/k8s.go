@@ -150,6 +150,7 @@ func SvcGetPort(svc *v1.Service, name string) (string, error) {
 
 // Pod functions
 
+// IsPodRunning returns a boolean value indicating if a given pod is running
 func IsPodRunning(ctx context.Context, c cv1.PodsGetter, namespace string, podName string) (bool, error) {
 	pod, err := c.Pods(namespace).Get(ctx, podName, metav1.GetOptions{})
 	if err != nil {
@@ -163,6 +164,7 @@ func IsPodRunning(ctx context.Context, c cv1.PodsGetter, namespace string, podNa
 	}
 }
 
+// GetPodsByLabelOrDie returns the list of pods wih a given selector, exiting in case of failure
 func GetPodsByLabelOrDie(ctx context.Context, c cv1.PodsGetter, namespace string, selector string) v1.PodList {
 	output, err := c.Pods(namespace).List(ctx, metav1.ListOptions{
 		LabelSelector: selector,
@@ -175,6 +177,7 @@ func GetPodsByLabelOrDie(ctx context.Context, c cv1.PodsGetter, namespace string
 	return *output
 }
 
+// GetContainerLogsOrDie returns container logs, exiting in case of failure
 func GetContainerLogsOrDie(ctx context.Context, c cv1.PodsGetter, namespace string, podName string, containerName string) []string {
 	var output []string
 	tailLines := int64(100)
@@ -201,16 +204,19 @@ func GetContainerLogsOrDie(ctx context.Context, c cv1.PodsGetter, namespace stri
 	return output
 }
 
+// ContainerLogsContainPattern returns a boolean indicating if the container logs have a given pattern
 func ContainerLogsContainPattern(ctx context.Context, c cv1.PodsGetter, namespace string, podName string, containerName string, pattern string) (bool, error) {
 	containerLogs := GetContainerLogsOrDie(ctx, c, namespace, podName, containerName)
-	return ContainsPattern(containerLogs, pattern)
+	return containsPattern(containerLogs, pattern)
 }
 
+// interruptableReader is a scanner that reads from Kubernetes container logs
 type interruptableReader struct {
 	ctx context.Context
 	r   io.Reader
 }
 
+// Read returns content from the Kubernetes logs
 func (r interruptableReader) Read(p []byte) (int, error) {
 	if err := r.ctx.Err(); err != nil {
 		return 0, err
@@ -222,7 +228,8 @@ func (r interruptableReader) Read(p []byte) (int, error) {
 	return n, r.ctx.Err()
 }
 
-func ContainsPattern(haystack []string, pattern string) (bool, error) {
+// containsPattern checks that a given pattern is inside an array of string
+func containsPattern(haystack []string, pattern string) (bool, error) {
 	var err error
 
 	for _, s := range haystack {
