@@ -41,7 +41,7 @@ func MustBuildClusterConfig(kubeconfig string) *rest.Config {
 func StsScale(ctx context.Context, c kubernetes.Interface, ss *appsv1.StatefulSet, count int32) (*appsv1.StatefulSet, error) {
 	name := ss.Name
 	ns := ss.Namespace
-	maxRetries := 3
+	const maxRetries = 3
 
 	for i := 0; i < maxRetries; i++ {
 		ss, err := c.AppsV1().StatefulSets(ns).Get(ctx, name, metav1.GetOptions{})
@@ -89,6 +89,9 @@ func DplScale(ctx context.Context, c kubernetes.Interface, dpl *appsv1.Deploymen
 		if err != nil {
 			return nil, fmt.Errorf("failed to get deployment %q: %v", name, err)
 		}
+		if dpl.Status.Replicas == count {
+			return dpl, nil
+		}
 		*(dpl.Spec.Replicas) = count
 		dpl, err = c.AppsV1().Deployments(ns).Update(ctx, ss, metav1.UpdateOptions{})
 		if err == nil {
@@ -113,6 +116,7 @@ func DplGetContainerImage(dpl *appsv1.Deployment, name string) (string, error) {
 	}
 
 	return "", fmt.Errorf("container %q not found in deployment %q", name, dpl.Name)
+
 }
 
 // Job functions
