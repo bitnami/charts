@@ -3747,6 +3747,7 @@ receive:
     ## - name: thanos.local
     ##   path: /
     ##   pathType: ImplementationSpecific
+    ##   portName: "http" # or "remote"
     ##
     extraHosts: []
     ## @param receive.ingress.extraTls The tls configuration for additional hostnames to be covered with this ingress record.
