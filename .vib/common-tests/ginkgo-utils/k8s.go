@@ -137,11 +137,11 @@ func JobGetSucceededPods(j *batchv1.Job) int32 {
 
 // SvcGetPort returns the port number of a Service
 func SvcGetPort(svc *v1.Service, name string) (string, error) {
-	ports := svc.Spec.Ports
-
-	for _, p := range ports {
-		if p.Name == name {
-			return strconv.Itoa(int(p.Port)), nil
+// SvcGetPortByName returns the port number of a svc given its name
+func SvcGetPortByName(svc *v1.Service, portName string) (string, error) {
+	for _, p := range svc.Spec.Ports {
+		if p.Name == portName {
+			return strconv.FormatInt(p.Port, 10), nil
 		}
 	}
 
