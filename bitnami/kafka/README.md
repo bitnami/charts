@@ -925,16 +925,16 @@ extraDeploy:
     kind: Deployment
     metadata:
       name: {{ include "common.names.fullname" . }}-connect
-      labels: {{- include "common.labels.standard" . | nindent 4 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
         app.kubernetes.io/component: connector
     spec:
       replicas: 1
       selector:
-        matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+        matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 6 }}
           app.kubernetes.io/component: connector
       template:
         metadata:
-          labels: {{- include "common.labels.standard" . | nindent 8 }}
+          labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 8 }}
             app.kubernetes.io/component: connector
         spec:
           containers:
@@ -956,7 +956,7 @@ extraDeploy:
     kind: ConfigMap
     metadata:
       name: {{ include "common.names.fullname" . }}-connect
-      labels: {{- include "common.labels.standard" . | nindent 4 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
         app.kubernetes.io/component: connector
     data:
       connect-standalone.properties: |-
@@ -970,14 +970,14 @@ extraDeploy:
     kind: Service
     metadata:
       name: {{ include "common.names.fullname" . }}-connect
-      labels: {{- include "common.labels.standard" . | nindent 4 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
         app.kubernetes.io/component: connector
     spec:
       ports:
         - protocol: TCP
           port: 8083
           targetPort: connector
-      selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
+      selector: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
         app.kubernetes.io/component: connector
 ```
 
