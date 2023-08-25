@@ -38,5 +38,5 @@ maintainers:
   url: https://github.com/bitnami/charts
 name: mongodb
 sources:
-- https://github.com/bitnami/charts/tree/main/bitnami/mongodb
-version: 13.16.4
+  - https://github.com/bitnami/charts/tree/main/bitnami/mongodb
+version: 13.17.0
