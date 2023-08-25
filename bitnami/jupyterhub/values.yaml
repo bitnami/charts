@@ -322,7 +322,7 @@ hub:
   ##
   customReadinessProbe: {}
   ## Hub resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param hub.resources.limits The resources limits for the Hub containers
   ## @param hub.resources.requests The requested resources for the Hub containers
   ##
@@ -739,7 +739,7 @@ proxy:
   ##
   customReadinessProbe: {}
   ## Proxy resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param proxy.resources.limits The resources limits for the Proxy containers
   ## @param proxy.resources.requests The requested resources for the Proxy containers
   ##
@@ -1264,7 +1264,7 @@ imagePuller:
   ##
   customReadinessProbe: {}
   ## ImagePuller resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param imagePuller.resources.limits The resources limits for the ImagePuller containers
   ## @param imagePuller.resources.requests The requested resources for the ImagePuller containers
   ##
@@ -1447,7 +1447,7 @@ singleuser:
   ##
   containerPort: 8888
   ## Singleuser resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param singleuser.resources.limits The resources limits for the Singleuser containers
   ## @param singleuser.resources.requests The requested resources for the Singleuser containers
   ##

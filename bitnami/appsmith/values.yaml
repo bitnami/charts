@@ -160,7 +160,7 @@ client:
   ##
   customStartupProbe: {}
   ## Appsmith client resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param client.resources.limits The resources limits for the Appsmith client containers
   ## @param client.resources.requests The requested resources for the Appsmith client containers
   ##
@@ -565,7 +565,7 @@ backend:
   ##
   customStartupProbe: {}
   ## Appsmith backend resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param backend.resources.limits The resources limits for the Appsmith backend containers
   ## @param backend.resources.requests The requested resources for the Appsmith backend containers
   ##
@@ -886,7 +886,7 @@ rts:
   ##
   customStartupProbe: {}
   ## Appsmith rts resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param rts.resources.limits The resources limits for the Appsmith rts containers
   ## @param rts.resources.requests The requested resources for the Appsmith rts containers
   ##
@@ -1125,7 +1125,7 @@ volumePermissions:
     ##
     pullSecrets: []
   ## Init container's resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param volumePermissions.resources.limits The resources limits for the init container
   ## @param volumePermissions.resources.requests The requested resources for the init container
   ##

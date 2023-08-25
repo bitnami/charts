@@ -506,7 +506,7 @@ master:
   updateStrategy:
     type: RollingUpdate
   ## OpenSearch resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -910,7 +910,7 @@ data:
   updateStrategy:
     type: RollingUpdate
   ## OpenSearch resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param data.resources.limits The resources limits for the data containers
   ## @param data.resources.requests [object] The requested resources for the data containers
   ##
@@ -1305,7 +1305,7 @@ coordinating:
   updateStrategy:
     type: RollingUpdate
   ## OpenSearch resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param coordinating.resources.limits The resources limits for the coordinating-only containers
   ## @param coordinating.resources.requests [object] The requested resources for the coordinating-only containers
   ##
@@ -1663,7 +1663,7 @@ ingest:
   updateStrategy:
     type: RollingUpdate
   ## OpenSearch resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param ingest.resources.limits The resources limits for the ingest-only containers
   ## @param ingest.resources.requests [object] The requested resources for the ingest-only containers
   ##
@@ -2178,7 +2178,7 @@ volumePermissions:
     ##
     pullSecrets: []
   ## Init container' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -2229,7 +2229,7 @@ sysctlImage:
   ##
   pullSecrets: []
   ## Init container' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -2373,7 +2373,7 @@ dashboards:
   updateStrategy:
     type: RollingUpdate
   ## OpenSearch resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param dashboards.resources.limits The resources limits for the data containers
   ## @param dashboards.resources.requests [object] The requested resources for the data containers
   ##

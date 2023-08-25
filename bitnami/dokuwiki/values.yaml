@@ -180,7 +180,7 @@ containerSecurityContext:
   runAsUser: 1001
   runAsNonRoot: true
 ## Configure resource requests and limits
-## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
 ## @param resources.requests [object] The requested resources for the container
 ## @param resources.limits [object] The requested limits for the container
 ##
@@ -534,7 +534,7 @@ volumePermissions:
     pullSecrets: []
     ##   - myRegistryKeySecretName
   ## Init containers' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -592,7 +592,7 @@ metrics:
     prometheus.io/scrape: "true"
     prometheus.io/port: "9117"
   ## @param metrics.resources Exporter resource requests/limit
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ##
   resources: {}
 

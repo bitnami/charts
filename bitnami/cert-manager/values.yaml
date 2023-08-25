@@ -122,7 +122,7 @@ controller:
       ##
       debug: false
   ## Controller containers' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param controller.resources.limits The resources limits for the Controller container
   ## @param controller.resources.requests The requested resources for the Controller container
   ##
@@ -348,7 +348,7 @@ webhook:
     ##
     debug: false
   ## Webhook containers' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ##
   resources:
     ## @param webhook.resources.limits The resources limits for the Webhook container
@@ -614,7 +614,7 @@ cainjector:
     ##
     debug: false
   ## CAInjector containers' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ##
   resources:
     ## @param cainjector.resources.limits The resources limits for the CAInjector container

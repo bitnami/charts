@@ -518,7 +518,7 @@ controller:
   ##
   lifecycleHooks: {}
   ## Kafka resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param controller.resources.limits The resources limits for the container
   ## @param controller.resources.requests The requested resources for the container
   ##
@@ -888,7 +888,7 @@ broker:
   ##
   lifecycleHooks: {}
   ## Kafka resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param broker.resources.limits The resources limits for the container
   ## @param broker.resources.requests The requested resources for the container
   ##
@@ -1268,7 +1268,7 @@ externalAccess:
       ##
       pullSecrets: []
     ## Init Container resource requests and limits
-    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
     ## @param externalAccess.autoDiscovery.resources.limits The resources limits for the auto-discovery init container
     ## @param externalAccess.autoDiscovery.resources.requests The requested resources for the auto-discovery init container
     ##
@@ -1515,7 +1515,7 @@ volumePermissions:
     ##
     pullSecrets: []
   ## Init container resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param volumePermissions.resources.limits Init container volume-permissions resource limits
   ## @param volumePermissions.resources.requests Init container volume-permissions resource requests
   ##
@@ -1634,7 +1634,7 @@ metrics:
     containerPorts:
       metrics: 9308
     ## Kafka exporter resource requests and limits
-    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
     ## @param metrics.kafka.resources.limits The resources limits for the container
     ## @param metrics.kafka.resources.requests The requested resources for the container
     ##
@@ -1881,7 +1881,7 @@ metrics:
     containerPorts:
       metrics: 5556
     ## Prometheus JMX exporter resource requests and limits
-    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
     ## @param metrics.jmx.resources.limits The resources limits for the JMX exporter container
     ## @param metrics.jmx.resources.requests The requested resources for the JMX exporter container
     ##
@@ -2156,7 +2156,7 @@ provisioning:
     ##
     automountServiceAccountToken: true
   ## Kafka provisioning resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param provisioning.resources.limits The resources limits for the Kafka provisioning container
   ## @param provisioning.resources.requests The requested resources for the Kafka provisioning container
   ##

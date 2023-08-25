@@ -437,7 +437,7 @@ customLivenessProbe: {}
 ##
 customReadinessProbe: {}
 ## OAuth2 Proxy resource requests and limits
-## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
 ## @param resources.limits The resources limits for the OAuth2 Proxy containers
 ## @param resources.requests The requested resources for the OAuth2 Proxy containers
 ##

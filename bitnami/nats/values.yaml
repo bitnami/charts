@@ -340,7 +340,7 @@ containerSecurityContext:
   runAsUser: 1001
   runAsNonRoot: true
 ## NATS resource requests and limits
-## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
 ## @param resources.limits The resources limits for the NATS containers
 ## @param resources.requests The requested resources for the NATS containers
 ##
@@ -712,7 +712,7 @@ metrics:
     ##
     pullSecrets: []
   ## @param metrics.resources Metrics exporter resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ##
   resources: {}
   ## @param metrics.containerPort Prometheus metrics exporter port

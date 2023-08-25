@@ -383,7 +383,7 @@ volumePermissions:
     runAsUser: 0
     privileged: false
   ## Container resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param volumePermissions.resources.limits The resources limits for the container
   ## @param volumePermissions.resources.requests The requested resources for the container
   ##
@@ -512,7 +512,7 @@ redis:
   ##
   podAnnotations: {}
   ## Redis&reg; resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param redis.resources.limits The resources limits for the container
   ## @param redis.resources.requests The requested resources for the container
   ##
@@ -729,7 +729,7 @@ updateJob:
   ##
   priorityClassName: ""
   ## Container resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -854,7 +854,7 @@ metrics:
     ##
     pullSecrets: []
   ## @param metrics.resources Metrics exporter resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ##
   resources: {}
   ## @param metrics.extraArgs Extra arguments for the binary; possible values [here](https://github.com/oliver006/redis_exporter)
@@ -1035,7 +1035,7 @@ sysctlImage:
     runAsUser: 0
     privileged: true
   ## Container resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param sysctlImage.resources.limits The resources limits for the container
   ## @param sysctlImage.resources.requests The requested resources for the container
   ##

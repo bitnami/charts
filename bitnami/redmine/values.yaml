@@ -177,7 +177,7 @@ replicaCount: 1
 containerPorts:
   http: 3000
 ## Redmine containers' resource requests and limits
-## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
 ## @param resources.limits The resources limits for the Redmine container
 ## @param resources.requests [object] The requested resources for the Redmine container
 ##
@@ -575,7 +575,7 @@ volumePermissions:
   ##
   enabled: false
   ## Init container's resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param volumePermissions.resources.limits The resources limits for the init container
   ## @param volumePermissions.resources.requests The requested resources for the init container
   ##

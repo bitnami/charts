@@ -312,7 +312,7 @@ kong:
     adminHttp: 8001
     adminHttps: 8444
   ## Container resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param kong.resources.limits The resources limits for the Kong container
   ## @param kong.resources.requests The requested resources for the Kong container
   ##
@@ -622,7 +622,7 @@ ingressController:
   containerPorts:
     health: 10254
   ## Container resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param ingressController.resources.limits The resources limits for the Kong Ingress Controller container
   ## @param ingressController.resources.requests The requested resources for the Kong Ingress Controller container
   ##
@@ -747,7 +747,7 @@ migration:
   ##
   extraVolumeMounts: []
   ## Container resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param migration.resources.limits The resources limits for the container
   ## @param migration.resources.requests The requested resources for the container
   ##

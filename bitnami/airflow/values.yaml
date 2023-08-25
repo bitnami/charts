@@ -291,7 +291,7 @@ web:
   ##
   customStartupProbe: {}
   ## Airflow web resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param web.resources.limits The resources limits for the Airflow web containers
   ## @param web.resources.requests The requested resources for the Airflow web containers
   ##
@@ -495,7 +495,7 @@ scheduler:
   ##
   customStartupProbe: {}
   ## Airflow scheduler resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param scheduler.resources.limits The resources limits for the Airflow scheduler containers
   ## @param scheduler.resources.requests The requested resources for the Airflow scheduler containers
   ##
@@ -747,7 +747,7 @@ worker:
   ##
   customStartupProbe: {}
   ## Airflow worker resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param worker.resources.limits The resources limits for the Airflow worker containers
   ## @param worker.resources.requests The requested resources for the Airflow worker containers
   ##
@@ -998,7 +998,7 @@ git:
     extraEnvVarsCM: ""
     extraEnvVarsSecret: ""
     ## Clone init container resource requests and limits
-    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
     ##
     resources: {}
   ## Properties for the Sync sidecar container
@@ -1020,7 +1020,7 @@ git:
     extraEnvVarsCM: ""
     extraEnvVarsSecret: ""
     ## Sync sidecar container resource requests and limits
-    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
     ##
     resources: {}
 
@@ -1311,7 +1311,7 @@ metrics:
   containerPorts:
     http: 9112
   ## Airflow exporter resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param metrics.resources.limits The resources limits for the container
   ## @param metrics.resources.requests The requested resources for the container
   ##

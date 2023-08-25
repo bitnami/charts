@@ -175,7 +175,7 @@ alertmanager:
   ##
   customStartupProbe: {}
   ## Alertmanager resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param alertmanager.resources.limits The resources limits for the Alertmanager containers
   ## @param alertmanager.resources.requests The requested resources for the Alertmanager containers
   ##
@@ -711,7 +711,7 @@ server:
   ##
   customStartupProbe: {}
   ## Prometheus resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param server.resources.limits The resources limits for the Prometheus containers
   ## @param server.resources.requests The requested resources for the Prometheus containers
   ##
@@ -885,7 +885,7 @@ server:
   ##
   initContainers: []
   ## @param server.routePrefix Prefix for the internal routes of web endpoints
-  ## 
+  ##
   routePrefix: /
   ## @param server.remoteWrite The remote_write spec configuration for Prometheus
   ##
@@ -894,7 +894,7 @@ server:
   ##
   scrapeInterval: ""
   ## @param server.scrapeTimeout Interval between consecutive scrapes. Example: "10s"
-  ## 
+  ##
   scrapeTimeout: ""
   ## @param server.evaluationInterval Interval between consecutive evaluations. Example: "1m"
   ##
@@ -1005,7 +1005,7 @@ server:
     ##
     extraVolumeMounts: []
     ## Thanos sidecar container resource requests and limits.
-    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
     ## We usually recommend not to specify default resources and to leave this as a conscious
     ## choice for the user. This also increases chances charts run on environments with little
     ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -1493,7 +1493,7 @@ volumePermissions:
     ##
     pullSecrets: []
   ## Init container's resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param volumePermissions.resources.limits The resources limits for the init container
   ## @param volumePermissions.resources.requests The requested resources for the init container
   ##

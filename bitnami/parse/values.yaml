@@ -214,7 +214,7 @@ server:
   ##
   existingCloudCodeScriptsCM: ""
   ## @param server.resources Parse Server pods' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ##
   resources: {}
   ## Parse Server pods' liveness probes
@@ -484,7 +484,7 @@ dashboard:
   ##
   appName: MyDashboard
   ## @param dashboard.resources Parse Dashboard pods' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ##
   resources: {}
   ## Parse Dashboard pods' liveness probe

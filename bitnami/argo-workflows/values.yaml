@@ -146,7 +146,7 @@ server:
   ##
   customStartupProbe: {}
   ## server resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param server.resources.limits The resources limits for the server containers
   ## @param server.resources.requests The requested resources for the server containers
   ##
@@ -552,7 +552,7 @@ controller:
   ##
   customStartupProbe: {}
   ## controller resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param controller.resources.limits The resources limits for the controller containers
   ## @param controller.resources.requests The requested resources for the controller containers
   ##
@@ -606,7 +606,7 @@ controller:
   ##
   ## @param controller.persistence.archive.enabled Save completed workflows to an SQL database.
   persistence:
-    archive:  
+    archive:
       enabled: false
 
   ## Controller configmap configuration content. Requires controller.existingConfigmap to be empty.
@@ -972,7 +972,7 @@ executor:
     ##
     pullSecrets: []
   ## Init container's resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param executor.resources.limits The resources limits for the init container
   ## @param executor.resources.requests The requested resources for the init container
   ##

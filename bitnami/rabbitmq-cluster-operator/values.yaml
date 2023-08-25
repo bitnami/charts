@@ -198,7 +198,7 @@ clusterOperator:
   customStartupProbe: {}
 
   ## RabbitMQ Cluster Operator resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param clusterOperator.resources.limits The resources limits for the RabbitMQ Cluster Operator containers
   ## @param clusterOperator.resources.requests The requested resources for the RabbitMQ Cluster Operator containers
   ##
@@ -595,7 +595,7 @@ msgTopologyOperator:
   existingWebhookCertCABundle: ""
 
   ## RabbitMQ Messaging Topology Operator resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param msgTopologyOperator.resources.limits The resources limits for the RabbitMQ Messaging Topology Operator containers
   ## @param msgTopologyOperator.resources.requests The requested resources for the RabbitMQ Messaging Topology Operator containers
   ##

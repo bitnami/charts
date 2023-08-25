@@ -287,7 +287,7 @@ affinity: {}
 ##
 nodeSelector: {}
 ## Configure resource requests and limits
-## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
 ## @param resources.requests [object] The requested resources for the container
 ## @param resources.limits The resources limits for the container
 ##
@@ -661,7 +661,7 @@ volumePermissions:
     ##
     pullSecrets: []
   ## Init containers' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -711,11 +711,11 @@ metrics:
     ##
     pullSecrets: []
   ## Metrics exporter containers' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param metrics.resources.requests [object] The requested resources for the metrics exporter container
   ## @param metrics.resources.limits The resources limits for the container for the metrics exporter container
   ##
-  resources: 
+  resources:
     ## Example:
     ## limits:
     ##    cpu: 100m

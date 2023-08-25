@@ -338,7 +338,7 @@ configsvr:
   ##
   replicaCount: 1
   ## @param configsvr.resources Configure pod resources
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ##
   resources: {}
   ## @param configsvr.hostAliases Deployment pod host aliases
@@ -652,7 +652,7 @@ mongos:
   ##
   replicaCount: 1
   ## @param mongos.resources Configure pod resources
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ##
   resources: {}
   ## @param mongos.hostAliases Deployment pod host aliases
@@ -976,7 +976,7 @@ shardsvr:
     ##
     replicaCount: 1
     ## @param shardsvr.dataNode.resources Configure pod resources
-    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
     ##
     resources: {}
     ## @param shardsvr.dataNode.mongodbExtraFlags MongoDB&reg; additional command line flags
@@ -1295,7 +1295,7 @@ shardsvr:
     ##
     hostAliases: []
     ## @param shardsvr.arbiter.resources Configure pod resources
-    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
     ##
     resources: {}
     ## @param shardsvr.arbiter.mongodbExtraFlags MongoDB&reg; additional command line flags
@@ -1569,7 +1569,7 @@ metrics:
   ##
   extraArgs: ""
   ## @param metrics.resources Metrics exporter resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ##
   resources: {}
   ## Configure Container Security Context

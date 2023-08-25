@@ -338,7 +338,7 @@ web:
   ##
   customStartupProbe: {}
   ## Mastodon web resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param web.resources.limits The resources limits for the Mastodon web containers
   ## @param web.resources.requests The requested resources for the Mastodon web containers
   ##
@@ -614,7 +614,7 @@ sidekiq:
   ##
   customStartupProbe: {}
   ## Mastodon sidekiq resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param sidekiq.resources.limits The resources limits for the Mastodon sidekiq containers
   ## @param sidekiq.resources.requests The requested resources for the Mastodon sidekiq containers
   ##
@@ -840,7 +840,7 @@ streaming:
   ##
   customStartupProbe: {}
   ## Mastodon streaming resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param streaming.resources.limits The resources limits for the Mastodon streaming containers
   ## @param streaming.resources.requests The requested resources for the Mastodon streaming containers
   ##
@@ -1091,7 +1091,7 @@ tootctlMediaManagement:
   successfulJobsHistoryLimit: 3
   ## @param tootctlMediaManagement.concurrencyPolicy Concurrency Policy.  Should be Allow, Forbid or Replace
   concurrencyPolicy: Allow
-  
+
 ## @section Mastodon Migration job Parameters
 ##
 
@@ -1160,7 +1160,7 @@ initJob:
   ##
   extraVolumeMounts: []
   ## Container resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param initJob.resources.limits The resources limits for the container
   ## @param initJob.resources.requests The requested resources for the container
   ##
@@ -1267,7 +1267,7 @@ volumePermissions:
     ##
     pullSecrets: []
   ## Init container's resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param volumePermissions.resources.limits The resources limits for the init container
   ## @param volumePermissions.resources.requests The requested resources for the init container
   ##

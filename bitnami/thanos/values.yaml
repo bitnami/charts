@@ -240,7 +240,7 @@ query:
     allowPrivilegeEscalation: false
     readOnlyRootFilesystem: true
   ## Thanos Query containers' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param query.resources.limits The resources limits for the Thanos Query container
   ## @param query.resources.requests The requested resources for the Thanos Query container
   ##
@@ -909,7 +909,7 @@ queryFrontend:
     allowPrivilegeEscalation: false
     readOnlyRootFilesystem: true
   ## Thanos Query Frontend containers' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param queryFrontend.resources.limits The resources limits for the Thanos Query Frontend container
   ## @param queryFrontend.resources.requests The requested resources for the Thanos Query Frontend container
   ##
@@ -1352,7 +1352,7 @@ bucketweb:
     allowPrivilegeEscalation: false
     readOnlyRootFilesystem: true
   ## Thanos Bucket Web containers' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param bucketweb.resources.limits The resources limits for the Thanos Bucket Web container
   ## @param bucketweb.resources.requests The requested resources for the Thanos Bucket Web container
   ##
@@ -1799,7 +1799,7 @@ compactor:
     allowPrivilegeEscalation: false
     readOnlyRootFilesystem: true
   ## Thanos Compactor containers' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param compactor.resources.limits The resources limits for the Thanos Compactor container
   ## @param compactor.resources.requests The requested resources for the Thanos Compactor container
   ##
@@ -2261,7 +2261,7 @@ storegateway:
     allowPrivilegeEscalation: false
     readOnlyRootFilesystem: true
   ## Thanos Store Gateway containers' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param storegateway.resources.limits The resources limits for the Thanos Store Gateway container
   ## @param storegateway.resources.requests The requested resources for the Thanos Store Gateway container
   ##
@@ -2904,7 +2904,7 @@ ruler:
     allowPrivilegeEscalation: false
     readOnlyRootFilesystem: true
   ## Thanos Ruler containers' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param ruler.resources.limits The resources limits for the Thanos Ruler container
   ## @param ruler.resources.requests The requested resources for the Thanos Ruler container
   ##
@@ -3408,7 +3408,7 @@ receive:
     allowPrivilegeEscalation: false
     readOnlyRootFilesystem: true
   ## Thanos Receive containers' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param receive.resources.limits The resources limits for the Thanos Receive container
   ## @param receive.resources.requests The requested resources for the Thanos Receive container
   ##
@@ -3878,7 +3878,7 @@ receiveDistributor:
     allowPrivilegeEscalation: false
     readOnlyRootFilesystem: true
   ## Thanos Receive Distributor containers' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param receiveDistributor.resources.limits The resources limits for the Thanos Receive container
   ## @param receiveDistributor.resources.requests The requested resources for the Thanos Receive container
   ##

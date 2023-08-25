@@ -169,7 +169,7 @@ server:
   ##
   customStartupProbe: {}
   ## Vault Server resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param server.resources.limits The resources limits for the Vault Server containers
   ## @param server.resources.requests The requested resources for the Vault Server containers
   ##
@@ -943,7 +943,7 @@ csiProvider:
     ##
     customStartupProbe: {}
     ## CSI Provider resource requests and limits
-    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
     ## @param csiProvider.provider.resources.limits The resources limits for the CSI Provider container
     ## @param csiProvider.provider.resources.requests The requested resources for the CSI Provider container
     ##
@@ -1072,7 +1072,7 @@ csiProvider:
       capabilities:
         drop: ["ALL"]
     ## CSI Provider Agent resource requests and limits
-    ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+    ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
     ## @param csiProvider.agent.resources.limits The resources limits for the CSI Provider Agent container
     ## @param csiProvider.agent.resources.requests The requested resources for the CSI Provider Agent container
     ##
@@ -1246,7 +1246,7 @@ injector:
   ##
   customStartupProbe: {}
   ## Vault Kubernetes Injector resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param injector.resources.limits The resources limits for the Vault Kubernetes Injector containers
   ## @param injector.resources.requests The requested resources for the Vault Kubernetes Injector containers
   ##
@@ -1556,7 +1556,7 @@ volumePermissions:
     ##
     pullSecrets: []
   ## Init container's resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param volumePermissions.resources.limits The resources limits for the init container
   ## @param volumePermissions.resources.requests The requested resources for the init container
   ##

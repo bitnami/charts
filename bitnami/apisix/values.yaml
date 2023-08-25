@@ -175,7 +175,7 @@ dataPlane:
   ##
   customStartupProbe: {}
   ## APISIX resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param dataPlane.resources.limits The resources limits for the APISIX containers
   ## @param dataPlane.resources.requests The requested resources for the APISIX containers
   ##
@@ -849,7 +849,7 @@ controlPlane:
   ##
   customStartupProbe: {}
   ## APISIX resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param controlPlane.resources.limits The resources limits for the APISIX containers
   ## @param controlPlane.resources.requests The requested resources for the APISIX containers
   ##
@@ -1883,7 +1883,7 @@ dashboard:
   ##
   customStartupProbe: {}
   ## Dashboard resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param dashboard.resources.limits The resources limits for the Dashboard container
   ## @param dashboard.resources.requests The requested resources for the Dashboard container
   ##
@@ -2262,7 +2262,7 @@ ingressController:
   ##
   customStartupProbe: {}
   ## APISIX Ingress Controller resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param ingressController.resources.limits The resources limits for the APISIX Ingress Controller containers
   ## @param ingressController.resources.requests The requested resources for the APISIX Ingress Controller containers
   ##

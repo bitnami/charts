@@ -254,7 +254,7 @@ frontend:
   updateStrategy:
     type: RollingUpdate
   ## Frontend containers' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param frontend.resources.limits.cpu The CPU limits for the NGINX container
   ## @param frontend.resources.limits.memory The memory limits for the NGINX container
   ## @param frontend.resources.requests.cpu The requested CPU for the NGINX container
@@ -622,7 +622,7 @@ dashboard:
   containerPorts:
     http: 8080
   ## Dashboard containers' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param dashboard.resources.limits.cpu The CPU limits for the Dashboard container
   ## @param dashboard.resources.limits.memory The memory limits for the Dashboard container
   ## @param dashboard.resources.requests.cpu The requested CPU for the Dashboard container
@@ -969,7 +969,7 @@ apprepository:
   updateStrategy:
     type: RollingUpdate
   ## AppRepository Controller containers' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param apprepository.resources.limits.cpu The CPU limits for the AppRepository Controller container
   ## @param apprepository.resources.limits.memory The memory limits for the AppRepository Controller container
   ## @param apprepository.resources.requests.cpu The requested CPU for the AppRepository Controller container
@@ -1249,7 +1249,7 @@ authProxy:
     runAsUser: 1001
     runAsNonRoot: true
   ## OAuth2 Proxy containers' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param authProxy.resources.limits.cpu The CPU limits for the OAuth2 Proxy container
   ## @param authProxy.resources.limits.memory The memory limits for the OAuth2 Proxy container
   ## @param authProxy.resources.requests.cpu The requested CPU for the OAuth2 Proxy container
@@ -1361,7 +1361,7 @@ pinnipedProxy:
     runAsUser: 1001
     runAsNonRoot: true
   ## Pinniped Proxy containers' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param pinnipedProxy.resources.limits.cpu The CPU limits for the Pinniped Proxy container
   ## @param pinnipedProxy.resources.limits.memory The memory limits for the Pinniped Proxy container
   ## @param pinnipedProxy.resources.requests.cpu The requested CPU for the Pinniped Proxy container
@@ -1483,7 +1483,7 @@ postgresql:
   securityContext:
     enabled: false
   ## PostgreSQL containers' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param postgresql.resources.limits The resources limits for the PostgreSQL container
   ## @param postgresql.resources.requests.cpu The requested CPU for the PostgreSQL container
   ## @param postgresql.resources.requests.memory The requested memory for the PostgreSQL container
@@ -1636,7 +1636,7 @@ kubeappsapis:
   containerPorts:
     http: 50051
   ## KubeappsAPIs containers' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param kubeappsapis.resources.limits.cpu The CPU limits for the KubeappsAPIs container
   ## @param kubeappsapis.resources.limits.memory The memory limits for the KubeappsAPIs container
   ## @param kubeappsapis.resources.requests.cpu The requested CPU for the KubeappsAPIs container

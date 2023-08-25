@@ -374,7 +374,7 @@ nodeSelector: {}
 ##
 tolerations: []
 ## WordPress containers' resource requests and limits
-## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
 ## @param resources.limits The resources limits for the WordPress containers
 ## @param resources.requests.memory The requested memory for the WordPress containers
 ## @param resources.requests.cpu The requested cpu for the WordPress containers
@@ -778,7 +778,7 @@ volumePermissions:
     ##
     pullSecrets: []
   ## Init container's resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param volumePermissions.resources.limits The resources limits for the init container
   ## @param volumePermissions.resources.requests The requested resources for the init container
   ##
@@ -929,7 +929,7 @@ metrics:
   ##
   customStartupProbe: {}
   ## Prometheus exporter container's resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param metrics.resources.limits The resources limits for the Prometheus exporter container
   ## @param metrics.resources.requests The requested resources for the Prometheus exporter container
   ##

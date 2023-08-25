@@ -354,7 +354,7 @@ compactor:
   ##
   customStartupProbe: {}
   ## compactor resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param compactor.resources.limits The resources limits for the compactor containers
   ## @param compactor.resources.requests The requested resources for the compactor containers
   ##
@@ -708,7 +708,7 @@ gateway:
   containerPorts:
     http: 8080
   ## gateway resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param gateway.resources.limits The resources limits for the gateway containers
   ## @param gateway.resources.requests The requested resources for the gateway containers
   ##
@@ -1072,7 +1072,7 @@ indexGateway:
   ##
   customStartupProbe: {}
   ## indexGateway resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param indexGateway.resources.limits The resources limits for the indexGateway containers
   ## @param indexGateway.resources.requests The requested resources for the indexGateway containers
   ##
@@ -1339,7 +1339,7 @@ distributor:
   ##
   customStartupProbe: {}
   ## distributor resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param distributor.resources.limits The resources limits for the distributor containers
   ## @param distributor.resources.requests The requested resources for the distributor containers
   ##
@@ -1609,7 +1609,7 @@ ingester:
   ##
   lifecycleHooks: {}
   ## ingester resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param ingester.resources.limits The resources limits for the Ingester containers
   ## @param ingester.resources.requests The requested resources for the Ingester containers
   ##
@@ -1921,7 +1921,7 @@ querier:
   ##
   customStartupProbe: {}
   ## querier resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param querier.resources.limits The resources limits for the Querier containers
   ## @param querier.resources.requests The requested resources for the Querier containers
   ##
@@ -2228,7 +2228,7 @@ queryFrontend:
   ##
   customStartupProbe: {}
   ## queryFrontend resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param queryFrontend.resources.limits The resources limits for the queryFrontend containers
   ## @param queryFrontend.resources.requests The requested resources for the queryFrontend containers
   ##
@@ -2505,7 +2505,7 @@ queryScheduler:
   ##
   customStartupProbe: {}
   ## queryScheduler resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param queryScheduler.resources.limits The resources limits for the queryScheduler containers
   ## @param queryScheduler.resources.requests The requested resources for the queryScheduler containers
   ##
@@ -2782,7 +2782,7 @@ ruler:
   ##
   lifecycleHooks: {}
   ## ruler resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param ruler.resources.limits The resources limits for the Ruler containers
   ## @param ruler.resources.requests The requested resources for the Ruler containers
   ##
@@ -3089,7 +3089,7 @@ tableManager:
   ##
   customStartupProbe: {}
   ## tableManager resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param tableManager.resources.limits The resources limits for the tableManager containers
   ## @param tableManager.resources.requests The requested resources for the tableManager containers
   ##
@@ -3393,7 +3393,7 @@ promtail:
   ##
   lifecycleHooks: {}
   ## promtail resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param promtail.resources.limits The resources limits for the Promtail containers
   ## @param promtail.resources.requests The requested resources for the Promtail containers
   ##
@@ -3722,7 +3722,7 @@ volumePermissions:
     ##
     pullSecrets: []
   ## Init container's resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param volumePermissions.resources.limits The resources limits for the init container
   ## @param volumePermissions.resources.requests The requested resources for the init container
   ##

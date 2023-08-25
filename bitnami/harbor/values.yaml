@@ -738,7 +738,7 @@ volumePermissions:
     ##
     pullSecrets: []
   ## Init container resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param volumePermissions.resources.limits Init container volume-permissions resource limits
   ## @param volumePermissions.resources.requests Init container volume-permissions resource requests
   ##
@@ -892,7 +892,7 @@ nginx:
   ##
   customStartupProbe: {}
   ## NGINX resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param nginx.resources.limits The resources limits for the NGINX containers
   ## @param nginx.resources.requests The requested resources for the NGINX containers
   ##
@@ -1141,7 +1141,7 @@ portal:
   ##
   customStartupProbe: {}
   ## Harbor Portal resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param portal.resources.limits The resources limits for the Harbor Portal containers
   ## @param portal.resources.requests The requested resources for the Harbor Portal containers
   ##
@@ -1460,7 +1460,7 @@ core:
   ##
   customStartupProbe: {}
   ## Harbor Core resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param core.resources.limits The resources limits for the Harbor Core containers
   ## @param core.resources.requests The requested resources for the Harbor Core containers
   ##
@@ -1743,7 +1743,7 @@ jobservice:
   ##
   customStartupProbe: {}
   ## Harbor Jobservice resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param jobservice.resources.limits The resources limits for the Harbor Jobservice containers
   ## @param jobservice.resources.requests The requested resources for the Harbor Jobservice containers
   ##
@@ -2170,7 +2170,7 @@ registry:
     ##
     customStartupProbe: {}
     ## Harbor Registry main resource requests and limits
-    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
     ## @param registry.server.resources.limits The resources limits for the Harbor Registry main containers
     ## @param registry.server.resources.requests The requested resources for the Harbor Registry main containers
     ##
@@ -2313,7 +2313,7 @@ registry:
     ##
     customStartupProbe: {}
     ## Harbor Registryctl resource requests and limits
-    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
     ## @param registry.controller.resources.limits The resources limits for the Harbor Registryctl containers
     ## @param registry.controller.resources.requests The requested resources for the Harbor Registryctl containers
     ##
@@ -2468,7 +2468,7 @@ notary:
     ##
     customStartupProbe: {}
     ## Harbor Notary Server resource requests and limits
-    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
     ## @param notary.server.resources.limits The resources limits for the Harbor Notary Server containers
     ## @param notary.server.resources.requests The requested resources for the Harbor Notary Server containers
     ##
@@ -2705,7 +2705,7 @@ notary:
     ##
     customStartupProbe: {}
     ## Harbor Notary Signer resource requests and limits
-    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
     ## @param notary.signer.resources.limits The resources limits for the Harbor Notary Signer containers
     ## @param notary.signer.resources.requests The requested resources for the Harbor Notary Signer containers
     ##
@@ -3009,7 +3009,7 @@ trivy:
   ##
   customStartupProbe: {}
   ## Trivy resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param trivy.resources.limits [object] The resources limits for the Trivy containers
   ## @param trivy.resources.requests [object] The requested resources for the Trivy containers
   ##
@@ -3268,7 +3268,7 @@ exporter:
   ##
   customStartupProbe: {}
   ## Harbor Exporter resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param exporter.resources.limits The resources limits for the Harbor Exporter containers
   ## @param exporter.resources.requests The requested resources for the Harbor Exporter containers
   ##

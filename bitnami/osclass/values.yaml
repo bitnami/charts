@@ -388,7 +388,7 @@ affinity: {}
 ##
 nodeSelector: {}
 ## Osclass containers' resource requests and limits
-## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
 ## @param resources.limits The resources limits for the Osclass container
 ## @param resources.requests [object] The requested resources for the Osclass container
 ##
@@ -717,7 +717,7 @@ volumePermissions:
     pullSecrets: []
     ##   - myRegistryKeySecretName
   ## Init container's resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param volumePermissions.resources.limits The resources limits for the init container
   ## @param volumePermissions.resources.requests The requested resources for the init container
   ##
@@ -795,7 +795,7 @@ metrics:
     pullSecrets: []
     #   - myRegistryKeySecretName
   ## Prometheus exporter container's resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param metrics.resources.limits The resources limits for the Prometheus exporter container
   ## @param metrics.resources.requests The requested resources for the Prometheus exporter container
   ##

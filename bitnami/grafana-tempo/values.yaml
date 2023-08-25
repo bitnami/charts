@@ -333,7 +333,7 @@ compactor:
   ##
   customStartupProbe: {}
   ## compactor resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param compactor.resources.limits The resources limits for the compactor containers
   ## @param compactor.resources.requests The requested resources for the compactor containers
   ##
@@ -592,7 +592,7 @@ distributor:
   ##
   customStartupProbe: {}
   ## distributor resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param distributor.resources.limits The resources limits for the distributor containers
   ## @param distributor.resources.requests The requested resources for the distributor containers
   ##
@@ -857,7 +857,7 @@ metricsGenerator:
   ##
   customStartupProbe: {}
   ## metricsGenerator resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param metricsGenerator.resources.limits The resources limits for the metricsGenerator containers
   ## @param metricsGenerator.resources.requests The requested resources for the metricsGenerator containers
   ##
@@ -1117,7 +1117,7 @@ ingester:
   ##
   lifecycleHooks: {}
   ## ingester resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param ingester.resources.limits The resources limits for the Ingester containers
   ## @param ingester.resources.requests The requested resources for the Ingester containers
   ##
@@ -1420,7 +1420,7 @@ querier:
   ##
   customStartupProbe: {}
   ## querier resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param querier.resources.limits The resources limits for the Querier containers
   ## @param querier.resources.requests The requested resources for the Querier containers
   ##
@@ -1683,7 +1683,7 @@ queryFrontend:
   ##
   customStartupProbe: {}
   ## queryFrontend resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param queryFrontend.resources.limits The resources limits for the queryFrontend containers
   ## @param queryFrontend.resources.requests The requested resources for the queryFrontend containers
   ##
@@ -1936,7 +1936,7 @@ queryFrontend:
       runAsUser: 1001
       runAsNonRoot: true
     ## Query sidecar resource requests and limits
-    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
     ## @param queryFrontend.query.resources.limits The resources limits for the query sidecar containers
     ## @param queryFrontend.query.resources.requests The requested resources for the query sidecar containers
     ##
@@ -2124,7 +2124,7 @@ vulture:
   ##
   customStartupProbe: {}
   ## vulture resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param vulture.resources.limits The resources limits for the Vulture containers
   ## @param vulture.resources.requests The requested resources for the Vulture containers
   ##
@@ -2343,7 +2343,7 @@ volumePermissions:
     ##
     pullSecrets: []
   ## Init container's resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param volumePermissions.resources.limits The resources limits for the init container
   ## @param volumePermissions.resources.requests The requested resources for the init container
   ##

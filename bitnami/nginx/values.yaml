@@ -242,7 +242,7 @@ containerPorts:
 ##
 extraContainerPorts: []
 ## NGINX containers' resource requests and limits
-## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
 ## We usually recommend not to specify default resources and to leave this as a conscious
 ## choice for the user. This also increases chances charts run on environments with little
 ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -471,7 +471,7 @@ cloneStaticSiteFromGit:
     ##
     args: []
     ## git-repo-syncer resource requests and limits
-    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
     ## @param cloneStaticSiteFromGit.gitSync.resources.limits The resources limits for the git-repo-syncer container
     ## @param cloneStaticSiteFromGit.gitSync.resources.requests The requested resources for the git-repo-syncer container
     ##
@@ -823,7 +823,7 @@ metrics:
       prometheus.io/scrape: "true"
       prometheus.io/port: "{{ .Values.metrics.service.port }}"
   ## NGINX Prometheus exporter resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following

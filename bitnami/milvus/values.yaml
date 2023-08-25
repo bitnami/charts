@@ -328,7 +328,7 @@ initJob:
   ##
   extraVolumeMounts: []
   ## Container resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param initJob.resources.limits The resources limits for the container
   ## @param initJob.resources.requests The requested resources for the container
   ##
@@ -460,7 +460,7 @@ dataCoord:
   ##
   customStartupProbe: {}
   ## data coordinator resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param dataCoord.resources.limits The resources limits for the data coordinator containers
   ## @param dataCoord.resources.requests The requested resources for the data coordinator containers
   ##
@@ -946,7 +946,7 @@ rootCoord:
   ##
   customStartupProbe: {}
   ## data coordinator resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param rootCoord.resources.limits The resources limits for the data coordinator containers
   ## @param rootCoord.resources.requests The requested resources for the data coordinator containers
   ##
@@ -1431,7 +1431,7 @@ queryCoord:
   ##
   customStartupProbe: {}
   ## data coordinator resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param queryCoord.resources.limits The resources limits for the data coordinator containers
   ## @param queryCoord.resources.requests The requested resources for the data coordinator containers
   ##
@@ -1917,7 +1917,7 @@ indexCoord:
   ##
   customStartupProbe: {}
   ## data coordinator resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param indexCoord.resources.limits The resources limits for the data coordinator containers
   ## @param indexCoord.resources.requests The requested resources for the data coordinator containers
   ##
@@ -2403,7 +2403,7 @@ dataNode:
   ##
   customStartupProbe: {}
   ## data node resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param dataNode.resources.limits The resources limits for the data node containers
   ## @param dataNode.resources.requests The requested resources for the data node containers
   ##
@@ -2889,7 +2889,7 @@ queryNode:
   ##
   customStartupProbe: {}
   ## data node resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param queryNode.resources.limits The resources limits for the data node containers
   ## @param queryNode.resources.requests The requested resources for the data node containers
   ##
@@ -3375,7 +3375,7 @@ indexNode:
   ##
   customStartupProbe: {}
   ## data node resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param indexNode.resources.limits The resources limits for the data node containers
   ## @param indexNode.resources.requests The requested resources for the data node containers
   ##
@@ -3863,7 +3863,7 @@ proxy:
   ##
   customStartupProbe: {}
   ## proxy resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param proxy.resources.limits The resources limits for the proxy containers
   ## @param proxy.resources.requests The requested resources for the proxy containers
   ##
@@ -4361,7 +4361,7 @@ attu:
   ##
   customStartupProbe: {}
   ## attu resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param attu.resources.limits The resources limits for the attu containers
   ## @param attu.resources.requests The requested resources for the attu containers
   ##

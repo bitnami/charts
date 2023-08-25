@@ -205,7 +205,7 @@ concierge:
   ##
   customStartupProbe: {}
   ## Concierge resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param concierge.resources.limits The resources limits for the Concierge containers
   ## @param concierge.resources.requests The requested resources for the Concierge containers
   ##
@@ -542,7 +542,7 @@ supervisor:
   ##
   customStartupProbe: {}
   ## Supervisor resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param supervisor.resources.limits The resources limits for the Supervisor containers
   ## @param supervisor.resources.requests The requested resources for the Supervisor containers
   ##

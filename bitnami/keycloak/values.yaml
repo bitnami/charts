@@ -294,7 +294,7 @@ containerSecurityContext:
   runAsUser: 1001
   runAsNonRoot: true
 ## Keycloak resource requests and limits
-## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
 ## @param resources.limits The resources limits for the Keycloak containers
 ## @param resources.requests The requested resources for the Keycloak containers
 ##
@@ -894,7 +894,7 @@ keycloakConfigCli:
   ##
   hostAliases: []
   ## Keycloak config CLI resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param keycloakConfigCli.resources.limits The resources limits for the keycloak-config-cli container
   ## @param keycloakConfigCli.resources.requests The requested resources for the keycloak-config-cli container
   ##

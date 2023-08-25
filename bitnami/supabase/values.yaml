@@ -200,7 +200,7 @@ jwt:
     ##
     extraVolumeMounts: []
     ## Container resource requests and limits
-    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
     ## @param jwt.autoGenerate.resources.limits The resources limits for the container
     ## @param jwt.autoGenerate.resources.requests The requested resources for the container
     ##
@@ -370,7 +370,7 @@ auth:
   ##
   customStartupProbe: {}
   ## Supabase auth resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param auth.resources.limits The resources limits for the Supabase auth containers
   ## @param auth.resources.requests The requested resources for the Supabase auth containers
   ##
@@ -694,7 +694,7 @@ meta:
   ##
   customStartupProbe: {}
   ## Supabase Postgres Meta resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param meta.resources.limits The resources limits for the Supabase Postgres Meta containers
   ## @param meta.resources.requests The requested resources for the Supabase Postgres Meta containers
   ##
@@ -1037,7 +1037,7 @@ realtime:
   ##
   customStartupProbe: {}
   ## Supabase realtime resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param realtime.resources.limits The resources limits for the Supabase realtime containers
   ## @param realtime.resources.requests The requested resources for the Supabase realtime containers
   ##
@@ -1359,7 +1359,7 @@ rest:
   ##
   customStartupProbe: {}
   ## Supabase rest resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param rest.resources.limits The resources limits for the Supabase rest containers
   ## @param rest.resources.requests The requested resources for the Supabase rest containers
   ##
@@ -1686,7 +1686,7 @@ storage:
   ##
   customStartupProbe: {}
   ## Supabase storage resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param storage.resources.limits The resources limits for the Supabase storage containers
   ## @param storage.resources.requests The requested resources for the Supabase storage containers
   ##
@@ -2060,7 +2060,7 @@ studio:
   ##
   customStartupProbe: {}
   ## Supabase studio resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param studio.resources.limits The resources limits for the Supabase studio containers
   ## @param studio.resources.requests The requested resources for the Supabase studio containers
   ##
@@ -2400,7 +2400,7 @@ volumePermissions:
     ##
     pullSecrets: []
   ## Init container's resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param volumePermissions.resources.limits The resources limits for the init container
   ## @param volumePermissions.resources.requests The requested resources for the init container
   ##

@@ -312,7 +312,7 @@ customStartupProbe: {}
 ##
 lifecycleHooks: {}
 ## ZooKeeper resource requests and limits
-## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
 ## @param resources.limits The resources limits for the ZooKeeper containers
 ## @param resources.requests.memory The requested memory for the ZooKeeper containers
 ## @param resources.requests.cpu The requested cpu for the ZooKeeper containers
@@ -675,7 +675,7 @@ volumePermissions:
     ##
     pullSecrets: []
   ## Init container resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param volumePermissions.resources.limits Init container volume-permissions resource limits
   ## @param volumePermissions.resources.requests Init container volume-permissions resource requests
   ##
@@ -873,7 +873,7 @@ tls:
     ##
     truststorePassword: ""
   ## Init container resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param tls.resources.limits The resources limits for the TLS init container
   ## @param tls.resources.requests The requested resources for the TLS init container
   ##

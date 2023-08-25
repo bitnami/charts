@@ -338,7 +338,7 @@ discourse:
   ##
   customStartupProbe: {}
   ## Discourse resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param discourse.resources.limits The resources limits for the Discourse containers
   ## @param discourse.resources.requests The requested resources for the Discourse containers
   ##
@@ -473,7 +473,7 @@ sidekiq:
   ##
   customStartupProbe: {}
   ## Sidekiq resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param sidekiq.resources.limits The resources limits for the Sidekiq containers
   ## @param sidekiq.resources.requests The requested resources for the Sidekiq containers
   ##
@@ -689,7 +689,7 @@ volumePermissions:
     ##
     pullSecrets: []
   ## Init container resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param volumePermissions.resources.limits Init container volume-permissions resource limits
   ## @param volumePermissions.resources.requests Init container volume-permissions resource requests
   ##

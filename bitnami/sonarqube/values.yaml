@@ -302,7 +302,7 @@ customReadinessProbe: {}
 ##
 customStartupProbe: {}
 ## SonarQube&trade; resource requests and limits
-## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
 ## @param resources.limits The resources limits for the SonarQube&trade; containers
 ## @param resources.requests [object] The requested resources for the SonarQube&trade; containers
 ##
@@ -631,7 +631,7 @@ caCerts:
   ##
   secret: ca-certs-secret
   ## Init container's resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param caCerts.resources.limits The resources limits for the init container
   ## @param caCerts.resources.requests The requested resources for the init container
   ##
@@ -689,7 +689,7 @@ plugins:
     ##
     pullSecrets: []
   ## Init container's resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param plugins.resources.limits The resources limits for the init container
   ## @param plugins.resources.requests The requested resources for the init container
   ##
@@ -770,7 +770,7 @@ volumePermissions:
     ##
     pullSecrets: []
   ## Init container's resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param volumePermissions.resources.limits The resources limits for the init container
   ## @param volumePermissions.resources.requests The requested resources for the init container
   ##
@@ -820,7 +820,7 @@ sysctl:
     ##
     pullSecrets: []
   ## Init container's resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param sysctl.resources.limits The resources limits for the init container
   ## @param sysctl.resources.requests The requested resources for the init container
   ##
@@ -904,7 +904,7 @@ metrics:
     containerPorts:
       metrics: 10445
     ## Prometheus JMX Exporter' resource requests and limits
-    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
     ## @param metrics.jmx.resources.limits The resources limits for the init container
     ## @param metrics.jmx.resources.requests The requested resources for the init container
     ##

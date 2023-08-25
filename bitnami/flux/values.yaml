@@ -163,7 +163,7 @@ kustomizeController:
   ##
   customStartupProbe: {}
   ## Kustomize Controller resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param kustomizeController.resources.limits The resources limits for the Kustomize Controller containers
   ## @param kustomizeController.resources.requests The requested resources for the Kustomize Controller containers
   ##
@@ -596,7 +596,7 @@ helmController:
   ##
   customStartupProbe: {}
   ## Helm Controller resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param helmController.resources.limits The resources limits for the Helm Controller containers
   ## @param helmController.resources.requests The requested resources for the Helm Controller containers
   ##
@@ -1031,7 +1031,7 @@ sourceController:
   ##
   customStartupProbe: {}
   ## Source Controller resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param sourceController.resources.limits The resources limits for the Source Controller containers
   ## @param sourceController.resources.requests The requested resources for the Source Controller containers
   ##
@@ -1622,7 +1622,7 @@ notificationController:
   ##
   customStartupProbe: {}
   ## Notification Controller resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param notificationController.resources.limits The resources limits for the Notification Controller containers
   ## @param notificationController.resources.requests The requested resources for the Notification Controller containers
   ##
@@ -2055,7 +2055,7 @@ imageAutomationController:
   ##
   customStartupProbe: {}
   ## Image Automation Controller resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param imageAutomationController.resources.limits The resources limits for the Image Automation Controller containers
   ## @param imageAutomationController.resources.requests The requested resources for the Image Automation Controller containers
   ##
@@ -2488,7 +2488,7 @@ imageReflectorController:
   ##
   customStartupProbe: {}
   ## Image Reflector Controller resource requests and limits
-  ## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param imageReflectorController.resources.limits The resources limits for the Image Reflector Controller containers
   ## @param imageReflectorController.resources.requests The requested resources for the Image Reflector Controller containers
   ##
@@ -2896,7 +2896,7 @@ volumePermissions:
     ##
     pullSecrets: []
   ## Init container's resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param volumePermissions.resources.limits The resources limits for the init container
   ## @param volumePermissions.resources.requests The requested resources for the init container
   ##

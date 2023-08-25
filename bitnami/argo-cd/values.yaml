@@ -139,7 +139,7 @@ controller:
   ##
   customReadinessProbe: {}
   ## Argo CD resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param controller.resources.limits The resources limits for the Argo CD containers
   ## @param controller.resources.requests The requested resources for the Argo CD containers
   ##
@@ -854,7 +854,7 @@ applicationSet:
   ##
   customReadinessProbe: {}
   ## Argo CD applicationSet controller resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param applicationSet.resources.limits The resources limits for the Argo CD applicationSet controller containers
   ## @param applicationSet.resources.requests The requested resources for the Argo CD applicationSet controller containers
   ##
@@ -1212,7 +1212,7 @@ notifications:
     readOnlyRootFilesystem: false
     runAsNonRoot: true
   ## Argo CD notifications controller resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param notifications.resources.limits The resources limits for the Argo CD notifications controller containers
   ## @param notifications.resources.requests The requested resources for the Argo CD notifications controller containers
   ##
@@ -1462,7 +1462,7 @@ notifications:
         readOnlyRootFilesystem: false
         runAsNonRoot: true
       ## Argo CD Slack bot resource requests and limits
-      ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+      ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
       ## @param notifications.bots.slack.resources.limits The resources limits for the Argo CD Slack bot containers
       ## @param notifications.bots.slack.resources.requests The requested resources for the Argo CD Slack bot containers
       ##
@@ -1571,7 +1571,7 @@ server:
   ##
   customReadinessProbe: {}
   ## Argo CD server resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param server.resources.limits The resources limits for the Argo CD server containers
   ## @param server.resources.requests The requested resources for the Argo CD server containers
   ##
@@ -2318,7 +2318,7 @@ repoServer:
   ##
   customReadinessProbe: {}
   ## Argo CD repo server resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param repoServer.resources.limits The resources limits for the Argo CD repo server containers
   ## @param repoServer.resources.requests The requested resources for the Argo CD repo server containers
   ##
@@ -2781,7 +2781,7 @@ dex:
   ##
   customReadinessProbe: {}
   ## Dex resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param dex.resources.limits The resources limits for the Dex containers
   ## @param dex.resources.requests The requested resources for the Dex containers
   ##
@@ -3336,7 +3336,7 @@ volumePermissions:
     ##
     pullSecrets: []
   ## Init container's resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param volumePermissions.resources.limits The resources limits for the init container
   ## @param volumePermissions.resources.requests The requested resources for the init container
   ##

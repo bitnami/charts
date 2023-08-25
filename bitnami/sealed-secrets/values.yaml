@@ -96,7 +96,7 @@ args: []
 containerPorts:
   http: 8080
 ## Sealed Secret resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
 ## @param resources.limits [object] The resources limits for the Sealed Secret containers
 ## @param resources.requests [object] The requested resources for the Sealed Secret containers
 ##
@@ -316,7 +316,7 @@ service:
   type: ClusterIP
   ports:
     ## @param service.ports.http Sealed Secret service HTTP port number
-    ##  
+    ##
     http: 8080
     ## @param service.ports.name Sealed Secret service HTTP port name
     ##

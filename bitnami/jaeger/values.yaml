@@ -170,7 +170,7 @@ query:
   ##
   customReadinessProbe: {}
   ## Jaeger pods' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## Minimum memory for development is 4GB and 2 CPU cores
   ## Minimum memory for production is 8GB and 4 CPU cores
   ## ref: http://docs.datastax.com/en/archived/jaeger/2.0/jaeger/architecture/architecturePlanningHardware_c.html
@@ -467,7 +467,7 @@ collector:
   ##
   customReadinessProbe: {}
   ## Jaeger pods' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## Minimum memory for development is 4GB and 2 CPU cores
   ## Minimum memory for production is 8GB and 4 CPU cores
   ## ref: http://docs.datastax.com/en/archived/jaeger/2.0/jaeger/architecture/architecturePlanningHardware_c.html
@@ -782,7 +782,7 @@ agent:
   ##
   customReadinessProbe: {}
   ## Jaeger pods' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## Minimum memory for development is 4GB and 2 CPU cores
   ## Minimum memory for production is 8GB and 4 CPU cores
   ## ref: http://docs.datastax.com/en/archived/jaeger/2.0/jaeger/architecture/architecturePlanningHardware_c.html
@@ -1063,7 +1063,7 @@ migration:
   ##
   extraVolumeMounts: []
   ## Jaeger pods' resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## Minimum memory for development is 4GB and 2 CPU cores
   ## Minimum memory for production is 8GB and 4 CPU cores
   ## ref: http://docs.datastax.com/en/archived/jaeger/2.0/jaeger/architecture/architecturePlanningHardware_c.html
