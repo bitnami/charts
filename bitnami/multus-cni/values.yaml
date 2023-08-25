@@ -204,7 +204,7 @@ affinity: {}
 ##
 nodeSelector: {}
 ## Multus CNI container's resource requests and limits
-## ref: http://kubernetes.io/docs/user-guide/compute-resources/
+## ref: http://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
 ## @param resources.requests [object] The requested resources for the init container
 ## @param resources.limits The resources limits for the init container
 ##

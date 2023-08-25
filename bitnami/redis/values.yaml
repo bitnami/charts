@@ -266,7 +266,7 @@ master:
   ##
   customReadinessProbe: {}
   ## Redis&reg; master resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param master.resources.limits The resources limits for the Redis&reg; master containers
   ## @param master.resources.requests The requested resources for the Redis&reg; master containers
   ##
@@ -709,7 +709,7 @@ replica:
   ##
   customReadinessProbe: {}
   ## Redis&reg; replicas resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param replica.resources.limits The resources limits for the Redis&reg; replicas containers
   ## @param replica.resources.requests The requested resources for the Redis&reg; replicas containers
   ##
@@ -1265,7 +1265,7 @@ sentinel:
     whenScaled: Retain
     whenDeleted: Retain
   ## Redis&reg; Sentinel resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param sentinel.resources.limits The resources limits for the Redis&reg; Sentinel containers
   ## @param sentinel.resources.requests The requested resources for the Redis&reg; Sentinel containers
   ##
@@ -1666,7 +1666,7 @@ metrics:
   ##
   extraVolumeMounts: []
   ## Redis&reg; exporter resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param metrics.resources.limits The resources limits for the Redis&reg; exporter container
   ## @param metrics.resources.requests The requested resources for the Redis&reg; exporter container
   ##
@@ -1882,7 +1882,7 @@ volumePermissions:
     ##
     pullSecrets: []
   ## Init container's resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param volumePermissions.resources.limits The resources limits for the init container
   ## @param volumePermissions.resources.requests The requested resources for the init container
   ##
@@ -1936,7 +1936,7 @@ sysctl:
   ##
   mountHostSys: false
   ## Init container's resource requests and limits
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param sysctl.resources.limits The resources limits for the init container
   ## @param sysctl.resources.requests The requested resources for the init container
   ##

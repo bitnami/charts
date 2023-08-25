@@ -2404,7 +2404,7 @@ notary:
     ##
     customStartupProbe: {}
     ## Harbor Notary Server resource requests and limits
-    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
     ## @param notary.server.resources.limits The resources limits for the Harbor Notary Server containers
     ## @param notary.server.resources.requests The requested resources for the Harbor Notary Server containers
     ##
@@ -2641,7 +2641,7 @@ notary:
     ##
     customStartupProbe: {}
     ## Harbor Notary Signer resource requests and limits
-    ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+    ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
     ## @param notary.signer.resources.limits The resources limits for the Harbor Notary Signer containers
     ## @param notary.signer.resources.requests The requested resources for the Harbor Notary Signer containers
     ##

@@ -273,7 +273,7 @@ server:
     seccompProfile:
       type: "RuntimeDefault"
   ## Dataflow Server containers' resource requests and limits.
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -769,7 +769,7 @@ skipper:
     seccompProfile:
       type: "RuntimeDefault"
   ## Skipper containers' resource requests and limits.
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -984,7 +984,7 @@ externalSkipper:
 ##
 deployer:
   ## Streaming applications resource requests and limits.
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## @param deployer.resources.limits [object] Streaming applications resource limits
   ## @param deployer.resources.requests Streaming applications resource requests
   ##
@@ -1110,7 +1110,7 @@ metrics:
     ##
     pullSecrets: []
   ## Prometheus Rsocket Proxy containers' resource requests and limits.
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
@@ -1534,7 +1534,7 @@ waitForBackends:
     seccompProfile:
       type: "RuntimeDefault"
   ## Init container resource requests and limits.
-  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## ref: https://kubernetes.io/docs/concepts/configuration/manage-compute-resources-container/
   ## We usually recommend not to specify default resources and to leave this as a conscious
   ## choice for the user. This also increases chances charts run on environments with little
   ## resources, such as Minikube. If you do want to specify resources, uncomment the following
