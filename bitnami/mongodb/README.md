@@ -310,6 +310,38 @@ Refer to the [chart documentation for more information on each of these architec
 | `persistence.volumeClaimTemplates.requests`   | Custom PVC requests attributes                                                                                                        | `{}`                |
 | `persistence.volumeClaimTemplates.dataSource` | Add dataSource to the VolumeClaimTemplate                                                                                             | `{}`                |
 
+### Backup parameters
+
+| Name                                                               | Description                                                                                                                           | Value               |
+| ------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
+| `backup.enabled`                                                   | Enable the logical dump of the database "regularly"                                                                                   | `false`             |
+| `backup.cronjob.schedule`                                          | Set the cronjob parameter schedule                                                                                                    | `@daily`            |
+| `backup.cronjob.concurrencyPolicy`                                 | Set the cronjob parameter concurrencyPolicy                                                                                           | `Allow`             |
+| `backup.cronjob.failedJobsHistoryLimit`                            | Set the cronjob parameter failedJobsHistoryLimit                                                                                      | `1`                 |
+| `backup.cronjob.successfulJobsHistoryLimit`                        | Set the cronjob parameter successfulJobsHistoryLimit                                                                                  | `3`                 |
+| `backup.cronjob.startingDeadlineSeconds`                           | Set the cronjob parameter startingDeadlineSeconds                                                                                     | `""`                |
+| `backup.cronjob.ttlSecondsAfterFinished`                           | Set the cronjob parameter ttlSecondsAfterFinished                                                                                     | `""`                |
+| `backup.cronjob.restartPolicy`                                     | Set the cronjob parameter restartPolicy                                                                                               | `OnFailure`         |
+| `backup.cronjob.containerSecurityContext.runAsUser`                | User ID for the backup container                                                                                                      | `1001`              |
+| `backup.cronjob.containerSecurityContext.runAsGroup`               | Group ID for the backup container                                                                                                     | `0`                 |
+| `backup.cronjob.containerSecurityContext.runAsNonRoot`             | Set backup container's Security Context runAsNonRoot                                                                                  | `true`              |
+| `backup.cronjob.containerSecurityContext.readOnlyRootFilesystem`   | Is the container itself readonly                                                                                                      | `true`              |
+| `backup.cronjob.containerSecurityContext.allowPrivilegeEscalation` | Is it possible to escalate backup pod(s) privileges                                                                                   | `false`             |
+| `backup.cronjob.containerSecurityContext.seccompProfile.type`      | Set backup container's Security Context seccompProfile type                                                                           | `RuntimeDefault`    |
+| `backup.cronjob.containerSecurityContext.capabilities.drop`        | Set backup container's Security Context capabilities to drop                                                                          | `["ALL"]`           |
+| `backup.cronjob.command`                                           | Set backup container's command to run                                                                                                 | `[]`                |
+| `backup.cronjob.labels`                                            | Set the cronjob labels                                                                                                                | `{}`                |
+| `backup.cronjob.annotations`                                       | Set the cronjob annotations                                                                                                           | `{}`                |
+| `backup.cronjob.storage.existingClaim`                             | Provide an existing `PersistentVolumeClaim` (only when `architecture=standalone`)                                                     | `""`                |
+| `backup.cronjob.storage.resourcePolicy`                            | Setting it to "keep" to avoid removing PVCs during a helm delete operation. Leaving it empty will delete PVCs after the chart deleted | `""`                |
+| `backup.cronjob.storage.storageClass`                              | PVC Storage Class for the backup data volume                                                                                          | `""`                |
+| `backup.cronjob.storage.accessModes`                               | PV Access Mode                                                                                                                        | `["ReadWriteOnce"]` |
+| `backup.cronjob.storage.size`                                      | PVC Storage Request for the backup data volume                                                                                        | `8Gi`               |
+| `backup.cronjob.storage.annotations`                               | PVC annotations                                                                                                                       | `{}`                |
+| `backup.cronjob.storage.mountPath`                                 | Path to mount the volume at                                                                                                           | `/backup/mongodb`   |
+| `backup.cronjob.storage.subPath`                                   | Subdirectory of the volume to mount at                                                                                                | `""`                |
+| `backup.cronjob.storage.volumeClaimTemplates.selector`             | A label query over volumes to consider for binding (e.g. when using local volumes)                                                    | `{}`                |
+
 ### RBAC parameters
 
 | Name                                          | Description                                                                                                                                 | Value   |
