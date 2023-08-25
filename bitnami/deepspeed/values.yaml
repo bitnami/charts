@@ -479,7 +479,7 @@ client:
     annotations: {}
   ## @section Deepspeed Client persistence paramaters
   ## Enable persistence using Persistent Volume Claims
-  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
   ##
   persistence:
     ## @param client.persistence.enabled Use a PVC to persist data
@@ -920,7 +920,7 @@ worker:
     ingressNSPodMatchLabels: {}
   ## @section Deepspeed Worker persistence paramaters
   ## Enable persistence using Persistent Volume Claims
-  ## ref: https://kubernetes.io/docs/user-guide/persistent-volumes/
+  ## ref: https://kubernetes.io/docs/concepts/storage/persistent-volumes/
   ##
   persistence:
     ## @param worker.persistence.enabled Use a PVC to persist data
