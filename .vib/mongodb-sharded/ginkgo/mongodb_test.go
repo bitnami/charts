@@ -36,29 +36,31 @@ var _ = Describe("MongoDB Sharded", Ordered, func() {
 			getAvailableReplicas := func(ss *appsv1.StatefulSet) int32 { return ss.Status.AvailableReplicas }
 			getSucceededJobs := func(j *batchv1.Job) int32 { return j.Status.Succeeded }
 
+			getOpts := metav1.GetOptions{}
+
 			for i := 0; i < shards; i++ {
 				By(fmt.Sprintf("checking all the shard %d replicas are available", i))
 				shardName := fmt.Sprintf("%s-shard%d-data", releaseName, i)
-				ss, err := c.AppsV1().StatefulSets(namespace).Get(ctx, shardName, metav1.GetOptions{})
+				ss, err := c.AppsV1().StatefulSets(namespace).Get(ctx, shardName, getOpts)
 				Expect(err).NotTo(HaveOccurred())
 				Expect(ss.Status.Replicas).NotTo(BeZero())
-				origReplicas := *ss.Spec.Replicas
+				origReplicas := ss.Spec.Replicas
 				Eventually(func() (*appsv1.StatefulSet, error) {
-					return c.AppsV1().StatefulSets(namespace).Get(ctx, shardName, metav1.GetOptions{})
+					return c.AppsV1().StatefulSets(namespace).Get(ctx, shardName, getOpts)
 				}, timeout, PollingInterval).Should(WithTransform(getAvailableReplicas, Equal(origReplicas)))
 			}
 
 			By("checking that mongos is available")
 			mongosName := fmt.Sprintf("%s-mongos", releaseName)
-			ss, err := c.AppsV1().StatefulSets(namespace).Get(ctx, mongosName, metav1.GetOptions{})
+			ss, err := c.AppsV1().StatefulSets(namespace).Get(ctx, mongosName, getOpts)
 			Expect(err).NotTo(HaveOccurred())
 			Expect(ss.Status.Replicas).NotTo(BeZero())
-			mongosOrigReplicas := *ss.Spec.Replicas
+			mongosOrigReplicas := ss.Spec.Replicas
 			Eventually(func() (*appsv1.StatefulSet, error) {
-				return c.AppsV1().StatefulSets(namespace).Get(ctx, mongosName, metav1.GetOptions{})
+				return c.AppsV1().StatefulSets(namespace).Get(ctx, mongosName, getOpts)
 			}, timeout, PollingInterval).Should(WithTransform(getAvailableReplicas, Equal(mongosOrigReplicas)))
 
-			svc, err := c.CoreV1().Services(namespace).Get(ctx, releaseName, metav1.GetOptions{})
+			svc, err := c.CoreV1().Services(namespace).Get(ctx, releaseName, getOpts)
 			Expect(err).NotTo(HaveOccurred())
 
 			port, err := utils.SvcGetPortByName(svc, "mongodb")
@@ -68,11 +70,7 @@ var _ = Describe("MongoDB Sharded", Ordered, func() {
 			Expect(err).NotTo(HaveOccurred())
 
 			// Use current time for allowing the test suite to repeat
-			currentTime := time.Now()
-			jobSuffix := fmt.Sprintf("%d%d%d%d%d%d",
-				currentTime.Year(), currentTime.Month(),
-				currentTime.Day(), currentTime.Hour(),
-				currentTime.Minute(), currentTime.Second())
+			jobSuffix := time.Now().Format("20060102150405")
 
 			By("creating a job to create a new test database")
 			createDBJobName := fmt.Sprintf("%s-createdb-%s",
@@ -83,19 +81,19 @@ var _ = Describe("MongoDB Sharded", Ordered, func() {
 			Expect(err).NotTo(HaveOccurred())
 
 			Eventually(func() (*batchv1.Job, error) {
-				return c.BatchV1().Jobs(namespace).Get(ctx, createDBJobName, metav1.GetOptions{})
+				return c.BatchV1().Jobs(namespace).Get(ctx, createDBJobName, getOpts)
 			}, timeout, PollingInterval).Should(WithTransform(getSucceededJobs, Equal(int32(1))))
 
 			for i := 0; i < shards; i++ {
 				By(fmt.Sprintf("Scaling shard %d down to 0 replicas", i))
 				shardName := fmt.Sprintf("%s-shard%d-data", releaseName, i)
-				ss, err := c.AppsV1().StatefulSets(namespace).Get(ctx, shardName, metav1.GetOptions{})
-				shardOrigReplicas := *ss.Spec.Replicas
+				ss, err := c.AppsV1().StatefulSets(namespace).Get(ctx, shardName, getOpts)
+				shardOrigReplicas := ss.Spec.Replicas
 				ss, err = utils.StsScale(ctx, c, ss, 0)
 				Expect(err).NotTo(HaveOccurred())
 				Expect(ss.Status.Replicas).NotTo(BeZero())
 				Eventually(func() (*appsv1.StatefulSet, error) {
-					return c.AppsV1().StatefulSets(namespace).Get(ctx, shardName, metav1.GetOptions{})
+					return c.AppsV1().StatefulSets(namespace).Get(ctx, shardName, getOpts)
 				}, timeout, PollingInterval).Should(WithTransform(getAvailableReplicas, BeZero()))
 
 				By(fmt.Sprintf("Scaling shard %d to the original replicas", i))
@@ -103,7 +101,7 @@ var _ = Describe("MongoDB Sharded", Ordered, func() {
 				Expect(err).NotTo(HaveOccurred())
 
 				Eventually(func() (*appsv1.StatefulSet, error) {
-					return c.AppsV1().StatefulSets(namespace).Get(ctx, shardName, metav1.GetOptions{})
+					return c.AppsV1().StatefulSets(namespace).Get(ctx, shardName, getOpts)
 				}, timeout, PollingInterval).Should(WithTransform(getAvailableReplicas, Equal(shardOrigReplicas)))
 			}
 
@@ -114,7 +112,7 @@ var _ = Describe("MongoDB Sharded", Ordered, func() {
 			Expect(err).NotTo(HaveOccurred())
 
 			Eventually(func() (*batchv1.Job, error) {
-				return c.BatchV1().Jobs(namespace).Get(ctx, deleteDBJobName, metav1.GetOptions{})
+				return c.BatchV1().Jobs(namespace).Get(ctx, deleteDBJobName, getOpts)
 			}, timeout, PollingInterval).Should(WithTransform(getSucceededJobs, Equal(int32(1))))
 		})
 	})
