@@ -923,6 +923,59 @@ In order to use SSO you need to enable Dex by setting `dex.enabled=true`. You ca
 > NOTE: `dex.config` is the key of the object. IF you are using the Helm CLI to set the parameter you need to scape the `.` like `--set server.config.dex\.config`.
 > IMPORTANT: if you enable Dex without configuring it you will get an error similar to `msg="dex is not configured"`, and the Dex pod will never reach the running state.
 
+### Installing a Config Management Plugin
+
+In order to install a Config Management Plugin as described in the official [documentation](https://argo-cd.readthedocs.io/en/stable/operator-manual/config-management-plugins/), it's recommended to run a sidecar container & mount the plugin configuration from a ConfigMap. You can achieve so by using `repoServer.extraVolumes`, `repoServer.sidecars` and `extraDeploy` parameters as shown in the example below:
+
+```yaml
+repoServer:
+  extraVolumes:
+    - name: plugin-config
+      configMap:
+        name: my-plugin-config
+    - name: plugins
+      emptyDir: {}
+    - name: plugin-tmp
+      emptyDir: {}
+    - name: var-files
+      emptyDir: {}
+  sidecars:
+    - name: plugin-sidecar
+      command: [argocd-cmp-server, --config-dir-path, /app/config]
+      image: "{{ include \"argocd.image\" . }}"
+      env:
+        - name: ARGOCD_PLUGINSOCKFILEPATH
+          value: /app/plugins
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+      volumeMounts:
+        - mountPath: /app/plugins
+          name: plugins
+        - mountPath: /tmp
+          name: plugin-tmp
+        - mountPath: /var/run/argocd
+          name: var-files
+        # Insert plugin configuration
+        - mountPath: /app/config/plugin.yaml
+          subPath: plugin.yaml
+          name: plugin-config
+extraDeploy:
+- apiVersion: v1
+  kind: ConfigMap
+  metadata:
+    name: my-plugin-config
+  data:
+    plugin.yaml: |
+      apiVersion: argoproj.io/v1alpha1
+      kind: ConfigManagementPlugin
+      metadata:
+        name: my-plugin
+      spec:
+        version: v1.0
+        (...)
+```
+
 ### Additional environment variables
 
 In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` property.
