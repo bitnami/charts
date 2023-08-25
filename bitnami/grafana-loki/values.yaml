@@ -634,6 +634,11 @@ gateway:
   ## @param gateway.extraArgs Additional container args (will be concatenated to args, unless diagnosticMode is enabled)
   ##
   extraArgs: []
+  ##
+  ## @param gateway.existingConfigmap Name of a ConfigMap with the NGINX configuration
+  ##
+  existingConfigmap: ""
+  ##
   ## @param gateway.verboseLogging Show the gateway access_log
   ##
   verboseLogging: false
