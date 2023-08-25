@@ -44,7 +44,7 @@ var _ = Describe("MongoDB Sharded", Ordered, func() {
 				ss, err := c.AppsV1().StatefulSets(namespace).Get(ctx, shardName, getOpts)
 				Expect(err).NotTo(HaveOccurred())
 				Expect(ss.Status.Replicas).NotTo(BeZero())
-				origReplicas := ss.Spec.Replicas
+				origReplicas := *ss.Spec.Replicas
 				Eventually(func() (*appsv1.StatefulSet, error) {
 					return c.AppsV1().StatefulSets(namespace).Get(ctx, shardName, getOpts)
 				}, timeout, PollingInterval).Should(WithTransform(getAvailableReplicas, Equal(origReplicas)))
@@ -55,7 +55,7 @@ var _ = Describe("MongoDB Sharded", Ordered, func() {
 			ss, err := c.AppsV1().StatefulSets(namespace).Get(ctx, mongosName, getOpts)
 			Expect(err).NotTo(HaveOccurred())
 			Expect(ss.Status.Replicas).NotTo(BeZero())
-			mongosOrigReplicas := ss.Spec.Replicas
+			mongosOrigReplicas := *ss.Spec.Replicas
 			Eventually(func() (*appsv1.StatefulSet, error) {
 				return c.AppsV1().StatefulSets(namespace).Get(ctx, mongosName, getOpts)
 			}, timeout, PollingInterval).Should(WithTransform(getAvailableReplicas, Equal(mongosOrigReplicas)))
@@ -88,7 +88,7 @@ var _ = Describe("MongoDB Sharded", Ordered, func() {
 				By(fmt.Sprintf("Scaling shard %d down to 0 replicas", i))
 				shardName := fmt.Sprintf("%s-shard%d-data", releaseName, i)
 				ss, err := c.AppsV1().StatefulSets(namespace).Get(ctx, shardName, getOpts)
-				shardOrigReplicas := ss.Spec.Replicas
+				shardOrigReplicas := *ss.Spec.Replicas
 				ss, err = utils.StsScale(ctx, c, ss, 0)
 				Expect(err).NotTo(HaveOccurred())
 				Expect(ss.Status.Replicas).NotTo(BeZero())
