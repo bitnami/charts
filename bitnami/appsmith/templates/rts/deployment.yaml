@@ -8,11 +8,8 @@ kind: Deployment
 metadata:
   name: {{ template "appsmith.rts.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: rts
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -21,19 +18,17 @@ spec:
   {{- if .Values.rts.updateStrategy }}
   strategy: {{- toYaml .Values.rts.updateStrategy | nindent 4 }}
   {{- end }}
+  {{- $podLabels := merge .Values.rts.podLabels .Values.commonLabels }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: rts
   template:
     metadata:
       {{- if .Values.rts.podAnnotations }}
       annotations: {{- include "common.tplvalues.render" (dict "value" .Values.rts.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: rts
-        {{- if .Values.rts.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.rts.podLabels "context" $) | nindent 8 }}
-        {{- end }}
     spec:
       serviceAccountName: {{ template "appsmith.serviceAccountName" . }}
       {{- include "appsmith.imagePullSecrets" . | nindent 6 }}
@@ -44,8 +39,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.rts.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.rts.podAffinityPreset "component" "rts" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.rts.podAntiAffinityPreset "component" "rts" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.rts.podAffinityPreset "component" "rts" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.rts.podAntiAffinityPreset "component" "rts" "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.rts.nodeAffinityPreset.type "key" .Values.rts.nodeAffinityPreset.key "values" .Values.rts.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.rts.nodeSelector }}
