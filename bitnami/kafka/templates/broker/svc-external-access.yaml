@@ -53,7 +53,7 @@ spec:
   {{- if and (eq $.Values.externalAccess.broker.service.type "NodePort") (le (add $i 1) (len $.Values.externalAccess.broker.service.externalIPs)) }}
   externalIPs: [{{ index $.Values.externalAccess.broker.service.externalIPs $i | quote }}]
   {{- end }}
-  {{- $podLabels := merge $.Values.worker.podLabels $.Values.commonLabels }}
+  {{- $podLabels := merge $.Values.broker.podLabels $.Values.commonLabels }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: kafka
     app.kubernetes.io/component: broker
