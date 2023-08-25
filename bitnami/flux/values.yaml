@@ -272,7 +272,7 @@ kustomizeController:
   ##
   affinity: {}
   ## @param kustomizeController.nodeSelector Node labels for Kustomize Controller pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param kustomizeController.tolerations Tolerations for Kustomize Controller pods assignment
@@ -705,7 +705,7 @@ helmController:
   ##
   affinity: {}
   ## @param helmController.nodeSelector Node labels for Helm Controller pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param helmController.tolerations Tolerations for Helm Controller pods assignment
@@ -1140,7 +1140,7 @@ sourceController:
   ##
   affinity: {}
   ## @param sourceController.nodeSelector Node labels for Source Controller pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param sourceController.tolerations Tolerations for Source Controller pods assignment
@@ -1731,7 +1731,7 @@ notificationController:
   ##
   affinity: {}
   ## @param notificationController.nodeSelector Node labels for Notification Controller pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param notificationController.tolerations Tolerations for Notification Controller pods assignment
@@ -2164,7 +2164,7 @@ imageAutomationController:
   ##
   affinity: {}
   ## @param imageAutomationController.nodeSelector Node labels for Image Automation Controller pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param imageAutomationController.tolerations Tolerations for Image Automation Controller pods assignment
@@ -2597,7 +2597,7 @@ imageReflectorController:
   ##
   affinity: {}
   ## @param imageReflectorController.nodeSelector Node labels for Image Reflector Controller pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param imageReflectorController.tolerations Tolerations for Image Reflector Controller pods assignment

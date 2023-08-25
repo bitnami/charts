@@ -306,7 +306,7 @@ server:
   ##
   affinity: {}
   ## @param server.nodeSelector Parse server node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param server.tolerations Parse server tolerations for pod assignment
@@ -584,7 +584,7 @@ dashboard:
   ##
   affinity: {}
   ## @param dashboard.nodeSelector Parse dashboard node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param dashboard.tolerations Parse dashboard tolerations for pod assignment

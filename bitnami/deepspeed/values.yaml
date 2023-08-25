@@ -363,7 +363,7 @@ client:
   ##
   affinity: {}
   ## @param client.nodeSelector Node labels for Client pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param client.tolerations Tolerations for Client pods assignment
@@ -711,7 +711,7 @@ worker:
   ##
   affinity: {}
   ## @param worker.nodeSelector Node labels for Worker pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param worker.tolerations Tolerations for Worker pods assignment

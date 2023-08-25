@@ -176,7 +176,7 @@ controller:
   ##
   affinity: {}
   ## @param controller.nodeSelector Node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## Controller Container port
@@ -404,7 +404,7 @@ webhook:
   ##
   affinity: {}
   ## @param webhook.nodeSelector Node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## Webhook Container port
@@ -670,7 +670,7 @@ cainjector:
   ##
   affinity: {}
   ## @param cainjector.nodeSelector  Node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param cainjector.command Override CAInjector default command

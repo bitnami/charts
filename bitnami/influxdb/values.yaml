@@ -223,7 +223,7 @@ influxdb:
   ##
   affinity: {}
   ## @param influxdb.nodeSelector InfluxDB&trade; Node labels for pod assignment
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param influxdb.tolerations InfluxDB&trade; Tolerations for pod assignment
@@ -951,7 +951,7 @@ backup:
   ##
   affinity: {}
   ## @param backup.nodeSelector Backup&trade; Node labels for backup pod assignment
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param backup.tolerations Backup&trade; Tolerations for backup pod assignment

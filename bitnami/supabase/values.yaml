@@ -447,7 +447,7 @@ auth:
   ##
   affinity: {}
   ## @param auth.nodeSelector Node labels for Supabase auth pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param auth.tolerations Tolerations for Supabase auth pods assignment
@@ -771,7 +771,7 @@ meta:
   ##
   affinity: {}
   ## @param meta.nodeSelector Node labels for Supabase Postgres Meta pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param meta.tolerations Tolerations for Supabase Postgres Meta pods assignment
@@ -1114,7 +1114,7 @@ realtime:
   ##
   affinity: {}
   ## @param realtime.nodeSelector Node labels for Supabase realtime pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param realtime.tolerations Tolerations for Supabase realtime pods assignment
@@ -1436,7 +1436,7 @@ rest:
   ##
   affinity: {}
   ## @param rest.nodeSelector Node labels for Supabase rest pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param rest.tolerations Tolerations for Supabase rest pods assignment
@@ -1763,7 +1763,7 @@ storage:
   ##
   affinity: {}
   ## @param storage.nodeSelector Node labels for Supabase storage pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param storage.tolerations Tolerations for Supabase storage pods assignment
@@ -2137,7 +2137,7 @@ studio:
   ##
   affinity: {}
   ## @param studio.nodeSelector Node labels for Supabase studio pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param studio.tolerations Tolerations for Supabase studio pods assignment

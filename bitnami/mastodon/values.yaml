@@ -423,7 +423,7 @@ web:
   ##
   affinity: {}
   ## @param web.nodeSelector Node labels for Mastodon web pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param web.tolerations Tolerations for Mastodon web pods assignment
@@ -699,7 +699,7 @@ sidekiq:
   ##
   affinity: {}
   ## @param sidekiq.nodeSelector Node labels for Mastodon sidekiq pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param sidekiq.tolerations Tolerations for Mastodon sidekiq pods assignment
@@ -925,7 +925,7 @@ streaming:
   ##
   affinity: {}
   ## @param streaming.nodeSelector Node labels for Mastodon streaming pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param streaming.tolerations Tolerations for Mastodon streaming pods assignment

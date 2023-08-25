@@ -229,7 +229,7 @@ standalone:
     ##
     values: []
   ## @param standalone.nodeSelector Node labels for Mxnet standalone pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param standalone.podAffinityPreset Pod affinity preset. Ignored if `standalone.affinity` is set. Allowed values: `soft` or `hard`
@@ -458,7 +458,7 @@ server:
     ##
     values: []
   ## @param server.nodeSelector Node labels for Mxnet server pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param server.podAffinityPreset Pod affinity preset. Ignored if `server.affinity` is set. Allowed values: `soft` or `hard`
@@ -686,7 +686,7 @@ worker:
     ##
     values: []
   ## @param worker.nodeSelector Node labels for Mxnet worker pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param worker.podAffinityPreset Pod affinity preset. Ignored if `worker.affinity` is set. Allowed values: `soft` or `hard`
@@ -916,7 +916,7 @@ scheduler:
     ##
     values: []
   ## @param scheduler.nodeSelector Node labels for Mxnet scheduler pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param scheduler.podAffinityPreset Pod affinity preset. Ignored if `scheduler.affinity` is set. Allowed values: `soft` or `hard`

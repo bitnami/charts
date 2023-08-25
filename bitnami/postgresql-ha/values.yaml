@@ -195,7 +195,7 @@ postgresql:
   ##
   affinity: {}
   ## @param postgresql.nodeSelector Node labels for PostgreSQL pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param postgresql.tolerations Tolerations for PostgreSQL pods assignment
@@ -692,7 +692,7 @@ witness:
   ##
   affinity: {}
   ## @param witness.nodeSelector Node labels for PostgreSQL witness pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param witness.tolerations Tolerations for PostgreSQL witness pods assignment
@@ -1194,7 +1194,7 @@ pgpool:
   ##
   affinity: {}
   ## @param pgpool.nodeSelector Node labels for Pgpool pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param pgpool.tolerations Tolerations for Pgpool pods assignment

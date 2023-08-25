@@ -275,7 +275,7 @@ alertmanager:
   ##
   affinity: {}
   ## @param alertmanager.nodeSelector Node labels for Alertmanager pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param alertmanager.tolerations Tolerations for Alertmanager pods assignment
@@ -810,7 +810,7 @@ server:
   ##
   affinity: {}
   ## @param server.nodeSelector Node labels for Prometheus pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param server.tolerations Tolerations for Prometheus pods assignment

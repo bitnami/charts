@@ -288,7 +288,7 @@ concierge:
   ##
   affinity: {}
   ## @param concierge.nodeSelector Node labels for Concierge pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param concierge.tolerations Tolerations for Concierge pods assignment
@@ -622,7 +622,7 @@ supervisor:
   ##
   affinity: {}
   ## @param supervisor.nodeSelector Node labels for Supervisor pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param supervisor.tolerations Tolerations for Supervisor pods assignment

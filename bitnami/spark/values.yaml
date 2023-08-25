@@ -238,7 +238,7 @@ master:
   ##
   affinity: {}
   ## @param master.nodeSelector Spark master node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param master.tolerations Spark master tolerations for pod assignment
@@ -518,7 +518,7 @@ worker:
   ##
   affinity: {}
   ## @param worker.nodeSelector Spark worker node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param worker.tolerations Spark worker tolerations for pod assignment

@@ -403,7 +403,7 @@ frontend:
   ##
   affinity: {}
   ## @param frontend.nodeSelector Node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param frontend.tolerations Tolerations for pod assignment
@@ -756,7 +756,7 @@ dashboard:
   ##
   affinity: {}
   ## @param dashboard.nodeSelector Node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param dashboard.tolerations Tolerations for pod assignment
@@ -1067,7 +1067,7 @@ apprepository:
   ##
   affinity: {}
   ## @param apprepository.nodeSelector Node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param apprepository.tolerations Tolerations for pod assignment
@@ -1776,7 +1776,7 @@ kubeappsapis:
   ##
   affinity: {}
   ## @param kubeappsapis.nodeSelector Node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param kubeappsapis.tolerations Tolerations for pod assignment

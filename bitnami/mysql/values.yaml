@@ -274,7 +274,7 @@ primary:
   ##
   affinity: {}
   ## @param primary.nodeSelector Node labels for MySQL primary pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param primary.tolerations Tolerations for MySQL primary pods assignment
@@ -653,7 +653,7 @@ secondary:
   ##
   affinity: {}
   ## @param secondary.nodeSelector Node labels for MySQL secondary pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param secondary.tolerations Tolerations for MySQL secondary pods assignment

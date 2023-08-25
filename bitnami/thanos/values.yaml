@@ -364,7 +364,7 @@ query:
   ##
   affinity: {}
   ## @param query.nodeSelector Thanos Query node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param query.tolerations Thanos Query tolerations for pod assignment
@@ -1029,7 +1029,7 @@ queryFrontend:
   ##
   affinity: {}
   ## @param queryFrontend.nodeSelector Thanos Query Frontend node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param queryFrontend.tolerations Thanos Query Frontend tolerations for pod assignment
@@ -1472,7 +1472,7 @@ bucketweb:
   ##
   affinity: {}
   ## @param bucketweb.nodeSelector Thanos Bucket Web node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param bucketweb.tolerations Thanos Bucket Web tolerations for pod assignment
@@ -1919,7 +1919,7 @@ compactor:
   ##
   affinity: {}
   ## @param compactor.nodeSelector Thanos Compactor node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param compactor.tolerations Thanos Compactor tolerations for pod assignment
@@ -2381,7 +2381,7 @@ storegateway:
   ##
   affinity: {}
   ## @param storegateway.nodeSelector Thanos Store Gateway node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param storegateway.tolerations Thanos Store Gateway tolerations for pod assignment
@@ -3024,7 +3024,7 @@ ruler:
   ##
   affinity: {}
   ## @param ruler.nodeSelector Thanos Ruler node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param ruler.tolerations Thanos Ruler tolerations for pod assignment
@@ -3529,7 +3529,7 @@ receive:
   ##
   affinity: {}
   ## @param receive.nodeSelector Thanos Receive node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param receive.tolerations Thanos Receive tolerations for pod assignment
@@ -3999,7 +3999,7 @@ receiveDistributor:
   ##
   affinity: {}
   ## @param receiveDistributor.nodeSelector Thanos Receive Distributor node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param receiveDistributor.tolerations Thanos Receive Distributor tolerations for pod assignment

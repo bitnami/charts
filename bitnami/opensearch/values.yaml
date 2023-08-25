@@ -599,7 +599,7 @@ master:
   ##
   affinity: {}
   ## @param master.nodeSelector Node labels for master-elegible pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param master.tolerations Tolerations for master-elegible pods assignment
@@ -993,7 +993,7 @@ data:
   ##
   affinity: {}
   ## @param data.nodeSelector Node labels for data pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param data.tolerations Tolerations for data pods assignment
@@ -1388,7 +1388,7 @@ coordinating:
   ##
   affinity: {}
   ## @param coordinating.nodeSelector Node labels for coordinating-only pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param coordinating.tolerations Tolerations for coordinating-only pods assignment
@@ -1746,7 +1746,7 @@ ingest:
   ##
   affinity: {}
   ## @param ingest.nodeSelector Node labels for ingest-only pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param ingest.tolerations Tolerations for ingest-only pods assignment
@@ -2456,7 +2456,7 @@ dashboards:
   ##
   affinity: {}
   ## @param dashboards.nodeSelector Node labels for data pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param dashboards.tolerations Tolerations for data pods assignment

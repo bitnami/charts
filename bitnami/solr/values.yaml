@@ -295,7 +295,7 @@ nodeAffinityPreset:
 ##
 affinity: {}
 ## @param nodeSelector Node labels for Solr pods assignment. Evaluated as a template
-## ref: https://kubernetes.io/docs/user-guide/node-selection/
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
 ##
 nodeSelector: {}
 ## @param tolerations Tolerations for Solr pods assignment. Evaluated as a template
@@ -856,7 +856,7 @@ metrics:
   ##
   affinity: {}
   ## @param metrics.nodeSelector Node labels for Solr Prometheus exporter pods assignment. Evaluated as a template
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param metrics.tolerations Tolerations for Solr Prometheus exporter pods assignment. Evaluated as a template

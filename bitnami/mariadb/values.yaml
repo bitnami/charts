@@ -278,7 +278,7 @@ primary:
   ##
   affinity: {}
   ## @param primary.nodeSelector Node labels for MariaDB primary pods assignment
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param primary.tolerations Tolerations for MariaDB primary pods assignment
@@ -674,7 +674,7 @@ secondary:
   ##
   affinity: {}
   ## @param secondary.nodeSelector Node labels for MariaDB secondary pods assignment
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param secondary.tolerations Tolerations for MariaDB secondary pods assignment

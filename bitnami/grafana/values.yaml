@@ -344,7 +344,7 @@ grafana:
   ##
   affinity: {}
   ## @param grafana.nodeSelector Node labels for pod assignment
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param grafana.tolerations Tolerations for pod assignment
@@ -868,7 +868,7 @@ imageRenderer:
   ##
   podLabels: {}
   ## @param imageRenderer.nodeSelector Node labels for pod assignment
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param imageRenderer.hostAliases Grafana Image Renderer pods host aliases

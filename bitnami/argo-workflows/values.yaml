@@ -340,7 +340,7 @@ server:
   ##
   affinity: {}
   ## @param server.nodeSelector Node labels for server pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param server.tolerations Tolerations for server pods assignment
@@ -817,7 +817,7 @@ controller:
   ##
   affinity: {}
   ## @param controller.nodeSelector Node labels for controller pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param controller.tolerations Tolerations for controller pods assignment

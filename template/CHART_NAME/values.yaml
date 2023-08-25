@@ -269,7 +269,7 @@ diagnosticMode:
   ##
   affinity: {}
   ## @param %%MAIN_OBJECT_BLOCK%%.nodeSelector Node labels for %%MAIN_CONTAINER_NAME%% pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param %%MAIN_OBJECT_BLOCK%%.tolerations Tolerations for %%MAIN_CONTAINER_NAME%% pods assignment

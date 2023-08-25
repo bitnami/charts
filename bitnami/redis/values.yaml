@@ -369,7 +369,7 @@ master:
   ##
   affinity: {}
   ## @param master.nodeSelector Node labels for Redis&reg; master pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param master.tolerations Tolerations for Redis&reg; master pods assignment
@@ -802,7 +802,7 @@ replica:
   ##
   affinity: {}
   ## @param replica.nodeSelector Node labels for Redis&reg; replicas pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param replica.tolerations Tolerations for Redis&reg; replicas pods assignment

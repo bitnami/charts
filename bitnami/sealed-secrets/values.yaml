@@ -231,7 +231,7 @@ nodeAffinityPreset:
 ##
 affinity: {}
 ## @param nodeSelector [object] Node labels for Sealed Secret pods assignment
-## ref: https://kubernetes.io/docs/user-guide/node-selection/
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
 ##
 nodeSelector: {}
 ## @param tolerations [array] Tolerations for Sealed Secret pods assignment

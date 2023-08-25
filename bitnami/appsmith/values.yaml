@@ -237,7 +237,7 @@ client:
   ##
   affinity: {}
   ## @param client.nodeSelector Node labels for Appsmith client pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param client.tolerations Tolerations for Appsmith client pods assignment
@@ -642,7 +642,7 @@ backend:
   ##
   affinity: {}
   ## @param backend.nodeSelector Node labels for Appsmith backend pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param backend.tolerations Tolerations for Appsmith backend pods assignment
@@ -963,7 +963,7 @@ rts:
   ##
   affinity: {}
   ## @param rts.nodeSelector Node labels for Appsmith rts pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param rts.tolerations Tolerations for Appsmith rts pods assignment

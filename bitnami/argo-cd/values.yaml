@@ -474,7 +474,7 @@ controller:
   ##
   affinity: {}
   ## @param controller.nodeSelector Node labels for Argo CD pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param controller.tolerations Tolerations for Argo CD pods assignment
@@ -870,7 +870,7 @@ applicationSet:
     enabled: true
     fsGroup: 1001
   ## @param applicationSet.nodeSelector Node labels for Argo CD applicationSet controller pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param applicationSet.tolerations Tolerations for Argo CD applicationSet controller pods assignment
@@ -1228,7 +1228,7 @@ notifications:
     enabled: true
     fsGroup: 1001
   ## @param notifications.nodeSelector Node labels for Argo CD notifications controller pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param notifications.tolerations Tolerations for Argo CD notifications controller pods assignment
@@ -1478,7 +1478,7 @@ notifications:
         enabled: true
         fsGroup: 1001
       ## @param notifications.bots.slack.nodeSelector Node labels for Argo CD Slack bot pods assignment
-      ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+      ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
       ##
       nodeSelector: {}
       ## @param notifications.bots.slack.tolerations Tolerations for Argo CD Slack bot pods assignment
@@ -2156,7 +2156,7 @@ server:
   ##
   affinity: {}
   ## @param server.nodeSelector Node labels for Argo CD server pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param server.tolerations Tolerations for Argo CD server pods assignment
@@ -2600,7 +2600,7 @@ repoServer:
   ##
   affinity: {}
   ## @param repoServer.nodeSelector Node labels for Argo CD repo server pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param repoServer.tolerations Tolerations for Argo CD repo server pods assignment
@@ -3045,7 +3045,7 @@ dex:
   ##
   affinity: {}
   ## @param dex.nodeSelector Node labels for Dex pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param dex.tolerations Tolerations for Dex pods assignment

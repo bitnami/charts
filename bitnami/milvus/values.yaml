@@ -545,7 +545,7 @@ dataCoord:
   ##
   affinity: {}
   ## @param dataCoord.nodeSelector Node labels for Data Coordinator pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param dataCoord.tolerations Tolerations for Data Coordinator pods assignment
@@ -1031,7 +1031,7 @@ rootCoord:
   ##
   affinity: {}
   ## @param rootCoord.nodeSelector Node labels for Root Coordinator pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param rootCoord.tolerations Tolerations for Root Coordinator pods assignment
@@ -1516,7 +1516,7 @@ queryCoord:
   ##
   affinity: {}
   ## @param queryCoord.nodeSelector Node labels for Query Coordinator pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param queryCoord.tolerations Tolerations for Query Coordinator pods assignment
@@ -2002,7 +2002,7 @@ indexCoord:
   ##
   affinity: {}
   ## @param indexCoord.nodeSelector Node labels for Index Coordinator pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param indexCoord.tolerations Tolerations for Index Coordinator pods assignment
@@ -2488,7 +2488,7 @@ dataNode:
   ##
   affinity: {}
   ## @param dataNode.nodeSelector Node labels for Data Node pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param dataNode.tolerations Tolerations for Data Node pods assignment
@@ -2974,7 +2974,7 @@ queryNode:
   ##
   affinity: {}
   ## @param queryNode.nodeSelector Node labels for Query Node pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param queryNode.tolerations Tolerations for Query Node pods assignment
@@ -3460,7 +3460,7 @@ indexNode:
   ##
   affinity: {}
   ## @param indexNode.nodeSelector Node labels for Index Node pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param indexNode.tolerations Tolerations for Index Node pods assignment
@@ -3948,7 +3948,7 @@ proxy:
   ##
   affinity: {}
   ## @param proxy.nodeSelector Node labels for Proxy pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param proxy.tolerations Tolerations for Proxy pods assignment
@@ -4446,7 +4446,7 @@ attu:
   ##
   affinity: {}
   ## @param attu.nodeSelector Node labels for Attu pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param attu.tolerations Tolerations for Attu pods assignment

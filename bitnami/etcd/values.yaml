@@ -457,7 +457,7 @@ nodeAffinityPreset:
 ##
 affinity: {}
 ## @param nodeSelector [object] Node labels for pod assignment
-## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
 ##
 nodeSelector: {}
 ## @param tolerations [array] Tolerations for pod assignment
@@ -866,7 +866,7 @@ disasterRecovery:
       requests: {}
 
     ## @param disasterRecovery.cronjob.nodeSelector Node labels for cronjob pods assignment
-    ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+    ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
     ##
     nodeSelector: {}
     ## @param disasterRecovery.cronjob.tolerations Tolerations for cronjob pods assignment

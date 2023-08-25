@@ -218,7 +218,7 @@ customLivenessProbe: {}
 ##
 customReadinessProbe: {}
 ## @param nodeSelector Node labels for pod assignment
-## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
 ##
 nodeSelector: {}
 ## @param priorityClassName Set Priority Class Name to allow priority control over other pods

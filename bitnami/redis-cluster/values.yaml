@@ -622,7 +622,7 @@ redis:
   ##
   affinity: {}
   ## @param redis.nodeSelector Node labels for Redis&reg; pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param redis.tolerations Tolerations for Redis&reg; pods assignment
@@ -718,7 +718,7 @@ updateJob:
   ##
   affinity: {}
   ## @param updateJob.nodeSelector Node labels for update job pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param updateJob.tolerations Tolerations for update job pods assignment

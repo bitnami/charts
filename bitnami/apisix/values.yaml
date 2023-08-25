@@ -385,7 +385,7 @@ dataPlane:
   ##
   affinity: {}
   ## @param dataPlane.nodeSelector Node labels for APISIX pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param dataPlane.tolerations Tolerations for APISIX pods assignment
@@ -1106,7 +1106,7 @@ controlPlane:
   ##
   affinity: {}
   ## @param controlPlane.nodeSelector Node labels for APISIX pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param controlPlane.tolerations Tolerations for APISIX pods assignment
@@ -1755,7 +1755,7 @@ dashboard:
   ##
   affinity: {}
   ## @param dashboard.nodeSelector Node labels for APISIX Dashboard pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param dashboard.tolerations Tolerations for APISIX Dashboard pods assignment
@@ -2358,7 +2358,7 @@ ingressController:
   ##
   affinity: {}
   ## @param ingressController.nodeSelector Node labels for APISIX Ingress Controller pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param ingressController.tolerations Tolerations for APISIX Ingress Controller pods assignment

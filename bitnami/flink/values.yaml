@@ -367,7 +367,7 @@ jobmanager:
   ##
   affinity: {}
   ## @param jobmanager.nodeSelector Node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param jobmanager.tolerations Tolerations for pod assignment
@@ -666,7 +666,7 @@ taskmanager:
   ##
   affinity: {}
   ## @param taskmanager.nodeSelector Node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param taskmanager.tolerations Tolerations for pod assignment

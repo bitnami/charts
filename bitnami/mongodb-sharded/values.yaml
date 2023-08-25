@@ -392,7 +392,7 @@ configsvr:
   ##
   affinity: {}
   ## @param configsvr.nodeSelector Config Server Node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param configsvr.tolerations Config Server Tolerations for pod assignment
@@ -706,7 +706,7 @@ mongos:
   ##
   affinity: {}
   ## @param mongos.nodeSelector Mongos Node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param mongos.tolerations Mongos Tolerations for pod assignment
@@ -1031,7 +1031,7 @@ shardsvr:
     ##
     affinity: {}
     ## @param shardsvr.dataNode.nodeSelector Data nodes Node labels for pod assignment
-    ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+    ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
     ## You can set dataNodeLoopId (or any other parameter) by setting the below code block under this 'nodeSelector' section:
     ## nodeSelector: { shardId: "{{ .dataNodeLoopId }}" }
     ##
@@ -1350,7 +1350,7 @@ shardsvr:
     ##
     affinity: {}
     ## @param shardsvr.arbiter.nodeSelector Arbiter's Node labels for pod assignment
-    ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+    ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
     ##
     nodeSelector: {}
     ## @param shardsvr.arbiter.tolerations Arbiter's Tolerations for pod assignment

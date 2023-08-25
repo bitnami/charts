@@ -503,7 +503,7 @@ web:
   ##
   affinity: {}
   ## @param web.nodeSelector Node labels for web pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param web.tolerations Tolerations for web pods assignment
@@ -798,7 +798,7 @@ worker:
   ##
   affinity: {}
   ## @param worker.nodeSelector Node labels for pod assignment
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param worker.tolerations Tolerations for worker pod assignment

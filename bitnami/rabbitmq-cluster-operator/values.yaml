@@ -276,7 +276,7 @@ clusterOperator:
   ##
   affinity: {}
   ## @param clusterOperator.nodeSelector Node labels for RabbitMQ Cluster Operator pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param clusterOperator.tolerations Tolerations for RabbitMQ Cluster Operator pods assignment
@@ -677,7 +677,7 @@ msgTopologyOperator:
   ##
   affinity: {}
   ## @param msgTopologyOperator.nodeSelector Node labels for RabbitMQ Messaging Topology Operator pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param msgTopologyOperator.tolerations Tolerations for RabbitMQ Messaging Topology Operator pods assignment

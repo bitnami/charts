@@ -396,7 +396,7 @@ hub:
   ##
   affinity: {}
   ## @param hub.nodeSelector Node labels for pod assignment.
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param hub.tolerations Tolerations for pod assignment.
@@ -812,7 +812,7 @@ proxy:
   ##
   affinity: {}
   ## @param proxy.nodeSelector Node labels for pod assignment. Evaluated as a template.
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param proxy.tolerations Tolerations for pod assignment. Evaluated as a template.
@@ -1335,7 +1335,7 @@ imagePuller:
   ##
   affinity: {}
   ## @param imagePuller.nodeSelector Node labels for pod assignment. Evaluated as a template.
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param imagePuller.tolerations Tolerations for pod assignment. Evaluated as a template.
@@ -1479,7 +1479,7 @@ singleuser:
   ##
   podAnnotations: {}
   ## @param singleuser.nodeSelector Node labels for pod assignment. Evaluated as a template.
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param singleuser.tolerations Tolerations for pod assignment. Evaluated as a template.

@@ -290,7 +290,7 @@ server:
   ##
   affinity: {}
   ## @param server.nodeSelector Node labels for Vault Server pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param server.tolerations Tolerations for Vault Server pods assignment
@@ -816,7 +816,7 @@ csiProvider:
   ##
   affinity: {}
   ## @param csiProvider.nodeSelector Node labels for Vault CSI Provider pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param csiProvider.tolerations Tolerations for Vault CSI Provider pods assignment
@@ -1355,7 +1355,7 @@ injector:
   ##
   affinity: {}
   ## @param injector.nodeSelector Node labels for Vault Kubernetes Injector pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param injector.tolerations Tolerations for Vault Kubernetes Injector pods assignment

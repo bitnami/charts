@@ -187,7 +187,7 @@ controller:
     ##    memory: 25Mi
     requests: {}
   ## @param controller.nodeSelector Node labels for controller pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param controller.tolerations Tolerations for controller pod assignment
@@ -541,7 +541,7 @@ speaker:
     ##    memory: 25Mi
     requests: {}
   ## @param speaker.nodeSelector Node labels for speaker pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param speaker.tolerations Tolerations for speaker pod assignment

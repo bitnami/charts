@@ -404,7 +404,7 @@ compactor:
   ##
   affinity: {}
   ## @param compactor.nodeSelector Node labels for Compactor pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param compactor.tolerations Tolerations for Compactor pods assignment
@@ -663,7 +663,7 @@ distributor:
   ##
   affinity: {}
   ## @param distributor.nodeSelector Node labels for Distributor pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param distributor.tolerations Tolerations for Distributor pods assignment
@@ -928,7 +928,7 @@ metricsGenerator:
   ##
   affinity: {}
   ## @param metricsGenerator.nodeSelector Node labels for metricsGenerator pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param metricsGenerator.tolerations Tolerations for metricsGenerator pods assignment
@@ -1185,7 +1185,7 @@ ingester:
   ##
   affinity: {}
   ## @param ingester.nodeSelector Node labels for Ingester pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param ingester.tolerations Tolerations for Ingester pods assignment
@@ -1491,7 +1491,7 @@ querier:
   ##
   affinity: {}
   ## @param querier.nodeSelector Node labels for Querier pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param querier.tolerations Tolerations for Querier pods assignment
@@ -1754,7 +1754,7 @@ queryFrontend:
   ##
   affinity: {}
   ## @param queryFrontend.nodeSelector Node labels for queryFrontend pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param queryFrontend.tolerations Tolerations for queryFrontend pods assignment
@@ -2199,7 +2199,7 @@ vulture:
   ##
   affinity: {}
   ## @param vulture.nodeSelector Node labels for Vulture pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param vulture.tolerations Tolerations for Vulture pods assignment
