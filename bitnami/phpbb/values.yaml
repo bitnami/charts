@@ -421,7 +421,7 @@ service:
     http: 80
     https: 443
   ## loadBalancerIP for the phpBB Service (optional, cloud specific)
-  ## ref: https://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
   ##
   ## loadBalancerIP:
   ## @param service.nodePorts.http Kubernetes HTTP node port

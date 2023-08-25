@@ -194,7 +194,7 @@ containerPorts:
   https: 8443
 ## @param sessionAffinity Control where client requests go, to the same pod or round-robin
 ## Values: ClientIP or None
-## ref: https://kubernetes.io/docs/user-guide/services/
+## ref: https://kubernetes.io/docs/concepts/services-networking/service/
 ##
 sessionAffinity: "None"
 ## @param podAffinityPreset Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
@@ -540,7 +540,7 @@ service:
   ##
   loadBalancerSourceRanges: []
   ## @param service.loadBalancerIP loadBalancerIP for the SuiteCRM Service (optional, cloud specific)
-  ## ref: https://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
   loadBalancerIP: ""
   ## @param service.nodePorts.http Kubernetes HTTP node port
   ## @param service.nodePorts.https Kubernetes HTTPS node port

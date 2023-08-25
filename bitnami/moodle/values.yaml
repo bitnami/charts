@@ -185,7 +185,7 @@ containerPorts:
   https: 8443
 ## @param sessionAffinity Control where client requests go, to the same pod or round-robin
 ## Values: ClientIP or None
-## ref: https://kubernetes.io/docs/user-guide/services/
+## ref: https://kubernetes.io/docs/concepts/services-networking/service/
 ##
 sessionAffinity: "None"
 ## Enable persistence using Persistent Volume Claims
@@ -420,7 +420,7 @@ service:
   ##
   loadBalancerSourceRanges: []
   ## @param service.loadBalancerIP loadBalancerIP for the Moodle&trade; Service (optional, cloud specific)
-  ## ref: https://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
   ##
   loadBalancerIP: ""
   ## @param service.externalTrafficPolicy Enable client source IP preservation

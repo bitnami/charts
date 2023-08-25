@@ -545,7 +545,7 @@ service:
   ##
   metricsPortNameOverride: ""
   ## @param service.loadBalancerIP loadBalancerIP for the etcd service (optional, cloud specific)
-  ## ref: https://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
   ##
   loadBalancerIP: ""
   ## @param service.loadBalancerSourceRanges [array] Load Balancer source ranges

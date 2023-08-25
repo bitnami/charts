@@ -347,7 +347,7 @@ service:
   ##
   clusterIP: ""
   ## @param service.loadBalancerIP Load balancer IP for the phpMyAdmin Service (optional, cloud specific)
-  ## ref: https://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
   ##
   loadBalancerIP: ""
   ## @param service.loadBalancerSourceRanges Addresses that are allowed when service is LoadBalancer

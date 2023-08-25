@@ -356,7 +356,7 @@ client:
     extraPorts: []
     ## @param client.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param client.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -761,7 +761,7 @@ backend:
     extraPorts: []
     ## @param backend.service.sessionAffinity Control where backend requests go, to the same pod or round-robin
     ## Values: BackendIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param backend.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -1082,7 +1082,7 @@ rts:
     extraPorts: []
     ## @param rts.service.sessionAffinity Control where rts requests go, to the same pod or round-robin
     ## Values: RTSIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param rts.service.sessionAffinityConfig Additional settings for the sessionAffinity

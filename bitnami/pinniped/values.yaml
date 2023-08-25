@@ -451,7 +451,7 @@ concierge:
     extraPorts: []
     ## @param concierge.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param concierge.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -770,7 +770,7 @@ supervisor:
       extraPorts: []
       ## @param supervisor.service.api.sessionAffinity Control where client requests go, to the same pod or round-robin
       ## Values: ClientIP or None
-      ## ref: https://kubernetes.io/docs/user-guide/services/
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
       ##
       sessionAffinity: None
       ## @param supervisor.service.api.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -825,7 +825,7 @@ supervisor:
       extraPorts: []
       ## @param supervisor.service.public.sessionAffinity Control where client requests go, to the same pod or round-robin
       ## Values: ClientIP or None
-      ## ref: https://kubernetes.io/docs/user-guide/services/
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
       ##
       sessionAffinity: None
       ## @param supervisor.service.public.sessionAffinityConfig Additional settings for the sessionAffinity

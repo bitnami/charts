@@ -542,7 +542,7 @@ web:
     extraPorts: []
     ## @param web.service.sessionAffinity Control where web requests go, to the same pod or round-robin
     ## Values: WebIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param web.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -1044,7 +1044,7 @@ streaming:
     extraPorts: []
     ## @param streaming.service.sessionAffinity Control where streaming requests go, to the same pod or round-robin
     ## Values: StreamingIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param streaming.service.sessionAffinityConfig Additional settings for the sessionAffinity

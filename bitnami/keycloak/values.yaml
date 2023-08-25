@@ -491,7 +491,7 @@ service:
     https: ""
   ## @param service.sessionAffinity Control where client requests go, to the same pod or round-robin
   ## Values: ClientIP or None
-  ## ref: https://kubernetes.io/docs/user-guide/services/
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
   ##
   sessionAffinity: None
   ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -506,7 +506,7 @@ service:
   ##
   clusterIP: ""
   ## @param service.loadBalancerIP loadBalancerIP for the SuiteCRM Service (optional, cloud specific)
-  ## ref: https://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
   ##
   loadBalancerIP: ""
   ## @param service.loadBalancerSourceRanges Address that are allowed when service is LoadBalancer

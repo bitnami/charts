@@ -798,11 +798,11 @@ service:
   ##
   clusterIP: ""
   ## @param service.externalIPs Controller Service external IP addresses
-  ## Ref: https://kubernetes.io/docs/user-guide/services/#external-ips
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/service/#external-ips
   ##
   externalIPs: []
   ## @param service.loadBalancerIP Kubernetes LoadBalancerIP to request for Controller (optional, cloud specific)
-  ## ref: https://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
   ##
   loadBalancerIP: ""
   ## @param service.loadBalancerSourceRanges List of IP CIDRs allowed access to load balancer (if supported)

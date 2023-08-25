@@ -392,7 +392,7 @@ server:
     ##
     clusterIP: None
     ## @param server.service.loadBalancerIP loadBalancerIP if service type is `LoadBalancer`
-    ## ref: https://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
     ##
     loadBalancerIP: ""
     ## @param server.service.loadBalancerSourceRanges Address that are allowed when service is LoadBalancer
@@ -813,7 +813,7 @@ agent:
     ##
     clusterIP: ""
     ## @param agent.service.loadBalancerIP loadBalancerIP if service type is `LoadBalancer`
-    ## ref: https://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
     ##
     loadBalancerIP: ""
     ## @param agent.service.loadBalancerSourceRanges Address that are allowed when service is LoadBalancer

@@ -390,7 +390,7 @@ service:
   ##
   clusterIP: ""
   ## @param service.loadBalancerIP loadBalancerIP for the Joomla Service (optional, cloud specific)
-  ## ref: http://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+  ## ref: http://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
   ##
   loadBalancerIP: ""
   ## @param service.loadBalancerSourceRanges Joomla! service Load Balancer sources

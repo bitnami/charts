@@ -852,7 +852,7 @@ metrics:
       prometheus.io/scrape: "true"
       prometheus.io/port: "9104"
     ## @param metrics.service.loadBalancerIP Load Balancer IP if the Prometheus metrics server type is `LoadBalancer`
-    ## ref: https://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
     ##
     loadBalancerIP: ""
     ## @param metrics.service.clusterIP Prometheus metrics service Cluster IP

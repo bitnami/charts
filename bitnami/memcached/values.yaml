@@ -399,7 +399,7 @@ service:
     memcached: ""
   ## @param service.sessionAffinity Control where client requests go, to the same pod or round-robin
   ## Values: ClientIP or None
-  ## ref: https://kubernetes.io/docs/user-guide/services/
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
   ##
   sessionAffinity: ""
   ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -414,7 +414,7 @@ service:
   ##
   clusterIP: ""
   ## @param service.loadBalancerIP Memcached service Load Balancer IP
-  ## ref: https://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
   ##
   loadBalancerIP: ""
   ## @param service.loadBalancerSourceRanges Memcached service Load Balancer sources
@@ -665,7 +665,7 @@ metrics:
     clusterIP: ""
     ## @param metrics.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param metrics.service.annotations [object] Annotations for the Prometheus metrics service

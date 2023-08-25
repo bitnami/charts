@@ -441,7 +441,7 @@ kustomizeController:
       extraPorts: []
       ## @param kustomizeController.metrics.service.sessionAffinity Control where client requests go, to the same pod or round-robin
       ## Values: ClientIP or None
-      ## ref: https://kubernetes.io/docs/user-guide/services/
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
       ##
       sessionAffinity: None
       ## @param kustomizeController.metrics.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -874,7 +874,7 @@ helmController:
       extraPorts: []
       ## @param helmController.metrics.service.sessionAffinity Control where client requests go, to the same pod or round-robin
       ## Values: ClientIP or None
-      ## ref: https://kubernetes.io/docs/user-guide/services/
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
       ##
       sessionAffinity: None
       ## @param helmController.metrics.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -1261,7 +1261,7 @@ sourceController:
     extraPorts: []
     ## @param sourceController.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param sourceController.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -1467,7 +1467,7 @@ sourceController:
       extraPorts: []
       ## @param sourceController.metrics.service.sessionAffinity Control where client requests go, to the same pod or round-robin
       ## Values: ClientIP or None
-      ## ref: https://kubernetes.io/docs/user-guide/services/
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
       ##
       sessionAffinity: None
       ## @param sourceController.metrics.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -1900,7 +1900,7 @@ notificationController:
       extraPorts: []
       ## @param notificationController.metrics.service.sessionAffinity Control where client requests go, to the same pod or round-robin
       ## Values: ClientIP or None
-      ## ref: https://kubernetes.io/docs/user-guide/services/
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
       ##
       sessionAffinity: None
       ## @param notificationController.metrics.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -2333,7 +2333,7 @@ imageAutomationController:
       extraPorts: []
       ## @param imageAutomationController.metrics.service.sessionAffinity Control where client requests go, to the same pod or round-robin
       ## Values: ClientIP or None
-      ## ref: https://kubernetes.io/docs/user-guide/services/
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
       ##
       sessionAffinity: None
       ## @param imageAutomationController.metrics.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -2809,7 +2809,7 @@ imageReflectorController:
       extraPorts: []
       ## @param imageReflectorController.metrics.service.sessionAffinity Control where client requests go, to the same pod or round-robin
       ## Values: ClientIP or None
-      ## ref: https://kubernetes.io/docs/user-guide/services/
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
       ##
       sessionAffinity: None
       ## @param imageReflectorController.metrics.service.sessionAffinityConfig Additional settings for the sessionAffinity

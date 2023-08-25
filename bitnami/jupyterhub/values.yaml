@@ -538,7 +538,7 @@ hub:
       http: ""
     ## @param hub.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param hub.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -944,7 +944,7 @@ proxy:
         http: ""
       ## @param proxy.service.api.sessionAffinity Control where client requests go, to the same pod or round-robin
       ## Values: ClientIP or None
-      ## ref: https://kubernetes.io/docs/user-guide/services/
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
       ##
       sessionAffinity: None
       ## @param proxy.service.api.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -994,7 +994,7 @@ proxy:
         http: ""
       ## @param proxy.service.metrics.sessionAffinity Control where client requests go, to the same pod or round-robin
       ## Values: ClientIP or None
-      ## ref: https://kubernetes.io/docs/user-guide/services/
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
       ##
       sessionAffinity: None
       ## @param proxy.service.metrics.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -1045,7 +1045,7 @@ proxy:
         http: ""
       ## @param proxy.service.public.sessionAffinity Control where client requests go, to the same pod or round-robin
       ## Values: ClientIP or None
-      ## ref: https://kubernetes.io/docs/user-guide/services/
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
       ##
       sessionAffinity: None
       ## @param proxy.service.public.sessionAffinityConfig Additional settings for the sessionAffinity

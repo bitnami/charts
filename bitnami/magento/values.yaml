@@ -766,7 +766,7 @@ service:
   ##
   loadBalancerSourceRanges: []
   ## @param service.loadBalancerIP loadBalancerIP for the Magento Service (optional, cloud specific)
-  ## ref: https://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
   ##
   loadBalancerIP: ""
   ## @param service.externalTrafficPolicy Enable client source IP preservation

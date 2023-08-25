@@ -342,7 +342,7 @@ service:
   ##
   clusterIP: ""
   ## @param service.loadBalancerIP loadBalancerIP if Kibana service type is `LoadBalancer`
-  ## ref: https://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
   ##
   loadBalancerIP: ""
   ## @param service.loadBalancerSourceRanges %%MAIN_CONTAINER_NAME%% service Load Balancer sources

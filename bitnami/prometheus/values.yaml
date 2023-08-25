@@ -520,7 +520,7 @@ alertmanager:
     extraPorts: []
     ## @param alertmanager.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param alertmanager.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -1382,7 +1382,7 @@ server:
     extraPorts: []
     ## @param server.service.sessionAffinity Control where client requests go, to the same pod or round-robin. ClientIP by default.
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: ClientIP
     ## @param server.service.sessionAffinityConfig Additional settings for the sessionAffinity

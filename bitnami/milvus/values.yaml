@@ -708,7 +708,7 @@ dataCoord:
     sessionAffinityConfig: {}
     ## @param dataCoord.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param dataCoord.service.clusterIP Data Coordinator service Cluster IP
@@ -1194,7 +1194,7 @@ rootCoord:
     sessionAffinityConfig: {}
     ## @param rootCoord.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param rootCoord.service.clusterIP Root Coordinator service Cluster IP
@@ -1679,7 +1679,7 @@ queryCoord:
     sessionAffinityConfig: {}
     ## @param queryCoord.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param queryCoord.service.clusterIP Query Coordinator service Cluster IP
@@ -2165,7 +2165,7 @@ indexCoord:
     sessionAffinityConfig: {}
     ## @param indexCoord.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param indexCoord.service.clusterIP Index Coordinator service Cluster IP
@@ -2651,7 +2651,7 @@ dataNode:
     sessionAffinityConfig: {}
     ## @param dataNode.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param dataNode.service.clusterIP Data Node service Cluster IP
@@ -3137,7 +3137,7 @@ queryNode:
     sessionAffinityConfig: {}
     ## @param queryNode.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param queryNode.service.clusterIP Query Node service Cluster IP
@@ -3623,7 +3623,7 @@ indexNode:
     sessionAffinityConfig: {}
     ## @param indexNode.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param indexNode.service.clusterIP Index Node service Cluster IP
@@ -4111,7 +4111,7 @@ proxy:
     sessionAffinityConfig: {}
     ## @param proxy.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param proxy.service.clusterIP Proxy service Cluster IP
@@ -4605,7 +4605,7 @@ attu:
     sessionAffinityConfig: {}
     ## @param attu.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param attu.service.clusterIP Attu service Cluster IP

@@ -768,7 +768,7 @@ service:
   externalTrafficPolicy: Local
   ## @param service.sessionAffinity Control where client requests go, to the same pod or round-robin
   ## Values: ClientIP or None
-  ## ref: https://kubernetes.io/docs/user-guide/services/
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
   ##
   sessionAffinity: None
   ## @param service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -914,7 +914,7 @@ externalAccess:
     annotations: {}
     ## @param externalAccess.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param externalAccess.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -989,7 +989,7 @@ externalAccess:
       annotations: {}
       ## @param externalAccess.hidden.service.sessionAffinity Control where client requests go, to the same pod or round-robin
       ## Values: ClientIP or None
-      ## ref: https://kubernetes.io/docs/user-guide/services/
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
       ##
       sessionAffinity: None
       ## @param externalAccess.hidden.service.sessionAffinityConfig Additional settings for the sessionAffinity

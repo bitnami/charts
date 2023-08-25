@@ -63,7 +63,7 @@ diagnosticMode:
 ##
 
 ## loadBalancerIP for the Parse Service (optional, cloud specific)
-## ref: https://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
 ##
 server:
   ## Bitnami Parse image version
@@ -340,7 +340,7 @@ server:
   ##
   lifecycleHooks: {}
   ## Kubernetes service for Parse Server Deployment
-  ## ref: https://kubernetes.io/docs/user-guide/services/#publishing-services---service-types
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services---service-types
   ##
   service:
     ## @param server.service.type Kubernetes Service type
@@ -384,7 +384,7 @@ server:
     extraPorts: []
     ## @param server.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param server.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -662,7 +662,7 @@ dashboard:
   ##
   initContainers: []
     ## Kubernetes service for Parse Server Deployment
-  ## ref: https://kubernetes.io/docs/user-guide/services/#publishing-services---service-types
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#publishing-services---service-types
   ##
   service:
     ## @param dashboard.service.type Kubernetes Service type
@@ -706,7 +706,7 @@ dashboard:
     extraPorts: []
     ## @param dashboard.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param dashboard.service.sessionAffinityConfig Additional settings for the sessionAffinity

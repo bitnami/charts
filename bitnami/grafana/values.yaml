@@ -594,11 +594,11 @@ service:
   nodePorts:
     grafana: ""
   ## @param service.loadBalancerIP loadBalancerIP if Grafana service type is `LoadBalancer` (optional, cloud specific)
-  ## ref: https://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
   ##
   loadBalancerIP: ""
   ## @param service.loadBalancerSourceRanges loadBalancerSourceRanges if Grafana service type is `LoadBalancer` (optional, cloud specific)
-  ## ref: https://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
   ## e.g:
   ## loadBalancerSourceRanges:
   ##   - 10.10.10.0/24
@@ -991,11 +991,11 @@ imageRenderer:
     nodePorts:
       grafana: ""
     ## @param imageRenderer.service.loadBalancerIP loadBalancerIP if Grafana service type is `LoadBalancer` (optional, cloud specific)
-    ## ref: https://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
     ##
     loadBalancerIP: ""
     ## @param imageRenderer.service.loadBalancerSourceRanges loadBalancerSourceRanges if Grafana service type is `LoadBalancer` (optional, cloud specific)
-    ## ref: https://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
     ## e.g:
     ## loadBalancerSourceRanges:
     ##   - 10.10.10.0/24
