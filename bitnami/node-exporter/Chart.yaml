@@ -27,5 +27,5 @@ maintainers:
   url: https://github.com/bitnami/charts
 name: node-exporter
 sources:
-- https://github.com/bitnami/charts/tree/main/bitnami/node-exporter
-version: 3.6.6
+  - https://github.com/bitnami/charts/tree/main/bitnami/node-exporter
+version: 3.7.0

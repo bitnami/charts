@@ -29,5 +29,5 @@ maintainers:
   url: https://github.com/bitnami/charts
 name: grafana-operator
 sources:
-- https://github.com/bitnami/charts/tree/main/bitnami/grafana-operator
-version: 3.3.2
+  - https://github.com/bitnami/charts/tree/main/bitnami/grafana-operator
+version: 3.4.0
