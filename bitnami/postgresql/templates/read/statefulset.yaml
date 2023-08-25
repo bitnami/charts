@@ -10,22 +10,12 @@ kind: StatefulSet
 metadata:
   name: {{ include "postgresql.readReplica.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  {{- $labels := merge .Values.readReplicas.labels .Values.commonLabels }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: read
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.readReplicas.labels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.readReplicas.labels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if or .Values.commonAnnotations .Values.readReplicas.annotations }}
-  annotations:
-    {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.readReplicas.annotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.readReplicas.annotations "context" $ ) | nindent 4 }}
-    {{- end }}
+  {{- $annotations := merge .Values.readReplicas.annotations .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
   replicas: {{ .Values.readReplicas.replicaCount }}
@@ -33,20 +23,15 @@ spec:
   {{- if .Values.readReplicas.updateStrategy }}
   updateStrategy: {{- toYaml .Values.readReplicas.updateStrategy | nindent 4 }}
   {{- end }}
+  {{- $podLabels := merge .Values.readReplicas.podLabels .Values.commonLabels }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: read
   template:
     metadata:
       name: {{ include "postgresql.readReplica.fullname" . }}
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: read
-        {{- if .Values.commonLabels }}
-        {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
-        {{- end }}
-        {{- if .Values.readReplicas.podLabels }}
-        {{- include "common.tplvalues.render" ( dict "value" .Values.readReplicas.podLabels "context" $ ) | nindent 8 }}
-        {{- end }}
       {{- if or (include "postgresql.readReplicas.createExtendedConfigmap" .) .Values.readReplicas.podAnnotations }}
       annotations:
         {{- if (include "postgresql.readReplicas.createExtendedConfigmap" .) }}
@@ -69,8 +54,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.readReplicas.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.readReplicas.podAffinityPreset "component" "read" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.readReplicas.podAntiAffinityPreset "component" "read" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.readReplicas.podAffinityPreset "component" "read" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.readReplicas.podAntiAffinityPreset "component" "read" "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.readReplicas.nodeAffinityPreset.type "key" .Values.readReplicas.nodeAffinityPreset.key "values" .Values.readReplicas.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.readReplicas.nodeSelector }}
