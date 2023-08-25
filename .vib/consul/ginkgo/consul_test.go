@@ -3,23 +3,18 @@ package consul_test
 import (
 	"context"
 	"fmt"
-	"strconv"
 	"time"
 
+	utils "github.com/bitnami/charts/.vib/common-tests/ginkgo-utils"
 	. "github.com/onsi/ginkgo/v2"
 	. "github.com/onsi/gomega"
 	appsv1 "k8s.io/api/apps/v1"
 	batchv1 "k8s.io/api/batch/v1"
-	v1 "k8s.io/api/core/v1"
-	apierrors "k8s.io/apimachinery/pkg/api/errors"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/client-go/kubernetes"
-	"k8s.io/client-go/rest"
-	"k8s.io/client-go/tools/clientcmd"
 )
 
 const (
-	Timeout         = 90 * time.Second
 	PollingInterval = 1 * time.Second
 )
 
@@ -31,30 +26,34 @@ var _ = Describe("Consul", Ordered, func() {
 	BeforeEach(func() {
 		ctx, cancel = context.WithCancel(context.Background())
 
-		conf := clusterConfigOrDie()
+		conf := utils.MustBuildClusterConfig(kubeconfig)
 		c = kubernetes.NewForConfigOrDie(conf)
 	})
 
 	When("a database is created and Consul is scaled down to 0 replicas and back up", func() {
 		It("should have access to the created key-pair", func() {
 
+			getAvailableReplicas := func(ss *appsv1.StatefulSet) int32 { return ss.Status.AvailableReplicas }
+			getSucceededJobs := func(j *batchv1.Job) int32 { return j.Status.Succeeded }
+			getOpts := metav1.GetOptions{}
+
 			By("checking all the replicas are available")
-			ss, err := c.AppsV1().StatefulSets(*namespace).Get(ctx, *stsName, metav1.GetOptions{})
+			ss, err := c.AppsV1().StatefulSets(namespace).Get(ctx, stsName, getOpts)
 			Expect(err).NotTo(HaveOccurred())
 			Expect(ss.Status.Replicas).NotTo(BeZero())
 			origReplicas := *ss.Spec.Replicas
 
 			Eventually(func() (*appsv1.StatefulSet, error) {
-				return c.AppsV1().StatefulSets(*namespace).Get(ctx, *stsName, metav1.GetOptions{})
-			}, Timeout, PollingInterval).Should(WithTransform(getAvailableReplicas, Equal(origReplicas)))
+				return c.AppsV1().StatefulSets(namespace).Get(ctx, stsName, getOpts)
+			}, timeout, PollingInterval).Should(WithTransform(getAvailableReplicas, Equal(origReplicas)))
 
-			svc, err := c.CoreV1().Services(*namespace).Get(ctx, fmt.Sprintf("%s-headless", *stsName), metav1.GetOptions{})
+			svc, err := c.CoreV1().Services(namespace).Get(ctx, fmt.Sprintf("%s-headless", stsName), getOpts)
 			Expect(err).NotTo(HaveOccurred())
 
-			port, err := getPort(svc, "http")
+			port, err := utils.SvcGetPortByName(svc, "http")
 			Expect(err).NotTo(HaveOccurred())
 
-			image, err := getContainerImage(ss, "consul")
+			image, err := utils.StsGetContainerImageByName(ss, "consul")
 			Expect(err).NotTo(HaveOccurred())
 
 			// Use current time for allowing the test suite to repeat
@@ -66,42 +65,44 @@ var _ = Describe("Consul", Ordered, func() {
 
 			By("creating a job to create a new test key-pair")
 			putKVJobName := fmt.Sprintf("%s-putkv-%s",
-				*stsName, jobSuffix)
+				stsName, jobSuffix)
 			keyName := fmt.Sprintf("test%s", jobSuffix)
 			keyValue := fmt.Sprintf("v%s", jobSuffix)
 
-			err = createJob(ctx, c, putKVJobName, port, image, "kv", "put", "-http-addr", fmt.Sprintf("http://consul-0.%s-headless:%s", *stsName, port), keyName, keyValue)
+			err = createJob(ctx, c, putKVJobName, port, image, "kv", "put", "-http-addr", fmt.Sprintf("http://consul-0.%s-headless:%s", stsName, port), keyName, keyValue)
 			Expect(err).NotTo(HaveOccurred())
 
 			Eventually(func() (*batchv1.Job, error) {
-				return c.BatchV1().Jobs(*namespace).Get(ctx, putKVJobName, metav1.GetOptions{})
-			}, Timeout, PollingInterval).Should(WithTransform(getSucceededPods, Equal(int32(1))))
+				return c.BatchV1().Jobs(namespace).Get(ctx, putKVJobName, getOpts)
+			}, timeout, PollingInterval).Should(WithTransform(getSucceededJobs, Equal(int32(1))))
 
 			By("scaling down to 0 replicas")
-			ss, err = scale(ctx, c, ss, 0)
+			ss, err = utils.StsScale(
+				ctx, c, ss, 0)
 			Expect(err).NotTo(HaveOccurred())
 
 			Eventually(func() (*appsv1.StatefulSet, error) {
-				return c.AppsV1().StatefulSets(*namespace).Get(ctx, *stsName, metav1.GetOptions{})
-			}, Timeout, PollingInterval).Should(WithTransform(getAvailableReplicas, BeZero()))
+				return c.AppsV1().StatefulSets(namespace).Get(ctx, stsName, getOpts)
+			}, timeout, PollingInterval).Should(WithTransform(getAvailableReplicas, BeZero()))
 
 			By("scaling up to the original replicas")
-			ss, err = scale(ctx, c, ss, origReplicas)
+			ss, err = utils.StsScale(
+				ctx, c, ss, origReplicas)
 			Expect(err).NotTo(HaveOccurred())
 
 			Eventually(func() (*appsv1.StatefulSet, error) {
-				return c.AppsV1().StatefulSets(*namespace).Get(ctx, *stsName, metav1.GetOptions{})
-			}, Timeout, PollingInterval).Should(WithTransform(getAvailableReplicas, Equal(origReplicas)))
+				return c.AppsV1().StatefulSets(namespace).Get(ctx, stsName, getOpts)
+			}, timeout, PollingInterval).Should(WithTransform(getAvailableReplicas, Equal(origReplicas)))
 
 			By("creating a job to delete the key-pair")
 			deleteDBJobName := fmt.Sprintf("%s-deletekv-%s",
-				*stsName, jobSuffix)
-			err = createJob(ctx, c, deleteDBJobName, port, image, "kv", "delete", "-http-addr", fmt.Sprintf("http://consul-0.%s-headless:%s", *stsName, port), keyName)
+				stsName, jobSuffix)
+			err = createJob(ctx, c, deleteDBJobName, port, image, "kv", "delete", "-http-addr", fmt.Sprintf("http://consul-0.%s-headless:%s", stsName, port), keyName)
 			Expect(err).NotTo(HaveOccurred())
 
 			Eventually(func() (*batchv1.Job, error) {
-				return c.BatchV1().Jobs(*namespace).Get(ctx, deleteDBJobName, metav1.GetOptions{})
-			}, Timeout, PollingInterval).Should(WithTransform(getSucceededPods, Equal(int32(1))))
+				return c.BatchV1().Jobs(namespace).Get(ctx, deleteDBJobName, getOpts)
+			}, timeout, PollingInterval).Should(WithTransform(getSucceededJobs, Equal(int32(1))))
 		})
 	})
 
@@ -109,101 +110,3 @@ var _ = Describe("Consul", Ordered, func() {
 		cancel()
 	})
 })
-
-func clusterConfigOrDie() *rest.Config {
-	if *kubeconfig == "" {
-		panic("kubeconfig must be supplied")
-	}
-
-	config, err := clientcmd.BuildConfigFromFlags("", *kubeconfig)
-	if err != nil {
-		panic(err.Error())
-	}
-
-	return config
-}
-
-func getAvailableReplicas(ss *appsv1.StatefulSet) int32 {
-	return ss.Status.AvailableReplicas
-}
-
-func getSucceededPods(j *batchv1.Job) int32 {
-	return j.Status.Succeeded
-}
-
-func createJob(ctx context.Context, c kubernetes.Interface, name string, port string, image string, args ...string) error {
-	command := []string{"consul"}
-	command = append(command, args[:]...)
-	job := &batchv1.Job{
-		ObjectMeta: metav1.ObjectMeta{
-			Name: name,
-		},
-		TypeMeta: metav1.TypeMeta{
-			Kind: "Job",
-		},
-		Spec: batchv1.JobSpec{
-			Template: v1.PodTemplateSpec{
-				Spec: v1.PodSpec{
-					RestartPolicy: "Never",
-					Containers: []v1.Container{
-						{
-							Name:    "consul",
-							Image:   image,
-							Command: command,
-						},
-					},
-				},
-			},
-		},
-	}
-
-	_, err := c.BatchV1().Jobs(*namespace).Create(ctx, job, metav1.CreateOptions{})
-
-	return err
-}
-
-func scale(ctx context.Context, c kubernetes.Interface, ss *appsv1.StatefulSet, count int32) (*appsv1.StatefulSet, error) {
-	name := ss.Name
-	ns := ss.Namespace
-
-	for i := 0; i < 3; i++ {
-		ss, err := c.AppsV1().StatefulSets(ns).Get(ctx, name, metav1.GetOptions{})
-		if err != nil {
-			return nil, fmt.Errorf("failed to get statefulset %q: %v", name, err)
-		}
-		*(ss.Spec.Replicas) = count
-		ss, err = c.AppsV1().StatefulSets(ns).Update(ctx, ss, metav1.UpdateOptions{})
-		if err == nil {
-			return ss, nil
-		}
-		if !apierrors.IsConflict(err) && !apierrors.IsServerTimeout(err) {
-			return nil, fmt.Errorf("failed to update statefulset %q: %v", name, err)
-		}
-	}
-
-	return nil, fmt.Errorf("too many retries draining statefulset %q", name)
-}
-
-func getContainerImage(ss *appsv1.StatefulSet, name string) (string, error) {
-	containers := ss.Spec.Template.Spec.Containers
-
-	for _, c := range containers {
-		if c.Name == name {
-			return c.Image, nil
-		}
-	}
-
-	return "", fmt.Errorf("container %q not found in statefulset %q", name, ss.Name)
-}
-
-func getPort(svc *v1.Service, name string) (string, error) {
-	ports := svc.Spec.Ports
-
-	for _, p := range ports {
-		if p.Name == name {
-			return strconv.Itoa(int(p.Port)), nil
-		}
-	}
-
-	return "", fmt.Errorf("port %q not found in service %q", name, svc.Name)
-}
