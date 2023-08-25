@@ -403,7 +403,7 @@ extraDeploy: |-
     metadata:
       name: {{ include "common.names.fullname" . }}-privileged
       namespace: {{ .Release.Namespace }}
-      labels: {{- include "common.labels.standard" . | nindent 6 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 6 }}
     roleRef:
       apiGroup: rbac.authorization.k8s.io
       kind: ClusterRole
