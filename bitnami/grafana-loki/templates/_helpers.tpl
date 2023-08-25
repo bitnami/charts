@@ -155,6 +155,17 @@ Get the promtail configuration configmap.
 {{- end -}}
 
 {{/*
+Get the NGINX configuration configmap.
+*/}}
+{{- define "grafana-loki.gateway.configmapName" -}}
+{{- if .Values.gateway.existingConfigmap -}}
+    {{- .Values.gateway.existingConfigmap -}}
+{{- else }}
+    {{- include "grafana-loki.gateway.fullname" .  -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Get the promtail configuration configmap.
 */}}
 {{- define "grafana-loki.gateway.secretName" -}}
