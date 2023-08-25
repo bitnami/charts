@@ -447,7 +447,7 @@ service:
 
 ## Configure the ingress resource that allows you to access the
 ## Moodle&trade; installation. Set up the URL
-## ref: https://kubernetes.io/docs/user-guide/ingress/
+## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
 ##
 ingress:
   ## @param ingress.enabled Set to true to enable ingress record generation

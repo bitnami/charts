@@ -658,7 +658,7 @@ service:
     annotations: {}
 ## Configure the ingress resource that allows you to access the
 ## MinIO&reg; Console. Set up the URL
-## ref: https://kubernetes.io/docs/user-guide/ingress/
+## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
 ##
 ingress:
   ## @param ingress.enabled Enable ingress controller resource for MinIO Console
@@ -767,7 +767,7 @@ ingress:
 
 ## Configure the ingress resource that allows you to access the
 ## MinIO&reg; API. Set up the URL
-## ref: https://kubernetes.io/docs/user-guide/ingress/
+## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
 ##
 apiIngress:
   ## @param apiIngress.enabled Enable ingress controller resource for MinIO API

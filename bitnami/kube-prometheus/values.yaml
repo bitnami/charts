@@ -666,7 +666,7 @@ prometheus:
 
   ## Configure the ingress resource that allows you to access the
   ## Prometheus installation. Set up the URL
-  ## ref: https://kubernetes.io/docs/user-guide/ingress/
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
     ## @param prometheus.ingress.enabled Enable ingress controller resource
@@ -1368,7 +1368,7 @@ prometheus:
       sessionAffinityConfig: {}
     ## Configure the ingress resource that allows you to access the
     ## Thanos Sidecar installation. Set up the URL
-    ## ref: https://kubernetes.io/docs/user-guide/ingress/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
     ##
     ingress:
       ## @param prometheus.thanos.ingress.enabled Enable ingress controller resource
@@ -1751,7 +1751,7 @@ alertmanager:
     extraParameters: {}
   ## Configure the ingress resource that allows you to access the
   ## Alertmanager installation. Set up the URL
-  ## ref: https://kubernetes.io/docs/user-guide/ingress/
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
     ## @param alertmanager.ingress.enabled Enable ingress controller resource

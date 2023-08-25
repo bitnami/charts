@@ -359,7 +359,7 @@ service:
   sessionAffinityConfig: {}
 
 ## OpenSearch ingress parameters
-## ref: http://kubernetes.io/docs/user-guide/ingress/
+## ref: http://kubernetes.io/docs/concepts/services-networking/ingress/
 ##
 ingress:
   ## @param ingress.enabled Enable ingress record generation for OpenSearch
@@ -2041,7 +2041,7 @@ ingest:
     ##
     sessionAffinityConfig: {}
   ## OpenSearch Ingest-only ingress parameters
-  ## ref: http://kubernetes.io/docs/user-guide/ingress/
+  ## ref: http://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
     ## @param ingest.ingress.enabled Enable ingress record generation for OpenSearch

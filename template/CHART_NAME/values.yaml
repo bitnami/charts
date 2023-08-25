@@ -421,7 +421,7 @@ service:
   ##
   sessionAffinityConfig: {}
 ## %%MAIN_CONTAINER_NAME%% ingress parameters
-## ref: http://kubernetes.io/docs/user-guide/ingress/
+## ref: http://kubernetes.io/docs/concepts/services-networking/ingress/
 ##
 ingress:
   ## @param ingress.enabled Enable ingress record generation for %%MAIN_CONTAINER_NAME%%

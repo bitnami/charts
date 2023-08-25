@@ -479,7 +479,7 @@ server:
       ##
       sessionAffinityConfig: {}
 
-  ## ref: http://kubernetes.io/docs/user-guide/ingress/
+  ## ref: http://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
     ## @param server.ingress.enabled Enable ingress record generation for Vault

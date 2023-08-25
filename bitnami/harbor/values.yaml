@@ -195,7 +195,7 @@ service:
 
 ingress:
   ## Configure the ingress resource that allows you to access Harbor Core
-  ## ref: https://kubernetes.io/docs/user-guide/ingress/
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   core:
     ## @param ingress.core.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
@@ -302,7 +302,7 @@ ingress:
     ##
     extraRules: []
   ## Configure the ingress resource that allows you to access Notary
-  ## ref: https://kubernetes.io/docs/user-guide/ingress/
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   notary:
     ## @param ingress.notary.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)

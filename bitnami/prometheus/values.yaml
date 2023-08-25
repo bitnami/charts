@@ -355,7 +355,7 @@ alertmanager:
   initContainers: []
 
   ## Alertmanager ingress parameters
-  ## ref: http://kubernetes.io/docs/user-guide/ingress/
+  ## ref: http://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
     ## @param alertmanager.ingress.enabled Enable ingress record generation for Alertmanager
@@ -1126,7 +1126,7 @@ server:
 
     ## Configure the ingress resource that allows you to access the
     ## Thanos Sidecar installation. Set up the URL
-    ## ref: https://kubernetes.io/docs/user-guide/ingress/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
     ##
     ingress:
       ## @param server.thanos.ingress.enabled Enable ingress controller resource
@@ -1220,7 +1220,7 @@ server:
       extraRules: []
 
   ## Prometheus Server ingress parameters
-  ## ref: http://kubernetes.io/docs/user-guide/ingress/
+  ## ref: http://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
     ## @param server.ingress.enabled Enable ingress record generation for Prometheus

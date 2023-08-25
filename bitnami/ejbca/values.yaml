@@ -465,7 +465,7 @@ service:
 
 ## Configure the ingress resource that allows you to access the
 ## EJBCA installation. Set up the URL
-## ref: https://kubernetes.io/docs/user-guide/ingress/
+## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
 ##
 ingress:
   ## @param ingress.enabled Enable ingress controller resource

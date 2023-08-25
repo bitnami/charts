@@ -522,7 +522,7 @@ dataPlane:
     ##
     sessionAffinityConfig: {}
 
-  ## ref: http://kubernetes.io/docs/user-guide/ingress/
+  ## ref: http://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
     ## @param dataPlane.ingress.enabled Enable ingress record generation for Apisix
@@ -1243,7 +1243,7 @@ controlPlane:
     ##
     sessionAffinityConfig: {}
 
-  ## ref: http://kubernetes.io/docs/user-guide/ingress/
+  ## ref: http://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
     ## @param controlPlane.ingress.enabled Enable ingress record generation for Apisix
@@ -1994,7 +1994,7 @@ dashboard:
     ##
     sessionAffinityConfig: {}
 
-  ## ref: http://kubernetes.io/docs/user-guide/ingress/
+  ## ref: http://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
     ## @param dashboard.ingress.enabled Enable ingress record generation for Apisix
@@ -2564,7 +2564,7 @@ ingressController:
     ##
     sessionAffinityConfig: {}
 
-  ## ref: http://kubernetes.io/docs/user-guide/ingress/
+  ## ref: http://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
     ## @param ingressController.ingress.enabled Enable ingress record generation for Apisix

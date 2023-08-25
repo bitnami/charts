@@ -648,7 +648,7 @@ query:
     minAvailable: 1
     maxUnavailable: ""
   ## Configure the ingress resource that allows you to access Thanos Query
-  ## ref: https://kubernetes.io/docs/user-guide/ingress/
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
     ## @param query.ingress.enabled Enable ingress controller resource
@@ -1190,7 +1190,7 @@ queryFrontend:
     minAvailable: 1
     maxUnavailable: ""
   ## Configure the ingress resource that allows you to access Thanos Query Frontend
-  ## ref: https://kubernetes.io/docs/user-guide/ingress/
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
     ## @param queryFrontend.ingress.enabled Enable ingress controller resource
@@ -1609,7 +1609,7 @@ bucketweb:
     minAvailable: 1
     maxUnavailable: ""
   ## Configure the ingress resource that allows you to access Thanos Bucketweb
-  ## ref: https://kubernetes.io/docs/user-guide/ingress/
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
     ## @param bucketweb.ingress.enabled Enable ingress controller resource
@@ -2034,7 +2034,7 @@ compactor:
     automountServiceAccountToken: true
     ## existingServiceAccount: ""
   ## Configure the ingress resource that allows you to access Thanos Query Frontend
-  ## ref: https://kubernetes.io/docs/user-guide/ingress/
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
     ## @param compactor.ingress.enabled Enable ingress controller resource
@@ -2563,7 +2563,7 @@ storegateway:
     minAvailable: 1
     maxUnavailable: ""
   ## Configure the ingress resource that allows you to access Thanos Query Frontend
-  ## ref: https://kubernetes.io/docs/user-guide/ingress/
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
     ## @param storegateway.ingress.enabled Enable ingress controller resource
@@ -3203,7 +3203,7 @@ ruler:
     minAvailable: 1
     maxUnavailable: ""
   ## Configure the ingress resource that allows you to access Thanos Ruler
-  ## ref: https://kubernetes.io/docs/user-guide/ingress/
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
     ## @param ruler.ingress.enabled Enable ingress controller resource
@@ -3715,7 +3715,7 @@ receive:
     ##
     existingClaim: ""
   ## Configure the ingress resource that allows you to access Thanos Receive
-  ## ref: https://kubernetes.io/docs/user-guide/ingress/
+  ## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
     ## @param receive.ingress.enabled Set to true to enable ingress record generation

@@ -735,7 +735,7 @@ agentListenerService:
   sessionAffinityConfig: {}
 
 ## Configure the ingress resource that allows you to access the Jenkins installation
-## ref: https://kubernetes.io/docs/user-guide/ingress/
+## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
 ##
 ingress:
   ## @param ingress.enabled Enable ingress record generation for Jenkins

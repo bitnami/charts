@@ -1696,7 +1696,7 @@ server:
     dex.config: ""
 
   ## Configure the ingress for the Argo CD server
-  ## Ref: https://kubernetes.io/docs/user-guide/ingress/
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
   ## @param server.ingress.enabled Enable the creation of an ingress for the Argo CD server
   ## @param server.ingress.pathType Path type for the Argo CD server ingress
   ## @param server.ingress.apiVersion Ingress API version for the Argo CD server ingress
@@ -1914,7 +1914,7 @@ server:
       honorLabels: false
 
   ## Configure the ingress resource that allows you to access the Argo CD gRPC API
-  ## Ref: https://kubernetes.io/docs/user-guide/ingress/
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
   ## Ref: https://argo-cd.readthedocs.io/en/stable/operator-manual/ingress/
   ## @param server.ingressGrpc.enabled Enable the creation of an ingress for the Argo CD gRPC server
   ## @param server.ingressGrpc.pathType Path type for the Argo CD gRPC server ingress

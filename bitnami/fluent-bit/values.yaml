@@ -550,7 +550,7 @@ autoscaling:
 
 ## Configure the ingress resource that allows you to access the
 ## fluent-bit Console. Set up the URL
-## ref: https://kubernetes.io/docs/user-guide/ingress/
+## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
 ##
 ingress:
   ## @param ingress.enabled Enable ingress controller resource for fluentBit Console

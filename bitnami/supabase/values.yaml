@@ -2266,7 +2266,7 @@ studio:
     ##
     sessionAffinityConfig: {}
 
-  ## ref: http://kubernetes.io/docs/user-guide/ingress/
+  ## ref: http://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
     ## @param studio.ingress.enabled Enable ingress record generation for Supabase
