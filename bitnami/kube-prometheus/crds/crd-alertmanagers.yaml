@@ -2939,7 +2939,7 @@ spec:
               imagePullSecrets:
                 description: An optional list of references to secrets in the same
                   namespace to use for pulling prometheus and alertmanager images
-                  from registries see http://kubernetes.io/docs/user-guide/images#specifying-imagepullsecrets-on-a-pod
+                  from registries see http://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod
                 items:
                   description: LocalObjectReference contains enough information to
                     let you locate the referenced object inside the same namespace.

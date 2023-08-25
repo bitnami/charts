@@ -2681,7 +2681,7 @@ spec:
                 type: string
               imagePullSecrets:
                 description: An optional list of references to Secrets in the same
-                  namespace to use for pulling images from registries. See http://kubernetes.io/docs/user-guide/images#specifying-imagepullsecrets-on-a-pod
+                  namespace to use for pulling images from registries. See http://kubernetes.io/docs/concepts/containers/images/#specifying-imagepullsecrets-on-a-pod
                 items:
                   description: LocalObjectReference contains enough information to
                     let you locate the referenced object inside the same namespace.
