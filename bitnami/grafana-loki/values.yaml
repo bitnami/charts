@@ -425,7 +425,7 @@ compactor:
   ##
   affinity: {}
   ## @param compactor.nodeSelector Node labels for Compactor pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param compactor.tolerations Tolerations for Compactor pods assignment
@@ -779,7 +779,7 @@ gateway:
   ##
   affinity: {}
   ## @param gateway.nodeSelector Node labels for Gateway pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param gateway.tolerations Tolerations for Gateway pods assignment
@@ -1143,7 +1143,7 @@ indexGateway:
   ##
   affinity: {}
   ## @param indexGateway.nodeSelector Node labels for index-gateway pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param indexGateway.tolerations Tolerations for index-gateway pods assignment
@@ -1410,7 +1410,7 @@ distributor:
   ##
   affinity: {}
   ## @param distributor.nodeSelector Node labels for Distributor pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param distributor.tolerations Tolerations for Distributor pods assignment
@@ -1677,7 +1677,7 @@ ingester:
   ##
   affinity: {}
   ## @param ingester.nodeSelector Node labels for Ingester pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param ingester.tolerations Tolerations for Ingester pods assignment
@@ -1992,7 +1992,7 @@ querier:
   ##
   affinity: {}
   ## @param querier.nodeSelector Node labels for Querier pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param querier.tolerations Tolerations for Querier pods assignment
@@ -2299,7 +2299,7 @@ queryFrontend:
   ##
   affinity: {}
   ## @param queryFrontend.nodeSelector Node labels for queryFrontend pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param queryFrontend.tolerations Tolerations for queryFrontend pods assignment
@@ -2576,7 +2576,7 @@ queryScheduler:
   ##
   affinity: {}
   ## @param queryScheduler.nodeSelector Node labels for queryScheduler pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param queryScheduler.tolerations Tolerations for queryScheduler pods assignment
@@ -2850,7 +2850,7 @@ ruler:
   ##
   affinity: {}
   ## @param ruler.nodeSelector Node labels for Ruler pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param ruler.tolerations Tolerations for Ruler pods assignment
@@ -3160,7 +3160,7 @@ tableManager:
   ##
   affinity: {}
   ## @param tableManager.nodeSelector Node labels for table-manager pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param tableManager.tolerations Tolerations for table-manager pods assignment
@@ -3461,7 +3461,7 @@ promtail:
   ##
   affinity: {}
   ## @param promtail.nodeSelector Node labels for Promtail pods assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param promtail.tolerations Tolerations for Promtail pods assignment

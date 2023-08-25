@@ -499,7 +499,7 @@ nodeAffinityPreset:
 ##
 affinity: {}
 ## @param nodeSelector MongoDB(&reg;) Node labels for pod assignment
-## ref: https://kubernetes.io/docs/user-guide/node-selection/
+## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
 ##
 nodeSelector: {}
 ## @param tolerations MongoDB(&reg;) Tolerations for pod assignment
@@ -1532,7 +1532,7 @@ arbiter:
   ##
   affinity: {}
   ## @param arbiter.nodeSelector Arbiter Node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param arbiter.tolerations Arbiter Tolerations for pod assignment
@@ -1867,7 +1867,7 @@ hidden:
   ##
   affinity: {}
   ## @param hidden.nodeSelector Hidden node Node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param hidden.tolerations Hidden node Tolerations for pod assignment

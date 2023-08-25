@@ -364,7 +364,7 @@ query:
   ##
   affinity: {}
   ## @param query.nodeSelector Node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param query.tolerations Tolerations for pod assignment
@@ -718,7 +718,7 @@ collector:
   ##
   affinity: {}
   ## @param collector.nodeSelector Node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param collector.tolerations Tolerations for pod assignment
@@ -1054,7 +1054,7 @@ agent:
   ##
   affinity: {}
   ## @param agent.nodeSelector Node labels for pod assignment
-  ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param agent.tolerations Tolerations for pod assignment

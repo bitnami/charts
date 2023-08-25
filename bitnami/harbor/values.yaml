@@ -848,7 +848,7 @@ nginx:
   ##
   affinity: {}
   ## @param nginx.nodeSelector NGINX Node labels for pod assignment
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param nginx.tolerations NGINX Tolerations for pod assignment
@@ -1108,7 +1108,7 @@ portal:
   ##
   affinity: {}
   ## @param portal.nodeSelector Harbor Portal Node labels for pod assignment
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param portal.tolerations Harbor Portal Tolerations for pod assignment
@@ -1439,7 +1439,7 @@ core:
   ##
   affinity: {}
   ## @param core.nodeSelector Harbor Core Node labels for pod assignment
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param core.tolerations Harbor Core Tolerations for pod assignment
@@ -1734,7 +1734,7 @@ jobservice:
   ##
   affinity: {}
   ## @param jobservice.nodeSelector Harbor Jobservice Node labels for pod assignment
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param jobservice.tolerations Harbor Jobservice Tolerations for pod assignment
@@ -1922,7 +1922,7 @@ registry:
   ##
   affinity: {}
   ## @param registry.nodeSelector Harbor Registry Node labels for pod assignment
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param registry.tolerations Harbor Registry Tolerations for pod assignment
@@ -2483,7 +2483,7 @@ notary:
     ##
     affinity: {}
     ## @param notary.server.nodeSelector Harbor Notary Server Node labels for pod assignment
-    ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+    ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
     ##
     nodeSelector: {}
     ## @param notary.server.tolerations Harbor Notary Server Tolerations for pod assignment
@@ -2720,7 +2720,7 @@ notary:
     ##
     affinity: {}
     ## @param notary.signer.nodeSelector Harbor Notary Signer Node labels for pod assignment
-    ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+    ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
     ##
     nodeSelector: {}
     ## @param notary.signer.tolerations Harbor Notary Signer Tolerations for pod assignment
@@ -3040,7 +3040,7 @@ trivy:
   ##
   affinity: {}
   ## @param trivy.nodeSelector Trivy Node labels for pod assignment
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param trivy.tolerations Trivy Tolerations for pod assignment
@@ -3319,7 +3319,7 @@ exporter:
   ##
   serviceAccountName: ""
   ## @param exporter.nodeSelector Harbor Exporter Node labels for pod assignment
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param exporter.tolerations Harbor Exporter Tolerations for pod assignment

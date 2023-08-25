@@ -513,7 +513,7 @@ forwarder:
   ##
   affinity: {}
   ## @param forwarder.nodeSelector Forwarder Node labels for pod assignment
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param forwarder.tolerations Forwarder Tolerations for pod assignment
@@ -1108,7 +1108,7 @@ aggregator:
   ##
   affinity: {}
   ## @param aggregator.nodeSelector Aggregator Node labels for pod assignment
-  ## Ref: https://kubernetes.io/docs/user-guide/node-selection/
+  ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/
   ##
   nodeSelector: {}
   ## @param aggregator.tolerations Aggregator Tolerations for pod assignment
