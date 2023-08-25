@@ -51,6 +51,20 @@
               }
             }
           }
+        },
+        {
+          "action_id": "ginkgo",
+          "params": {
+            "resources": {
+              "path": "/.vib/etcd/ginkgo"
+            },
+            "params": {
+              "kubeconfig": "{{kubeconfig}}",
+              "namespace": "{{namespace}}",
+              "name": "etcd",
+              "password": "ComplicatedPassword123!4"
+            }
+          }
         }
       ]
     }
