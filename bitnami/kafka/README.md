@@ -925,16 +925,16 @@ extraDeploy:
     kind: Deployment
     metadata:
       name: {{ include "common.names.fullname" . }}-connect
-      labels: {{- include "common.labels.standard" . | nindent 4 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
         app.kubernetes.io/component: connector
     spec:
       replicas: 1
       selector:
-        matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+        matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 6 }}
           app.kubernetes.io/component: connector
       template:
         metadata:
-          labels: {{- include "common.labels.standard" . | nindent 8 }}
+          labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 8 }}
             app.kubernetes.io/component: connector
         spec:
           containers:
@@ -956,7 +956,7 @@ extraDeploy:
     kind: ConfigMap
     metadata:
       name: {{ include "common.names.fullname" . }}-connect
-      labels: {{- include "common.labels.standard" . | nindent 4 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
         app.kubernetes.io/component: connector
     data:
       connect-standalone.properties: |-
@@ -970,14 +970,14 @@ extraDeploy:
     kind: Service
     metadata:
       name: {{ include "common.names.fullname" . }}-connect
-      labels: {{- include "common.labels.standard" . | nindent 4 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
         app.kubernetes.io/component: connector
     spec:
       ports:
         - protocol: TCP
           port: 8083
           targetPort: connector
-      selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
+      selector: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
         app.kubernetes.io/component: connector
 ```
 
@@ -1208,6 +1208,10 @@ kubectl apply -f $NEW_PVC_MANIFEST_FILE
 ```
 
 Repeat this process for each replica you had in your Kafka cluster. Once completed, upgrade the cluster and the new Statefulset should reuse the existing PVCs.
+
+### To 25.0.0
+
+This major updates the Zookeeper subchart to it newest major, 12.0.0. For more information on this subchart's major, please refer to [zookeeper upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/zookeeper#to-1200).
 
 ### To 23.0.0
 
