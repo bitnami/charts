@@ -67,7 +67,7 @@ useDaemonset: false
 image:
   registry: docker.io
   repository: bitnami/external-dns
-  tag: 0.13.5-debian-11-r55
+  tag: 0.13.5-debian-11-r79
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -589,7 +589,7 @@ rfc2136:
   ## @param rfc2136.tsigSecret When using the rfc2136 provider, specify the tsig secret to enable security. (do not specify if `rfc2136.secretName` is provided.) (optional)
   ##
   tsigSecret: ""
-  ## @param rfc2136.secretName When using the rfc2136 provider, specify the existing secret which contains your tsig secret. Disables the usage of `rfc2136.tsigSecret` (optional)
+  ## @param rfc2136.secretName When using the rfc2136 provider, specify the existing secret which contains your tsig secret in the key "rfc2136_tsig_secret". Disables the usage of `rfc2136.tsigSecret` (optional)
   ##
   secretName: ""
   ## @param rfc2136.tsigSecretAlg When using the rfc2136 provider, specify the tsig secret to enable security (optional)
@@ -597,7 +597,7 @@ rfc2136:
   tsigSecretAlg: hmac-sha256
   ## @param rfc2136.tsigKeyname When using the rfc2136 provider, specify the tsig keyname to enable security (optional)
   ##
-  tsigKeyname: externaldns-key
+  tsigKeyname: rfc2136_tsig_secret
   ## @param rfc2136.tsigAxfr When using the rfc2136 provider, enable AFXR to enable security (optional)
   ##
   tsigAxfr: true
@@ -682,6 +682,12 @@ annotationFilter: ""
 ## @param labelFilter Select sources managed by external-dns using label selector (optional)
 ##
 labelFilter: ""
+## @param ingressClassFilters Filter sources managed by external-dns via IngressClass (optional)
+##
+ingressClassFilters: []
+## @param managedRecordTypesFilters Filter record types managed by external-dns (optional)
+##
+managedRecordTypesFilters: []
 ## @param dryRun When enabled, prints DNS record changes rather than actually performing them (optional)
 ##
 dryRun: false
@@ -846,6 +852,9 @@ service:
   ## @param service.externalIPs Service external IP addresses
   ##
   externalIPs: []
+  ## @param service.externalName Service external name
+  ##
+  externalName: ""
   ## @param service.loadBalancerIP IP address to assign to load balancer (if supported)
   ##
   loadBalancerIP: ""

@@ -9,19 +9,17 @@ kind: StatefulSet
 metadata:
   name: {{ include "mysql.secondary.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: secondary
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
   replicas: {{ .Values.secondary.replicaCount }}
   podManagementPolicy: {{ .Values.secondary.podManagementPolicy | quote }}
+  {{- $podLabels := merge .Values.secondary.podLabels .Values.commonLabels }}
   selector:
-    matchLabels: {{ include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: secondary
   serviceName: {{ include "mysql.secondary.fullname" . }}
   {{- if .Values.secondary.updateStrategy }}
@@ -36,11 +34,8 @@ spec:
         {{- if .Values.secondary.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.secondary.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: secondary
-        {{- if .Values.secondary.podLabels }}
-        {{- include "common.tplvalues.render" ( dict "value" .Values.secondary.podLabels "context" $ ) | nindent 8 }}
-        {{- end }}
     spec:
       serviceAccountName: {{ include "mysql.serviceAccountName" . }}
       {{- include "mysql.imagePullSecrets" . | nindent 6 }}
@@ -51,8 +46,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.secondary.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.secondary.podAffinityPreset "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.secondary.podAntiAffinityPreset "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.secondary.podAffinityPreset "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.secondary.podAntiAffinityPreset "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.secondary.nodeAffinityPreset.type "key" .Values.secondary.nodeAffinityPreset.key "values" .Values.secondary.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.secondary.nodeSelector }}
@@ -238,6 +233,10 @@ spec:
             - name: custom-init-scripts
               mountPath: /docker-entrypoint-initdb.d
             {{- end }}
+            {{- if or .Values.startdbScriptsConfigMap .Values.startdbScripts }}
+            - name: custom-start-scripts
+              mountPath: /docker-entrypoint-startdb.d
+            {{- end }}
             {{- if or .Values.secondary.configuration .Values.secondary.existingConfigmap }}
             - name: config
               mountPath: /opt/bitnami/mysql/conf/my.cnf
@@ -280,7 +279,7 @@ spec:
               if [[ -f "${MYSQL_ROOT_PASSWORD_FILE:-}" ]]; then
                   password_aux=$(cat "$MYSQL_ROOT_PASSWORD_FILE")
               fi
-              DATA_SOURCE_NAME="root:${password_aux}@(localhost:3306)/" /bin/mysqld_exporter {{- range .Values.metrics.extraArgs.secondary }} {{ . }} {{- end }}
+              MYSQLD_EXPORTER_PASSWORD=${password_aux} /bin/mysqld_exporter --mysqld.address=localhost:3306 --mysqld.username=root {{- range .Values.metrics.extraArgs.primary }} {{ . }} {{- end }}
           {{- end }}
           ports:
             - name: metrics
@@ -317,6 +316,11 @@ spec:
           configMap:
             name: {{ include "mysql.initdbScriptsCM" . }}
         {{- end }}
+        {{- if or .Values.startdbScriptsConfigMap .Values.startdbScripts }}
+        - name: custom-start-scripts
+          configMap:
+            name: {{ include "mysql.startdbScriptsCM" . }}
+        {{- end }}
         {{- if or .Values.secondary.configuration .Values.secondary.existingConfigmap }}
         - name: config
           configMap:
@@ -346,18 +350,12 @@ spec:
   volumeClaimTemplates:
     - metadata:
         name: data
-        labels: {{ include "common.labels.matchLabels" . | nindent 10 }}
+        labels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 10 }}
           app.kubernetes.io/component: secondary
-          {{- if .Values.commonLabels }}
-          {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 10 }}
-          {{- end }}
-        annotations:
-          {{- if .Values.secondary.persistence.annotations }}
-          {{- include "common.tplvalues.render" (dict "value" .Values.secondary.persistence.annotations "context" $) | nindent 10 }}
-          {{- end }}
-          {{- if .Values.commonAnnotations }}
-          {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 10 }}
-          {{- end }}
+        {{- if or .Values.secondary.persistence.annotations .Values.commonAnnotations }}
+        {{- $annotations := merge  .Values.secondary.persistence.annotations .Values.commonAnnotations }}
+        annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 10 }}
+        {{- end }}
       spec:
         accessModes:
           {{- range .Values.secondary.persistence.accessModes }}

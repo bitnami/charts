@@ -9,22 +9,12 @@ kind: StatefulSet
 metadata:
   name: {{ include "postgresql.primary.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  {{- $labels := merge .Values.primary.labels .Values.commonLabels }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: primary
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.primary.labels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.primary.labels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if or .Values.commonAnnotations .Values.primary.annotations }}
-  annotations:
-    {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.primary.annotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.primary.annotations "context" $ ) | nindent 4 }}
-    {{- end }}
+  {{- $annotations := merge .Values.primary.annotations .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
   replicas: 1
@@ -32,20 +22,15 @@ spec:
   {{- if .Values.primary.updateStrategy }}
   updateStrategy: {{- toYaml .Values.primary.updateStrategy | nindent 4 }}
   {{- end }}
+  {{- $podLabels := merge .Values.primary.podLabels .Values.commonLabels }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: primary
   template:
     metadata:
       name: {{ include "postgresql.primary.fullname" . }}
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: primary
-        {{- if .Values.commonLabels }}
-        {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
-        {{- end }}
-        {{- if .Values.primary.podLabels }}
-        {{- include "common.tplvalues.render" ( dict "value" .Values.primary.podLabels "context" $ ) | nindent 8 }}
-        {{- end }}
       {{- if or (include "postgresql.primary.createConfigmap" .) (include "postgresql.primary.createExtendedConfigmap" .) .Values.primary.podAnnotations }}
       annotations:
         {{- if (include "postgresql.primary.createConfigmap" .) }}
@@ -71,8 +56,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.primary.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.primary.podAffinityPreset "component" "primary" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.primary.podAntiAffinityPreset "component" "primary" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.primary.podAffinityPreset "component" "primary" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.primary.podAntiAffinityPreset "component" "primary" "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.primary.nodeAffinityPreset.type "key" .Values.primary.nodeAffinityPreset.key "values" .Values.primary.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.primary.nodeSelector }}

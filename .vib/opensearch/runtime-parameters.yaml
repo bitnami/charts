@@ -1,9 +1,15 @@
 master:
   replicaCount: 1
+  podSecurityContext:
+    enabled: true
+    fsGroup: 1002
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1002
 coordinating:
   replicaCount: 1
 data:
-  replicaCount: 1
+  replicaCount: 2
 ingest:
   enabled: true
   replicaCount: 1

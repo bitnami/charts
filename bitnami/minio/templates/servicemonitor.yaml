@@ -8,18 +8,9 @@ apiVersion: {{ default "monitoring.coreos.com/v1" .Values.metrics.serviceMonitor
 kind: ServiceMonitor
 metadata:
   name: {{ include "common.names.fullname" . }}
-  {{- if .Values.metrics.serviceMonitor.namespace }}
-  namespace: {{ .Values.metrics.serviceMonitor.namespace | quote }}
-  {{- else }}
-  namespace: {{ .Release.Namespace | quote }}
-  {{- end }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
-    {{- if .Values.metrics.serviceMonitor.labels }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.metrics.serviceMonitor.labels "context" $) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
+  namespace: {{ default .Release.Namespace .Values.metrics.serviceMonitor.namespace | quote }}
+  {{- $labels := merge .Values.metrics.serviceMonitor.labels .Values.commonLabels }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -37,16 +28,16 @@ spec:
       honorLabels: {{ .Values.metrics.serviceMonitor.honorLabels }}
       {{- end }}
       {{- if .Values.metrics.serviceMonitor.metricRelabelings }}
-      metricRelabelings: {{- toYaml .Values.metrics.serviceMonitor.metricRelabelings | nindent 6 }}
+      metricRelabelings: {{- toYaml .Values.metrics.serviceMonitor.metricRelabelings | nindent 8 }}
       {{- end }}
       {{- if .Values.metrics.serviceMonitor.relabelings }}
-      relabelings: {{- toYaml .Values.metrics.serviceMonitor.relabelings | nindent 6 }}
+      relabelings: {{- toYaml .Values.metrics.serviceMonitor.relabelings | nindent 8 }}
       {{- end }}
       {{- if .Values.tls.enabled }}
       scheme: https
       {{- end }}
       {{- if .Values.metrics.serviceMonitor.tlsConfig }}
-      {{- toYaml .Values.metrics.serviceMonitor.tlsConfig | nindent 6 }}
+      tlsConfig: {{- toYaml .Values.metrics.serviceMonitor.tlsConfig | nindent 8 }}
       {{- end }}
   {{- if .Values.metrics.serviceMonitor.jobLabel }}
   jobLabel: {{ .Values.metrics.serviceMonitor.jobLabel }}
@@ -55,7 +46,7 @@ spec:
     matchNames:
       - {{ .Release.Namespace | quote }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 6 }}
       {{- if .Values.metrics.serviceMonitor.selector }}
       {{- include "common.tplvalues.render" (dict "value" .Values.metrics.serviceMonitor.selector "context" $) | nindent 6 }}
       {{- end }}
