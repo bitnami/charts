@@ -353,7 +353,7 @@ service:
   sessionAffinityConfig: {}
 
 ## Elasticsearch ingress parameters
-## ref: http://kubernetes.io/docs/user-guide/ingress/
+## ref: http://kubernetes.io/docs/concepts/services-networking/ingress/
 ##
 ingress:
   ## @param ingress.enabled Enable ingress record generation for Elasticsearch
@@ -1709,7 +1709,7 @@ ingest:
     ##
     sessionAffinityConfig: {}
   ## Elasticsearch Ingest-only ingress parameters
-  ## ref: http://kubernetes.io/docs/user-guide/ingress/
+  ## ref: http://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ingress:
     ## @param ingest.ingress.enabled Enable ingress record generation for Elasticsearch

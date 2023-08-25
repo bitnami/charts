@@ -115,7 +115,7 @@ service:
   labels: {}
 
 ## Configure the ingress resource that allows you to access the haproxy installation
-## ref: https://kubernetes.io/docs/user-guide/ingress/
+## ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
 ##
 ingress:
   ## @param ingress.enabled Enable ingress record generation for haproxy

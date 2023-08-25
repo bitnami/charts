@@ -1316,7 +1316,7 @@ defaultBackend:
 ##
 ingress:
   ## @param ingress.enabled Ingress configuration enabled
-  ## Ref: https://kubernetes.io/docs/user-guide/ingress/
+  ## Ref: https://kubernetes.io/docs/concepts/services-networking/ingress/
   ##
   ## Enable Ingress.
   ##
