@@ -95,6 +95,7 @@ spec:
       {{- if .Values.master.dnsConfig }}
       dnsConfig: {{- include "common.tplvalues.render" (dict "value" .Values.master.dnsConfig "context" $) | nindent 8 }}
       {{- end }}
+      enableServiceLinks: {{ .Values.master.enableServiceLinks }}
       terminationGracePeriodSeconds: {{ .Values.master.terminationGracePeriodSeconds }}
       containers:
         - name: redis
@@ -180,7 +181,6 @@ spec:
           ports:
             - name: redis
               containerPort: {{ .Values.master.containerPorts.redis }}
-          enableServiceLinks: {{ .Values.master.enableServiceLinks }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.master.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.master.customStartupProbe "context" $) | nindent 12 }}
@@ -310,7 +310,6 @@ spec:
           ports:
             - name: metrics
               containerPort: 9121
-          enableServiceLinks: {{ .Values.metrics.enableServiceLinks }}
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.metrics.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.customStartupProbe "context" $) | nindent 12 }}

@@ -1564,9 +1564,6 @@ metrics:
   ## Useful for certificate CN/SAN matching
   ##
   redisTargetHost: "localhost"
-  ## @param metrics.enableServiceLinks Whether information about services should be injected into pod's environment variable
-  ##
-  enableServiceLinks: true
   ## @param metrics.extraArgs Extra arguments for Redis&reg; exporter, for example:
   ## e.g.:
   ## extraArgs:

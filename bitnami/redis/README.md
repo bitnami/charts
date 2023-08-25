@@ -498,7 +498,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                                | `{}`                     |
 | `metrics.command`                                           | Override default metrics container init command (useful when using custom images)                                   | `[]`                     |
 | `metrics.redisTargetHost`                                   | A way to specify an alternative Redis&reg; hostname                                                                 | `localhost`              |
-| `metrics.enableServiceLinks`                                | Whether information about services should be injected into pod's environment variable                               | `true`                   |
 | `metrics.extraArgs`                                         | Extra arguments for Redis&reg; exporter, for example:                                                               | `{}`                     |
 | `metrics.extraEnvVars`                                      | Array with extra environment variables to add to Redis&reg; exporter                                                | `[]`                     |
 | `metrics.containerSecurityContext.enabled`                  | Enabled Redis&reg; exporter containers' Security Context                                                            | `true`                   |
