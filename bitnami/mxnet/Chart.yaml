@@ -32,5 +32,5 @@ maintainers:
   url: https://github.com/bitnami/charts
 name: mxnet
 sources:
-- https://github.com/bitnami/charts/tree/main/bitnami/mxnet
-version: 3.3.10
+  - https://github.com/bitnami/charts/tree/main/bitnami/mxnet
+version: 3.4.0

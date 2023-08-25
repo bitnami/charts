@@ -2,6 +2,8 @@ module test-elasticsearch-chart
 
 go 1.20
 
+replace github.com/bitnami/charts/.vib/common-tests/ginkgo-utils => ../../common-tests/ginkgo-utils
+
 require (
 	github.com/onsi/ginkgo/v2 v2.11.0
 	github.com/onsi/gomega v1.27.8
