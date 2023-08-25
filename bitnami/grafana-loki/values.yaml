@@ -545,7 +545,7 @@ compactor:
     sessionAffinityConfig: {}
     ## @param compactor.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param compactor.service.clusterIP Compactor service Cluster IP
@@ -859,7 +859,7 @@ gateway:
     sessionAffinityConfig: {}
     ## @param gateway.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param gateway.service.clusterIP Gateway service Cluster IP
@@ -1227,7 +1227,7 @@ indexGateway:
     sessionAffinityConfig: {}
     ## @param indexGateway.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param indexGateway.service.clusterIP index-gateway service Cluster IP
@@ -1494,7 +1494,7 @@ distributor:
     sessionAffinityConfig: {}
     ## @param distributor.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param distributor.service.clusterIP Distributor service Cluster IP
@@ -1805,7 +1805,7 @@ ingester:
     sessionAffinityConfig: {}
     ## @param ingester.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param ingester.service.clusterIP Ingester service Cluster IP
@@ -2116,7 +2116,7 @@ querier:
     sessionAffinityConfig: {}
     ## @param querier.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param querier.service.clusterIP Querier service Cluster IP
@@ -2383,7 +2383,7 @@ queryFrontend:
     sessionAffinityConfig: {}
     ## @param queryFrontend.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param queryFrontend.service.clusterIP queryFrontend service Cluster IP
@@ -2660,7 +2660,7 @@ queryScheduler:
     sessionAffinityConfig: {}
     ## @param queryScheduler.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param queryScheduler.service.clusterIP queryScheduler service Cluster IP
@@ -2974,7 +2974,7 @@ ruler:
     sessionAffinityConfig: {}
     ## @param ruler.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param ruler.service.clusterIP Ruler service Cluster IP
@@ -3244,7 +3244,7 @@ tableManager:
     sessionAffinityConfig: {}
     ## @param tableManager.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param tableManager.service.clusterIP table-manager service Cluster IP
@@ -3633,7 +3633,7 @@ promtail:
     sessionAffinityConfig: {}
     ## @param promtail.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param promtail.service.clusterIP Promtail service Cluster IP

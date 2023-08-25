@@ -577,7 +577,7 @@ auth:
     extraPorts: []
     ## @param auth.service.sessionAffinity Control where auth requests go, to the same pod or round-robin
     ## Values: AuthIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param auth.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -911,7 +911,7 @@ meta:
     extraPorts: []
     ## @param meta.service.sessionAffinity Control where meta requests go, to the same pod or round-robin
     ## Values: MetaIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param meta.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -1264,7 +1264,7 @@ realtime:
     extraPorts: []
     ## @param realtime.service.sessionAffinity Control where realtime requests go, to the same pod or round-robin
     ## Values: RealtimeIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param realtime.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -1596,7 +1596,7 @@ rest:
     extraPorts: []
     ## @param rest.service.sessionAffinity Control where rest requests go, to the same pod or round-robin
     ## Values: RestIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param rest.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -1933,7 +1933,7 @@ storage:
     extraPorts: []
     ## @param storage.service.sessionAffinity Control where storage requests go, to the same pod or round-robin
     ## Values: StorageIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param storage.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -2317,7 +2317,7 @@ studio:
     extraPorts: []
     ## @param studio.service.sessionAffinity Control where studio requests go, to the same pod or round-robin
     ## Values: StudioIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param studio.service.sessionAffinityConfig Additional settings for the sessionAffinity

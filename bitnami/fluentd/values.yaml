@@ -328,7 +328,7 @@ forwarder:
         targetPort: http
         protocol: TCP
     ## @param forwarder.service.loadBalancerIP loadBalancerIP if service type is `LoadBalancer` (optional, cloud specific)
-    ## ref: https://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
     ##
     loadBalancerIP: ""
     ## @param forwarder.service.loadBalancerSourceRanges Addresses that are allowed when service is LoadBalancer
@@ -814,7 +814,7 @@ aggregator:
         targetPort: tcp
         protocol: TCP
     ## @param aggregator.service.loadBalancerIP loadBalancerIP if service type is `LoadBalancer` (optional, cloud specific)
-    ## ref: https://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
     ##
     loadBalancerIP: ""
     ## @param aggregator.service.loadBalancerSourceRanges Addresses that are allowed when service is LoadBalancer
@@ -1276,7 +1276,7 @@ metrics:
     ##
     port: 24231
     ## @param metrics.service.loadBalancerIP Load Balancer IP if the Prometheus metrics server type is `LoadBalancer`
-    ## ref: https://kubernetes.io/docs/user-guide/services/#type-loadbalancer
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
     ##
     loadBalancerIP: ""
     ## @param metrics.service.clusterIP Prometheus metrics service Cluster IP

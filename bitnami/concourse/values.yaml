@@ -1000,7 +1000,7 @@ service:
       https: ""
     ## @param service.web.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param service.web.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -1053,7 +1053,7 @@ service:
       tsa: ""
     ## @param service.workerGateway.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param service.workerGateway.sessionAffinityConfig Additional settings for the sessionAffinity

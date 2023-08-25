@@ -489,7 +489,7 @@ compactor:
       http: ""
     ## @param compactor.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param compactor.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -764,7 +764,7 @@ distributor:
       grpc: ""
     ## @param distributor.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param distributor.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -1041,7 +1041,7 @@ metricsGenerator:
       grpc: ""
     ## @param metricsGenerator.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param metricsGenerator.service.clusterIP metricsGenerator service Cluster IP
@@ -1353,7 +1353,7 @@ ingester:
       grpc: ""
     ## @param ingester.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param ingester.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -1628,7 +1628,7 @@ querier:
       grpc: ""
     ## @param querier.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param querier.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -2057,7 +2057,7 @@ queryFrontend:
       grpc: ""
     ## @param queryFrontend.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param queryFrontend.service.sessionAffinityConfig Additional settings for the sessionAffinity
@@ -2368,7 +2368,7 @@ vulture:
       http: ""
     ## @param vulture.service.sessionAffinity Control where client requests go, to the same pod or round-robin
     ## Values: ClientIP or None
-    ## ref: https://kubernetes.io/docs/user-guide/services/
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/
     ##
     sessionAffinity: None
     ## @param vulture.service.sessionAffinityConfig Additional settings for the sessionAffinity
