@@ -201,7 +201,7 @@ The command removes all the Kubernetes components associated with the chart and 
 ### Traffic Exposure Parameters
 
 | Name                                              | Description                                                                                                                      | Value                    |
-| ------------------------------------------------- |----------------------------------------------------------------------------------------------------------------------------------| ------------------------ |
+| ------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
 | `service.type`                                    | ClickHouse service type                                                                                                          | `ClusterIP`              |
 | `service.ports.http`                              | ClickHouse service HTTP port                                                                                                     | `8123`                   |
 | `service.ports.https`                             | ClickHouse service HTTPS port                                                                                                    | `443`                    |
@@ -248,7 +248,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalAccess.service.ports.interserver`        | ClickHouse service Interserver port                                                                                              | `9009`                   |
 | `externalAccess.service.ports.metrics`            | ClickHouse service metrics port                                                                                                  | `8001`                   |
 | `externalAccess.service.loadBalancerIPs`          | Array of load balancer IPs for each ClickHouse . Length must be the same as replicaCount                                         | `[]`                     |
-| `externalAccess.service.loadBalancerAnnotations`  | Array of load balancer annotations for each ClickHouse . Length must be the same shards multiplied by replicaCount               | `[]`                     |
+| `externalAccess.service.loadBalancerAnnotations`  | Array of load balancer annotations for each ClickHouse . Length must be the same as shards multiplied by replicaCount            | `[]`                     |
 | `externalAccess.service.loadBalancerSourceRanges` | Address(es) that are allowed when service is LoadBalancer                                                                        | `[]`                     |
 | `externalAccess.service.nodePorts.http`           | Node port for HTTP                                                                                                               | `[]`                     |
 | `externalAccess.service.nodePorts.https`          | Node port for HTTPS                                                                                                              | `[]`                     |
