@@ -9,30 +9,23 @@ kind: StatefulSet
 metadata:
   name: {{ include "opensearch.coordinating.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: coordinating-only
     {{- if .Values.useIstioLabels }}
     ## Istio Labels: https://istio.io/docs/ops/deployment/requirements/
     app: coordinating-only
     {{- end }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if or .Values.coordinating.annotations .Values.commonAnnotations }}
-  annotations:
-    {{- if .Values.coordinating.annotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.coordinating.annotations "context" $ ) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-    {{- end }}
+  {{- $annotations := merge .Values.coordinating.annotations .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
   {{- if not .Values.coordinating.autoscaling.hpa.enabled }}
   replicas: {{ .Values.coordinating.replicaCount }}
   {{- end }}
+  {{- $podLabels := merge .Values.coordinating.podLabels .Values.commonLabels }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: coordinating-only
   {{- if .Values.coordinating.updateStrategy }}
   updateStrategy: {{- toYaml .Values.coordinating.updateStrategy | nindent 4 }}
@@ -41,14 +34,11 @@ spec:
   podManagementPolicy: {{ .Values.coordinating.podManagementPolicy }}
   template:
     metadata:
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: coordinating-only
         {{- if .Values.useIstioLabels }}
         ## Istio Labels: https://istio.io/docs/ops/deployment/requirements/
         app: coordinating-only
-        {{- end }}
-        {{- if .Values.coordinating.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.coordinating.podLabels "context" $) | nindent 8 }}
         {{- end }}
       annotations:
         {{- if and (include "opensearch.createTlsSecret" .) (not .Values.security.tls.coordinating.existingSecret) }}
@@ -67,8 +57,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.coordinating.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.coordinating.podAffinityPreset "component" "coordinating-only" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.coordinating.podAntiAffinityPreset "component" "coordinating-only" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.coordinating.podAffinityPreset "component" "coordinating-only" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.coordinating.podAntiAffinityPreset "component" "coordinating-only" "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.coordinating.nodeAffinityPreset.type "key" .Values.coordinating.nodeAffinityPreset.key "values" .Values.coordinating.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.coordinating.nodeSelector }}
