@@ -203,6 +203,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `gateway.command`                               | Override default container command (useful when using custom images)                                  | `[]`                  |
 | `gateway.args`                                  | Override default container args (useful when using custom images)                                     | `[]`                  |
 | `gateway.extraArgs`                             | Additional container args (will be concatenated to args, unless diagnosticMode is enabled)            | `[]`                  |
+| `gateway.existingConfigmap`                     | Name of a ConfigMap with the NGINX configuration                                                      | `""`                  |
 | `gateway.verboseLogging`                        | Show the gateway access_log                                                                           | `false`               |
 | `gateway.replicaCount`                          | Number of Gateway replicas to deploy                                                                  | `1`                   |
 | `gateway.auth.enabled`                          | Enable basic auth                                                                                     | `false`               |
