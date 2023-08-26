@@ -200,6 +200,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `gateway.extraEnvVars`                          | Array with extra environment variables to add to gateway nodes                                        | `[]`                  |
 | `gateway.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars for gateway nodes                                | `""`                  |
 | `gateway.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for gateway nodes                                   | `""`                  |
+| `gateway.existingConfigmap`                     | Name of existing ConfigMap containing nginx.conf                                                      | `""`                  |
 | `gateway.command`                               | Override default container command (useful when using custom images)                                  | `[]`                  |
 | `gateway.args`                                  | Override default container args (useful when using custom images)                                     | `[]`                  |
 | `gateway.extraArgs`                             | Additional container args (will be concatenated to args, unless diagnosticMode is enabled)            | `[]`                  |
