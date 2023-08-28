@@ -95,6 +95,7 @@ spec:
       {{- if .Values.master.dnsConfig }}
       dnsConfig: {{- include "common.tplvalues.render" (dict "value" .Values.master.dnsConfig "context" $) | nindent 8 }}
       {{- end }}
+      enableServiceLinks: {{ .Values.master.enableServiceLinks }}
       terminationGracePeriodSeconds: {{ .Values.master.terminationGracePeriodSeconds }}
       containers:
         - name: redis

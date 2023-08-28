@@ -35,7 +35,7 @@ dependencies:
 - condition: redis.enabled
   name: redis
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 17.x.x
+  version: 18.x.x
 - condition: postgresql.enabled
   name: postgresql
   repository: oci://registry-1.docker.io/bitnamicharts
@@ -59,4 +59,4 @@ maintainers:
 name: harbor
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/harbor
-version: 16.8.0
+version: 17.1.0
