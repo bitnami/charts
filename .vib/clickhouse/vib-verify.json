@@ -61,6 +61,22 @@
             "endpoint": "lb-clickhouse-http",
             "app_protocol": "HTTP"
           }
+        },
+        {
+          "action_id": "ginkgo",
+          "params": {
+            "resources": {
+              "path": "/.vib/clickhouse/ginkgo"
+            },
+            "params": {
+              "kubeconfig": "{{kubeconfig}}",
+              "namespace": "{{namespace}}",
+              "name": "clickhouse",
+              "shards": "2",
+              "username": "test_user",
+              "password": "bitnami1234"
+            }
+          }
         }
       ]
     }
