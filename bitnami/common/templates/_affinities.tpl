@@ -82,7 +82,7 @@ preferredDuringSchedulingIgnoredDuringExecution:
   {{- range $extraPodAffinityTerms }}
   - podAffinityTerm:
       labelSelector:
-        matchLabels: {{- (include "common.labels.matchLabels" $.context) | nindent 10 }}
+        matchLabels: {{- (include "common.labels.matchLabels" ( dict "customLabels" $customLabels "context" $.context )) | nindent 10 }}
           {{- if not (empty $component) }}
           {{ printf "app.kubernetes.io/component: %s" $component }}
           {{- end }}
@@ -115,7 +115,7 @@ requiredDuringSchedulingIgnoredDuringExecution:
     topologyKey: {{ include "common.affinities.topologyKey" (dict "topologyKey" .topologyKey) }}
   {{- range $extraPodAffinityTerms }}
   - labelSelector:
-      matchLabels: {{- (include "common.labels.matchLabels" $.context) | nindent 8 }}
+      matchLabels: {{- (include "common.labels.matchLabels" ( dict "customLabels" $customLabels "context" $.context )) | nindent 8 }}
         {{- if not (empty $component) }}
         {{ printf "app.kubernetes.io/component: %s" $component }}
         {{- end }}
