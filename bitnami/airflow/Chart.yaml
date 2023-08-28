@@ -12,7 +12,7 @@ annotations:
     - name: airflow-worker
       image: docker.io/bitnami/airflow-worker:2.7.0-debian-11-r2
     - name: airflow
-      image: docker.io/bitnami/airflow:2.7.0-debian-11-r3
+      image: docker.io/bitnami/airflow:2.7.0-debian-11-r5
     - name: git
       image: docker.io/bitnami/git:2.42.0-debian-11-r5
     - name: os-shell
@@ -47,4 +47,4 @@ maintainers:
 name: airflow
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/airflow
-version: 15.0.1
+version: 15.0.2
