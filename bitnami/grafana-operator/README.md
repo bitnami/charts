@@ -220,6 +220,7 @@ For more information, refer to the [documentation on the differences between the
 | `grafana.affinity`                                          | Affinity for controller pod assignment                                                                  | `{}`                     |
 | `grafana.nodeSelector`                                      | Node labels for controller pod assignment                                                               | `{}`                     |
 | `grafana.tolerations`                                       | Tolerations for controller pod assignment                                                               | `[]`                     |
+| `grafana.env`                                               | it is environment variable to pass to the running container                                             | `[]`                     |
 | `grafana.envFrom`                                           | Extra environment variable to pass to the running container                                             | `[]`                     |
 | `grafana.client.timeout`                                    | The timeout in seconds for the Grafana Rest API on that instance                                        | `5`                      |
 | `grafana.labels`                                            | Add additional labels to the grafana deployment, service and ingress resources                          | `{}`                     |
