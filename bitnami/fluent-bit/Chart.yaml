@@ -27,5 +27,5 @@ maintainers:
   url: https://github.com/bitnami/charts
 name: fluent-bit
 sources:
-- https://github.com/bitnami/charts/tree/main/bitnami/fluent-bit
-version: 0.4.11
+  - https://github.com/bitnami/charts/tree/main/bitnami/fluent-bit
+version: 0.5.0
