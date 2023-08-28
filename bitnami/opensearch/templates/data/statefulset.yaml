@@ -9,31 +9,24 @@ kind: StatefulSet
 metadata:
   name: {{ include "opensearch.data.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: data
     {{- if .Values.useIstioLabels }}
     ## Istio Labels: https://istio.io/docs/ops/deployment/requirements/
     app: data
     {{- end }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if or .Values.data.annotations .Values.commonAnnotations }}
-  annotations:
-    {{- if .Values.data.annotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.data.annotations "context" $ ) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-    {{- end }}
+  {{- $annotations := merge .Values.data.annotations .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
   {{- if not .Values.data.autoscaling.hpa.enabled }}
   replicas: {{ .Values.data.replicaCount }}
   {{- end }}
   podManagementPolicy: {{ .Values.data.podManagementPolicy }}
+  {{- $podLabels := merge .Values.data.podLabels .Values.commonLabels }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: data
   serviceName: {{ include "opensearch.data.servicename" . }}
   {{- if .Values.data.updateStrategy }}
@@ -41,14 +34,11 @@ spec:
   {{- end }}
   template:
     metadata:
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: data
         {{- if .Values.useIstioLabels }}
         ## Istio Labels: https://istio.io/docs/ops/deployment/requirements/
         app: data
-        {{- end }}
-        {{- if .Values.data.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.data.podLabels "context" $) | nindent 8 }}
         {{- end }}
       annotations:
         {{- if and (include "opensearch.createTlsSecret" .) (not .Values.security.tls.data.existingSecret) }}
@@ -67,8 +57,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.data.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.data.podAffinityPreset "component" "data" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.data.podAntiAffinityPreset "component" "data" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.data.podAffinityPreset "component" "data" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.data.podAntiAffinityPreset "component" "data" "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.data.nodeAffinityPreset.type "key" .Values.data.nodeAffinityPreset.key "values" .Values.data.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.data.nodeSelector }}
@@ -338,13 +328,10 @@ spec:
   volumeClaimTemplates:
     - metadata:
         name: "data"
-        annotations:
-          {{- if .Values.data.persistence.annotations }}
-          {{- include "common.tplvalues.render" (dict "value" .Values.data.persistence.annotations "context" $) | nindent 10 }}
-          {{- end }}
-          {{- if .Values.commonAnnotations }}
-          {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 10 }}
-          {{- end }}
+        {{- if or .Values.data.persistence.annotations .Values.commonAnnotations }}
+        {{- $claimAnnotations := merge .Values.data.persistence.annotations .Values.commonAnnotations }}
+        annotations: {{- include "common.tplvalues.render" ( dict "value" $claimAnnotations "context" $) | nindent 4 }}
+        {{- end }}
         {{- if .Values.commonLabels }}
         labels: {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 10 }}
         {{- end }}
