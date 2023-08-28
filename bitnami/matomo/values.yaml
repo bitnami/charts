@@ -918,7 +918,7 @@ cronjobs:
     schedule: "*/5 * * * *"
     ## @param cronjobs.taskScheduler.suspend Whether to create suspended CronJob
     ##
-    suspend: true
+    suspend: false
     ## @param cronjobs.taskScheduler.mailProtocol Mail protocol to use for reading emails. Allowed values: `IMAP` and `POP3`
     ##
     mailProtocol: IMAP
@@ -1124,7 +1124,7 @@ cronjobs:
     schedule: "*/5 * * * *"
     ## @param cronjobs.archive.suspend Whether to create suspended CronJob
     ##
-    suspend: true
+    suspend: false
     ## @param cronjobs.archive.mailProtocol Mail protocol to use for reading emails. Allowed values: `IMAP` and `POP3`
     ##
     mailProtocol: IMAP
