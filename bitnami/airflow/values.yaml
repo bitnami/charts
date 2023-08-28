@@ -188,7 +188,7 @@ web:
   image:
     registry: docker.io
     repository: bitnami/airflow
-    tag: 2.7.0-debian-11-r3
+    tag: 2.7.0-debian-11-r5
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
