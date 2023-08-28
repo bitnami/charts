@@ -43,6 +43,15 @@ spec:
     {{- end }}
       port: {{ .Values.containerPorts.peer }}
       targetPort: peer
+    {{- if .Values.metrics.useSeparateEndpoint }}
+    {{- if .Values.service.metricsPortNameOverride }}
+    - name: {{ .Values.service.metricsPortNameOverride }}
+    {{- else }}
+    - name: metrics
+    {{- end }}
+      port: {{ .Values.containerPorts.metrics }}
+      targetPort: metrics
+    {{- end }}
   {{- $podLabels := merge .Values.podLabels .Values.commonLabels }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: etcd
