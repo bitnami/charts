@@ -9,10 +9,8 @@ apiVersion: v1
 metadata:
   name: {{ printf "%s-scheduler-hl" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
-    {{- end }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: scheduler
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 4 }}
   {{- end }}
@@ -22,6 +20,7 @@ spec:
     - name: task-logs
       port: {{ .Values.worker.containerPorts.http }}
       targetPort: task-logs
-  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
+  {{- $podLabels := merge .Values.scheduler.podLabels .Values.commonLabels }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: scheduler
 {{- end }}

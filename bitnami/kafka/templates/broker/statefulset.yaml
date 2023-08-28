@@ -19,7 +19,7 @@ metadata:
 spec:
   podManagementPolicy: {{ .Values.broker.podManagementPolicy }}
   replicas: {{ .Values.broker.replicaCount }}
-  {{- $podLabels := merge .Values.worker.podLabels .Values.commonLabels }}
+  {{- $podLabels := merge .Values.broker.podLabels .Values.commonLabels }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: broker
