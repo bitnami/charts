@@ -60,7 +60,7 @@
             "params": {
               "kubeconfig": "{{kubeconfig}}",
               "namespace": "{{namespace}}",
-              "name": "redis",
+              "name": "redis-master",
               "password": "ComplicatedPassword123!4"
             }
           }
