@@ -17,8 +17,8 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  schedule: {{ .Values.cronjobs.taskScheduler.schedule | quote }}
-  suspend: {{ .Values.cronjobs.taskScheduler.suspend }}
+  schedule: {{ .Values.cronjobs.archive.schedule | quote }}
+  suspend: {{ .Values.cronjobs.archive.suspend }}
   concurrencyPolicy: Forbid
   jobTemplate:
     spec:
@@ -26,11 +26,11 @@ spec:
         metadata:
           labels: {{- include "common.labels.standard" . | nindent 12 }}
             app.kubernetes.io/component: archive
-            {{- if .Values.cronjobs.taskScheduler.podLabels }}
-            {{- include "common.tplvalues.render" ( dict "value" .Values.cronjobs.taskScheduler.podLabels "context" $ ) | nindent 12 }}
+            {{- if .Values.cronjobs.archive.podLabels }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.cronjobs.archive.podLabels "context" $ ) | nindent 12 }}
             {{- end }}
-          {{- if .Values.cronjobs.taskScheduler.podAnnotations }}
-          annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.cronjobs.taskScheduler.podAnnotations "context" $ ) | nindent 12 }}
+          {{- if .Values.cronjobs.archive.podAnnotations }}
+          annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.cronjobs.archive.podAnnotations "context" $ ) | nindent 12 }}
           {{- end }}
         spec:
           {{- include "matomo.imagePullSecrets" . | nindent 10 }}
@@ -149,7 +149,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  schedule: {{ .Values.cronjobs.archive.schedule | quote }}
+  schedule: {{ .Values.cronjobs.taskScheduler.schedule | quote }}
   suspend: {{ .Values.cronjobs.archive.suspend }}
   concurrencyPolicy: Forbid
   jobTemplate:
@@ -158,11 +158,11 @@ spec:
         metadata:
           labels: {{- include "common.labels.standard" . | nindent 12 }}
             app.kubernetes.io/component: task-scheduler
-            {{- if .Values.cronjobs.archive.podLabels }}
-            {{- include "common.tplvalues.render" ( dict "value" .Values.cronjobs.archive.podLabels "context" $ ) | nindent 12 }}
+            {{- if .Values.cronjobs.taskScheduler.podLabels }}
+            {{- include "common.tplvalues.render" ( dict "value" .Values.cronjobs.taskScheduler.podLabels "context" $ ) | nindent 12 }}
             {{- end }}
-          {{- if .Values.cronjobs.archive.podAnnotations }}
-          annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.cronjobs.archive.podAnnotations "context" $ ) | nindent 12 }}
+          {{- if .Values.cronjobs.taskScheduler.podAnnotations }}
+          annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.cronjobs.taskScheduler.podAnnotations "context" $ ) | nindent 12 }}
           {{- end }}
         spec:
           {{- include "matomo.imagePullSecrets" . | nindent 10 }}
@@ -173,18 +173,18 @@ spec:
             - name: {{ include "common.names.fullname" . }}-scheduled-tasks
               image: {{ template "matomo.image" . }}
               imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
-              {{- if .Values.cronjobs.archive.containerSecurityContext.enabled }}
-              securityContext: {{- omit .Values.cronjobs.archive.containerSecurityContext "enabled" | toYaml | nindent 16 }}
+              {{- if .Values.cronjobs.taskScheduler.containerSecurityContext.enabled }}
+              securityContext: {{- omit .Values.cronjobs.taskScheduler.containerSecurityContext "enabled" | toYaml | nindent 16 }}
               {{- end }}
-              {{- if .Values.cronjobs.archive.command }}
-              command: {{- include "common.tplvalues.render" (dict "value" .Values.cronjobs.archive.command "context" $) | nindent 16 }}
+              {{- if .Values.cronjobs.taskScheduler.command }}
+              command: {{- include "common.tplvalues.render" (dict "value" .Values.cronjobs.taskScheduler.command "context" $) | nindent 16 }}
               {{- else }}
               command:
                 - /bin/bash
                 - -c
               {{- end }}
-              {{- if .Values.cronjobs.archive.args }}
-              args: {{- include "common.tplvalues.render" (dict "value" .Values.cronjobs.archive.args "context" $) | nindent 16 }}
+              {{- if .Values.cronjobs.taskScheduler.args }}
+              args: {{- include "common.tplvalues.render" (dict "value" .Values.cronjobs.taskScheduler.args "context" $) | nindent 16 }}
               {{- else }}
               args:
                 - . /opt/bitnami/scripts/matomo-env.sh &&
