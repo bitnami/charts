@@ -33,5 +33,5 @@ maintainers:
   url: https://github.com/bitnami/charts
 name: mysql
 sources:
-- https://github.com/bitnami/charts/tree/main/bitnami/mysql
-version: 9.11.3
+  - https://github.com/bitnami/charts/tree/main/bitnami/mysql
+version: 9.12.1
