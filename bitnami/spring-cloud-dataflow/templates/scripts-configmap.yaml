@@ -43,7 +43,12 @@ data:
     {{- if .Values.rabbitmq.enabled }}
     k8s_wait_for_statefulset {{ $releaseNamespace }} {{ $rabbitmqFullname }}
     {{- else if .Values.kafka.enabled }}
-    k8s_wait_for_statefulset {{ $releaseNamespace }} {{ $kafkaFullname }}
+    {{- if gt (int .Values.kafka.controller.replicaCount) 0 }}
+    k8s_wait_for_statefulset {{ $releaseNamespace }} {{ $kafkaFullname }}-controller
+    {{- end }}
+    {{- if gt (int .Values.kafka.broker.replicaCount) 0 }}
+    k8s_wait_for_statefulset {{ $releaseNamespace }} {{ $kafkaFullname }}-broker
+    {{- end }}
     {{- end }}
     {{- end }}
 {{- end }}
