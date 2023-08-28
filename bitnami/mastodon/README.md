@@ -674,7 +674,13 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
-## Notable changes
+## Upgrading
+
+### 2.0.0
+
+This major updates the Redis&reg; subchart to its newest major, 18.0.0. This subchart's major doesn't include any changes affecting its use as a subchart for Mastodon, so no major issues are expected during the upgrade.
+
+NOTE: Due to an error in our release process, Redis&reg;' chart versions higher or equal than 17.15.4 already use Redis&reg; 7.2 by default.
 
 ### 1.0.0
 
