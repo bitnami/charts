@@ -8,12 +8,9 @@ kind: Deployment
 metadata:
   name: {{ template "rmqco.clusterOperator.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: rabbitmq-operator
     app.kubernetes.io/part-of: rabbitmq
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -22,20 +19,18 @@ spec:
   {{- if .Values.clusterOperator.updateStrategy }}
   strategy: {{- toYaml .Values.clusterOperator.updateStrategy | nindent 4 }}
   {{- end }}
+  {{- $podLabels := merge .Values.clusterOperator.podLabels .Values.commonLabels }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: rabbitmq-operator
   template:
     metadata:
       {{- if .Values.clusterOperator.podAnnotations }}
       annotations: {{- include "common.tplvalues.render" (dict "value" .Values.clusterOperator.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: rabbitmq-operator
         app.kubernetes.io/part-of: rabbitmq
-        {{- if .Values.clusterOperator.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.clusterOperator.podLabels "context" $) | nindent 8 }}
-        {{- end }}
     spec:
       serviceAccountName: {{ template "rmqco.clusterOperator.serviceAccountName" . }}
       {{- include "rmqco.imagePullSecrets" . | nindent 6 }}
@@ -52,8 +47,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.clusterOperator.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.clusterOperator.podAffinityPreset "component" "rabbitmq-operator" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.clusterOperator.podAntiAffinityPreset "component" "rabbitmq-operator" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.clusterOperator.podAffinityPreset "component" "rabbitmq-operator" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.clusterOperator.podAntiAffinityPreset "component" "rabbitmq-operator" "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.clusterOperator.nodeAffinityPreset.type "key" .Values.clusterOperator.nodeAffinityPreset.key "values" .Values.clusterOperator.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.clusterOperator.nodeSelector }}
