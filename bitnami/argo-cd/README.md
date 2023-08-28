@@ -75,15 +75,15 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Argo CD image parameters
 
-| Name                | Description                                                                                             | Value                 |
-| ------------------- | ------------------------------------------------------------------------------------------------------- | --------------------- |
-| `image.registry`    | Argo CD image registry                                                                                  | `docker.io`           |
-| `image.repository`  | Argo CD image repository                                                                                | `bitnami/argo-cd`     |
-| `image.tag`         | Argo CD image tag (immutable tags are recommended)                                                      | `2.7.10-debian-11-r0` |
-| `image.digest`      | Argo CD image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
-| `image.pullPolicy`  | Argo CD image pull policy                                                                               | `IfNotPresent`        |
-| `image.pullSecrets` | Argo CD image pull secrets                                                                              | `[]`                  |
-| `image.debug`       | Enable Argo CD image debug mode                                                                         | `false`               |
+| Name                | Description                                                                                             | Value                |
+| ------------------- | ------------------------------------------------------------------------------------------------------- | -------------------- |
+| `image.registry`    | Argo CD image registry                                                                                  | `docker.io`          |
+| `image.repository`  | Argo CD image repository                                                                                | `bitnami/argo-cd`    |
+| `image.tag`         | Argo CD image tag (immutable tags are recommended)                                                      | `2.8.1-debian-11-r3` |
+| `image.digest`      | Argo CD image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                 |
+| `image.pullPolicy`  | Argo CD image pull policy                                                                               | `IfNotPresent`       |
+| `image.pullSecrets` | Argo CD image pull secrets                                                                              | `[]`                 |
+| `image.debug`       | Enable Argo CD image debug mode                                                                         | `false`              |
 
 ### Argo CD application controller parameters
 
@@ -693,7 +693,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------------------- | --------------------------------------------------------------------------------------------------- | ---------------------- |
 | `dex.image.registry`                                    | Dex image registry                                                                                  | `docker.io`            |
 | `dex.image.repository`                                  | Dex image repository                                                                                | `bitnami/dex`          |
-| `dex.image.tag`                                         | Dex image tag (immutable tags are recommended)                                                      | `2.37.0-debian-11-r30` |
+| `dex.image.tag`                                         | Dex image tag (immutable tags are recommended)                                                      | `2.37.0-debian-11-r51` |
 | `dex.image.digest`                                      | Dex image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
 | `dex.image.pullPolicy`                                  | Dex image pull policy                                                                               | `IfNotPresent`         |
 | `dex.image.pullSecrets`                                 | Dex image pull secrets                                                                              | `[]`                   |
@@ -810,6 +810,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `config.existingStylesConfigmap`               | Use an existing styles configmap                                                                      | `""`   |
 | `config.tlsCerts`                              | TLS certificates used to verify the authenticity of the repository servers                            | `{}`   |
 | `config.gpgKeys`                               | GnuPG public keys to add to the keyring                                                               | `{}`   |
+| `config.rbac`                                  | Role-based authentication configuration                                                               | `{}`   |
 | `config.secret.create`                         | Whether to create or not the secret                                                                   | `true` |
 | `config.secret.annotations`                    | General secret extra annotations                                                                      | `{}`   |
 | `config.secret.githubSecret`                   | GitHub secret to configure webhooks                                                                   | `""`   |
@@ -832,7 +833,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`                    | `false`            |
 | `volumePermissions.image.registry`                     | OS Shell + Utility image registry                                                                                  | `docker.io`        |
 | `volumePermissions.image.repository`                   | OS Shell + Utility image repository                                                                                | `bitnami/os-shell` |
-| `volumePermissions.image.tag`                          | OS Shell + Utility image tag (immutable tags are recommended)                                                      | `11-debian-11-r22` |
+| `volumePermissions.image.tag`                          | OS Shell + Utility image tag (immutable tags are recommended)                                                      | `11-debian-11-r45` |
 | `volumePermissions.image.digest`                       | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`               |
 | `volumePermissions.image.pullPolicy`                   | OS Shell + Utility image pull policy                                                                               | `IfNotPresent`     |
 | `volumePermissions.image.pullSecrets`                  | OS Shell + Utility image pull secrets                                                                              | `[]`               |
@@ -842,30 +843,30 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Other Parameters
 
-| Name                                      | Description                                                                                           | Value                  |
-| ----------------------------------------- | ----------------------------------------------------------------------------------------------------- | ---------------------- |
-| `rbac.create`                             | Specifies whether RBAC resources should be created                                                    | `true`                 |
-| `redis.image.registry`                    | Redis image registry                                                                                  | `docker.io`            |
-| `redis.image.repository`                  | Redis image repository                                                                                | `bitnami/redis`        |
-| `redis.image.tag`                         | Redis image tag (immutable tags are recommended)                                                      | `7.0.12-debian-11-r17` |
-| `redis.image.digest`                      | Redis image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
-| `redis.image.pullPolicy`                  | Redis image pull policy                                                                               | `IfNotPresent`         |
-| `redis.image.pullSecrets`                 | Redis image pull secrets                                                                              | `[]`                   |
-| `redis.enabled`                           | Enable Redis dependency                                                                               | `true`                 |
-| `redis.nameOverride`                      | Name override for the Redis dependency                                                                | `""`                   |
-| `redis.service.port`                      | Service port for Redis dependency                                                                     | `6379`                 |
-| `redis.auth.enabled`                      | Enable Redis dependency authentication                                                                | `true`                 |
-| `redis.auth.existingSecret`               | Existing secret to load redis dependency password                                                     | `""`                   |
-| `redis.auth.existingSecretPasswordKey`    | Pasword key name inside the existing secret                                                           | `redis-password`       |
-| `redis.architecture`                      | Redis&reg; architecture. Allowed values: `standalone` or `replication`                                | `standalone`           |
-| `externalRedis.host`                      | External Redis host                                                                                   | `""`                   |
-| `externalRedis.port`                      | External Redis port                                                                                   | `6379`                 |
-| `externalRedis.password`                  | External Redis password                                                                               | `""`                   |
-| `externalRedis.existingSecret`            | Existing secret for the external redis                                                                | `""`                   |
-| `externalRedis.existingSecretPasswordKey` | Password key for the existing secret containing the external redis password                           | `redis-password`       |
-| `redisWait.enabled`                       | Enables waiting for redis                                                                             | `true`                 |
-| `redisWait.extraArgs`                     | Additional arguments for the redis-cli call, such as TLS                                              | `""`                   |
-| `redisWait.securityContext`               | Security context for init container                                                                   | `{}`                   |
+| Name                                      | Description                                                                                           | Value                |
+| ----------------------------------------- | ----------------------------------------------------------------------------------------------------- | -------------------- |
+| `rbac.create`                             | Specifies whether RBAC resources should be created                                                    | `true`               |
+| `redis.image.registry`                    | Redis image registry                                                                                  | `docker.io`          |
+| `redis.image.repository`                  | Redis image repository                                                                                | `bitnami/redis`      |
+| `redis.image.tag`                         | Redis image tag (immutable tags are recommended)                                                      | `7.2.0-debian-11-r5` |
+| `redis.image.digest`                      | Redis image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                 |
+| `redis.image.pullPolicy`                  | Redis image pull policy                                                                               | `IfNotPresent`       |
+| `redis.image.pullSecrets`                 | Redis image pull secrets                                                                              | `[]`                 |
+| `redis.enabled`                           | Enable Redis dependency                                                                               | `true`               |
+| `redis.nameOverride`                      | Name override for the Redis dependency                                                                | `""`                 |
+| `redis.service.port`                      | Service port for Redis dependency                                                                     | `6379`               |
+| `redis.auth.enabled`                      | Enable Redis dependency authentication                                                                | `true`               |
+| `redis.auth.existingSecret`               | Existing secret to load redis dependency password                                                     | `""`                 |
+| `redis.auth.existingSecretPasswordKey`    | Pasword key name inside the existing secret                                                           | `redis-password`     |
+| `redis.architecture`                      | Redis&reg; architecture. Allowed values: `standalone` or `replication`                                | `standalone`         |
+| `externalRedis.host`                      | External Redis host                                                                                   | `""`                 |
+| `externalRedis.port`                      | External Redis port                                                                                   | `6379`               |
+| `externalRedis.password`                  | External Redis password                                                                               | `""`                 |
+| `externalRedis.existingSecret`            | Existing secret for the external redis                                                                | `""`                 |
+| `externalRedis.existingSecretPasswordKey` | Password key for the existing secret containing the external redis password                           | `redis-password`     |
+| `redisWait.enabled`                       | Enables waiting for redis                                                                             | `true`               |
+| `redisWait.extraArgs`                     | Additional arguments for the redis-cli call, such as TLS                                              | `""`                 |
+| `redisWait.securityContext`               | Security context for init container                                                                   | `{}`                 |
 
 The above parameters map to the env variables defined in [bitnami/argo-cd](https://github.com/bitnami/containers/tree/main/bitnami/argo-cd). For more information please refer to the [bitnami/argo-cd](https://github.com/bitnami/containers/tree/main/bitnami/argo-cd) image documentation.
 
@@ -950,6 +951,14 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 5.0.0
+
+This major updates the Redis&reg; subchart to its newest major, 18.0.0. [Here](https://github.com/bitnami/charts/tree/main/bitnami/redis#to-1800) you can find more information about the changes introduced in that version.
+
+NOTE: Due to an error in our release process, Redis&reg;' chart versions higher or equal than 17.15.4 already use Redis&reg; 7.2 by default.
+
+### To any previous version
 
 Refer to the [chart documentation for more information about how to upgrade from previous releases](https://docs.bitnami.com/kubernetes/infrastructure/argo-cd/administration/upgrade/).
 

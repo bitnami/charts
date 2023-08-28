@@ -9,11 +9,8 @@ apiVersion: batch/v1
 metadata:
   name: {{ printf "%s-provisioning" (include "common.names.fullname" .) }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: kafka-provisioning
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   annotations:
     helm.sh/hook: post-install,post-upgrade
     helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
@@ -23,17 +20,15 @@ metadata:
 spec:
   template:
     metadata:
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      {{- $podLabels := merge .Values.provisioning.podLabels .Values.commonLabels }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: kafka-provisioning
-        {{- if .Values.provisioning.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.provisioning.podLabels "context" $) | nindent 8 }}
-        {{- end }}
-      annotations:
-        {{- if .Values.provisioning.podAnnotations }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.provisioning.podAnnotations "context" $) | nindent 8 }}
-        {{- end }}
+      {{- if .Values.provisioning.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.provisioning.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
     spec:
       serviceAccountName: {{ template "kafka.provisioning.serviceAccountName" . }}
+      enableServiceLinks: {{ .Values.provisioning.enableServiceLinks }}
       {{- include "kafka.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.provisioning.schedulerName }}
       schedulerName: {{ .Values.provisioning.schedulerName | quote }}
@@ -102,7 +97,7 @@ spec:
             - |
               echo "Configuring environment"
               . /opt/bitnami/scripts/libkafka.sh
-              export CLIENT_CONF="${CLIENT_CONF:-/opt/bitnami/kafka/config/client.properties}"
+              export CLIENT_CONF="${CLIENT_CONF:-/tmp/client.properties}"
               if [ ! -f "$CLIENT_CONF" ]; then
                 touch $CLIENT_CONF
 
@@ -242,6 +237,8 @@ spec:
               readOnly: true
             {{- end }}
             {{- end }}
+            - name: tmp
+              mountPath: /tmp
             {{- if .Values.provisioning.extraVolumeMounts }}
             {{- include "common.tplvalues.render" (dict "value" .Values.provisioning.extraVolumeMounts "context" $) | nindent 12 }}
             {{- end }}
@@ -262,6 +259,8 @@ spec:
             defaultMode: 256
         {{- end }}
         {{- end }}
+        - name: tmp
+          emptyDir: {}
         {{- if .Values.provisioning.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.provisioning.extraVolumes "context" $) | nindent 8 }}
         {{- end }}
