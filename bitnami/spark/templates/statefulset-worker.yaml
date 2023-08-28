@@ -8,11 +8,8 @@ kind: StatefulSet
 metadata:
   name: {{ printf "%s-worker" (include "common.names.fullname" .) }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: worker
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -23,24 +20,22 @@ spec:
   {{- if .Values.worker.updateStrategy }}
   updateStrategy: {{- toYaml .Values.worker.updateStrategy | nindent 4 }}
   {{- end }}
+  {{- $podLabels := merge .Values.worker.podLabels .Values.commonLabels }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: worker
   template:
     metadata:
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: worker
-        {{- if .Values.worker.podLabels }}
-          {{- include "common.tplvalues.render" (dict "value" .Values.worker.podLabels "context" $) | nindent 8 }}
-        {{- end }}
-      {{- if or .Values.worker.podAnnotations .Values.metrics.enabled }}
+      {{- if or .Values.worker.podAnnotations (and .Values.metrics.enabled .Values.metrics.workerAnnotations) }}
       annotations:
-      {{- if .Values.worker.podAnnotations }}
+        {{- if .Values.worker.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.worker.podAnnotations "context" $) | nindent 8 }}
-      {{- end }}
-      {{- if and .Values.metrics.enabled }}
+        {{- end }}
+        {{- if and .Values.metrics.enabled .Values.metrics.workerAnnotations }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.workerAnnotations "context" $) | nindent 8 }}
-      {{- end }}
+        {{- end }}
       {{- end }}
     spec:
       {{- include "spark.imagePullSecrets" . | nindent 6 }}
@@ -49,8 +44,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.worker.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.worker.podAffinityPreset "component" "worker" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.worker.podAntiAffinityPreset "component" "worker" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.worker.podAffinityPreset "component" "worker" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.worker.podAntiAffinityPreset "component" "worker" "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.worker.nodeAffinityPreset.type "key" .Values.worker.nodeAffinityPreset.key "values" .Values.worker.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.worker.hostAliases }}
