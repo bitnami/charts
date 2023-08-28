@@ -790,6 +790,12 @@ This issue can be mitigated by splitting the upgrade into two stages: one for al
 - Stage 2 (anything else that is not up to date, in this case only master):
 `helm upgrade oci://registry-1.docker.io/bitnamicharts/redis`
 
+### To 18.0.0
+
+This major version updates the Redis&reg; docker image version used from `7.0` to `7.2`, the new stable version. There are no major changes in the chart, but we recommend checking the [Redis&reg; 7.2 release notes](https://raw.githubusercontent.com/redis/redis/7.2/00-RELEASENOTES) before upgrading.
+
+NOTE: Due to an error in our release process, versions higher or equal than 17.15.4 already use 7.2 by default.
+
 ### To 17.0.0
 
 This major version updates the Redis&reg; docker image version used from `6.2` to `7.0`, the new stable version. There are no major changes in the chart, but we recommend checking the [Redis&reg; 7.0 release notes](https://raw.githubusercontent.com/redis/redis/7.0/00-RELEASENOTES) before upgrading.
