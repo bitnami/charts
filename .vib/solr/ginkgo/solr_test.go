@@ -57,11 +57,7 @@ var _ = Describe("Solr", Ordered, func() {
 			Expect(err).NotTo(HaveOccurred())
 
 			// Use current time for allowing the test suite to repeat
-			currentTime := time.Now()
-			jobSuffix := fmt.Sprintf("%d%d%d%d%d%d",
-				currentTime.Year(), currentTime.Month(),
-				currentTime.Day(), currentTime.Hour(),
-				currentTime.Minute(), currentTime.Second())
+			jobSuffix := time.Now().Format("20060102150405")
 
 			By("creating a job to create a new test collection")
 			createColJobName := fmt.Sprintf("%s-createcol-%s",
