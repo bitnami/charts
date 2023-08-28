@@ -33,6 +33,6 @@ spec:
       targetPort: client
   {{- $podLabels := merge .Values.broker.podLabels .Values.commonLabels }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
-      app.kubernetes.io/component: broker
+    app.kubernetes.io/component: broker
     app.kubernetes.io/part-of: kafka
 {{- end }}
