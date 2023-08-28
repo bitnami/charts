@@ -50,6 +50,22 @@
               }
             }
           }
+        },
+        {
+          "action_id": "ginkgo",
+          "params": {
+            "resources": {
+              "path": "/.vib/mongodb-sharded/ginkgo"
+            },
+            "params": {
+              "kubeconfig": "{{kubeconfig}}",
+              "namespace": "{{namespace}}",
+              "name": "mongodb-sharded",
+              "shards": "3",
+              "username": "root",
+              "password": "Password123!4"
+            }
+          }
         }
       ]
     }

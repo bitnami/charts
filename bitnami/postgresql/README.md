@@ -264,6 +264,9 @@ kubectl delete pvc -l release=my-release
 | `primary.persistence.labels`                                | Labels for the PVC                                                                                                       | `{}`                  |
 | `primary.persistence.selector`                              | Selector to match an existing Persistent Volume (this value is evaluated as a template)                                  | `{}`                  |
 | `primary.persistence.dataSource`                            | Custom PVC data source                                                                                                   | `{}`                  |
+| `primary.persistentVolumeClaimRetentionPolicy.enabled`      | Enable Persistent volume retention policy for Primary Statefulset                                                        | `false`               |
+| `primary.persistentVolumeClaimRetentionPolicy.whenScaled`   | Volume retention behavior when the replica count of the StatefulSet is reduced                                           | `Retain`              |
+| `primary.persistentVolumeClaimRetentionPolicy.whenDeleted`  | Volume retention behavior that applies when the StatefulSet is deleted                                                   | `Retain`              |
 
 ### PostgreSQL read only replica parameters (only used when `architecture` is set to `replication`)
 
@@ -360,6 +363,9 @@ kubectl delete pvc -l release=my-release
 | `readReplicas.persistence.labels`                                | Labels for the PVC                                                                                                       | `{}`                  |
 | `readReplicas.persistence.selector`                              | Selector to match an existing Persistent Volume (this value is evaluated as a template)                                  | `{}`                  |
 | `readReplicas.persistence.dataSource`                            | Custom PVC data source                                                                                                   | `{}`                  |
+| `readReplicas.persistentVolumeClaimRetentionPolicy.enabled`      | Enable Persistent volume retention policy for read only Statefulset                                                      | `false`               |
+| `readReplicas.persistentVolumeClaimRetentionPolicy.whenScaled`   | Volume retention behavior when the replica count of the StatefulSet is reduced                                           | `Retain`              |
+| `readReplicas.persistentVolumeClaimRetentionPolicy.whenDeleted`  | Volume retention behavior that applies when the StatefulSet is deleted                                                   | `Retain`              |
 
 ### Backup parameters
 
