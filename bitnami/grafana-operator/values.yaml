@@ -552,6 +552,21 @@ grafana:
   ## Ref: https://kubernetes.io/docs/concepts/configuration/taint-and-toleration/
   ##
   tolerations: []
+  ## @param grafana.env it is environment variable to pass to the running container
+  ## e.g:
+  ## env:
+  ##   - name: GF_SECURITY_ADMIN_USER
+  ##     valueFrom:
+  ##       secretKeyRef:
+  ##         key: GF_SECURITY_ADMIN_USER
+  ##         name: credentials
+  ##   - name: GF_SECURITY_ADMIN_PASSWORD
+  ##     valueFrom:
+  ##       secretKeyRef:
+  ##         key: GF_SECURITY_ADMIN_PASSWORD
+  ##         name: credentials
+  ##
+  env: []
   ## @param grafana.envFrom Extra environment variable to pass to the running container
   ## Ref: https://github.com/integr8ly/grafana-operator/blob/master/documentation/deploy_grafana.md#configuring-the-deployment
   ## e.g:
