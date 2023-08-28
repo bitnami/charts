@@ -9,18 +9,12 @@ kind: Service
 metadata:
   name: {{ include "opensearch.ingest.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: ingest
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
-  annotations:
-    {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.ingest.service.annotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.ingest.service.annotations "context" $) | nindent 4 }}
-    {{- end }}
+  {{- if or .Values.ingest.service.annotations .Values.commonAnnotations }}
+  {{- $annotations := merge .Values.ingest.service.annotations .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
 spec:
   type: {{ .Values.ingest.service.type }}
   {{- if and .Values.ingest.service.clusterIP (eq .Values.ingest.service.type "ClusterIP") }}
@@ -60,6 +54,7 @@ spec:
     {{- if .Values.ingest.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.ingest.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}
-  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
+  {{- $podLabels := merge .Values.ingest.podLabels .Values.commonLabels }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: ingest
 {{- end }}
