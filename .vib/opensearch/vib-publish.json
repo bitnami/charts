@@ -61,6 +61,19 @@
             "endpoint": "lb-opensearch-tcp-rest-api",
             "app_protocol": "HTTP"
           }
+        },
+        {
+          "action_id": "ginkgo",
+          "params": {
+            "resources": {
+              "path": "/.vib/opensearch/ginkgo"
+            },
+            "params": {
+              "kubeconfig": "{{kubeconfig}}",
+              "namespace": "{{namespace}}",
+              "name": "opensearch"
+            }
+          }
         }
       ]
     },
