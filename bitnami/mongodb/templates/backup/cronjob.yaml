@@ -81,9 +81,7 @@ spec:
                 value: --tls --tlsCertificateKeyFile=/certs/mongodb.pem --tlsCAFile=/certs/mongodb-ca-cert
               {{- end }}
             {{- if .Values.backup.cronjob.command }}
-            command:
-            {{- range .Values.backup.cronjob.command }}
-            - {{ . }}
+            command: {{- include "common.tplvalues.render" (dict "value" .Values.backup.cronjob.command "context" $) | nindent 14 }}
             {{- else }}
             command: 
               - /bin/sh
