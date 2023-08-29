@@ -16,7 +16,6 @@ metadata:
 spec:
   selector:
     matchLabels: {{- include "kube-prometheus.alertmanager.matchLabels" . | nindent 6 }}
-      alertmanager: {{ template "kube-prometheus.alertmanager.fullname" . }}
   {{- if .Values.alertmanager.pdb.minAvailable }}
   minAvailable: {{ .Values.alertmanager.pdb.minAvailable }}
   {{- end }}

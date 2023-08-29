@@ -69,7 +69,7 @@ spec:
   {{- end }}
   {{- end }}
   podMetadata:
-    labels: {{- include "kube-prometheus.alertmanager.podLabels" . | nindent 6 }}
+    labels: {{- include "kube-prometheus.alertmanager.matchLabels" . | nindent 6 }}
     {{- if .Values.alertmanager.podMetadata.annotations }}
     annotations: {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.podMetadata.annotations "context" $) | nindent 6 }}
     {{- end }}
@@ -77,12 +77,11 @@ spec:
   affinity: {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.affinity "context" $) | nindent 4 }}
   {{- else }}
   affinity:
-    {{- $podLabels := merge .Values.alertmanager.podMetadata.labels .Values.commonLabels }}
     {{- if not (empty .Values.alertmanager.podAffinityPreset) }}
-    podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.alertmanager.podAffinityPreset "component" "alertmanager" "customLabels" $podLabels "context" $) | nindent 6 }}
+    podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.alertmanager.podAffinityPreset "component" "alertmanager" "context" $) | nindent 6 }}
     {{- end }}
     {{- if not (empty .Values.alertmanager.podAntiAffinityPreset) }}
-    podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.alertmanager.podAntiAffinityPreset "component" "alertmanager" "customLabels" $podLabels "context" $) | nindent 6 }}
+    podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.alertmanager.podAntiAffinityPreset "component" "alertmanager" "context" $) | nindent 6 }}
     {{- end }}
     {{- if not (empty .Values.alertmanager.nodeAffinityPreset.values) }}
     nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.alertmanager.nodeAffinityPreset.type "key" .Values.alertmanager.nodeAffinityPreset.key "values" .Values.alertmanager.nodeAffinityPreset.values) | nindent 6 }}

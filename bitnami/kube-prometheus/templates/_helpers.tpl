@@ -117,24 +117,6 @@ app.kubernetes.io/component: operator
 {{- end -}}
 
 {{/*
-Labels for prometheus pods
-*/}}
-{{- define "kube-prometheus.prometheus.podLabels" -}}
-{{- $podLabels := merge .Values.prometheus.podMetadata.labels .Values.commonLabels }}
-{{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) }}
-app.kubernetes.io/component: prometheus
-{{- end -}}
-
-{{/*
-Labels for alertmanager pods
-*/}}
-{{- define "kube-prometheus.alertmanager.podLabels" -}}
-{{- $podLabels := merge .Values.alertmanager.podMetadata.labels .Values.commonLabels }}
-{{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) }}
-app.kubernetes.io/component: alertmanager
-{{- end -}}
-
-{{/*
 Labels for blackbox-exporter pods
 */}}
 {{- define "kube-prometheus.blackboxExporter.podLabels" -}}
@@ -156,18 +138,26 @@ app.kubernetes.io/component: operator
 matchLabels for prometheus
 */}}
 {{- define "kube-prometheus.prometheus.matchLabels" -}}
+{{- if or .Values.prometheus.podMetadata.labels .Values.commonLabels }}
 {{- $podLabels := merge .Values.prometheus.podMetadata.labels .Values.commonLabels }}
-{{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) }}
+{{- include "common.tplvalues.render" ( dict "value" $podLabels "context" $ ) }}
+{{- end -}}
+app.kubernetes.io/name: prometheus
 app.kubernetes.io/component: prometheus
+prometheus: {{ template "kube-prometheus.prometheus.fullname" . }}
 {{- end -}}
 
 {{/*
 matchLabels for alertmanager
 */}}
 {{- define "kube-prometheus.alertmanager.matchLabels" -}}
+{{- if or .Values.alertmanager.podMetadata.labels .Values.commonLabels }}
 {{- $podLabels := merge .Values.alertmanager.podMetadata.labels .Values.commonLabels }}
-{{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) }}
+{{- include "common.tplvalues.render" ( dict "value" $podLabels "context" $ ) }}
+{{- end -}}
+app.kubernetes.io/name: alertmanager
 app.kubernetes.io/component: alertmanager
+alertmanager: {{ template "kube-prometheus.alertmanager.fullname" . }}
 {{- end -}}
 
 {{/*

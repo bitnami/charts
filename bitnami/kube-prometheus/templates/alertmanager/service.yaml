@@ -48,5 +48,4 @@ spec:
     {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}
   selector: {{- include "kube-prometheus.alertmanager.matchLabels" . | nindent 4 }}
-    alertmanager: {{ template "kube-prometheus.alertmanager.fullname" . }}
 {{- end }}

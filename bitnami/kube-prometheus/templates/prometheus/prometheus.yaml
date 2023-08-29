@@ -186,7 +186,7 @@ spec:
         {{- include "common.storage.class" (dict "persistence" .Values.prometheus.persistence "global" .Values.global) | nindent 8 }}
   {{- end }}
   podMetadata:
-    labels: {{- include "kube-prometheus.prometheus.podLabels" . | nindent 6 }}
+    labels: {{- include "kube-prometheus.prometheus.matchLabels" . | nindent 6 }}
     {{- if .Values.prometheus.podMetadata.annotations }}
     annotations: {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.podMetadata.annotations "context" $) | nindent 6 }}
     {{- end }}
@@ -197,12 +197,11 @@ spec:
   affinity: {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.affinity "context" $) | nindent 4 }}
   {{- else }}
   affinity:
-    {{- $podLabels := merge .Values.prometheus.podMetadata.labels .Values.commonLabels }}
     {{- if not (empty .Values.prometheus.podAffinityPreset) }}
-    podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.prometheus.podAffinityPreset "component" "prometheus" "customLabels" $podLabels "context" $) | nindent 6 }}
+    podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.prometheus.podAffinityPreset "component" "prometheus" "context" $) | nindent 6 }}
     {{- end }}
     {{- if not (empty .Values.prometheus.podAntiAffinityPreset) }}
-    podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.prometheus.podAntiAffinityPreset "component" "prometheus" "customLabels"  $podLabels "context" $) | nindent 6 }}
+    podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.prometheus.podAntiAffinityPreset "component" "prometheus" "context" $) | nindent 6 }}
     {{- end }}
     {{- if not (empty .Values.prometheus.nodeAffinityPreset.values) }}
     nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.prometheus.nodeAffinityPreset.type "key" .Values.prometheus.nodeAffinityPreset.key "values" .Values.prometheus.nodeAffinityPreset.values) | nindent 6 }}

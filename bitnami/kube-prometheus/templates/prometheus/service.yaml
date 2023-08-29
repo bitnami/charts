@@ -49,5 +49,4 @@ spec:
       nodePort: {{ .Values.prometheus.service.nodePorts.http }}
       {{- end }}
   selector: {{- include "kube-prometheus.prometheus.matchLabels" . | nindent 4 }}
-    prometheus: {{ template "kube-prometheus.prometheus.fullname" . }}
 {{- end }}
