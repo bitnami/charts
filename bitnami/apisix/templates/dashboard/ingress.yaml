@@ -13,7 +13,7 @@ metadata:
     app.kubernetes.io/part-of: apisix
     app.kubernetes.io/component: dashboard
   {{- if or .Values.dashboard.ingress.annotations .Values.commonAnnotations }}
-  {{- $annotations := merge .Values.controdashboardlPlane.ingress.annotations .Values.commonAnnotations }}
+  {{- $annotations := merge .Values.dashboard.ingress.annotations .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
