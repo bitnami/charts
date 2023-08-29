@@ -16,6 +16,7 @@ postgresql:
   repmgrDatabase: repmgr
   repmgrConnectTimeout: 7
   replicaCount: 4
+  password: psqlPassword123!4
   containerPorts:
     postgresql: 5431
   podSecurityContext:
