@@ -90,7 +90,7 @@ helm uninstall my-release
 | `contour.enabled`                                             | Contour Deployment creation.                                                                                                       | `true`                 |
 | `contour.image.registry`                                      | Contour image registry                                                                                                             | `docker.io`            |
 | `contour.image.repository`                                    | Contour image name                                                                                                                 | `bitnami/contour`      |
-| `contour.image.tag`                                           | Contour image tag                                                                                                                  | `1.25.2-debian-11-r11` |
+| `contour.image.tag`                                           | Contour image tag                                                                                                                  | `1.25.2-debian-11-r22` |
 | `contour.image.digest`                                        | Contour image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                            | `""`                   |
 | `contour.image.pullPolicy`                                    | Contour Image pull policy                                                                                                          | `IfNotPresent`         |
 | `contour.image.pullSecrets`                                   | Contour Image pull secrets                                                                                                         | `[]`                   |
@@ -198,7 +198,7 @@ helm uninstall my-release
 | `envoy.enabled`                                               | Envoy Proxy creation                                                                                                  | `true`                 |
 | `envoy.image.registry`                                        | Envoy Proxy image registry                                                                                            | `docker.io`            |
 | `envoy.image.repository`                                      | Envoy Proxy image repository                                                                                          | `bitnami/envoy`        |
-| `envoy.image.tag`                                             | Envoy Proxy image tag (immutable tags are recommended)                                                                | `1.26.4-debian-11-r11` |
+| `envoy.image.tag`                                             | Envoy Proxy image tag (immutable tags are recommended)                                                                | `1.26.4-debian-11-r20` |
 | `envoy.image.digest`                                          | Envoy Proxy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag           | `""`                   |
 | `envoy.image.pullPolicy`                                      | Envoy image pull policy                                                                                               | `IfNotPresent`         |
 | `envoy.image.pullSecrets`                                     | Envoy image pull secrets                                                                                              | `[]`                   |
@@ -219,6 +219,9 @@ helm uninstall my-release
 | `envoy.shutdownManager.containerSecurityContext.enabled`      | Shutdown Manager Container securityContext                                                                            | `true`                 |
 | `envoy.shutdownManager.containerSecurityContext.runAsUser`    | User ID for the Shutdown Manager container (to change this, http and https containerPorts must be set to >1024)       | `1001`                 |
 | `envoy.shutdownManager.containerSecurityContext.runAsNonRoot` | Run as non root                                                                                                       | `true`                 |
+| `envoy.initConfig.containerSecurityContext.enabled`           | Envoy initconfig Container securityContext                                                                            | `true`                 |
+| `envoy.initConfig.containerSecurityContext.runAsUser`         | User ID for the Envoy initconfig container (to change this, http and https containerPorts must be set to >1024)       | `1001`                 |
+| `envoy.initConfig.containerSecurityContext.runAsNonRoot`      | Run as non root                                                                                                       | `true`                 |
 | `envoy.kind`                                                  | Install as deployment or daemonset                                                                                    | `daemonset`            |
 | `envoy.replicaCount`                                          | Desired number of Controller pods                                                                                     | `1`                    |
 | `envoy.lifecycleHooks`                                        | lifecycleHooks for the container to automate configuration before or after startup.                                   | `{}`                   |
@@ -230,6 +233,7 @@ helm uninstall my-release
 | `envoy.autoscaling.maxReplicas`                               | Maximum number of Controller replicas                                                                                 | `11`                   |
 | `envoy.autoscaling.targetCPU`                                 | Target CPU utilization percentage                                                                                     | `""`                   |
 | `envoy.autoscaling.targetMemory`                              | Target Memory utilization percentage                                                                                  | `""`                   |
+| `envoy.autoscaling.behavior`                                  | HPA Behavior                                                                                                          | `{}`                   |
 | `envoy.podAffinityPreset`                                     | Envoy Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                             | `""`                   |
 | `envoy.podAntiAffinityPreset`                                 | Envoy Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                        | `""`                   |
 | `envoy.nodeAffinityPreset.type`                               | Envoy Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                       | `""`                   |
@@ -246,9 +250,6 @@ helm uninstall my-release
 | `envoy.containerSecurityContext.enabled`                      | Envoy Container securityContext                                                                                       | `true`                 |
 | `envoy.containerSecurityContext.runAsUser`                    | User ID for the Envoy container (to change this, http and https containerPorts must be set to >1024)                  | `1001`                 |
 | `envoy.containerSecurityContext.runAsNonRoot`                 | Run as non root                                                                                                       | `true`                 |
-| `envoy.containerSecurityContextEnvoyInit.enabled`             | EnvoyInit Container securityContext                                                                                   | `true`                 |
-| `envoy.containerSecurityContextEnvoyInit.runAsUser`           | User ID for the EnvoyInit container (to change this, http and https containerPorts must be set to >1024)              | `1001`                 |
-| `envoy.containerSecurityContextEnvoyInit.runAsNonRoot`        | Run as non root                                                                                                       | `true`                 |
 | `envoy.hostNetwork`                                           | Envoy Pod host network access                                                                                         | `false`                |
 | `envoy.dnsPolicy`                                             | Envoy Pod Dns Policy's DNS Policy                                                                                     | `ClusterFirst`         |
 | `envoy.tlsExistingSecret`                                     | Name of the existingSecret to be use in Envoy deployment                                                              | `""`                   |
@@ -328,7 +329,7 @@ helm uninstall my-release
 | `defaultBackend.enabled`                               | Enable a default backend based on NGINX                                                                         | `false`                  |
 | `defaultBackend.image.registry`                        | Default backend image registry                                                                                  | `docker.io`              |
 | `defaultBackend.image.repository`                      | Default backend image name                                                                                      | `bitnami/nginx`          |
-| `defaultBackend.image.tag`                             | Default backend image tag                                                                                       | `1.25.1-debian-11-r48`   |
+| `defaultBackend.image.tag`                             | Default backend image tag                                                                                       | `1.25.2-debian-11-r2`    |
 | `defaultBackend.image.digest`                          | Default backend image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                     |
 | `defaultBackend.image.pullPolicy`                      | Image pull policy                                                                                               | `IfNotPresent`           |
 | `defaultBackend.image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                | `[]`                     |

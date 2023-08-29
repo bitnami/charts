@@ -8,7 +8,7 @@ command:
     timeout: 40000
 file:
   /opt/bitnami/airflow/airflow.cfg:
-    mode: "0600"
+    mode: "0644"
     filetype: file
     exists: true
     group: root

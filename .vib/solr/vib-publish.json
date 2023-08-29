@@ -61,6 +61,21 @@
             "endpoint": "lb-solr-tcp-client",
             "app_protocol": "HTTP"
           }
+        },
+        {
+          "action_id": "ginkgo",
+          "params": {
+            "resources": {
+              "path": "/.vib/solr/ginkgo"
+            },
+            "params": {
+              "kubeconfig": "{{kubeconfig}}",
+              "namespace": "{{namespace}}",
+              "name": "solr",
+              "username": "admin_user",
+              "password": "ComplicatedPassword123!4"
+            }
+          }
         }
       ]
     },
