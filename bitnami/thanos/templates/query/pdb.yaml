@@ -10,7 +10,7 @@ kind: PodDisruptionBudget
 metadata:
   name: {{ include "common.names.fullname" . }}-query
   namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: query
     {{- if .Values.commonLabels }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
@@ -25,7 +25,8 @@ spec:
   {{- if $query.pdb.maxUnavailable }}
   maxUnavailable: {{ $query.pdb.maxUnavailable }}
   {{- end }}
+  {{- $podLabels := merge $query.podLabels .Values.commonLabels }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: query
 {{- end }}
