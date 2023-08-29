@@ -203,8 +203,6 @@ spec:
                   name: {{ include "solr.secretName" . }}
                   key: {{ include "solr.secretPasswordKey" . }}
             {{- end }}
-            - name: ZK_HOSTS
-              value: {{ include "solr.zookeeper.hosts" . | quote }}
             - name: SOLR_ZK_HOSTS
               value: {{ include "solr.zookeeper.hosts" . | quote }}
             {{- if .Values.tls.enabled }}
