@@ -187,6 +187,10 @@ spec:
               value: {{ .Values.matomoWebsiteName | quote }}
             - name: MATOMO_WEBSITE_HOST
               value: {{ .Values.matomoWebsiteHost | quote }}
+            {{- if .Values.smtpAuth -}}
+            - name: MATOMO_SMTP_AUTH
+              value: {{ .Values.smtpAuth | quote }}
+            {{- end }}
             {{- if .Values.smtpHost }}
             - name: MATOMO_SMTP_HOST
               value: {{ .Values.smtpHost | quote }}
@@ -209,6 +213,14 @@ spec:
             {{- if .Values.smtpProtocol }}
             - name: MATOMO_SMTP_PROTOCOL
               value: {{ .Values.smtpProtocol | quote }}
+            {{- end }}
+            {{- if .Values.noreplyAddress }}
+            - name: MATOMO_NOREPLY_ADDRESS
+              value: {{ .Values.noreplyAddress | quote }}
+            {{- end }}
+            {{- if .Values.noreplyName }}
+            - name: MATOMO_NOREPLY_NAME
+              value: {{ .Values.noreplyName | quote }}
             {{- end }}
             {{- if .Values.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.extraEnvVars "context" $) | nindent 12 }}
