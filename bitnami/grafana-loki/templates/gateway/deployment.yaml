@@ -163,7 +163,7 @@ spec:
       volumes:
         - name: config
           configMap:
-            name: {{ include "grafana-loki.gateway.fullname" . }}
+            name: {{ include "grafana-loki.gateway.configmapName" . }}
       {{- if .Values.gateway.auth.enabled }}
         - name: htpasswd
           secret:
