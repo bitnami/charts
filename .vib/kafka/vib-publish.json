@@ -50,6 +50,19 @@
               }
             }
           }
+        },
+        {
+          "action_id": "ginkgo",
+          "params": {
+            "resources": {
+              "path": "/.vib/kafka/ginkgo"
+            },
+            "params": {
+              "kubeconfig": "{{kubeconfig}}",
+              "namespace": "{{namespace}}",
+              "name": "kafka"
+            }
+          }
         }
       ]
     },

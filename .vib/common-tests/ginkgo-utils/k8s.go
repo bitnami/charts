@@ -85,17 +85,17 @@ func DplScale(ctx context.Context, c kubernetes.Interface, dpl *appsv1.Deploymen
 	ns := dpl.Namespace
 
 	for i := 0; i < 3; i++ {
-		ss, err := c.AppsV1().Deployments(ns).Get(ctx, name, metav1.GetOptions{})
+		currentDpl, err := c.AppsV1().Deployments(ns).Get(ctx, name, metav1.GetOptions{})
 		if err != nil {
 			return nil, fmt.Errorf("failed to get deployment %q: %v", name, err)
 		}
-		if dpl.Status.Replicas == count {
-			return dpl, nil
+		if currentDpl.Status.Replicas == count {
+			return currentDpl, nil
 		}
-		*(dpl.Spec.Replicas) = count
-		dpl, err = c.AppsV1().Deployments(ns).Update(ctx, ss, metav1.UpdateOptions{})
+		*(currentDpl.Spec.Replicas) = count
+		currentDpl, err = c.AppsV1().Deployments(ns).Update(ctx, currentDpl, metav1.UpdateOptions{})
 		if err == nil {
-			return dpl, nil
+			return currentDpl, nil
 		}
 		if !apierrors.IsConflict(err) && !apierrors.IsServerTimeout(err) {
 			return nil, fmt.Errorf("failed to update statefulset %q: %v", name, err)

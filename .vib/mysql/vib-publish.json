@@ -50,6 +50,21 @@
               }
             }
           }
+        },
+        {
+          "action_id": "ginkgo",
+          "params": {
+            "resources": {
+              "path": "/.vib/mysql/ginkgo"
+            },
+            "params": {
+              "kubeconfig": "{{kubeconfig}}",
+              "namespace": "{{namespace}}",
+              "name": "mysql-primary",
+              "username": "root",
+              "password": "R0ot)Password"
+            }
+          }
         }
       ]
     },
