@@ -22,7 +22,7 @@ spec:
   template:
     metadata:
       {{- if or .Values.podAnnotations .Values.commonAnnotations }}
-      {{- $annotations := merge .ValuespodAnnotations .Values.commonAnnotations }}
+      {{- $annotations := merge .Values.podAnnotations .Values.commonAnnotations }}
       annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 8 }}
       {{- end }}
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}

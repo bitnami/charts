@@ -50,6 +50,21 @@
               }
             }
           }
+        },
+        {
+          "action_id": "ginkgo",
+          "params": {
+            "resources": {
+              "path": "/.vib/postgresql/ginkgo"
+            },
+            "params": {
+              "kubeconfig": "{{kubeconfig}}",
+              "namespace": "{{namespace}}",
+              "name": "postgresql-ptest",
+              "username": "postgres",
+              "password": "ComplicatedPassword123!4"
+            }
+          }
         }
       ]
     }
