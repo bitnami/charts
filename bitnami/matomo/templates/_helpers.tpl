@@ -144,7 +144,7 @@ db-password
 {{- end -}}
 
 {{/*
-Return the matomo image needed initContainers
+Return the matomo pods needed initContainers
 */}}
 {{- define "matomo.initContainers" -}}
 {{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
