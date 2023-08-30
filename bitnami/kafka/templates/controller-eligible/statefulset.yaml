@@ -333,6 +333,13 @@ spec:
         - name: kafka-configmaps
           configMap:
             name: {{ include "kafka.controller.configmapName" . }}
+        - name: kafka-secret-config
+        {{- if (include "kafka.controller.secretConfigExists" .) }}
+          secret:
+            secretName: {{ include "kafka.controller.secretConfigName" . }}
+        {{- else }}
+          emptyDir: {}
+        {{- end }}
         - name: kafka-config
           emptyDir: {}
         - name: tmp

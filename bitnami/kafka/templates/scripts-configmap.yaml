@@ -143,6 +143,13 @@ data:
       sed -i "s/$placeholder/$password/g" "$KAFKA_CONFIG_FILE"
     }
 
+    append_file_to_kafka_conf() {
+        local file="${1:?missing source file}"
+        local conf="${2:?missing kafka conf file}"
+
+        cat "$1" >> "$2"
+    }
+
     configure_external_access() {
       # Configure external hostname
       if [[ -f "/shared/external-host.txt" ]]; then
@@ -350,5 +357,8 @@ data:
     {{- if and .Values.tls.zookeeper.enabled .Values.tls.zookeeper.existingSecret }}
     configure_zookeeper_tls
     {{- end }}
+    if [ -f /secret-config/server-secret.properties ]; then
+      append_file_to_kafka_conf /secret-config/server-secret.properties $KAFKA_CONFIG_FILE
+    fi
     {{- include "common.tplvalues.render" ( dict "value" .Values.extraInit "context" $ ) | nindent 4 }}
 

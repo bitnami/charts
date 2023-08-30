@@ -340,6 +340,13 @@ spec:
         - name: kafka-configmaps
           configMap:
             name: {{ include "kafka.broker.configmapName" . }}
+        - name: kafka-secret-config
+        {{- if (include "kafka.broker.secretConfigExists" .) }}
+          secret:
+            secretName: {{ include "kafka.broker.secretConfigName" . }}
+        {{- else }}
+          emptyDir: {}
+        {{- end }}
         - name: kafka-config
           emptyDir: {}
         - name: tmp
