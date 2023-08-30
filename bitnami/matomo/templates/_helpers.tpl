@@ -160,7 +160,7 @@ Return the matomo image needed initContainers
   securityContext:
     runAsUser: 0
   {{- if .Values.volumePermissions.resources }}
-  resources: {{- toYaml .Values.volumePermissions.resources | nindent 12 }}
+  resources: {{- toYaml .Values.volumePermissions.resources | nindent 4 }}
   {{- end }}
   volumeMounts:
     - name: matomo-data
@@ -176,7 +176,7 @@ Return the matomo image needed initContainers
   {{- end }}
   command:
   {{- if .Values.certificates.command }}
-  command: {{- include "common.tplvalues.render" (dict "value" .Values.certificates.command "context" $) | nindent 12 }}
+  command: {{- include "common.tplvalues.render" (dict "value" .Values.certificates.command "context" $) | nindent 4 }}
   {{- else if .Values.certificates.customCertificate.certificateSecret }}
   - sh
   - -c
@@ -191,9 +191,9 @@ Return the matomo image needed initContainers
       -keyout /etc/ssl/private/ssl-cert-snakeoil.key -extensions v3_req
   {{- end }}
   {{- if .Values.certificates.args }}
-  args: {{- include "common.tplvalues.render" (dict "value" .Values.certificates.args "context" $) | nindent 12 }}
+  args: {{- include "common.tplvalues.render" (dict "value" .Values.certificates.args "context" $) | nindent 4 }}
   {{- end }}
-  env: {{- include "common.tplvalues.render" (dict "value" .Values.certificates.extraEnvVars "context" $) | nindent 12 }}
+  env: {{- include "common.tplvalues.render" (dict "value" .Values.certificates.extraEnvVars "context" $) | nindent 4 }}
   envFrom:
     {{- if .Values.certificates.extraEnvVarsCM }}
     - configMapRef:
