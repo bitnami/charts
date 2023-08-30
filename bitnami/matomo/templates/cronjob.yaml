@@ -38,7 +38,7 @@ spec:
           initContainers:
             {{ include "matomo.initContainers" . | nindent 12 }}
           containers:
-            - name: {{ include "common.names.fullname" . }}-scheduled-tasks
+            - name: {{ include "common.names.fullname" . }}-archive
               image: {{ template "matomo.image" . }}
               imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
               {{- if .Values.cronjobs.archive.containerSecurityContext.enabled }}
@@ -62,7 +62,7 @@ spec:
                   /opt/bitnami/scripts/mysql-client/setup.sh &&
                   /opt/bitnami/scripts/matomo/setup.sh &&
                   /post-init.sh &&
-                  /opt/bitnami/php/bin/php /opt/bitnami/matomo/console core:run-scheduled-tasks
+                  /opt/bitnami/php/bin/php /opt/bitnami/matomo/console core:archive
               {{- end }}
               env:
                 - name: BITNAMI_DEBUG
@@ -194,7 +194,7 @@ spec:
                   /opt/bitnami/scripts/mysql-client/setup.sh &&
                   /opt/bitnami/scripts/matomo/setup.sh &&
                   /post-init.sh &&
-                  /opt/bitnami/php/bin/php /opt/bitnami/matomo/console core:archive
+                  /opt/bitnami/php/bin/php /opt/bitnami/matomo/console core:run-scheduled-tasks
               {{- end }}
               env:
                 - name: BITNAMI_DEBUG
