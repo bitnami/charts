@@ -48,7 +48,7 @@ spec:
     {{- if and .Values.query.ingress.grpc.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.query.ingress.grpc.annotations )) .Values.query.ingress.grpc.selfSigned) }}
     - hosts:
         - {{ .Values.query.ingress.grpc.hostname }}
-      secretName: {{ printf "%s-tls" .Values.query.ingress.grpc.hostname }}
+      secretName: {{ .Values.query.ingress.grpc.secretName | default (printf "%s-tls" .Values.query.ingress.grpc.hostname) }}
     {{- end }}
     {{- if .Values.query.ingress.grpc.extraTls }}
     {{- toYaml .Values.query.ingress.grpc.extraTls | nindent 4 }}

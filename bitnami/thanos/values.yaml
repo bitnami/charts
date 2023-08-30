@@ -657,6 +657,9 @@ query:
     ## @param query.ingress.hostname Default host for the ingress resource
     ##
     hostname: thanos.local
+    ## @param query.ingress.secretName Custom secretName for the ingress resource
+    ## If query.ingress.secretName is not set, the secret will be named as follows: query.ingress.hostname-tls
+    secretName: ""   
     ## @param query.ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
     ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
     ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
@@ -756,6 +759,9 @@ query:
       ## @param query.ingress.grpc.hostname Default host for the ingress resource (GRPC)
       ##
       hostname: thanos-grpc.local
+      ## @param query.ingress.grpc.secretName Custom secretName for the ingress resource (GRPC)
+      ## If query.ingress.grpc.secretName is not set, the secret will be named as follows: query.ingress.grpc.hostname-tls
+      secretName: ""         
       ## @param query.ingress.grpc.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
       ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
       ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
