@@ -96,10 +96,10 @@ spec:
             {{- if .Values.certificates.customCAs }}
             - name: etc-ssl-certs
               emptyDir:
-              medium: "Memory"
+                medium: "Memory"
             - name: etc-ssl-private
               emptyDir:
-              medium: "Memory"
+                medium: "Memory"
             - name: custom-ca-certificates
               projected:
                 defaultMode: 0400
@@ -219,10 +219,10 @@ spec:
             {{- if .Values.certificates.customCAs }}
             - name: etc-ssl-certs
               emptyDir:
-              medium: "Memory"
+                medium: "Memory"
             - name: etc-ssl-private
               emptyDir:
-              medium: "Memory"
+                medium: "Memory"
             - name: custom-ca-certificates
               projected:
                 defaultMode: 0400
