@@ -494,12 +494,11 @@ cloneStaticSiteFromGit:
 ##     }
 ##   }
 ##
-
+## change here ya Abdo when you get the ip and port from MDP
 serverBlock: |-
    server {
      listen 0.0.0.0:8080;
      location / {
-## change here ya Abdo when you get the ip and port from MDP
        proxy_pass https://192.168.64.222:7002;
      }
    }
