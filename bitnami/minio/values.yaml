@@ -351,7 +351,12 @@ provisioning:
   ##     region: us-east-1
   ##     # Only when mode is 'distributed'
   ##     # ref: https://docs.minio.io/docs/distributed-minio-quickstart-guide
+  ##     # `versioning: false` corresponds to "suspended" versioning, not to be confused with "unversioned"
   ##     versioning: false
+  ##     # Set `disableVersioning` to `true` to leave the provisioned bucket unversioned.
+  ##     # This will have no effect if the bucket had previously been provisioned with
+  ##     # versioning enabled or suspended, as versioning cannot be disabled once enabled.
+  ##     disableVersioning: false
   ##     # Versioning is automatically enabled if withLock is true
   ##     # ref: https://docs.min.io/docs/minio-bucket-versioning-guide.html
   ##     withLock: true
