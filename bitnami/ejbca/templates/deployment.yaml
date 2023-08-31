@@ -160,7 +160,7 @@ spec:
             successThreshold: {{ .Values.startupProbe.successThreshold }}
             failureThreshold: {{ .Values.startupProbe.failureThreshold }}
             httpGet:
-              path: /ejbca
+              path: /ejbca/doc
               port: http
           {{- end }}
           {{- if .Values.customLivenessProbe }}
@@ -173,7 +173,7 @@ spec:
             successThreshold: {{ .Values.livenessProbe.successThreshold }}
             failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
             httpGet:
-              path: /ejbca
+              path: /ejbca/doc
               port: http
           {{- end }}
           {{- if .Values.customReadinessProbe }}
@@ -186,7 +186,7 @@ spec:
             successThreshold: {{ .Values.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
             httpGet:
-              path: /ejbca
+              path: /ejbca/doc
               port: http
           {{- end }}
           {{- end }}
