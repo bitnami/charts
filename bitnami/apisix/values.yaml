@@ -1770,7 +1770,16 @@ dashboard:
     ## Can be set to RollingUpdate or OnDelete
     ##
     type: RollingUpdate
-
+  ## Pod Disruption Budget configuration
+  ## ref: https://kubernetes.io/docs/tasks/run-application/configure-pdb
+  ## @param dashboard.pdb.create Enable/disable a Pod Disruption Budget creation
+  ## @param dashboard.pdb.minAvailable Minimum number/percentage of pods that should remain scheduled
+  ## @param dashboard.pdb.maxUnavailable Maximum number/percentage of pods that may be made unavailable
+  ##
+  pdb:
+    create: false
+    minAvailable: 1
+    maxUnavailable: ""
   ## @param dashboard.priorityClassName APISIX Dashboard pods' priorityClassName
   ##
   priorityClassName: ""

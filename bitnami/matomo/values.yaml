@@ -197,17 +197,23 @@ tolerations: []
 existingSecret: ""
 ## SMTP mail delivery configuration
 ## ref: https://github.com/bitnami/containers/tree/main/bitnami/matomo/#smtp-configuration
+## @param smtpAuth SMTP authentication mechanism (options: Plain, Login, Crammd5)
 ## @param smtpHost SMTP host
 ## @param smtpPort SMTP port
 ## @param smtpUser SMTP user
 ## @param smtpPassword SMTP password
 ## @param smtpProtocol SMTP Protocol (options: ssl,tls, nil)
+## @param noreplyName Noreply name
+## @param noreplyAddress Noreply address
 ##
+smtpAuth: ""
 smtpHost: ""
 smtpPort: ""
 smtpUser: ""
 smtpPassword: ""
 smtpProtocol: ""
+noreplyName: ""
+noreplyAddress: "" 
 ## @param smtpExistingSecret The name of an existing secret with SMTP credentials
 ## NOTE: Must contain key `smtp-password`
 ## NOTE: When it's set, the `smtpPassword` parameter is ignored

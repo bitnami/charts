@@ -9,11 +9,8 @@ kind: Deployment
 metadata:
   name: {{ template "opensearch.dashboards.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: dashboards
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -24,22 +21,17 @@ spec:
   {{- if .Values.dashboards.updateStrategy }}
   strategy: {{- toYaml .Values.dashboards.updateStrategy | nindent 4 }}
   {{- end }}
+  {{- $podLabels := merge .Values.dashboards.podLabels .Values.commonLabels }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: dashboards
   template:
     metadata:
       {{- if .Values.dashboards.podAnnotations }}
       annotations: {{- include "common.tplvalues.render" (dict "value" .Values.dashboards.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: dashboards
-        {{- if .Values.dashboards.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.dashboards.podLabels "context" $) | nindent 8 }}
-        {{- end }}
-        {{- if .Values.commonLabels }}
-        {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
-        {{- end }}
     spec:
       serviceAccountName: {{ template "opensearch.dashboards.serviceAccountName" . }}
       {{- include "opensearch.imagePullSecrets" . | nindent 6 }}
@@ -50,8 +42,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.dashboards.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.dashboards.podAffinityPreset "component" "dashboards" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.dashboards.podAntiAffinityPreset "component" "dashboards" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.dashboards.podAffinityPreset "component" "dashboards" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.dashboards.podAntiAffinityPreset "component" "dashboards" "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.dashboards.nodeAffinityPreset.type "key" .Values.dashboards.nodeAffinityPreset.key "values" .Values.dashboards.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.dashboards.nodeSelector }}

@@ -50,6 +50,21 @@
               }
             }
           }
+        },
+        {
+          "action_id": "ginkgo",
+          "params": {
+            "resources": {
+              "path": "/.vib/mongodb/ginkgo"
+            },
+            "params": {
+              "kubeconfig": "{{kubeconfig}}",
+              "namespace": "{{namespace}}",
+              "name": "mongodb",
+              "username": "bitnamiRoot",
+              "password": "ComplicatedPassword123!4"
+            }
+          }
         }
       ]
     }
