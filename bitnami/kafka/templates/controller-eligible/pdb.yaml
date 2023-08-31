@@ -26,6 +26,6 @@ spec:
   {{- $podLabels := merge .Values.controller.podLabels .Values.commonLabels }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
-      app.kubernetes.io/component: controller-only
+      app.kubernetes.io/component: controller-eligible
       app.kubernetes.io/part-of: kafka
 {{- end }}
