@@ -96,7 +96,7 @@ Refer to the [chart documentation for more information on each of these architec
 | -------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
 | `image.registry`                 | MongoDB(&reg;) image registry                                                                                                                               | `docker.io`            |
 | `image.repository`               | MongoDB(&reg;) image registry                                                                                                                               | `bitnami/mongodb`      |
-| `image.tag`                      | MongoDB(&reg;) image tag (immutable tags are recommended)                                                                                                   | `6.0.8-debian-11-r12`  |
+| `image.tag`                      | MongoDB(&reg;) image tag (immutable tags are recommended)                                                                                                   | `6.0.9-debian-11-r5`   |
 | `image.digest`                   | MongoDB(&reg;) image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                              | `""`                   |
 | `image.pullPolicy`               | MongoDB(&reg;) image pull policy                                                                                                                            | `IfNotPresent`         |
 | `image.pullSecrets`              | Specify docker-registry secret names as an array                                                                                                            | `[]`                   |
@@ -127,7 +127,7 @@ Refer to the [chart documentation for more information on each of these architec
 | `tls.arbiter.existingSecret`     | Existing secret with TLS certificates (`tls.key`, `tls.crt`, `ca.crt`) or (`tls.key`, `tls.crt`) with tls.pemChainIncluded set as enabled.                  | `""`                   |
 | `tls.image.registry`             | Init container TLS certs setup image registry                                                                                                               | `docker.io`            |
 | `tls.image.repository`           | Init container TLS certs setup image repository                                                                                                             | `bitnami/nginx`        |
-| `tls.image.tag`                  | Init container TLS certs setup image tag (immutable tags are recommended)                                                                                   | `1.25.1-debian-11-r39` |
+| `tls.image.tag`                  | Init container TLS certs setup image tag (immutable tags are recommended)                                                                                   | `1.25.2-debian-11-r11` |
 | `tls.image.digest`               | Init container TLS certs setup image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                              | `""`                   |
 | `tls.image.pullPolicy`           | Init container TLS certs setup image pull policy                                                                                                            | `IfNotPresent`         |
 | `tls.image.pullSecrets`          | Init container TLS certs specify docker-registry secret names as an array                                                                                   | `[]`                   |
@@ -253,7 +253,7 @@ Refer to the [chart documentation for more information on each of these architec
 | `externalAccess.autoDiscovery.enabled`                        | Enable using an init container to auto-detect external IPs by querying the K8s API                                                              | `false`                |
 | `externalAccess.autoDiscovery.image.registry`                 | Init container auto-discovery image registry                                                                                                    | `docker.io`            |
 | `externalAccess.autoDiscovery.image.repository`               | Init container auto-discovery image repository                                                                                                  | `bitnami/kubectl`      |
-| `externalAccess.autoDiscovery.image.tag`                      | Init container auto-discovery image tag (immutable tags are recommended)                                                                        | `1.25.12-debian-11-r6` |
+| `externalAccess.autoDiscovery.image.tag`                      | Init container auto-discovery image tag (immutable tags are recommended)                                                                        | `1.25.13-debian-11-r5` |
 | `externalAccess.autoDiscovery.image.digest`                   | Init container auto-discovery image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                   | `""`                   |
 | `externalAccess.autoDiscovery.image.pullPolicy`               | Init container auto-discovery image pull policy                                                                                                 | `IfNotPresent`         |
 | `externalAccess.autoDiscovery.image.pullSecrets`              | Init container auto-discovery image pull secrets                                                                                                | `[]`                   |
@@ -310,6 +310,38 @@ Refer to the [chart documentation for more information on each of these architec
 | `persistence.volumeClaimTemplates.requests`   | Custom PVC requests attributes                                                                                                        | `{}`                |
 | `persistence.volumeClaimTemplates.dataSource` | Add dataSource to the VolumeClaimTemplate                                                                                             | `{}`                |
 
+### Backup parameters
+
+| Name                                                               | Description                                                                                                                           | Value               |
+| ------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
+| `backup.enabled`                                                   | Enable the logical dump of the database "regularly"                                                                                   | `false`             |
+| `backup.cronjob.schedule`                                          | Set the cronjob parameter schedule                                                                                                    | `@daily`            |
+| `backup.cronjob.concurrencyPolicy`                                 | Set the cronjob parameter concurrencyPolicy                                                                                           | `Allow`             |
+| `backup.cronjob.failedJobsHistoryLimit`                            | Set the cronjob parameter failedJobsHistoryLimit                                                                                      | `1`                 |
+| `backup.cronjob.successfulJobsHistoryLimit`                        | Set the cronjob parameter successfulJobsHistoryLimit                                                                                  | `3`                 |
+| `backup.cronjob.startingDeadlineSeconds`                           | Set the cronjob parameter startingDeadlineSeconds                                                                                     | `""`                |
+| `backup.cronjob.ttlSecondsAfterFinished`                           | Set the cronjob parameter ttlSecondsAfterFinished                                                                                     | `""`                |
+| `backup.cronjob.restartPolicy`                                     | Set the cronjob parameter restartPolicy                                                                                               | `OnFailure`         |
+| `backup.cronjob.containerSecurityContext.runAsUser`                | User ID for the backup container                                                                                                      | `1001`              |
+| `backup.cronjob.containerSecurityContext.runAsGroup`               | Group ID for the backup container                                                                                                     | `0`                 |
+| `backup.cronjob.containerSecurityContext.runAsNonRoot`             | Set backup container's Security Context runAsNonRoot                                                                                  | `true`              |
+| `backup.cronjob.containerSecurityContext.readOnlyRootFilesystem`   | Is the container itself readonly                                                                                                      | `true`              |
+| `backup.cronjob.containerSecurityContext.allowPrivilegeEscalation` | Is it possible to escalate backup pod(s) privileges                                                                                   | `false`             |
+| `backup.cronjob.containerSecurityContext.seccompProfile.type`      | Set backup container's Security Context seccompProfile type                                                                           | `RuntimeDefault`    |
+| `backup.cronjob.containerSecurityContext.capabilities.drop`        | Set backup container's Security Context capabilities to drop                                                                          | `["ALL"]`           |
+| `backup.cronjob.command`                                           | Set backup container's command to run                                                                                                 | `[]`                |
+| `backup.cronjob.labels`                                            | Set the cronjob labels                                                                                                                | `{}`                |
+| `backup.cronjob.annotations`                                       | Set the cronjob annotations                                                                                                           | `{}`                |
+| `backup.cronjob.storage.existingClaim`                             | Provide an existing `PersistentVolumeClaim` (only when `architecture=standalone`)                                                     | `""`                |
+| `backup.cronjob.storage.resourcePolicy`                            | Setting it to "keep" to avoid removing PVCs during a helm delete operation. Leaving it empty will delete PVCs after the chart deleted | `""`                |
+| `backup.cronjob.storage.storageClass`                              | PVC Storage Class for the backup data volume                                                                                          | `""`                |
+| `backup.cronjob.storage.accessModes`                               | PV Access Mode                                                                                                                        | `["ReadWriteOnce"]` |
+| `backup.cronjob.storage.size`                                      | PVC Storage Request for the backup data volume                                                                                        | `8Gi`               |
+| `backup.cronjob.storage.annotations`                               | PVC annotations                                                                                                                       | `{}`                |
+| `backup.cronjob.storage.mountPath`                                 | Path to mount the volume at                                                                                                           | `/backup/mongodb`   |
+| `backup.cronjob.storage.subPath`                                   | Subdirectory of the volume to mount at                                                                                                | `""`                |
+| `backup.cronjob.storage.volumeClaimTemplates.selector`             | A label query over volumes to consider for binding (e.g. when using local volumes)                                                    | `{}`                |
+
 ### RBAC parameters
 
 | Name                                          | Description                                                                                                                                 | Value   |
@@ -332,7 +364,7 @@ Refer to the [chart documentation for more information on each of these architec
 | `volumePermissions.enabled`                   | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup`              | `false`            |
 | `volumePermissions.image.registry`            | Init container volume-permissions image registry                                                                                  | `docker.io`        |
 | `volumePermissions.image.repository`          | Init container volume-permissions image repository                                                                                | `bitnami/os-shell` |
-| `volumePermissions.image.tag`                 | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r16` |
+| `volumePermissions.image.tag`                 | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r51` |
 | `volumePermissions.image.digest`              | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`               |
 | `volumePermissions.image.pullPolicy`          | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`     |
 | `volumePermissions.image.pullSecrets`         | Specify docker-registry secret names as an array                                                                                  | `[]`               |
@@ -521,7 +553,7 @@ Refer to the [chart documentation for more information on each of these architec
 | `metrics.enabled`                            | Enable using a sidecar Prometheus exporter                                                                                    | `false`                    |
 | `metrics.image.registry`                     | MongoDB(&reg;) Prometheus exporter image registry                                                                             | `docker.io`                |
 | `metrics.image.repository`                   | MongoDB(&reg;) Prometheus exporter image repository                                                                           | `bitnami/mongodb-exporter` |
-| `metrics.image.tag`                          | MongoDB(&reg;) Prometheus exporter image tag (immutable tags are recommended)                                                 | `0.39.0-debian-11-r53`     |
+| `metrics.image.tag`                          | MongoDB(&reg;) Prometheus exporter image tag (immutable tags are recommended)                                                 | `0.39.0-debian-11-r85`     |
 | `metrics.image.digest`                       | MongoDB(&reg;) image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                | `""`                       |
 | `metrics.image.pullPolicy`                   | MongoDB(&reg;) Prometheus exporter image pull policy                                                                          | `IfNotPresent`             |
 | `metrics.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                              | `[]`                       |

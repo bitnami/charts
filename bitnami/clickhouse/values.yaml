@@ -79,7 +79,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/clickhouse
-  tag: 23.7.4-debian-11-r0
+  tag: 23.7.5-debian-11-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -266,6 +266,8 @@ defaultConfigurationOverrides: |
             <replica>
                 <host>{{ printf "%s-shard%d-%d.%s.%s.svc.%s" (include "common.names.fullname" $ ) $shard $i (include "clickhouse.headlessServiceName" $) (include "common.names.namespace" $) $.Values.clusterDomain }}</host>
                 <port>{{ $.Values.service.ports.tcp }}</port>
+                <user from_env="CLICKHOUSE_ADMIN_USER"></user>
+                <password from_env="CLICKHOUSE_ADMIN_PASSWORD"></password>
             </replica>
             {{- end }}
         </shard>
@@ -960,7 +962,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r37
+    tag: 11-debian-11-r48
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
