@@ -20,7 +20,8 @@ metadata:
 spec:
   jobLabel: {{ .Values.alertmanager.serviceMonitor.jobLabel | quote }}
   selector:
-    matchLabels: {{- include "kube-prometheus.alertmanager.matchLabels" . | nindent 6 }}
+    matchLabels:
+      app.kubernetes.io/component: alertmanager
       {{- if .Values.alertmanager.serviceMonitor.selector }}
       {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.serviceMonitor.selector "context" $) | nindent 6 }}
       {{- end }}
