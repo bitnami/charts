@@ -18,6 +18,7 @@ Kubernetes standard labels
             "helm.sh/chart" (include "common.names.chart" .context)
             "app.kubernetes.io/instance" .context.Release.Name
             "app.kubernetes.io/managed-by" .context.Release.Service
+            "app.kubernetes.io/version" .context.Chart.AppVersion
         )
     | toYaml
 }}
