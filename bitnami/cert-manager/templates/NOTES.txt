@@ -4,7 +4,7 @@ APP VERSION: {{ .Chart.AppVersion }}
 
 ** Please be patient while the chart is being deployed **
 
-In other to begin using certificates, you will need to set up Issuer or ClustersIssuer resources.
+In order to begin using certificates, you will need to set up Issuer or ClustersIssuer resources.
 
 https://cert-manager.io/docs/configuration/
 

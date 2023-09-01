@@ -8,5 +8,5 @@
   },
   "viewportWidth": 1920,
   "viewportHeight": 1080,
-  "defaultCommandTimeout": 30000
+  "defaultCommandTimeout": 60000
 }

@@ -33,7 +33,7 @@
         {
           "action_id": "health-check",
           "params": {
-            "endpoint": "lb-kafka-0-external-tcp-kafka"
+            "endpoint": "lb-kafka-controller-0-external-tcp-kafka"
           }
         },
         {
@@ -46,8 +46,21 @@
             "vars_file": "kafka/runtime-parameters.yaml",
             "remote": {
               "pod": {
-                "workload": "sts-kafka"
+                "workload": "sts-kafka-controller"
               }
+            }
+          }
+        },
+        {
+          "action_id": "ginkgo",
+          "params": {
+            "resources": {
+              "path": "/.vib/kafka/ginkgo"
+            },
+            "params": {
+              "kubeconfig": "{{kubeconfig}}",
+              "namespace": "{{namespace}}",
+              "name": "kafka"
             }
           }
         }

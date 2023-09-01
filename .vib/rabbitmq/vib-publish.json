@@ -38,6 +38,21 @@
           }
         },
         {
+          "action_id": "goss",
+          "params": {
+            "resources": {
+              "path": "/.vib"
+            },
+            "tests_file": "rabbitmq/goss/goss.yaml",
+            "vars_file": "rabbitmq/runtime-parameters.yaml",
+            "remote": {
+              "pod": {
+                "workload": "sts-rabbitmq"
+              }
+            }
+          }
+        },
+        {
           "action_id": "cypress",
           "params": {
             "resources": {
@@ -52,17 +67,17 @@
           }
         },
         {
-          "action_id": "goss",
+          "action_id": "ginkgo",
           "params": {
             "resources": {
-              "path": "/.vib"
+              "path": "/.vib/rabbitmq/ginkgo"
             },
-            "tests_file": "rabbitmq/goss/goss.yaml",
-            "vars_file": "rabbitmq/runtime-parameters.yaml",
-            "remote": {
-              "pod": {
-                "workload": "sts-rabbitmq"
-              }
+            "params": {
+              "kubeconfig": "{{kubeconfig}}",
+              "namespace": "{{namespace}}",
+              "name": "rabbitmq",
+              "username": "test_user",
+              "password": "ComplicatedPassword123!4"
             }
           }
         }

@@ -24,6 +24,7 @@ it('allows creating a registry', () => {
     cy.contains('New Endpoint').click();
     cy.get('#adapter').select(`${registry.newRegistry.provider}`);
     cy.get('#destination_name').type(`${registry.newRegistry.name}-${random}`);
+    cy.get('#destination_url').type(`${registry.newRegistry.url}`);
     cy.contains('Test Connection').should('not.be.disabled').click();
     cy.contains('Connection tested successfully');
     cy.contains('button', 'OK').should('not.be.disabled').click();

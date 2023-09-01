@@ -36,23 +36,6 @@ Create chart name and version as used by the chart label.
 {{- printf "%s-%s" .Chart.Name .Chart.Version | replace "+" "_" | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
-{{/* Helm required labels */}}
-{{- define "external-dns.labels" -}}
-app.kubernetes.io/name: {{ template "external-dns.name" . }}
-helm.sh/chart: {{ template "external-dns.chart" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}
-app.kubernetes.io/managed-by: {{ .Release.Service }}
-{{- if .Values.podLabels }}
-{{ toYaml .Values.podLabels }}
-{{- end }}
-{{- end -}}
-
-{{/* matchLabels */}}
-{{- define "external-dns.matchLabels" -}}
-app.kubernetes.io/name: {{ template "external-dns.name" . }}
-app.kubernetes.io/instance: {{ .Release.Name }}
-{{- end -}}
-
 {{/* podAnnotations */}}
 {{- define "external-dns.podAnnotations" -}}
 {{- if .Values.podAnnotations }}

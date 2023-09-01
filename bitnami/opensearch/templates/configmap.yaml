@@ -1,0 +1,25 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if or .Values.config .Values.extraConfig }}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: {{ include "common.names.fullname" . }}
+  namespace: {{ include "common.names.namespace" . | quote }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  {{- if .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+  {{- end }}
+data:
+  {{- if .Values.config }}
+  opensearch.yml: |-
+    {{- include "common.tplvalues.render" ( dict "value" .Values.config "context" $ ) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.extraConfig }}
+  my_opensearch.yml: |-
+    {{- include "common.tplvalues.render" ( dict "value" .Values.extraConfig "context" $ ) | nindent 4 }}
+  {{- end }}
+{{- end }}
