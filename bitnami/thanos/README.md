@@ -109,7 +109,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`                              | Thanos image registry                                                                                               | `docker.io`           |
 | `image.repository`                            | Thanos image repository                                                                                             | `bitnami/thanos`      |
-| `image.tag`                                   | Thanos image tag (immutable tags are recommended)                                                                   | `0.32.0-debian-11-r0` |
+| `image.tag`                                   | Thanos image tag (immutable tags are recommended)                                                                   | `0.32.1-debian-11-r0` |
 | `image.digest`                                | Thanos image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag              | `""`                  |
 | `image.pullPolicy`                            | Thanos image pull policy                                                                                            | `IfNotPresent`        |
 | `image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                    | `[]`                  |
@@ -266,6 +266,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `query.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable                                                                          | `""`                     |
 | `query.ingress.enabled`                                   | Enable ingress controller resource                                                                                                      | `false`                  |
 | `query.ingress.hostname`                                  | Default host for the ingress resource                                                                                                   | `thanos.local`           |
+| `query.ingress.secretName`                                | Custom secretName for the ingress resource                                                                                              | `""`                     |
 | `query.ingress.ingressClassName`                          | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                           | `""`                     |
 | `query.ingress.annotations`                               | Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.        | `{}`                     |
 | `query.ingress.extraHosts`                                | The list of additional hostnames to be covered with this ingress record.                                                                | `[]`                     |
@@ -279,6 +280,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `query.ingress.pathType`                                  | Ingress path type                                                                                                                       | `ImplementationSpecific` |
 | `query.ingress.grpc.enabled`                              | Enable ingress controller resource (GRPC)                                                                                               | `false`                  |
 | `query.ingress.grpc.hostname`                             | Default host for the ingress resource (GRPC)                                                                                            | `thanos-grpc.local`      |
+| `query.ingress.grpc.secretName`                           | Custom secretName for the ingress resource (GRPC)                                                                                       | `""`                     |
 | `query.ingress.grpc.ingressClassName`                     | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                           | `""`                     |
 | `query.ingress.grpc.annotations`                          | Additional annotations for the Ingress resource (GRPC). To enable certificate autogeneration, place here your cert-manager annotations. | `{}`                     |
 | `query.ingress.grpc.extraHosts`                           | The list of additional hostnames to be covered with this ingress record.                                                                | `[]`                     |
@@ -1185,7 +1187,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | `volumePermissions.enabled`           | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`                                   | `false`            |
 | `volumePermissions.image.registry`    | Init container volume-permissions image registry                                                                                  | `docker.io`        |
 | `volumePermissions.image.repository`  | Init container volume-permissions image repository                                                                                | `bitnami/os-shell` |
-| `volumePermissions.image.tag`         | Init container volume-permissions image tag                                                                                       | `11-debian-11-r45` |
+| `volumePermissions.image.tag`         | Init container volume-permissions image tag                                                                                       | `11-debian-11-r48` |
 | `volumePermissions.image.digest`      | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`               |
 | `volumePermissions.image.pullPolicy`  | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`     |
 | `volumePermissions.image.pullSecrets` | Specify docker-registry secret names as an array                                                                                  | `[]`               |

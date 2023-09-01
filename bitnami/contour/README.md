@@ -219,6 +219,9 @@ helm uninstall my-release
 | `envoy.shutdownManager.containerSecurityContext.enabled`      | Shutdown Manager Container securityContext                                                                            | `true`                 |
 | `envoy.shutdownManager.containerSecurityContext.runAsUser`    | User ID for the Shutdown Manager container (to change this, http and https containerPorts must be set to >1024)       | `1001`                 |
 | `envoy.shutdownManager.containerSecurityContext.runAsNonRoot` | Run as non root                                                                                                       | `true`                 |
+| `envoy.initConfig.containerSecurityContext.enabled`           | Envoy initconfig Container securityContext                                                                            | `true`                 |
+| `envoy.initConfig.containerSecurityContext.runAsUser`         | User ID for the Envoy initconfig container (to change this, http and https containerPorts must be set to >1024)       | `1001`                 |
+| `envoy.initConfig.containerSecurityContext.runAsNonRoot`      | Run as non root                                                                                                       | `true`                 |
 | `envoy.kind`                                                  | Install as deployment or daemonset                                                                                    | `daemonset`            |
 | `envoy.replicaCount`                                          | Desired number of Controller pods                                                                                     | `1`                    |
 | `envoy.lifecycleHooks`                                        | lifecycleHooks for the container to automate configuration before or after startup.                                   | `{}`                   |
@@ -247,9 +250,6 @@ helm uninstall my-release
 | `envoy.containerSecurityContext.enabled`                      | Envoy Container securityContext                                                                                       | `true`                 |
 | `envoy.containerSecurityContext.runAsUser`                    | User ID for the Envoy container (to change this, http and https containerPorts must be set to >1024)                  | `1001`                 |
 | `envoy.containerSecurityContext.runAsNonRoot`                 | Run as non root                                                                                                       | `true`                 |
-| `envoy.containerSecurityContextEnvoyInit.enabled`             | EnvoyInit Container securityContext                                                                                   | `true`                 |
-| `envoy.containerSecurityContextEnvoyInit.runAsUser`           | User ID for the EnvoyInit container (to change this, http and https containerPorts must be set to >1024)              | `1001`                 |
-| `envoy.containerSecurityContextEnvoyInit.runAsNonRoot`        | Run as non root                                                                                                       | `true`                 |
 | `envoy.hostNetwork`                                           | Envoy Pod host network access                                                                                         | `false`                |
 | `envoy.dnsPolicy`                                             | Envoy Pod Dns Policy's DNS Policy                                                                                     | `ClusterFirst`         |
 | `envoy.tlsExistingSecret`                                     | Name of the existingSecret to be use in Envoy deployment                                                              | `""`                   |

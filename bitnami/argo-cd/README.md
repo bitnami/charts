@@ -79,7 +79,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | ------------------------------------------------------------------------------------------------------- | -------------------- |
 | `image.registry`    | Argo CD image registry                                                                                  | `docker.io`          |
 | `image.repository`  | Argo CD image repository                                                                                | `bitnami/argo-cd`    |
-| `image.tag`         | Argo CD image tag (immutable tags are recommended)                                                      | `2.8.1-debian-11-r3` |
+| `image.tag`         | Argo CD image tag (immutable tags are recommended)                                                      | `2.8.2-debian-11-r2` |
 | `image.digest`      | Argo CD image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                 |
 | `image.pullPolicy`  | Argo CD image pull policy                                                                               | `IfNotPresent`       |
 | `image.pullSecrets` | Argo CD image pull secrets                                                                              | `[]`                 |
@@ -693,7 +693,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------------------- | --------------------------------------------------------------------------------------------------- | ---------------------- |
 | `dex.image.registry`                                    | Dex image registry                                                                                  | `docker.io`            |
 | `dex.image.repository`                                  | Dex image repository                                                                                | `bitnami/dex`          |
-| `dex.image.tag`                                         | Dex image tag (immutable tags are recommended)                                                      | `2.37.0-debian-11-r51` |
+| `dex.image.tag`                                         | Dex image tag (immutable tags are recommended)                                                      | `2.37.0-debian-11-r57` |
 | `dex.image.digest`                                      | Dex image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
 | `dex.image.pullPolicy`                                  | Dex image pull policy                                                                               | `IfNotPresent`         |
 | `dex.image.pullSecrets`                                 | Dex image pull secrets                                                                              | `[]`                   |
@@ -833,7 +833,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`                    | `false`            |
 | `volumePermissions.image.registry`                     | OS Shell + Utility image registry                                                                                  | `docker.io`        |
 | `volumePermissions.image.repository`                   | OS Shell + Utility image repository                                                                                | `bitnami/os-shell` |
-| `volumePermissions.image.tag`                          | OS Shell + Utility image tag (immutable tags are recommended)                                                      | `11-debian-11-r45` |
+| `volumePermissions.image.tag`                          | OS Shell + Utility image tag (immutable tags are recommended)                                                      | `11-debian-11-r48` |
 | `volumePermissions.image.digest`                       | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`               |
 | `volumePermissions.image.pullPolicy`                   | OS Shell + Utility image pull policy                                                                               | `IfNotPresent`     |
 | `volumePermissions.image.pullSecrets`                  | OS Shell + Utility image pull secrets                                                                              | `[]`               |
@@ -848,7 +848,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `rbac.create`                             | Specifies whether RBAC resources should be created                                                    | `true`               |
 | `redis.image.registry`                    | Redis image registry                                                                                  | `docker.io`          |
 | `redis.image.repository`                  | Redis image repository                                                                                | `bitnami/redis`      |
-| `redis.image.tag`                         | Redis image tag (immutable tags are recommended)                                                      | `7.2.0-debian-11-r5` |
+| `redis.image.tag`                         | Redis image tag (immutable tags are recommended)                                                      | `7.2.0-debian-11-r0` |
 | `redis.image.digest`                      | Redis image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                 |
 | `redis.image.pullPolicy`                  | Redis image pull policy                                                                               | `IfNotPresent`       |
 | `redis.image.pullSecrets`                 | Redis image pull secrets                                                                              | `[]`                 |
@@ -923,6 +923,59 @@ In order to use SSO you need to enable Dex by setting `dex.enabled=true`. You ca
 > NOTE: `dex.config` is the key of the object. IF you are using the Helm CLI to set the parameter you need to scape the `.` like `--set server.config.dex\.config`.
 > IMPORTANT: if you enable Dex without configuring it you will get an error similar to `msg="dex is not configured"`, and the Dex pod will never reach the running state.
 
+### Installing a Config Management Plugin
+
+In order to install a Config Management Plugin as described in the official [documentation](https://argo-cd.readthedocs.io/en/stable/operator-manual/config-management-plugins/), it's recommended to run a sidecar container & mount the plugin configuration from a ConfigMap. You can achieve so by using `repoServer.extraVolumes`, `repoServer.sidecars` and `extraDeploy` parameters as shown in the example below:
+
+```yaml
+repoServer:
+  extraVolumes:
+    - name: plugin-config
+      configMap:
+        name: my-plugin-config
+    - name: plugins
+      emptyDir: {}
+    - name: plugin-tmp
+      emptyDir: {}
+    - name: var-files
+      emptyDir: {}
+  sidecars:
+    - name: plugin-sidecar
+      command: [argocd-cmp-server, --config-dir-path, /app/config]
+      image: "{{ include \"argocd.image\" . }}"
+      env:
+        - name: ARGOCD_PLUGINSOCKFILEPATH
+          value: /app/plugins
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1001
+      volumeMounts:
+        - mountPath: /app/plugins
+          name: plugins
+        - mountPath: /tmp
+          name: plugin-tmp
+        - mountPath: /var/run/argocd
+          name: var-files
+        # Insert plugin configuration
+        - mountPath: /app/config/plugin.yaml
+          subPath: plugin.yaml
+          name: plugin-config
+extraDeploy:
+- apiVersion: v1
+  kind: ConfigMap
+  metadata:
+    name: my-plugin-config
+  data:
+    plugin.yaml: |
+      apiVersion: argoproj.io/v1alpha1
+      kind: ConfigManagementPlugin
+      metadata:
+        name: my-plugin
+      spec:
+        version: v1.0
+        (...)
+```
+
 ### Additional environment variables
 
 In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` property.
@@ -951,6 +1004,14 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 5.0.0
+
+This major updates the Redis&reg; subchart to its newest major, 18.0.0. [Here](https://github.com/bitnami/charts/tree/main/bitnami/redis#to-1800) you can find more information about the changes introduced in that version.
+
+NOTE: Due to an error in our release process, Redis&reg;' chart versions higher or equal than 17.15.4 already use Redis&reg; 7.2 by default.
+
+### To any previous version
 
 Refer to the [chart documentation for more information about how to upgrade from previous releases](https://docs.bitnami.com/kubernetes/infrastructure/argo-cd/administration/upgrade/).
 
