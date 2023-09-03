@@ -112,11 +112,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | `serviceAccountName`                    | Attach serviceAccountName to the pod and sidecars                                                                     | `""`                   |
 | `tolerations`                           | Tolerations for pod assignment                                                                                        | `[]`                   |
 | `existingSecret`                        | Name of a secret with the application password                                                                        | `""`                   |
+| `smtpAuth`                              | SMTP authentication mechanism (options: Plain, Login, Crammd5)                                                        | `""`                   |
 | `smtpHost`                              | SMTP host                                                                                                             | `""`                   |
 | `smtpPort`                              | SMTP port                                                                                                             | `""`                   |
 | `smtpUser`                              | SMTP user                                                                                                             | `""`                   |
 | `smtpPassword`                          | SMTP password                                                                                                         | `""`                   |
 | `smtpProtocol`                          | SMTP Protocol (options: ssl,tls, nil)                                                                                 | `""`                   |
+| `noreplyName`                           | Noreply name                                                                                                          | `""`                   |
+| `noreplyAddress`                        | Noreply address                                                                                                       | `""`                   |
 | `smtpExistingSecret`                    | The name of an existing secret with SMTP credentials                                                                  | `""`                   |
 | `containerPorts`                        | Container ports                                                                                                       | `{}`                   |
 | `persistence.enabled`                   | Enable persistence using PVC                                                                                          | `true`                 |

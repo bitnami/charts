@@ -120,7 +120,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mongodb
-  tag: 6.0.8-debian-11-r20
+  tag: 6.0.9-debian-11-r5
   digest: ""
   ## Specify a imagePullPolicy
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -244,7 +244,7 @@ tls:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.25.2-debian-11-r0
+    tag: 1.25.2-debian-11-r11
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -809,7 +809,7 @@ externalAccess:
     image:
       registry: docker.io
       repository: bitnami/kubectl
-      tag: 1.25.12-debian-11-r26
+      tag: 1.25.13-debian-11-r5
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1064,6 +1064,113 @@ persistence:
     ##
     dataSource: {}
 
+## @section Backup parameters
+## This section implements a trivial logical dump cronjob of the database.
+## This only comes with the consistency guarantees of the dump program.
+## This is not a snapshot based roll forward/backward recovery backup.
+## ref: https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/
+##
+backup:
+  ## @param backup.enabled Enable the logical dump of the database "regularly"
+  ##
+  enabled: false
+  ## Fine tuning cronjob's config
+  ##
+  cronjob:
+    ## @param backup.cronjob.schedule Set the cronjob parameter schedule
+    ##
+    schedule: "@daily"
+    ## @param backup.cronjob.concurrencyPolicy Set the cronjob parameter concurrencyPolicy
+    ##
+    concurrencyPolicy: Allow
+    ## @param backup.cronjob.failedJobsHistoryLimit Set the cronjob parameter failedJobsHistoryLimit
+    ##
+    failedJobsHistoryLimit: 1
+    ## @param backup.cronjob.successfulJobsHistoryLimit Set the cronjob parameter successfulJobsHistoryLimit
+    ##
+    successfulJobsHistoryLimit: 3
+    ## @param backup.cronjob.startingDeadlineSeconds Set the cronjob parameter startingDeadlineSeconds
+    ##
+    startingDeadlineSeconds: ""
+    ## @param backup.cronjob.ttlSecondsAfterFinished Set the cronjob parameter ttlSecondsAfterFinished
+    ##
+    ttlSecondsAfterFinished: ""
+    ## @param backup.cronjob.restartPolicy Set the cronjob parameter restartPolicy
+    ##
+    restartPolicy: OnFailure
+    ## backup container's Security Context
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+    ## @param backup.cronjob.containerSecurityContext.runAsUser User ID for the backup container
+    ## @param backup.cronjob.containerSecurityContext.runAsGroup Group ID for the backup container
+    ## @param backup.cronjob.containerSecurityContext.runAsNonRoot Set backup container's Security Context runAsNonRoot
+    ## @param backup.cronjob.containerSecurityContext.readOnlyRootFilesystem Is the container itself readonly
+    ## @param backup.cronjob.containerSecurityContext.allowPrivilegeEscalation Is it possible to escalate backup pod(s) privileges
+    ## @param backup.cronjob.containerSecurityContext.seccompProfile.type Set backup container's Security Context seccompProfile type
+    ## @param backup.cronjob.containerSecurityContext.capabilities.drop Set backup container's Security Context capabilities to drop
+    ##
+    containerSecurityContext:
+      runAsUser: 1001
+      runAsGroup: 0
+      runAsNonRoot: true
+      allowPrivilegeEscalation: false
+      readOnlyRootFilesystem: true
+      seccompProfile:
+        type: RuntimeDefault
+      capabilities:
+        drop:
+          - ALL
+    ## @param backup.cronjob.command Set backup container's command to run
+    ##
+    command: []
+    ## @param backup.cronjob.labels Set the cronjob labels
+    ##
+    labels: {}
+    ## @param backup.cronjob.annotations Set the cronjob annotations
+    ##
+    annotations: {}
+    ## Backup container's
+    ##
+    storage:
+      ## @param backup.cronjob.storage.existingClaim Provide an existing `PersistentVolumeClaim` (only when `architecture=standalone`)
+      ## If defined, PVC must be created manually before volume will be bound
+      ##
+      existingClaim: ""
+      ## @param backup.cronjob.storage.resourcePolicy Setting it to "keep" to avoid removing PVCs during a helm delete operation. Leaving it empty will delete PVCs after the chart deleted
+      ##
+      resourcePolicy: ""
+      ## @param backup.cronjob.storage.storageClass PVC Storage Class for the backup data volume
+      ## If defined, storageClassName: <storageClass>
+      ## If set to "-", storageClassName: "", which disables dynamic provisioning
+      ## If undefined (the default) or set to null, no storageClassName spec is
+      ## set, choosing the default provisioner.
+      ##
+      storageClass: ""
+      ## @param backup.cronjob.storage.accessModes PV Access Mode
+      ##
+      accessModes:
+       - ReadWriteOnce
+      ## @param backup.cronjob.storage.size PVC Storage Request for the backup data volume
+      ##
+      size: 8Gi
+      ## @param backup.cronjob.storage.annotations PVC annotations
+      ##
+      annotations: {}
+      ## @param backup.cronjob.storage.mountPath Path to mount the volume at 
+      ##
+      mountPath: /backup/mongodb
+      ## @param backup.cronjob.storage.subPath Subdirectory of the volume to mount at
+      ## and one PV for multiple services.
+      ##
+      subPath: ""
+      ## Fine tuning for volumeClaimTemplates
+      ##
+      volumeClaimTemplates:
+        ## @param backup.cronjob.storage.volumeClaimTemplates.selector A label query over volumes to consider for binding (e.g. when using local volumes)
+        ## A label query over volumes to consider for binding (e.g. when using local volumes)
+        ## See https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.20/#labelselector-v1-meta for more details
+        ##
+        selector: {}
+
 ## @section RBAC parameters
 ##
 
@@ -1182,7 +1289,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r40
+    tag: 11-debian-11-r51
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1963,7 +2070,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mongodb-exporter
-    tag: 0.39.0-debian-11-r73
+    tag: 0.39.0-debian-11-r85
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
