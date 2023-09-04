@@ -130,6 +130,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `master.disableCommands`                                   | Array with Redis&reg; commands to disable on master nodes                                             | `["FLUSHDB","FLUSHALL"]` |
 | `master.command`                                           | Override default container command (useful when using custom images)                                  | `[]`                     |
 | `master.args`                                              | Override default container args (useful when using custom images)                                     | `[]`                     |
+| `master.enableServiceLinks`                                | Whether information about services should be injected into pod's environment variable                 | `true`                   |
 | `master.preExecCmds`                                       | Additional commands to run prior to starting Redis&reg; master                                        | `[]`                     |
 | `master.extraFlags`                                        | Array with additional command line flags for Redis&reg; master                                        | `[]`                     |
 | `master.extraEnvVars`                                      | Array with extra environment variables to add to Redis&reg; master nodes                              | `[]`                     |
@@ -235,6 +236,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `replica.disableCommands`                                   | Array with Redis&reg; commands to disable on replicas nodes                                             | `["FLUSHDB","FLUSHALL"]` |
 | `replica.command`                                           | Override default container command (useful when using custom images)                                    | `[]`                     |
 | `replica.args`                                              | Override default container args (useful when using custom images)                                       | `[]`                     |
+| `replica.enableServiceLinks`                                | Whether information about services should be injected into pod's environment variable                   | `true`                   |
 | `replica.preExecCmds`                                       | Additional commands to run prior to starting Redis&reg; replicas                                        | `[]`                     |
 | `replica.extraFlags`                                        | Array with additional command line flags for Redis&reg; replicas                                        | `[]`                     |
 | `replica.extraEnvVars`                                      | Array with extra environment variables to add to Redis&reg; replicas nodes                              | `[]`                     |
@@ -362,6 +364,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sentinel.configuration`                                     | Configuration for Redis&reg; Sentinel nodes                                                                                                 | `""`                     |
 | `sentinel.command`                                           | Override default container command (useful when using custom images)                                                                        | `[]`                     |
 | `sentinel.args`                                              | Override default container args (useful when using custom images)                                                                           | `[]`                     |
+| `sentinel.enableServiceLinks`                                | Whether information about services should be injected into pod's environment variable                                                       | `true`                   |
 | `sentinel.preExecCmds`                                       | Additional commands to run prior to starting Redis&reg; Sentinel                                                                            | `[]`                     |
 | `sentinel.extraEnvVars`                                      | Array with extra environment variables to add to Redis&reg; Sentinel nodes                                                                  | `[]`                     |
 | `sentinel.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars for Redis&reg; Sentinel nodes                                                          | `""`                     |
@@ -468,7 +471,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                                           | Start a sidecar prometheus exporter to expose Redis&reg; metrics                                                    | `false`                  |
 | `metrics.image.registry`                                    | Redis&reg; Exporter image registry                                                                                  | `docker.io`              |
 | `metrics.image.repository`                                  | Redis&reg; Exporter image repository                                                                                | `bitnami/redis-exporter` |
-| `metrics.image.tag`                                         | Redis&reg; Exporter image tag (immutable tags are recommended)                                                      | `1.52.0-debian-11-r20`   |
+| `metrics.image.tag`                                         | Redis&reg; Exporter image tag (immutable tags are recommended)                                                      | `1.52.0-debian-11-r25`   |
 | `metrics.image.digest`                                      | Redis&reg; Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                     |
 | `metrics.image.pullPolicy`                                  | Redis&reg; Exporter image pull policy                                                                               | `IfNotPresent`           |
 | `metrics.image.pullSecrets`                                 | Redis&reg; Exporter image pull secrets                                                                              | `[]`                     |
@@ -541,7 +544,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`                    | `false`            |
 | `volumePermissions.image.registry`                     | OS Shell + Utility image registry                                                                                  | `docker.io`        |
 | `volumePermissions.image.repository`                   | OS Shell + Utility image repository                                                                                | `bitnami/os-shell` |
-| `volumePermissions.image.tag`                          | OS Shell + Utility image tag (immutable tags are recommended)                                                      | `11-debian-11-r40` |
+| `volumePermissions.image.tag`                          | OS Shell + Utility image tag (immutable tags are recommended)                                                      | `11-debian-11-r48` |
 | `volumePermissions.image.digest`                       | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`               |
 | `volumePermissions.image.pullPolicy`                   | OS Shell + Utility image pull policy                                                                               | `IfNotPresent`     |
 | `volumePermissions.image.pullSecrets`                  | OS Shell + Utility image pull secrets                                                                              | `[]`               |
@@ -551,7 +554,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sysctl.enabled`                                       | Enable init container to modify Kernel settings                                                                    | `false`            |
 | `sysctl.image.registry`                                | OS Shell + Utility image registry                                                                                  | `docker.io`        |
 | `sysctl.image.repository`                              | OS Shell + Utility image repository                                                                                | `bitnami/os-shell` |
-| `sysctl.image.tag`                                     | OS Shell + Utility image tag (immutable tags are recommended)                                                      | `11-debian-11-r40` |
+| `sysctl.image.tag`                                     | OS Shell + Utility image tag (immutable tags are recommended)                                                      | `11-debian-11-r48` |
 | `sysctl.image.digest`                                  | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`               |
 | `sysctl.image.pullPolicy`                              | OS Shell + Utility image pull policy                                                                               | `IfNotPresent`     |
 | `sysctl.image.pullSecrets`                             | OS Shell + Utility image pull secrets                                                                              | `[]`               |
@@ -786,6 +789,12 @@ This issue can be mitigated by splitting the upgrade into two stages: one for al
 `helm upgrade oci://registry-1.docker.io/bitnamicharts/redis --set master.updateStrategy.rollingUpdate.partition=99`
 - Stage 2 (anything else that is not up to date, in this case only master):
 `helm upgrade oci://registry-1.docker.io/bitnamicharts/redis`
+
+### To 18.0.0
+
+This major version updates the Redis&reg; docker image version used from `7.0` to `7.2`, the new stable version. There are no major changes in the chart, but we recommend checking the [Redis&reg; 7.2 release notes](https://raw.githubusercontent.com/redis/redis/7.2/00-RELEASENOTES) before upgrading.
+
+NOTE: Due to an error in our release process, versions higher or equal than 17.15.4 already use 7.2 by default.
 
 ### To 17.0.0
 

@@ -6,17 +6,17 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: kubectl
-      image: docker.io/bitnami/kubectl:1.25.12-debian-11-r26
+      image: docker.io/bitnami/kubectl:1.25.12-debian-11-r30
     - name: mariadb
-      image: docker.io/bitnami/mariadb:10.11.5-debian-11-r0
+      image: docker.io/bitnami/mariadb:10.11.5-debian-11-r4
     - name: prometheus-rsocket-proxy
-      image: docker.io/bitnami/prometheus-rsocket-proxy:1.5.2-debian-11-r37
+      image: docker.io/bitnami/prometheus-rsocket-proxy:1.5.2-debian-11-r40
     - name: spring-cloud-dataflow-composed-task-runner
-      image: docker.io/bitnami/spring-cloud-dataflow-composed-task-runner:2.10.3-debian-11-r91
+      image: docker.io/bitnami/spring-cloud-dataflow-composed-task-runner:2.10.3-debian-11-r94
     - name: spring-cloud-dataflow
-      image: docker.io/bitnami/spring-cloud-dataflow:2.10.3-debian-11-r83
+      image: docker.io/bitnami/spring-cloud-dataflow:2.10.3-debian-11-r86
     - name: spring-cloud-skipper
-      image: docker.io/bitnami/spring-cloud-skipper:2.9.3-debian-11-r96
+      image: docker.io/bitnami/spring-cloud-skipper:2.9.3-debian-11-r98
 apiVersion: v2
 appVersion: 2.10.3
 dependencies:
@@ -33,7 +33,7 @@ dependencies:
 - condition: kafka.enabled
   name: kafka
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 24.x.x
+  version: 25.x.x
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
   tags:
@@ -53,4 +53,4 @@ maintainers:
 name: spring-cloud-dataflow
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/spring-cloud-dataflow
-version: 22.0.1
+version: 23.1.0

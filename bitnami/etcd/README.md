@@ -77,54 +77,54 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### etcd parameters
 
-| Name                                   | Description                                                                                                          | Value                 |
-| -------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | --------------------- |
-| `image.registry`                       | etcd image registry                                                                                                  | `docker.io`           |
-| `image.repository`                     | etcd image name                                                                                                      | `bitnami/etcd`        |
-| `image.tag`                            | etcd image tag                                                                                                       | `3.5.9-debian-11-r96` |
-| `image.digest`                         | etcd image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                 | `""`                  |
-| `image.pullPolicy`                     | etcd image pull policy                                                                                               | `IfNotPresent`        |
-| `image.pullSecrets`                    | etcd image pull secrets                                                                                              | `[]`                  |
-| `image.debug`                          | Enable image debug mode                                                                                              | `false`               |
-| `auth.rbac.create`                     | Switch to enable RBAC authentication                                                                                 | `true`                |
-| `auth.rbac.allowNoneAuthentication`    | Allow to use etcd without configuring RBAC authentication                                                            | `true`                |
-| `auth.rbac.rootPassword`               | Root user password. The root user is always `root`                                                                   | `""`                  |
-| `auth.rbac.existingSecret`             | Name of the existing secret containing credentials for the root user                                                 | `""`                  |
-| `auth.rbac.existingSecretPasswordKey`  | Name of key containing password to be retrieved from the existing secret                                             | `""`                  |
-| `auth.token.enabled`                   | Enables token authentication                                                                                         | `true`                |
-| `auth.token.type`                      | Authentication token type. Allowed values: 'simple' or 'jwt'                                                         | `jwt`                 |
-| `auth.token.privateKey.filename`       | Name of the file containing the private key for signing the JWT token                                                | `jwt-token.pem`       |
-| `auth.token.privateKey.existingSecret` | Name of the existing secret containing the private key for signing the JWT token                                     | `""`                  |
-| `auth.token.signMethod`                | JWT token sign method                                                                                                | `RS256`               |
-| `auth.token.ttl`                       | JWT token TTL                                                                                                        | `10m`                 |
-| `auth.client.secureTransport`          | Switch to encrypt client-to-server communications using TLS certificates                                             | `false`               |
-| `auth.client.useAutoTLS`               | Switch to automatically create the TLS certificates                                                                  | `false`               |
-| `auth.client.existingSecret`           | Name of the existing secret containing the TLS certificates for client-to-server communications                      | `""`                  |
-| `auth.client.enableAuthentication`     | Switch to enable host authentication using TLS certificates. Requires existing secret                                | `false`               |
-| `auth.client.certFilename`             | Name of the file containing the client certificate                                                                   | `cert.pem`            |
-| `auth.client.certKeyFilename`          | Name of the file containing the client certificate private key                                                       | `key.pem`             |
-| `auth.client.caFilename`               | Name of the file containing the client CA certificate                                                                | `""`                  |
-| `auth.peer.secureTransport`            | Switch to encrypt server-to-server communications using TLS certificates                                             | `false`               |
-| `auth.peer.useAutoTLS`                 | Switch to automatically create the TLS certificates                                                                  | `false`               |
-| `auth.peer.existingSecret`             | Name of the existing secret containing the TLS certificates for server-to-server communications                      | `""`                  |
-| `auth.peer.enableAuthentication`       | Switch to enable host authentication using TLS certificates. Requires existing secret                                | `false`               |
-| `auth.peer.certFilename`               | Name of the file containing the peer certificate                                                                     | `cert.pem`            |
-| `auth.peer.certKeyFilename`            | Name of the file containing the peer certificate private key                                                         | `key.pem`             |
-| `auth.peer.caFilename`                 | Name of the file containing the peer CA certificate                                                                  | `""`                  |
-| `autoCompactionMode`                   | Auto compaction mode, by default periodic. Valid values: "periodic", "revision".                                     | `""`                  |
-| `autoCompactionRetention`              | Auto compaction retention for mvcc key value store in hour, by default 0, means disabled                             | `""`                  |
-| `initialClusterState`                  | Initial cluster state. Allowed values: 'new' or 'existing'                                                           | `""`                  |
-| `initialClusterToken`                  | Initial cluster token. Can be used to protect etcd from cross-cluster-interaction, which might corrupt the clusters. | `etcd-cluster-k8s`    |
-| `logLevel`                             | Sets the log level for the etcd process. Allowed values: 'debug', 'info', 'warn', 'error', 'panic', 'fatal'          | `info`                |
-| `maxProcs`                             | Limits the number of operating system threads that can execute user-level                                            | `""`                  |
-| `removeMemberOnContainerTermination`   | Use a PreStop hook to remove the etcd members from the etcd cluster on container termination                         | `true`                |
-| `configuration`                        | etcd configuration. Specify content for etcd.conf.yml                                                                | `""`                  |
-| `existingConfigmap`                    | Existing ConfigMap with etcd configuration                                                                           | `""`                  |
-| `extraEnvVars`                         | Extra environment variables to be set on etcd container                                                              | `[]`                  |
-| `extraEnvVarsCM`                       | Name of existing ConfigMap containing extra env vars                                                                 | `""`                  |
-| `extraEnvVarsSecret`                   | Name of existing Secret containing extra env vars                                                                    | `""`                  |
-| `command`                              | Default container command (useful when using custom images)                                                          | `[]`                  |
-| `args`                                 | Default container args (useful when using custom images)                                                             | `[]`                  |
+| Name                                   | Description                                                                                                          | Value                  |
+| -------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ---------------------- |
+| `image.registry`                       | etcd image registry                                                                                                  | `docker.io`            |
+| `image.repository`                     | etcd image name                                                                                                      | `bitnami/etcd`         |
+| `image.tag`                            | etcd image tag                                                                                                       | `3.5.9-debian-11-r100` |
+| `image.digest`                         | etcd image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                 | `""`                   |
+| `image.pullPolicy`                     | etcd image pull policy                                                                                               | `IfNotPresent`         |
+| `image.pullSecrets`                    | etcd image pull secrets                                                                                              | `[]`                   |
+| `image.debug`                          | Enable image debug mode                                                                                              | `false`                |
+| `auth.rbac.create`                     | Switch to enable RBAC authentication                                                                                 | `true`                 |
+| `auth.rbac.allowNoneAuthentication`    | Allow to use etcd without configuring RBAC authentication                                                            | `true`                 |
+| `auth.rbac.rootPassword`               | Root user password. The root user is always `root`                                                                   | `""`                   |
+| `auth.rbac.existingSecret`             | Name of the existing secret containing credentials for the root user                                                 | `""`                   |
+| `auth.rbac.existingSecretPasswordKey`  | Name of key containing password to be retrieved from the existing secret                                             | `""`                   |
+| `auth.token.enabled`                   | Enables token authentication                                                                                         | `true`                 |
+| `auth.token.type`                      | Authentication token type. Allowed values: 'simple' or 'jwt'                                                         | `jwt`                  |
+| `auth.token.privateKey.filename`       | Name of the file containing the private key for signing the JWT token                                                | `jwt-token.pem`        |
+| `auth.token.privateKey.existingSecret` | Name of the existing secret containing the private key for signing the JWT token                                     | `""`                   |
+| `auth.token.signMethod`                | JWT token sign method                                                                                                | `RS256`                |
+| `auth.token.ttl`                       | JWT token TTL                                                                                                        | `10m`                  |
+| `auth.client.secureTransport`          | Switch to encrypt client-to-server communications using TLS certificates                                             | `false`                |
+| `auth.client.useAutoTLS`               | Switch to automatically create the TLS certificates                                                                  | `false`                |
+| `auth.client.existingSecret`           | Name of the existing secret containing the TLS certificates for client-to-server communications                      | `""`                   |
+| `auth.client.enableAuthentication`     | Switch to enable host authentication using TLS certificates. Requires existing secret                                | `false`                |
+| `auth.client.certFilename`             | Name of the file containing the client certificate                                                                   | `cert.pem`             |
+| `auth.client.certKeyFilename`          | Name of the file containing the client certificate private key                                                       | `key.pem`              |
+| `auth.client.caFilename`               | Name of the file containing the client CA certificate                                                                | `""`                   |
+| `auth.peer.secureTransport`            | Switch to encrypt server-to-server communications using TLS certificates                                             | `false`                |
+| `auth.peer.useAutoTLS`                 | Switch to automatically create the TLS certificates                                                                  | `false`                |
+| `auth.peer.existingSecret`             | Name of the existing secret containing the TLS certificates for server-to-server communications                      | `""`                   |
+| `auth.peer.enableAuthentication`       | Switch to enable host authentication using TLS certificates. Requires existing secret                                | `false`                |
+| `auth.peer.certFilename`               | Name of the file containing the peer certificate                                                                     | `cert.pem`             |
+| `auth.peer.certKeyFilename`            | Name of the file containing the peer certificate private key                                                         | `key.pem`              |
+| `auth.peer.caFilename`                 | Name of the file containing the peer CA certificate                                                                  | `""`                   |
+| `autoCompactionMode`                   | Auto compaction mode, by default periodic. Valid values: "periodic", "revision".                                     | `""`                   |
+| `autoCompactionRetention`              | Auto compaction retention for mvcc key value store in hour, by default 0, means disabled                             | `""`                   |
+| `initialClusterState`                  | Initial cluster state. Allowed values: 'new' or 'existing'                                                           | `""`                   |
+| `initialClusterToken`                  | Initial cluster token. Can be used to protect etcd from cross-cluster-interaction, which might corrupt the clusters. | `etcd-cluster-k8s`     |
+| `logLevel`                             | Sets the log level for the etcd process. Allowed values: 'debug', 'info', 'warn', 'error', 'panic', 'fatal'          | `info`                 |
+| `maxProcs`                             | Limits the number of operating system threads that can execute user-level                                            | `""`                   |
+| `removeMemberOnContainerTermination`   | Use a PreStop hook to remove the etcd members from the etcd cluster on container termination                         | `true`                 |
+| `configuration`                        | etcd configuration. Specify content for etcd.conf.yml                                                                | `""`                   |
+| `existingConfigmap`                    | Existing ConfigMap with etcd configuration                                                                           | `""`                   |
+| `extraEnvVars`                         | Extra environment variables to be set on etcd container                                                              | `[]`                   |
+| `extraEnvVarsCM`                       | Name of existing ConfigMap containing extra env vars                                                                 | `""`                   |
+| `extraEnvVarsSecret`                   | Name of existing Secret containing extra env vars                                                                    | `""`                   |
+| `command`                              | Default container command (useful when using custom images)                                                          | `[]`                   |
+| `args`                                 | Default container args (useful when using custom images)                                                             | `[]`                   |
 
 ### etcd statefulset parameters
 
@@ -137,6 +137,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `lifecycleHooks`                                    | Override default etcd container hooks                                                     | `{}`            |
 | `containerPorts.client`                             | Client port to expose at container level                                                  | `2379`          |
 | `containerPorts.peer`                               | Peer port to expose at container level                                                    | `2380`          |
+| `containerPorts.metrics`                            | Metrics port to expose at container level when metrics.useSeparateEndpoint is true        | `9090`          |
 | `podSecurityContext.enabled`                        | Enabled etcd pods' Security Context                                                       | `true`          |
 | `podSecurityContext.fsGroup`                        | Set etcd pod's Security Context fsGroup                                                   | `1001`          |
 | `containerSecurityContext.enabled`                  | Enabled etcd containers' Security Context                                                 | `true`          |
@@ -193,26 +194,29 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Traffic exposure parameters
 
-| Name                               | Description                                                                        | Value       |
-| ---------------------------------- | ---------------------------------------------------------------------------------- | ----------- |
-| `service.type`                     | Kubernetes Service type                                                            | `ClusterIP` |
-| `service.enabled`                  | create second service if equal true                                                | `true`      |
-| `service.clusterIP`                | Kubernetes service Cluster IP                                                      | `""`        |
-| `service.ports.client`             | etcd client port                                                                   | `2379`      |
-| `service.ports.peer`               | etcd peer port                                                                     | `2380`      |
-| `service.nodePorts.client`         | Specify the nodePort client value for the LoadBalancer and NodePort service types. | `""`        |
-| `service.nodePorts.peer`           | Specify the nodePort peer value for the LoadBalancer and NodePort service types.   | `""`        |
-| `service.clientPortNameOverride`   | etcd client port name override                                                     | `""`        |
-| `service.peerPortNameOverride`     | etcd peer port name override                                                       | `""`        |
-| `service.loadBalancerIP`           | loadBalancerIP for the etcd service (optional, cloud specific)                     | `""`        |
-| `service.loadBalancerSourceRanges` | Load Balancer source ranges                                                        | `[]`        |
-| `service.externalIPs`              | External IPs                                                                       | `[]`        |
-| `service.externalTrafficPolicy`    | %%MAIN_CONTAINER_NAME%% service external traffic policy                            | `Cluster`   |
-| `service.extraPorts`               | Extra ports to expose (normally used with the `sidecar` value)                     | `[]`        |
-| `service.annotations`              | Additional annotations for the etcd service                                        | `{}`        |
-| `service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"               | `None`      |
-| `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                        | `{}`        |
-| `service.headless.annotations`     | Annotations for the headless service.                                              | `{}`        |
+| Name                               | Description                                                                                                                                                    | Value       |
+| ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------- |
+| `service.type`                     | Kubernetes Service type                                                                                                                                        | `ClusterIP` |
+| `service.enabled`                  | create second service if equal true                                                                                                                            | `true`      |
+| `service.clusterIP`                | Kubernetes service Cluster IP                                                                                                                                  | `""`        |
+| `service.ports.client`             | etcd client port                                                                                                                                               | `2379`      |
+| `service.ports.peer`               | etcd peer port                                                                                                                                                 | `2380`      |
+| `service.ports.metrics`            | etcd metrics port when metrics.useSeparateEndpoint is true                                                                                                     | `9090`      |
+| `service.nodePorts.client`         | Specify the nodePort client value for the LoadBalancer and NodePort service types.                                                                             | `""`        |
+| `service.nodePorts.peer`           | Specify the nodePort peer value for the LoadBalancer and NodePort service types.                                                                               | `""`        |
+| `service.nodePorts.metrics`        | Specify the nodePort metrics value for the LoadBalancer and NodePort service types. The metrics port is only exposed when metrics.useSeparateEndpoint is true. | `""`        |
+| `service.clientPortNameOverride`   | etcd client port name override                                                                                                                                 | `""`        |
+| `service.peerPortNameOverride`     | etcd peer port name override                                                                                                                                   | `""`        |
+| `service.metricsPortNameOverride`  | etcd metrics port name override. The metrics port is only exposed when metrics.useSeparateEndpoint is true.                                                    | `""`        |
+| `service.loadBalancerIP`           | loadBalancerIP for the etcd service (optional, cloud specific)                                                                                                 | `""`        |
+| `service.loadBalancerSourceRanges` | Load Balancer source ranges                                                                                                                                    | `[]`        |
+| `service.externalIPs`              | External IPs                                                                                                                                                   | `[]`        |
+| `service.externalTrafficPolicy`    | %%MAIN_CONTAINER_NAME%% service external traffic policy                                                                                                        | `Cluster`   |
+| `service.extraPorts`               | Extra ports to expose (normally used with the `sidecar` value)                                                                                                 | `[]`        |
+| `service.annotations`              | Additional annotations for the etcd service                                                                                                                    | `{}`        |
+| `service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                                                           | `None`      |
+| `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                                                    | `{}`        |
+| `service.headless.annotations`     | Annotations for the headless service.                                                                                                                          | `{}`        |
 
 ### Persistence parameters
 
@@ -256,6 +260,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                      | Description                                                                                                                   | Value        |
 | ----------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ------------ |
 | `metrics.enabled`                         | Expose etcd metrics                                                                                                           | `false`      |
+| `metrics.useSeparateEndpoint`             | Use a separate endpoint for exposing metrics                                                                                  | `false`      |
 | `metrics.podAnnotations`                  | Annotations for the Prometheus metrics on etcd pods                                                                           | `{}`         |
 | `metrics.podMonitor.enabled`              | Create PodMonitor Resource for scraping metrics using PrometheusOperator                                                      | `false`      |
 | `metrics.podMonitor.namespace`            | Namespace in which Prometheus is running                                                                                      | `monitoring` |

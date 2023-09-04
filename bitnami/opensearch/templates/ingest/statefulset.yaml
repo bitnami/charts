@@ -9,31 +9,24 @@ kind: StatefulSet
 metadata:
   name: {{ include "opensearch.ingest.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: ingest
     {{- if .Values.useIstioLabels }}
     ## Istio Labels: https://istio.io/docs/ops/deployment/requirements/
     app: ingest
     {{- end }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if or .Values.ingest.annotations .Values.commonAnnotations }}
-  annotations:
-    {{- if .Values.ingest.annotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.ingest.annotations "context" $ ) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-    {{- end }}
+  {{- $annotations := merge .Values.ingest.annotations .Values.commonAnnotations }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
   {{- if not .Values.ingest.autoscaling.hpa.enabled }}
   replicas: {{ .Values.ingest.replicaCount }}
   {{- end }}
   podManagementPolicy: {{ .Values.ingest.podManagementPolicy }}
+  {{- $podLabels := merge .Values.ingest.podLabels .Values.commonLabels }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: ingest
   serviceName: {{ include "opensearch.ingest.servicename" . }}
   {{- if .Values.ingest.updateStrategy }}
@@ -41,14 +34,11 @@ spec:
   {{- end }}
   template:
     metadata:
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: ingest
         {{- if .Values.useIstioLabels }}
         ## Istio Labels: https://istio.io/docs/ops/deployment/requirements/
         app: ingest
-        {{- end }}
-        {{- if .Values.ingest.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.ingest.podLabels "context" $) | nindent 8 }}
         {{- end }}
       annotations:
         {{- if and (include "opensearch.createTlsSecret" .) (not .Values.security.tls.ingest.existingSecret) }}
@@ -67,8 +57,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.ingest.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.ingest.podAffinityPreset "component" "ingest" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.ingest.podAntiAffinityPreset "component" "ingest" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.ingest.podAffinityPreset "component" "ingest" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.ingest.podAntiAffinityPreset "component" "ingest" "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.ingest.nodeAffinityPreset.type "key" .Values.ingest.nodeAffinityPreset.key "values" .Values.ingest.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.ingest.nodeSelector }}

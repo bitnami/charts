@@ -9,10 +9,7 @@ kind: Service
 metadata:
   name: {{ include "harbor.trivy" . }}
   namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: trivy
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
@@ -23,6 +20,7 @@ spec:
       protocol: TCP
       port: {{ ternary .Values.trivy.service.ports.https .Values.trivy.service.ports.http .Values.internalTLS.enabled }}
       targetPort: api-server
-  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
+  {{- $podLabels := merge .Values.trivy.podLabels .Values.commonLabels }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: trivy
 {{ end }}
