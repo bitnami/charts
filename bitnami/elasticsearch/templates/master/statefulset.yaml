@@ -21,7 +21,7 @@ metadata:
   {{- end }}
 spec:
   {{- if not .Values.master.autoscaling.enabled }}
-  replicas: {{ .Values.master.replicaCount }}
+  replicas: {{ ternary 1 .Values.master.replicaCount (eq .Values.architecture "standalone") }}
   {{- end }}
   podManagementPolicy: {{ .Values.master.podManagementPolicy }}
   {{- $podLabels := merge .Values.master.podLabels .Values.commonLabels }}
@@ -156,17 +156,20 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
+            {{- if eq .Values.architecture "cluster" }}
             - name: ELASTICSEARCH_IS_DEDICATED_NODE
               value: {{ ternary "yes" "no" .Values.master.masterOnly | quote }}
             {{- $roles := ternary "master" (list "master" .Values.master.extraRoles) (empty .Values.master.extraRoles) }}
             - name: ELASTICSEARCH_NODE_ROLES
               value: {{ join "," $roles | quote }}
+            {{- end }}
             - name: ELASTICSEARCH_TRANSPORT_PORT_NUMBER
               value: {{ .Values.containerPorts.transport | quote }}
             - name: ELASTICSEARCH_HTTP_PORT_NUMBER
               value: {{ .Values.containerPorts.restAPI | quote }}
             - name: ELASTICSEARCH_CLUSTER_NAME
               value: {{ .Values.clusterName | quote }}
+            {{- if eq .Values.architecture "cluster" }}
             - name: ELASTICSEARCH_CLUSTER_HOSTS
               value: {{ include "elasticsearch.hosts" . | quote }}
             - name: ELASTICSEARCH_TOTAL_NODES
@@ -179,6 +182,7 @@ spec:
               value: {{ add (div (ternary .Values.master.autoscaling.minReplicas .Values.master.replicaCount .Values.master.autoscaling.enabled) 2) 1 | quote }}
             - name: ELASTICSEARCH_ADVERTISED_HOSTNAME
               value: "$(MY_POD_NAME).{{ (include "elasticsearch.master.servicename" .) | trunc 63 | trimSuffix "-" }}.{{ include "common.names.namespace" . }}.svc.{{ .Values.clusterDomain }}"
+            {{- end }}
             {{- if .Values.plugins }}
             - name: ELASTICSEARCH_PLUGINS
               value: {{ .Values.plugins | quote }}

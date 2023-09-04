@@ -208,6 +208,10 @@ image:
   ##
   debug: false
 
+## @param architecture Elasticsearch architecture (`standalone` or `cluster`)
+##
+architecture: cluster
+
 ## X-Pack security parameters
 ## Note: TLS configuration is required in order to configure password authentication
 ##

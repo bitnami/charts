@@ -197,7 +197,7 @@ Returns true if at least one master-elegible node replica has been configured.
 Returns true if at least one coordinating-only node replica has been configured.
 */}}
 {{- define "elasticsearch.coordinating.enabled" -}}
-{{- if or .Values.coordinating.autoscaling.enabled (gt (int .Values.coordinating.replicaCount) 0) -}}
+{{- if and (eq .Values.architecture "cluster") (or .Values.coordinating.autoscaling.enabled (gt (int .Values.coordinating.replicaCount) 0)) -}}
     {{- true -}}
 {{- end -}}
 {{- end -}}
@@ -206,7 +206,7 @@ Returns true if at least one coordinating-only node replica has been configured.
 Returns true if at least one data-only node replica has been configured.
 */}}
 {{- define "elasticsearch.data.enabled" -}}
-{{- if or .Values.data.autoscaling.enabled (gt (int .Values.data.replicaCount) 0) -}}
+{{- if and (eq .Values.architecture "cluster") (or .Values.data.autoscaling.enabled (gt (int .Values.data.replicaCount) 0)) -}}
     {{- true -}}
 {{- end -}}
 {{- end -}}
@@ -215,7 +215,7 @@ Returns true if at least one data-only node replica has been configured.
 Returns true if at least one ingest-only node replica has been configured.
 */}}
 {{- define "elasticsearch.ingest.enabled" -}}
-{{- if and .Values.ingest.enabled (or .Values.ingest.autoscaling.enabled (gt (int .Values.ingest.replicaCount) 0)) -}}
+{{- if and (eq .Values.architecture "cluster") (and .Values.ingest.enabled (or .Values.ingest.autoscaling.enabled (gt (int .Values.ingest.replicaCount) 0))) -}}
     {{- true -}}
 {{- end -}}
 {{- end -}}
