@@ -17,7 +17,7 @@ metadata:
 spec:
   replicas: {{ .Values.secondary.replicaCount }}
   podManagementPolicy: {{ .Values.secondary.podManagementPolicy | quote }}
-  {{- $podLabels := merge .Values.secondary.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.secondary.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: secondary
@@ -353,7 +353,7 @@ spec:
         labels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 10 }}
           app.kubernetes.io/component: secondary
         {{- if or .Values.secondary.persistence.annotations .Values.commonAnnotations }}
-        {{- $annotations := merge  .Values.secondary.persistence.annotations .Values.commonAnnotations }}
+        {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list  .Values.secondary.persistence.annotations .Values.commonAnnotations ) "context" . ) }}
         annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 10 }}
         {{- end }}
       spec:
