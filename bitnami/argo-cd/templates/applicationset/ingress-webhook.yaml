@@ -9,7 +9,7 @@ kind: Ingress
 metadata:
   name: {{ include "argocd.applicationSet" . }}
   namespace: {{ .Release.Namespace | quote }}
-  {{- $labels := merge .Values.applicationSet.webhook.ingress.labels .Values.commonLabels }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.applicationSet.webhook.ingress.labels .Values.commonLabels ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: applicationSet
   {{- if or .Values.applicationSet.webhook.ingress.annotations .Values.commonAnnotations .Values.applicationSet.webhook.ingress.certManager }}
@@ -18,7 +18,7 @@ metadata:
     kubernetes.io/tls-acme: "true"
     {{- end }}
     {{- if or .Values.applicationSet.webhook.ingress.annotations .Values.commonAnnotations }}
-    {{- $annotations := merge .Values.applicationSet.webhook.ingress.annotations .Values.commonAnnotations }}
+    {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.applicationSet.webhook.ingress.annotations .Values.commonAnnotations ) "context" . ) }}
     {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
     {{- end }}
   {{- end }}
