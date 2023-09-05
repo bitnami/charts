@@ -13,7 +13,7 @@ metadata:
     app.kubernetes.io/component: receive
     {{- include "thanos.servicemonitor.matchLabels" . | nindent 4 -}}
   {{- if or .Values.receive.service.headless.annotations .Values.commonAnnotations }}
-  {{- $annotations := merge .Values.receive.service.headless.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.receive.service.headless.annotations .Values.commonAnnotations ) "context" . ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
@@ -28,7 +28,7 @@ spec:
       targetPort: grpc
       protocol: TCP
       name: grpc
-  {{- $podLabels := merge .Values.receive.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.receive.podLabels .Values.commonLabels ) "context" . ) }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: receive
 {{- end }}
