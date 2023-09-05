@@ -97,13 +97,13 @@ spec:
           nodeSelector: {{ toYaml .Values.grafana.nodeSelector | nindent 12 }}
           {{- end }}
           volumes:
-            {{- if .Values.grafana.persistence.enabled }}
             - name: grafana-data
+              {{- if .Values.grafana.persistence.enabled }}
               persistentVolumeClaim:
                 claimName: {{ printf "%s-grafana-pvc" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
-            {{- else }}
-            emptyDir: {}
-            {{- end }}
+              {{- else }}
+              emptyDir: {}
+              {{- end }}
             {{- range .Values.grafana.secrets }}
             - name: '{{.}}'
               secret:
