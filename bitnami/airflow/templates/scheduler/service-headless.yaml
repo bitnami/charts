@@ -20,7 +20,7 @@ spec:
     - name: task-logs
       port: {{ .Values.worker.containerPorts.http }}
       targetPort: task-logs
-  {{- $podLabels := merge .Values.scheduler.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.scheduler.podLabels .Values.commonLabels ) "context" . ) }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: scheduler
 {{- end }}
