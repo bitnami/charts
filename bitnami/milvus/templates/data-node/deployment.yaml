@@ -22,7 +22,7 @@ spec:
   {{- if .Values.dataNode.updateStrategy }}
   strategy: {{- toYaml .Values.dataNode.updateStrategy | nindent 4 }}
   {{- end }}
-  {{- $podLabels := merge .Values.dataNode.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.dataNode.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/part-of: milvus
