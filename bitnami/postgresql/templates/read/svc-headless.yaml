@@ -13,7 +13,7 @@ metadata:
     app.kubernetes.io/component: read
   annotations:
     {{- if or .Values.readReplicas.service.headless.annotations .Values.commonAnnotations }}
-    {{- $annotations := merge .Values.readReplicas.service.headless.annotations .Values.commonAnnotations }}
+    {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.readReplicas.service.headless.annotations .Values.commonAnnotations ) "context" . ) }}
     {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
     {{- end }}
     # Use this annotation in addition to the actual publishNotReadyAddresses
@@ -32,7 +32,7 @@ spec:
     - name: tcp-postgresql
       port: {{ include "postgresql.readReplica.service.port" . }}
       targetPort: tcp-postgresql
-  {{- $podLabels := merge .Values.readReplicas.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.readReplicas.podLabels .Values.commonLabels ) "context" . ) }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: read
 {{- end }}
