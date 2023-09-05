@@ -15,7 +15,7 @@ metadata:
     app.kubernetes.io/component: master
     {{- end }}
   {{- if or .Values.service.annotations .Values.commonAnnotations }}
-  {{- $annotations := merge .Values.service.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.service.annotations .Values.commonAnnotations ) "context" . ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
