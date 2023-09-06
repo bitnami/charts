@@ -16,13 +16,13 @@ spec:
   {{- if .Values.updateStrategy }}
   strategy: {{- toYaml .Values.updateStrategy | nindent 4 }}
   {{- end }}
-  {{- $podLabels := merge .Values.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
   template:
     metadata:
       {{- if or .Values.podAnnotations .Values.commonAnnotations }}
-      {{- $annotations := merge .Values.podAnnotations .Values.commonAnnotations }}
+      {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.podAnnotations .Values.commonAnnotations ) "context" . ) }}
       annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 8 }}
       {{- end }}
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}

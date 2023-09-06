@@ -10,15 +10,9 @@ metadata:
   name: {{ template "kube-prometheus.alertmanager.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "kube-prometheus.alertmanager.labels" . | nindent 4 }}
-  annotations:
-    {{- if .Values.alertmanager.ingress.annotations }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.ingress.annotations "context" $) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 4 }}
-    {{- end }}
-  {{- if .Values.commonLabels }}
-  labels: {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
+  {{- if or .Values.alertmanager.ingress.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.alertmanager.ingress.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
   {{- if and .Values.alertmanager.ingress.ingressClassName (include "common.ingress.supportsIngressClassname" .) }}

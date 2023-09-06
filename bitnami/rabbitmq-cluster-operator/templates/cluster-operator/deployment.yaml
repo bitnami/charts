@@ -19,7 +19,7 @@ spec:
   {{- if .Values.clusterOperator.updateStrategy }}
   strategy: {{- toYaml .Values.clusterOperator.updateStrategy | nindent 4 }}
   {{- end }}
-  {{- $podLabels := merge .Values.clusterOperator.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.clusterOperator.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: rabbitmq-operator

@@ -652,6 +652,12 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 9.0.0
+
+This major version updates the Redis&reg; docker image version used from `7.0` to `7.2`, the new stable version. There are no major changes in the chart, but we recommend checking the [Redis&reg; 7.2 release notes](https://raw.githubusercontent.com/redis/redis/7.2/00-RELEASENOTES) before upgrading.
+
+NOTE: Due to an error in our release process, versions higher or equal than 8.8.1 already use 7.2 by default.
+
 ### To 7.0.0
 
 This major release renames several values in this chart and adds missing features, in order to be inline with the rest of assets in the Bitnami charts repository.
