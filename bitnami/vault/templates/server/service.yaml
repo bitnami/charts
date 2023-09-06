@@ -13,7 +13,7 @@ metadata:
     app.kubernetes.io/part-of: vault
     app.kubernetes.io/component: server
   {{- if or .Values.server.service.general.annotations .Values.commonAnnotations }}
-  {{- $annotations := merge .Values.server.service.general.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.server.service.general.annotations .Values.commonAnnotations ) "context" . ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
@@ -58,7 +58,7 @@ spec:
     {{- if .Values.server.service.general.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.server.service.general.extraPorts "context" $) | nindent 4 }}
     {{- end }}
-  {{- $podLabels := merge .Values.server.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.server.podLabels .Values.commonLabels ) "context" . ) }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: vault
     app.kubernetes.io/component: server
