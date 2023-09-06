@@ -10,10 +10,10 @@ kind: CronJob
 metadata:
   name: {{ include "postgresql.primary.fullname" . }}-pgdumpall
   namespace: {{ .Release.Namespace | quote }}
-  {{- $labels := merge .Values.backup.cronjob.labels .Values.commonLabels }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.backup.cronjob.labels .Values.commonLabels ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: pg_dumpall
-  {{- $annotations := merge .Values.backup.cronjob.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.backup.cronjob.annotations .Values.commonAnnotations ) "context" . ) }}
   {{- if $annotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
