@@ -203,7 +203,7 @@ spec:
                   if [[ -f "${MYSQL_ROOT_PASSWORD_FILE:-}" ]]; then
                       password_aux=$(cat "$MYSQL_ROOT_PASSWORD_FILE")
                   fi
-                  mysqladmin status -uroot -p"${password_aux}"
+                  mariadb-admin status -uroot -p"${password_aux}"
           {{- end }}
           {{- if .Values.primary.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.primary.customReadinessProbe "context" $) | nindent 12 }}
@@ -218,7 +218,7 @@ spec:
                   if [[ -f "${MYSQL_ROOT_PASSWORD_FILE:-}" ]]; then
                       password_aux=$(cat "$MYSQL_ROOT_PASSWORD_FILE")
                   fi
-                  mysqladmin status -uroot -p"${password_aux}"
+                  mariadb-admin status -uroot -p"${password_aux}"
           {{- end }}
           {{- if .Values.primary.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.primary.customStartupProbe "context" $) | nindent 12 }}
@@ -233,7 +233,7 @@ spec:
                   if [[ -f "${MYSQL_ROOT_PASSWORD_FILE:-}" ]]; then
                       password_aux=$(cat "$MYSQL_ROOT_PASSWORD_FILE")
                   fi
-                  mysqladmin status -uroot -p"${password_aux}"
+                  mariadb-admin status -uroot -p"${password_aux}"
           {{- end }}
           {{- end }}
           {{- if .Values.primary.resources }}
