@@ -61,8 +61,8 @@
             "resources": {
               "path": "/.vib/ejbca/cypress"
             },
-            "endpoint": "lb-ejbca-http",
-            "app_protocol": "HTTP"
+            "endpoint": "lb-ejbca-https",
+            "app_protocol": "HTTPS"
           }
         }
       ]

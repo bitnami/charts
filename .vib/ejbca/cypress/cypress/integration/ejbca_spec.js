@@ -11,10 +11,10 @@ it('allows to enrol and verify certificate', () => {
     // A user can only enrol once
     if (!exists) {
       cy.visit(`/ejbca/ra/enrollwithusername.xhtml?username=${Cypress.env('username')}`);
-      cy.get('#enrollWithUsernameForm:enrollmentCode').type(Cypress.env('password'));
-      cy.get('#enrollWithUsernameForm:checkButton').click();
+      cy.get('[name="enrollWithUsernameForm:enrollmentCode"]').type(Cypress.env('password'));
+      cy.get('[name="enrollWithUsernameForm:checkButton"]').click();
       cy.fixture('certs').then((certs) => {
-        cy.get('#enrollWithUsernameForm:selectAlgorithmOneMenu').select(certs.newAdminCert.algorithm);
+        cy.get('[name="enrollWithUsernameForm:selectAlgorithmOneMenu"]').select(certs.newAdminCert.algorithm);
       });
       // Clicking on the button will download the certificate, but Cypress
       // expects the page to be reloaded and fails with a timeout. We manually
@@ -30,7 +30,7 @@ it('allows to enrol and verify certificate', () => {
             }, 12000);
           });
 
-          cy.get('#enrollWithUsernameForm:generatePkcs12').click();
+          cy.get('[name="enrollWithUsernameForm:generatePkcs12"]').click();
         });
     }
     cy.readFile(certFile).should('exist');
