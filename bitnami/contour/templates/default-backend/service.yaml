@@ -12,7 +12,7 @@ metadata:
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: default-backend
   {{- if or .Values.defaultBackend.service.annotations .Values.commonAnnotations }}
-  {{- $annotations := merge .Values.defaultBackend.service.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.defaultBackend.service.annotations .Values.commonAnnotations ) "context" . ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
@@ -22,7 +22,7 @@ spec:
       port: {{ .Values.defaultBackend.service.ports.http }}
       protocol: TCP
       targetPort: http
-  {{- $podLabels := merge .Values.defaultBackend.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.defaultBackend.podLabels .Values.commonLabels ) "context" . ) }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: default-backend
 {{- end }}
