@@ -342,11 +342,15 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Zookeeper subchart parameters
 
-| Name                             | Description                   | Value  |
-| -------------------------------- | ----------------------------- | ------ |
-| `zookeeper.enabled`              | Deploy Zookeeper subchart     | `true` |
-| `zookeeper.replicaCount`         | Number of Zookeeper instances | `3`    |
-| `zookeeper.service.ports.client` | Zookeeper client port         | `2181` |
+| Name                             | Description                                          | Value                 |
+| -------------------------------- | ---------------------------------------------------- | --------------------- |
+| `zookeeper.enabled`              | Deploy Zookeeper subchart                            | `true`                |
+| `zookeeper.replicaCount`         | Number of Zookeeper instances                        | `3`                   |
+| `zookeeper.service.ports.client` | Zookeeper client port                                | `2181`                |
+| `zookeeper.image.registry`       | Zookeeper image registry                             | `docker.io`           |
+| `zookeeper.image.repository`     | Zookeeper image repository                           | `bitnami/zookeeper`   |
+| `zookeeper.image.tag`            | Zookeeper image tag (immutable tags are recommended) | `3.8.2-debian-11-r40` |
+| `zookeeper.image.pullPolicy`     | Zookeeper image pull policy                          | `IfNotPresent`        |
 
 See <https://github.com/bitnami-labs/readme-generator-for-helm> to create the table.
 
