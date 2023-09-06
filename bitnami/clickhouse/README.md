@@ -91,13 +91,14 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`                                    | ClickHouse image registry                                                                                  | `docker.io`           |
 | `image.repository`                                  | ClickHouse image repository                                                                                | `bitnami/clickhouse`  |
-| `image.tag`                                         | ClickHouse image tag (immutable tags are recommended)                                                      | `23.7.5-debian-11-r0` |
+| `image.tag`                                         | ClickHouse image tag (immutable tags are recommended)                                                      | `23.8.1-debian-11-r0` |
 | `image.digest`                                      | ClickHouse image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
 | `image.pullPolicy`                                  | ClickHouse image pull policy                                                                               | `IfNotPresent`        |
 | `image.pullSecrets`                                 | ClickHouse image pull secrets                                                                              | `[]`                  |
 | `image.debug`                                       | Enable ClickHouse image debug mode                                                                         | `false`               |
 | `shards`                                            | Number of ClickHouse shards to deploy                                                                      | `2`                   |
 | `replicaCount`                                      | Number of ClickHouse replicas per shard to deploy                                                          | `3`                   |
+| `distributeReplicasByZone`                          | Schedules replicas of the same shard to different availability zones                                       | `false`               |
 | `containerPorts.http`                               | ClickHouse HTTP container port                                                                             | `8123`                |
 | `containerPorts.https`                              | ClickHouse HTTPS container port                                                                            | `8443`                |
 | `containerPorts.tcp`                                | ClickHouse TCP container port                                                                              | `9000`                |
@@ -299,7 +300,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`            |
 | `volumePermissions.image.registry`                     | OS Shell + Utility image registry                                                               | `docker.io`        |
 | `volumePermissions.image.repository`                   | OS Shell + Utility image repository                                                             | `bitnami/os-shell` |
-| `volumePermissions.image.tag`                          | OS Shell + Utility image tag (immutable tags are recommended)                                   | `11-debian-11-r48` |
+| `volumePermissions.image.tag`                          | OS Shell + Utility image tag (immutable tags are recommended)                                   | `11-debian-11-r54` |
 | `volumePermissions.image.pullPolicy`                   | OS Shell + Utility image pull policy                                                            | `IfNotPresent`     |
 | `volumePermissions.image.pullSecrets`                  | OS Shell + Utility image pull secrets                                                           | `[]`               |
 | `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`               |
