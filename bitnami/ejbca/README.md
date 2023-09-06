@@ -137,19 +137,19 @@ The command removes all the Kubernetes components associated with the chart and 
 | `containerSecurityContext.runAsUser`    | Set EJBCA containers' Security Context runAsUser                                                            | `1001`                      |
 | `containerSecurityContext.runAsNonRoot` | Set EJBCA container's Security Context runAsNonRoot                                                         | `true`                      |
 | `startupProbe.enabled`                  | Enable/disable startupProbe                                                                                 | `false`                     |
-| `startupProbe.initialDelaySeconds`      | Delay before startup probe is initiated                                                                     | `180`                       |
+| `startupProbe.initialDelaySeconds`      | Delay before startup probe is initiated                                                                     | `300`                       |
 | `startupProbe.periodSeconds`            | How often to perform the probe                                                                              | `10`                        |
 | `startupProbe.timeoutSeconds`           | When the probe times out                                                                                    | `5`                         |
 | `startupProbe.failureThreshold`         | Minimum consecutive failures for the probe                                                                  | `6`                         |
 | `startupProbe.successThreshold`         | Minimum consecutive successes for the probe                                                                 | `1`                         |
 | `livenessProbe.enabled`                 | Enable/disable livenessProbe                                                                                | `true`                      |
-| `livenessProbe.initialDelaySeconds`     | Delay before liveness probe is initiated                                                                    | `180`                       |
+| `livenessProbe.initialDelaySeconds`     | Delay before liveness probe is initiated                                                                    | `300`                       |
 | `livenessProbe.periodSeconds`           | How often to perform the probe                                                                              | `10`                        |
 | `livenessProbe.timeoutSeconds`          | When the probe times out                                                                                    | `5`                         |
 | `livenessProbe.failureThreshold`        | Minimum consecutive failures for the probe                                                                  | `6`                         |
 | `livenessProbe.successThreshold`        | Minimum consecutive successes for the probe                                                                 | `1`                         |
 | `readinessProbe.enabled`                | Enable/disable readinessProbe                                                                               | `true`                      |
-| `readinessProbe.initialDelaySeconds`    | Delay before readiness probe is initiated                                                                   | `180`                       |
+| `readinessProbe.initialDelaySeconds`    | Delay before readiness probe is initiated                                                                   | `300`                       |
 | `readinessProbe.periodSeconds`          | How often to perform the probe                                                                              | `10`                        |
 | `readinessProbe.timeoutSeconds`         | When the probe times out                                                                                    | `5`                         |
 | `readinessProbe.failureThreshold`       | Minimum consecutive failures for the probe                                                                  | `6`                         |
