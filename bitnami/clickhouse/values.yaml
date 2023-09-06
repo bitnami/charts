@@ -105,6 +105,10 @@ shards: 2
 ## if keeper enable, same as keeper count, keeper cluster by shards.
 ##
 replicaCount: 3
+
+## @param distributeReplicasByZone Schedules replicas of the same shard to different availability zones
+##
+distributeReplicasByZone: false
 ## @param containerPorts.http ClickHouse HTTP container port
 ## @param containerPorts.https ClickHouse HTTPS container port
 ## @param containerPorts.tcp ClickHouse TCP container port

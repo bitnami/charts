@@ -98,6 +98,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `image.debug`                                       | Enable ClickHouse image debug mode                                                                         | `false`               |
 | `shards`                                            | Number of ClickHouse shards to deploy                                                                      | `2`                   |
 | `replicaCount`                                      | Number of ClickHouse replicas per shard to deploy                                                          | `3`                   |
+| `distributeReplicasByZone`                          | Schedules replicas of the same shard to different availability zones                                       | `false`               |
 | `containerPorts.http`                               | ClickHouse HTTP container port                                                                             | `8123`                |
 | `containerPorts.https`                              | ClickHouse HTTPS container port                                                                            | `8443`                |
 | `containerPorts.tcp`                                | ClickHouse TCP container port                                                                              | `9000`                |
