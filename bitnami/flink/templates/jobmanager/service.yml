@@ -12,7 +12,7 @@ metadata:
     app.kubernetes.io/part-of: flink
     app.kubernetes.io/component: jobmanager
   {{- if or .Values.jobmanager.service.annotations .Values.commonAnnotations }}
-  {{- $annotations := merge .Values.jobmanager.service.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.jobmanager.service.annotations .Values.commonAnnotations ) "context" . ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
@@ -63,7 +63,7 @@ spec:
     {{- if .Values.jobmanager.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.jobmanager.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}
-  {{- $podLabels := merge .Values.jobmanager.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.jobmanager.podLabels .Values.commonLabels ) "context" . ) }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: flink
     app.kubernetes.io/component: jobmanager
