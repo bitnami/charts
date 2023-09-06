@@ -345,7 +345,7 @@ containerSecurityContext:
 ##
 startupProbe:
   enabled: false
-  initialDelaySeconds: 500
+  initialDelaySeconds: 180
   periodSeconds: 10
   timeoutSeconds: 5
   failureThreshold: 6
@@ -361,7 +361,7 @@ startupProbe:
 ##
 livenessProbe:
   enabled: true
-  initialDelaySeconds: 500
+  initialDelaySeconds: 180
   periodSeconds: 10
   timeoutSeconds: 5
   failureThreshold: 6
@@ -377,7 +377,7 @@ livenessProbe:
 ##
 readinessProbe:
   enabled: true
-  initialDelaySeconds: 500
+  initialDelaySeconds: 180
   periodSeconds: 10
   timeoutSeconds: 5
   failureThreshold: 6
