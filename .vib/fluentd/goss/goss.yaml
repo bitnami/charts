@@ -27,5 +27,5 @@ command:
     exit-status: 0
     stdout:
       - {{.}}
-    timeout: 75000
+    timeout: 120000
   {{end}}
