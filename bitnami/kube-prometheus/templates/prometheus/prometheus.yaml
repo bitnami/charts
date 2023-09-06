@@ -169,7 +169,7 @@ spec:
     volumeClaimTemplate:
       metadata:
         {{- if or .Values.prometheus.persistence.annotations .Values.commonAnnotations }}
-        {{- $claimAnnotations := merge .Values.prometheus.persistence.annotations .Values.commonAnnotations }}
+        {{- $claimAnnotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.prometheus.persistence.annotations .Values.commonAnnotations ) "context" . ) }}
         annotations: {{- include "common.tplvalues.render" ( dict "value" $claimAnnotations "context" $ ) | nindent 10 }}
         {{- end }}
         {{- if .Values.commonLabels }}
