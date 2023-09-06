@@ -113,7 +113,7 @@ spec:
             - name: EJBCA_HTTP_PORT_NUMBER
               value: {{ .Values.containerPorts.http | quote }}
             - name: EJBCA_HTTPS_PORT_NUMBER
-              value: {{ .Values.service.httpsPort | quote }}
+              value: {{ .Values.containerPorts.https | quote }}
             - name: EJBCA_HTTPS_ADVERTISED_PORT_NUMBER
               value: {{ .Values.service.advertisedHttpsPort | quote }}
             {{- if .Values.ejbcaKeystoreExistingSecret }}
