@@ -1110,6 +1110,17 @@ externalZookeeper:
 ##
 zookeeper:
   enabled: true
+  ## Override zookeeper default image as 3.9 is not supported https://github.com/ClickHouse/ClickHouse/issues/53749
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/zookeeper
+  ## @param zookeeper.image.registry Zookeeper image registry
+  ## @param zookeeper.image.repository Zookeeper image repository
+  ## @param zookeeper.image.tag Zookeeper image tag (immutable tags are recommended)
+  ## @param zookeeper.image.pullPolicy Zookeeper image pull policy
+  image:
+    registry: docker.io
+    repository: bitnami/zookeeper
+    tag: 3.8.2-debian-11-r40
+    pullPolicy: IfNotPresent
   replicaCount: 3
   service:
     ports:

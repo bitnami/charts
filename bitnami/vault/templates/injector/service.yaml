@@ -13,7 +13,7 @@ metadata:
     app.kubernetes.io/part-of: vault
     app.kubernetes.io/component: injector
   {{- if or .Values.injector.service.annotations .Values.commonAnnotations }}
-  {{- $annotations := merge .Values.injector.service.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.injector.service.annotations .Values.commonAnnotations ) "context" . ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
@@ -49,7 +49,7 @@ spec:
     {{- if .Values.injector.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.injector.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}
-  {{- $podLabels := merge .Values.injector.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.injector.podLabels .Values.commonLabels ) "context" . ) }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: vault
     app.kubernetes.io/component: injector
