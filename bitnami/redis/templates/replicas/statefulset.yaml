@@ -18,7 +18,7 @@ spec:
   {{- if not .Values.replica.autoscaling.enabled }}
   replicas: {{ .Values.replica.replicaCount }}
   {{- end }}
-  {{- $podLabels := merge .Values.replica.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.replica.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: replica
@@ -495,7 +495,7 @@ spec:
       kind: PersistentVolumeClaim
       metadata:
         name: redis-data
-        {{- $claimLabels := merge .Values.master.persistence.labels .Values.commonLabels }}
+        {{- $claimLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.master.persistence.labels .Values.commonLabels ) "context" . ) }}
         labels: {{- include "common.labels.matchLabels" ( dict "customLabels" $claimLabels "context" $ ) | nindent 10 }}
           app.kubernetes.io/component: replica
         {{- if .Values.replica.persistence.annotations }}
