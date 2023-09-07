@@ -21,7 +21,7 @@ spec:
   {{- if .Values.skipper.pdb.maxUnavailable }}
   maxUnavailable: {{ .Values.skipper.pdb.maxUnavailable }}
   {{- end }}
-  {{- $podLabels := merge .Values.skipper.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.skipper.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: skipper
