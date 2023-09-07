@@ -23,7 +23,7 @@ metadata:
     kubernetes.io/tls-acme: "true"
     {{- end }}
     {{- if or .Values.controller.service.annotations .Values.commonAnnotations }}
-    {{- $annotations := merge .Values.controller.service.annotations .Values.commonAnnotations }}
+    {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.controller.service.annotations .Values.commonAnnotations ) "context" . ) }}
     {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
     {{- end }}
 spec:
