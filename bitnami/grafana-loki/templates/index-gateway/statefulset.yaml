@@ -23,7 +23,7 @@ spec:
   {{- end }}
   podManagementPolicy: {{ .Values.indexGateway.podManagementPolicy }}
   serviceName: {{ template "grafana-loki.index-gateway.fullname" . }}
-  {{- $podLabels := merge .Values.indexGateway.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.indexGateway.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/part-of: grafana-loki
