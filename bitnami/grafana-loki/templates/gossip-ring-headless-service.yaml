@@ -12,7 +12,7 @@ metadata:
     app.kubernetes.io/part-of: grafana-loki
     app.kubernetes.io/component: loki
   {{- if or .Values.commonAnnotations .Values.loki.gossipRing.service.annotations }}
-  {{- $annotations := merge .Values.loki.gossipRing.service.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.loki.gossipRing.service.annotations .Values.commonAnnotations ) "context" . ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:

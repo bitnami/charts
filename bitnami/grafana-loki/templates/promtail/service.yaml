@@ -13,7 +13,7 @@ metadata:
     app.kubernetes.io/part-of: grafana-loki
     app.kubernetes.io/component: promtail
   {{- if or .Values.commonAnnotations .Values.promtail.service.annotations }}
-  {{- $annotations := merge .Values.promtail.service.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.promtail.service.annotations .Values.commonAnnotations ) "context" . ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
@@ -49,7 +49,7 @@ spec:
     {{- if .Values.promtail.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.promtail.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}
-  {{- $podLabels := merge .Values.promtail.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.promtail.podLabels .Values.commonLabels ) "context" . ) }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: grafana-loki
     app.kubernetes.io/component: promtail
