@@ -92,11 +92,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                             | Description                                                                                                                  | Value                                |
 | -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | ------------------------------------ |
 | `environment`                    | Mastodon Rails and Node environment. Should be one of 'production',                                                          | `production`                         |
-| `adminUser`                      | Mastodon admin username                                                                                                      | `user`                               |
-| `adminEmail`                     | Mastodon admin email                                                                                                         | `user@changeme.com`                  |
+| `adminUser`                      | Mastodon admin username                                                                                                      | `""`                                 |
+| `adminEmail`                     | Mastodon admin email                                                                                                         | `""`                                 |
 | `adminPassword`                  | Mastodon admin password                                                                                                      | `""`                                 |
-| `defaultConfig`                  | Default configuration for Mastodon in the form of environment variables                                                      | `""`                                 |
-| `defaultSecretConfig`            | Default secret configuration for Mastodon in the form of environment variables                                               | `""`                                 |
 | `extraConfig`                    | Extra configuration for Mastodon in the form of environment variables                                                        | `{}`                                 |
 | `extraSecretConfig`              | Extra secret configuration for Mastodon in the form of environment variables                                                 | `{}`                                 |
 | `existingConfigmap`              | The name of an existing ConfigMap with your default configuration for Mastodon                                               | `""`                                 |
@@ -128,6 +126,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `smtp.existingSecret`            | Name of an existing secret resource containing the SMTP                                                                      | `""`                                 |
 | `smtp.existingSecretLoginKey`    | Name of the key for the SMTP login credential                                                                                | `""`                                 |
 | `smtp.existingSecretPasswordKey` | Name of the key for the SMTP password credential                                                                             | `""`                                 |
+| `smtp.existingSecretServerKey`   | Name of the key for the SMTP hostname                                                                                        | `""`                                 |
 
 ### Mastodon Web Parameters
 
