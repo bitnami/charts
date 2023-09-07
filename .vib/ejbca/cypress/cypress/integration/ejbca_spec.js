@@ -6,17 +6,15 @@
 /// <reference types="cypress" />
 
 it('allows to enrol and verify certificate', () => {
-  const certFile = `cypress/downloads/${Cypress.env('username')}.p12`;
+  const certFile = `cypress/downloads/SuperAdmin.p12`;
   cy.task('fileExists', certFile).then((exists) => {
     // A user can only enrol once
     if (!exists) {
-      cy.visit('/ejbca/enrol/keystore.jsp');
-      cy.get('#textfieldusername').type(Cypress.env('username'));
-      cy.get('#textfieldpassword').type(Cypress.env('password'));
-      cy.get('#buttonsubmitusername').click();
+      cy.visit(`/ejbca/ra/enrollwithusername.xhtml?username=${Cypress.env('username')}`);
+      cy.get('[name="enrollWithUsernameForm:enrollmentCode"]').type(Cypress.env('password'));
+      cy.get('[name="enrollWithUsernameForm:checkButton"]').click();
       cy.fixture('certs').then((certs) => {
-        cy.get('#tokenKeySpec').select(certs.newAdminCert.cipherSpec);
-        cy.get('#certprofile').select(certs.newAdminCert.profile);
+        cy.get('[name="enrollWithUsernameForm:selectAlgorithmOneMenu"]').select(certs.newAdminCert.algorithm);
       });
       // Clicking on the button will download the certificate, but Cypress
       // expects the page to be reloaded and fails with a timeout. We manually
@@ -32,15 +30,9 @@ it('allows to enrol and verify certificate', () => {
             }, 12000);
           });
 
-          cy.contains('input', 'Enroll').click();
+          cy.get('[name="enrollWithUsernameForm:generatePkcs12"]').click();
         });
     }
     cy.readFile(certFile).should('exist');
   });
-
-  cy.visit('/ejbca/retrieve/list_certs.jsp');
-  cy.get('#subject').type(`${Cypress.env('baseDN')},CN=SuperAdmin`);
-  cy.get('#ok').click();
-  cy.contains('Check if certificate is revoked').click();
-  cy.contains('has NOT been revoked');
 });

@@ -13,7 +13,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  {{- $podLabels := merge .Values.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
   replicas: {{ .Values.replicaCount }}
@@ -22,7 +22,7 @@ spec:
   template:
     metadata:
       {{- if or .Values.podAnnotations .Values.commonAnnotations }}
-      {{- $podAnnotations := merge .Values.podAnnotations .Values.commonAnnotations }}
+      {{- $podAnnotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.podAnnotations .Values.commonAnnotations ) "context" . ) }}
       annotations: {{- include "common.tplvalues.render" ( dict "value" $podAnnotations "context" $) | nindent 8 }}
       {{- end }}
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}

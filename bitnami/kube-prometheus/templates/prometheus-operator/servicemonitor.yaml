@@ -14,7 +14,7 @@ metadata:
     {{- include "common.tplvalues.render" ( dict "value" .Values.operator.serviceMonitor.labels "context" $ ) | nindent 4 }}
     {{- end }}
   {{- if or .Values.commonAnnotations .Values.operator.serviceMonitor.annotations }}
-  {{- $annotations := merge .Values.operator.serviceMonitor.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.operator.serviceMonitor.annotations .Values.commonAnnotations ) "context" . ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
