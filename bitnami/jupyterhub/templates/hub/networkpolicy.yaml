@@ -15,7 +15,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  {{- $hubPodLabels := merge .Values.hub.podLabels .Values.commonLabels }}
+  {{- $hubPodLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.hub.podLabels .Values.commonLabels ) "context" . ) }}
   podSelector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $hubPodLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: hub
@@ -53,7 +53,7 @@ spec:
     - ports:
         - port: {{ .Values.proxy.containerPort.api }}
       to:
-        {{- $proxyPodLabels := merge .Values.proxy.podLabels .Values.commonLabels }}
+        {{- $proxyPodLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.proxy.podLabels .Values.commonLabels ) "context" . ) }}
         - podSelector:
             matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $proxyPodLabels "context" $ ) | nindent 14 }}
               app.kubernetes.io/component: proxy

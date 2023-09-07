@@ -9,7 +9,7 @@ kind: ServiceMonitor
 metadata:
   name: {{ printf "%s-speaker" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   namespace: {{ default .Release.Namespace .Values.speaker.metrics.serviceMonitor.namespace | quote }}
-  {{- $labels := merge .Values.speaker.metrics.serviceMonitor.labels .Values.commonLabels }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.speaker.metrics.serviceMonitor.labels .Values.commonLabels ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: speaker
   {{- if .Values.commonAnnotations }}

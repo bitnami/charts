@@ -9,7 +9,7 @@ kind: ServiceMonitor
 metadata:
   name: {{ template "common.names.fullname" . }}
   namespace: {{ default (include "common.names.namespace" .) .Values.serviceMonitor.namespace | quote }}
-  {{- $labels := merge .Values.serviceMonitor.labels .Values.commonLabels }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.serviceMonitor.labels .Values.commonLabels ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
