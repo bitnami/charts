@@ -9,12 +9,12 @@ kind: ServiceMonitor
 metadata:
   name: {{ template "milvus.query-node.fullname" . }}
   namespace: {{ default (include "common.names.namespace" .) .Values.queryNode.metrics.serviceMonitor.namespace | quote }}
-  {{- $labels := merge .Values.queryNode.metrics.serviceMonitor.labels .Values.commonLabels }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.queryNode.metrics.serviceMonitor.labels .Values.commonLabels ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: milvus
     app.kubernetes.io/component: query-node
   {{- if or .Values.commonAnnotations .Values.queryNode.metrics.serviceMonitor.annotations }}
-  {{- $annotations := merge .Values.queryNode.metrics.serviceMonitor.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.queryNode.metrics.serviceMonitor.annotations .Values.commonAnnotations ) "context" . ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
