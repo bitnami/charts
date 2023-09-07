@@ -4,11 +4,11 @@ SPDX-License-Identifier: APACHE-2.0
 */}}
 
 {{- if .Values.backup.enabled }}
-{{- $customUser := include "postgresql.username" . }}
+{{- $customUser := include "postgresql.v1.username" . }}
 apiVersion: batch/v1
 kind: CronJob
 metadata:
-  name: {{ include "postgresql.primary.fullname" . }}-pgdumpall
+  name: {{ include "postgresql.v1.primary.fullname" . }}-pgdumpall
   namespace: {{ .Release.Namespace | quote }}
   {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.backup.cronjob.labels .Values.commonLabels ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
@@ -39,8 +39,8 @@ spec:
           {{- end }}
         spec:
           containers:
-          - name: {{ include "postgresql.primary.fullname" . }}-pgdumpall
-            image: {{ include "postgresql.image" . }}
+          - name: {{ include "postgresql.v1.primary.fullname" . }}-pgdumpall
+            image: {{ include "postgresql.v1.image" . }}
             env:
               - name: PGUSER
               {{- if .Values.auth.enablePostgresUser }}
@@ -50,16 +50,16 @@ spec:
               {{- end }}
               {{- if .Values.auth.usePasswordFiles }}
               - name:  PGPASSFILE
-                value: {{ printf "/opt/bitnami/postgresql/secrets/%s" (include "postgresql.adminPasswordKey" .) }}
+                value: {{ printf "/opt/bitnami/postgresql/secrets/%s" (include "postgresql.v1.adminPasswordKey" .) }}
               {{- else }}
               - name: PGPASSWORD
                 valueFrom:
                   secretKeyRef:
-                    name: {{ include "postgresql.secretName" . }}
-                    key: {{ include "postgresql.adminPasswordKey" . }}
+                    name: {{ include "postgresql.v1.secretName" . }}
+                    key: {{ include "postgresql.v1.adminPasswordKey" . }}
               {{- end }}
               - name: PGHOST
-                value: {{ include "postgresql.primary.fullname" . }}
+                value: {{ include "postgresql.v1.primary.fullname" . }}
               - name: PGPORT
                 value: {{ .Values.containerPorts.postgresql | quote }}
               - name: PGDUMP_DIR
@@ -99,6 +99,6 @@ spec:
             {{- else }}
             - name: datadir
               persistentVolumeClaim:
-                claimName: {{ include "postgresql.primary.fullname" . }}-pgdumpall
+                claimName: {{ include "postgresql.v1.primary.fullname" . }}-pgdumpall
             {{- end }}
 {{- end }}
