@@ -14,7 +14,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  {{- $secondaryPodLabels := merge .Values.secondary.podLabels .Values.commonLabels }}
+  {{- $secondaryPodLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.secondary.podLabels .Values.commonLabels ) "context" . ) }}
   podSelector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $secondaryPodLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: secondary

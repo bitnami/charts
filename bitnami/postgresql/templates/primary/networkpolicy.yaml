@@ -15,7 +15,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  {{- $primaryPodLabels := merge .Values.primary.podLabels .Values.commonLabels }}
+  {{- $primaryPodLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.primary.podLabels .Values.commonLabels ) "context" . ) }}
   podSelector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $primaryPodLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: primary
@@ -48,7 +48,7 @@ spec:
     {{- end }}
     {{- if and .Values.networkPolicy.ingressRules.primaryAccessOnlyFrom.enabled (eq .Values.architecture "replication") }}
     - from:
-        {{- $readPodLabels := merge .Values.readReplicas.podLabels .Values.commonLabels }}
+        {{- $readPodLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.readReplicas.podLabels .Values.commonLabels ) "context" . ) }}
         - podSelector:
             matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $readPodLabels "context" $ ) | nindent 14 }}
               app.kubernetes.io/component: read

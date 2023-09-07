@@ -19,7 +19,7 @@ spec:
   {{- if .Values.promtail.updateStrategy }}
   updateStrategy: {{- toYaml .Values.promtail.updateStrategy | nindent 4 }}
   {{- end }}
-  {{- $podLabels := merge .Values.promtail.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.promtail.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/part-of: grafana-loki
