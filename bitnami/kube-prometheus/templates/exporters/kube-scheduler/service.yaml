@@ -9,7 +9,7 @@ kind: Service
 metadata:
   name: {{ template "kube-prometheus.fullname" . }}-kube-scheduler
   namespace: {{ .Values.kubeScheduler.namespace }}
-  {{- $labels := merge .Values.kubeScheduler.service.labels .Values.commonLabels }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.kubeScheduler.service.labels .Values.commonLabels ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: kube-scheduler
   {{- if .Values.commonAnnotations }}

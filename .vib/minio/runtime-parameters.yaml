@@ -18,7 +18,7 @@ service:
     console: 80
 persistence:
   enabled: true
-  mountPath: /data
+  mountPath: /bitnami/minio/data
 serviceAccount:
   create: true
   automountServiceAccountToken: true
