@@ -14,7 +14,7 @@ metadata:
     app.kubernetes.io/component: server
     app.kubernetes.io/subcomponent: thanos
   {{- if or .Values.server.thanos.ingress.annotations .Values.commonAnnotations }}
-  {{- $annotations := merge .Values.server.thanos.ingress.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.server.thanos.ingress.annotations .Values.commonAnnotations ) "context" . ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
