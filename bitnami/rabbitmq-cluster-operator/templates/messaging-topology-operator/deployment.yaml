@@ -20,7 +20,7 @@ spec:
   {{- if .Values.msgTopologyOperator.updateStrategy }}
   strategy: {{- toYaml .Values.msgTopologyOperator.updateStrategy | nindent 4 }}
   {{- end }}
-  {{- $podLabels := merge .Values.msgTopologyOperator.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.msgTopologyOperator.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: messaging-topology-operator
