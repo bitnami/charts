@@ -41,27 +41,27 @@ extraDeploy:
   kind: Deployment
   metadata:
     labels:
-      app: kuard
-    name: kuard
+      app: dokuwiki
+    name: dokuwiki
   spec:
     replicas: 1
     selector:
       matchLabels:
-        app: kuard
+        app: dokuwiki
     template:
       metadata:
         labels:
-          app: kuard
+          app: dokuwiki
       spec:
         containers:
-        - image: gcr.io/kuar-demo/kuard-amd64:1
-          name: kuard
+        - image: docker.io/bitnami/dokuwiki:latest
+          name: dokuwiki
 - apiVersion: v1
   kind: Service
   metadata:
     labels:
-      app: kuard
-    name: kuard-vib
+      app: dokuwiki
+    name: dokuwiki-vib
   spec:
     ports:
     - port: 80
@@ -73,6 +73,6 @@ extraDeploy:
       targetPort: 443
       name: https
     selector:
-      app: kuard
+      app: dokuwiki
     sessionAffinity: None
     type: ClusterIP

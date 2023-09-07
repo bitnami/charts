@@ -24,7 +24,7 @@ spec:
   {{- if .Values.defaultBackend.pdb.maxUnavailable }}
   maxUnavailable: {{ .Values.defaultBackend.pdb.maxUnavailable }}
   {{- end }}
-  {{- $podLabels := merge .Values.defaultBackend.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.defaultBackend.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: default-backend
