@@ -55,7 +55,7 @@ spec:
     {{- if .Values.agent.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.agent.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}
-  {{- $podLabels := merge .Values.agent.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.agent.podLabels .Values.commonLabels ) "context" . ) }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: agent
 {{- end }}
