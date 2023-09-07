@@ -12,7 +12,7 @@ metadata:
     app.kubernetes.io/part-of: flink
     app.kubernetes.io/component: taskmanager
   {{- if or .Values.taskmanager.service.annotations .Values.commonAnnotations }}
-  {{- $annotations := merge .Values.taskmanager.service.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.taskmanager.service.annotations .Values.commonAnnotations ) "context" . ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
@@ -55,7 +55,7 @@ spec:
     {{- if .Values.taskmanager.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.taskmanager.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}
-  {{- $podLabels := merge .Values.taskmanager.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.taskmanager.podLabels .Values.commonLabels ) "context" . ) }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: flink
     app.kubernetes.io/component: taskmanager

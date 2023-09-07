@@ -9,11 +9,11 @@ kind: StatefulSet
 metadata:
   name: {{ include "postgresql.primary.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
-  {{- $labels := merge .Values.primary.labels .Values.commonLabels }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.primary.labels .Values.commonLabels ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: primary
   {{- if or .Values.commonAnnotations .Values.primary.annotations }}
-  {{- $annotations := merge .Values.primary.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.primary.annotations .Values.commonAnnotations ) "context" . ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
@@ -22,7 +22,7 @@ spec:
   {{- if .Values.primary.updateStrategy }}
   updateStrategy: {{- toYaml .Values.primary.updateStrategy | nindent 4 }}
   {{- end }}
-  {{- $podLabels := merge .Values.primary.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.primary.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: primary
