@@ -35,7 +35,7 @@ data:
   STREAMING_API_BASE_URL: {{ include "mastodon.streaming.url" . | quote }}
   REDIS_HOST: {{ include "mastodon.redis.host" . | quote }}
   REDIS_PORT: {{ include "mastodon.redis.port" . | quote }}
-  {{- if .Values.adminEmail }}
+  {{- if .Values.smtp.server }}
   SMTP_SERVER: {{ .Values.smtp.server | quote }}
   {{- end }}
   SMTP_PORT: {{ .Values.smtp.port | quote }}

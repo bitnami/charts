@@ -224,6 +224,9 @@ smtp:
   ## @param smtp.existingSecretPasswordKey Name of the key for the SMTP password credential
   ## stored in the existingSecret resource
   existingSecretPasswordKey: ""
+  ## @param smtp.existingSecretServerKey Name of the key for the SMTP hostname
+  ## stored in the existingSecret resource
+  existingSecretServerKey: ""
 
 ## @section Mastodon Web Parameters
 ##
