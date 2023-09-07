@@ -9,12 +9,9 @@ kind: Deployment
 metadata:
   name: {{ template "milvus.index-node.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: milvus
     app.kubernetes.io/component: index-node
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -25,8 +22,9 @@ spec:
   {{- if .Values.indexNode.updateStrategy }}
   strategy: {{- toYaml .Values.indexNode.updateStrategy | nindent 4 }}
   {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.indexNode.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/part-of: milvus
       app.kubernetes.io/component: index-node
   template:
@@ -38,12 +36,9 @@ spec:
         {{- if .Values.indexNode.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.indexNode.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/part-of: milvus
         app.kubernetes.io/component: index-node
-        {{- if .Values.indexNode.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.indexNode.podLabels "context" $) | nindent 8 }}
-        {{- end }}
     spec:
       serviceAccountName: {{ template "milvus.index-node.serviceAccountName" . }}
       {{- include "milvus.imagePullSecrets" . | nindent 6 }}
@@ -54,8 +49,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.indexNode.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.indexNode.podAffinityPreset "component" "index-node" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.indexNode.podAntiAffinityPreset "component" "index-node" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.indexNode.podAffinityPreset "component" "index-node" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.indexNode.podAntiAffinityPreset "component" "index-node" "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.indexNode.nodeAffinityPreset.type "key" .Values.indexNode.nodeAffinityPreset.key "values" .Values.indexNode.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.indexNode.nodeSelector }}

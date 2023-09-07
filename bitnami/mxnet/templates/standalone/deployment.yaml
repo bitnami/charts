@@ -9,11 +9,8 @@ kind: Deployment
 metadata:
   name: {{ include "common.names.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: standalone
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -22,19 +19,17 @@ spec:
   {{- if .Values.standalone.updateStrategy }}
   strategy: {{- toYaml .Values.standalone.updateStrategy | nindent 6 }}
   {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.standalone.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: standalone
   template:
     metadata:
       {{- if .Values.standalone.podAnnotations }}
       annotations: {{- include "common.tplvalues.render" (dict "value" .Values.standalone.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: standalone
-        {{- if .Values.standalone.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.standalone.podLabels "context" $) | nindent 8 }}
-        {{- end }}
     spec:
       {{- include "mxnet.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.standalone.hostAliases }}
@@ -44,8 +39,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.standalone.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.standalone.podAffinityPreset "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.standalone.podAntiAffinityPreset "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.standalone.podAffinityPreset "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.standalone.podAntiAffinityPreset "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.standalone.nodeAffinityPreset.type "key" .Values.standalone.nodeAffinityPreset.key "values" .Values.standalone.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.standalone.nodeSelector }}

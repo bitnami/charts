@@ -9,23 +9,18 @@ kind: Job
 metadata:
   name: {{ include "common.names.fullname" . }}-migrate
   namespace: {{ .Release.Namespace }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: server
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.migration.annotations "context" $ ) | nindent 4 }}
-    {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-    {{- end }}
+  {{- if or .Values.migration.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.migration.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
 spec:
   template:
     metadata:
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.migration.podLabels .Values.commonLabels ) "context" . ) }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: migration
-        {{- if .Values.migration.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.migration.podLabels "context" $) | nindent 8 }}
-        {{- end }}
       {{- if .Values.migration.podAnnotations }}
       annotations: {{- include "common.tplvalues.render" (dict "value" .Values.migration.podAnnotations "context" $) | nindent 8 }}
       {{- end }}

@@ -82,7 +82,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------------- | -------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
 | `image.registry`              | ZooKeeper image registry                                                                                                   | `docker.io`             |
 | `image.repository`            | ZooKeeper image repository                                                                                                 | `bitnami/zookeeper`     |
-| `image.tag`                   | ZooKeeper image tag (immutable tags are recommended)                                                                       | `3.8.2-debian-11-r7`    |
+| `image.tag`                   | ZooKeeper image tag (immutable tags are recommended)                                                                       | `3.9.0-debian-11-r11`   |
 | `image.digest`                | ZooKeeper image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                  | `""`                    |
 | `image.pullPolicy`            | ZooKeeper image pull policy                                                                                                | `IfNotPresent`          |
 | `image.pullSecrets`           | Specify docker-registry secret names as an array                                                                           | `[]`                    |
@@ -248,7 +248,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner and group of the persistent volume                                                   | `false`            |
 | `volumePermissions.image.registry`                     | Init container volume-permissions image registry                                                                                  | `docker.io`        |
 | `volumePermissions.image.repository`                   | Init container volume-permissions image repository                                                                                | `bitnami/os-shell` |
-| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r19` |
+| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r51` |
 | `volumePermissions.image.digest`                       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`               |
 | `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`     |
 | `volumePermissions.image.pullSecrets`                  | Init container volume-permissions image pull secrets                                                                              | `[]`               |
@@ -422,6 +422,10 @@ As an alternative, you can use any of the preset configurations for pod affinity
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 12.0.0
+
+This new version of the chart includes the new ZooKeeper major version 3.9.x. For more information, please refer to [Zookeeper 3.9.0 Release Notes](https://zookeeper.apache.org/doc/r3.9.0/releasenotes.html)
 
 ### To 11.0.0
 

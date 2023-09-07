@@ -82,7 +82,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`                      | Kafka image registry                                                                                                                                                                                       | `docker.io`           |
 | `image.repository`                    | Kafka image repository                                                                                                                                                                                     | `bitnami/kafka`       |
-| `image.tag`                           | Kafka image tag (immutable tags are recommended)                                                                                                                                                           | `3.5.1-debian-11-r16` |
+| `image.tag`                           | Kafka image tag (immutable tags are recommended)                                                                                                                                                           | `3.5.1-debian-11-r41` |
 | `image.digest`                        | Kafka image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                      | `""`                  |
 | `image.pullPolicy`                    | Kafka image pull policy                                                                                                                                                                                    | `IfNotPresent`        |
 | `image.pullSecrets`                   | Specify docker-registry secret names as an array                                                                                                                                                           | `[]`                  |
@@ -91,6 +91,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `config`                              | Configuration file for Kafka, rendered as a template. Auto-generated based on chart values when not specified.                                                                                             | `""`                  |
 | `existingConfigmap`                   | ConfigMap with Kafka Configuration                                                                                                                                                                         | `""`                  |
 | `extraConfig`                         | Additional configuration to be appended at the end of the generated Kafka configuration file.                                                                                                              | `""`                  |
+| `secretConfig`                        | Additional configuration to be appended at the end of the generated Kafka configuration file.                                                                                                              | `""`                  |
+| `existingSecretConfig`                | Secret with additonal configuration that will be appended to the end of the generated Kafka configuration file                                                                                             | `""`                  |
 | `log4j`                               | An optional log4j.properties file to overwrite the default of the Kafka brokers                                                                                                                            | `""`                  |
 | `existingLog4jConfigMap`              | The name of an existing ConfigMap containing a log4j.properties file                                                                                                                                       | `""`                  |
 | `heapOpts`                            | Kafka Java Heap size                                                                                                                                                                                       | `-Xmx1024m -Xms1024m` |
@@ -181,6 +183,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `controller.config`                                            | Configuration file for Kafka controller-eligible nodes, rendered as a template. Auto-generated based on chart values when not specified.                                                      | `""`                      |
 | `controller.existingConfigmap`                                 | ConfigMap with Kafka Configuration for controller-eligible nodes.                                                                                                                             | `""`                      |
 | `controller.extraConfig`                                       | Additional configuration to be appended at the end of the generated Kafka controller-eligible nodes configuration file.                                                                       | `""`                      |
+| `controller.secretConfig`                                      | Additional configuration to be appended at the end of the generated Kafka controller-eligible nodes configuration file.                                                                       | `""`                      |
+| `controller.existingSecretConfig`                              | Secret with additonal configuration that will be appended to the end of the generated Kafka controller-eligible nodes configuration file                                                      | `""`                      |
 | `controller.heapOpts`                                          | Kafka Java Heap size for controller-eligible nodes                                                                                                                                            | `-Xmx1024m -Xms1024m`     |
 | `controller.command`                                           | Override Kafka container command                                                                                                                                                              | `[]`                      |
 | `controller.args`                                              | Override Kafka container arguments                                                                                                                                                            | `[]`                      |
@@ -277,6 +281,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `broker.config`                                            | Configuration file for Kafka broker-only nodes, rendered as a template. Auto-generated based on chart values when not specified.                                                              | `""`                      |
 | `broker.existingConfigmap`                                 | ConfigMap with Kafka Configuration for broker-only nodes.                                                                                                                                     | `""`                      |
 | `broker.extraConfig`                                       | Additional configuration to be appended at the end of the generated Kafka broker-only nodes configuration file.                                                                               | `""`                      |
+| `broker.secretConfig`                                      | Additional configuration to be appended at the end of the generated Kafka broker-only nodes configuration file.                                                                               | `""`                      |
+| `broker.existingSecretConfig`                              | Secret with additonal configuration that will be appended to the end of the generated Kafka broker-only nodes configuration file                                                              | `""`                      |
 | `broker.heapOpts`                                          | Kafka Java Heap size for broker-only nodes                                                                                                                                                    | `-Xmx1024m -Xms1024m`     |
 | `broker.command`                                           | Override Kafka container command                                                                                                                                                              | `[]`                      |
 | `broker.args`                                              | Override Kafka container arguments                                                                                                                                                            | `[]`                      |
@@ -390,7 +396,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalAccess.autoDiscovery.enabled`                       | Enable using an init container to auto-detect external IPs/ports by querying the K8s API                                                  | `false`                 |
 | `externalAccess.autoDiscovery.image.registry`                | Init container auto-discovery image registry                                                                                              | `docker.io`             |
 | `externalAccess.autoDiscovery.image.repository`              | Init container auto-discovery image repository                                                                                            | `bitnami/kubectl`       |
-| `externalAccess.autoDiscovery.image.tag`                     | Init container auto-discovery image tag (immutable tags are recommended)                                                                  | `1.25.12-debian-11-r17` |
+| `externalAccess.autoDiscovery.image.tag`                     | Init container auto-discovery image tag (immutable tags are recommended)                                                                  | `1.25.13-debian-11-r11` |
 | `externalAccess.autoDiscovery.image.digest`                  | Kubectl image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                   | `""`                    |
 | `externalAccess.autoDiscovery.image.pullPolicy`              | Init container auto-discovery image pull policy                                                                                           | `IfNotPresent`          |
 | `externalAccess.autoDiscovery.image.pullSecrets`             | Init container auto-discovery image pull secrets                                                                                          | `[]`                    |
@@ -440,7 +446,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner and group of the persistent volume                                                   | `false`            |
 | `volumePermissions.image.registry`                     | Init container volume-permissions image registry                                                                                  | `docker.io`        |
 | `volumePermissions.image.repository`                   | Init container volume-permissions image repository                                                                                | `bitnami/os-shell` |
-| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r31` |
+| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r60` |
 | `volumePermissions.image.digest`                       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`               |
 | `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`     |
 | `volumePermissions.image.pullSecrets`                  | Init container volume-permissions image pull secrets                                                                              | `[]`               |
@@ -465,7 +471,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.kafka.enabled`                                           | Whether or not to create a standalone Kafka exporter to expose Kafka metrics                                                     | `false`                                                                                 |
 | `metrics.kafka.image.registry`                                    | Kafka exporter image registry                                                                                                    | `docker.io`                                                                             |
 | `metrics.kafka.image.repository`                                  | Kafka exporter image repository                                                                                                  | `bitnami/kafka-exporter`                                                                |
-| `metrics.kafka.image.tag`                                         | Kafka exporter image tag (immutable tags are recommended)                                                                        | `1.7.0-debian-11-r72`                                                                   |
+| `metrics.kafka.image.tag`                                         | Kafka exporter image tag (immutable tags are recommended)                                                                        | `1.7.0-debian-11-r102`                                                                  |
 | `metrics.kafka.image.digest`                                      | Kafka exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                   | `""`                                                                                    |
 | `metrics.kafka.image.pullPolicy`                                  | Kafka exporter image pull policy                                                                                                 | `IfNotPresent`                                                                          |
 | `metrics.kafka.image.pullSecrets`                                 | Specify docker-registry secret names as an array                                                                                 | `[]`                                                                                    |
@@ -519,7 +525,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.jmx.kafkaJmxPort`                                        | JMX port where the exporter will collect metrics, exposed in the Kafka container.                                                | `5555`                                                                                  |
 | `metrics.jmx.image.registry`                                      | JMX exporter image registry                                                                                                      | `docker.io`                                                                             |
 | `metrics.jmx.image.repository`                                    | JMX exporter image repository                                                                                                    | `bitnami/jmx-exporter`                                                                  |
-| `metrics.jmx.image.tag`                                           | JMX exporter image tag (immutable tags are recommended)                                                                          | `0.19.0-debian-11-r36`                                                                  |
+| `metrics.jmx.image.tag`                                           | JMX exporter image tag (immutable tags are recommended)                                                                          | `0.19.0-debian-11-r66`                                                                  |
 | `metrics.jmx.image.digest`                                        | JMX exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                     | `""`                                                                                    |
 | `metrics.jmx.image.pullPolicy`                                    | JMX exporter image pull policy                                                                                                   | `IfNotPresent`                                                                          |
 | `metrics.jmx.image.pullSecrets`                                   | Specify docker-registry secret names as an array                                                                                 | `[]`                                                                                    |
@@ -925,16 +931,16 @@ extraDeploy:
     kind: Deployment
     metadata:
       name: {{ include "common.names.fullname" . }}-connect
-      labels: {{- include "common.labels.standard" . | nindent 4 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
         app.kubernetes.io/component: connector
     spec:
       replicas: 1
       selector:
-        matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+        matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 6 }}
           app.kubernetes.io/component: connector
       template:
         metadata:
-          labels: {{- include "common.labels.standard" . | nindent 8 }}
+          labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 8 }}
             app.kubernetes.io/component: connector
         spec:
           containers:
@@ -956,7 +962,7 @@ extraDeploy:
     kind: ConfigMap
     metadata:
       name: {{ include "common.names.fullname" . }}-connect
-      labels: {{- include "common.labels.standard" . | nindent 4 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
         app.kubernetes.io/component: connector
     data:
       connect-standalone.properties: |-
@@ -970,14 +976,14 @@ extraDeploy:
     kind: Service
     metadata:
       name: {{ include "common.names.fullname" . }}-connect
-      labels: {{- include "common.labels.standard" . | nindent 4 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
         app.kubernetes.io/component: connector
     spec:
       ports:
         - protocol: TCP
           port: 8083
           targetPort: connector
-      selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
+      selector: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
         app.kubernetes.io/component: connector
 ```
 
@@ -1086,6 +1092,10 @@ This guide is an adaptation from upstream documentation: [Migrate from ZooKeeper
     For more information about decommissioning kafka broker check the [Kafka documentation](https://www.confluent.io/blog/remove-kafka-brokers-from-any-cluster-the-easy-way/).
 
 ## Upgrading
+
+### To 25.0.0
+
+This major updates the Zookeeper subchart to it newest major, 12.0.0. For more information on this subchart's major, please refer to [zookeeper upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/zookeeper#to-1200).
 
 ### To 24.0.0
 

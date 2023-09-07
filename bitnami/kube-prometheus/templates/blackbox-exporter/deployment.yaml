@@ -10,9 +10,6 @@ metadata:
   name: {{ template "kube-prometheus.blackboxExporter.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "kube-prometheus.blackboxExporter.labels" . | nindent 4 }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -22,8 +19,7 @@ spec:
   strategy: {{- toYaml .Values.blackboxExporter.updateStrategy | nindent 4 }}
   {{- end }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
-      app.kubernetes.io/component: blackbox-exporter
+    matchLabels: {{- include "kube-prometheus.blackboxExporter.matchLabels" . | nindent 6 }}
   template:
     metadata:
       annotations:
@@ -31,11 +27,7 @@ spec:
         {{- if .Values.blackboxExporter.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.blackboxExporter.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
-        app.kubernetes.io/component: blackbox-exporter
-        {{- if .Values.blackboxExporter.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.blackboxExporter.podLabels "context" $) | nindent 8 }}
-        {{- end }}
+      labels: {{- include "kube-prometheus.blackboxExporter.podLabels" . | nindent 8 }}
     spec:
       serviceAccountName: {{ template "kube-prometheus.blackboxExporter.serviceAccountName" . }}
       {{- include "kube-prometheus.imagePullSecrets" . | nindent 6 }}
@@ -46,8 +38,9 @@ spec:
       affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.blackboxExporter.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.blackboxExporter.podAffinityPreset "component" "blackbox-exporter" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.blackboxExporter.podAntiAffinityPreset "component" "blackbox-exporter" "context" $) | nindent 10 }}
+        {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.blackboxExporter.podLabels .Values.commonLabels ) "context" . ) }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.blackboxExporter.podAffinityPreset "component" "blackbox-exporter" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.blackboxExporter.podAntiAffinityPreset "component" "blackbox-exporter" "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.blackboxExporter.nodeAffinityPreset.type "key" .Values.blackboxExporter.nodeAffinityPreset.key "values" .Values.blackboxExporter.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.blackboxExporter.nodeSelector }}

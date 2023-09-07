@@ -9,11 +9,8 @@ apiVersion: batch/v1
 metadata:
   name: {{ printf "%s-provisioning" (include "common.names.fullname" .) }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: kafka-provisioning
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   annotations:
     helm.sh/hook: post-install,post-upgrade
     helm.sh/hook-delete-policy: before-hook-creation,hook-succeeded
@@ -23,15 +20,12 @@ metadata:
 spec:
   template:
     metadata:
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.provisioning.podLabels .Values.commonLabels ) "context" . ) }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: kafka-provisioning
-        {{- if .Values.provisioning.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.provisioning.podLabels "context" $) | nindent 8 }}
-        {{- end }}
-      annotations:
-        {{- if .Values.provisioning.podAnnotations }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.provisioning.podAnnotations "context" $) | nindent 8 }}
-        {{- end }}
+      {{- if .Values.provisioning.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.provisioning.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
     spec:
       serviceAccountName: {{ template "kafka.provisioning.serviceAccountName" . }}
       enableServiceLinks: {{ .Values.provisioning.enableServiceLinks }}

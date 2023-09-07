@@ -8,11 +8,8 @@ kind: Deployment
 metadata:
   name: {{ include "jupyterhub.hub.name" . }}
   namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: hub
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -20,8 +17,9 @@ spec:
   {{- if .Values.hub.updateStrategy }}
   strategy: {{- toYaml .Values.hub.updateStrategy | nindent 4 }}
   {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.hub.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: hub
   template:
     metadata:
@@ -35,14 +33,11 @@ spec:
         {{- if empty .Values.hub.existingSecret }}
         checksum/hub-secret: {{ include (print $.Template.BasePath "/hub/secret.yaml") . | sha256sum }}
         {{- end }}
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: hub
         hub.jupyter.org/network-access-proxy-api: "true"
         hub.jupyter.org/network-access-proxy-http: "true"
         hub.jupyter.org/network-access-singleuser: "true"
-        {{- if .Values.hub.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.hub.podLabels "context" $) | nindent 8 }}
-        {{- end }}
     spec:
       serviceAccountName: {{ template "jupyterhub.hubServiceAccountName" . }}
       {{- include "jupyterhub.imagePullSecrets" . | nindent 6 }}
@@ -53,8 +48,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.hub.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.hub.podAffinityPreset "component" "hub" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.hub.podAntiAffinityPreset "component" "hub" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.hub.podAffinityPreset "component" "hub" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.hub.podAntiAffinityPreset "component" "hub" "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.hub.nodeAffinityPreset.type "key" .Values.hub.nodeAffinityPreset.key "values" .Values.hub.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.hub.nodeSelector }}

@@ -11,17 +11,15 @@ kind: StatefulSet
 metadata:
   name: {{ printf "%s-shard%d-data" (include "common.names.fullname" $ ) $i }}
   namespace: {{ include "common.names.namespace" $ | quote }}
-  labels: {{- include "common.labels.standard" $ | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $.Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: shardsvr
-    {{- if $.Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" $.Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if $.Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $.Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list $.Values.shardsvr.dataNode.podLabels $.Values.common.podLabels $.Values.common.podLabels ) "context" $ ) }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" $ | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: shardsvr
   podManagementPolicy: {{ $.Values.shardsvr.dataNode.podManagementPolicy }}
   updateStrategy: {{- toYaml $.Values.shardsvr.dataNode.updateStrategy | nindent 4 }}
@@ -29,25 +27,17 @@ spec:
   replicas: {{ $.Values.shardsvr.dataNode.replicaCount }}
   template:
     metadata:
-      labels: {{- include "common.labels.standard" $ | nindent 8 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: shardsvr
-        {{- if $.Values.common.podLabels }}
-          {{- include "common.tplvalues.render" ( dict "value" $.Values.common.podLabels "context" $ ) | nindent 8 }}
-        {{- end }}
-        {{- if $.Values.shardsvr.dataNode.podLabels }}
-          {{- include "common.tplvalues.render" ( dict "value" $.Values.shardsvr.dataNode.podLabels "context" $ ) | nindent 8 }}
-        {{- end }}
         shard: {{ $i | quote }}
       {{- if or $.Values.common.podAnnotations $.Values.shardsvr.dataNode.podAnnotations $.Values.metrics.enabled }}
       annotations:
-        {{- if $.Values.common.podAnnotations }}
-           {{- include "common.tplvalues.render" ( dict "value" $.Values.common.podAnnotations "context" $ ) | nindent 8 }}
-        {{- end }}
-        {{- if $.Values.shardsvr.dataNode.podAnnotations }}
-          {{- include "common.tplvalues.render" ( dict "value" $.Values.shardsvr.dataNode.podAnnotations "context" $ ) | nindent 8 }}
+        {{- if or $.Values.common.podAnnotations $.Values.shardsvr.dataNode.podAnnotations }}
+        {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list $.Values.shardsvr.dataNode.podAnnotations $.Values.common.podAnnotations ) "context" $ ) }}
+        {{- include "common.tplvalues.render" ( dict "value" $annotations  "context" $ ) | nindent 8 }}
         {{- end }}
         {{- if $.Values.metrics.enabled }}
-           {{- include "common.tplvalues.render" ( dict "value" $.Values.metrics.podAnnotations "context" $ ) | nindent 8 }}
+        {{- include "common.tplvalues.render" ( dict "value" $.Values.metrics.podAnnotations "context" $ ) | nindent 8 }}
         {{- end }}
       {{- end }}
     spec:
@@ -58,8 +48,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" (dict "value" $.Values.shardsvr.dataNode.affinity "context" (set $ "dataNodeLoopId" $i)) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" $.Values.shardsvr.dataNode.podAffinityPreset "component" "shardsvr" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" $.Values.shardsvr.dataNode.podAntiAffinityPreset "component" "shardsvr" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" $.Values.shardsvr.dataNode.podAffinityPreset "component" "shardsvr" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" $.Values.shardsvr.dataNode.podAntiAffinityPreset "component" "shardsvr" "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" $.Values.shardsvr.dataNode.nodeAffinityPreset.type "key" $.Values.shardsvr.dataNode.nodeAffinityPreset.key "values" $.Values.shardsvr.dataNode.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if $.Values.shardsvr.dataNode.hostAliases }}

@@ -79,7 +79,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/clickhouse
-  tag: 23.7.3-debian-11-r0
+  tag: 23.8.2-debian-11-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -105,6 +105,10 @@ shards: 2
 ## if keeper enable, same as keeper count, keeper cluster by shards.
 ##
 replicaCount: 3
+
+## @param distributeReplicasByZone Schedules replicas of the same shard to different availability zones
+##
+distributeReplicasByZone: false
 ## @param containerPorts.http ClickHouse HTTP container port
 ## @param containerPorts.https ClickHouse HTTPS container port
 ## @param containerPorts.tcp ClickHouse TCP container port
@@ -266,6 +270,8 @@ defaultConfigurationOverrides: |
             <replica>
                 <host>{{ printf "%s-shard%d-%d.%s.%s.svc.%s" (include "common.names.fullname" $ ) $shard $i (include "clickhouse.headlessServiceName" $) (include "common.names.namespace" $) $.Values.clusterDomain }}</host>
                 <port>{{ $.Values.service.ports.tcp }}</port>
+                <user from_env="CLICKHOUSE_ADMIN_USER"></user>
+                <password from_env="CLICKHOUSE_ADMIN_PASSWORD"></password>
             </replica>
             {{- end }}
         </shard>
@@ -960,7 +966,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r28
+    tag: 11-debian-11-r60
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1104,6 +1110,17 @@ externalZookeeper:
 ##
 zookeeper:
   enabled: true
+  ## Override zookeeper default image as 3.9 is not supported https://github.com/ClickHouse/ClickHouse/issues/53749
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/zookeeper
+  ## @param zookeeper.image.registry Zookeeper image registry
+  ## @param zookeeper.image.repository Zookeeper image repository
+  ## @param zookeeper.image.tag Zookeeper image tag (immutable tags are recommended)
+  ## @param zookeeper.image.pullPolicy Zookeeper image pull policy
+  image:
+    registry: docker.io
+    repository: bitnami/zookeeper
+    tag: 3.8.2-debian-11-r43
+    pullPolicy: IfNotPresent
   replicaCount: 3
   service:
     ports:

@@ -9,19 +9,14 @@ kind: Service
 metadata:
   name: {{ template "milvus.index-node.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: milvus
     app.kubernetes.io/component: index-node
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
-  {{- if or .Values.commonAnnotations .Values.indexNode.service.annotations }}
+ {{- if or .Values.commonAnnotations .Values.indexNode.service.annotations (and .Values.indexNode.metrics.enabled .Values.indexNode.metrics.annotations) }}
   annotations:
-    {{- if .Values.indexNode.service.annotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.indexNode.service.annotations "context" $ ) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
+    {{- if or .Values.indexNode.service.annotations .Values.commonAnnotations }}
+    {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.indeindexNodexCoord.service.annotations .Values.commonAnnotations ) "context" . ) }}
+    {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
     {{- end }}
     {{- if and .Values.indexNode.metrics.enabled .Values.indexNode.metrics.annotations }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.indexNode.metrics.annotations "context" $ ) | nindent 4 }}
@@ -71,7 +66,8 @@ spec:
     {{- if .Values.indexNode.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.indexNode.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}
-  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.indexNode.podLabels .Values.commonLabels ) "context" . ) }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: milvus
     app.kubernetes.io/component: index-node
 {{- end }}

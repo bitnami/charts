@@ -9,10 +9,7 @@ kind: StatefulSet
 metadata:
   name: {{ include "harbor.trivy" . }}
   namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: trivy
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
@@ -21,18 +18,13 @@ spec:
   replicas: {{ .Values.trivy.replicaCount }}
   serviceName: {{ template "harbor.trivy" . }}
   updateStrategy: {{- toYaml .Values.trivy.updateStrategy | nindent 4 }}
+  {{- $podLabels := merge .Values.trivy.podLabels .Values.commonLabels }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: trivy
   template:
     metadata:
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
-        {{- if .Values.commonLabels }}
-        {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
-        {{- end }}
-        {{- if .Values.trivy.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.trivy.podLabels "context" $) | nindent 8 }}
-        {{- end }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: trivy
       annotations:
         checksum/configmap-env: {{ include (print $.Template.BasePath "/trivy/trivy-cm-envvars.yaml") . | sha256sum }}
@@ -52,8 +44,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.trivy.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.trivy.podAffinityPreset "component" "trivy" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.trivy.podAntiAffinityPreset "component" "trivy" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.trivy.podAffinityPreset "component" "trivy" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.trivy.podAntiAffinityPreset "component" "trivy" "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.trivy.nodeAffinityPreset.type "key" .Values.trivy.nodeAffinityPreset.key "values" .Values.trivy.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.trivy.nodeSelector }}
@@ -209,7 +201,7 @@ spec:
   volumeClaimTemplates:
     - metadata:
         name: data
-        labels: {{- include "common.labels.matchLabels" . | nindent 10 }}
+        labels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 10 }}
         {{- if .Values.persistence.persistentVolumeClaim.trivy.annotations }}
         annotations: {{- toYaml .Values.persistence.persistentVolumeClaim.trivy.annotations | nindent 10 }}
         {{- end }}

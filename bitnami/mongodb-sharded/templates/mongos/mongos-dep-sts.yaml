@@ -8,11 +8,8 @@ kind: {{ if .Values.mongos.useStatefulSet }}StatefulSet{{- else }}Deployment{{- 
 metadata:
   name: {{ printf "%s-mongos" (include "common.names.fullname" .) }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: mongos
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -26,29 +23,22 @@ spec:
   {{- end }}
     {{- toYaml .Values.mongos.updateStrategy | nindent 4 }}
   replicas: {{ .Values.mongos.replicaCount }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.mongos.podLabels .Values.common.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: mongos
   template:
     metadata:
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: mongos
-        {{- if .Values.common.podLabels }}
-          {{- include "common.tplvalues.render" ( dict "value" .Values.common.podLabels "context" $ ) | nindent 8 }}
-        {{- end }}
-        {{- if .Values.mongos.podLabels }}
-          {{- include "common.tplvalues.render" ( dict "value" .Values.mongos.podLabels "context" $ ) | nindent 8 }}
-        {{- end }}
       {{- if or .Values.common.podAnnotations .Values.mongos.podAnnotations .Values.metrics.enabled }}
       annotations:
-        {{- if .Values.common.podAnnotations }}
-           {{- include "common.tplvalues.render" ( dict "value" .Values.common.podAnnotations "context" $ ) | nindent 8 }}
-        {{- end }}
-        {{- if .Values.mongos.podAnnotations }}
-          {{- include "common.tplvalues.render" ( dict "value" .Values.mongos.podAnnotations "context" $ ) | nindent 8 }}
+        {{- if or .Values.common.podAnnotations .Values.mongos.podAnnotations }}
+        {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.mongos.podAnnotations .Values.common.podAnnotations ) "context" . ) }}
+        {{- include "common.tplvalues.render" ( dict "value" $annotations  "context" $ ) | nindent 8 }}
         {{- end }}
         {{- if .Values.metrics.enabled }}
-           {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.podAnnotations "context" $ ) | nindent 8 }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.podAnnotations "context" $ ) | nindent 8 }}
         {{- end }}
       {{- end }}
     spec:
@@ -63,8 +53,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.mongos.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.mongos.podAffinityPreset "component" "mongos" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.mongos.podAntiAffinityPreset "component" "mongos" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.mongos.podAffinityPreset "component" "mongos" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.mongos.podAntiAffinityPreset "component" "mongos" "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.mongos.nodeAffinityPreset.type "key" .Values.mongos.nodeAffinityPreset.key "values" .Values.mongos.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.mongos.nodeSelector }}

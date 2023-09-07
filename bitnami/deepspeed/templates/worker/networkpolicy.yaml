@@ -9,18 +9,16 @@ apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
 metadata:
   name: {{ template "deepspeed.v0.worker.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: deepspeed
     app.kubernetes.io/component: worker
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.worker.podLabels .Values.commonLabels ) "context" . ) }}
   podSelector:
-    matchLabels: {{ include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/part-of: deepspeed
       app.kubernetes.io/component: worker
   policyTypes:
@@ -39,12 +37,9 @@ spec:
         - port: {{ .Values.worker.externalAccess.service.ports.ssh }}
       to:
         - podSelector:
-            matchLabels: {{- include "common.labels.standard" . | nindent 14 }}
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 14 }}
               app.kubernetes.io/part-of: deepspeed
               app.kubernetes.io/component: worker
-              {{- if .Values.worker.podLabels }}
-              {{- include "common.tplvalues.render" (dict "value" .Values.worker.podLabels "context" $) | nindent 14 }}
-              {{- end }}
     {{- if .Values.worker.networkPolicy.extraEgress }}
     {{- include "common.tplvalues.render" (dict "value" .Values.worker.networkPolicy.extraEgress "context" $) | nindent 4 }}
     {{- end }}

@@ -9,23 +9,12 @@ kind: Service
 metadata:
   name: {{ include "vault.server.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: vault
     app.kubernetes.io/component: server
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if or .Values.server.service.general.annotations .Values.commonAnnotations }}
-  annotations:
-    {{- if .Values.server.service.general.annotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.server.service.general.annotations "context" $) | nindent 4 }}
-    {{- end }}
-    {{- if and .Values.server.metrics.enabled .Values.server.metrics.annotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.server.metrics.annotations "context" $) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-    {{- end }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.server.service.general.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
   type: {{ .Values.server.service.general.type }}
@@ -69,7 +58,8 @@ spec:
     {{- if .Values.server.service.general.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.server.service.general.extraPorts "context" $) | nindent 4 }}
     {{- end }}
-  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.server.podLabels .Values.commonLabels ) "context" . ) }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: vault
     app.kubernetes.io/component: server
 {{- end }}

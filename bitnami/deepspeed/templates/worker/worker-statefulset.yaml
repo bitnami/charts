@@ -9,30 +9,21 @@ kind: StatefulSet
 metadata:
   name: {{ include "deepspeed.v0.worker.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.worker.labels .Values.commonLabels ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: deepspeed
     app.kubernetes.io/component: worker
-    {{- if .Values.worker.labels }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.worker.labels "context" $) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
-    {{- end }}
   {{- if or .Values.worker.annotations .Values.commonAnnotations }}
-  annotations:
-    {{- if .Values.worker.annotations }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.worker.annotations "context" $) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 4 }}
-    {{- end }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.worker.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
   replicas: {{ .Values.worker.replicaCount }}
   podManagementPolicy: {{ .Values.worker.podManagementPolicy | quote }}
   serviceName: {{ printf "%s-headless" (include "deepspeed.v0.worker.fullname" .) }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.worker.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/part-of: deepspeed
       app.kubernetes.io/component: worker
   {{- if .Values.worker.updateStrategy }}
@@ -46,21 +37,13 @@ spec:
         {{- if (include "deepspeed.v0.source.createConfigMap" .) }}
         checksum/source: {{ include (print $.Template.BasePath "/client/source-configmap.yaml") . | sha256sum }}
         {{- end }}
-        {{- if .Values.worker.podAnnotations }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.worker.podAnnotations "context" $) | nindent 8 }}
+        {{- if or .Values.worker.podAnnotations .Values.commonAnnotations }}
+        {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.worker.podAnnotations .Values.commonAnnotations ) "context" . ) }}
+        {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 8 }}
         {{- end }}
-        {{- if .Values.commonAnnotations }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 8 }}
-        {{- end }}
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/part-of: deepspeed
         app.kubernetes.io/component: worker
-        {{- if .Values.worker.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.worker.podLabels "context" $) | nindent 8 }}
-        {{- end }}
-        {{- if .Values.commonLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 8 }}
-        {{- end }}
     spec:
       serviceAccountName: {{ template "deepspeed.v0.worker.serviceAccountName" . }}
       {{- include "deepspeed.v0.imagePullSecrets" . | nindent 6 }}
@@ -71,8 +54,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.worker.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.worker.podAffinityPreset "component" "worker" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.worker.podAntiAffinityPreset "component" "worker" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.worker.podAffinityPreset "component" "worker" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.worker.podAntiAffinityPreset "component" "worker" "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.worker.nodeAffinityPreset.type "key" .Values.worker.nodeAffinityPreset.key "values" .Values.worker.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.worker.nodeSelector }}
@@ -146,6 +129,8 @@ spec:
               containerPort: {{ .Values.worker.containerPorts.ssh }}
               protocol: TCP
           env:
+            - name: HOME
+              value: /home/deepspeed
             {{- if .Values.worker.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.worker.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}

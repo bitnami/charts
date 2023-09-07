@@ -9,11 +9,8 @@ kind: Deployment
 metadata:
   name: {{ include "argocd.notifications" . }}
   namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: notifications
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -21,19 +18,17 @@ spec:
   replicas: 1
   strategy:
     type: Recreate
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.notifications.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: notifications
   template:
     metadata:
       {{- if .Values.notifications.podAnnotations }}
       annotations: {{- include "common.tplvalues.render" (dict "value" .Values.notifications.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: notifications
-        {{- if .Values.notifications.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.notifications.podLabels "context" $) | nindent 8 }}
-        {{- end }}
     spec:
       serviceAccountName: {{ include "argocd.notifications.serviceAccountName" . }}
       {{- include "argocd.imagePullSecrets" . | nindent 6 }}
@@ -44,8 +39,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.notifications.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.notifications.podAffinityPreset "component" "notifications" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.notifications.podAntiAffinityPreset "component" "notifications" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.notifications.podAffinityPreset "component" "notifications" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.notifications.podAntiAffinityPreset "component" "notifications" "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.notifications.nodeAffinityPreset.type "key" .Values.notifications.nodeAffinityPreset.key "values" .Values.notifications.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.notifications.tolerations }}

@@ -4,13 +4,28 @@
 annotations:
   category: Infrastructure
   licenses: Apache-2.0
+  images: |
+    - name: kubeapps-apis
+      image: docker.io/bitnami/kubeapps-apis:2.8.0-debian-11-r49
+    - name: kubeapps-apprepository-controller
+      image: docker.io/bitnami/kubeapps-apprepository-controller:2.8.0-debian-11-r20
+    - name: kubeapps-asset-syncer
+      image: docker.io/bitnami/kubeapps-asset-syncer:2.8.0-debian-11-r20
+    - name: kubeapps-pinniped-proxy
+      image: docker.io/bitnami/kubeapps-pinniped-proxy:2.8.0-debian-11-r49
+    - name: kubeapps-dashboard
+      image: docker.io/bitnami/kubeapps-dashboard:2.8.0-debian-11-r50
+    - name: nginx
+      image: docker.io/bitnami/nginx:1.25.2-debian-11-r8
+    - name: oauth2-proxy
+      image: docker.io/bitnami/oauth2-proxy:7.4.0-debian-11-r281
 apiVersion: v2
 appVersion: 2.8.0
 dependencies:
   - condition: packaging.flux.enabled
     name: redis
     repository: oci://registry-1.docker.io/bitnamicharts
-    version: 17.x.x
+    version: 18.x.x
   - condition: packaging.helm.enabled
     name: postgresql
     repository: oci://registry-1.docker.io/bitnamicharts
@@ -35,4 +50,4 @@ maintainers:
 name: kubeapps
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/kubeapps
-version: 12.4.9
+version: 13.1.1

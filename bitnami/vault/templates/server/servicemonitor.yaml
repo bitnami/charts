@@ -9,26 +9,18 @@ kind: ServiceMonitor
 metadata:
   name: {{ template "vault.server.fullname" . }}
   namespace: {{ default (include "common.names.namespace" .) .Values.server.metrics.serviceMonitor.namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.server.metrics.serviceMonitor.labels .Values.commonLabels ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: vault
     app.kubernetes.io/component: server
-    {{- if .Values.server.metrics.serviceMonitor.labels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.server.metrics.serviceMonitor.labels "context" $ ) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
-  annotations:
-    {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.server.metrics.serviceMonitor.annotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.server.metrics.serviceMonitor.annotations "context" $ ) | nindent 4 }}
-    {{- end }}
+  {{- if or .Values.server.metrics.serviceMonitor.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.server.metrics.serviceMonitor.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
 spec:
   jobLabel: {{ .Values.server.metrics.serviceMonitor.jobLabel | quote }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/part-of: vault
       app.kubernetes.io/component: server
       {{- if .Values.server.metrics.serviceMonitor.selector }}
