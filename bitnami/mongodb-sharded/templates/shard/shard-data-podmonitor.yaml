@@ -32,7 +32,7 @@ spec:
   namespaceSelector:
     matchNames:
       - {{ $.Release.Namespace }}
-  {{- $podLabels := merge $.Values.shardsvr.arbiter.podLabels $.Values.common.podLabels $.Values.common.podLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list $.Values.shardsvr.arbiter.podLabels $.Values.common.podLabels $.Values.common.podLabels ) "context" $ ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: shardsvr

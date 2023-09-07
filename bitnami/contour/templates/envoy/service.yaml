@@ -3,14 +3,14 @@ Copyright VMware, Inc.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- $podLabels := merge .Values.envoy.podLabels .Values.commonLabels }}
+{{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.envoy.podLabels .Values.commonLabels ) "context" . ) }}
 {{- if .Values.envoy.enabled }}
 apiVersion: v1
 kind: Service
 metadata:
   name: {{ default (printf "%s-envoy" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-") .Values.envoy.service.name }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  {{- $labels := merge .Values.envoy.service.labels .Values.commonLabels }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.envoy.service.labels .Values.commonLabels ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: envoy
   annotations:
@@ -25,7 +25,7 @@ metadata:
     service.beta.kubernetes.io/aws-load-balancer-backend-protocol: tcp
     {{- end }}
     {{- if or .Values.envoy.service.annotations .Values.commonAnnotations }}
-    {{- $annotations := merge .Values.envoy.service.annotations .Values.commonAnnotations }}
+    {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.envoy.service.annotations .Values.commonAnnotations ) "context" . ) }}
     {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
     {{- end }}
 spec:
