@@ -353,7 +353,7 @@ clusterOperator:
     ## ClusterRole parameters
     ##
     clusterRole:
-      ## @param clusterOperator.rbac.customRules Define custom access rules for the ClusterRole
+      ## @param clusterOperator.rbac.clusterRole.customRules Define custom access rules for the ClusterRole
       ## ref: https://kubernetes.io/docs/reference/access-authn-authz/rbac/#role-and-clusterrole
       ## e.g:
       ## customRules:
