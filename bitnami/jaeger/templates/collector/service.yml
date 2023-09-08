@@ -12,7 +12,7 @@ metadata:
     app.kubernetes.io/part-of: jaeger
     app.kubernetes.io/component: collector
   {{- if or .Values.collector.service.annotations .Values.collector.service.metrics.annotations .Values.commonAnnotations }}
-  {{- $annotations := merge .Values.collector.service.annotations .Values.collector.service.metrics.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.collector.service.annotations .Values.collector.service.metrics.annotations .Values.commonAnnotations ) "context" . ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
@@ -71,7 +71,7 @@ spec:
     {{- if .Values.collector.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.collector.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}
-  {{- $podLabels := merge .Values.collector.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.collector.podLabels .Values.commonLabels ) "context" . ) }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: jaeger
     app.kubernetes.io/component: collector

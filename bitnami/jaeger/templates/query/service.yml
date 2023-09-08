@@ -12,7 +12,7 @@ metadata:
     app.kubernetes.io/part-of: jaeger
     app.kubernetes.io/component: query
   {{- if or .Values.query.service.annotations .Values.query.service.metrics.annotations .Values.commonAnnotations }}
-  {{- $annotations := merge .Values.query.service.annotations .Values.query.service.metrics.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.query.service.annotations .Values.query.service.metrics.annotations .Values.commonAnnotations ) "context" . ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
@@ -55,7 +55,7 @@ spec:
     {{- if .Values.query.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.query.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}
-  {{- $podLabels := merge .Values.query.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.query.podLabels .Values.commonLabels ) "context" . ) }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: jaeger
     app.kubernetes.io/component: query
