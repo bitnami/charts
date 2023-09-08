@@ -9,7 +9,7 @@ kind: Service
 metadata:
   name: {{ template "kube-prometheus.fullname" . }}-coredns
   namespace: {{ .Values.coreDns.namespace }}
-  {{- $labels := merge .Values.coreDns.service.labels .Values.commonLabels }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.coreDns.service.labels .Values.commonLabels ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: {{ template "kube-prometheus.fullname" . }}-coredns
   {{- if .Values.commonAnnotations }}
