@@ -28,7 +28,7 @@ data:
     kind: Pod
     metadata:
       name: k8s-executor-pod
-      {{- $labels := merge .Values.worker.podLabels .Values.commonLabels }}
+      {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.worker.podLabels .Values.commonLabels ) "context" . ) }}
       labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: worker
       {{- if .Values.worker.podAnnotations }}
