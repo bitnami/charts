@@ -6,7 +6,7 @@ SPDX-License-Identifier: APACHE-2.0
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "postgresql.primary.fullname" . }}
+  name: {{ include "postgresql.v1.primary.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: primary
@@ -36,7 +36,7 @@ spec:
   {{- end }}
   ports:
     - name: tcp-postgresql
-      port: {{ template "postgresql.service.port" . }}
+      port: {{ template "postgresql.v1.service.port" . }}
       targetPort: tcp-postgresql
       {{- if and (or (eq .Values.primary.service.type "NodePort") (eq .Values.primary.service.type "LoadBalancer")) (not (empty .Values.primary.service.nodePorts.postgresql)) }}
       nodePort: {{ .Values.primary.service.nodePorts.postgresql }}

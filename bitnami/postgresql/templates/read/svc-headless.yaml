@@ -7,7 +7,7 @@ SPDX-License-Identifier: APACHE-2.0
 apiVersion: v1
 kind: Service
 metadata:
-  name: {{ include "postgresql.readReplica.svc.headless" . }}
+  name: {{ include "postgresql.v1.readReplica.svc.headless" . }}
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: read
@@ -30,7 +30,7 @@ spec:
   publishNotReadyAddresses: true
   ports:
     - name: tcp-postgresql
-      port: {{ include "postgresql.readReplica.service.port" . }}
+      port: {{ include "postgresql.v1.readReplica.service.port" . }}
       targetPort: tcp-postgresql
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.readReplicas.podLabels .Values.commonLabels ) "context" . ) }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
