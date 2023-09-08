@@ -30,7 +30,7 @@ spec:
   namespaceSelector:
     matchNames:
       - {{ .Release.Namespace }}
-  {{- $podLabels := merge .Values.mongos.podLabels .Values.common.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.mongos.podLabels .Values.common.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: mongos

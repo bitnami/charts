@@ -15,7 +15,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  {{- $podLabels := merge .Values.taskmanager.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.taskmanager.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/part-of: flink
@@ -30,7 +30,7 @@ spec:
         app.kubernetes.io/part-of: flink
         app.kubernetes.io/component: taskmanager
       {{- if or .Values.taskmanager.podAnnotations .Values.commonAnnotations }}
-      {{- $podAnnotations := merge .Values.taskmanager.podAnnotations .Values.commonAnnotations }}
+      {{- $podAnnotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.taskmanager.podAnnotations .Values.commonAnnotations ) "context" . ) }}
       annotations: {{- include "common.tplvalues.render" (dict "value" $podAnnotations "context" $) | nindent 8 }}
       {{- end }}
     spec:

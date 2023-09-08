@@ -51,7 +51,7 @@ spec:
     volumeClaimTemplate:
       metadata:
         {{- if or .Values.alertmanager.persistence.annotations .Values.commonAnnotations }}
-        {{- $claimAnnotations := merge .Values.alertmanager.persistence.annotations .Values.commonAnnotations }}
+        {{- $claimAnnotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.alertmanager.persistence.annotations .Values.commonAnnotations ) "context" . ) }}
         annotations: {{- include "common.tplvalues.render" ( dict "value" $claimAnnotations "context" $ ) | nindent 10 }}
         {{- end }}
         {{- if .Values.commonLabels }}
