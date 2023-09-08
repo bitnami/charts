@@ -212,10 +212,10 @@ spec:
             - --aws-prefer-cname
             {{- end }}
             {{- if .Values.aws.dynamodbTable }}
-            - --dynamodb-table
+            - --dynamodb-table={{ .Values.aws.dynamodbTable }}
             {{- end }}
             {{- if .Values.aws.dynamodbRegion }}
-            - --dynamodb-region
+            - --dynamodb-region={{ .Values.aws.dynamodbRegion }}
             {{- end }}
             {{- if and (kindIs "bool" .Values.aws.evaluateTargetHealth) (not .Values.aws.evaluateTargetHealth) }}
             - --no-aws-evaluate-target-health
