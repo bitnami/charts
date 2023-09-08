@@ -22,7 +22,7 @@ spec:
     - name: notary-server
       port: {{ .Values.notary.service.ports.server }}
       targetPort: notary-server
-  {{- $serverPodLabels := merge .Values.notary.server.podLabels .Values.commonLabels }}
+  {{- $serverPodLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.notary.server.podLabels .Values.commonLabels ) "context" . ) }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $serverPodLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: notary-server
 ---
@@ -40,7 +40,7 @@ spec:
     - name: notary-signer
       port: {{ .Values.notary.service.ports.signer }}
       targetPort: notary-signer
-  {{- $signerPodLabels := merge .Values.notary.signer.podLabels .Values.commonLabels }}
+  {{- $signerPodLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.notary.signer.podLabels .Values.commonLabels ) "context" . ) }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $signerPodLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: notary-signer
 {{- end }}
