@@ -8,7 +8,7 @@ kind: StatefulSet
 metadata:
   name: {{ include "postgresql-ha.postgresql" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  {{- $labels := merge .Values.postgresql.labels .Values.commonLabels }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.postgresql.labels .Values.commonLabels ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: postgresql
     role: data
@@ -20,7 +20,7 @@ spec:
   podManagementPolicy: Parallel
   serviceName: {{ printf "%s-headless" (include "postgresql-ha.postgresql" .) }}
   updateStrategy: {{- toYaml .Values.postgresql.updateStrategy | nindent 4 }}
-  {{- $podLabels := merge .Values.postgresql.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.postgresql.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: postgresql
