@@ -22,7 +22,7 @@ spec:
   {{- if not .Values.dashboard.autoscaling.hpa.enabled }}
   replicas: {{ .Values.dashboard.replicaCount }}
   {{- end }}
-  {{- $podLabels := merge .Values.dashboard.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.dashboard.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/part-of: apisix
