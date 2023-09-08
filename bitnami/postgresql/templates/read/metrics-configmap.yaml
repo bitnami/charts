@@ -7,7 +7,7 @@ SPDX-License-Identifier: APACHE-2.0
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ printf "%s-metrics" (include "postgresql.readReplica.fullname" .) }}
+  name: {{ printf "%s-metrics" (include "postgresql.v1.readReplica.fullname" .) }}
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
   {{- if .Values.commonAnnotations }}

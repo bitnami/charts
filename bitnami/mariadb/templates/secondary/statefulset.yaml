@@ -17,7 +17,7 @@ metadata:
 spec:
   replicas: {{ .Values.secondary.replicaCount }}
   revisionHistoryLimit: {{ .Values.secondary.revisionHistoryLimit }}
-  {{- $podLabels := merge .Values.secondary.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.secondary.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: secondary
@@ -341,7 +341,7 @@ spec:
   volumeClaimTemplates:
     - metadata:
         name: data
-        {{- $claimLabels := merge .Values.secondary.persistence.labels .Values.commonLabels }}
+        {{- $claimLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.secondary.persistence.labels .Values.commonLabels ) "context" . ) }}
         labels: {{- include "common.labels.matchLabels" ( dict "customLabels" $claimLabels "context" $ ) | nindent 10 }}
           app.kubernetes.io/component: secondary
         {{- if .Values.secondary.persistence.annotations }}
