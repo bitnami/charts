@@ -9,7 +9,7 @@ kind: StatefulSet
 metadata:
   name: {{ include "postgresql-ha.postgresql" . }}-witness
   namespace: {{ include "common.names.namespace" . | quote }}
-  {{- $labels := merge .Values.witness.labels .Values.commonLabels }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.witness.labels .Values.commonLabels ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: postgresql
     role: witness
@@ -21,7 +21,7 @@ spec:
   podManagementPolicy: Parallel
   serviceName: {{ printf "%s-witness" (include "postgresql-ha.postgresql" .) }}
   updateStrategy: {{- toYaml .Values.witness.updateStrategy | nindent 4 }}
-  {{- $podLabels := merge .Values.witness.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.witness.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: postgresql

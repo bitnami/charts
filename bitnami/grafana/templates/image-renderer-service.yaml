@@ -51,7 +51,7 @@ spec:
     {{- if .Values.imageRenderer.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.imageRenderer.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}
-  {{- $podLabels := merge .Values.imageRenderer.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.imageRenderer.podLabels .Values.commonLabels ) "context" . ) }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: image-renderer
 {{- end }}
