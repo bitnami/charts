@@ -37,8 +37,8 @@ jobs:
           # Adding || true to avoid "Process exited with code 1" errors
           charts_dirs_changed="$(echo "$files_changed" | xargs dirname | grep -o "bitnami/[^/]*" | sort | uniq || true)"
           for chart in ${charts_dirs_changed}; do
-            echo "Updating README.md for ${chart}"
-            readme-generator --values "charts/${chart}/values.yaml" --readme "charts/${chart}/README.md" --schema "/tmp/schema.json"
+            echo "Updating README.md and values.schema.json for ${chart}"
+            readme-generator --values "charts/${chart}/values.yaml" --readme "charts/${chart}/README.md" --schema "charts/${chart}/values.schema.json"
           done
       - name: Push changes
         run: |
@@ -47,5 +47,5 @@ jobs:
           if git status -s | grep bitnami; then
             git config user.name "Bitnami Containers"
             git config user.email "bitnami-bot@vmware.com"
-            git add . && git commit -am "Update README.md with readme-generator-for-helm" --signoff && git push
+            git add . && git commit -am "Update README.md and values.schema.json with readme-generator-for-helm" --signoff && git push
           fi
