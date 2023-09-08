@@ -7,7 +7,7 @@ SPDX-License-Identifier: APACHE-2.0
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: {{ include "postgresql.primary.fullname" . }}-pgdumpall
+  name: {{ include "postgresql.v1.primary.fullname" . }}-pgdumpall
   namespace: {{ .Release.Namespace | quote }}
   {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.backup.cronjob.labels .Values.commonLabels ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}

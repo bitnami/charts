@@ -20,7 +20,7 @@ metadata:
 spec:
   template:
     metadata:
-      {{- $podLabels := merge .Values.provisioning.podLabels .Values.commonLabels }}
+      {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.provisioning.podLabels .Values.commonLabels ) "context" . ) }}
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: kafka-provisioning
       {{- if .Values.provisioning.podAnnotations }}
