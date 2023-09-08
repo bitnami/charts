@@ -13,7 +13,7 @@ metadata:
     app.kubernetes.io/part-of: milvus
     app.kubernetes.io/component: data-coordinator
   {{- if or .Values.commonAnnotations .Values.dataCoord.autoscaling.hpa.annotations }}
-  {{- $annotations := merge .Values.dataCoord.autoscaling.hpa.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.dataCoord.autoscaling.hpa.annotations .Values.commonAnnotations ) "context" . ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:

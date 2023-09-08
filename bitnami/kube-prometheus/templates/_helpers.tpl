@@ -141,7 +141,7 @@ matchLabels for prometheus
 {{- if or .Values.prometheus.podMetadata.labels .Values.commonLabels }}
 {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.prometheus.podMetadata.labels .Values.commonLabels ) "context" . ) }}
 {{- include "common.tplvalues.render" ( dict "value" $podLabels "context" $ ) }}
-{{- end -}}
+{{- end }}
 app.kubernetes.io/name: prometheus
 app.kubernetes.io/component: prometheus
 prometheus: {{ template "kube-prometheus.prometheus.fullname" . }}
@@ -154,7 +154,7 @@ matchLabels for alertmanager
 {{- if or .Values.alertmanager.podMetadata.labels .Values.commonLabels }}
 {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.alertmanager.podMetadata.labels .Values.commonLabels ) "context" . ) }}
 {{- include "common.tplvalues.render" ( dict "value" $podLabels "context" $ ) }}
-{{- end -}}
+{{- end }}
 app.kubernetes.io/name: alertmanager
 app.kubernetes.io/component: alertmanager
 alertmanager: {{ template "kube-prometheus.alertmanager.fullname" . }}
