@@ -95,6 +95,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `adminUser`                      | Mastodon admin username                                                                                                      | `""`                                 |
 | `adminEmail`                     | Mastodon admin email                                                                                                         | `""`                                 |
 | `adminPassword`                  | Mastodon admin password                                                                                                      | `""`                                 |
+| `otpSecret`                      | Mastodon one time password secret. Generate with rake secret. Changing it will break two-factor authentication.              | `""`                                 |
+| `secretKeyBase`                  | Mastoon secret key base. Generate with rake secret. Changing it will break all active browser sessions.                      | `""`                                 |
 | `extraConfig`                    | Extra configuration for Mastodon in the form of environment variables                                                        | `{}`                                 |
 | `extraSecretConfig`              | Extra secret configuration for Mastodon in the form of environment variables                                                 | `{}`                                 |
 | `existingConfigmap`              | The name of an existing ConfigMap with your default configuration for Mastodon                                               | `""`                                 |

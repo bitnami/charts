@@ -111,6 +111,12 @@ adminEmail: ""
 ## @param adminPassword Mastodon admin password
 ##
 adminPassword: ""
+## @param otpSecret Mastodon one time password secret. Generate with rake secret. Changing it will break two-factor authentication.
+##
+otpSecret: ""
+## @param secretKeyBase Mastoon secret key base. Generate with rake secret. Changing it will break all active browser sessions.
+##
+secretKeyBase: ""
 
 ## @param extraConfig Extra configuration for Mastodon in the form of environment variables
 ##
