@@ -23,14 +23,14 @@ spec:
   strategy: {{- toYaml .Values.envoy.updateStrategy | nindent 4 }}
   {{- end }}
   minReadySeconds: {{ .Values.envoy.minReadySeconds }}
-  {{- $podLabels := merge .Values.envoy.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.envoy.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: envoy
   template:
     metadata:
       {{- if or .Values.envoy.podAnnotations .Values.commonAnnotations }}
-      {{- $podAnnotations := merge .Values.envoy.podAnnotations .Values.commonAnnotations }}
+      {{- $podAnnotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.envoy.podAnnotations .Values.commonAnnotations ) "context" . ) }}
       annotations: {{- include "common.tplvalues.render" (dict "value" $podAnnotations "context" $) | nindent 8 }}
       {{- end }}
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}

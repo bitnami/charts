@@ -20,6 +20,6 @@ spec:
     - name: worker
       port: {{ .Values.worker.containerPorts.http }}
       targetPort: worker
-  {{- $podLabels := merge .Values.worker.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.worker.podLabels .Values.commonLabels ) "context" . ) }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: worker

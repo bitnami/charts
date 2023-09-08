@@ -15,7 +15,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  {{- $podLabels := merge .Values.contour.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.contour.podLabels .Values.commonLabels ) "context" . ) }}
   replicas: {{ .Values.contour.replicaCount }}
   {{- if .Values.contour.updateStrategy }}
   strategy: {{- toYaml .Values.contour.updateStrategy | nindent 4 }}
