@@ -117,6 +117,12 @@ otpSecret: ""
 ## @param secretKeyBase Mastoon secret key base. Generate with rake secret. Changing it will break all active browser sessions.
 ##
 secretKeyBase: ""
+## @param vapidPrivateKey Mastdon vapid private key. Generate with rake mastodon:webpush:generate_vapid_key. Changing it will break push notifications.
+##
+vapidPrivateKey: ""
+## @param vapidPublicKey Mastdon vapid public key. Generate with rake mastodon:webpush:generate_vapid_key. Changing it will break push notifications.
+##
+vapidPublicKey: ""
 
 ## @param extraConfig Extra configuration for Mastodon in the form of environment variables
 ##
