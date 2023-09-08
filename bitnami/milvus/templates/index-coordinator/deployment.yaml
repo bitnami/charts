@@ -22,7 +22,7 @@ spec:
   {{- if .Values.indexCoord.updateStrategy }}
   strategy: {{- toYaml .Values.indexCoord.updateStrategy | nindent 4 }}
   {{- end }}
-  {{- $podLabels := merge .Values.indexCoord.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.indexCoord.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/part-of: milvus

@@ -9,11 +9,11 @@ kind: ServiceMonitor
 metadata:
   name: {{ template "kube-prometheus.fullname" . }}-kube-scheduler
   namespace: {{ include "common.names.namespace" . | quote }}
-  {{- $labels := merge .Values.kubeScheduler.serviceMonitor.labels .Values.commonLabels }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.kubeScheduler.serviceMonitor.labels .Values.commonLabels ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: kube-scheduler
   {{- if or .Values.commonAnnotations .Values.kubeScheduler.serviceMonitor.annotations }}
-  {{- $annotations := merge .Values.kubeScheduler.serviceMonitor.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.kubeScheduler.serviceMonitor.annotations .Values.commonAnnotations ) "context" . ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
