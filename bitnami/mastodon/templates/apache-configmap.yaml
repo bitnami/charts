@@ -16,12 +16,13 @@ metadata:
   {{- end }}
 data:
   mastodon-vhost.conf: |-
-    <VirtualHost VirtualHost 127.0.0.1:{{ .Values.apache.containerPorts.http }} _default_:{{ .Values.apache.containerPorts.http }}>
+    <VirtualHost 127.0.0.1:{{ .Values.apache.containerPorts.http }} _default_:{{ .Values.apache.containerPorts.http }}>
       ServerName {{ include "mastodon.web.domain" . }}
       ServerAlias *
       <Location "/">
         ProxyPass http://{{ include "mastodon.web.fullname" . }}:{{ .Values.web.service.ports.http }}/
         ProxyPassReverse {{ include "mastodon.web.domain" . }}
+        ProxyPreserveHost on
         Order allow,deny
         Allow from all
       </Location>
