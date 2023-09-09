@@ -276,7 +276,7 @@ azure:
   ## @param azure.aadClientSecret When using the Azure provider, set the Azure AAD Client Secret
   ##
   aadClientSecret: ""
-  ## @param azure.useWorkloadIdentityExtension When using the Azure provider, set if you use Workload Identity extension. You are required to specify a service account which has access to the RBAC resources together with the necessary pod labels. 
+  ## @param azure.useWorkloadIdentityExtension When using the Azure provider, set if you use Workload Identity extension.
   ##
   useWorkloadIdentityExtension: false
   ## @param azure.useManagedIdentityExtension When using the Azure provider, set if you use Azure MSI
