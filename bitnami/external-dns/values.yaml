@@ -276,7 +276,10 @@ azure:
   ## @param azure.aadClientSecret When using the Azure provider, set the Azure AAD Client Secret
   ##
   aadClientSecret: ""
-  ## @param azure.useManagedIdentityExtension When using the Azure provider, set if you use Azure MSI
+  ## @param azure.useWorkloadIdentityExtension When using the Azure provider, set if you use Workload Identity
+  ##
+  useWorkloadIdentityExtension: false
+  ## @param azure.userAssignedIdentityID When using the Azure provider with Azure MSI, set Client ID of Azure user-assigned managed identity (optional, otherwise system-assigned managed identity is used)
   ##
   useManagedIdentityExtension: false
   ## @param azure.userAssignedIdentityID When using the Azure provider with Azure MSI, set Client ID of Azure user-assigned managed identity (optional, otherwise system-assigned managed identity is used)
