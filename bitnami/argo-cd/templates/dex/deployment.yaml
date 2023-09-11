@@ -19,7 +19,7 @@ spec:
   {{- if .Values.dex.updateStrategy }}
   strategy: {{- toYaml .Values.dex.updateStrategy | nindent 4 }}
   {{- end }}
-  {{- $podLabels := merge .Values.dex.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.dex.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: dex

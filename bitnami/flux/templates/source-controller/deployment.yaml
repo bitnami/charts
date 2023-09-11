@@ -22,7 +22,7 @@ spec:
   {{- if .Values.sourceController.updateStrategy }}
   strategy: {{- toYaml .Values.sourceController.updateStrategy | nindent 4 }}
   {{- end }}
-  {{- $podLabels := merge .Values.sourceController.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.sourceController.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: source-controller

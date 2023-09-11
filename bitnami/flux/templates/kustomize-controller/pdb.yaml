@@ -22,7 +22,7 @@ spec:
   {{- if .Values.kustomizeController.pdb.maxUnavailable }}
   maxUnavailable: {{ .Values.kustomizeController.pdb.maxUnavailable }}
   {{- end }}
-  {{- $podLabels := merge .Values.kustomizeController.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.kustomizeController.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: kustomize-controller
