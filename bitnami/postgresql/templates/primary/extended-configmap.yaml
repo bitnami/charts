@@ -3,11 +3,11 @@ Copyright VMware, Inc.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if (include "postgresql.primary.createExtendedConfigmap" .) }}
+{{- if (include "postgresql.v1.primary.createExtendedConfigmap" .) }}
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: {{ printf "%s-extended-configuration" (include "postgresql.primary.fullname" .) }}
+  name: {{ printf "%s-extended-configuration" (include "postgresql.v1.primary.fullname" .) }}
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: primary

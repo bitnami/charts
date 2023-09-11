@@ -16,7 +16,7 @@ metadata:
   {{- end }}
 spec:
   replicas: {{ .Values.notary.server.replicaCount }}
-  {{- $podLabels := merge .Values.notary.server.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.notary.server.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: notary-server

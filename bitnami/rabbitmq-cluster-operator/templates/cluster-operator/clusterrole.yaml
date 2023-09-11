@@ -15,6 +15,13 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 rules:
+  {{- if .Values.clusterOperator.rbac.clusterRole.customRules }}
+  {{- range .Values.clusterOperator.rbac.clusterRole.customRules }}
+  - apiGroups: {{ .apiGroups | toYaml | nindent 6 }}
+    resources: {{ .resources | toYaml | nindent 6 }}
+    verbs: {{ .verbs | toYaml | nindent 6 }}
+  {{- end }}
+  {{- else }}
   - apiGroups:
       - ""
     resources:
@@ -150,4 +157,5 @@ rules:
       - list
       - update
       - watch
+  {{- end }}
 {{- end }}
