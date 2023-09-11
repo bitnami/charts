@@ -350,6 +350,17 @@ clusterOperator:
     ## @param clusterOperator.rbac.create Specifies whether RBAC resources should be created
     ##
     create: true
+    ## ClusterRole parameters
+    ##
+    clusterRole:
+      ## @param clusterOperator.rbac.clusterRole.customRules Define custom access rules for the ClusterRole
+      ## ref: https://kubernetes.io/docs/reference/access-authn-authz/rbac/#role-and-clusterrole
+      ## e.g:
+      ## customRules:
+      ##   - apiGroups: A list of API groups (e.g., [""], ["apps"]).
+      ##   - resources: A list of resource names (e.g., ["configmaps", "pods"]).
+      ##   - verbs: A list of allowed access verbs (e.g., ["create", "get", "list"]).
+      customRules: []
 
   ## ServiceAccount configuration
   ##

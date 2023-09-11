@@ -13,7 +13,7 @@ metadata:
   name: {{ printf "%s-metrics" (include "rmqco.clusterOperator.fullname" .) }}
   namespace: {{ include "common.names.namespace" . | quote }}
   {{- if or .Values.commonAnnotations .Values.clusterOperator.metrics.service.annotations }}
-  {{- $annotations := merge .Values.clusterOperator.metrics.service.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.clusterOperator.metrics.service.annotations .Values.commonAnnotations ) "context" . ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
@@ -49,7 +49,7 @@ spec:
     {{- if .Values.clusterOperator.metrics.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.clusterOperator.metrics.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}
-  {{- $podLabels := merge .Values.clusterOperator.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.clusterOperator.podLabels .Values.commonLabels ) "context" . ) }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: rabbitmq-operator
 {{- end }}

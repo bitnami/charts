@@ -14,7 +14,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  {{- $podLabels := merge .Values.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
   replicas: {{ .Values.replicaCount }}
@@ -253,10 +253,10 @@ spec:
   volumeClaimTemplates:
     - metadata:
         name: data
-        {{- $claimLabels := merge .Values.persistence.labels .Values.commonLabels }}
+        {{- $claimLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.persistence.labels .Values.commonLabels ) "context" . ) }}
         labels: {{- include "common.labels.matchLabels" ( dict "customLabels" $claimLabels "context" $ ) | nindent 10 }}
         {{- if or .Values.persistence.annotations .Values.commonAnnotations }}
-        {{- $claimAnnotations := merge .Values.persistence.annotations .Values.commonAnnotations }}
+        {{- $claimAnnotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.persistence.annotations .Values.commonAnnotations ) "context" . ) }}
         annotations: {{- include "common.tplvalues.render" ( dict "value" $claimAnnotations "context" $) | nindent 10 }}
         {{- end }}
       spec:

@@ -20,7 +20,7 @@ spec:
   {{- if .Values.worker.updateStrategy }}
   updateStrategy: {{- toYaml .Values.worker.updateStrategy | nindent 4 }}
   {{- end }}
-  {{- $podLabels := merge .Values.worker.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.worker.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: worker

@@ -21,6 +21,6 @@ spec:
     - name: {{ ternary "https" "http" .Values.internalTLS.enabled }}
       port: {{ ternary .Values.portal.service.ports.https .Values.portal.service.ports.http .Values.internalTLS.enabled }}
       targetPort: {{ ternary "https" "http" .Values.internalTLS.enabled }}
-  {{- $podLabels := merge .Values.portal.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.portal.podLabels .Values.commonLabels ) "context" . ) }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: portal

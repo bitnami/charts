@@ -20,7 +20,7 @@ spec:
       protocol: TCP
       port: {{ ternary .Values.trivy.service.ports.https .Values.trivy.service.ports.http .Values.internalTLS.enabled }}
       targetPort: api-server
-  {{- $podLabels := merge .Values.trivy.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.trivy.podLabels .Values.commonLabels ) "context" . ) }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: trivy
 {{ end }}
