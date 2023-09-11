@@ -1,0 +1,1278 @@
+{
+    "title": "Chart Values",
+    "type": "object",
+    "properties": {
+        "global": {
+            "type": "object",
+            "properties": {
+                "imageRegistry": {
+                    "type": "string",
+                    "description": "Global Docker image registry",
+                    "default": ""
+                },
+                "imagePullSecrets": {
+                    "type": "array",
+                    "description": "Global Docker registry secret names as an array",
+                    "default": [],
+                    "items": {}
+                },
+                "storageClass": {
+                    "type": "string",
+                    "description": "Global StorageClass for Persistent Volume(s)",
+                    "default": ""
+                }
+            }
+        },
+        "nameOverride": {
+            "type": "string",
+            "description": "String to partially override common.names.fullname template (will maintain the release name)",
+            "default": ""
+        },
+        "fullnameOverride": {
+            "type": "string",
+            "description": "String to fully override common.names.fullname template",
+            "default": ""
+        },
+        "commonLabels": {
+            "type": "object",
+            "description": "Labels to add to all deployed objects",
+            "default": {}
+        },
+        "commonAnnotations": {
+            "type": "object",
+            "description": "Annotations to add to all deployed objects",
+            "default": {}
+        },
+        "kubeVersion": {
+            "type": "string",
+            "description": "Force target Kubernetes version (using Helm capabilities if not set)",
+            "default": ""
+        },
+        "clusterDomain": {
+            "type": "string",
+            "description": "Default Kubernetes cluster domain",
+            "default": "cluster.local"
+        },
+        "extraDeploy": {
+            "type": "array",
+            "description": "Array of extra objects to deploy with the release",
+            "default": [],
+            "items": {}
+        },
+        "image": {
+            "type": "object",
+            "properties": {
+                "registry": {
+                    "type": "string",
+                    "description": "MinIO&reg; image registry",
+                    "default": "docker.io"
+                },
+                "repository": {
+                    "type": "string",
+                    "description": "MinIO&reg; image repository",
+                    "default": "bitnami/minio"
+                },
+                "tag": {
+                    "type": "string",
+                    "description": "MinIO&reg; image tag (immutable tags are recommended)",
+                    "default": "2023.9.7-debian-11-r0"
+                },
+                "digest": {
+                    "type": "string",
+                    "description": "MinIO&reg; image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag",
+                    "default": ""
+                },
+                "pullPolicy": {
+                    "type": "string",
+                    "description": "Image pull policy",
+                    "default": "IfNotPresent"
+                },
+                "pullSecrets": {
+                    "type": "array",
+                    "description": "Specify docker-registry secret names as an array",
+                    "default": [],
+                    "items": {}
+                },
+                "debug": {
+                    "type": "boolean",
+                    "description": "Specify if debug logs should be enabled",
+                    "default": false
+                }
+            }
+        },
+        "clientImage": {
+            "type": "object",
+            "properties": {
+                "registry": {
+                    "type": "string",
+                    "description": "MinIO&reg; Client image registry",
+                    "default": "docker.io"
+                },
+                "repository": {
+                    "type": "string",
+                    "description": "MinIO&reg; Client image repository",
+                    "default": "bitnami/minio-client"
+                },
+                "tag": {
+                    "type": "string",
+                    "description": "MinIO&reg; Client image tag (immutable tags are recommended)",
+                    "default": "2023.9.2-debian-11-r2"
+                },
+                "digest": {
+                    "type": "string",
+                    "description": "MinIO&reg; Client image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag",
+                    "default": ""
+                }
+            }
+        },
+        "mode": {
+            "type": "string",
+            "description": "MinIO&reg; server mode (`standalone` or `distributed`)",
+            "default": "standalone"
+        },
+        "auth": {
+            "type": "object",
+            "properties": {
+                "rootUser": {
+                    "type": "string",
+                    "description": "MinIO&reg; root username",
+                    "default": "admin"
+                },
+                "rootPassword": {
+                    "type": "string",
+                    "description": "Password for MinIO&reg; root user",
+                    "default": ""
+                },
+                "existingSecret": {
+                    "type": "string",
+                    "description": "Use existing secret for credentials details (`auth.rootUser` and `auth.rootPassword` will be ignored and picked up from this secret). The secret has to contain the keys `root-user` and `root-password`)",
+                    "default": ""
+                },
+                "forcePassword": {
+                    "type": "boolean",
+                    "description": "Force users to specify required passwords",
+                    "default": false
+                },
+                "useCredentialsFiles": {
+                    "type": "boolean",
+                    "description": "Mount credentials as a files instead of using an environment variable",
+                    "default": false
+                },
+                "forceNewKeys": {
+                    "type": "boolean",
+                    "description": "Force root credentials (user and password) to be reconfigured every time they change in the secrets",
+                    "default": false
+                }
+            }
+        },
+        "defaultBuckets": {
+            "type": "string",
+            "description": "Comma, semi-colon or space separated list of buckets to create at initialization (only in standalone mode)",
+            "default": ""
+        },
+        "disableWebUI": {
+            "type": "boolean",
+            "description": "Disable MinIO&reg; Web UI",
+            "default": false
+        },
+        "tls": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "description": "Enable tls in front of the container",
+                    "default": false
+                },
+                "autoGenerated": {
+                    "type": "boolean",
+                    "description": "Generate automatically self-signed TLS certificates",
+                    "default": false
+                },
+                "existingSecret": {
+                    "type": "string",
+                    "description": "Name of an existing secret holding the certificate information",
+                    "default": ""
+                },
+                "mountPath": {
+                    "type": "string",
+                    "description": "The mount path where the secret will be located",
+                    "default": ""
+                }
+            }
+        },
+        "extraEnvVars": {
+            "type": "array",
+            "description": "Extra environment variables to be set on MinIO&reg; container",
+            "default": [],
+            "items": {}
+        },
+        "extraEnvVarsCM": {
+            "type": "string",
+            "description": "ConfigMap with extra environment variables",
+            "default": ""
+        },
+        "extraEnvVarsSecret": {
+            "type": "string",
+            "description": "Secret with extra environment variables",
+            "default": ""
+        },
+        "command": {
+            "type": "array",
+            "description": "Default container command (useful when using custom images). Use array form",
+            "default": [],
+            "items": {}
+        },
+        "args": {
+            "type": "array",
+            "description": "Default container args (useful when using custom images). Use array form",
+            "default": [],
+            "items": {}
+        },
+        "schedulerName": {
+            "type": "string",
+            "description": "Specifies the schedulerName, if it's nil uses kube-scheduler",
+            "default": ""
+        },
+        "terminationGracePeriodSeconds": {
+            "type": "string",
+            "description": "In seconds, time the given to the MinIO pod needs to terminate gracefully",
+            "default": ""
+        },
+        "deployment": {
+            "type": "object",
+            "properties": {
+                "updateStrategy": {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "description": "Deployment strategy type",
+                            "default": "Recreate"
+                        }
+                    }
+                }
+            }
+        },
+        "statefulset": {
+            "type": "object",
+            "properties": {
+                "updateStrategy": {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "description": "StatefulSet strategy type",
+                            "default": "RollingUpdate"
+                        }
+                    }
+                },
+                "podManagementPolicy": {
+                    "type": "string",
+                    "description": "StatefulSet controller supports relax its ordering guarantees while preserving its uniqueness and identity guarantees. There are two valid pod management policies: OrderedReady and Parallel",
+                    "default": "Parallel"
+                },
+                "replicaCount": {
+                    "type": "number",
+                    "description": "Number of pods per zone (only for MinIO&reg; distributed mode). Should be even and `>= 4`",
+                    "default": 4
+                },
+                "zones": {
+                    "type": "number",
+                    "description": "Number of zones (only for MinIO&reg; distributed mode)",
+                    "default": 1
+                },
+                "drivesPerNode": {
+                    "type": "number",
+                    "description": "Number of drives attached to every node (only for MinIO&reg; distributed mode)",
+                    "default": 1
+                }
+            }
+        },
+        "provisioning": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "description": "Enable MinIO&reg; provisioning Job",
+                    "default": false
+                },
+                "schedulerName": {
+                    "type": "string",
+                    "description": "Name of the k8s scheduler (other than default) for MinIO&reg; provisioning",
+                    "default": ""
+                },
+                "podLabels": {
+                    "type": "object",
+                    "description": "Extra labels for provisioning pods",
+                    "default": {}
+                },
+                "podAnnotations": {
+                    "type": "object",
+                    "description": "Provisioning Pod annotations.",
+                    "default": {}
+                },
+                "command": {
+                    "type": "array",
+                    "description": "Default provisioning container command (useful when using custom images). Use array form",
+                    "default": [],
+                    "items": {}
+                },
+                "args": {
+                    "type": "array",
+                    "description": "Default provisioning container args (useful when using custom images). Use array form",
+                    "default": [],
+                    "items": {}
+                },
+                "extraCommands": {
+                    "type": "array",
+                    "description": "Optionally specify extra list of additional commands for MinIO&reg; provisioning pod",
+                    "default": [],
+                    "items": {}
+                },
+                "extraVolumes": {
+                    "type": "array",
+                    "description": "Optionally specify extra list of additional volumes for MinIO&reg; provisioning pod",
+                    "default": [],
+                    "items": {}
+                },
+                "extraVolumeMounts": {
+                    "type": "array",
+                    "description": "Optionally specify extra list of additional volumeMounts for MinIO&reg; provisioning container",
+                    "default": [],
+                    "items": {}
+                },
+                "resources": {
+                    "type": "object",
+                    "properties": {
+                        "limits": {
+                            "type": "object",
+                            "description": "The resources limits for the container",
+                            "default": {}
+                        },
+                        "requests": {
+                            "type": "object",
+                            "description": "The requested resources for the container",
+                            "default": {}
+                        }
+                    }
+                },
+                "policies": {
+                    "type": "array",
+                    "description": "MinIO&reg; policies provisioning",
+                    "default": [],
+                    "items": {}
+                },
+                "users": {
+                    "type": "array",
+                    "description": "MinIO&reg; users provisioning. Can be used in addition to provisioning.usersExistingSecrets.",
+                    "default": [],
+                    "items": {}
+                },
+                "usersExistingSecrets": {
+                    "type": "array",
+                    "description": "Array if existing secrets containing MinIO&reg; users to be provisioned. Can be used in addition to provisioning.users.",
+                    "default": [],
+                    "items": {}
+                },
+                "groups": {
+                    "type": "array",
+                    "description": "MinIO&reg; groups provisioning",
+                    "default": [],
+                    "items": {}
+                },
+                "buckets": {
+                    "type": "array",
+                    "description": "MinIO&reg; buckets, versioning, lifecycle, quota and tags provisioning",
+                    "default": [],
+                    "items": {}
+                },
+                "config": {
+                    "type": "array",
+                    "description": "MinIO&reg; config provisioning",
+                    "default": [],
+                    "items": {}
+                },
+                "podSecurityContext": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable pod Security Context",
+                            "default": true
+                        },
+                        "fsGroup": {
+                            "type": "number",
+                            "description": "Group ID for the container",
+                            "default": 1001
+                        }
+                    }
+                },
+                "containerSecurityContext": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable container Security Context",
+                            "default": true
+                        },
+                        "runAsUser": {
+                            "type": "number",
+                            "description": "User ID for the container",
+                            "default": 1001
+                        },
+                        "runAsNonRoot": {
+                            "type": "boolean",
+                            "description": "Avoid running as root User",
+                            "default": true
+                        }
+                    }
+                },
+                "cleanupAfterFinished": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enables Cleanup for Finished Jobs",
+                            "default": false
+                        },
+                        "seconds": {
+                            "type": "number",
+                            "description": "Sets the value of ttlSecondsAfterFinished",
+                            "default": 600
+                        }
+                    }
+                }
+            }
+        },
+        "hostAliases": {
+            "type": "array",
+            "description": "MinIO&reg; pod host aliases",
+            "default": [],
+            "items": {}
+        },
+        "containerPorts": {
+            "type": "object",
+            "properties": {
+                "api": {
+                    "type": "number",
+                    "description": "MinIO&reg; container port to open for MinIO&reg; API",
+                    "default": 9000
+                },
+                "console": {
+                    "type": "number",
+                    "description": "MinIO&reg; container port to open for MinIO&reg; Console",
+                    "default": 9001
+                }
+            }
+        },
+        "podSecurityContext": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "description": "Enable pod Security Context",
+                    "default": true
+                },
+                "fsGroup": {
+                    "type": "number",
+                    "description": "Group ID for the container",
+                    "default": 1001
+                }
+            }
+        },
+        "containerSecurityContext": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "description": "Enable container Security Context",
+                    "default": true
+                },
+                "runAsUser": {
+                    "type": "number",
+                    "description": "User ID for the container",
+                    "default": 1001
+                },
+                "runAsNonRoot": {
+                    "type": "boolean",
+                    "description": "Avoid running as root User",
+                    "default": true
+                }
+            }
+        },
+        "podLabels": {
+            "type": "object",
+            "description": "Extra labels for MinIO&reg; pods",
+            "default": {}
+        },
+        "podAnnotations": {
+            "type": "object",
+            "description": "Annotations for MinIO&reg; pods",
+            "default": {}
+        },
+        "podAffinityPreset": {
+            "type": "string",
+            "description": "Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`",
+            "default": ""
+        },
+        "podAntiAffinityPreset": {
+            "type": "string",
+            "description": "Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`",
+            "default": "soft"
+        },
+        "nodeAffinityPreset": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "description": "Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`",
+                    "default": ""
+                },
+                "key": {
+                    "type": "string",
+                    "description": "Node label key to match. Ignored if `affinity` is set.",
+                    "default": ""
+                },
+                "values": {
+                    "type": "array",
+                    "description": "Node label values to match. Ignored if `affinity` is set.",
+                    "default": [],
+                    "items": {}
+                }
+            }
+        },
+        "affinity": {
+            "type": "object",
+            "description": "Affinity for pod assignment. Evaluated as a template.",
+            "default": {}
+        },
+        "nodeSelector": {
+            "type": "object",
+            "description": "Node labels for pod assignment. Evaluated as a template.",
+            "default": {}
+        },
+        "tolerations": {
+            "type": "array",
+            "description": "Tolerations for pod assignment. Evaluated as a template.",
+            "default": [],
+            "items": {}
+        },
+        "topologySpreadConstraints": {
+            "type": "array",
+            "description": "Topology Spread Constraints for MinIO&reg; pods assignment spread across your cluster among failure-domains",
+            "default": [],
+            "items": {}
+        },
+        "priorityClassName": {
+            "type": "string",
+            "description": "MinIO&reg; pods' priorityClassName",
+            "default": ""
+        },
+        "resources": {
+            "type": "object",
+            "properties": {
+                "limits": {
+                    "type": "object",
+                    "description": "The resources limits for the MinIO&reg; container",
+                    "default": {}
+                },
+                "requests": {
+                    "type": "object",
+                    "description": "The requested resources for the MinIO&reg; container",
+                    "default": {}
+                }
+            }
+        },
+        "livenessProbe": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "description": "Enable livenessProbe",
+                    "default": true
+                },
+                "initialDelaySeconds": {
+                    "type": "number",
+                    "description": "Initial delay seconds for livenessProbe",
+                    "default": 5
+                },
+                "periodSeconds": {
+                    "type": "number",
+                    "description": "Period seconds for livenessProbe",
+                    "default": 5
+                },
+                "timeoutSeconds": {
+                    "type": "number",
+                    "description": "Timeout seconds for livenessProbe",
+                    "default": 5
+                },
+                "failureThreshold": {
+                    "type": "number",
+                    "description": "Failure threshold for livenessProbe",
+                    "default": 5
+                },
+                "successThreshold": {
+                    "type": "number",
+                    "description": "Success threshold for livenessProbe",
+                    "default": 1
+                }
+            }
+        },
+        "readinessProbe": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "description": "Enable readinessProbe",
+                    "default": true
+                },
+                "initialDelaySeconds": {
+                    "type": "number",
+                    "description": "Initial delay seconds for readinessProbe",
+                    "default": 5
+                },
+                "periodSeconds": {
+                    "type": "number",
+                    "description": "Period seconds for readinessProbe",
+                    "default": 5
+                },
+                "timeoutSeconds": {
+                    "type": "number",
+                    "description": "Timeout seconds for readinessProbe",
+                    "default": 1
+                },
+                "failureThreshold": {
+                    "type": "number",
+                    "description": "Failure threshold for readinessProbe",
+                    "default": 5
+                },
+                "successThreshold": {
+                    "type": "number",
+                    "description": "Success threshold for readinessProbe",
+                    "default": 1
+                }
+            }
+        },
+        "startupProbe": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "description": "Enable startupProbe",
+                    "default": false
+                },
+                "initialDelaySeconds": {
+                    "type": "number",
+                    "description": "Initial delay seconds for startupProbe",
+                    "default": 0
+                },
+                "periodSeconds": {
+                    "type": "number",
+                    "description": "Period seconds for startupProbe",
+                    "default": 10
+                },
+                "timeoutSeconds": {
+                    "type": "number",
+                    "description": "Timeout seconds for startupProbe",
+                    "default": 5
+                },
+                "failureThreshold": {
+                    "type": "number",
+                    "description": "Failure threshold for startupProbe",
+                    "default": 60
+                },
+                "successThreshold": {
+                    "type": "number",
+                    "description": "Success threshold for startupProbe",
+                    "default": 1
+                }
+            }
+        },
+        "customLivenessProbe": {
+            "type": "object",
+            "description": "Override default liveness probe",
+            "default": {}
+        },
+        "customReadinessProbe": {
+            "type": "object",
+            "description": "Override default readiness probe",
+            "default": {}
+        },
+        "customStartupProbe": {
+            "type": "object",
+            "description": "Override default startup probe",
+            "default": {}
+        },
+        "lifecycleHooks": {
+            "type": "object",
+            "description": "for the MinIO&reg container(s) to automate configuration before or after startup",
+            "default": {}
+        },
+        "extraVolumes": {
+            "type": "array",
+            "description": "Optionally specify extra list of additional volumes for MinIO&reg; pods",
+            "default": [],
+            "items": {}
+        },
+        "extraVolumeMounts": {
+            "type": "array",
+            "description": "Optionally specify extra list of additional volumeMounts for MinIO&reg; container(s)",
+            "default": [],
+            "items": {}
+        },
+        "initContainers": {
+            "type": "array",
+            "description": "Add additional init containers to the MinIO&reg; pods",
+            "default": [],
+            "items": {}
+        },
+        "sidecars": {
+            "type": "array",
+            "description": "Add additional sidecar containers to the MinIO&reg; pods",
+            "default": [],
+            "items": {}
+        },
+        "service": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "description": "MinIO&reg; service type",
+                    "default": "ClusterIP"
+                },
+                "ports": {
+                    "type": "object",
+                    "properties": {
+                        "api": {
+                            "type": "number",
+                            "description": "MinIO&reg; API service port",
+                            "default": 9000
+                        },
+                        "console": {
+                            "type": "number",
+                            "description": "MinIO&reg; Console service port",
+                            "default": 9001
+                        }
+                    }
+                },
+                "nodePorts": {
+                    "type": "object",
+                    "properties": {
+                        "api": {
+                            "type": "string",
+                            "description": "Specify the MinIO&reg API nodePort value for the LoadBalancer and NodePort service types",
+                            "default": ""
+                        },
+                        "console": {
+                            "type": "string",
+                            "description": "Specify the MinIO&reg Console nodePort value for the LoadBalancer and NodePort service types",
+                            "default": ""
+                        }
+                    }
+                },
+                "clusterIP": {
+                    "type": "string",
+                    "description": "Service Cluster IP",
+                    "default": ""
+                },
+                "loadBalancerIP": {
+                    "type": "string",
+                    "description": "loadBalancerIP if service type is `LoadBalancer` (optional, cloud specific)",
+                    "default": ""
+                },
+                "loadBalancerSourceRanges": {
+                    "type": "array",
+                    "description": "Addresses that are allowed when service is LoadBalancer",
+                    "default": [],
+                    "items": {}
+                },
+                "externalTrafficPolicy": {
+                    "type": "string",
+                    "description": "Enable client source IP preservation",
+                    "default": "Cluster"
+                },
+                "extraPorts": {
+                    "type": "array",
+                    "description": "Extra ports to expose in the service (normally used with the `sidecar` value)",
+                    "default": [],
+                    "items": {}
+                },
+                "annotations": {
+                    "type": "object",
+                    "description": "Annotations for MinIO&reg; service",
+                    "default": {}
+                },
+                "headless": {
+                    "type": "object",
+                    "properties": {
+                        "annotations": {
+                            "type": "object",
+                            "description": "Annotations for the headless service.",
+                            "default": {}
+                        }
+                    }
+                }
+            }
+        },
+        "ingress": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "description": "Enable ingress controller resource for MinIO Console",
+                    "default": false
+                },
+                "apiVersion": {
+                    "type": "string",
+                    "description": "Force Ingress API version (automatically detected if not set)",
+                    "default": ""
+                },
+                "ingressClassName": {
+                    "type": "string",
+                    "description": "IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)",
+                    "default": ""
+                },
+                "hostname": {
+                    "type": "string",
+                    "description": "Default host for the ingress resource",
+                    "default": "minio.local"
+                },
+                "path": {
+                    "type": "string",
+                    "description": "The Path to MinIO&reg;. You may need to set this to '/*' in order to use this with ALB ingress controllers.",
+                    "default": "/"
+                },
+                "pathType": {
+                    "type": "string",
+                    "description": "Ingress path type",
+                    "default": "ImplementationSpecific"
+                },
+                "servicePort": {
+                    "type": "string",
+                    "description": "Service port to be used",
+                    "default": "minio-console"
+                },
+                "annotations": {
+                    "type": "object",
+                    "description": "Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.",
+                    "default": {}
+                },
+                "tls": {
+                    "type": "boolean",
+                    "description": "Enable TLS configuration for the hostname defined at `ingress.hostname` parameter",
+                    "default": false
+                },
+                "selfSigned": {
+                    "type": "boolean",
+                    "description": "Create a TLS secret for this ingress record using self-signed certificates generated by Helm",
+                    "default": false
+                },
+                "extraHosts": {
+                    "type": "array",
+                    "description": "The list of additional hostnames to be covered with this ingress record.",
+                    "default": [],
+                    "items": {}
+                },
+                "extraPaths": {
+                    "type": "array",
+                    "description": "Any additional paths that may need to be added to the ingress under the main host",
+                    "default": [],
+                    "items": {}
+                },
+                "extraTls": {
+                    "type": "array",
+                    "description": "The tls configuration for additional hostnames to be covered with this ingress record.",
+                    "default": [],
+                    "items": {}
+                },
+                "secrets": {
+                    "type": "array",
+                    "description": "If you're providing your own certificates, please use this to add the certificates as secrets",
+                    "default": [],
+                    "items": {}
+                },
+                "extraRules": {
+                    "type": "array",
+                    "description": "Additional rules to be covered with this ingress record",
+                    "default": [],
+                    "items": {}
+                }
+            }
+        },
+        "apiIngress": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "description": "Enable ingress controller resource for MinIO API",
+                    "default": false
+                },
+                "apiVersion": {
+                    "type": "string",
+                    "description": "Force Ingress API version (automatically detected if not set)",
+                    "default": ""
+                },
+                "ingressClassName": {
+                    "type": "string",
+                    "description": "IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)",
+                    "default": ""
+                },
+                "hostname": {
+                    "type": "string",
+                    "description": "Default host for the ingress resource",
+                    "default": "minio.local"
+                },
+                "path": {
+                    "type": "string",
+                    "description": "The Path to MinIO&reg;. You may need to set this to '/*' in order to use this with ALB ingress controllers.",
+                    "default": "/"
+                },
+                "pathType": {
+                    "type": "string",
+                    "description": "Ingress path type",
+                    "default": "ImplementationSpecific"
+                },
+                "servicePort": {
+                    "type": "string",
+                    "description": "Service port to be used",
+                    "default": "minio-api"
+                },
+                "annotations": {
+                    "type": "object",
+                    "description": "Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.",
+                    "default": {}
+                },
+                "tls": {
+                    "type": "boolean",
+                    "description": "Enable TLS configuration for the hostname defined at `apiIngress.hostname` parameter",
+                    "default": false
+                },
+                "selfSigned": {
+                    "type": "boolean",
+                    "description": "Create a TLS secret for this ingress record using self-signed certificates generated by Helm",
+                    "default": false
+                },
+                "extraHosts": {
+                    "type": "array",
+                    "description": "The list of additional hostnames to be covered with this ingress record.",
+                    "default": [],
+                    "items": {}
+                },
+                "extraPaths": {
+                    "type": "array",
+                    "description": "Any additional paths that may need to be added to the ingress under the main host",
+                    "default": [],
+                    "items": {}
+                },
+                "extraTls": {
+                    "type": "array",
+                    "description": "The tls configuration for additional hostnames to be covered with this ingress record.",
+                    "default": [],
+                    "items": {}
+                },
+                "secrets": {
+                    "type": "array",
+                    "description": "If you're providing your own certificates, please use this to add the certificates as secrets",
+                    "default": [],
+                    "items": {}
+                },
+                "extraRules": {
+                    "type": "array",
+                    "description": "Additional rules to be covered with this ingress record",
+                    "default": [],
+                    "items": {}
+                }
+            }
+        },
+        "networkPolicy": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "description": "Enable the default NetworkPolicy policy",
+                    "default": false
+                },
+                "allowExternal": {
+                    "type": "boolean",
+                    "description": "Don't require client label for connections",
+                    "default": true
+                },
+                "extraFromClauses": {
+                    "type": "array",
+                    "description": "Allows to add extra 'from' clauses to the NetworkPolicy",
+                    "default": [],
+                    "items": {}
+                }
+            }
+        },
+        "persistence": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "description": "Enable MinIO&reg; data persistence using PVC. If false, use emptyDir",
+                    "default": true
+                },
+                "storageClass": {
+                    "type": "string",
+                    "description": "PVC Storage Class for MinIO&reg; data volume",
+                    "default": ""
+                },
+                "mountPath": {
+                    "type": "string",
+                    "description": "Data volume mount path",
+                    "default": "/bitnami/minio/data"
+                },
+                "accessModes": {
+                    "type": "array",
+                    "description": "PVC Access Modes for MinIO&reg; data volume",
+                    "default": [
+                        "ReadWriteOnce"
+                    ],
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "size": {
+                    "type": "string",
+                    "description": "PVC Storage Request for MinIO&reg; data volume",
+                    "default": "8Gi"
+                },
+                "annotations": {
+                    "type": "object",
+                    "description": "Annotations for the PVC",
+                    "default": {}
+                },
+                "existingClaim": {
+                    "type": "string",
+                    "description": "Name of an existing PVC to use (only in `standalone` mode)",
+                    "default": ""
+                }
+            }
+        },
+        "volumePermissions": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "description": "Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup`",
+                    "default": false
+                },
+                "image": {
+                    "type": "object",
+                    "properties": {
+                        "registry": {
+                            "type": "string",
+                            "description": "Init container volume-permissions image registry",
+                            "default": "docker.io"
+                        },
+                        "repository": {
+                            "type": "string",
+                            "description": "Init container volume-permissions image repository",
+                            "default": "bitnami/os-shell"
+                        },
+                        "tag": {
+                            "type": "string",
+                            "description": "Init container volume-permissions image tag (immutable tags are recommended)",
+                            "default": "11-debian-11-r60"
+                        },
+                        "digest": {
+                            "type": "string",
+                            "description": "Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag",
+                            "default": ""
+                        },
+                        "pullPolicy": {
+                            "type": "string",
+                            "description": "Init container volume-permissions image pull policy",
+                            "default": "IfNotPresent"
+                        },
+                        "pullSecrets": {
+                            "type": "array",
+                            "description": "Specify docker-registry secret names as an array",
+                            "default": [],
+                            "items": {}
+                        }
+                    }
+                },
+                "resources": {
+                    "type": "object",
+                    "properties": {
+                        "limits": {
+                            "type": "object",
+                            "description": "Init container volume-permissions resource limits",
+                            "default": {}
+                        },
+                        "requests": {
+                            "type": "object",
+                            "description": "Init container volume-permissions resource requests",
+                            "default": {}
+                        }
+                    }
+                },
+                "containerSecurityContext": {
+                    "type": "object",
+                    "properties": {
+                        "runAsUser": {
+                            "type": "number",
+                            "description": "User ID for the init container",
+                            "default": 0
+                        }
+                    }
+                }
+            }
+        },
+        "serviceAccount": {
+            "type": "object",
+            "properties": {
+                "create": {
+                    "type": "boolean",
+                    "description": "Enable the creation of a ServiceAccount for MinIO&reg; pods",
+                    "default": true
+                },
+                "name": {
+                    "type": "string",
+                    "description": "Name of the created ServiceAccount",
+                    "default": ""
+                },
+                "automountServiceAccountToken": {
+                    "type": "boolean",
+                    "description": "Enable/disable auto mounting of the service account token",
+                    "default": true
+                },
+                "annotations": {
+                    "type": "object",
+                    "description": "Custom annotations for MinIO&reg; ServiceAccount",
+                    "default": {}
+                }
+            }
+        },
+        "pdb": {
+            "type": "object",
+            "properties": {
+                "create": {
+                    "type": "boolean",
+                    "description": "Enable/disable a Pod Disruption Budget creation",
+                    "default": false
+                },
+                "minAvailable": {
+                    "type": "number",
+                    "description": "Minimum number/percentage of pods that must still be available after the eviction",
+                    "default": 1
+                },
+                "maxUnavailable": {
+                    "type": "string",
+                    "description": "Maximum number/percentage of pods that may be made unavailable after the eviction",
+                    "default": ""
+                }
+            }
+        },
+        "metrics": {
+            "type": "object",
+            "properties": {
+                "prometheusAuthType": {
+                    "type": "string",
+                    "description": "Authentication mode for Prometheus (`jwt` or `public`)",
+                    "default": "public"
+                },
+                "serviceMonitor": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "If the operator is installed in your cluster, set to true to create a Service Monitor Entry",
+                            "default": false
+                        },
+                        "namespace": {
+                            "type": "string",
+                            "description": "Namespace which Prometheus is running in",
+                            "default": ""
+                        },
+                        "labels": {
+                            "type": "object",
+                            "description": "Extra labels for the ServiceMonitor",
+                            "default": {}
+                        },
+                        "jobLabel": {
+                            "type": "string",
+                            "description": "The name of the label on the target service to use as the job name in Prometheus",
+                            "default": ""
+                        },
+                        "path": {
+                            "type": "string",
+                            "description": "HTTP path to scrape for metrics",
+                            "default": "/minio/v2/metrics/cluster"
+                        },
+                        "interval": {
+                            "type": "string",
+                            "description": "Interval at which metrics should be scraped",
+                            "default": "30s"
+                        },
+                        "scrapeTimeout": {
+                            "type": "string",
+                            "description": "Specify the timeout after which the scrape is ended",
+                            "default": ""
+                        },
+                        "metricRelabelings": {
+                            "type": "array",
+                            "description": "MetricRelabelConfigs to apply to samples before ingestion",
+                            "default": [],
+                            "items": {}
+                        },
+                        "relabelings": {
+                            "type": "array",
+                            "description": "Metrics relabelings to add to the scrape endpoint, applied before scraping",
+                            "default": [],
+                            "items": {}
+                        },
+                        "honorLabels": {
+                            "type": "boolean",
+                            "description": "Specify honorLabels parameter to add the scrape endpoint",
+                            "default": false
+                        },
+                        "selector": {
+                            "type": "object",
+                            "description": "Prometheus instance selector labels",
+                            "default": {}
+                        },
+                        "apiVersion": {
+                            "type": "string",
+                            "description": "ApiVersion for the serviceMonitor Resource (defaults to \"monitoring.coreos.com/v1\")",
+                            "default": ""
+                        },
+                        "tlsConfig": {
+                            "type": "object",
+                            "description": "Additional TLS configuration for metrics endpoint with \"https\" scheme",
+                            "default": {}
+                        }
+                    }
+                },
+                "prometheusRule": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Create a Prometheus Operator PrometheusRule (also requires `metrics.enabled` to be `true` and `metrics.prometheusRule.rules`)",
+                            "default": false
+                        },
+                        "namespace": {
+                            "type": "string",
+                            "description": "Namespace for the PrometheusRule Resource (defaults to the Release Namespace)",
+                            "default": ""
+                        },
+                        "additionalLabels": {
+                            "type": "object",
+                            "description": "Additional labels that can be used so PrometheusRule will be discovered by Prometheus",
+                            "default": {}
+                        },
+                        "rules": {
+                            "type": "array",
+                            "description": "Prometheus Rule definitions",
+                            "default": [],
+                            "items": {}
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
