@@ -189,7 +189,7 @@ useIstioLabels: true
 image:
   registry: docker.io
   repository: bitnami/elasticsearch
-  tag: 8.9.1-debian-11-r2
+  tag: 8.9.2-debian-11-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -638,7 +638,7 @@ master:
   ##
   livenessProbe:
     enabled: true
-    initialDelaySeconds: 90
+    initialDelaySeconds: 180
     periodSeconds: 10
     timeoutSeconds: 5
     successThreshold: 1
@@ -949,7 +949,7 @@ data:
   ##
   livenessProbe:
     enabled: true
-    initialDelaySeconds: 90
+    initialDelaySeconds: 180
     periodSeconds: 10
     timeoutSeconds: 5
     successThreshold: 1
@@ -1261,7 +1261,7 @@ coordinating:
   ##
   livenessProbe:
     enabled: true
-    initialDelaySeconds: 90
+    initialDelaySeconds: 180
     periodSeconds: 10
     timeoutSeconds: 5
     successThreshold: 1
@@ -1542,7 +1542,7 @@ ingest:
   ##
   livenessProbe:
     enabled: true
-    initialDelaySeconds: 90
+    initialDelaySeconds: 180
     periodSeconds: 10
     timeoutSeconds: 5
     successThreshold: 1
@@ -1839,7 +1839,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/elasticsearch-exporter
-    tag: 1.6.0-debian-11-r48
+    tag: 1.6.0-debian-11-r65
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -2172,7 +2172,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r40
+    tag: 11-debian-11-r60
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -2219,7 +2219,7 @@ sysctlImage:
   ##
   registry: docker.io
   repository: bitnami/os-shell
-  tag: 11-debian-11-r40
+  tag: 11-debian-11-r60
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
