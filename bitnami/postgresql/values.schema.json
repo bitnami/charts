@@ -1782,6 +1782,16 @@
                             "description": "Set the cronjob parameter restartPolicy",
                             "default": "OnFailure"
                         },
+                        "securityContext": {
+                            "type": "object",
+                            "properties": {
+                                "fsGroup": {
+                                    "type": "number",
+                                    "description": "Group ID for the CronJob",
+                                    "default": 1001
+                                }
+                            }
+                        },
                         "containerSecurityContext": {
                             "type": "object",
                             "properties": {
