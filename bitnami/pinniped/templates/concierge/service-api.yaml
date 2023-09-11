@@ -22,7 +22,7 @@ spec:
     - protocol: TCP
       port: 443
       targetPort: https-api
-  {{- $podLabels := merge .Values.concierge.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.concierge.podLabels .Values.commonLabels ) "context" . ) }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: concierge
 {{- end }}

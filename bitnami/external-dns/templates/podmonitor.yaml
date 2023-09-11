@@ -19,7 +19,7 @@ spec:
       {{- with .Values.metrics.googlePodMonitor.interval }}
       interval: {{ . }}
       {{- end }}
-  {{- $podLabels := merge .Values.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
 {{- end }}

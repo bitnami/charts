@@ -18,7 +18,7 @@ spec:
       port: {{ .Values.controller.containerPort }}
       protocol: TCP
       targetPort: {{ .Values.metrics.serviceMonitor.targetPort }}
-  {{- $podLabels := merge .Values.webhook.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.webhook.podLabels .Values.commonLabels ) "context" . ) }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: controller
 {{- end }}
