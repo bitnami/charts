@@ -284,6 +284,9 @@ azure:
   ## @param azure.aadClientSecret When using the Azure provider, set the Azure AAD Client Secret
   ##
   aadClientSecret: ""
+  ## @param azure.useWorkloadIdentityExtension When using the Azure provider, set if you use Workload Identity extension.
+  ##
+  useWorkloadIdentityExtension: false
   ## @param azure.useManagedIdentityExtension When using the Azure provider, set if you use Azure MSI
   ##
   useManagedIdentityExtension: false
