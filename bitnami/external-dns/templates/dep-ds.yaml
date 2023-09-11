@@ -23,7 +23,7 @@ spec:
   {{- if .Values.updateStrategy }}
   strategy: {{- toYaml .Values.updateStrategy | nindent 4 }}
   {{- end }}
-  {{- $podLabels := merge .Values.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
   template:
@@ -784,6 +784,9 @@ spec:
           {{- if or .Values.azure.secretName (and .Values.azure.resourceGroup .Values.azure.tenantId .Values.azure.subscriptionId) }}
           secret:
             secretName: {{ template "external-dns.secretName" . }}
+          {{- else if .Values.azure.useWorkloadIdentityExtension }}
+          secret:
+            secretName: {{ template "external-dns.fullname" . }}
           {{- else if .Values.azure.useManagedIdentityExtension }}
           secret:
             secretName: {{ template "external-dns.fullname" . }}

@@ -9,12 +9,12 @@ kind: Service
 metadata:
   name: {{ include "common.names.fullname" . }}-receive
   namespace: {{ .Release.Namespace | quote }}
-  {{- $labels := merge .Values.receive.service.labels .Values.commonLabels }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.receive.service.labels .Values.commonLabels ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: receive
     {{- include "thanos.servicemonitor.matchLabels" . | nindent 4 -}}
   {{- if or .Values.receive.service.annotations .Values.commonAnnotations }}
-  {{- $annotations := merge .Values.receive.service.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.receive.service.annotations .Values.commonAnnotations ) "context" . ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
@@ -66,7 +66,7 @@ spec:
     {{- if .Values.receive.service.labelSelectorsOverride }}
     {{- include "common.tplvalues.render" (dict "value" .Values.receive.service.labelSelectorsOverride "context" $) | nindent 4 }}
     {{- else }}
-    {{- $podLabels := merge .Values.receive.podLabels .Values.commonLabels }}
+    {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.receive.podLabels .Values.commonLabels ) "context" . ) }}
     {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     {{- if eq .Values.receive.mode "dual-mode" }}
     app.kubernetes.io/component: receive-distributor

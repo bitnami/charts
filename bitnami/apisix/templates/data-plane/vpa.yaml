@@ -13,7 +13,7 @@ metadata:
     app.kubernetes.io/part-of: apisix
     app.kubernetes.io/component: data-plane
   {{- if or .Values.dataPlane.autoscaling.vpa.annotations .Values.commonAnnotations }}
-  {{- $annotations := merge .Values.dataPlane.autoscaling.vpa.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.dataPlane.autoscaling.vpa.annotations .Values.commonAnnotations ) "context" . ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:

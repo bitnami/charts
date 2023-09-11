@@ -18,7 +18,7 @@ metadata:
 spec:
   replicas: {{ .Values.worker.replicaCount }}
   podManagementPolicy: {{ .Values.worker.podManagementPolicy }}
-  {{- $podLabels := merge .Values.worker.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.worker.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: {{ template "concourse.worker.fullname" . }}
