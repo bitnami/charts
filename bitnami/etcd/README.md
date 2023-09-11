@@ -81,7 +81,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ---------------------- |
 | `image.registry`                       | etcd image registry                                                                                                  | `docker.io`            |
 | `image.repository`                     | etcd image name                                                                                                      | `bitnami/etcd`         |
-| `image.tag`                            | etcd image tag                                                                                                       | `3.5.9-debian-11-r100` |
+| `image.tag`                            | etcd image tag                                                                                                       | `3.5.9-debian-11-r118` |
 | `image.digest`                         | etcd image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                 | `""`                   |
 | `image.pullPolicy`                     | etcd image pull policy                                                                                               | `IfNotPresent`         |
 | `image.pullSecrets`                    | etcd image pull secrets                                                                                              | `[]`                   |
@@ -128,69 +128,70 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### etcd statefulset parameters
 
-| Name                                                | Description                                                                               | Value           |
-| --------------------------------------------------- | ----------------------------------------------------------------------------------------- | --------------- |
-| `replicaCount`                                      | Number of etcd replicas to deploy                                                         | `1`             |
-| `updateStrategy.type`                               | Update strategy type, can be set to RollingUpdate or OnDelete.                            | `RollingUpdate` |
-| `podManagementPolicy`                               | Pod management policy for the etcd statefulset                                            | `Parallel`      |
-| `hostAliases`                                       | etcd pod host aliases                                                                     | `[]`            |
-| `lifecycleHooks`                                    | Override default etcd container hooks                                                     | `{}`            |
-| `containerPorts.client`                             | Client port to expose at container level                                                  | `2379`          |
-| `containerPorts.peer`                               | Peer port to expose at container level                                                    | `2380`          |
-| `containerPorts.metrics`                            | Metrics port to expose at container level when metrics.useSeparateEndpoint is true        | `9090`          |
-| `podSecurityContext.enabled`                        | Enabled etcd pods' Security Context                                                       | `true`          |
-| `podSecurityContext.fsGroup`                        | Set etcd pod's Security Context fsGroup                                                   | `1001`          |
-| `containerSecurityContext.enabled`                  | Enabled etcd containers' Security Context                                                 | `true`          |
-| `containerSecurityContext.runAsUser`                | Set etcd container's Security Context runAsUser                                           | `1001`          |
-| `containerSecurityContext.runAsNonRoot`             | Set etcd container's Security Context runAsNonRoot                                        | `true`          |
-| `containerSecurityContext.allowPrivilegeEscalation` | Force the child process to be run as nonprivilege                                         | `false`         |
-| `resources.limits`                                  | The resources limits for the etcd container                                               | `{}`            |
-| `resources.requests`                                | The requested resources for the etcd container                                            | `{}`            |
-| `livenessProbe.enabled`                             | Enable livenessProbe                                                                      | `true`          |
-| `livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                   | `60`            |
-| `livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                          | `30`            |
-| `livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                         | `5`             |
-| `livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                       | `5`             |
-| `livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                       | `1`             |
-| `readinessProbe.enabled`                            | Enable readinessProbe                                                                     | `true`          |
-| `readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                  | `60`            |
-| `readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                         | `10`            |
-| `readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                        | `5`             |
-| `readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                      | `5`             |
-| `readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                      | `1`             |
-| `startupProbe.enabled`                              | Enable startupProbe                                                                       | `false`         |
-| `startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                    | `0`             |
-| `startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                           | `10`            |
-| `startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                          | `5`             |
-| `startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                        | `60`            |
-| `startupProbe.successThreshold`                     | Success threshold for startupProbe                                                        | `1`             |
-| `customLivenessProbe`                               | Override default liveness probe                                                           | `{}`            |
-| `customReadinessProbe`                              | Override default readiness probe                                                          | `{}`            |
-| `customStartupProbe`                                | Override default startup probe                                                            | `{}`            |
-| `extraVolumes`                                      | Optionally specify extra list of additional volumes for etcd pods                         | `[]`            |
-| `extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for etcd container(s)            | `[]`            |
-| `extraVolumeClaimTemplates`                         | Optionally specify extra list of additional volumeClaimTemplates for etcd container(s)    | `[]`            |
-| `initContainers`                                    | Add additional init containers to the etcd pods                                           | `[]`            |
-| `sidecars`                                          | Add additional sidecar containers to the etcd pods                                        | `[]`            |
-| `podAnnotations`                                    | Annotations for etcd pods                                                                 | `{}`            |
-| `podLabels`                                         | Extra labels for etcd pods                                                                | `{}`            |
-| `podAffinityPreset`                                 | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`            |
-| `podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`  | `soft`          |
-| `nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard` | `""`            |
-| `nodeAffinityPreset.key`                            | Node label key to match. Ignored if `affinity` is set.                                    | `""`            |
-| `nodeAffinityPreset.values`                         | Node label values to match. Ignored if `affinity` is set.                                 | `[]`            |
-| `affinity`                                          | Affinity for pod assignment                                                               | `{}`            |
-| `nodeSelector`                                      | Node labels for pod assignment                                                            | `{}`            |
-| `tolerations`                                       | Tolerations for pod assignment                                                            | `[]`            |
-| `terminationGracePeriodSeconds`                     | Seconds the pod needs to gracefully terminate                                             | `""`            |
-| `schedulerName`                                     | Name of the k8s scheduler (other than default)                                            | `""`            |
-| `priorityClassName`                                 | Name of the priority class to be used by etcd pods                                        | `""`            |
-| `runtimeClassName`                                  | Name of the runtime class to be used by pod(s)                                            | `""`            |
-| `shareProcessNamespace`                             | Enable shared process namespace in a pod.                                                 | `false`         |
-| `topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment                                            | `[]`            |
-| `persistentVolumeClaimRetentionPolicy.enabled`      | Controls if and how PVCs are deleted during the lifecycle of a StatefulSet                | `false`         |
-| `persistentVolumeClaimRetentionPolicy.whenScaled`   | Volume retention behavior when the replica count of the StatefulSet is reduced            | `Retain`        |
-| `persistentVolumeClaimRetentionPolicy.whenDeleted`  | Volume retention behavior that applies when the StatefulSet is deleted                    | `Retain`        |
+| Name                                                | Description                                                                                           | Value            |
+| --------------------------------------------------- | ----------------------------------------------------------------------------------------------------- | ---------------- |
+| `replicaCount`                                      | Number of etcd replicas to deploy                                                                     | `1`              |
+| `updateStrategy.type`                               | Update strategy type, can be set to RollingUpdate or OnDelete.                                        | `RollingUpdate`  |
+| `podManagementPolicy`                               | Pod management policy for the etcd statefulset                                                        | `Parallel`       |
+| `hostAliases`                                       | etcd pod host aliases                                                                                 | `[]`             |
+| `lifecycleHooks`                                    | Override default etcd container hooks                                                                 | `{}`             |
+| `containerPorts.client`                             | Client port to expose at container level                                                              | `2379`           |
+| `containerPorts.peer`                               | Peer port to expose at container level                                                                | `2380`           |
+| `containerPorts.metrics`                            | Metrics port to expose at container level when metrics.useSeparateEndpoint is true                    | `9090`           |
+| `podSecurityContext.enabled`                        | Enabled etcd pods' Security Context                                                                   | `true`           |
+| `podSecurityContext.fsGroup`                        | Set etcd pod's Security Context fsGroup                                                               | `1001`           |
+| `containerSecurityContext.enabled`                  | Enabled etcd containers' Security Context                                                             | `true`           |
+| `containerSecurityContext.runAsUser`                | Set etcd container's Security Context runAsUser                                                       | `1001`           |
+| `containerSecurityContext.runAsNonRoot`             | Set etcd container's Security Context runAsNonRoot                                                    | `true`           |
+| `containerSecurityContext.allowPrivilegeEscalation` | Force the child process to be run as nonprivilege                                                     | `false`          |
+| `containerSecurityContext.seccompProfile.type`      | indicates that the container will use the default Seccomp profile provided by the runtime environment | `RuntimeDefault` |
+| `resources.limits`                                  | The resources limits for the etcd container                                                           | `{}`             |
+| `resources.requests`                                | The requested resources for the etcd container                                                        | `{}`             |
+| `livenessProbe.enabled`                             | Enable livenessProbe                                                                                  | `true`           |
+| `livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                               | `60`             |
+| `livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                      | `30`             |
+| `livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                     | `5`              |
+| `livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                   | `5`              |
+| `livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                   | `1`              |
+| `readinessProbe.enabled`                            | Enable readinessProbe                                                                                 | `true`           |
+| `readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                              | `60`             |
+| `readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                     | `10`             |
+| `readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                    | `5`              |
+| `readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                  | `5`              |
+| `readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                  | `1`              |
+| `startupProbe.enabled`                              | Enable startupProbe                                                                                   | `false`          |
+| `startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                                | `0`              |
+| `startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                       | `10`             |
+| `startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                                      | `5`              |
+| `startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                    | `60`             |
+| `startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                    | `1`              |
+| `customLivenessProbe`                               | Override default liveness probe                                                                       | `{}`             |
+| `customReadinessProbe`                              | Override default readiness probe                                                                      | `{}`             |
+| `customStartupProbe`                                | Override default startup probe                                                                        | `{}`             |
+| `extraVolumes`                                      | Optionally specify extra list of additional volumes for etcd pods                                     | `[]`             |
+| `extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for etcd container(s)                        | `[]`             |
+| `extraVolumeClaimTemplates`                         | Optionally specify extra list of additional volumeClaimTemplates for etcd container(s)                | `[]`             |
+| `initContainers`                                    | Add additional init containers to the etcd pods                                                       | `[]`             |
+| `sidecars`                                          | Add additional sidecar containers to the etcd pods                                                    | `[]`             |
+| `podAnnotations`                                    | Annotations for etcd pods                                                                             | `{}`             |
+| `podLabels`                                         | Extra labels for etcd pods                                                                            | `{}`             |
+| `podAffinityPreset`                                 | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                   | `""`             |
+| `podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`              | `soft`           |
+| `nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`             | `""`             |
+| `nodeAffinityPreset.key`                            | Node label key to match. Ignored if `affinity` is set.                                                | `""`             |
+| `nodeAffinityPreset.values`                         | Node label values to match. Ignored if `affinity` is set.                                             | `[]`             |
+| `affinity`                                          | Affinity for pod assignment                                                                           | `{}`             |
+| `nodeSelector`                                      | Node labels for pod assignment                                                                        | `{}`             |
+| `tolerations`                                       | Tolerations for pod assignment                                                                        | `[]`             |
+| `terminationGracePeriodSeconds`                     | Seconds the pod needs to gracefully terminate                                                         | `""`             |
+| `schedulerName`                                     | Name of the k8s scheduler (other than default)                                                        | `""`             |
+| `priorityClassName`                                 | Name of the priority class to be used by etcd pods                                                    | `""`             |
+| `runtimeClassName`                                  | Name of the runtime class to be used by pod(s)                                                        | `""`             |
+| `shareProcessNamespace`                             | Enable shared process namespace in a pod.                                                             | `false`          |
+| `topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment                                                        | `[]`             |
+| `persistentVolumeClaimRetentionPolicy.enabled`      | Controls if and how PVCs are deleted during the lifecycle of a StatefulSet                            | `false`          |
+| `persistentVolumeClaimRetentionPolicy.whenScaled`   | Volume retention behavior when the replica count of the StatefulSet is reduced                        | `Retain`         |
+| `persistentVolumeClaimRetentionPolicy.whenDeleted`  | Volume retention behavior that applies when the StatefulSet is deleted                                | `Retain`         |
 
 ### Traffic exposure parameters
 
@@ -237,7 +238,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup`              | `false`            |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                  | `docker.io`        |
 | `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                                      | `bitnami/os-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                       | `11-debian-11-r40` |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                       | `11-debian-11-r60` |
 | `volumePermissions.image.digest`       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`               |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`     |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                  | `[]`               |

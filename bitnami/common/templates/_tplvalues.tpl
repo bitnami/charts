@@ -22,3 +22,17 @@ Usage:
     {{- $value }}
 {{- end }}
 {{- end -}}
+
+{{/*
+Merge a list of values that contains template after rendering them.
+Merge precedence is consistent with http://masterminds.github.io/sprig/dicts.html#merge-mustmerge
+Usage:
+{{ include "common.tplvalues.merge" ( dict "values" (list .Values.path.to.the.Value1 .Values.path.to.the.Value2) "context" $ ) }}
+*/}}
+{{- define "common.tplvalues.merge" -}}
+{{- $dst := dict -}}
+{{- range .values -}}
+{{- $dst = include "common.tplvalues.render" (dict "value" . "context" $.context "scope" $.scope) | fromYaml | merge $dst -}}
+{{- end -}}
+{{ $dst | toYaml }}
+{{- end -}}

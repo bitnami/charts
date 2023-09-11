@@ -24,6 +24,6 @@ spec:
       port: {{ .Values.registry.server.service.ports.metrics }}
       targetPort: metrics
     {{- end }}
-  {{- $podLabels := merge .Values.registry.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.registry.podLabels .Values.commonLabels ) "context" . ) }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: registry
