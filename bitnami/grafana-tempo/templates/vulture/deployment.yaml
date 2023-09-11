@@ -19,7 +19,7 @@ spec:
   {{- if .Values.vulture.updateStrategy }}
   strategy: {{- toYaml .Values.vulture.updateStrategy | nindent 4 }}
   {{- end }}
-  {{- $podLabels := merge .Values.vulture.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.vulture.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: vulture

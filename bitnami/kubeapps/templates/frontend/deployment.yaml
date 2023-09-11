@@ -18,7 +18,7 @@ spec:
   {{- if .Values.frontend.updateStrategy }}
   strategy: {{- toYaml .Values.frontend.updateStrategy | nindent 4 }}
   {{- end }}
-  {{- $podLabels := merge .Values.frontend.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.frontend.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: frontend

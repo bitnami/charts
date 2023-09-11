@@ -12,7 +12,7 @@ metadata:
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: query
   {{- if or .Values.query.ingress.annotations .Values.commonAnnotations }}
-  {{- $annotations := merge .Values.query.ingress.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.query.ingress.annotations .Values.commonAnnotations ) "context" . ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
@@ -48,7 +48,7 @@ spec:
     {{- if and .Values.query.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.query.ingress.annotations )) .Values.query.ingress.selfSigned) }}
     - hosts:
         - {{ .Values.query.ingress.hostname }}
-      secretName: {{ printf "%s-tls" .Values.query.ingress.hostname }}
+      secretName: {{ .Values.query.ingress.secretName | default (printf "%s-tls" .Values.query.ingress.hostname) }}
     {{- end }}
     {{- if .Values.query.ingress.extraTls }}
     {{- toYaml .Values.query.ingress.extraTls | nindent 4 }}
