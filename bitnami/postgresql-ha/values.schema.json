@@ -1,0 +1,2924 @@
+{
+    "title": "Chart Values",
+    "type": "object",
+    "properties": {
+        "global": {
+            "type": "object",
+            "properties": {
+                "imageRegistry": {
+                    "type": "string",
+                    "description": "Global Docker image registry",
+                    "default": ""
+                },
+                "imagePullSecrets": {
+                    "type": "array",
+                    "description": "Global Docker registry secret names as an array",
+                    "default": [],
+                    "items": {}
+                },
+                "storageClass": {
+                    "type": "string",
+                    "description": "Global StorageClass for Persistent Volume(s)",
+                    "default": ""
+                },
+                "postgresql": {
+                    "type": "object",
+                    "properties": {
+                        "username": {
+                            "type": "string",
+                            "description": "PostgreSQL username (overrides `postgresql.username`)",
+                            "default": ""
+                        },
+                        "password": {
+                            "type": "string",
+                            "description": "PostgreSQL password (overrides `postgresql.password`)",
+                            "default": ""
+                        },
+                        "database": {
+                            "type": "string",
+                            "description": "PostgreSQL database (overrides `postgresql.database`)",
+                            "default": ""
+                        },
+                        "repmgrUsername": {
+                            "type": "string",
+                            "description": "PostgreSQL repmgr username (overrides `postgresql.repmgrUsername`)",
+                            "default": ""
+                        },
+                        "repmgrPassword": {
+                            "type": "string",
+                            "description": "PostgreSQL repmgr password (overrides `postgresql.repmgrpassword`)",
+                            "default": ""
+                        },
+                        "repmgrDatabase": {
+                            "type": "string",
+                            "description": "PostgreSQL repmgr database (overrides `postgresql.repmgrDatabase`)",
+                            "default": ""
+                        },
+                        "existingSecret": {
+                            "type": "string",
+                            "description": "Name of existing secret to use for PostgreSQL passwords (overrides `postgresql.existingSecret`)",
+                            "default": ""
+                        }
+                    }
+                },
+                "ldap": {
+                    "type": "object",
+                    "properties": {
+                        "bindpw": {
+                            "type": "string",
+                            "description": "LDAP bind password (overrides `ldap.bindpw`)",
+                            "default": ""
+                        },
+                        "existingSecret": {
+                            "type": "string",
+                            "description": "Name of existing secret to use for LDAP passwords (overrides `ldap.existingSecret`)",
+                            "default": ""
+                        }
+                    }
+                },
+                "pgpool": {
+                    "type": "object",
+                    "properties": {
+                        "adminUsername": {
+                            "type": "string",
+                            "description": "Pgpool Admin username (overrides `pgpool.adminUsername`)",
+                            "default": ""
+                        },
+                        "adminPassword": {
+                            "type": "string",
+                            "description": "Pgpool Admin password (overrides `pgpool.adminPassword`)",
+                            "default": ""
+                        },
+                        "existingSecret": {
+                            "type": "string",
+                            "description": "Pgpool existing secret",
+                            "default": ""
+                        }
+                    }
+                }
+            }
+        },
+        "kubeVersion": {
+            "type": "string",
+            "description": "Override Kubernetes version",
+            "default": ""
+        },
+        "nameOverride": {
+            "type": "string",
+            "description": "String to partially override common.names.fullname template (will maintain the release name)",
+            "default": ""
+        },
+        "fullnameOverride": {
+            "type": "string",
+            "description": "String to fully override common.names.fullname template",
+            "default": ""
+        },
+        "namespaceOverride": {
+            "type": "string",
+            "description": "String to fully override common.names.namespace",
+            "default": ""
+        },
+        "commonLabels": {
+            "type": "object",
+            "description": "Common labels to add to all resources (sub-charts are not considered). Evaluated as a template",
+            "default": {}
+        },
+        "commonAnnotations": {
+            "type": "object",
+            "description": "Common annotations to add to all resources (sub-charts are not considered). Evaluated as a template",
+            "default": {}
+        },
+        "clusterDomain": {
+            "type": "string",
+            "description": "Kubernetes Cluster Domain",
+            "default": "cluster.local"
+        },
+        "extraDeploy": {
+            "type": "array",
+            "description": "Array of extra objects to deploy with the release (evaluated as a template)",
+            "default": [],
+            "items": {}
+        },
+        "diagnosticMode": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "description": "Enable diagnostic mode (all probes will be disabled and the command will be overridden)",
+                    "default": false
+                },
+                "command": {
+                    "type": "array",
+                    "description": "Command to override all containers in the deployment",
+                    "default": [
+                        "sleep"
+                    ],
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "args": {
+                    "type": "array",
+                    "description": "Args to override all containers in the deployment",
+                    "default": [
+                        "infinity"
+                    ],
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "postgresql": {
+            "type": "object",
+            "properties": {
+                "image": {
+                    "type": "object",
+                    "properties": {
+                        "registry": {
+                            "type": "string",
+                            "description": "PostgreSQL with Repmgr image registry",
+                            "default": "docker.io"
+                        },
+                        "repository": {
+                            "type": "string",
+                            "description": "PostgreSQL with Repmgr image repository",
+                            "default": "bitnami/postgresql-repmgr"
+                        },
+                        "tag": {
+                            "type": "string",
+                            "description": "PostgreSQL with Repmgr image tag",
+                            "default": "15.4.0-debian-11-r19"
+                        },
+                        "digest": {
+                            "type": "string",
+                            "description": "PostgreSQL image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag",
+                            "default": ""
+                        },
+                        "pullPolicy": {
+                            "type": "string",
+                            "description": "PostgreSQL with Repmgr image pull policy",
+                            "default": "IfNotPresent"
+                        },
+                        "pullSecrets": {
+                            "type": "array",
+                            "description": "Specify docker-registry secret names as an array",
+                            "default": [],
+                            "items": {}
+                        },
+                        "debug": {
+                            "type": "boolean",
+                            "description": "Specify if debug logs should be enabled",
+                            "default": false
+                        }
+                    }
+                },
+                "labels": {
+                    "type": "object",
+                    "description": "Labels to add to the StatefulSet. Evaluated as template",
+                    "default": {}
+                },
+                "podLabels": {
+                    "type": "object",
+                    "description": "Labels to add to the StatefulSet pods. Evaluated as template",
+                    "default": {}
+                },
+                "serviceAnnotations": {
+                    "type": "object",
+                    "description": "Provide any additional annotations for PostgreSQL service",
+                    "default": {}
+                },
+                "replicaCount": {
+                    "type": "number",
+                    "description": "Number of replicas to deploy. Use an odd number. Having 3 replicas is the minimum to get quorum when promoting a new primary.",
+                    "default": 3
+                },
+                "updateStrategy": {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "description": "Postgresql statefulset strategy type",
+                            "default": "RollingUpdate"
+                        }
+                    }
+                },
+                "containerPorts": {
+                    "type": "object",
+                    "properties": {
+                        "postgresql": {
+                            "type": "number",
+                            "description": "PostgreSQL port",
+                            "default": 5432
+                        }
+                    }
+                },
+                "hostAliases": {
+                    "type": "array",
+                    "description": "Deployment pod host aliases",
+                    "default": [],
+                    "items": {}
+                },
+                "hostNetwork": {
+                    "type": "boolean",
+                    "description": "Specify if host network should be enabled for PostgreSQL pod",
+                    "default": false
+                },
+                "hostIPC": {
+                    "type": "boolean",
+                    "description": "Specify if host IPC should be enabled for PostgreSQL pod",
+                    "default": false
+                },
+                "podAnnotations": {
+                    "type": "object",
+                    "description": "Additional pod annotations",
+                    "default": {}
+                },
+                "podAffinityPreset": {
+                    "type": "string",
+                    "description": "PostgreSQL pod affinity preset. Ignored if `postgresql.affinity` is set. Allowed values: `soft` or `hard`",
+                    "default": ""
+                },
+                "podAntiAffinityPreset": {
+                    "type": "string",
+                    "description": "PostgreSQL pod anti-affinity preset. Ignored if `postgresql.affinity` is set. Allowed values: `soft` or `hard`",
+                    "default": "soft"
+                },
+                "nodeAffinityPreset": {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "description": "PostgreSQL node affinity preset type. Ignored if `postgresql.affinity` is set. Allowed values: `soft` or `hard`",
+                            "default": ""
+                        },
+                        "key": {
+                            "type": "string",
+                            "description": "PostgreSQL node label key to match Ignored if `postgresql.affinity` is set.",
+                            "default": ""
+                        },
+                        "values": {
+                            "type": "array",
+                            "description": "PostgreSQL node label values to match. Ignored if `postgresql.affinity` is set.",
+                            "default": [],
+                            "items": {}
+                        }
+                    }
+                },
+                "affinity": {
+                    "type": "object",
+                    "description": "Affinity for PostgreSQL pods assignment",
+                    "default": {}
+                },
+                "nodeSelector": {
+                    "type": "object",
+                    "description": "Node labels for PostgreSQL pods assignment",
+                    "default": {}
+                },
+                "tolerations": {
+                    "type": "array",
+                    "description": "Tolerations for PostgreSQL pods assignment",
+                    "default": [],
+                    "items": {}
+                },
+                "topologySpreadConstraints": {
+                    "type": "array",
+                    "description": "Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template",
+                    "default": [],
+                    "items": {}
+                },
+                "priorityClassName": {
+                    "type": "string",
+                    "description": "Pod priority class",
+                    "default": ""
+                },
+                "schedulerName": {
+                    "type": "string",
+                    "description": "Use an alternate scheduler, e.g. \"stork\".",
+                    "default": ""
+                },
+                "terminationGracePeriodSeconds": {
+                    "type": "string",
+                    "description": "Seconds PostgreSQL pod needs to terminate gracefully",
+                    "default": ""
+                },
+                "podSecurityContext": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable security context for PostgreSQL with Repmgr",
+                            "default": true
+                        },
+                        "fsGroup": {
+                            "type": "number",
+                            "description": "Group ID for the PostgreSQL with Repmgr filesystem",
+                            "default": 1001
+                        }
+                    }
+                },
+                "containerSecurityContext": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable container security context",
+                            "default": true
+                        },
+                        "runAsUser": {
+                            "type": "number",
+                            "description": "User ID for the PostgreSQL with Repmgr container",
+                            "default": 1001
+                        },
+                        "runAsGroup": {
+                            "type": "number",
+                            "description": "Group ID for the PostgreSQL with Repmgr container",
+                            "default": 0
+                        },
+                        "runAsNonRoot": {
+                            "type": "boolean",
+                            "description": "Set PostgreSQL with Repmgr containers' Security Context runAsNonRoot",
+                            "default": true
+                        },
+                        "readOnlyRootFilesystem": {
+                            "type": "boolean",
+                            "description": "Set PostgreSQL with Repmgr containers' Security Context runAsNonRoot",
+                            "default": false
+                        },
+                        "allowPrivilegeEscalation": {
+                            "type": "boolean",
+                            "description": "Set PostgreSQL with Repmgr container's Security Context allowPrivilegeEscalation",
+                            "default": false
+                        },
+                        "seccompProfile": {
+                            "type": "object",
+                            "properties": {
+                                "type": {
+                                    "type": "string",
+                                    "description": "Set PostgreSQL with Repmgr container's Security Context seccompProfile",
+                                    "default": "RuntimeDefault"
+                                }
+                            }
+                        },
+                        "capabilities": {
+                            "type": "object",
+                            "properties": {
+                                "drop": {
+                                    "type": "array",
+                                    "description": "Set PostgreSQL with Repmgr container's Security Context capabilities to drop",
+                                    "default": [
+                                        "ALL"
+                                    ],
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "command": {
+                    "type": "array",
+                    "description": "Override default container command (useful when using custom images)",
+                    "default": [],
+                    "items": {}
+                },
+                "args": {
+                    "type": "array",
+                    "description": "Override default container args (useful when using custom images)",
+                    "default": [],
+                    "items": {}
+                },
+                "lifecycleHooks": {
+                    "type": "object",
+                    "description": "LifecycleHook to set additional configuration at startup, e.g. LDAP settings via REST API. Evaluated as a template",
+                    "default": {}
+                },
+                "extraEnvVars": {
+                    "type": "array",
+                    "description": "Array containing extra environment variables",
+                    "default": [],
+                    "items": {}
+                },
+                "extraEnvVarsCM": {
+                    "type": "string",
+                    "description": "ConfigMap with extra environment variables",
+                    "default": ""
+                },
+                "extraEnvVarsSecret": {
+                    "type": "string",
+                    "description": "Secret with extra environment variables",
+                    "default": ""
+                },
+                "extraVolumes": {
+                    "type": "array",
+                    "description": "Extra volumes to add to the deployment",
+                    "default": [],
+                    "items": {}
+                },
+                "extraVolumeMounts": {
+                    "type": "array",
+                    "description": "Extra volume mounts to add to the container. Normally used with `extraVolumes`.",
+                    "default": [],
+                    "items": {}
+                },
+                "initContainers": {
+                    "type": "array",
+                    "description": "Extra init containers to add to the deployment",
+                    "default": [],
+                    "items": {}
+                },
+                "sidecars": {
+                    "type": "array",
+                    "description": "Extra sidecar containers to add to the deployment",
+                    "default": [],
+                    "items": {}
+                },
+                "resources": {
+                    "type": "object",
+                    "properties": {
+                        "limits": {
+                            "type": "object",
+                            "description": "The resources limits for the container",
+                            "default": {}
+                        },
+                        "requests": {
+                            "type": "object",
+                            "description": "The requested resources for the container",
+                            "default": {}
+                        }
+                    }
+                },
+                "livenessProbe": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable livenessProbe",
+                            "default": true
+                        },
+                        "initialDelaySeconds": {
+                            "type": "number",
+                            "description": "Initial delay seconds for livenessProbe",
+                            "default": 30
+                        },
+                        "periodSeconds": {
+                            "type": "number",
+                            "description": "Period seconds for livenessProbe",
+                            "default": 10
+                        },
+                        "timeoutSeconds": {
+                            "type": "number",
+                            "description": "Timeout seconds for livenessProbe",
+                            "default": 5
+                        },
+                        "failureThreshold": {
+                            "type": "number",
+                            "description": "Failure threshold for livenessProbe",
+                            "default": 6
+                        },
+                        "successThreshold": {
+                            "type": "number",
+                            "description": "Success threshold for livenessProbe",
+                            "default": 1
+                        }
+                    }
+                },
+                "readinessProbe": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable readinessProbe",
+                            "default": true
+                        },
+                        "initialDelaySeconds": {
+                            "type": "number",
+                            "description": "Initial delay seconds for readinessProbe",
+                            "default": 5
+                        },
+                        "periodSeconds": {
+                            "type": "number",
+                            "description": "Period seconds for readinessProbe",
+                            "default": 10
+                        },
+                        "timeoutSeconds": {
+                            "type": "number",
+                            "description": "Timeout seconds for readinessProbe",
+                            "default": 5
+                        },
+                        "failureThreshold": {
+                            "type": "number",
+                            "description": "Failure threshold for readinessProbe",
+                            "default": 6
+                        },
+                        "successThreshold": {
+                            "type": "number",
+                            "description": "Success threshold for readinessProbe",
+                            "default": 1
+                        }
+                    }
+                },
+                "startupProbe": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable startupProbe",
+                            "default": false
+                        },
+                        "initialDelaySeconds": {
+                            "type": "number",
+                            "description": "Initial delay seconds for startupProbe",
+                            "default": 5
+                        },
+                        "periodSeconds": {
+                            "type": "number",
+                            "description": "Period seconds for startupProbe",
+                            "default": 10
+                        },
+                        "timeoutSeconds": {
+                            "type": "number",
+                            "description": "Timeout seconds for startupProbe",
+                            "default": 5
+                        },
+                        "failureThreshold": {
+                            "type": "number",
+                            "description": "Failure threshold for startupProbe",
+                            "default": 10
+                        },
+                        "successThreshold": {
+                            "type": "number",
+                            "description": "Success threshold for startupProbe",
+                            "default": 1
+                        }
+                    }
+                },
+                "customLivenessProbe": {
+                    "type": "object",
+                    "description": "Override default liveness probe",
+                    "default": {}
+                },
+                "customReadinessProbe": {
+                    "type": "object",
+                    "description": "Override default readiness probe",
+                    "default": {}
+                },
+                "customStartupProbe": {
+                    "type": "object",
+                    "description": "Override default startup probe",
+                    "default": {}
+                },
+                "pdb": {
+                    "type": "object",
+                    "properties": {
+                        "create": {
+                            "type": "boolean",
+                            "description": "Specifies whether to create a Pod disruption budget for PostgreSQL with Repmgr",
+                            "default": false
+                        },
+                        "minAvailable": {
+                            "type": "number",
+                            "description": "Minimum number / percentage of pods that should remain scheduled",
+                            "default": 1
+                        },
+                        "maxUnavailable": {
+                            "type": "string",
+                            "description": "Maximum number / percentage of pods that may be made unavailable",
+                            "default": ""
+                        }
+                    }
+                },
+                "username": {
+                    "type": "string",
+                    "description": "PostgreSQL username",
+                    "default": "postgres"
+                },
+                "password": {
+                    "type": "string",
+                    "description": "PostgreSQL password",
+                    "default": ""
+                },
+                "database": {
+                    "type": "string",
+                    "description": "PostgreSQL database",
+                    "default": ""
+                },
+                "existingSecret": {
+                    "type": "string",
+                    "description": "PostgreSQL password using existing secret",
+                    "default": ""
+                },
+                "postgresPassword": {
+                    "type": "string",
+                    "description": "PostgreSQL password for the `postgres` user when `username` is not `postgres`",
+                    "default": ""
+                },
+                "usePasswordFile": {
+                    "type": "string",
+                    "description": "Set to `true` to mount PostgreSQL secret as a file instead of passing environment variable",
+                    "default": ""
+                },
+                "repmgrUsePassfile": {
+                    "type": "string",
+                    "description": "Set to `true` to configure repmgrl to use `passfile` instead of `password` vars*:*:*:username:password\" and use it to configure Repmgr instead of using password (Requires Postgresql 10+, otherwise ignored)",
+                    "default": ""
+                },
+                "repmgrPassfilePath": {
+                    "type": "string",
+                    "description": "Custom path where `passfile` will be stored",
+                    "default": ""
+                },
+                "upgradeRepmgrExtension": {
+                    "type": "boolean",
+                    "description": "Upgrade repmgr extension in the database",
+                    "default": false
+                },
+                "pgHbaTrustAll": {
+                    "type": "boolean",
+                    "description": "Configures PostgreSQL HBA to trust every user",
+                    "default": false
+                },
+                "syncReplication": {
+                    "type": "boolean",
+                    "description": "Make the replication synchronous. This will wait until the data is synchronized in all the replicas before other query can be run. This ensures the data availability at the expenses of speed.",
+                    "default": false
+                },
+                "syncReplicationMode": {
+                    "type": "string",
+                    "description": "This specifies the method to choose synchronous standbys from the listed servers. Valid values: empty, FIRST, ANY.",
+                    "default": ""
+                },
+                "repmgrUsername": {
+                    "type": "string",
+                    "description": "PostgreSQL Repmgr username",
+                    "default": "repmgr"
+                },
+                "repmgrPassword": {
+                    "type": "string",
+                    "description": "PostgreSQL Repmgr password",
+                    "default": ""
+                },
+                "repmgrDatabase": {
+                    "type": "string",
+                    "description": "PostgreSQL Repmgr database",
+                    "default": "repmgr"
+                },
+                "repmgrLogLevel": {
+                    "type": "string",
+                    "description": "Repmgr log level (DEBUG, INFO, NOTICE, WARNING, ERROR, ALERT, CRIT or EMERG)",
+                    "default": "NOTICE"
+                },
+                "repmgrConnectTimeout": {
+                    "type": "number",
+                    "description": "Repmgr backend connection timeout (in seconds)",
+                    "default": 5
+                },
+                "repmgrReconnectAttempts": {
+                    "type": "number",
+                    "description": "Repmgr backend reconnection attempts",
+                    "default": 2
+                },
+                "repmgrReconnectInterval": {
+                    "type": "number",
+                    "description": "Repmgr backend reconnection interval (in seconds)",
+                    "default": 3
+                },
+                "repmgrFenceOldPrimary": {
+                    "type": "boolean",
+                    "description": "Set if fencing of old primary in multiple primary situation is desired",
+                    "default": false
+                },
+                "repmgrChildNodesCheckInterval": {
+                    "type": "number",
+                    "description": "Repmgr child nodes check interval (in seconds)",
+                    "default": 5
+                },
+                "repmgrChildNodesConnectedMinCount": {
+                    "type": "number",
+                    "description": "Repmgr minimum number of connected child nodes before being considered as failed primary for fencing",
+                    "default": 1
+                },
+                "repmgrChildNodesDisconnectTimeout": {
+                    "type": "number",
+                    "description": "Repmgr time before node will be fenced when insufficient child nodes are detected (in seconds)",
+                    "default": 30
+                },
+                "usePgRewind": {
+                    "type": "boolean",
+                    "description": "Use pg_rewind for standby failover (experimental)",
+                    "default": false
+                },
+                "audit": {
+                    "type": "object",
+                    "properties": {
+                        "logHostname": {
+                            "type": "boolean",
+                            "description": "Add client hostnames to the log file",
+                            "default": true
+                        },
+                        "logConnections": {
+                            "type": "boolean",
+                            "description": "Add client log-in operations to the log file",
+                            "default": false
+                        },
+                        "logDisconnections": {
+                            "type": "boolean",
+                            "description": "Add client log-outs operations to the log file",
+                            "default": false
+                        },
+                        "pgAuditLog": {
+                            "type": "string",
+                            "description": "Add operations to log using the pgAudit extension",
+                            "default": ""
+                        },
+                        "pgAuditLogCatalog": {
+                            "type": "string",
+                            "description": "Log catalog using pgAudit",
+                            "default": "off"
+                        },
+                        "clientMinMessages": {
+                            "type": "string",
+                            "description": "Message log level to share with the user",
+                            "default": "error"
+                        },
+                        "logLinePrefix": {
+                            "type": "string",
+                            "description": "Template string for the log line prefix",
+                            "default": ""
+                        },
+                        "logTimezone": {
+                            "type": "string",
+                            "description": "Timezone for the log timestamps",
+                            "default": ""
+                        }
+                    }
+                },
+                "sharedPreloadLibraries": {
+                    "type": "string",
+                    "description": "Shared preload libraries (comma-separated list)",
+                    "default": "pgaudit, repmgr"
+                },
+                "maxConnections": {
+                    "type": "string",
+                    "description": "Maximum total connections",
+                    "default": ""
+                },
+                "postgresConnectionLimit": {
+                    "type": "string",
+                    "description": "Maximum connections for the postgres user",
+                    "default": ""
+                },
+                "dbUserConnectionLimit": {
+                    "type": "string",
+                    "description": "Maximum connections for the created user",
+                    "default": ""
+                },
+                "tcpKeepalivesInterval": {
+                    "type": "string",
+                    "description": "TCP keepalives interval",
+                    "default": ""
+                },
+                "tcpKeepalivesIdle": {
+                    "type": "string",
+                    "description": "TCP keepalives idle",
+                    "default": ""
+                },
+                "tcpKeepalivesCount": {
+                    "type": "string",
+                    "description": "TCP keepalives count",
+                    "default": ""
+                },
+                "statementTimeout": {
+                    "type": "string",
+                    "description": "Statement timeout",
+                    "default": ""
+                },
+                "pghbaRemoveFilters": {
+                    "type": "string",
+                    "description": "Comma-separated list of patterns to remove from the pg_hba.conf file",
+                    "default": ""
+                },
+                "extraInitContainers": {
+                    "type": "array",
+                    "description": "Extra init containers",
+                    "default": [],
+                    "items": {}
+                },
+                "repmgrConfiguration": {
+                    "type": "string",
+                    "description": "Repmgr configuration",
+                    "default": ""
+                },
+                "configuration": {
+                    "type": "string",
+                    "description": "PostgreSQL configuration",
+                    "default": ""
+                },
+                "pgHbaConfiguration": {
+                    "type": "string",
+                    "description": "PostgreSQL client authentication configuration",
+                    "default": ""
+                },
+                "configurationCM": {
+                    "type": "string",
+                    "description": "Name of existing ConfigMap with configuration files",
+                    "default": ""
+                },
+                "extendedConf": {
+                    "type": "string",
+                    "description": "Extended PostgreSQL configuration (appended to main or default configuration). Implies `volumePermissions.enabled`.",
+                    "default": ""
+                },
+                "extendedConfCM": {
+                    "type": "string",
+                    "description": "ConfigMap with PostgreSQL extended configuration",
+                    "default": ""
+                },
+                "initdbScripts": {
+                    "type": "object",
+                    "description": "Dictionary of initdb scripts",
+                    "default": {}
+                },
+                "initdbScriptsCM": {
+                    "type": "string",
+                    "description": "ConfigMap with scripts to be run at first boot",
+                    "default": ""
+                },
+                "initdbScriptsSecret": {
+                    "type": "string",
+                    "description": "Secret with scripts to be run at first boot",
+                    "default": ""
+                },
+                "tls": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable TLS traffic support for end-client connections",
+                            "default": false
+                        },
+                        "preferServerCiphers": {
+                            "type": "boolean",
+                            "description": "Whether to use the server's TLS cipher preferences rather than the client's",
+                            "default": true
+                        },
+                        "certificatesSecret": {
+                            "type": "string",
+                            "description": "Name of an existing secret that contains the certificates",
+                            "default": ""
+                        },
+                        "certFilename": {
+                            "type": "string",
+                            "description": "Certificate filename",
+                            "default": ""
+                        },
+                        "certKeyFilename": {
+                            "type": "string",
+                            "description": "Certificate key filename",
+                            "default": ""
+                        }
+                    }
+                },
+                "preStopDelayAfterPgStopSeconds": {
+                    "type": "number",
+                    "description": "Minimal number of seconds preStop hook waits after postgres instance is stopped",
+                    "default": 25
+                },
+                "headlessWithNotReadyAddresses": {
+                    "type": "boolean",
+                    "description": "set postgres headless service into publishNotReadyAddresses mode",
+                    "default": false
+                }
+            }
+        },
+        "witness": {
+            "type": "object",
+            "properties": {
+                "create": {
+                    "type": "boolean",
+                    "description": "Create PostgreSQL witness nodes",
+                    "default": false
+                },
+                "labels": {
+                    "type": "object",
+                    "description": "Labels to add to the StatefulSet. Evaluated as template",
+                    "default": {}
+                },
+                "podLabels": {
+                    "type": "object",
+                    "description": "Labels to add to the StatefulSet pods. Evaluated as template",
+                    "default": {}
+                },
+                "replicaCount": {
+                    "type": "number",
+                    "description": "Number of replicas to deploy.",
+                    "default": 1
+                },
+                "updateStrategy": {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "description": "Postgresql statefulset strategy type",
+                            "default": "RollingUpdate"
+                        }
+                    }
+                },
+                "containerPorts": {
+                    "type": "object",
+                    "properties": {
+                        "postgresql": {
+                            "type": "number",
+                            "description": "PostgreSQL witness port",
+                            "default": 5432
+                        }
+                    }
+                },
+                "hostAliases": {
+                    "type": "array",
+                    "description": "Deployment pod host aliases",
+                    "default": [],
+                    "items": {}
+                },
+                "hostNetwork": {
+                    "type": "boolean",
+                    "description": "Specify if host network should be enabled for PostgreSQL witness pod",
+                    "default": false
+                },
+                "hostIPC": {
+                    "type": "boolean",
+                    "description": "Specify if host IPC should be enabled for PostgreSQL witness pod",
+                    "default": false
+                },
+                "podAnnotations": {
+                    "type": "object",
+                    "description": "Additional pod annotations",
+                    "default": {}
+                },
+                "podAffinityPreset": {
+                    "type": "string",
+                    "description": "PostgreSQL witness pod affinity preset. Ignored if `witness.affinity` is set. Allowed values: `soft` or `hard`",
+                    "default": ""
+                },
+                "podAntiAffinityPreset": {
+                    "type": "string",
+                    "description": "PostgreSQL witness pod anti-affinity preset. Ignored if `witness.affinity` is set. Allowed values: `soft` or `hard`",
+                    "default": "soft"
+                },
+                "nodeAffinityPreset": {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "description": "PostgreSQL witness node affinity preset type. Ignored if `witness.affinity` is set. Allowed values: `soft` or `hard`",
+                            "default": ""
+                        },
+                        "key": {
+                            "type": "string",
+                            "description": "PostgreSQL witness node label key to match Ignored if `witness.affinity` is set.",
+                            "default": ""
+                        },
+                        "values": {
+                            "type": "array",
+                            "description": "PostgreSQL witness node label values to match. Ignored if `witness.affinity` is set.",
+                            "default": [],
+                            "items": {}
+                        }
+                    }
+                },
+                "affinity": {
+                    "type": "object",
+                    "description": "Affinity for PostgreSQL witness pods assignment",
+                    "default": {}
+                },
+                "nodeSelector": {
+                    "type": "object",
+                    "description": "Node labels for PostgreSQL witness pods assignment",
+                    "default": {}
+                },
+                "tolerations": {
+                    "type": "array",
+                    "description": "Tolerations for PostgreSQL witness pods assignment",
+                    "default": [],
+                    "items": {}
+                },
+                "topologySpreadConstraints": {
+                    "type": "array",
+                    "description": "Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template",
+                    "default": [],
+                    "items": {}
+                },
+                "priorityClassName": {
+                    "type": "string",
+                    "description": "Pod priority class",
+                    "default": ""
+                },
+                "schedulerName": {
+                    "type": "string",
+                    "description": "Use an alternate scheduler, e.g. \"stork\".",
+                    "default": ""
+                },
+                "terminationGracePeriodSeconds": {
+                    "type": "string",
+                    "description": "Seconds PostgreSQL witness pod needs to terminate gracefully",
+                    "default": ""
+                },
+                "podSecurityContext": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable security context for PostgreSQL witness with Repmgr",
+                            "default": true
+                        },
+                        "fsGroup": {
+                            "type": "number",
+                            "description": "Group ID for the PostgreSQL witness with Repmgr filesystem",
+                            "default": 1001
+                        }
+                    }
+                },
+                "containerSecurityContext": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable container security context",
+                            "default": true
+                        },
+                        "runAsUser": {
+                            "type": "number",
+                            "description": "User ID for the PostgreSQL witness with Repmgr container",
+                            "default": 1001
+                        },
+                        "runAsGroup": {
+                            "type": "number",
+                            "description": "Group ID for the PostgreSQL witness with Repmgr container",
+                            "default": 0
+                        },
+                        "runAsNonRoot": {
+                            "type": "boolean",
+                            "description": "Set PostgreSQL witness with Repmgr containers' Security Context runAsNonRoot",
+                            "default": true
+                        },
+                        "readOnlyRootFilesystem": {
+                            "type": "boolean",
+                            "description": "Set PostgreSQL witness with Repmgr containers' Security Context runAsNonRoot",
+                            "default": false
+                        },
+                        "allowPrivilegeEscalation": {
+                            "type": "boolean",
+                            "description": "Set PostgreSQL witness with Repmgr container's Security Context allowPrivilegeEscalation",
+                            "default": false
+                        },
+                        "seccompProfile": {
+                            "type": "object",
+                            "properties": {
+                                "type": {
+                                    "type": "string",
+                                    "description": "Set PostgreSQL witness with Repmgr container's Security Context seccompProfile",
+                                    "default": "RuntimeDefault"
+                                }
+                            }
+                        },
+                        "capabilities": {
+                            "type": "object",
+                            "properties": {
+                                "drop": {
+                                    "type": "array",
+                                    "description": "Set PostgreSQL witness with Repmgr container's Security Context capabilities to drop",
+                                    "default": [
+                                        "ALL"
+                                    ],
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "command": {
+                    "type": "array",
+                    "description": "Override default container command (useful when using custom images)",
+                    "default": [],
+                    "items": {}
+                },
+                "args": {
+                    "type": "array",
+                    "description": "Override default container args (useful when using custom images)",
+                    "default": [],
+                    "items": {}
+                },
+                "lifecycleHooks": {
+                    "type": "object",
+                    "description": "LifecycleHook to set additional configuration at startup, e.g. LDAP settings via REST API. Evaluated as a template",
+                    "default": {}
+                },
+                "extraEnvVars": {
+                    "type": "array",
+                    "description": "Array containing extra environment variables",
+                    "default": [],
+                    "items": {}
+                },
+                "extraEnvVarsCM": {
+                    "type": "string",
+                    "description": "ConfigMap with extra environment variables",
+                    "default": ""
+                },
+                "extraEnvVarsSecret": {
+                    "type": "string",
+                    "description": "Secret with extra environment variables",
+                    "default": ""
+                },
+                "extraVolumes": {
+                    "type": "array",
+                    "description": "Extra volumes to add to the deployment",
+                    "default": [],
+                    "items": {}
+                },
+                "extraVolumeMounts": {
+                    "type": "array",
+                    "description": "Extra volume mounts to add to the container. Normally used with `extraVolumes`.",
+                    "default": [],
+                    "items": {}
+                },
+                "initContainers": {
+                    "type": "array",
+                    "description": "Extra init containers to add to the deployment",
+                    "default": [],
+                    "items": {}
+                },
+                "sidecars": {
+                    "type": "array",
+                    "description": "Extra sidecar containers to add to the deployment",
+                    "default": [],
+                    "items": {}
+                },
+                "resources": {
+                    "type": "object",
+                    "properties": {
+                        "limits": {
+                            "type": "object",
+                            "description": "The resources limits for the container",
+                            "default": {}
+                        },
+                        "requests": {
+                            "type": "object",
+                            "description": "The requested resources for the container",
+                            "default": {}
+                        }
+                    }
+                },
+                "livenessProbe": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable livenessProbe",
+                            "default": true
+                        },
+                        "initialDelaySeconds": {
+                            "type": "number",
+                            "description": "Initial delay seconds for livenessProbe",
+                            "default": 30
+                        },
+                        "periodSeconds": {
+                            "type": "number",
+                            "description": "Period seconds for livenessProbe",
+                            "default": 10
+                        },
+                        "timeoutSeconds": {
+                            "type": "number",
+                            "description": "Timeout seconds for livenessProbe",
+                            "default": 5
+                        },
+                        "failureThreshold": {
+                            "type": "number",
+                            "description": "Failure threshold for livenessProbe",
+                            "default": 6
+                        },
+                        "successThreshold": {
+                            "type": "number",
+                            "description": "Success threshold for livenessProbe",
+                            "default": 1
+                        }
+                    }
+                },
+                "readinessProbe": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable readinessProbe",
+                            "default": true
+                        },
+                        "initialDelaySeconds": {
+                            "type": "number",
+                            "description": "Initial delay seconds for readinessProbe",
+                            "default": 5
+                        },
+                        "periodSeconds": {
+                            "type": "number",
+                            "description": "Period seconds for readinessProbe",
+                            "default": 10
+                        },
+                        "timeoutSeconds": {
+                            "type": "number",
+                            "description": "Timeout seconds for readinessProbe",
+                            "default": 5
+                        },
+                        "failureThreshold": {
+                            "type": "number",
+                            "description": "Failure threshold for readinessProbe",
+                            "default": 6
+                        },
+                        "successThreshold": {
+                            "type": "number",
+                            "description": "Success threshold for readinessProbe",
+                            "default": 1
+                        }
+                    }
+                },
+                "startupProbe": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable startupProbe",
+                            "default": false
+                        },
+                        "initialDelaySeconds": {
+                            "type": "number",
+                            "description": "Initial delay seconds for startupProbe",
+                            "default": 5
+                        },
+                        "periodSeconds": {
+                            "type": "number",
+                            "description": "Period seconds for startupProbe",
+                            "default": 10
+                        },
+                        "timeoutSeconds": {
+                            "type": "number",
+                            "description": "Timeout seconds for startupProbe",
+                            "default": 5
+                        },
+                        "failureThreshold": {
+                            "type": "number",
+                            "description": "Failure threshold for startupProbe",
+                            "default": 10
+                        },
+                        "successThreshold": {
+                            "type": "number",
+                            "description": "Success threshold for startupProbe",
+                            "default": 1
+                        }
+                    }
+                },
+                "customLivenessProbe": {
+                    "type": "object",
+                    "description": "Override default liveness probe",
+                    "default": {}
+                },
+                "customReadinessProbe": {
+                    "type": "object",
+                    "description": "Override default readiness probe",
+                    "default": {}
+                },
+                "customStartupProbe": {
+                    "type": "object",
+                    "description": "Override default startup probe",
+                    "default": {}
+                },
+                "pdb": {
+                    "type": "object",
+                    "properties": {
+                        "create": {
+                            "type": "boolean",
+                            "description": "Specifies whether to create a Pod disruption budget for PostgreSQL witness with Repmgr",
+                            "default": false
+                        },
+                        "minAvailable": {
+                            "type": "number",
+                            "description": "Minimum number / percentage of pods that should remain scheduled",
+                            "default": 1
+                        },
+                        "maxUnavailable": {
+                            "type": "string",
+                            "description": "Maximum number / percentage of pods that may be made unavailable",
+                            "default": ""
+                        }
+                    }
+                },
+                "upgradeRepmgrExtension": {
+                    "type": "boolean",
+                    "description": "Upgrade repmgr extension in the database",
+                    "default": false
+                },
+                "pgHbaTrustAll": {
+                    "type": "boolean",
+                    "description": "Configures PostgreSQL HBA to trust every user",
+                    "default": false
+                },
+                "repmgrLogLevel": {
+                    "type": "string",
+                    "description": "Repmgr log level (DEBUG, INFO, NOTICE, WARNING, ERROR, ALERT, CRIT or EMERG)",
+                    "default": "NOTICE"
+                },
+                "repmgrConnectTimeout": {
+                    "type": "number",
+                    "description": "Repmgr backend connection timeout (in seconds)",
+                    "default": 5
+                },
+                "repmgrReconnectAttempts": {
+                    "type": "number",
+                    "description": "Repmgr backend reconnection attempts",
+                    "default": 2
+                },
+                "repmgrReconnectInterval": {
+                    "type": "number",
+                    "description": "Repmgr backend reconnection interval (in seconds)",
+                    "default": 3
+                },
+                "audit": {
+                    "type": "object",
+                    "properties": {
+                        "logHostname": {
+                            "type": "boolean",
+                            "description": "Add client hostnames to the log file",
+                            "default": true
+                        },
+                        "logConnections": {
+                            "type": "boolean",
+                            "description": "Add client log-in operations to the log file",
+                            "default": false
+                        },
+                        "logDisconnections": {
+                            "type": "boolean",
+                            "description": "Add client log-outs operations to the log file",
+                            "default": false
+                        },
+                        "pgAuditLog": {
+                            "type": "string",
+                            "description": "Add operations to log using the pgAudit extension",
+                            "default": ""
+                        },
+                        "pgAuditLogCatalog": {
+                            "type": "string",
+                            "description": "Log catalog using pgAudit",
+                            "default": "off"
+                        },
+                        "clientMinMessages": {
+                            "type": "string",
+                            "description": "Message log level to share with the user",
+                            "default": "error"
+                        },
+                        "logLinePrefix": {
+                            "type": "string",
+                            "description": "Template string for the log line prefix",
+                            "default": ""
+                        },
+                        "logTimezone": {
+                            "type": "string",
+                            "description": "Timezone for the log timestamps",
+                            "default": ""
+                        }
+                    }
+                },
+                "maxConnections": {
+                    "type": "string",
+                    "description": "Maximum total connections",
+                    "default": ""
+                },
+                "postgresConnectionLimit": {
+                    "type": "string",
+                    "description": "Maximum connections for the postgres user",
+                    "default": ""
+                },
+                "dbUserConnectionLimit": {
+                    "type": "string",
+                    "description": "Maximum connections for the created user",
+                    "default": ""
+                },
+                "tcpKeepalivesInterval": {
+                    "type": "string",
+                    "description": "TCP keepalives interval",
+                    "default": ""
+                },
+                "tcpKeepalivesIdle": {
+                    "type": "string",
+                    "description": "TCP keepalives idle",
+                    "default": ""
+                },
+                "tcpKeepalivesCount": {
+                    "type": "string",
+                    "description": "TCP keepalives count",
+                    "default": ""
+                },
+                "statementTimeout": {
+                    "type": "string",
+                    "description": "Statement timeout",
+                    "default": ""
+                },
+                "pghbaRemoveFilters": {
+                    "type": "string",
+                    "description": "Comma-separated list of patterns to remove from the pg_hba.conf file",
+                    "default": ""
+                },
+                "extraInitContainers": {
+                    "type": "array",
+                    "description": "Extra init containers",
+                    "default": [],
+                    "items": {}
+                },
+                "repmgrConfiguration": {
+                    "type": "string",
+                    "description": "Repmgr configuration",
+                    "default": ""
+                },
+                "configuration": {
+                    "type": "string",
+                    "description": "PostgreSQL configuration",
+                    "default": ""
+                },
+                "pgHbaConfiguration": {
+                    "type": "string",
+                    "description": "PostgreSQL client authentication configuration",
+                    "default": ""
+                },
+                "configurationCM": {
+                    "type": "string",
+                    "description": "Name of existing ConfigMap with configuration files",
+                    "default": ""
+                },
+                "extendedConf": {
+                    "type": "string",
+                    "description": "Extended PostgreSQL configuration (appended to main or default configuration). Implies `volumePermissions.enabled`.",
+                    "default": ""
+                },
+                "extendedConfCM": {
+                    "type": "string",
+                    "description": "ConfigMap with PostgreSQL extended configuration",
+                    "default": ""
+                },
+                "initdbScripts": {
+                    "type": "object",
+                    "description": "Dictionary of initdb scripts",
+                    "default": {}
+                },
+                "initdbScriptsCM": {
+                    "type": "string",
+                    "description": "ConfigMap with scripts to be run at first boot",
+                    "default": ""
+                },
+                "initdbScriptsSecret": {
+                    "type": "string",
+                    "description": "Secret with scripts to be run at first boot",
+                    "default": ""
+                }
+            }
+        },
+        "pgpool": {
+            "type": "object",
+            "properties": {
+                "image": {
+                    "type": "object",
+                    "properties": {
+                        "registry": {
+                            "type": "string",
+                            "description": "Pgpool image registry",
+                            "default": "docker.io"
+                        },
+                        "repository": {
+                            "type": "string",
+                            "description": "Pgpool image repository",
+                            "default": "bitnami/pgpool"
+                        },
+                        "tag": {
+                            "type": "string",
+                            "description": "Pgpool image tag",
+                            "default": "4.4.4-debian-11-r13"
+                        },
+                        "digest": {
+                            "type": "string",
+                            "description": "Pgpool image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag",
+                            "default": ""
+                        },
+                        "pullPolicy": {
+                            "type": "string",
+                            "description": "Pgpool image pull policy",
+                            "default": "IfNotPresent"
+                        },
+                        "pullSecrets": {
+                            "type": "array",
+                            "description": "Specify docker-registry secret names as an array",
+                            "default": [],
+                            "items": {}
+                        },
+                        "debug": {
+                            "type": "boolean",
+                            "description": "Specify if debug logs should be enabled",
+                            "default": false
+                        }
+                    }
+                },
+                "customUsers": {
+                    "type": "object",
+                    "properties": {
+                        "usernames": {
+                            "type": "string",
+                            "description": "Comma or semicolon separated list of additional users that will be performing connections to the database using pgpool.",
+                            "default": ""
+                        },
+                        "passwords": {
+                            "type": "string",
+                            "description": "Comma or semicolon separated list of the associated passwords for the users above. Must have the same number of elements as the usernames list.",
+                            "default": ""
+                        }
+                    }
+                },
+                "hostAliases": {
+                    "type": "array",
+                    "description": "Deployment pod host aliases",
+                    "default": [],
+                    "items": {}
+                },
+                "customUsersSecret": {
+                    "type": "string",
+                    "description": "Name of a secret containing the usernames and passwords of accounts that will be added to pgpool_passwd",
+                    "default": ""
+                },
+                "existingSecret": {
+                    "type": "string",
+                    "description": "Pgpool admin password using existing secret",
+                    "default": ""
+                },
+                "srCheckDatabase": {
+                    "type": "string",
+                    "description": "Name of the database to perform streaming replication checks",
+                    "default": "postgres"
+                },
+                "labels": {
+                    "type": "object",
+                    "description": "Labels to add to the Deployment. Evaluated as template",
+                    "default": {}
+                },
+                "podLabels": {
+                    "type": "object",
+                    "description": "Labels to add to the pods. Evaluated as template",
+                    "default": {}
+                },
+                "serviceLabels": {
+                    "type": "object",
+                    "description": "Labels to add to the service. Evaluated as template",
+                    "default": {}
+                },
+                "serviceAnnotations": {
+                    "type": "object",
+                    "description": "Provide any additional annotations for Pgpool service",
+                    "default": {}
+                },
+                "customLivenessProbe": {
+                    "type": "object",
+                    "description": "Override default liveness probe",
+                    "default": {}
+                },
+                "customReadinessProbe": {
+                    "type": "object",
+                    "description": "Override default readiness probe",
+                    "default": {}
+                },
+                "customStartupProbe": {
+                    "type": "object",
+                    "description": "Override default startup probe",
+                    "default": {}
+                },
+                "command": {
+                    "type": "array",
+                    "description": "Override default container command (useful when using custom images)",
+                    "default": [],
+                    "items": {}
+                },
+                "args": {
+                    "type": "array",
+                    "description": "Override default container args (useful when using custom images)",
+                    "default": [],
+                    "items": {}
+                },
+                "lifecycleHooks": {
+                    "type": "object",
+                    "description": "LifecycleHook to set additional configuration at startup, e.g. LDAP settings via REST API. Evaluated as a template",
+                    "default": {}
+                },
+                "extraEnvVars": {
+                    "type": "array",
+                    "description": "Array containing extra environment variables",
+                    "default": [],
+                    "items": {}
+                },
+                "extraEnvVarsCM": {
+                    "type": "string",
+                    "description": "ConfigMap with extra environment variables",
+                    "default": ""
+                },
+                "extraEnvVarsSecret": {
+                    "type": "string",
+                    "description": "Secret with extra environment variables",
+                    "default": ""
+                },
+                "extraVolumes": {
+                    "type": "array",
+                    "description": "Extra volumes to add to the deployment",
+                    "default": [],
+                    "items": {}
+                },
+                "extraVolumeMounts": {
+                    "type": "array",
+                    "description": "Extra volume mounts to add to the container. Normally used with `extraVolumes`",
+                    "default": [],
+                    "items": {}
+                },
+                "initContainers": {
+                    "type": "array",
+                    "description": "Extra init containers to add to the deployment",
+                    "default": [],
+                    "items": {}
+                },
+                "sidecars": {
+                    "type": "array",
+                    "description": "Extra sidecar containers to add to the deployment",
+                    "default": [],
+                    "items": {}
+                },
+                "replicaCount": {
+                    "type": "number",
+                    "description": "The number of replicas to deploy",
+                    "default": 1
+                },
+                "podAnnotations": {
+                    "type": "object",
+                    "description": "Additional pod annotations",
+                    "default": {}
+                },
+                "priorityClassName": {
+                    "type": "string",
+                    "description": "Pod priority class",
+                    "default": ""
+                },
+                "schedulerName": {
+                    "type": "string",
+                    "description": "Use an alternate scheduler, e.g. \"stork\".",
+                    "default": ""
+                },
+                "terminationGracePeriodSeconds": {
+                    "type": "string",
+                    "description": "Seconds pgpool pod needs to terminate gracefully",
+                    "default": ""
+                },
+                "topologySpreadConstraints": {
+                    "type": "array",
+                    "description": "Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template",
+                    "default": [],
+                    "items": {}
+                },
+                "podAffinityPreset": {
+                    "type": "string",
+                    "description": "Pgpool pod affinity preset. Ignored if `pgpool.affinity` is set. Allowed values: `soft` or `hard`",
+                    "default": ""
+                },
+                "podAntiAffinityPreset": {
+                    "type": "string",
+                    "description": "Pgpool pod anti-affinity preset. Ignored if `pgpool.affinity` is set. Allowed values: `soft` or `hard`",
+                    "default": "soft"
+                },
+                "nodeAffinityPreset": {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "description": "Pgpool node affinity preset type. Ignored if `pgpool.affinity` is set. Allowed values: `soft` or `hard`",
+                            "default": ""
+                        },
+                        "key": {
+                            "type": "string",
+                            "description": "Pgpool node label key to match Ignored if `pgpool.affinity` is set.",
+                            "default": ""
+                        },
+                        "values": {
+                            "type": "array",
+                            "description": "Pgpool node label values to match. Ignored if `pgpool.affinity` is set.",
+                            "default": [],
+                            "items": {}
+                        }
+                    }
+                },
+                "affinity": {
+                    "type": "object",
+                    "description": "Affinity for Pgpool pods assignment",
+                    "default": {}
+                },
+                "nodeSelector": {
+                    "type": "object",
+                    "description": "Node labels for Pgpool pods assignment",
+                    "default": {}
+                },
+                "tolerations": {
+                    "type": "array",
+                    "description": "Tolerations for Pgpool pods assignment",
+                    "default": [],
+                    "items": {}
+                },
+                "podSecurityContext": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable security context for Pgpool",
+                            "default": true
+                        },
+                        "fsGroup": {
+                            "type": "number",
+                            "description": "Group ID for the Pgpool filesystem",
+                            "default": 1001
+                        }
+                    }
+                },
+                "containerSecurityContext": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable container security context",
+                            "default": true
+                        },
+                        "runAsUser": {
+                            "type": "number",
+                            "description": "User ID for the Pgpool container",
+                            "default": 1001
+                        },
+                        "runAsGroup": {
+                            "type": "number",
+                            "description": "User ID for the Pgpool container",
+                            "default": 0
+                        },
+                        "runAsNonRoot": {
+                            "type": "boolean",
+                            "description": "Set Pgpool containers' Security Context runAsNonRoot",
+                            "default": true
+                        },
+                        "readOnlyRootFilesystem": {
+                            "type": "boolean",
+                            "description": "Set Pgpool containers' Security Context runAsNonRoot",
+                            "default": false
+                        },
+                        "allowPrivilegeEscalation": {
+                            "type": "boolean",
+                            "description": "Set Pgpool container's Security Context allowPrivilegeEscalation",
+                            "default": false
+                        },
+                        "seccompProfile": {
+                            "type": "object",
+                            "properties": {
+                                "type": {
+                                    "type": "string",
+                                    "description": "Set Pgpool container's Security Context seccompProfile",
+                                    "default": "RuntimeDefault"
+                                }
+                            }
+                        },
+                        "capabilities": {
+                            "type": "object",
+                            "properties": {
+                                "drop": {
+                                    "type": "array",
+                                    "description": "Set Pgpool container's Security Context capabilities to drop",
+                                    "default": [
+                                        "ALL"
+                                    ],
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "resources": {
+                    "type": "object",
+                    "properties": {
+                        "limits": {
+                            "type": "object",
+                            "description": "The resources limits for the container",
+                            "default": {}
+                        },
+                        "requests": {
+                            "type": "object",
+                            "description": "The requested resources for the container",
+                            "default": {}
+                        }
+                    }
+                },
+                "livenessProbe": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable livenessProbe",
+                            "default": true
+                        },
+                        "initialDelaySeconds": {
+                            "type": "number",
+                            "description": "Initial delay seconds for livenessProbe",
+                            "default": 30
+                        },
+                        "periodSeconds": {
+                            "type": "number",
+                            "description": "Period seconds for livenessProbe",
+                            "default": 10
+                        },
+                        "timeoutSeconds": {
+                            "type": "number",
+                            "description": "Timeout seconds for livenessProbe",
+                            "default": 5
+                        },
+                        "failureThreshold": {
+                            "type": "number",
+                            "description": "Failure threshold for livenessProbe",
+                            "default": 5
+                        },
+                        "successThreshold": {
+                            "type": "number",
+                            "description": "Success threshold for livenessProbe",
+                            "default": 1
+                        }
+                    }
+                },
+                "readinessProbe": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable readinessProbe",
+                            "default": true
+                        },
+                        "initialDelaySeconds": {
+                            "type": "number",
+                            "description": "Initial delay seconds for readinessProbe",
+                            "default": 5
+                        },
+                        "periodSeconds": {
+                            "type": "number",
+                            "description": "Period seconds for readinessProbe",
+                            "default": 5
+                        },
+                        "timeoutSeconds": {
+                            "type": "number",
+                            "description": "Timeout seconds for readinessProbe",
+                            "default": 5
+                        },
+                        "failureThreshold": {
+                            "type": "number",
+                            "description": "Failure threshold for readinessProbe",
+                            "default": 5
+                        },
+                        "successThreshold": {
+                            "type": "number",
+                            "description": "Success threshold for readinessProbe",
+                            "default": 1
+                        }
+                    }
+                },
+                "startupProbe": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable startupProbe",
+                            "default": false
+                        },
+                        "initialDelaySeconds": {
+                            "type": "number",
+                            "description": "Initial delay seconds for startupProbe",
+                            "default": 5
+                        },
+                        "periodSeconds": {
+                            "type": "number",
+                            "description": "Period seconds for startupProbe",
+                            "default": 10
+                        },
+                        "timeoutSeconds": {
+                            "type": "number",
+                            "description": "Timeout seconds for startupProbe",
+                            "default": 5
+                        },
+                        "failureThreshold": {
+                            "type": "number",
+                            "description": "Failure threshold for startupProbe",
+                            "default": 10
+                        },
+                        "successThreshold": {
+                            "type": "number",
+                            "description": "Success threshold for startupProbe",
+                            "default": 1
+                        }
+                    }
+                },
+                "pdb": {
+                    "type": "object",
+                    "properties": {
+                        "create": {
+                            "type": "boolean",
+                            "description": "Specifies whether a Pod disruption budget should be created for Pgpool pods",
+                            "default": false
+                        },
+                        "minAvailable": {
+                            "type": "number",
+                            "description": "Minimum number / percentage of pods that should remain scheduled",
+                            "default": 1
+                        },
+                        "maxUnavailable": {
+                            "type": "string",
+                            "description": "Maximum number / percentage of pods that may be made unavailable",
+                            "default": ""
+                        }
+                    }
+                },
+                "updateStrategy": {
+                    "type": "object",
+                    "description": "Strategy used to replace old Pods by new ones",
+                    "default": {}
+                },
+                "containerPorts": {
+                    "type": "object",
+                    "properties": {
+                        "postgresql": {
+                            "type": "number",
+                            "description": "Pgpool port",
+                            "default": 5432
+                        }
+                    }
+                },
+                "minReadySeconds": {
+                    "type": "string",
+                    "description": "How many seconds a pod needs to be ready before killing the next, during update",
+                    "default": ""
+                },
+                "adminUsername": {
+                    "type": "string",
+                    "description": "Pgpool Admin username",
+                    "default": "admin"
+                },
+                "adminPassword": {
+                    "type": "string",
+                    "description": "Pgpool Admin password",
+                    "default": ""
+                },
+                "usePasswordFile": {
+                    "type": "string",
+                    "description": "Set to `true` to mount pgpool secret as a file instead of passing environment variable",
+                    "default": ""
+                },
+                "authenticationMethod": {
+                    "type": "string",
+                    "description": "Pgpool authentication method. Use 'md5' for PSQL < 14.",
+                    "default": "scram-sha-256"
+                },
+                "logConnections": {
+                    "type": "boolean",
+                    "description": "Log all client connections (PGPOOL_ENABLE_LOG_CONNECTIONS)",
+                    "default": false
+                },
+                "logHostname": {
+                    "type": "boolean",
+                    "description": "Log the client hostname instead of IP address (PGPOOL_ENABLE_LOG_HOSTNAME)",
+                    "default": true
+                },
+                "logPerNodeStatement": {
+                    "type": "boolean",
+                    "description": "Log every SQL statement for each DB node separately (PGPOOL_ENABLE_LOG_PER_NODE_STATEMENT)",
+                    "default": false
+                },
+                "logLinePrefix": {
+                    "type": "string",
+                    "description": "Format of the log entry lines (PGPOOL_LOG_LINE_PREFIX)",
+                    "default": ""
+                },
+                "clientMinMessages": {
+                    "type": "string",
+                    "description": "Log level for clients",
+                    "default": "error"
+                },
+                "numInitChildren": {
+                    "type": "string",
+                    "description": "The number of preforked Pgpool-II server processes. It is also the concurrent",
+                    "default": ""
+                },
+                "reservedConnections": {
+                    "type": "number",
+                    "description": "Number of reserved connections. When zero, excess connection block. When non-zero, excess connections are refused with an error message.",
+                    "default": 1
+                },
+                "maxPool": {
+                    "type": "string",
+                    "description": "The maximum number of cached connections in each child process (PGPOOL_MAX_POOL)",
+                    "default": ""
+                },
+                "childMaxConnections": {
+                    "type": "string",
+                    "description": "The maximum number of client connections in each child process (PGPOOL_CHILD_MAX_CONNECTIONS)",
+                    "default": ""
+                },
+                "childLifeTime": {
+                    "type": "string",
+                    "description": "The time in seconds to terminate a Pgpool-II child process if it remains idle (PGPOOL_CHILD_LIFE_TIME)",
+                    "default": ""
+                },
+                "clientIdleLimit": {
+                    "type": "string",
+                    "description": "The time in seconds to disconnect a client if it remains idle since the last query (PGPOOL_CLIENT_IDLE_LIMIT)",
+                    "default": ""
+                },
+                "connectionLifeTime": {
+                    "type": "string",
+                    "description": "The time in seconds to terminate the cached connections to the PostgreSQL backend (PGPOOL_CONNECTION_LIFE_TIME)",
+                    "default": ""
+                },
+                "useLoadBalancing": {
+                    "type": "boolean",
+                    "description": "Use Pgpool Load-Balancing",
+                    "default": true
+                },
+                "loadBalancingOnWrite": {
+                    "type": "string",
+                    "description": "LoadBalancer on write actions behavior",
+                    "default": "transaction"
+                },
+                "configuration": {
+                    "type": "string",
+                    "description": "Pgpool configuration",
+                    "default": ""
+                },
+                "configurationCM": {
+                    "type": "string",
+                    "description": "ConfigMap with Pgpool configuration",
+                    "default": ""
+                },
+                "initdbScripts": {
+                    "type": "object",
+                    "description": "Dictionary of initdb scripts",
+                    "default": {}
+                },
+                "initdbScriptsCM": {
+                    "type": "string",
+                    "description": "ConfigMap with scripts to be run every time Pgpool container is initialized",
+                    "default": ""
+                },
+                "initdbScriptsSecret": {
+                    "type": "string",
+                    "description": "Secret with scripts to be run every time Pgpool container is initialized",
+                    "default": ""
+                },
+                "tls": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable TLS traffic support for end-client connections",
+                            "default": false
+                        },
+                        "autoGenerated": {
+                            "type": "boolean",
+                            "description": "Create self-signed TLS certificates. Currently only supports PEM certificates",
+                            "default": false
+                        },
+                        "preferServerCiphers": {
+                            "type": "boolean",
+                            "description": "Whether to use the server's TLS cipher preferences rather than the client's",
+                            "default": true
+                        },
+                        "certificatesSecret": {
+                            "type": "string",
+                            "description": "Name of an existing secret that contains the certificates",
+                            "default": ""
+                        },
+                        "certFilename": {
+                            "type": "string",
+                            "description": "Certificate filename",
+                            "default": ""
+                        },
+                        "certKeyFilename": {
+                            "type": "string",
+                            "description": "Certificate key filename",
+                            "default": ""
+                        },
+                        "certCAFilename": {
+                            "type": "string",
+                            "description": "CA Certificate filename",
+                            "default": ""
+                        }
+                    }
+                }
+            }
+        },
+        "ldap": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "description": "Enable LDAP support",
+                    "default": false
+                },
+                "existingSecret": {
+                    "type": "string",
+                    "description": "Name of existing secret to use for LDAP passwords",
+                    "default": ""
+                },
+                "uri": {
+                    "type": "string",
+                    "description": "LDAP URL beginning in the form `ldap[s]://<hostname>:<port>`",
+                    "default": ""
+                },
+                "basedn": {
+                    "type": "string",
+                    "description": "LDAP base DN",
+                    "default": ""
+                },
+                "binddn": {
+                    "type": "string",
+                    "description": "LDAP bind DN",
+                    "default": ""
+                },
+                "bindpw": {
+                    "type": "string",
+                    "description": "LDAP bind password",
+                    "default": ""
+                },
+                "bslookup": {
+                    "type": "string",
+                    "description": "LDAP base lookup",
+                    "default": ""
+                },
+                "scope": {
+                    "type": "string",
+                    "description": "LDAP search scope",
+                    "default": ""
+                },
+                "tlsReqcert": {
+                    "type": "string",
+                    "description": "LDAP TLS check on server certificates",
+                    "default": ""
+                },
+                "nssInitgroupsIgnoreusers": {
+                    "type": "string",
+                    "description": "LDAP ignored users",
+                    "default": "root,nslcd"
+                }
+            }
+        },
+        "rbac": {
+            "type": "object",
+            "properties": {
+                "create": {
+                    "type": "boolean",
+                    "description": "Create Role and RoleBinding (required for PSP to work)",
+                    "default": false
+                },
+                "rules": {
+                    "type": "array",
+                    "description": "Custom RBAC rules to set",
+                    "default": [],
+                    "items": {}
+                }
+            }
+        },
+        "serviceAccount": {
+            "type": "object",
+            "properties": {
+                "create": {
+                    "type": "boolean",
+                    "description": "Enable creation of ServiceAccount for Airflow pods",
+                    "default": false
+                },
+                "name": {
+                    "type": "string",
+                    "description": "The name of the ServiceAccount to use.",
+                    "default": ""
+                },
+                "annotations": {
+                    "type": "object",
+                    "description": "Additional custom annotations for the ServiceAccount",
+                    "default": {}
+                },
+                "automountServiceAccountToken": {
+                    "type": "boolean",
+                    "description": "Allows auto mount of ServiceAccountToken on the serviceAccount created",
+                    "default": true
+                }
+            }
+        },
+        "psp": {
+            "type": "object",
+            "properties": {
+                "create": {
+                    "type": "boolean",
+                    "description": "Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later",
+                    "default": false
+                }
+            }
+        },
+        "metrics": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "description": "Enable PostgreSQL Prometheus exporter",
+                    "default": false
+                },
+                "image": {
+                    "type": "object",
+                    "properties": {
+                        "registry": {
+                            "type": "string",
+                            "description": "PostgreSQL Prometheus exporter image registry",
+                            "default": "docker.io"
+                        },
+                        "repository": {
+                            "type": "string",
+                            "description": "PostgreSQL Prometheus exporter image repository",
+                            "default": "bitnami/postgres-exporter"
+                        },
+                        "tag": {
+                            "type": "string",
+                            "description": "PostgreSQL Prometheus exporter image tag",
+                            "default": "0.13.2-debian-11-r36"
+                        },
+                        "digest": {
+                            "type": "string",
+                            "description": "PostgreSQL Prometheus exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag",
+                            "default": ""
+                        },
+                        "pullPolicy": {
+                            "type": "string",
+                            "description": "PostgreSQL Prometheus exporter image pull policy",
+                            "default": "IfNotPresent"
+                        },
+                        "pullSecrets": {
+                            "type": "array",
+                            "description": "Specify docker-registry secret names as an array",
+                            "default": [],
+                            "items": {}
+                        },
+                        "debug": {
+                            "type": "boolean",
+                            "description": "Specify if debug logs should be enabled",
+                            "default": false
+                        }
+                    }
+                },
+                "podSecurityContext": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable security context for PostgreSQL Prometheus exporter",
+                            "default": true
+                        },
+                        "runAsUser": {
+                            "type": "number",
+                            "description": "User ID for the PostgreSQL Prometheus exporter container",
+                            "default": 1001
+                        },
+                        "runAsGroup": {
+                            "type": "number",
+                            "description": "Group ID for the PostgreSQL Prometheus exporter container",
+                            "default": 0
+                        },
+                        "runAsNonRoot": {
+                            "type": "boolean",
+                            "description": "Set PostgreSQL Prometheus exporter container's Security Context runAsNonRoot",
+                            "default": true
+                        },
+                        "seccompProfile": {
+                            "type": "object",
+                            "properties": {
+                                "type": {
+                                    "type": "string",
+                                    "description": "Set PostgreSQL Prometheus exporter  container's Security Context seccompProfile",
+                                    "default": "RuntimeDefault"
+                                }
+                            }
+                        }
+                    }
+                },
+                "resources": {
+                    "type": "object",
+                    "properties": {
+                        "limits": {
+                            "type": "object",
+                            "description": "The resources limits for the container",
+                            "default": {}
+                        },
+                        "requests": {
+                            "type": "object",
+                            "description": "The requested resources for the container",
+                            "default": {}
+                        }
+                    }
+                },
+                "containerPorts": {
+                    "type": "object",
+                    "properties": {
+                        "http": {
+                            "type": "number",
+                            "description": "Prometheus metrics exporter port",
+                            "default": 9187
+                        }
+                    }
+                },
+                "livenessProbe": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable livenessProbe",
+                            "default": true
+                        },
+                        "initialDelaySeconds": {
+                            "type": "number",
+                            "description": "Initial delay seconds for livenessProbe",
+                            "default": 30
+                        },
+                        "periodSeconds": {
+                            "type": "number",
+                            "description": "Period seconds for livenessProbe",
+                            "default": 10
+                        },
+                        "timeoutSeconds": {
+                            "type": "number",
+                            "description": "Timeout seconds for livenessProbe",
+                            "default": 5
+                        },
+                        "failureThreshold": {
+                            "type": "number",
+                            "description": "Failure threshold for livenessProbe",
+                            "default": 6
+                        },
+                        "successThreshold": {
+                            "type": "number",
+                            "description": "Success threshold for livenessProbe",
+                            "default": 1
+                        }
+                    }
+                },
+                "readinessProbe": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable readinessProbe",
+                            "default": true
+                        },
+                        "initialDelaySeconds": {
+                            "type": "number",
+                            "description": "Initial delay seconds for readinessProbe",
+                            "default": 5
+                        },
+                        "periodSeconds": {
+                            "type": "number",
+                            "description": "Period seconds for readinessProbe",
+                            "default": 10
+                        },
+                        "timeoutSeconds": {
+                            "type": "number",
+                            "description": "Timeout seconds for readinessProbe",
+                            "default": 5
+                        },
+                        "failureThreshold": {
+                            "type": "number",
+                            "description": "Failure threshold for readinessProbe",
+                            "default": 6
+                        },
+                        "successThreshold": {
+                            "type": "number",
+                            "description": "Success threshold for readinessProbe",
+                            "default": 1
+                        }
+                    }
+                },
+                "startupProbe": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable startupProbe",
+                            "default": false
+                        },
+                        "initialDelaySeconds": {
+                            "type": "number",
+                            "description": "Initial delay seconds for startupProbe",
+                            "default": 5
+                        },
+                        "periodSeconds": {
+                            "type": "number",
+                            "description": "Period seconds for startupProbe",
+                            "default": 10
+                        },
+                        "timeoutSeconds": {
+                            "type": "number",
+                            "description": "Timeout seconds for startupProbe",
+                            "default": 5
+                        },
+                        "failureThreshold": {
+                            "type": "number",
+                            "description": "Failure threshold for startupProbe",
+                            "default": 10
+                        },
+                        "successThreshold": {
+                            "type": "number",
+                            "description": "Success threshold for startupProbe",
+                            "default": 1
+                        }
+                    }
+                },
+                "customLivenessProbe": {
+                    "type": "object",
+                    "description": "Override default liveness probe",
+                    "default": {}
+                },
+                "customReadinessProbe": {
+                    "type": "object",
+                    "description": "Override default readiness probe",
+                    "default": {}
+                },
+                "customStartupProbe": {
+                    "type": "object",
+                    "description": "Override default startup probe",
+                    "default": {}
+                },
+                "service": {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "description": "PostgreSQL Prometheus exporter metrics service type",
+                            "default": "ClusterIP"
+                        },
+                        "ports": {
+                            "type": "object",
+                            "properties": {
+                                "metrics": {
+                                    "type": "number",
+                                    "description": "PostgreSQL Prometheus exporter metrics service port",
+                                    "default": 9187
+                                }
+                            }
+                        },
+                        "nodePorts": {
+                            "type": "object",
+                            "properties": {
+                                "metrics": {
+                                    "type": "string",
+                                    "description": "PostgreSQL Prometheus exporter Node Port",
+                                    "default": ""
+                                }
+                            }
+                        },
+                        "clusterIP": {
+                            "type": "string",
+                            "description": "PostgreSQL Prometheus exporter metrics service Cluster IP",
+                            "default": ""
+                        },
+                        "loadBalancerIP": {
+                            "type": "string",
+                            "description": "PostgreSQL Prometheus exporter service Load Balancer IP",
+                            "default": ""
+                        },
+                        "loadBalancerSourceRanges": {
+                            "type": "array",
+                            "description": "PostgreSQL Prometheus exporter service Load Balancer sources",
+                            "default": [],
+                            "items": {}
+                        },
+                        "externalTrafficPolicy": {
+                            "type": "string",
+                            "description": "PostgreSQL Prometheus exporter service external traffic policy",
+                            "default": "Cluster"
+                        }
+                    }
+                },
+                "annotations": {
+                    "type": "object",
+                    "properties": {
+                        "prometheus": {
+                            "type": "object",
+                            "properties": {
+                                "io/scrape": {
+                                    "type": "string",
+                                    "description": "",
+                                    "default": "true"
+                                },
+                                "io/port": {
+                                    "type": "string",
+                                    "description": "",
+                                    "default": "9187"
+                                }
+                            }
+                        }
+                    }
+                },
+                "customMetrics": {
+                    "type": "object",
+                    "description": "Additional custom metrics",
+                    "default": {}
+                },
+                "extraEnvVars": {
+                    "type": "array",
+                    "description": "Array containing extra environment variables",
+                    "default": [],
+                    "items": {}
+                },
+                "extraEnvVarsCM": {
+                    "type": "string",
+                    "description": "ConfigMap with extra environment variables",
+                    "default": ""
+                },
+                "extraEnvVarsSecret": {
+                    "type": "string",
+                    "description": "Secret with extra environment variables",
+                    "default": ""
+                },
+                "serviceMonitor": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)",
+                            "default": false
+                        },
+                        "namespace": {
+                            "type": "string",
+                            "description": "Optional namespace which Prometheus is running in",
+                            "default": ""
+                        },
+                        "interval": {
+                            "type": "string",
+                            "description": "How frequently to scrape metrics (use by default, falling back to Prometheus' default)",
+                            "default": ""
+                        },
+                        "scrapeTimeout": {
+                            "type": "string",
+                            "description": "Service monitor scrape timeout",
+                            "default": ""
+                        },
+                        "annotations": {
+                            "type": "object",
+                            "description": "Additional annotations for the ServiceMonitor",
+                            "default": {}
+                        },
+                        "labels": {
+                            "type": "object",
+                            "description": "Additional labels that can be used so ServiceMonitor will be discovered by Prometheus",
+                            "default": {}
+                        },
+                        "selector": {
+                            "type": "object",
+                            "properties": {
+                                "prometheus": {
+                                    "type": "string",
+                                    "description": "",
+                                    "default": "kube-prometheus"
+                                }
+                            }
+                        },
+                        "relabelings": {
+                            "type": "array",
+                            "description": "ServiceMonitor relabelings. Value is evaluated as a template",
+                            "default": [],
+                            "items": {}
+                        },
+                        "metricRelabelings": {
+                            "type": "array",
+                            "description": "ServiceMonitor metricRelabelings. Value is evaluated as a template",
+                            "default": [],
+                            "items": {}
+                        },
+                        "honorLabels": {
+                            "type": "boolean",
+                            "description": "Specify honorLabels parameter to add the scrape endpoint",
+                            "default": false
+                        },
+                        "jobLabel": {
+                            "type": "string",
+                            "description": "The name of the label on the target service to use as the job name in prometheus.",
+                            "default": ""
+                        }
+                    }
+                }
+            }
+        },
+        "volumePermissions": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "description": "Enable init container to adapt volume permissions",
+                    "default": false
+                },
+                "image": {
+                    "type": "object",
+                    "properties": {
+                        "registry": {
+                            "type": "string",
+                            "description": "Init container volume-permissions image registry",
+                            "default": "docker.io"
+                        },
+                        "repository": {
+                            "type": "string",
+                            "description": "Init container volume-permissions image repository",
+                            "default": "bitnami/os-shell"
+                        },
+                        "tag": {
+                            "type": "string",
+                            "description": "Init container volume-permissions image tag",
+                            "default": "11-debian-11-r54"
+                        },
+                        "digest": {
+                            "type": "string",
+                            "description": "Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag",
+                            "default": ""
+                        },
+                        "pullPolicy": {
+                            "type": "string",
+                            "description": "Init container volume-permissions image pull policy",
+                            "default": "IfNotPresent"
+                        },
+                        "pullSecrets": {
+                            "type": "array",
+                            "description": "Specify docker-registry secret names as an array",
+                            "default": [],
+                            "items": {}
+                        }
+                    }
+                },
+                "podSecurityContext": {
+                    "type": "object",
+                    "properties": {
+                        "runAsUser": {
+                            "type": "number",
+                            "description": "Init container volume-permissions User ID",
+                            "default": 0
+                        },
+                        "runAsGroup": {
+                            "type": "number",
+                            "description": "Group ID for the init container volume-permissions container",
+                            "default": 0
+                        },
+                        "runAsNonRoot": {
+                            "type": "boolean",
+                            "description": "Set Security Context runAsNonRoot for the init container volume-permissions container",
+                            "default": false
+                        },
+                        "seccompProfile": {
+                            "type": "object",
+                            "properties": {
+                                "type": {
+                                    "type": "string",
+                                    "description": "Set Security Context seccompProfile for the init container volume-permissions container",
+                                    "default": "RuntimeDefault"
+                                }
+                            }
+                        }
+                    }
+                },
+                "resources": {
+                    "type": "object",
+                    "properties": {
+                        "limits": {
+                            "type": "object",
+                            "description": "The resources limits for the container",
+                            "default": {}
+                        },
+                        "requests": {
+                            "type": "object",
+                            "description": "The requested resources for the container",
+                            "default": {}
+                        }
+                    }
+                }
+            }
+        },
+        "persistence": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "description": "Enable data persistence",
+                    "default": true
+                },
+                "existingClaim": {
+                    "type": "string",
+                    "description": "A manually managed Persistent Volume and Claim",
+                    "default": ""
+                },
+                "storageClass": {
+                    "type": "string",
+                    "description": "Persistent Volume Storage Class",
+                    "default": ""
+                },
+                "mountPath": {
+                    "type": "string",
+                    "description": "The path the volume will be mounted at, useful when using different PostgreSQL images.",
+                    "default": "/bitnami/postgresql"
+                },
+                "accessModes": {
+                    "type": "array",
+                    "description": "List of access modes of data volume",
+                    "default": [
+                        "ReadWriteOnce"
+                    ],
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "size": {
+                    "type": "string",
+                    "description": "Persistent Volume Claim size",
+                    "default": "8Gi"
+                },
+                "annotations": {
+                    "type": "object",
+                    "description": "Persistent Volume Claim annotations",
+                    "default": {}
+                },
+                "labels": {
+                    "type": "object",
+                    "description": "Persistent Volume Claim labels",
+                    "default": {}
+                },
+                "selector": {
+                    "type": "object",
+                    "description": "Selector to match an existing Persistent Volume (this value is evaluated as a template)",
+                    "default": {}
+                }
+            }
+        },
+        "service": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "description": "Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`)",
+                    "default": "ClusterIP"
+                },
+                "ports": {
+                    "type": "object",
+                    "properties": {
+                        "postgresql": {
+                            "type": "number",
+                            "description": "PostgreSQL port",
+                            "default": 5432
+                        }
+                    }
+                },
+                "portName": {
+                    "type": "string",
+                    "description": "PostgreSQL service port name",
+                    "default": "postgresql"
+                },
+                "nodePorts": {
+                    "type": "object",
+                    "properties": {
+                        "postgresql": {
+                            "type": "string",
+                            "description": "Kubernetes service nodePort",
+                            "default": ""
+                        }
+                    }
+                },
+                "loadBalancerIP": {
+                    "type": "string",
+                    "description": "Load balancer IP if service type is `LoadBalancer`",
+                    "default": ""
+                },
+                "loadBalancerSourceRanges": {
+                    "type": "array",
+                    "description": "Addresses that are allowed when service is LoadBalancer",
+                    "default": [],
+                    "items": {}
+                },
+                "clusterIP": {
+                    "type": "string",
+                    "description": "Set the Cluster IP to use",
+                    "default": ""
+                },
+                "externalTrafficPolicy": {
+                    "type": "string",
+                    "description": "Enable client source IP preservation",
+                    "default": "Cluster"
+                },
+                "extraPorts": {
+                    "type": "array",
+                    "description": "Extra ports to expose (normally used with the `sidecar` value)",
+                    "default": [],
+                    "items": {}
+                },
+                "sessionAffinity": {
+                    "type": "string",
+                    "description": "Control where client requests go, to the same pod or round-robin",
+                    "default": "None"
+                },
+                "sessionAffinityConfig": {
+                    "type": "object",
+                    "description": "Additional settings for the sessionAffinity",
+                    "default": {}
+                },
+                "annotations": {
+                    "type": "object",
+                    "description": "Provide any additional annotations both for PostgreSQL and Pgpool services",
+                    "default": {}
+                },
+                "serviceLabels": {
+                    "type": "object",
+                    "description": "Labels for PostgreSQL service",
+                    "default": {}
+                },
+                "headless": {
+                    "type": "object",
+                    "properties": {
+                        "annotations": {
+                            "type": "object",
+                            "description": "Annotations for the headless service.",
+                            "default": {}
+                        }
+                    }
+                }
+            }
+        },
+        "networkPolicy": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "description": "Enable NetworkPolicy",
+                    "default": false
+                },
+                "allowExternal": {
+                    "type": "boolean",
+                    "description": "Don't require client label for connections",
+                    "default": true
+                },
+                "egressRules": {
+                    "type": "object",
+                    "properties": {
+                        "denyConnectionsToExternal": {
+                            "type": "boolean",
+                            "description": "Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53)",
+                            "default": false
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
