@@ -87,6 +87,8 @@ spec:
             securityContext:
               {{- include "common.tplvalues.render" ( dict "value" .Values.backup.cronjob.containerSecurityContext "context" $) | nindent 14 }}
           restartPolicy: {{ .Values.backup.cronjob.restartPolicy }}
+          securityContext:
+              {{- include "common.tplvalues.render" ( dict "value" .Values.backup.cronjob.securityContext "context" $) | nindent 12 }}
           volumes:
             {{- if .Values.tls.enabled }}
             - name: raw-certificates
