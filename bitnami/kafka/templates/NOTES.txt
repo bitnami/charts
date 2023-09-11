@@ -77,6 +77,13 @@ To connect a client to your Kafka, you need to create the 'client.properties' co
 
 security.protocol={{ .Values.listeners.client.protocol }}
 {{- if $clientSaslEnabled }}
+{{- if regexFind "OAUTHBEARER" (upper .Values.sasl.enabledMechanisms ) }}
+sasl.jaas.config="org.apache.kafka.common.security.oauthbearer.OAuthBearerLoginModule required"\
+    clientId="<Valid id From OAUTH provider>" \
+    password="<Valid password for id from OAUTH provider>";
+sasl.login.callback.handler.class=org.apache.kafka.common.security.oauthbearer.secured.OAuthBearerLoginCallbackHandler
+sasl.oauthbearer.token.endpoint.url={{ .Values.sasl.oauthbearer.tokenEndpointUrl }}
+{{- else }}
 {{- if regexFind "SCRAM-SHA-256" (upper .Values.sasl.enabledMechanisms) }}
 sasl.mechanism=SCRAM-SHA-256
 {{- else if regexFind "SCRAM-SHA-512" (upper .Values.sasl.enabledMechanisms) }}
@@ -88,6 +95,7 @@ sasl.mechanism=PLAIN
 sasl.jaas.config={{ $securityModule }} \
     username="{{ index .Values.sasl.client.users 0 }}" \
     password="$(kubectl get secret {{ $fullname }}-user-passwords --namespace {{ $releaseNamespace }} -o jsonpath='{.data.client-passwords}' | base64 -d | cut -d , -f 1)";
+{{- end }}
 {{- end }}
 {{- if $clientSslEnabled }}
 {{- $clientTlsType := upper .Values.tls.type }}
@@ -265,6 +273,13 @@ To connect a client to your Kafka, you need to create the 'client.properties' co
 
 security.protocol={{ .Values.listeners.external.protocol }}
 {{- if $externalSaslEnabled }}
+{{- if regexFind "OAUTHBEARER" (upper .Values.sasl.enabledMechanisms ) }}
+sasl.jaas.config="org.apache.kafka.common.security.oauthbearer.OAuthBearerLoginModule required"\
+    clientId="<Valid id From OAUTH provider>" \
+    password="<Valid password for id from OAUTH provider>";
+sasl.login.callback.handler.class=org.apache.kafka.common.security.oauthbearer.secured.OAuthBearerLoginCallbackHandler
+sasl.oauthbearer.token.endpoint.url={{ .Values.sasl.oauthbearer.tokenEndpointUrl }}
+{{- else }}
 {{- if regexFind "SCRAM-SHA-256" (upper .Values.sasl.enabledMechanisms) }}
 sasl.mechanism=SCRAM-SHA-256
 {{- else if regexFind "SCRAM-SHA-512" (upper .Values.sasl.enabledMechanisms) }}
@@ -276,6 +291,7 @@ sasl.mechanism=PLAIN
 sasl.jaas.config={{ $securityModule }} \
     username="{{ index .Values.sasl.client.users 0 }}" \
     password="$(kubectl get secret {{ $fullname }}-user-passwords --namespace {{ $releaseNamespace }} -o jsonpath='{.data.client-passwords}' | base64 -d | cut -d , -f 1)";
+{{- end }}
 {{- end }}
 {{- if $externalSslEnabled }}
 {{- $clientTlsType := upper .Values.tls.type }}
