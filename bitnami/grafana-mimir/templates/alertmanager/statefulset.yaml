@@ -21,7 +21,7 @@ spec:
   {{- if .Values.alertmanager.updateStrategy }}
   updateStrategy: {{- toYaml .Values.alertmanager.updateStrategy | nindent 4 }}
   {{- end }}
-  {{- $podLabels := merge .Values.alertmanager.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.alertmanager.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/part-of: grafana-mimir
@@ -214,7 +214,7 @@ spec:
     - metadata:
         name: data
         {{- if or .Values.alertmanager.persistence.annotations .Values.commonAnnotations }}
-        {{- $claimAnnotations := merge .Values.alertmanager.persistence.annotations .Values.commonAnnotations }}
+        {{- $claimAnnotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.alertmanager.persistence.annotations .Values.commonAnnotations ) "context" . ) }}
         annotations: {{- include "common.tplvalues.render" ( dict "value" $claimAnnotations "context" $) | nindent 10 }}
         {{- end }}
         {{- if .Values.commonLabels }}
