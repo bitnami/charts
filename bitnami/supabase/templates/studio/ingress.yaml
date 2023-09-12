@@ -13,7 +13,7 @@ metadata:
     app.kubernetes.io/part-of: supabase
     app.kubernetes.io/component: studio
   {{- if or .Values.studio.ingress.annotations .Values.commonAnnotations }}
-  {{- $annotations := merge .Values.studio.ingress.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.studio.ingress.annotations .Values.commonAnnotations ) "context" . ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:

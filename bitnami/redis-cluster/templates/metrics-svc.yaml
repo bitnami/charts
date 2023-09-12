@@ -9,11 +9,11 @@ kind: Service
 metadata:
   name: {{ template "common.names.fullname" . }}-metrics
   namespace: {{ .Release.Namespace | quote }}
-  {{- $labels := merge .Values.metrics.service.labels .Values.commonLabels }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.metrics.service.labels .Values.commonLabels ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: "metrics"
   {{- if or .Values.metrics.service.annotations .Values.commonAnnotations }}
-  {{- $annotations := merge .Values.metrics.service.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.metrics.service.annotations .Values.commonAnnotations ) "context" . ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
@@ -28,6 +28,6 @@ spec:
     - name: metrics
       port: 9121
       targetPort: http-metrics
-  {{- $podLabels := merge .Values.redis.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.redis.podLabels .Values.commonLabels ) "context" . ) }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
 {{- end }}

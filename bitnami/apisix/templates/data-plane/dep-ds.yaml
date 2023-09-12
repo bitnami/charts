@@ -22,7 +22,7 @@ spec:
   {{- if .Values.dataPlane.updateStrategy }}
   {{ ternary "updateStrategy" "strategy" .Values.dataPlane.useDaemonSet }}: {{- toYaml .Values.dataPlane.updateStrategy | nindent 4 }}
   {{- end }}
-  {{- $podLabels := merge .Values.dataPlane.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.dataPlane.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/part-of: apisix
