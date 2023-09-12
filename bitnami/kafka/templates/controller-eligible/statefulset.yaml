@@ -186,6 +186,7 @@ spec:
             {{- end }}
             {{- end }}
             {{- if regexFind "SASL" (upper .Values.listeners.controller.protocol) }}
+            {{- if (include "kafka.saslUserPasswordsEnabled" .) }}
             - name: KAFKA_CONTROLLER_USER
               value: {{ .Values.sasl.controller.user | quote }}
             - name: KAFKA_CONTROLLER_PASSWORD
@@ -193,6 +194,8 @@ spec:
                 secretKeyRef:
                   name: {{ include "kafka.saslSecretName" . }}
                   key: controller-password
+            {{- end }}
+            {{- if (include "kafka.saslClientSecretsEnabled" .) }}
             - name: KAFKA_CONTROLLER_CLIENT_ID
               value: {{ .Values.sasl.controller.clientId | quote }}
             - name: KAFKA_CONTROLLER_CLIENT_SECRET
@@ -200,6 +203,7 @@ spec:
                 secretKeyRef:
                   name: {{ include "kafka.saslSecretName" . }}
                   key: controller-client-secret
+            {{- end }}
             {{- end }}
             {{- end }}
             {{- if .Values.metrics.jmx.enabled }}
