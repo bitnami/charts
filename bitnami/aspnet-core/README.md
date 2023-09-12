@@ -76,21 +76,21 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### ASP.NET Core parameters
 
-| Name                 | Description                                                                                                  | Value                  |
-| -------------------- | ------------------------------------------------------------------------------------------------------------ | ---------------------- |
-| `image.registry`     | ASP.NET Core image registry                                                                                  | `docker.io`            |
-| `image.repository`   | ASP.NET Core image repository                                                                                | `bitnami/aspnet-core`  |
-| `image.tag`          | ASP.NET Core image tag (immutable tags are recommended)                                                      | `7.0.10-debian-11-r10` |
-| `image.digest`       | ASP.NET Core image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
-| `image.pullPolicy`   | ASP.NET Core image pull policy                                                                               | `IfNotPresent`         |
-| `image.pullSecrets`  | ASP.NET Core image pull secrets                                                                              | `[]`                   |
-| `image.debug`        | Enable image debug mode                                                                                      | `false`                |
-| `command`            | Override default container command (useful when using custom images)                                         | `[]`                   |
-| `args`               | Override default container args (useful when using custom images)                                            | `[]`                   |
-| `bindURLs`           | URLs to bind                                                                                                 | `http://+:8080`        |
-| `extraEnvVars`       | Extra environment variables to be set on ASP.NET Core container                                              | `[]`                   |
-| `extraEnvVarsCM`     | ConfigMap with extra environment variables                                                                   | `""`                   |
-| `extraEnvVarsSecret` | Secret with extra environment variables                                                                      | `""`                   |
+| Name                 | Description                                                                                                  | Value                 |
+| -------------------- | ------------------------------------------------------------------------------------------------------------ | --------------------- |
+| `image.registry`     | ASP.NET Core image registry                                                                                  | `docker.io`           |
+| `image.repository`   | ASP.NET Core image repository                                                                                | `bitnami/aspnet-core` |
+| `image.tag`          | ASP.NET Core image tag (immutable tags are recommended)                                                      | `7.0.11-debian-11-r0` |
+| `image.digest`       | ASP.NET Core image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
+| `image.pullPolicy`   | ASP.NET Core image pull policy                                                                               | `IfNotPresent`        |
+| `image.pullSecrets`  | ASP.NET Core image pull secrets                                                                              | `[]`                  |
+| `image.debug`        | Enable image debug mode                                                                                      | `false`               |
+| `command`            | Override default container command (useful when using custom images)                                         | `[]`                  |
+| `args`               | Override default container args (useful when using custom images)                                            | `[]`                  |
+| `bindURLs`           | URLs to bind                                                                                                 | `http://+:8080`       |
+| `extraEnvVars`       | Extra environment variables to be set on ASP.NET Core container                                              | `[]`                  |
+| `extraEnvVarsCM`     | ConfigMap with extra environment variables                                                                   | `""`                  |
+| `extraEnvVarsSecret` | Secret with extra environment variables                                                                      | `""`                  |
 
 ### ASP.NET Core deployment parameters
 
@@ -163,7 +163,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `appFromExternalRepo.enabled`                   | Enable to download/build ASP.NET Core app from external git repository                                   | `true`                                               |
 | `appFromExternalRepo.clone.image.registry`      | Git image registry                                                                                       | `docker.io`                                          |
 | `appFromExternalRepo.clone.image.repository`    | Git image repository                                                                                     | `bitnami/git`                                        |
-| `appFromExternalRepo.clone.image.tag`           | Git image tag (immutable tags are recommended)                                                           | `2.41.0-debian-11-r74`                               |
+| `appFromExternalRepo.clone.image.tag`           | Git image tag (immutable tags are recommended)                                                           | `2.42.0-debian-11-r20`                               |
 | `appFromExternalRepo.clone.image.digest`        | Git image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag      | `""`                                                 |
 | `appFromExternalRepo.clone.image.pullPolicy`    | Git image pull policy                                                                                    | `IfNotPresent`                                       |
 | `appFromExternalRepo.clone.image.pullSecrets`   | Git image pull secrets                                                                                   | `[]`                                                 |
@@ -172,7 +172,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `appFromExternalRepo.clone.extraVolumeMounts`   | Add extra volume mounts for the GIT container                                                            | `[]`                                                 |
 | `appFromExternalRepo.publish.image.registry`    | .NET SDK image registry                                                                                  | `docker.io`                                          |
 | `appFromExternalRepo.publish.image.repository`  | .NET SDK image repository                                                                                | `bitnami/dotnet-sdk`                                 |
-| `appFromExternalRepo.publish.image.tag`         | .NET SDK image tag (immutable tags are recommended)                                                      | `7.0.400-debian-11-r8`                               |
+| `appFromExternalRepo.publish.image.tag`         | .NET SDK image tag (immutable tags are recommended)                                                      | `7.0.401-debian-11-r0`                               |
 | `appFromExternalRepo.publish.image.digest`      | .NET SDK image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                                                 |
 | `appFromExternalRepo.publish.image.pullPolicy`  | .NET SDK image pull policy                                                                               | `IfNotPresent`                                       |
 | `appFromExternalRepo.publish.image.pullSecrets` | .NET SDK image pull secrets                                                                              | `[]`                                                 |
