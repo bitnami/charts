@@ -6,30 +6,30 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: kibana
-      image: docker.io/bitnami/kibana:8.9.2-debian-11-r0
+      image: docker.io/bitnami/kibana:8.10.0-debian-11-r0
     - name: os-shell
-      image: docker.io/bitnami/os-shell:11-debian-11-r60
+      image: docker.io/bitnami/os-shell:11-debian-11-r66
 apiVersion: v2
-appVersion: 8.9.2
+appVersion: 8.10.0
 dependencies:
-  - name: common
-    repository: oci://registry-1.docker.io/bitnamicharts
-    tags:
-      - bitnami-common
-    version: 2.x.x
+- name: common
+  repository: oci://registry-1.docker.io/bitnamicharts
+  tags:
+  - bitnami-common
+  version: 2.x.x
 description: Kibana is an open source, browser based analytics and search dashboard for Elasticsearch. Kibana strives to be easy to get started with, while also being flexible and powerful.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/kibana/img/kibana-stack-220x234.png
 keywords:
-  - kibana
-  - analytics
-  - monitoring
-  - metrics
-  - logs
+- kibana
+- analytics
+- monitoring
+- metrics
+- logs
 maintainers:
-  - name: VMware, Inc.
-    url: https://github.com/bitnami/charts
+- name: VMware, Inc.
+  url: https://github.com/bitnami/charts
 name: kibana
 sources:
-  - https://github.com/bitnami/charts/tree/main/bitnami/kibana
-version: 10.5.2
+- https://github.com/bitnami/charts/tree/main/bitnami/kibana
+version: 10.5.3
