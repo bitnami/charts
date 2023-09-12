@@ -10,12 +10,12 @@ kind: Service
 metadata:
   name: {{ include "common.names.fullname" . }}-query
   namespace: {{ .Release.Namespace | quote }}
-  {{- $labels := merge $query.service.labels .Values.commonLabels }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list $query.service.labels .Values.commonLabels ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: query
     {{- include "thanos.servicemonitor.matchLabels" . | nindent 4 -}}
   {{- if or $query.service.annotations .Values.commonAnnotations }}
-  {{- $annotations := merge $query.service.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list $query.service.annotations .Values.commonAnnotations ) "context" . ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
@@ -49,7 +49,7 @@ spec:
     {{- if $query.service.labelSelectorsOverride }}
     {{- include "common.tplvalues.render" (dict "value" $query.service.labelSelectorsOverride "context" $) | nindent 4 }}
     {{- else }}
-    {{- $podLabels := merge $query.podLabels .Values.commonLabels }}
+    {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list $query.podLabels .Values.commonLabels ) "context" . ) }}
     {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: query
     {{- end }}
