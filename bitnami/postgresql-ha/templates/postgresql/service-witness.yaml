@@ -11,7 +11,7 @@ metadata:
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
   {{- if or .Values.commonAnnotations .Values.service.headless.annotations }}
-  {{- $annotations := merge .Values.service.headless.serviceAnnotations .Values.service.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.service.headless.serviceAnnotations .Values.service.annotations .Values.commonAnnotations ) "context" . ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
@@ -22,7 +22,7 @@ spec:
       port: {{ .Values.postgresql.containerPorts.postgresql }}
       targetPort: postgresql
       protocol: TCP
-  {{- $podLabels := merge .Values.witness.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.witness.podLabels .Values.commonLabels ) "context" . ) }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: postgresql
     role: witness
