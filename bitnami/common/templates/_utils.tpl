@@ -65,3 +65,13 @@ Usage:
 {{- end -}}
 {{- printf "%s" $key -}} 
 {{- end -}}
+
+{{/*
+Checksum a template containing a *single* resource (ConfigMap,Secret) for use in pod annotations, excluding the metadata (see #18376).
+Usage:
+{{ include "common.utils.checksum" (dict "template" "/configmap.yaml" "context" $) }}
+*/}}
+{{- define "common.utils.checksum" -}}
+{{- $obj := include (print .context.Template.BasePath .template) .context | fromYaml -}}
+{{ omit $obj "apiVersion" "kind" "metadata" | toYaml | sha256sum }}
+{{- end -}}
