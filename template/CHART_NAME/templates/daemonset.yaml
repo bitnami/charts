@@ -17,7 +17,7 @@ spec:
   {{- if .Values.%%MAIN_OBJECT_BLOCK%%.updateStrategy }}
   updateStrategy: {{- toYaml .Values.%%MAIN_OBJECT_BLOCK%%.updateStrategy | nindent 4 }}
   {{- end }}
-  {{- $podLabels := include "common.tplvalues.merge (dict "values" .Values.%%MAIN_OBJECT_BLOCK%%.podLabels .Values.commonLabels "context" .) | fromYaml }}
+  {{- $podLabels := include "common.tplvalues.merge" (dict "values" .Values.%%MAIN_OBJECT_BLOCK%%.podLabels .Values.commonLabels "context" .) | fromYaml }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: %%COMPONENT_NAME%%
