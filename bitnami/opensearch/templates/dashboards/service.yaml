@@ -12,7 +12,7 @@ metadata:
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: dashboards
   {{- if or .Values.dashboards.service.annotations .Values.commonAnnotations }}
-  {{- $annotations := merge .Values.dashboards.service.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.dashboards.service.annotations .Values.commonAnnotations ) "context" . ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
@@ -48,7 +48,7 @@ spec:
     {{- if .Values.dashboards.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.dashboards.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}
-  {{- $podLabels := merge .Values.dashboards.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.dashboards.podLabels .Values.commonLabels ) "context" . ) }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: dashboards
 {{- end }}

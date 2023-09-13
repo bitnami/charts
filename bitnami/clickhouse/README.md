@@ -281,17 +281,17 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Persistence Parameters
 
-| Name                        | Description                                                            | Value               |
-| --------------------------- | ---------------------------------------------------------------------- | ------------------- |
-| `persistence.enabled`       | Enable persistence using Persistent Volume Claims                      | `true`              |
-| `persistence.existingClaim` | Name of an existing PVC to use                                         | `""`                |
-| `persistence.storageClass`  | Storage class of backing PVC                                           | `""`                |
-| `persistence.labels`        | Persistent Volume Claim labels                                         | `{}`                |
-| `persistence.annotations`   | Persistent Volume Claim annotations                                    | `{}`                |
-| `persistence.accessModes`   | Persistent Volume Access Modes                                         | `["ReadWriteOnce"]` |
-| `persistence.size`          | Size of data volume                                                    | `8Gi`               |
-| `persistence.selector`      | Selector to match an existing Persistent Volume for WordPress data PVC | `{}`                |
-| `persistence.dataSource`    | Custom PVC data source                                                 | `{}`                |
+| Name                        | Description                                                             | Value               |
+| --------------------------- | ----------------------------------------------------------------------- | ------------------- |
+| `persistence.enabled`       | Enable persistence using Persistent Volume Claims                       | `true`              |
+| `persistence.existingClaim` | Name of an existing PVC to use                                          | `""`                |
+| `persistence.storageClass`  | Storage class of backing PVC                                            | `""`                |
+| `persistence.labels`        | Persistent Volume Claim labels                                          | `{}`                |
+| `persistence.annotations`   | Persistent Volume Claim annotations                                     | `{}`                |
+| `persistence.accessModes`   | Persistent Volume Access Modes                                          | `["ReadWriteOnce"]` |
+| `persistence.size`          | Size of data volume                                                     | `8Gi`               |
+| `persistence.selector`      | Selector to match an existing Persistent Volume for ClickHouse data PVC | `{}`                |
+| `persistence.dataSource`    | Custom PVC data source                                                  | `{}`                |
 
 ### Init Container Parameters
 

@@ -22,7 +22,7 @@ spec:
   {{- if .Values.helmController.updateStrategy }}
   strategy: {{- toYaml .Values.helmController.updateStrategy | nindent 4 }}
   {{- end }}
-  {{- $podLabels := merge .Values.helmController.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.helmController.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: helm-controller

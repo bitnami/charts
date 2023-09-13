@@ -1,0 +1,1424 @@
+{
+    "title": "Chart Values",
+    "type": "object",
+    "properties": {
+        "global": {
+            "type": "object",
+            "properties": {
+                "imageRegistry": {
+                    "type": "string",
+                    "description": "Global Docker image registry",
+                    "default": ""
+                },
+                "imagePullSecrets": {
+                    "type": "array",
+                    "description": "Global Docker registry secret names as an array",
+                    "default": [],
+                    "items": {}
+                },
+                "storageClass": {
+                    "type": "string",
+                    "description": "Global StorageClass for Persistent Volume(s)",
+                    "default": ""
+                }
+            }
+        },
+        "kubeVersion": {
+            "type": "string",
+            "description": "Force target Kubernetes version (using Helm capabilities if not set)",
+            "default": ""
+        },
+        "nameOverride": {
+            "type": "string",
+            "description": "String to partially override common.names.fullname template (will maintain the release name)",
+            "default": ""
+        },
+        "fullnameOverride": {
+            "type": "string",
+            "description": "String to fully override common.names.fullname template",
+            "default": ""
+        },
+        "namespaceOverride": {
+            "type": "string",
+            "description": "String to fully override common.names.namespace",
+            "default": ""
+        },
+        "commonLabels": {
+            "type": "object",
+            "description": "Labels to add to all deployed objects",
+            "default": {}
+        },
+        "commonAnnotations": {
+            "type": "object",
+            "description": "Annotations to add to all deployed objects",
+            "default": {}
+        },
+        "clusterDomain": {
+            "type": "string",
+            "description": "Kubernetes cluster domain name",
+            "default": "cluster.local"
+        },
+        "extraDeploy": {
+            "type": "array",
+            "description": "Array of extra objects to deploy with the release",
+            "default": [],
+            "items": {}
+        },
+        "initScripts": {
+            "type": "object",
+            "description": "Dictionary of init scripts. Evaluated as a template.",
+            "default": {}
+        },
+        "initScriptsCM": {
+            "type": "string",
+            "description": "ConfigMap with the init scripts. Evaluated as a template.",
+            "default": ""
+        },
+        "initScriptsSecret": {
+            "type": "string",
+            "description": "Secret containing `/docker-entrypoint-initdb.d` scripts to be executed at initialization time that contain sensitive data. Evaluated as a template.",
+            "default": ""
+        },
+        "diagnosticMode": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "description": "Enable diagnostic mode (all probes will be disabled and the command will be overridden)",
+                    "default": false
+                },
+                "command": {
+                    "type": "array",
+                    "description": "Command to override all containers in the deployment",
+                    "default": [
+                        "sleep"
+                    ],
+                    "items": {
+                        "type": "string"
+                    }
+                },
+                "args": {
+                    "type": "array",
+                    "description": "Args to override all containers in the deployment",
+                    "default": [
+                        "infinity"
+                    ],
+                    "items": {
+                        "type": "string"
+                    }
+                }
+            }
+        },
+        "image": {
+            "type": "object",
+            "properties": {
+                "registry": {
+                    "type": "string",
+                    "description": "Spark image registry",
+                    "default": "docker.io"
+                },
+                "repository": {
+                    "type": "string",
+                    "description": "Spark image repository",
+                    "default": "bitnami/spark"
+                },
+                "tag": {
+                    "type": "string",
+                    "description": "Spark image tag (immutable tags are recommended)",
+                    "default": "3.4.1-debian-11-r48"
+                },
+                "digest": {
+                    "type": "string",
+                    "description": "Spark image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag",
+                    "default": ""
+                },
+                "pullPolicy": {
+                    "type": "string",
+                    "description": "Spark image pull policy",
+                    "default": "IfNotPresent"
+                },
+                "pullSecrets": {
+                    "type": "array",
+                    "description": "Specify docker-registry secret names as an array",
+                    "default": [],
+                    "items": {}
+                },
+                "debug": {
+                    "type": "boolean",
+                    "description": "Enable image debug mode",
+                    "default": false
+                }
+            }
+        },
+        "hostNetwork": {
+            "type": "boolean",
+            "description": "Enable HOST Network",
+            "default": false
+        },
+        "master": {
+            "type": "object",
+            "properties": {
+                "existingConfigmap": {
+                    "type": "string",
+                    "description": "The name of an existing ConfigMap with your custom configuration for master",
+                    "default": ""
+                },
+                "containerPorts": {
+                    "type": "object",
+                    "properties": {
+                        "http": {
+                            "type": "number",
+                            "description": "Specify the port where the web interface will listen on the master over HTTP",
+                            "default": 8080
+                        },
+                        "https": {
+                            "type": "number",
+                            "description": "Specify the port where the web interface will listen on the master over HTTPS",
+                            "default": 8480
+                        },
+                        "cluster": {
+                            "type": "number",
+                            "description": "Specify the port where the master listens to communicate with workers",
+                            "default": 7077
+                        }
+                    }
+                },
+                "hostAliases": {
+                    "type": "array",
+                    "description": "Deployment pod host aliases",
+                    "default": [],
+                    "items": {}
+                },
+                "extraContainerPorts": {
+                    "type": "array",
+                    "description": "Specify the port where the running jobs inside the masters listens",
+                    "default": [],
+                    "items": {}
+                },
+                "daemonMemoryLimit": {
+                    "type": "string",
+                    "description": "Set the memory limit for the master daemon",
+                    "default": ""
+                },
+                "configOptions": {
+                    "type": "string",
+                    "description": "Use a string to set the config options for in the form \"-Dx=y\"",
+                    "default": ""
+                },
+                "extraEnvVars": {
+                    "type": "array",
+                    "description": "Extra environment variables to pass to the master container",
+                    "default": [],
+                    "items": {}
+                },
+                "extraEnvVarsCM": {
+                    "type": "string",
+                    "description": "Name of existing ConfigMap containing extra env vars for master nodes",
+                    "default": ""
+                },
+                "extraEnvVarsSecret": {
+                    "type": "string",
+                    "description": "Name of existing Secret containing extra env vars for master nodes",
+                    "default": ""
+                },
+                "podSecurityContext": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable security context",
+                            "default": true
+                        },
+                        "fsGroup": {
+                            "type": "number",
+                            "description": "Set master pod's Security Context Group ID",
+                            "default": 1001
+                        },
+                        "runAsUser": {
+                            "type": "number",
+                            "description": "Set master pod's Security Context User ID",
+                            "default": 1001
+                        },
+                        "runAsGroup": {
+                            "type": "number",
+                            "description": "Set master pod's Security Context Group ID",
+                            "default": 0
+                        },
+                        "seLinuxOptions": {
+                            "type": "object",
+                            "description": "Set master pod's Security Context SELinux options",
+                            "default": {}
+                        }
+                    }
+                },
+                "containerSecurityContext": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enabled master containers' Security Context",
+                            "default": true
+                        },
+                        "runAsUser": {
+                            "type": "number",
+                            "description": "Set master containers' Security Context runAsUser",
+                            "default": 1001
+                        },
+                        "runAsNonRoot": {
+                            "type": "boolean",
+                            "description": "Set master containers' Security Context runAsNonRoot",
+                            "default": true
+                        },
+                        "readOnlyRootFilesystem": {
+                            "type": "boolean",
+                            "description": "Set master containers' Security Context runAsNonRoot",
+                            "default": false
+                        }
+                    }
+                },
+                "command": {
+                    "type": "array",
+                    "description": "Override default container command (useful when using custom images)",
+                    "default": [],
+                    "items": {}
+                },
+                "args": {
+                    "type": "array",
+                    "description": "Override default container args (useful when using custom images)",
+                    "default": [],
+                    "items": {}
+                },
+                "podAnnotations": {
+                    "type": "object",
+                    "description": "Annotations for pods in StatefulSet",
+                    "default": {}
+                },
+                "podLabels": {
+                    "type": "object",
+                    "description": "Extra labels for pods in StatefulSet",
+                    "default": {}
+                },
+                "podAffinityPreset": {
+                    "type": "string",
+                    "description": "Spark master pod affinity preset. Ignored if `master.affinity` is set. Allowed values: `soft` or `hard`",
+                    "default": ""
+                },
+                "podAntiAffinityPreset": {
+                    "type": "string",
+                    "description": "Spark master pod anti-affinity preset. Ignored if `master.affinity` is set. Allowed values: `soft` or `hard`",
+                    "default": "soft"
+                },
+                "nodeAffinityPreset": {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "description": "Spark master node affinity preset type. Ignored if `master.affinity` is set. Allowed values: `soft` or `hard`",
+                            "default": ""
+                        },
+                        "key": {
+                            "type": "string",
+                            "description": "Spark master node label key to match Ignored if `master.affinity` is set.",
+                            "default": ""
+                        },
+                        "values": {
+                            "type": "array",
+                            "description": "Spark master node label values to match. Ignored if `master.affinity` is set.",
+                            "default": [],
+                            "items": {}
+                        }
+                    }
+                },
+                "affinity": {
+                    "type": "object",
+                    "description": "Spark master affinity for pod assignment",
+                    "default": {}
+                },
+                "nodeSelector": {
+                    "type": "object",
+                    "description": "Spark master node labels for pod assignment",
+                    "default": {}
+                },
+                "tolerations": {
+                    "type": "array",
+                    "description": "Spark master tolerations for pod assignment",
+                    "default": [],
+                    "items": {}
+                },
+                "updateStrategy": {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "description": "Master statefulset strategy type.",
+                            "default": "RollingUpdate"
+                        }
+                    }
+                },
+                "priorityClassName": {
+                    "type": "string",
+                    "description": "master pods' priorityClassName",
+                    "default": ""
+                },
+                "topologySpreadConstraints": {
+                    "type": "array",
+                    "description": "Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template",
+                    "default": [],
+                    "items": {}
+                },
+                "schedulerName": {
+                    "type": "string",
+                    "description": "Name of the k8s scheduler (other than default) for master pods",
+                    "default": ""
+                },
+                "terminationGracePeriodSeconds": {
+                    "type": "string",
+                    "description": "Seconds Redmine pod needs to terminate gracefully",
+                    "default": ""
+                },
+                "lifecycleHooks": {
+                    "type": "object",
+                    "description": "for the master container(s) to automate configuration before or after startup",
+                    "default": {}
+                },
+                "extraVolumes": {
+                    "type": "array",
+                    "description": "Optionally specify extra list of additional volumes for the master pod(s)",
+                    "default": [],
+                    "items": {}
+                },
+                "extraVolumeMounts": {
+                    "type": "array",
+                    "description": "Optionally specify extra list of additional volumeMounts for the master container(s)",
+                    "default": [],
+                    "items": {}
+                },
+                "extraVolumeClaimTemplates": {
+                    "type": "array",
+                    "description": "Optionally specify extra list of volumesClaimTemplates for the master statefulset",
+                    "default": [],
+                    "items": {}
+                },
+                "resources": {
+                    "type": "object",
+                    "properties": {
+                        "limits": {
+                            "type": "object",
+                            "description": "The resources limits for the container",
+                            "default": {}
+                        },
+                        "requests": {
+                            "type": "object",
+                            "description": "The requested resources for the container",
+                            "default": {}
+                        }
+                    }
+                },
+                "livenessProbe": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable livenessProbe",
+                            "default": true
+                        },
+                        "initialDelaySeconds": {
+                            "type": "number",
+                            "description": "Initial delay seconds for livenessProbe",
+                            "default": 180
+                        },
+                        "periodSeconds": {
+                            "type": "number",
+                            "description": "Period seconds for livenessProbe",
+                            "default": 20
+                        },
+                        "timeoutSeconds": {
+                            "type": "number",
+                            "description": "Timeout seconds for livenessProbe",
+                            "default": 5
+                        },
+                        "failureThreshold": {
+                            "type": "number",
+                            "description": "Failure threshold for livenessProbe",
+                            "default": 6
+                        },
+                        "successThreshold": {
+                            "type": "number",
+                            "description": "Success threshold for livenessProbe",
+                            "default": 1
+                        }
+                    }
+                },
+                "readinessProbe": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable readinessProbe",
+                            "default": true
+                        },
+                        "initialDelaySeconds": {
+                            "type": "number",
+                            "description": "Initial delay seconds for readinessProbe",
+                            "default": 30
+                        },
+                        "periodSeconds": {
+                            "type": "number",
+                            "description": "Period seconds for readinessProbe",
+                            "default": 10
+                        },
+                        "timeoutSeconds": {
+                            "type": "number",
+                            "description": "Timeout seconds for readinessProbe",
+                            "default": 5
+                        },
+                        "failureThreshold": {
+                            "type": "number",
+                            "description": "Failure threshold for readinessProbe",
+                            "default": 6
+                        },
+                        "successThreshold": {
+                            "type": "number",
+                            "description": "Success threshold for readinessProbe",
+                            "default": 1
+                        }
+                    }
+                },
+                "startupProbe": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable startupProbe",
+                            "default": false
+                        },
+                        "initialDelaySeconds": {
+                            "type": "number",
+                            "description": "Initial delay seconds for startupProbe",
+                            "default": 30
+                        },
+                        "periodSeconds": {
+                            "type": "number",
+                            "description": "Period seconds for startupProbe",
+                            "default": 10
+                        },
+                        "timeoutSeconds": {
+                            "type": "number",
+                            "description": "Timeout seconds for startupProbe",
+                            "default": 5
+                        },
+                        "failureThreshold": {
+                            "type": "number",
+                            "description": "Failure threshold for startupProbe",
+                            "default": 6
+                        },
+                        "successThreshold": {
+                            "type": "number",
+                            "description": "Success threshold for startupProbe",
+                            "default": 1
+                        }
+                    }
+                },
+                "customLivenessProbe": {
+                    "type": "object",
+                    "description": "Custom livenessProbe that overrides the default one",
+                    "default": {}
+                },
+                "customReadinessProbe": {
+                    "type": "object",
+                    "description": "Custom readinessProbe that overrides the default one",
+                    "default": {}
+                },
+                "customStartupProbe": {
+                    "type": "object",
+                    "description": "Custom startupProbe that overrides the default one",
+                    "default": {}
+                },
+                "sidecars": {
+                    "type": "array",
+                    "description": "Add additional sidecar containers to the master pod(s)",
+                    "default": [],
+                    "items": {}
+                },
+                "initContainers": {
+                    "type": "array",
+                    "description": "Add initContainers to the master pods.",
+                    "default": [],
+                    "items": {}
+                }
+            }
+        },
+        "worker": {
+            "type": "object",
+            "properties": {
+                "existingConfigmap": {
+                    "type": "string",
+                    "description": "The name of an existing ConfigMap with your custom configuration for workers",
+                    "default": ""
+                },
+                "containerPorts": {
+                    "type": "object",
+                    "properties": {
+                        "http": {
+                            "type": "number",
+                            "description": "Specify the port where the web interface will listen on the worker over HTTP",
+                            "default": 8080
+                        },
+                        "https": {
+                            "type": "number",
+                            "description": "Specify the port where the web interface will listen on the worker over HTTPS",
+                            "default": 8480
+                        },
+                        "cluster": {
+                            "type": "string",
+                            "description": "Specify the port where the worker listens to communicate with workers",
+                            "default": ""
+                        }
+                    }
+                },
+                "hostAliases": {
+                    "type": "array",
+                    "description": "Add deployment host aliases",
+                    "default": [],
+                    "items": {}
+                },
+                "extraContainerPorts": {
+                    "type": "array",
+                    "description": "Specify the port where the running jobs inside the workers listens",
+                    "default": [],
+                    "items": {}
+                },
+                "daemonMemoryLimit": {
+                    "type": "string",
+                    "description": "Set the memory limit for the worker daemon",
+                    "default": ""
+                },
+                "memoryLimit": {
+                    "type": "string",
+                    "description": "Set the maximum memory the worker is allowed to use",
+                    "default": ""
+                },
+                "coreLimit": {
+                    "type": "string",
+                    "description": "Se the maximum number of cores that the worker can use",
+                    "default": ""
+                },
+                "dir": {
+                    "type": "string",
+                    "description": "Set a custom working directory for the application",
+                    "default": ""
+                },
+                "javaOptions": {
+                    "type": "string",
+                    "description": "Set options for the JVM in the form `-Dx=y`",
+                    "default": ""
+                },
+                "configOptions": {
+                    "type": "string",
+                    "description": "Set extra options to configure the worker in the form `-Dx=y`",
+                    "default": ""
+                },
+                "extraEnvVars": {
+                    "type": "array",
+                    "description": "An array to add extra env vars",
+                    "default": [],
+                    "items": {}
+                },
+                "extraEnvVarsCM": {
+                    "type": "string",
+                    "description": "Name of existing ConfigMap containing extra env vars for worker nodes",
+                    "default": ""
+                },
+                "extraEnvVarsSecret": {
+                    "type": "string",
+                    "description": "Name of existing Secret containing extra env vars for worker nodes",
+                    "default": ""
+                },
+                "replicaCount": {
+                    "type": "number",
+                    "description": "Number of spark workers (will be the minimum number when autoscaling is enabled)",
+                    "default": 2
+                },
+                "podSecurityContext": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable security context",
+                            "default": true
+                        },
+                        "fsGroup": {
+                            "type": "number",
+                            "description": "Group ID for the container",
+                            "default": 1001
+                        },
+                        "runAsUser": {
+                            "type": "number",
+                            "description": "User ID for the container",
+                            "default": 1001
+                        },
+                        "runAsGroup": {
+                            "type": "number",
+                            "description": "Group ID for the container",
+                            "default": 0
+                        },
+                        "seLinuxOptions": {
+                            "type": "object",
+                            "description": "SELinux options for the container",
+                            "default": {}
+                        }
+                    }
+                },
+                "containerSecurityContext": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enabled worker containers' Security Context",
+                            "default": true
+                        },
+                        "runAsUser": {
+                            "type": "number",
+                            "description": "Set worker containers' Security Context runAsUser",
+                            "default": 1001
+                        },
+                        "runAsNonRoot": {
+                            "type": "boolean",
+                            "description": "Set worker containers' Security Context runAsNonRoot",
+                            "default": true
+                        },
+                        "readOnlyRootFilesystem": {
+                            "type": "boolean",
+                            "description": "Set worker containers' Security Context runAsNonRoot",
+                            "default": false
+                        }
+                    }
+                },
+                "command": {
+                    "type": "array",
+                    "description": "Override default container command (useful when using custom images)",
+                    "default": [],
+                    "items": {}
+                },
+                "args": {
+                    "type": "array",
+                    "description": "Override default container args (useful when using custom images)",
+                    "default": [],
+                    "items": {}
+                },
+                "podAnnotations": {
+                    "type": "object",
+                    "description": "Annotations for pods in StatefulSet",
+                    "default": {}
+                },
+                "podLabels": {
+                    "type": "object",
+                    "description": "Extra labels for pods in StatefulSet",
+                    "default": {}
+                },
+                "podAffinityPreset": {
+                    "type": "string",
+                    "description": "Spark worker pod affinity preset. Ignored if `worker.affinity` is set. Allowed values: `soft` or `hard`",
+                    "default": ""
+                },
+                "podAntiAffinityPreset": {
+                    "type": "string",
+                    "description": "Spark worker pod anti-affinity preset. Ignored if `worker.affinity` is set. Allowed values: `soft` or `hard`",
+                    "default": "soft"
+                },
+                "nodeAffinityPreset": {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "description": "Spark worker node affinity preset type. Ignored if `worker.affinity` is set. Allowed values: `soft` or `hard`",
+                            "default": ""
+                        },
+                        "key": {
+                            "type": "string",
+                            "description": "Spark worker node label key to match Ignored if `worker.affinity` is set.",
+                            "default": ""
+                        },
+                        "values": {
+                            "type": "array",
+                            "description": "Spark worker node label values to match. Ignored if `worker.affinity` is set.",
+                            "default": [],
+                            "items": {}
+                        }
+                    }
+                },
+                "affinity": {
+                    "type": "object",
+                    "description": "Spark worker affinity for pod assignment",
+                    "default": {}
+                },
+                "nodeSelector": {
+                    "type": "object",
+                    "description": "Spark worker node labels for pod assignment",
+                    "default": {}
+                },
+                "tolerations": {
+                    "type": "array",
+                    "description": "Spark worker tolerations for pod assignment",
+                    "default": [],
+                    "items": {}
+                },
+                "updateStrategy": {
+                    "type": "object",
+                    "properties": {
+                        "type": {
+                            "type": "string",
+                            "description": "Worker statefulset strategy type.",
+                            "default": "RollingUpdate"
+                        }
+                    }
+                },
+                "podManagementPolicy": {
+                    "type": "string",
+                    "description": "Statefulset Pod Management Policy Type",
+                    "default": "OrderedReady"
+                },
+                "priorityClassName": {
+                    "type": "string",
+                    "description": "worker pods' priorityClassName",
+                    "default": ""
+                },
+                "topologySpreadConstraints": {
+                    "type": "array",
+                    "description": "Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template",
+                    "default": [],
+                    "items": {}
+                },
+                "schedulerName": {
+                    "type": "string",
+                    "description": "Name of the k8s scheduler (other than default) for worker pods",
+                    "default": ""
+                },
+                "terminationGracePeriodSeconds": {
+                    "type": "string",
+                    "description": "Seconds Redmine pod needs to terminate gracefully",
+                    "default": ""
+                },
+                "lifecycleHooks": {
+                    "type": "object",
+                    "description": "for the worker container(s) to automate configuration before or after startup",
+                    "default": {}
+                },
+                "extraVolumes": {
+                    "type": "array",
+                    "description": "Optionally specify extra list of additional volumes for the worker pod(s)",
+                    "default": [],
+                    "items": {}
+                },
+                "extraVolumeMounts": {
+                    "type": "array",
+                    "description": "Optionally specify extra list of additional volumeMounts for the master container(s)",
+                    "default": [],
+                    "items": {}
+                },
+                "extraVolumeClaimTemplates": {
+                    "type": "array",
+                    "description": "Optionally specify extra list of volumesClaimTemplates for the worker statefulset",
+                    "default": [],
+                    "items": {}
+                },
+                "resources": {
+                    "type": "object",
+                    "properties": {
+                        "limits": {
+                            "type": "object",
+                            "description": "The resources limits for the container",
+                            "default": {}
+                        },
+                        "requests": {
+                            "type": "object",
+                            "description": "The requested resources for the container",
+                            "default": {}
+                        }
+                    }
+                },
+                "livenessProbe": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable livenessProbe",
+                            "default": true
+                        },
+                        "initialDelaySeconds": {
+                            "type": "number",
+                            "description": "Initial delay seconds for livenessProbe",
+                            "default": 180
+                        },
+                        "periodSeconds": {
+                            "type": "number",
+                            "description": "Period seconds for livenessProbe",
+                            "default": 20
+                        },
+                        "timeoutSeconds": {
+                            "type": "number",
+                            "description": "Timeout seconds for livenessProbe",
+                            "default": 5
+                        },
+                        "failureThreshold": {
+                            "type": "number",
+                            "description": "Failure threshold for livenessProbe",
+                            "default": 6
+                        },
+                        "successThreshold": {
+                            "type": "number",
+                            "description": "Success threshold for livenessProbe",
+                            "default": 1
+                        }
+                    }
+                },
+                "readinessProbe": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable readinessProbe",
+                            "default": true
+                        },
+                        "initialDelaySeconds": {
+                            "type": "number",
+                            "description": "Initial delay seconds for readinessProbe",
+                            "default": 30
+                        },
+                        "periodSeconds": {
+                            "type": "number",
+                            "description": "Period seconds for readinessProbe",
+                            "default": 10
+                        },
+                        "timeoutSeconds": {
+                            "type": "number",
+                            "description": "Timeout seconds for readinessProbe",
+                            "default": 5
+                        },
+                        "failureThreshold": {
+                            "type": "number",
+                            "description": "Failure threshold for readinessProbe",
+                            "default": 6
+                        },
+                        "successThreshold": {
+                            "type": "number",
+                            "description": "Success threshold for readinessProbe",
+                            "default": 1
+                        }
+                    }
+                },
+                "startupProbe": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable startupProbe",
+                            "default": true
+                        },
+                        "initialDelaySeconds": {
+                            "type": "number",
+                            "description": "Initial delay seconds for startupProbe",
+                            "default": 30
+                        },
+                        "periodSeconds": {
+                            "type": "number",
+                            "description": "Period seconds for startupProbe",
+                            "default": 10
+                        },
+                        "timeoutSeconds": {
+                            "type": "number",
+                            "description": "Timeout seconds for startupProbe",
+                            "default": 5
+                        },
+                        "failureThreshold": {
+                            "type": "number",
+                            "description": "Failure threshold for startupProbe",
+                            "default": 6
+                        },
+                        "successThreshold": {
+                            "type": "number",
+                            "description": "Success threshold for startupProbe",
+                            "default": 1
+                        }
+                    }
+                },
+                "customLivenessProbe": {
+                    "type": "object",
+                    "description": "Custom livenessProbe that overrides the default one",
+                    "default": {}
+                },
+                "customReadinessProbe": {
+                    "type": "object",
+                    "description": "Custom readinessProbe that overrides the default one",
+                    "default": {}
+                },
+                "customStartupProbe": {
+                    "type": "object",
+                    "description": "Custom startupProbe that overrides the default one",
+                    "default": {}
+                },
+                "sidecars": {
+                    "type": "array",
+                    "description": "Add additional sidecar containers to the worker pod(s)",
+                    "default": [],
+                    "items": {}
+                },
+                "initContainers": {
+                    "type": "array",
+                    "description": "Add initContainers to the worker pods.",
+                    "default": [],
+                    "items": {}
+                },
+                "autoscaling": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable replica autoscaling depending on CPU",
+                            "default": false
+                        },
+                        "minReplicas": {
+                            "type": "string",
+                            "description": "Minimum number of worker replicas",
+                            "default": ""
+                        },
+                        "maxReplicas": {
+                            "type": "number",
+                            "description": "Maximum number of worker replicas",
+                            "default": 5
+                        },
+                        "targetCPU": {
+                            "type": "number",
+                            "description": "Target CPU utilization percentage",
+                            "default": 50
+                        },
+                        "targetMemory": {
+                            "type": "string",
+                            "description": "Target Memory utilization percentage",
+                            "default": ""
+                        }
+                    }
+                }
+            }
+        },
+        "security": {
+            "type": "object",
+            "properties": {
+                "passwordsSecretName": {
+                    "type": "string",
+                    "description": "Name of the secret that contains all the passwords",
+                    "default": ""
+                },
+                "rpc": {
+                    "type": "object",
+                    "properties": {
+                        "authenticationEnabled": {
+                            "type": "boolean",
+                            "description": "Enable the RPC authentication",
+                            "default": false
+                        },
+                        "encryptionEnabled": {
+                            "type": "boolean",
+                            "description": "Enable the encryption for RPC",
+                            "default": false
+                        }
+                    }
+                },
+                "storageEncryptionEnabled": {
+                    "type": "boolean",
+                    "description": "Enables local storage encryption",
+                    "default": false
+                },
+                "certificatesSecretName": {
+                    "type": "string",
+                    "description": "Name of the secret that contains the certificates.",
+                    "default": ""
+                },
+                "ssl": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Enable the SSL configuration",
+                            "default": false
+                        },
+                        "needClientAuth": {
+                            "type": "boolean",
+                            "description": "Enable the client authentication",
+                            "default": false
+                        },
+                        "protocol": {
+                            "type": "string",
+                            "description": "Set the SSL protocol",
+                            "default": "TLSv1.2"
+                        },
+                        "existingSecret": {
+                            "type": "string",
+                            "description": "Name of the existing secret containing the TLS certificates",
+                            "default": ""
+                        },
+                        "autoGenerated": {
+                            "type": "boolean",
+                            "description": "Create self-signed TLS certificates. Currently only supports PEM certificates",
+                            "default": false
+                        },
+                        "keystorePassword": {
+                            "type": "string",
+                            "description": "Set the password of the JKS Keystore",
+                            "default": ""
+                        },
+                        "truststorePassword": {
+                            "type": "string",
+                            "description": "Truststore password.",
+                            "default": ""
+                        },
+                        "resources": {
+                            "type": "object",
+                            "properties": {
+                                "limits": {
+                                    "type": "object",
+                                    "description": "The resources limits for the container",
+                                    "default": {}
+                                },
+                                "requests": {
+                                    "type": "object",
+                                    "description": "The requested resources for the container",
+                                    "default": {}
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "service": {
+            "type": "object",
+            "properties": {
+                "type": {
+                    "type": "string",
+                    "description": "Kubernetes Service type",
+                    "default": "ClusterIP"
+                },
+                "ports": {
+                    "type": "object",
+                    "properties": {
+                        "http": {
+                            "type": "number",
+                            "description": "Spark client port for HTTP",
+                            "default": 80
+                        },
+                        "https": {
+                            "type": "number",
+                            "description": "Spark client port for HTTPS",
+                            "default": 443
+                        },
+                        "cluster": {
+                            "type": "number",
+                            "description": "Spark cluster port",
+                            "default": 7077
+                        }
+                    }
+                },
+                "nodePorts": {
+                    "type": "object",
+                    "properties": {
+                        "http": {
+                            "type": "string",
+                            "description": "Kubernetes web node port for HTTP",
+                            "default": ""
+                        },
+                        "https": {
+                            "type": "string",
+                            "description": "Kubernetes web node port for HTTPS",
+                            "default": ""
+                        },
+                        "cluster": {
+                            "type": "string",
+                            "description": "Kubernetes cluster node port",
+                            "default": ""
+                        }
+                    }
+                },
+                "clusterIP": {
+                    "type": "string",
+                    "description": "Spark service Cluster IP",
+                    "default": ""
+                },
+                "loadBalancerIP": {
+                    "type": "string",
+                    "description": "Load balancer IP if spark service type is `LoadBalancer`",
+                    "default": ""
+                },
+                "loadBalancerSourceRanges": {
+                    "type": "array",
+                    "description": "Spark service Load Balancer sources",
+                    "default": [],
+                    "items": {}
+                },
+                "externalTrafficPolicy": {
+                    "type": "string",
+                    "description": "Spark service external traffic policy",
+                    "default": "Cluster"
+                },
+                "annotations": {
+                    "type": "object",
+                    "description": "Additional custom annotations for Spark service",
+                    "default": {}
+                },
+                "extraPorts": {
+                    "type": "array",
+                    "description": "Extra ports to expose in Spark service (normally used with the `sidecars` value)",
+                    "default": [],
+                    "items": {}
+                },
+                "sessionAffinity": {
+                    "type": "string",
+                    "description": "Control where client requests go, to the same pod or round-robin",
+                    "default": "None"
+                },
+                "sessionAffinityConfig": {
+                    "type": "object",
+                    "description": "Additional settings for the sessionAffinity",
+                    "default": {}
+                },
+                "headless": {
+                    "type": "object",
+                    "properties": {
+                        "annotations": {
+                            "type": "object",
+                            "description": "Annotations for the headless service.",
+                            "default": {}
+                        }
+                    }
+                }
+            }
+        },
+        "ingress": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "description": "Enable ingress controller resource",
+                    "default": false
+                },
+                "pathType": {
+                    "type": "string",
+                    "description": "Ingress path type",
+                    "default": "ImplementationSpecific"
+                },
+                "apiVersion": {
+                    "type": "string",
+                    "description": "Force Ingress API version (automatically detected if not set)",
+                    "default": ""
+                },
+                "hostname": {
+                    "type": "string",
+                    "description": "Default host for the ingress resource",
+                    "default": "spark.local"
+                },
+                "ingressClassName": {
+                    "type": "string",
+                    "description": "IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)",
+                    "default": ""
+                },
+                "path": {
+                    "type": "string",
+                    "description": "The Path to Spark. You may need to set this to '/*' in order to use this with ALB ingress controllers.",
+                    "default": "/"
+                },
+                "annotations": {
+                    "type": "object",
+                    "description": "Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.",
+                    "default": {}
+                },
+                "tls": {
+                    "type": "boolean",
+                    "description": "Enable TLS configuration for the hostname defined at ingress.hostname parameter",
+                    "default": false
+                },
+                "selfSigned": {
+                    "type": "boolean",
+                    "description": "Create a TLS secret for this ingress record using self-signed certificates generated by Helm",
+                    "default": false
+                },
+                "extraHosts": {
+                    "type": "array",
+                    "description": "The list of additional hostnames to be covered with this ingress record.",
+                    "default": [],
+                    "items": {}
+                },
+                "extraPaths": {
+                    "type": "array",
+                    "description": "Any additional arbitrary paths that may need to be added to the ingress under the main host.",
+                    "default": [],
+                    "items": {}
+                },
+                "extraTls": {
+                    "type": "array",
+                    "description": "The tls configuration for additional hostnames to be covered with this ingress record.",
+                    "default": [],
+                    "items": {}
+                },
+                "secrets": {
+                    "type": "array",
+                    "description": "If you're providing your own certificates, please use this to add the certificates as secrets",
+                    "default": [],
+                    "items": {}
+                },
+                "extraRules": {
+                    "type": "array",
+                    "description": "Additional rules to be covered with this ingress record",
+                    "default": [],
+                    "items": {}
+                }
+            }
+        },
+        "serviceAccount": {
+            "type": "object",
+            "properties": {
+                "create": {
+                    "type": "boolean",
+                    "description": "Enable the creation of a ServiceAccount for Spark pods",
+                    "default": true
+                },
+                "name": {
+                    "type": "string",
+                    "description": "The name of the ServiceAccount to use.",
+                    "default": ""
+                },
+                "annotations": {
+                    "type": "object",
+                    "description": "Annotations for Spark Service Account",
+                    "default": {}
+                },
+                "automountServiceAccountToken": {
+                    "type": "boolean",
+                    "description": "Automount API credentials for a service account.",
+                    "default": true
+                }
+            }
+        },
+        "metrics": {
+            "type": "object",
+            "properties": {
+                "enabled": {
+                    "type": "boolean",
+                    "description": "Start a side-car prometheus exporter",
+                    "default": false
+                },
+                "masterAnnotations": {
+                    "type": "object",
+                    "properties": {
+                        "prometheus": {
+                            "type": "object",
+                            "properties": {
+                                "io/scrape": {
+                                    "type": "string",
+                                    "description": "",
+                                    "default": "true"
+                                },
+                                "io/path": {
+                                    "type": "string",
+                                    "description": "",
+                                    "default": "/metrics/"
+                                },
+                                "io/port": {
+                                    "type": "string",
+                                    "description": "",
+                                    "default": "{{ .Values.master.containerPorts.http }}"
+                                }
+                            }
+                        }
+                    }
+                },
+                "workerAnnotations": {
+                    "type": "object",
+                    "properties": {
+                        "prometheus": {
+                            "type": "object",
+                            "properties": {
+                                "io/scrape": {
+                                    "type": "string",
+                                    "description": "",
+                                    "default": "true"
+                                },
+                                "io/path": {
+                                    "type": "string",
+                                    "description": "",
+                                    "default": "/metrics/"
+                                },
+                                "io/port": {
+                                    "type": "string",
+                                    "description": "",
+                                    "default": "{{ .Values.worker.containerPorts.http }}"
+                                }
+                            }
+                        }
+                    }
+                },
+                "podMonitor": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "If the operator is installed in your cluster, set to true to create a PodMonitor Resource for scraping metrics using PrometheusOperator",
+                            "default": false
+                        },
+                        "extraMetricsEndpoints": {
+                            "type": "array",
+                            "description": "Add metrics endpoints for monitoring the jobs running in the worker nodes",
+                            "default": [],
+                            "items": {}
+                        },
+                        "namespace": {
+                            "type": "string",
+                            "description": "Specify the namespace in which the podMonitor resource will be created",
+                            "default": ""
+                        },
+                        "interval": {
+                            "type": "string",
+                            "description": "Specify the interval at which metrics should be scraped",
+                            "default": "30s"
+                        },
+                        "scrapeTimeout": {
+                            "type": "string",
+                            "description": "Specify the timeout after which the scrape is ended",
+                            "default": ""
+                        },
+                        "additionalLabels": {
+                            "type": "object",
+                            "description": "Additional labels that can be used so PodMonitors will be discovered by Prometheus",
+                            "default": {}
+                        }
+                    }
+                },
+                "prometheusRule": {
+                    "type": "object",
+                    "properties": {
+                        "enabled": {
+                            "type": "boolean",
+                            "description": "Set this to true to create prometheusRules for Prometheus",
+                            "default": false
+                        },
+                        "namespace": {
+                            "type": "string",
+                            "description": "Namespace where the prometheusRules resource should be created",
+                            "default": ""
+                        },
+                        "additionalLabels": {
+                            "type": "object",
+                            "description": "Additional labels that can be used so prometheusRules will be discovered by Prometheus",
+                            "default": {}
+                        },
+                        "rules": {
+                            "type": "array",
+                            "description": "Custom Prometheus [rules](https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/)",
+                            "default": [],
+                            "items": {}
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
