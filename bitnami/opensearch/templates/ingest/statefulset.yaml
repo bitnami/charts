@@ -16,7 +16,7 @@ metadata:
     app: ingest
     {{- end }}
   {{- if or .Values.ingest.annotations .Values.commonAnnotations }}
-  {{- $annotations := merge .Values.ingest.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.ingest.annotations .Values.commonAnnotations ) "context" . ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
@@ -24,7 +24,7 @@ spec:
   replicas: {{ .Values.ingest.replicaCount }}
   {{- end }}
   podManagementPolicy: {{ .Values.ingest.podManagementPolicy }}
-  {{- $podLabels := merge .Values.ingest.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.ingest.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: ingest

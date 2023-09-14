@@ -207,7 +207,7 @@ Return true if a TLS secret object should be created
 Provisioning job labels (exclude matchLabels from standard labels)
 */}}
 {{- define "minio.labels.provisioning" -}}
-{{- $podLabels := merge .Values.provisioning.podLabels .Values.commonLabels }}
+{{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.provisioning.podLabels .Values.commonLabels ) "context" . ) }}
 {{- $provisioningLabels := (include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | fromYaml ) -}}
 {{- range (include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | fromYaml | keys ) -}}
 {{- $_ := unset $provisioningLabels . -}}

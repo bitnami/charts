@@ -14,11 +14,11 @@ metadata:
     ## Istio Labels: https://istio.io/docs/ops/deployment/requirements/
     app: aggregator
   {{- if or .Values.aggregator.annotations .Values.commonAnnotations }}
-  {{- $annotations := merge .Values.aggregator.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.aggregator.annotations .Values.commonAnnotations ) "context" . ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
-  {{- $podLabels := merge .Values.aggregator.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.aggregator.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: aggregator
@@ -230,12 +230,12 @@ spec:
         {{- if .Values.aggregator.initScriptsCM }}
         - name: custom-init-scripts-cm
           configMap:
-            name: {{ template ".Values.initScriptsCM" . }}
+            name: {{ template "fluentd.aggregator.initScriptsCM" . }}
         {{- end }}
         {{- if .Values.aggregator.initScriptsSecret }}
         - name: custom-init-scripts-secret
           secret:
-            secretName: {{ template ".Values.initScriptsSecret" . }}
+            secretName: {{ template "fluentd.aggregator.initScriptsSecret" . }}
             defaultMode: 0755
         {{- end }}
 
