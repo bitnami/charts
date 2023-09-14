@@ -10,7 +10,7 @@ metadata:
   name: {{ include "common.names.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
-  {{- $annotations := merge (include "minio.ingress.annotations" . | fromYaml) .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list (include "minio.ingress.annotations" . | fromYaml) .Values.commonAnnotations ) "context" . ) }}
   {{- if $annotations }}
   annotations: {{- include "common.tplvalues.render" (dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}

@@ -23,9 +23,9 @@ spec:
   {{- if .Values.controller.pdb.maxUnavailable }}
   maxUnavailable: {{ .Values.controller.pdb.maxUnavailable }}
   {{- end }}
-  {{- $podLabels := merge .Values.controller.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.controller.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
-      app.kubernetes.io/component: controller-only
+      app.kubernetes.io/component: controller-eligible
       app.kubernetes.io/part-of: kafka
 {{- end }}

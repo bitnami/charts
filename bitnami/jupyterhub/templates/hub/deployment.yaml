@@ -17,7 +17,7 @@ spec:
   {{- if .Values.hub.updateStrategy }}
   strategy: {{- toYaml .Values.hub.updateStrategy | nindent 4 }}
   {{- end }}
-  {{- $podLabels := merge .Values.hub.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.hub.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: hub

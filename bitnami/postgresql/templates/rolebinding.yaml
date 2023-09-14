@@ -19,6 +19,6 @@ roleRef:
   apiGroup: rbac.authorization.k8s.io
 subjects:
   - kind: ServiceAccount
-    name: {{ include "postgresql.serviceAccountName" . }}
+    name: {{ include "postgresql.v1.serviceAccountName" . }}
     namespace: {{ .Release.Namespace | quote }}
 {{- end }}

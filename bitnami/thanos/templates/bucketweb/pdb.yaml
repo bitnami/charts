@@ -21,7 +21,7 @@ spec:
   {{- if .Values.bucketweb.pdb.maxUnavailable }}
   maxUnavailable: {{ .Values.bucketweb.pdb.maxUnavailable }}
   {{- end }}
-  {{- $podLabels := merge .Values.bucketweb.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.bucketweb.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: bucketweb

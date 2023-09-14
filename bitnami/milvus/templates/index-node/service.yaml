@@ -15,7 +15,7 @@ metadata:
  {{- if or .Values.commonAnnotations .Values.indexNode.service.annotations (and .Values.indexNode.metrics.enabled .Values.indexNode.metrics.annotations) }}
   annotations:
     {{- if or .Values.indexNode.service.annotations .Values.commonAnnotations }}
-    {{- $annotations := merge .Values.indeindexNodexCoord.service.annotations .Values.commonAnnotations }}
+    {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.indeindexNodexCoord.service.annotations .Values.commonAnnotations ) "context" . ) }}
     {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
     {{- end }}
     {{- if and .Values.indexNode.metrics.enabled .Values.indexNode.metrics.annotations }}
@@ -66,7 +66,7 @@ spec:
     {{- if .Values.indexNode.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.indexNode.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}
-  {{- $podLabels := merge .Values.indexNode.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.indexNode.podLabels .Values.commonLabels ) "context" . ) }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: milvus
     app.kubernetes.io/component: index-node
