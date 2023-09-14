@@ -63,6 +63,7 @@ spec:
           - name: {{ include "mongodb.fullname" . }}-mongodump
             image: {{ include "mongodb.image" . }}
             env:
+            {{- if .Values.auth.enabled }}
               - name: MONGODB_ROOT_USER
                 value: {{ .Values.auth.rootUser | quote }}
               - name: MONGODB_ROOT_PASSWORD
@@ -70,6 +71,7 @@ spec:
                   secretKeyRef:
                     name: {{ include "mongodb.secretName" . }}
                     key: mongodb-root-password
+            {{- end }}
               - name: MONGODB_SERVICE_NAME
                 value: {{ include "mongodb.service.nameOverride" . }}
               - name: MONGODB_PORT_NUMBER
@@ -83,10 +85,10 @@ spec:
             {{- if .Values.backup.cronjob.command }}
             command: {{- include "common.tplvalues.render" (dict "value" .Values.backup.cronjob.command "context" $) | nindent 14 }}
             {{- else }}
-            command: 
+            command:
               - /bin/sh
               - -c
-              - "mongodump --username=${MONGODB_ROOT_USER} --password=${MONGODB_ROOT_PASSWORD} --host=${MONGODB_SERVICE_NAME} --port=${MONGODB_PORT_NUMBER} ${MONGODB_CLIENT_EXTRA_FLAGS} --oplog --gzip --archive=${MONGODUMP_DIR}/mongodump-$(date '+%Y-%m-%d-%H-%M').gz"
+              - "mongodump {{- if .Values.auth.enabled }} --username=${MONGODB_ROOT_USER} --password=${MONGODB_ROOT_PASSWORD} {{- end }} --host=${MONGODB_SERVICE_NAME} --port=${MONGODB_PORT_NUMBER} ${MONGODB_CLIENT_EXTRA_FLAGS} --oplog --gzip --archive=${MONGODUMP_DIR}/mongodump-$(date '+%Y-%m-%d-%H-%M').gz"
             {{- end }}
             volumeMounts:
               {{- if .Values.tls.enabled }}
