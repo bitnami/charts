@@ -488,7 +488,7 @@ infoblox:
   noSslVerify: false
   ## @param infoblox.wapiPort When using the Infoblox provider, specify the Infoblox WAPI port (optional)
   ##
-  wapiPort: ""
+  wapiPort: 443
   ## @param infoblox.wapiVersion When using the Infoblox provider, specify the Infoblox WAPI version (optional)
   ##
   wapiVersion: ""
@@ -639,7 +639,7 @@ pdns:
   apiUrl: ""
   ## @param pdns.apiPort When using the PowerDNS provider, specify the API port of the server.
   ##
-  apiPort: "8081"
+  apiPort: 8081
   ## @param pdns.apiKey When using the PowerDNS provider, specify the API key of the server.
   ##
   apiKey: ""

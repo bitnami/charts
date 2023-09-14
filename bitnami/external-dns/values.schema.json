@@ -723,9 +723,9 @@
                     "default": false
                 },
                 "wapiPort": {
-                    "type": "string",
+                    "type": "number",
                     "description": "When using the Infoblox provider, specify the Infoblox WAPI port (optional)",
-                    "default": ""
+                    "default": 443
                 },
                 "wapiVersion": {
                     "type": "string",
@@ -953,9 +953,9 @@
                     "default": ""
                 },
                 "apiPort": {
-                    "type": "string",
+                    "type": "number",
                     "description": "When using the PowerDNS provider, specify the API port of the server.",
-                    "default": "8081"
+                    "default": 8081
                 },
                 "apiKey": {
                     "type": "string",
@@ -1266,9 +1266,8 @@
                     "type": "object",
                     "properties": {
                         "http": {
-                            "type": "string",
-                            "description": "Port to bind to for NodePort service type (client port)",
-                            "default": ""
+                            "type": "number",
+                            "description": "Port to bind to for NodePort service type (client port)"
                         }
                     }
                 },
