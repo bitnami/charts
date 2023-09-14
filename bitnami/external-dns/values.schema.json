@@ -369,8 +369,18 @@
                 },
                 "evaluateTargetHealth": {
                     "type": "boolean",
-                    "description": "When using the AWS provider, sets the evaluate target health flag.",
+                    "description": "When using the AWS provider, sets the evaluate target health flag",
                     "default": false
+                },
+                "dynamodbTable": {
+                    "type": "string",
+                    "description": "When using the AWS provider, sets the DynamoDB table name to use for dynamodb registry",
+                    "default": ""
+                },
+                "dynamodbRegion": {
+                    "type": "string",
+                    "description": "When using the AWS provider, sets the DynamoDB table region to use for dynamodb registry",
+                    "default": ""
                 }
             }
         },
@@ -1092,7 +1102,7 @@
         },
         "registry": {
             "type": "string",
-            "description": "Registry method to use (options: txt, aws-sd, noop)",
+            "description": "Registry method to use (options: txt, aws-sd, dynamodb, noop)",
             "default": "txt"
         },
         "txtPrefix": {
