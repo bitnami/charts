@@ -209,7 +209,8 @@ image:
   debug: false
 
 ## @param architecture Elasticsearch architecture (`standalone` or `cluster`)
-##
+## Note: in standalone mode, only the master role configuration would be taken into account, the rest will be ignored: data, coordinating, ingest
+##       .master.replicaCount value will be ignored and forced to '1'
 architecture: cluster
 
 ## X-Pack security parameters
