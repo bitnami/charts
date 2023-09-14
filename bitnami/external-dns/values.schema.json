@@ -368,9 +368,9 @@
                     "default": ""
                 },
                 "evaluateTargetHealth": {
-                    "type": "string",
-                    "description": "When using the AWS provider, sets the evaluate target health flag (options: true, false)",
-                    "default": ""
+                    "type": "boolean",
+                    "description": "When using the AWS provider, sets the evaluate target health flag.",
+                    "default": false
                 }
             }
         },

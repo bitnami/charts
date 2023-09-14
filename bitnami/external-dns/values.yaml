@@ -248,9 +248,9 @@ aws:
   ## @param aws.preferCNAME When using the AWS provider, replaces Alias records with CNAME (options: true, false)
   ##
   preferCNAME: ""
-  ## @param aws.evaluateTargetHealth When using the AWS provider, sets the evaluate target health flag (options: true, false)
+  ## @param aws.evaluateTargetHealth When using the AWS provider, sets the evaluate target health flag
   ##
-  evaluateTargetHealth: ""
+  evaluateTargetHealth: false
   ## @param aws.dynamodbTable When using the AWS provider, sets the DynamoDB table name to use for dynamodb registry
   ## ref: https://github.com/kubernetes-sigs/external-dns/blob/0483ffde22e60436f16be154b9fe1a388a1400d0/docs/registry/dynamodb.md
   ##
