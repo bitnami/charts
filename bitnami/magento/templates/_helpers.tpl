@@ -58,6 +58,9 @@ When using Ingress, it will be set to the Ingress hostname.
 {{- if .Values.ingress.enabled }}
 {{- $host := .Values.ingress.hostname | default "" -}}
 {{- default (include "magento.serviceIP" .) $host -}}
+{{- else if .Values.magentoHost -}}
+{{- $host := .Values.magentoHost | default "" -}}
+{{- default (include "magento.serviceIP" .) $host -}}
 {{- else -}}
 {{- $host := index .Values (printf "%sHost" .Chart.Name) | default "" -}}
 {{- default (include "magento.serviceIP" .) $host -}}
