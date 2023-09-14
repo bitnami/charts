@@ -591,7 +591,7 @@ kubectl get services --namespace kubeapps --watch
 
 #### Ingress
 
-This chart provides support for ingress resources. If you have an ingress controller installed on your cluster, such as nginx-ingress or traefik you can utilize the ingress controller to expose Kubeapps.
+This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application.
 
 To enable ingress integration, please set `ingress.enabled` to `true`
 

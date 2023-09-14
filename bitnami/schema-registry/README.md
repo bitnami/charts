@@ -390,8 +390,7 @@ externalKafka.auth.jaas.existingSecret=my-secret
 
 ### Ingress
 
-This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your Schema Registry.
-
+This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application.
 To enable Ingress integration, set `ingress.enabled` to `true`. The `ingress.hostname` property can be used to set the host name.
 
 #### Hosts
