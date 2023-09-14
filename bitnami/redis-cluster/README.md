@@ -237,32 +237,33 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Cluster update job parameters
 
-| Name                                  | Description                                                                                                    | Value  |
-| ------------------------------------- | -------------------------------------------------------------------------------------------------------------- | ------ |
-| `updateJob.activeDeadlineSeconds`     | Number of seconds the Job to create the cluster will be waiting for the Nodes to be ready.                     | `600`  |
-| `updateJob.command`                   | Container command (using container default if not set)                                                         | `[]`   |
-| `updateJob.args`                      | Container args (using container default if not set)                                                            | `[]`   |
-| `updateJob.hostAliases`               | Deployment pod host aliases                                                                                    | `[]`   |
-| `updateJob.annotations`               | Job annotations                                                                                                | `{}`   |
-| `updateJob.podAnnotations`            | Job pod annotations                                                                                            | `{}`   |
-| `updateJob.podLabels`                 | Pod extra labels                                                                                               | `{}`   |
-| `updateJob.extraEnvVars`              | An array to add extra environment variables                                                                    | `[]`   |
-| `updateJob.extraEnvVarsCM`            | ConfigMap containing extra environment variables                                                               | `""`   |
-| `updateJob.extraEnvVarsSecret`        | Secret containing extra environment variables                                                                  | `""`   |
-| `updateJob.extraVolumes`              | Extra volumes to add to the deployment                                                                         | `[]`   |
-| `updateJob.extraVolumeMounts`         | Extra volume mounts to add to the container                                                                    | `[]`   |
-| `updateJob.initContainers`            | Extra init containers to add to the deployment                                                                 | `[]`   |
-| `updateJob.podAffinityPreset`         | Update job pod affinity preset. Ignored if `updateJob.affinity` is set. Allowed values: `soft` or `hard`       | `""`   |
-| `updateJob.podAntiAffinityPreset`     | Update job pod anti-affinity preset. Ignored if `updateJob.affinity` is set. Allowed values: `soft` or `hard`  | `soft` |
-| `updateJob.nodeAffinityPreset.type`   | Update job node affinity preset type. Ignored if `updateJob.affinity` is set. Allowed values: `soft` or `hard` | `""`   |
-| `updateJob.nodeAffinityPreset.key`    | Update job node label key to match Ignored if `updateJob.affinity` is set.                                     | `""`   |
-| `updateJob.nodeAffinityPreset.values` | Update job node label values to match. Ignored if `updateJob.affinity` is set.                                 | `[]`   |
-| `updateJob.affinity`                  | Affinity for update job pods assignment                                                                        | `{}`   |
-| `updateJob.nodeSelector`              | Node labels for update job pods assignment                                                                     | `{}`   |
-| `updateJob.tolerations`               | Tolerations for update job pods assignment                                                                     | `[]`   |
-| `updateJob.priorityClassName`         | Priority class name                                                                                            | `""`   |
-| `updateJob.resources.limits`          | The resources limits for the container                                                                         | `{}`   |
-| `updateJob.resources.requests`        | The requested resources for the container                                                                      | `{}`   |
+| Name                                  | Description                                                                                                    | Value          |
+| ------------------------------------- | -------------------------------------------------------------------------------------------------------------- | -------------- |
+| `updateJob.activeDeadlineSeconds`     | Number of seconds the Job to create the cluster will be waiting for the Nodes to be ready.                     | `600`          |
+| `updateJob.command`                   | Container command (using container default if not set)                                                         | `[]`           |
+| `updateJob.args`                      | Container args (using container default if not set)                                                            | `[]`           |
+| `updateJob.hostAliases`               | Deployment pod host aliases                                                                                    | `[]`           |
+| `updateJob.helmHook`                  | Job Helm hook                                                                                                  | `post-upgrade` |
+| `updateJob.annotations`               | Job annotations                                                                                                | `{}`           |
+| `updateJob.podAnnotations`            | Job pod annotations                                                                                            | `{}`           |
+| `updateJob.podLabels`                 | Pod extra labels                                                                                               | `{}`           |
+| `updateJob.extraEnvVars`              | An array to add extra environment variables                                                                    | `[]`           |
+| `updateJob.extraEnvVarsCM`            | ConfigMap containing extra environment variables                                                               | `""`           |
+| `updateJob.extraEnvVarsSecret`        | Secret containing extra environment variables                                                                  | `""`           |
+| `updateJob.extraVolumes`              | Extra volumes to add to the deployment                                                                         | `[]`           |
+| `updateJob.extraVolumeMounts`         | Extra volume mounts to add to the container                                                                    | `[]`           |
+| `updateJob.initContainers`            | Extra init containers to add to the deployment                                                                 | `[]`           |
+| `updateJob.podAffinityPreset`         | Update job pod affinity preset. Ignored if `updateJob.affinity` is set. Allowed values: `soft` or `hard`       | `""`           |
+| `updateJob.podAntiAffinityPreset`     | Update job pod anti-affinity preset. Ignored if `updateJob.affinity` is set. Allowed values: `soft` or `hard`  | `soft`         |
+| `updateJob.nodeAffinityPreset.type`   | Update job node affinity preset type. Ignored if `updateJob.affinity` is set. Allowed values: `soft` or `hard` | `""`           |
+| `updateJob.nodeAffinityPreset.key`    | Update job node label key to match Ignored if `updateJob.affinity` is set.                                     | `""`           |
+| `updateJob.nodeAffinityPreset.values` | Update job node label values to match. Ignored if `updateJob.affinity` is set.                                 | `[]`           |
+| `updateJob.affinity`                  | Affinity for update job pods assignment                                                                        | `{}`           |
+| `updateJob.nodeSelector`              | Node labels for update job pods assignment                                                                     | `{}`           |
+| `updateJob.tolerations`               | Tolerations for update job pods assignment                                                                     | `[]`           |
+| `updateJob.priorityClassName`         | Priority class name                                                                                            | `""`           |
+| `updateJob.resources.limits`          | The resources limits for the container                                                                         | `{}`           |
+| `updateJob.resources.requests`        | The requested resources for the container                                                                      | `{}`           |
 
 ### Cluster management parameters
 
