@@ -24,6 +24,9 @@ spec:
   namespaceSelector:
     matchNames:
       - {{ .Values.kubeScheduler.namespace }}
+  {{- with .Values.kubeScheduler.serviceMonitor.sampleLimit }}
+  sampleLimit: {{ . }}
+  {{- end }}
   endpoints:
     - port: http-metrics
       bearerTokenFile: /var/run/secrets/kubernetes.io/serviceaccount/token

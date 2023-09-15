@@ -21,6 +21,9 @@ spec:
   namespaceSelector:
     matchNames:
       - {{ include "common.names.namespace" . | quote }}
+  {{- with .Values.prometheus.serviceMonitor.sampleLimit }}
+  sampleLimit: {{ . }}
+  {{- end }}
   endpoints:
     - port: http
       {{- if .Values.prometheus.serviceMonitor.interval }}
