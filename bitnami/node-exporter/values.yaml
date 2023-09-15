@@ -471,3 +471,6 @@ serviceMonitor:
   ##   node: true
   ##
   attachMetadata: {}
+  ## @param serviceMonitor.sampleLimit Per-scrape limit on number of scraped samples that will be accepted.
+  ##
+  sampleLimit: ""
