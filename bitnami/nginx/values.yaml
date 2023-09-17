@@ -461,6 +461,9 @@ cloneStaticSiteFromGit:
     ## @param cloneStaticSiteFromGit.gitClone.args Override default container args for git-clone-repository
     ##
     args: []
+    ## @param cloneStaticSiteFromGit.gitClone.extraEnvVarsSecret Secret with extra environment variables
+    ##
+    extraEnvVarsSecret: ""
   ## Additional configuration for the git-repo-syncer container
   ##
   gitSync:
