@@ -213,15 +213,12 @@ primary:
     bind-address=*
     pid-file=/opt/bitnami/mysql/tmp/mysqld.pid
     log-error=/opt/bitnami/mysql/logs/mysqld.log
-    character-set-server=UTF8
-    collation-server=utf8_general_ci
     slow_query_log=0
     long_query_time=10.0
 
     [client]
     port=3306
     socket=/opt/bitnami/mysql/tmp/mysql.sock
-    default-character-set=UTF8
     plugin_dir=/opt/bitnami/mysql/lib/plugin
 
     [manager]
@@ -591,15 +588,12 @@ secondary:
     bind-address=*
     pid-file=/opt/bitnami/mysql/tmp/mysqld.pid
     log-error=/opt/bitnami/mysql/logs/mysqld.log
-    character-set-server=UTF8
-    collation-server=utf8_general_ci
     slow_query_log=0
     long_query_time=10.0
 
     [client]
     port=3306
     socket=/opt/bitnami/mysql/tmp/mysql.sock
-    default-character-set=UTF8
     plugin_dir=/opt/bitnami/mysql/lib/plugin
 
     [manager]
