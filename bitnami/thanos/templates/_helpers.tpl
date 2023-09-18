@@ -469,7 +469,7 @@ Labels to use on serviceMonitor.spec.selector
 */}}
 {{- define "thanos.servicemonitor.selector" -}}
 {{- include "thanos.servicemonitor.matchLabels" $ }}
-{{- if .Values.metrics.serviceMonitor.selector -}}
+{{ if .Values.metrics.serviceMonitor.selector -}}
 {{- include "common.tplvalues.render" (dict "value" .Values.metrics.serviceMonitor.selector "context" $)}}
 {{- end -}}
 {{- end -}}
