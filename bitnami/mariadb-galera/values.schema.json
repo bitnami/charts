@@ -1,1148 +1,224 @@
 {
-    "title": "Chart Values",
-    "type": "object",
-    "properties": {
-        "global": {
-            "type": "object",
-            "properties": {
-                "imageRegistry": {
-                    "type": "string",
-                    "description": "Global Docker image registry",
-                    "default": ""
-                },
-                "imagePullSecrets": {
-                    "type": "array",
-                    "description": "Global Docker registry secret names as an array",
-                    "default": [],
-                    "items": {}
-                },
-                "storageClass": {
-                    "type": "string",
-                    "description": "Global StorageClass for Persistent Volume(s)",
-                    "default": ""
-                }
+  "$schema": "http://json-schema.org/schema#",
+  "type": "object",
+  "properties": {
+    "galera": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "Galera cluster name",
+          "form": true
+        },
+        "mariabackup": {
+          "type": "object",
+          "properties": {
+            "password": {
+              "type": "string",
+              "title": "Mariabackup password for SST",
+              "form": true,
+              "description": "Defaults to a random 10-character alphanumeric string if not set",
+              "hidden": {
+                "value": true,
+                "path": "existingSecret"
+              }
             }
-        },
-        "kubeVersion": {
-            "type": "string",
-            "description": "Force target Kubernetes version (using Helm capabilities if not set)",
-            "default": ""
-        },
-        "nameOverride": {
-            "type": "string",
-            "description": "String to partially override common.names.fullname template with a string (will prepend the release name)",
-            "default": ""
-        },
-        "fullnameOverride": {
-            "type": "string",
-            "description": "String to fully override common.names.fullname template with a string",
-            "default": ""
-        },
-        "namespaceOverride": {
-            "type": "string",
-            "description": "String to fully override common.names.namespace",
-            "default": ""
-        },
-        "commonAnnotations": {
-            "type": "object",
-            "description": "Annotations to add to all deployed objects",
-            "default": {}
-        },
-        "commonLabels": {
-            "type": "object",
-            "description": "Labels to add to all deployed objects",
-            "default": {}
-        },
-        "schedulerName": {
-            "type": "string",
-            "description": "Name of the Kubernetes scheduler (other than default)",
-            "default": ""
-        },
-        "clusterDomain": {
-            "type": "string",
-            "description": "Kubernetes DNS Domain name to use",
-            "default": "cluster.local"
-        },
-        "extraDeploy": {
-            "type": "array",
-            "description": "Array of extra objects to deploy with the release (evaluated as a template)",
-            "default": [],
-            "items": {}
-        },
-        "diagnosticMode": {
-            "type": "object",
-            "properties": {
-                "enabled": {
-                    "type": "boolean",
-                    "description": "Enable diagnostic mode (all probes will be disabled and the command will be overridden)",
-                    "default": false
-                },
-                "command": {
-                    "type": "array",
-                    "description": "Command to override all containers in the deployment",
-                    "default": [
-                        "sleep"
-                    ],
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "args": {
-                    "type": "array",
-                    "description": "Args to override all containers in the deployment",
-                    "default": [
-                        "infinity"
-                    ],
-                    "items": {
-                        "type": "string"
-                    }
-                }
-            }
-        },
-        "image": {
-            "type": "object",
-            "properties": {
-                "registry": {
-                    "type": "string",
-                    "description": "MariaDB Galera image registry",
-                    "default": "docker.io"
-                },
-                "repository": {
-                    "type": "string",
-                    "description": "MariaDB Galera image repository",
-                    "default": "bitnami/mariadb-galera"
-                },
-                "tag": {
-                    "type": "string",
-                    "description": "MariaDB Galera image tag (immutable tags are recommended)",
-                    "default": "11.0.3-debian-11-r7"
-                },
-                "digest": {
-                    "type": "string",
-                    "description": "MariaDB Galera image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag",
-                    "default": ""
-                },
-                "pullPolicy": {
-                    "type": "string",
-                    "description": "MariaDB Galera image pull policy",
-                    "default": "IfNotPresent"
-                },
-                "pullSecrets": {
-                    "type": "array",
-                    "description": "Specify docker-registry secret names as an array",
-                    "default": [],
-                    "items": {}
-                },
-                "debug": {
-                    "type": "boolean",
-                    "description": "Specify if debug logs should be enabled",
-                    "default": false
-                }
-            }
-        },
-        "podManagementPolicy": {
-            "type": "string",
-            "description": "StatefulSet controller supports relax its ordering guarantees while preserving its uniqueness and identity guarantees. There are two valid pod management policies: OrderedReady and Parallel",
-            "default": "OrderedReady"
-        },
-        "hostAliases": {
-            "type": "array",
-            "description": "Add deployment host aliases",
-            "default": [],
-            "items": {}
-        },
-        "service": {
-            "type": "object",
-            "properties": {
-                "type": {
-                    "type": "string",
-                    "description": "Kubernetes service type",
-                    "default": "ClusterIP"
-                },
-                "clusterIP": {
-                    "type": "string",
-                    "description": "Specific cluster IP when service type is cluster IP. Use `None` for headless service",
-                    "default": ""
-                },
-                "ports": {
-                    "type": "object",
-                    "properties": {
-                        "mysql": {
-                            "type": "number",
-                            "description": "MariaDB service port",
-                            "default": 3306
-                        }
-                    }
-                },
-                "nodePorts": {
-                    "type": "object",
-                    "properties": {
-                        "mysql": {
-                            "type": "string",
-                            "description": "Specify the nodePort value for the LoadBalancer and NodePort service types.",
-                            "default": ""
-                        }
-                    }
-                },
-                "extraPorts": {
-                    "type": "array",
-                    "description": "Extra ports to expose (normally used with the `sidecar` value)",
-                    "default": [],
-                    "items": {}
-                },
-                "externalIPs": {
-                    "type": "array",
-                    "description": "External IP list to use with ClusterIP service type",
-                    "default": [],
-                    "items": {}
-                },
-                "loadBalancerIP": {
-                    "type": "string",
-                    "description": "`loadBalancerIP` if service type is `LoadBalancer`",
-                    "default": ""
-                },
-                "loadBalancerSourceRanges": {
-                    "type": "array",
-                    "description": "Addresses that are allowed when svc is `LoadBalancer`",
-                    "default": [],
-                    "items": {}
-                },
-                "externalTrafficPolicy": {
-                    "type": "string",
-                    "description": "%%MAIN_CONTAINER_NAME%% service external traffic policy",
-                    "default": "Cluster"
-                },
-                "annotations": {
-                    "type": "object",
-                    "description": "Additional annotations for MariaDB Galera service",
-                    "default": {}
-                },
-                "sessionAffinity": {
-                    "type": "string",
-                    "description": "Session Affinity for Kubernetes service, can be \"None\" or \"ClientIP\"",
-                    "default": "None"
-                },
-                "sessionAffinityConfig": {
-                    "type": "object",
-                    "description": "Additional settings for the sessionAffinity",
-                    "default": {}
-                },
-                "headless": {
-                    "type": "object",
-                    "properties": {
-                        "annotations": {
-                            "type": "object",
-                            "description": "Annotations for the headless service.",
-                            "default": {}
-                        },
-                        "publishNotReadyAddresses": {
-                            "type": "boolean",
-                            "description": "Publish not Ready MariaDB Galera pods' IPs in the headless service.",
-                            "default": true
-                        }
-                    }
-                }
-            }
-        },
-        "serviceAccount": {
-            "type": "object",
-            "properties": {
-                "create": {
-                    "type": "boolean",
-                    "description": "Specify whether a ServiceAccount should be created",
-                    "default": false
-                },
-                "name": {
-                    "type": "string",
-                    "description": "Name of the service account to use. If not set and create is true, a name is generated using the fullname template.",
-                    "default": ""
-                },
-                "automountServiceAccountToken": {
-                    "type": "boolean",
-                    "description": "Automount service account token for the server service account",
-                    "default": false
-                },
-                "annotations": {
-                    "type": "object",
-                    "description": "Annotations for service account. Evaluated as a template. Only used if `create` is `true`.",
-                    "default": {}
-                }
-            }
-        },
-        "command": {
-            "type": "array",
-            "description": "Override default container command (useful when using custom images)",
-            "default": [],
-            "items": {}
-        },
-        "args": {
-            "type": "array",
-            "description": "Override default container args (useful when using custom images)",
-            "default": [],
-            "items": {}
-        },
-        "extraEnvVars": {
-            "type": "array",
-            "description": "Array containing extra env vars to configure MariaDB Galera replicas",
-            "default": [],
-            "items": {}
-        },
-        "extraEnvVarsCM": {
-            "type": "string",
-            "description": "ConfigMap containing extra env vars to configure MariaDB Galera replicas",
-            "default": ""
-        },
-        "extraEnvVarsSecret": {
-            "type": "string",
-            "description": "Secret containing extra env vars to configure MariaDB Galera replicas",
-            "default": ""
-        },
-        "rbac": {
-            "type": "object",
-            "properties": {
-                "create": {
-                    "type": "boolean",
-                    "description": "Specify whether RBAC resources should be created and used",
-                    "default": false
-                }
-            }
-        },
-        "podSecurityContext": {
-            "type": "object",
-            "properties": {
-                "enabled": {
-                    "type": "boolean",
-                    "description": "Enable security context",
-                    "default": true
-                },
-                "fsGroup": {
-                    "type": "number",
-                    "description": "Group ID for the container filesystem",
-                    "default": 1001
-                },
-                "runAsUser": {
-                    "type": "number",
-                    "description": "User ID for the container",
-                    "default": 1001
-                }
-            }
-        },
-        "containerSecurityContext": {
-            "type": "object",
-            "properties": {
-                "enabled": {
-                    "type": "boolean",
-                    "description": "Enabled galera's container Security Context",
-                    "default": true
-                },
-                "runAsUser": {
-                    "type": "number",
-                    "description": "Set galera's container Security Context runAsUser",
-                    "default": 1001
-                },
-                "runAsNonRoot": {
-                    "type": "boolean",
-                    "description": "Set galera's container Security Context runAsNonRoot",
-                    "default": true
-                }
-            }
-        },
-        "rootUser": {
-            "type": "object",
-            "properties": {
-                "user": {
-                    "type": "string",
-                    "description": "Username for the admin user.",
-                    "default": "root"
-                },
-                "password": {
-                    "type": "string",
-                    "description": "Password for the admin user. Ignored if existing secret is provided.",
-                    "default": ""
-                },
-                "forcePassword": {
-                    "type": "boolean",
-                    "description": "Option to force users to specify a password. That is required for 'helm upgrade' to work properly.",
-                    "default": false
-                }
-            }
-        },
-        "existingSecret": {
-            "type": "string",
-            "description": "Use existing secret for password details (`rootUser.password`, `db.password`, `galera.mariabackup.password` will be ignored and picked up from this secret)",
-            "default": ""
-        },
-        "usePasswordFiles": {
-            "type": "boolean",
-            "description": "Mount credentials as a files instead of using an environment variable.",
-            "default": false
-        },
-        "customPasswordFiles": {
-            "type": "object",
-            "description": "Use custom password files when `usePasswordFiles` is set to `true`. Define path for keys `root`, `user`, and `mariabackup`.",
-            "default": {}
-        },
-        "db": {
-            "type": "object",
-            "properties": {
-                "user": {
-                    "type": "string",
-                    "description": "Username of new user to create",
-                    "default": ""
-                },
-                "password": {
-                    "type": "string",
-                    "description": "Password for the new user. Ignored if existing secret is provided.",
-                    "default": ""
-                },
-                "name": {
-                    "type": "string",
-                    "description": "Name for new database to create",
-                    "default": "my_database"
-                },
-                "forcePassword": {
-                    "type": "boolean",
-                    "description": "Option to force users to specify a password. That is required for 'helm upgrade' to work properly.",
-                    "default": false
-                }
-            }
-        },
-        "galera": {
-            "type": "object",
-            "properties": {
-                "name": {
-                    "type": "string",
-                    "description": "Galera cluster name",
-                    "default": "galera"
-                },
-                "bootstrap": {
-                    "type": "object",
-                    "properties": {
-                        "forceBootstrap": {
-                            "type": "boolean",
-                            "description": "Option to force the boostraping from the indicated node in `galera.bootstarp.bootstrapFromNode`",
-                            "default": false
-                        },
-                        "bootstrapFromNode": {
-                            "type": "number",
-                            "description": "Node to bootstrap from, you will need to change this parameter in case you want to bootstrap from other node",
-                            "default": 0
-                        },
-                        "forceSafeToBootstrap": {
-                            "type": "boolean",
-                            "description": "Force `safe_to_bootstrap: 1` in `grastate.date` file",
-                            "default": false
-                        }
-                    }
-                },
-                "mariabackup": {
-                    "type": "object",
-                    "properties": {
-                        "user": {
-                            "type": "string",
-                            "description": "MariaBackup username",
-                            "default": "mariabackup"
-                        },
-                        "password": {
-                            "type": "string",
-                            "description": "MariaBackup password. Password is ignored if existingSecret is specified.",
-                            "default": ""
-                        },
-                        "forcePassword": {
-                            "type": "boolean",
-                            "description": "Option to force users to specify a password. That is required for 'helm upgrade' to work properly.",
-                            "default": false
-                        }
-                    }
-                }
-            }
-        },
-        "ldap": {
-            "type": "object",
-            "properties": {
-                "enabled": {
-                    "type": "boolean",
-                    "description": "Enable LDAP support",
-                    "default": false
-                },
-                "uri": {
-                    "type": "string",
-                    "description": "LDAP URL beginning in the form `ldap`",
-                    "default": ""
-                },
-                "base": {
-                    "type": "string",
-                    "description": "LDAP base DN",
-                    "default": ""
-                },
-                "binddn": {
-                    "type": "string",
-                    "description": "LDAP bind DN",
-                    "default": ""
-                },
-                "bindpw": {
-                    "type": "string",
-                    "description": "LDAP bind password",
-                    "default": ""
-                },
-                "bslookup": {
-                    "type": "string",
-                    "description": "LDAP base lookup",
-                    "default": ""
-                },
-                "filter": {
-                    "type": "string",
-                    "description": "LDAP custom filter",
-                    "default": ""
-                },
-                "map": {
-                    "type": "string",
-                    "description": "LDAP custom map",
-                    "default": ""
-                },
-                "nss_initgroups_ignoreusers": {
-                    "type": "string",
-                    "description": "LDAP ignored users",
-                    "default": "root,nslcd"
-                },
-                "scope": {
-                    "type": "string",
-                    "description": "LDAP search scope",
-                    "default": ""
-                },
-                "tls_reqcert": {
-                    "type": "string",
-                    "description": "LDAP TLS check on server certificates",
-                    "default": ""
-                }
-            }
-        },
-        "tls": {
-            "type": "object",
-            "properties": {
-                "enabled": {
-                    "type": "boolean",
-                    "description": "Enable TLS support for replication traffic",
-                    "default": false
-                },
-                "autoGenerated": {
-                    "type": "boolean",
-                    "description": "Generate automatically self-signed TLS certificates",
-                    "default": false
-                },
-                "certificatesSecret": {
-                    "type": "string",
-                    "description": "Name of the secret that contains the certificates",
-                    "default": ""
-                },
-                "certFilename": {
-                    "type": "string",
-                    "description": "Certificate filename",
-                    "default": ""
-                },
-                "certKeyFilename": {
-                    "type": "string",
-                    "description": "Certificate key filename",
-                    "default": ""
-                },
-                "certCAFilename": {
-                    "type": "string",
-                    "description": "CA Certificate filename",
-                    "default": ""
-                }
-            }
-        },
-        "mariadbConfiguration": {
-            "type": "string",
-            "description": "Configuration for the MariaDB server",
-            "default": "[client]\nport=3306\nsocket=/opt/bitnami/mariadb/tmp/mysql.sock\nplugin_dir=/opt/bitnami/mariadb/plugin\n\n[mysqld]\ndefault_storage_engine=InnoDB\nbasedir=/opt/bitnami/mariadb\ndatadir=/bitnami/mariadb/data\nplugin_dir=/opt/bitnami/mariadb/plugin\ntmpdir=/opt/bitnami/mariadb/tmp\nsocket=/opt/bitnami/mariadb/tmp/mysql.sock\npid_file=/opt/bitnami/mariadb/tmp/mysqld.pid\nbind_address=0.0.0.0\n\n## Character set\n##\ncollation_server=utf8_unicode_ci\ninit_connect='SET NAMES utf8'\ncharacter_set_server=utf8\n\n## MyISAM\n##\nkey_buffer_size=32M\nmyisam_recover_options=FORCE,BACKUP\n\n## Safety\n##\nskip_host_cache\nskip_name_resolve\nmax_allowed_packet=16M\nmax_connect_errors=1000000\nsql_mode=STRICT_TRANS_TABLES,ERROR_FOR_DIVISION_BY_ZERO,NO_AUTO_CREATE_USER,NO_AUTO_VALUE_ON_ZERO,NO_ENGINE_SUBSTITUTION,NO_ZERO_DATE,NO_ZERO_IN_DATE,ONLY_FULL_GROUP_BY\nsysdate_is_now=1\n\n## Binary Logging\n##\nlog_bin=mysql-bin\nexpire_logs_days=14\n# Disabling for performance per http://severalnines.com/blog/9-tips-going-production-galera-cluster-mysql\nsync_binlog=0\n# Required for Galera\nbinlog_format=row\n\n## Caches and Limits\n##\ntmp_table_size=32M\nmax_heap_table_size=32M\n# Re-enabling as now works with Maria 10.1.2\nquery_cache_type=1\nquery_cache_limit=4M\nquery_cache_size=256M\nmax_connections=500\nthread_cache_size=50\nopen_files_limit=65535\ntable_definition_cache=4096\ntable_open_cache=4096\n\n## InnoDB\n##\ninnodb=FORCE\ninnodb_strict_mode=1\n# Mandatory per https://github.com/codership/documentation/issues/25\ninnodb_autoinc_lock_mode=2\n# Per https://www.percona.com/blog/2006/08/04/innodb-double-write/\ninnodb_doublewrite=1\ninnodb_flush_method=O_DIRECT\ninnodb_log_files_in_group=2\ninnodb_log_file_size=128M\ninnodb_flush_log_at_trx_commit=1\ninnodb_file_per_table=1\n# 80% Memory is default reco.\n# Need to re-evaluate when DB size grows\ninnodb_buffer_pool_size=2G\ninnodb_file_format=Barracuda\n\n## Logging\n##\nlog_error=/opt/bitnami/mariadb/logs/mysqld.log\nslow_query_log_file=/opt/bitnami/mariadb/logs/mysqld.log\nlog_queries_not_using_indexes=1\nslow_query_log=1\n\n## SSL\n## Use extraVolumes and extraVolumeMounts to mount /certs filesystem\n# ssl_ca=/certs/ca.pem\n# ssl_cert=/certs/server-cert.pem\n# ssl_key=/certs/server-key.pem\n\n[galera]\nwsrep_on=ON\nwsrep_provider=/opt/bitnami/mariadb/lib/libgalera_smm.so\nwsrep_sst_method=mariabackup\nwsrep_slave_threads=4\nwsrep_cluster_address=gcomm://\nwsrep_cluster_name=galera\nwsrep_sst_auth=\"root:\"\n# Enabled for performance per https://mariadb.com/kb/en/innodb-system-variables/#innodb_flush_log_at_trx_commit\ninnodb_flush_log_at_trx_commit=2\n# MYISAM REPLICATION SUPPORT #\nwsrep_mode=REPLICATE_MYISAM\n\n[mariadb]\nplugin_load_add=auth_pam\n\n## Data-at-Rest Encryption\n## Use extraVolumes and extraVolumeMounts to mount /encryption filesystem\n# plugin_load_add=file_key_management\n# file_key_management_filename=/encryption/keyfile.enc\n# file_key_management_filekey=FILE:/encryption/keyfile.key\n# file_key_management_encryption_algorithm=AES_CTR\n# encrypt_binlog=ON\n# encrypt_tmp_files=ON\n\n## InnoDB/XtraDB Encryption\n# innodb_encrypt_tables=ON\n# innodb_encrypt_temporary_tables=ON\n# innodb_encrypt_log=ON\n# innodb_encryption_threads=4\n# innodb_encryption_rotate_key_age=1\n\n## Aria Encryption\n# aria_encrypt_tables=ON\n# encrypt_tmp_disk_tables=ON"
-        },
-        "configurationConfigMap": {
-            "type": "string",
-            "description": "ConfigMap with the MariaDB configuration files (Note: Overrides `mariadbConfiguration`). The value is evaluated as a template.",
-            "default": ""
-        },
-        "initdbScripts": {
-            "type": "object",
-            "description": "Specify dictionary of scripts to be run at first boot",
-            "default": {}
-        },
-        "initdbScriptsConfigMap": {
-            "type": "string",
-            "description": "ConfigMap with the initdb scripts (Note: Overrides `initdbScripts`)",
-            "default": ""
-        },
-        "extraFlags": {
-            "type": "string",
-            "description": "MariaDB additional command line flags",
-            "default": ""
-        },
-        "replicaCount": {
-            "type": "number",
-            "description": "Desired number of cluster nodes",
-            "default": 3
-        },
-        "updateStrategy": {
-            "type": "object",
-            "properties": {
-                "type": {
-                    "type": "string",
-                    "description": "updateStrategy for MariaDB Master StatefulSet",
-                    "default": "RollingUpdate"
-                }
-            }
-        },
-        "podLabels": {
-            "type": "object",
-            "description": "Extra labels for MariaDB Galera pods",
-            "default": {}
-        },
-        "podAnnotations": {
-            "type": "object",
-            "description": "Annotations for MariaDB Galera  pods",
-            "default": {}
-        },
-        "podAffinityPreset": {
-            "type": "string",
-            "description": "Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`",
-            "default": ""
-        },
-        "podAntiAffinityPreset": {
-            "type": "string",
-            "description": "Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`",
-            "default": "soft"
-        },
-        "nodeAffinityPreset": {
-            "type": "object",
-            "properties": {
-                "type": {
-                    "type": "string",
-                    "description": "Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`",
-                    "default": ""
-                },
-                "key": {
-                    "type": "string",
-                    "description": "Node label key to match. Ignored if `affinity` is set.",
-                    "default": ""
-                },
-                "values": {
-                    "type": "array",
-                    "description": "Node label values to match. Ignored if `affinity` is set.",
-                    "default": [],
-                    "items": {}
-                }
-            }
-        },
-        "affinity": {
-            "type": "object",
-            "description": "Affinity for pod assignment",
-            "default": {}
-        },
-        "nodeSelector": {
-            "type": "object",
-            "description": "Node labels for pod assignment",
-            "default": {}
-        },
-        "tolerations": {
-            "type": "array",
-            "description": "Tolerations for pod assignment",
-            "default": [],
-            "items": {}
-        },
-        "topologySpreadConstraints": {
-            "type": "array",
-            "description": "Topology Spread Constraints for pods assignment",
-            "default": [],
-            "items": {}
-        },
-        "lifecycleHooks": {
-            "type": "object",
-            "description": "for the galera container(s) to automate configuration before or after startup",
-            "default": {}
-        },
-        "containerPorts": {
-            "type": "object",
-            "properties": {
-                "mysql": {
-                    "type": "number",
-                    "description": "mariadb database container port",
-                    "default": 3306
-                },
-                "galera": {
-                    "type": "number",
-                    "description": "galera cluster container port",
-                    "default": 4567
-                },
-                "ist": {
-                    "type": "number",
-                    "description": "galera IST container port",
-                    "default": 4568
-                },
-                "sst": {
-                    "type": "number",
-                    "description": "galera SST container port",
-                    "default": 4444
-                }
-            }
-        },
-        "persistence": {
-            "type": "object",
-            "properties": {
-                "enabled": {
-                    "type": "boolean",
-                    "description": "Enable persistence using PVC",
-                    "default": true
-                },
-                "existingClaim": {
-                    "type": "string",
-                    "description": "Provide an existing `PersistentVolumeClaim`",
-                    "default": ""
-                },
-                "subPath": {
-                    "type": "string",
-                    "description": "Subdirectory of the volume to mount",
-                    "default": ""
-                },
-                "mountPath": {
-                    "type": "string",
-                    "description": "Path to mount the volume at",
-                    "default": "/bitnami/mariadb"
-                },
-                "selector": {
-                    "type": "object",
-                    "description": "Selector to match an existing Persistent Volume (this value is evaluated as a template)",
-                    "default": {}
-                },
-                "storageClass": {
-                    "type": "string",
-                    "description": "Persistent Volume Storage Class",
-                    "default": ""
-                },
-                "annotations": {
-                    "type": "object",
-                    "description": "Persistent Volume Claim annotations",
-                    "default": {}
-                },
-                "labels": {
-                    "type": "object",
-                    "description": "Persistent Volume Claim Labels",
-                    "default": {}
-                },
-                "accessModes": {
-                    "type": "array",
-                    "description": "Persistent Volume Access Modes",
-                    "default": [
-                        "ReadWriteOnce"
-                    ],
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "size": {
-                    "type": "string",
-                    "description": "Persistent Volume Size",
-                    "default": "8Gi"
-                }
-            }
-        },
-        "priorityClassName": {
-            "type": "string",
-            "description": "Priority Class Name for Statefulset",
-            "default": ""
-        },
-        "initContainers": {
-            "type": "array",
-            "description": "Additional init containers (this value is evaluated as a template)",
-            "default": [],
-            "items": {}
-        },
-        "sidecars": {
-            "type": "array",
-            "description": "Add additional sidecar containers (this value is evaluated as a template)",
-            "default": [],
-            "items": {}
-        },
-        "extraVolumes": {
-            "type": "array",
-            "description": "Extra volumes",
-            "default": [],
-            "items": {}
-        },
-        "extraVolumeMounts": {
-            "type": "array",
-            "description": "Mount extra volume(s)",
-            "default": [],
-            "items": {}
-        },
-        "resources": {
-            "type": "object",
-            "properties": {
-                "limits": {
-                    "type": "object",
-                    "description": "The resources limits for the container",
-                    "default": {}
-                },
-                "requests": {
-                    "type": "object",
-                    "description": "The requested resources for the container",
-                    "default": {}
-                }
-            }
-        },
-        "livenessProbe": {
-            "type": "object",
-            "properties": {
-                "enabled": {
-                    "type": "boolean",
-                    "description": "Turn on and off liveness probe",
-                    "default": true
-                },
-                "initialDelaySeconds": {
-                    "type": "number",
-                    "description": "Delay before liveness probe is initiated",
-                    "default": 120
-                },
-                "periodSeconds": {
-                    "type": "number",
-                    "description": "How often to perform the probe",
-                    "default": 10
-                },
-                "timeoutSeconds": {
-                    "type": "number",
-                    "description": "When the probe times out",
-                    "default": 1
-                },
-                "failureThreshold": {
-                    "type": "number",
-                    "description": "Minimum consecutive failures for the probe",
-                    "default": 3
-                },
-                "successThreshold": {
-                    "type": "number",
-                    "description": "Minimum consecutive successes for the probe",
-                    "default": 1
-                }
-            }
-        },
-        "readinessProbe": {
-            "type": "object",
-            "properties": {
-                "enabled": {
-                    "type": "boolean",
-                    "description": "Turn on and off readiness probe",
-                    "default": true
-                },
-                "initialDelaySeconds": {
-                    "type": "number",
-                    "description": "Delay before readiness probe is initiated",
-                    "default": 30
-                },
-                "periodSeconds": {
-                    "type": "number",
-                    "description": "How often to perform the probe",
-                    "default": 10
-                },
-                "timeoutSeconds": {
-                    "type": "number",
-                    "description": "When the probe times out",
-                    "default": 1
-                },
-                "failureThreshold": {
-                    "type": "number",
-                    "description": "Minimum consecutive failures for the probe",
-                    "default": 3
-                },
-                "successThreshold": {
-                    "type": "number",
-                    "description": "Minimum consecutive successes for the probe",
-                    "default": 1
-                }
-            }
-        },
-        "startupProbe": {
-            "type": "object",
-            "properties": {
-                "enabled": {
-                    "type": "boolean",
-                    "description": "Turn on and off startup probe",
-                    "default": false
-                },
-                "initialDelaySeconds": {
-                    "type": "number",
-                    "description": "Delay before startup probe is initiated",
-                    "default": 120
-                },
-                "periodSeconds": {
-                    "type": "number",
-                    "description": "How often to perform the probe",
-                    "default": 10
-                },
-                "timeoutSeconds": {
-                    "type": "number",
-                    "description": "When the probe times out",
-                    "default": 1
-                },
-                "failureThreshold": {
-                    "type": "number",
-                    "description": "Minimum consecutive failures for the probe",
-                    "default": 48
-                },
-                "successThreshold": {
-                    "type": "number",
-                    "description": "Minimum consecutive successes for the probe",
-                    "default": 1
-                }
-            }
-        },
-        "customStartupProbe": {
-            "type": "object",
-            "description": "Custom liveness probe for the Web component",
-            "default": {}
-        },
-        "customLivenessProbe": {
-            "type": "object",
-            "description": "Custom liveness probe for the Web component",
-            "default": {}
-        },
-        "customReadinessProbe": {
-            "type": "object",
-            "description": "Custom rediness probe for the Web component",
-            "default": {}
-        },
-        "podDisruptionBudget": {
-            "type": "object",
-            "properties": {
-                "create": {
-                    "type": "boolean",
-                    "description": "Specifies whether a Pod disruption budget should be created",
-                    "default": false
-                },
-                "minAvailable": {
-                    "type": "number",
-                    "description": "Minimum number / percentage of pods that should remain scheduled",
-                    "default": 1
-                },
-                "maxUnavailable": {
-                    "type": "string",
-                    "description": "Maximum number / percentage of pods that may be made unavailable",
-                    "default": ""
-                }
-            }
-        },
-        "metrics": {
-            "type": "object",
-            "properties": {
-                "enabled": {
-                    "type": "boolean",
-                    "description": "Start a side-car prometheus exporter",
-                    "default": false
-                },
-                "image": {
-                    "type": "object",
-                    "properties": {
-                        "registry": {
-                            "type": "string",
-                            "description": "MariaDB Prometheus exporter image registry",
-                            "default": "docker.io"
-                        },
-                        "repository": {
-                            "type": "string",
-                            "description": "MariaDB Prometheus exporter image repository",
-                            "default": "bitnami/mysqld-exporter"
-                        },
-                        "tag": {
-                            "type": "string",
-                            "description": "MariaDB Prometheus exporter image tag (immutable tags are recommended)",
-                            "default": "0.15.0-debian-11-r24"
-                        },
-                        "digest": {
-                            "type": "string",
-                            "description": "MariaDB Prometheus exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag",
-                            "default": ""
-                        },
-                        "pullPolicy": {
-                            "type": "string",
-                            "description": "MariaDB Prometheus exporter image pull policy",
-                            "default": "IfNotPresent"
-                        },
-                        "pullSecrets": {
-                            "type": "array",
-                            "description": "MariaDB Prometheus exporter image pull secrets",
-                            "default": [],
-                            "items": {}
-                        }
-                    }
-                },
-                "extraFlags": {
-                    "type": "array",
-                    "description": "MariaDB Prometheus exporter additional command line flags",
-                    "default": [],
-                    "items": {}
-                },
-                "resources": {
-                    "type": "object",
-                    "properties": {
-                        "limits": {
-                            "type": "object",
-                            "description": "The resources limits for the container",
-                            "default": {}
-                        },
-                        "requests": {
-                            "type": "object",
-                            "description": "The requested resources for the container",
-                            "default": {}
-                        }
-                    }
-                },
-                "containerSecurityContext": {
-                    "type": "object",
-                    "properties": {
-                        "enabled": {
-                            "type": "boolean",
-                            "description": "Enabled exporter's container Security Context",
-                            "default": false
-                        }
-                    }
-                },
-                "service": {
-                    "type": "object",
-                    "properties": {
-                        "type": {
-                            "type": "string",
-                            "description": "Prometheus exporter service type",
-                            "default": "ClusterIP"
-                        },
-                        "port": {
-                            "type": "number",
-                            "description": "Prometheus exporter service port",
-                            "default": 9104
-                        },
-                        "annotations": {
-                            "type": "object",
-                            "properties": {
-                                "prometheus": {
-                                    "type": "object",
-                                    "properties": {
-                                        "io/scrape": {
-                                            "type": "string",
-                                            "description": "",
-                                            "default": "true"
-                                        },
-                                        "io/port": {
-                                            "type": "string",
-                                            "description": "",
-                                            "default": "9104"
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "loadBalancerIP": {
-                            "type": "string",
-                            "description": "Load Balancer IP if the Prometheus metrics server type is `LoadBalancer`",
-                            "default": ""
-                        },
-                        "clusterIP": {
-                            "type": "string",
-                            "description": "Prometheus metrics service Cluster IP",
-                            "default": ""
-                        },
-                        "loadBalancerSourceRanges": {
-                            "type": "array",
-                            "description": "Prometheus metrics service Load Balancer sources",
-                            "default": [],
-                            "items": {}
-                        },
-                        "externalTrafficPolicy": {
-                            "type": "string",
-                            "description": "Prometheus metrics service external traffic policy",
-                            "default": "Cluster"
-                        }
-                    }
-                },
-                "serviceMonitor": {
-                    "type": "object",
-                    "properties": {
-                        "enabled": {
-                            "type": "boolean",
-                            "description": "if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)",
-                            "default": false
-                        },
-                        "namespace": {
-                            "type": "string",
-                            "description": "Optional namespace which Prometheus is running in",
-                            "default": ""
-                        },
-                        "jobLabel": {
-                            "type": "string",
-                            "description": "The name of the label on the target service to use as the job name in prometheus.",
-                            "default": ""
-                        },
-                        "interval": {
-                            "type": "string",
-                            "description": "How frequently to scrape metrics (use by default, falling back to Prometheus' default)",
-                            "default": ""
-                        },
-                        "scrapeTimeout": {
-                            "type": "string",
-                            "description": "Timeout after which the scrape is ended",
-                            "default": ""
-                        },
-                        "relabelings": {
-                            "type": "array",
-                            "description": "RelabelConfigs to apply to samples before scraping",
-                            "default": [],
-                            "items": {}
-                        },
-                        "metricRelabelings": {
-                            "type": "array",
-                            "description": "MetricRelabelConfigs to apply to samples before ingestion",
-                            "default": [],
-                            "items": {}
-                        },
-                        "honorLabels": {
-                            "type": "boolean",
-                            "description": "honorLabels chooses the metric's labels on collisions with target labels",
-                            "default": false
-                        },
-                        "labels": {
-                            "type": "object",
-                            "description": "ServiceMonitor extra labels",
-                            "default": {}
-                        }
-                    }
-                },
-                "prometheusRules": {
-                    "type": "object",
-                    "properties": {
-                        "enabled": {
-                            "type": "boolean",
-                            "description": "if `true`, creates a Prometheus Operator PrometheusRule (also requires `metrics.enabled` to be `true`, and makes little sense without ServiceMonitor)",
-                            "default": false
-                        },
-                        "additionalLabels": {
-                            "type": "object",
-                            "properties": {
-                                "app": {
-                                    "type": "string",
-                                    "description": "",
-                                    "default": "prometheus-operator"
-                                },
-                                "release": {
-                                    "type": "string",
-                                    "description": "",
-                                    "default": "prometheus"
-                                }
-                            }
-                        },
-                        "rules": {
-                            "type": "object",
-                            "description": "PrometheusRule rules to configure",
-                            "default": {}
-                        }
-                    }
-                }
-            }
+          }
         }
+      }
+    },
+    "rootUser": {
+      "type": "object",
+      "properties": {
+        "password": {
+          "type": "string",
+          "title": "MariaDB admin password",
+          "form": true,
+          "description": "Defaults to a random 10-character alphanumeric string if not set",
+          "hidden": {
+            "value": true,
+            "path": "existingSecret"
+          }
+        },
+        "user": {
+          "type": "string",
+          "title": "MariaDB admin user",
+          "description": "Name of the admin user to be created during the 1st initialization of MariaDB.",
+          "form": true
+        }
+      }
+    },
+    "db": {
+      "type": "object",
+      "title": "Custom database & users",
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "MariaDB custom database",
+          "description": "Name of the custom database to be created during the 1st initialization of MariaDB",
+          "form": true
+        },
+        "user": {
+          "type": "string",
+          "title": "MariaDB custom user",
+          "description": "Name of the custom user to be created during the 1st initialization of MariaDB. This user only has permissions on the MariaDB custom database",
+          "form": true
+        },
+        "password": {
+          "type": "string",
+          "title": "Password for MariaDB custom user",
+          "form": true,
+          "description": "Defaults to a random 10-character alphanumeric string if not set",
+          "hidden": {
+            "value": true,
+            "path": "existingSecret"
+          }
+        }
+      }
+    },
+    "ldap": {
+      "type": "object",
+      "title": "LDAP configuration",
+      "form": true,
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "form": true,
+          "title": "Enable LDAP support",
+          "description": "Enable authentication using LDAP"
+        },
+        "uri": {
+          "type": "string",
+          "title": "LDAP URL",
+          "form": true,
+          "hidden": {
+            "value": false,
+            "path": "ldap/enabled"
+          }
+        },
+        "base": {
+          "type": "string",
+          "title": "LDAP base DN",
+          "form": true,
+          "hidden": {
+            "value": false,
+            "path": "ldap/enabled"
+          }
+        },
+        "binddn": {
+          "type": "string",
+          "title": "LDAP bind DN",
+          "form": true,
+          "hidden": {
+            "value": false,
+            "path": "ldap/enabled"
+          }
+        },
+        "bindpw": {
+          "type": "string",
+          "title": "LDAP bind password",
+          "form": true,
+          "hidden": {
+            "value": false,
+            "path": "ldap/enabled"
+          }
+        }
+      }
+    },
+    "replicaCount": {
+      "type": "integer",
+      "form": true,
+      "title": "Desired number of cluster nodes"
+    },
+    "persistence": {
+      "type": "object",
+      "title": "Persistence",
+      "form": true,
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "form": true,
+          "title": "Enable persistence",
+          "description": "Enable persistence using Persistent Volume Claims"
+        },
+        "size": {
+          "type": "string",
+          "title": "Persistent Volume Size",
+          "form": true,
+          "render": "slider",
+          "sliderMin": 1,
+          "sliderMax": 100,
+          "sliderUnit": "Gi",
+          "hidden": {
+            "value": false,
+            "path": "persistence/enabled"
+          }
+        }
+      }
+    },
+    "serviceAccount": {
+      "type": "object",
+      "title": "ServiceAccount configuration",
+      "form": true,
+      "properties": {
+        "create": {
+          "type": "boolean",
+          "form": true,
+          "title": "Create a ServiceAcccount",
+          "description": "Specify whether a ServiceAcccount for MariaDB Galera pods should be created"
+        },
+        "name": {
+          "type": "string",
+          "form": true,
+          "title": "ServiceAcccount name",
+          "description": "ServiceAcccount name to use. Auto-generated if not specified",
+          "hidden": {
+            "value": false,
+            "path": "serviceAccount/create"
+          }
+        }
+      }
+    },
+    "rbac": {
+      "type": "object",
+      "title": "RBAC rules configuration",
+      "form": true,
+      "properties": {
+        "create": {
+          "type": "boolean",
+          "form": true,
+          "title": "Create RBAC rules",
+          "description": "Specify whether RBAC resources should be created and used"
+        }
+      }
+    },
+    "metrics": {
+      "type": "object",
+      "form": true,
+      "title": "Prometheus metrics details",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "Create Prometheus metrics exporter",
+          "description": "Create a side-car container to expose Prometheus metrics",
+          "form": true
+        },
+        "serviceMonitor": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "title": "Create Prometheus Operator ServiceMonitor",
+              "description": "Create a ServiceMonitor to track metrics using Prometheus Operator",
+              "form": true,
+              "hidden": {
+                "value": false,
+                "path": "metrics/enabled"
+              }
+            }
+          }
+        }
+      }
     }
+  }
 }

@@ -110,7 +110,7 @@
                 "tag": {
                     "type": "string",
                     "description": "APISIX image tag (immutable tags are recommended)",
-                    "default": "3.5.0-debian-11-r0"
+                    "default": "3.3.0-debian-11-r3"
                 },
                 "digest": {
                     "type": "string",
@@ -1943,7 +1943,7 @@
                         "tag": {
                             "type": "string",
                             "description": "APISIX Dashboard image tag (immutable tags are recommended)",
-                            "default": "3.0.1-debian-11-r98"
+                            "default": "3.0.1-debian-11-r2"
                         },
                         "digest": {
                             "type": "string",
@@ -1991,7 +1991,7 @@
                 "defaultConfig": {
                     "type": "string",
                     "description": "APISIX Dashboard configuration (evaluated as a template)",
-                    "default": "conf:\n  listen:\n    host: 0.0.0.0\n    port: {{ .Values.dashboard.containerPorts.http }}\n  {{- if .Values.dashboard.tls.enabled }}\n  ssl:\n    host: 0.0.0.0\n    port: {{ .Values.dashboard.containerPorts.https }}\n    cert: /bitnami/certs/{{ .Values.dashboard.tls.certFilename }}\n    key: /bitnami/certs/{{ .Values.dashboard.tls.certKeyFilename }}\n  {{- end }}\n  etcd:\n    prefix: \"/apisix\"\n    endpoints:\n      {{- if .Values.etcd.enabled  }}\n        {{- $replicas := $.Values.etcd.replicaCount | int }}\n        {{- range $i, $_e := until $replicas }}\n      - {{ printf \"%s://%s-%d.%s:%v\" (ternary \"https\" \"http\" $.Values.etcd.auth.client.secureTransport) (include \"apisix.etcd.fullname\" $ ) $i (include \"apisix.etcd.headlessServiceName\" $) ( include \"apisix.etcd.port\" $ ) }}          {{- end }}\n      {{- else }}\n      {{- range $node :=.Values.externalEtcd.servers }}\n      - {{ printf \"%s:%v\" $node (include \"apisix.etcd.port\" $) }}\n      {{- end }}\n      {{- end }}\n    {{- if (include \"apisix.etcd.authEnabled\" .) }}\n    username: \"{{ print \"{{ APISIX_ETCD_USER }}\" }}\"\n    password: \"{{ print \"{{ APISIX_ETCD_PASSWORD }}\" }}\"\n    {{- end }}\n  log:\n    error_log:\n      level: warn\n      file_path: /dev/stderr\n    access_log:\n      file_path: /dev/stdout\nauthentication:\n  secret: secret\n  expire_time: 3600\n  users:\n    - username: \"{{ print \"{{ APISIX_DASHBOARD_USER }}\" }}\"\n      password: \"{{ print \"{{ APISIX_DASHBOARD_PASSWORD }}\" }}\"\nplugins:\n  - api-breaker\n  - authz-casbin\n  - authz-casdoor\n  - authz-keycloak\n  - aws-lambda\n  - azure-functions\n  - basic-auth\n  # - batch-requests\n  - clickhouse-logger\n  - client-control\n  - consumer-restriction\n  - cors\n  - csrf\n  - datadog\n  # - dubbo-proxy\n  - echo\n  - error-log-logger\n  # - example-plugin\n  - ext-plugin-post-req\n  - ext-plugin-post-resp\n  - ext-plugin-pre-req\n  - fault-injection\n  - file-logger\n  - forward-auth\n  - google-cloud-logging\n  - grpc-transcode\n  - grpc-web\n  - gzip\n  - hmac-auth\n  - http-logger\n  - ip-restriction\n  - jwt-auth\n  - kafka-logger\n  - kafka-proxy\n  - key-auth\n  - ldap-auth\n  - limit-conn\n  - limit-count\n  - limit-req\n  - loggly\n  # - log-rotate\n  - mocking\n  # - node-status\n  - opa\n  - openid-connect\n  - opentelemetry\n  - openwhisk\n  - prometheus\n  - proxy-cache\n  - proxy-control\n  - proxy-mirror\n  - proxy-rewrite\n  - public-api\n  - real-ip\n  - redirect\n  - referer-restriction\n  - request-id\n  - request-validation\n  - response-rewrite\n  - rocketmq-logger\n  - server-info\n  - serverless-post-function\n  - serverless-pre-function\n  - skywalking\n  - skywalking-logger\n  - sls-logger\n  - splunk-hec-logging\n  - syslog\n  - tcp-logger\n  - traffic-split\n  - ua-restriction\n  - udp-logger\n  - uri-blocker\n  - wolf-rbac\n  - zipkin\n  - elasticsearch-logge\n  - openfunction\n  - tencent-cloud-cls\n  - ai\n  - cas-auth\n"
+                    "default": "conf:\n  listen:\n    host: 0.0.0.0\n    port: {{ .Values.dashboard.containerPorts.http }}\n  {{- if .Values.dashboard.tls.enabled }}\n  ssl:\n    host: 0.0.0.0\n    port: {{ .Values.dashboard.containerPorts.https }}\n    cert: /bitnami/certs/{{ .Values.dashboard.tls.certFilename }}\n    key: /bitnami/certs/{{ .Values.dashboard.tls.certKeyFilename }}\n  {{- end }}\n  etcd:\n    prefix: \"/apisix\"\n    endpoints:\n      {{- if .Values.etcd.enabled  }}\n        {{- $replicas := $.Values.etcd.replicaCount | int }}\n        {{- range $i, $_e := until $replicas }}\n      - {{ printf \"%s://%s-%d.%s:%v\" (ternary \"https\" \"http\" $.Values.etcd.auth.client.secureTransport) (include \"apisix.etcd.fullname\" $ ) $i (include \"apisix.etcd.headlessServiceName\" $) ( include \"apisix.etcd.port\" $ ) }}          {{- end }}\n      {{- else }}\n      {{- range $node :=.Values.externalEtcd.servers }}\n      - {{ printf \"%s:%v\" $node (include \"apisix.etcd.port\" $) }}\n      {{- end }}\n      {{- end }}\n    {{- if (include \"apisix.etcd.authEnabled\" .) }}\n    username: \"{{ print \"{{ APISIX_ETCD_USER }}\" }}\"\n    password: \"{{ print \"{{ APISIX_ETCD_PASSWORD }}\" }}\"\n    {{- end }}\n  log:\n    error_log:\n      level: warn\n      file_path: /dev/stderr\n    access_log:\n      file_path: /dev/stdout\nauthentication:\n  secret: secret\n  expire_time: 3600\n  users:\n    - username: \"{{ print \"{{ APISIX_DASHBOARD_USER }}\" }}\"\n      password: \"{{ print \"{{ APISIX_DASHBOARD_PASSWORD }}\" }}\"\n"
                 },
                 "extraConfig": {
                     "type": "object",
@@ -2128,26 +2128,6 @@
                             "type": "string",
                             "description": "APISIX Dashboard statefulset strategy type",
                             "default": "RollingUpdate"
-                        }
-                    }
-                },
-                "pdb": {
-                    "type": "object",
-                    "properties": {
-                        "create": {
-                            "type": "boolean",
-                            "description": "Enable/disable a Pod Disruption Budget creation",
-                            "default": false
-                        },
-                        "minAvailable": {
-                            "type": "number",
-                            "description": "Minimum number/percentage of pods that should remain scheduled",
-                            "default": 1
-                        },
-                        "maxUnavailable": {
-                            "type": "string",
-                            "description": "Maximum number/percentage of pods that may be made unavailable",
-                            "default": ""
                         }
                     }
                 },
@@ -2738,7 +2718,7 @@
                         "tag": {
                             "type": "string",
                             "description": "APISIX Ingress Controller image tag (immutable tags are recommended)",
-                            "default": "1.6.1-debian-11-r97"
+                            "default": "1.6.1-debian-11-r3"
                         },
                         "digest": {
                             "type": "string",
@@ -3621,7 +3601,7 @@
                         "tag": {
                             "type": "string",
                             "description": "Init container wait-container image tag",
-                            "default": "11-debian-11-r54"
+                            "default": "11-debian-11-r2"
                         },
                         "digest": {
                             "type": "string",
