@@ -142,6 +142,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `operator.serviceMonitor.labels`                                                      | Extra labels for the ServiceMonitor                                                                                    | `{}`                          |
 | `operator.serviceMonitor.annotations`                                                 | Extra annotations for the ServiceMonitor                                                                               | `{}`                          |
 | `operator.serviceMonitor.extraParameters`                                             | Any extra parameter to be added to the endpoint configured in the ServiceMonitor                                       | `{}`                          |
+| `operator.serviceMonitor.sampleLimit`                                                 | Per-scrape limit on number of scraped samples that will be accepted.                                                   | `""`                          |
 | `operator.resources`                                                                  | Configure resource requests and limits                                                                                 | `{}`                          |
 | `operator.podAffinityPreset`                                                          | Pod affinity preset                                                                                                    | `""`                          |
 | `operator.podAntiAffinityPreset`                                                      | Prometheus Operator Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`           | `soft`                        |
@@ -199,7 +200,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `operator.prometheusConfigReloader.readinessProbe.failureThreshold`                   | Minimum consecutive failures for the probe                                                                             | `6`                           |
 | `operator.prometheusConfigReloader.readinessProbe.successThreshold`                   | Minimum consecutive successes for the probe                                                                            | `1`                           |
 | `operator.namespaces`                                                                 | Optional comma-separated list of namespaces to watch (default=all).                                                    | `""`                          |
-| `operator.serviceMonitor.sampleLimit`                                                 | Per-scrape limit on number of scraped samples that will be accepted                                                    | `""`                          |
 
 ### Prometheus Parameters
 
@@ -243,7 +243,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `prometheus.serviceMonitor.interval`                                  | Scrape interval (use by default, falling back to Prometheus' default)                                                            | `""`                      |
 | `prometheus.serviceMonitor.metricRelabelings`                         | Metric relabeling                                                                                                                | `[]`                      |
 | `prometheus.serviceMonitor.relabelings`                               | Relabel configs                                                                                                                  | `[]`                      |
-| `prometheus.serviceMonitor.sampleLimit`                               | Per-scrape limit on number of scraped samples that will be accepted                                                              | `""`                      |
+| `prometheus.serviceMonitor.sampleLimit`                               | Per-scrape limit on number of scraped samples that will be accepted.                                                             | `""`                      |
 | `prometheus.ingress.enabled`                                          | Enable ingress controller resource                                                                                               | `false`                   |
 | `prometheus.ingress.pathType`                                         | Ingress Path type                                                                                                                | `ImplementationSpecific`  |
 | `prometheus.ingress.apiVersion`                                       | Override API Version (automatically detected if not set)                                                                         | `""`                      |
@@ -436,7 +436,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `prometheus.configReloader.serviceMonitor.jobLabel`                   | The name of the label on the target service to use as the job name in prometheus.                                                | `""`                      |
 | `prometheus.configReloader.serviceMonitor.metricRelabelings`          | Metric relabeling                                                                                                                | `[]`                      |
 | `prometheus.configReloader.serviceMonitor.relabelings`                | Relabel configs                                                                                                                  | `[]`                      |
-| `prometheus.configReloader.serviceMonitor.sampleLimit`                | Per-scrape limit on number of scraped samples that will be accepted                                                              | `""`                      |
+| `prometheus.configReloader.serviceMonitor.sampleLimit`                | Per-scrape limit on number of scraped samples that will be accepted.                                                             | `""`                      |
 | `prometheus.portName`                                                 | Port name used for the pods and governing service. This defaults to web                                                          | `web`                     |
 
 ### Alertmanager Parameters
@@ -487,7 +487,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `alertmanager.serviceMonitor.annotations`                        | Extra annotations for the ServiceMonitor                                                                                                                                                                                                                                                                   | `{}`                     |
 | `alertmanager.serviceMonitor.honorLabels`                        | honorLabels chooses the metric's labels on collisions with target labels                                                                                                                                                                                                                                   | `false`                  |
 | `alertmanager.serviceMonitor.extraParameters`                    | Any extra parameter to be added to the endpoint configured in the ServiceMonitor                                                                                                                                                                                                                           | `{}`                     |
-| `alertmanager.serviceMonitor.sampleLimit`                        | Per-scrape limit on number of scraped samples that will be accepted                                                                                                                                                                                                                                        | `""`                     |
+| `alertmanager.serviceMonitor.sampleLimit`                        | Per-scrape limit on number of scraped samples that will be accepted.                                                                                                                                                                                                                                       | `""`                     |
 | `alertmanager.ingress.enabled`                                   | Enable ingress controller resource                                                                                                                                                                                                                                                                         | `false`                  |
 | `alertmanager.ingress.pathType`                                  | Ingress Path type                                                                                                                                                                                                                                                                                          | `ImplementationSpecific` |
 | `alertmanager.ingress.apiVersion`                                | Override API Version (automatically detected if not set)                                                                                                                                                                                                                                                   | `""`                     |
@@ -579,7 +579,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `kubelet.serviceMonitor.cAdvisorRelabelings`       | Relabel configs for scraping cAdvisor                                                                  | `[]`                         |
 | `kubelet.serviceMonitor.labels`                    | Extra labels for the ServiceMonitor                                                                    | `{}`                         |
 | `kubelet.serviceMonitor.annotations`               | Extra annotations for the ServiceMonitor                                                               | `{}`                         |
-| `kubelet.serviceMonitor.sampleLimit`                | Per-scrape limit on number of scraped samples that will be accepted                                   | `""`                         |
+| `kubelet.serviceMonitor.sampleLimit`               | Per-scrape limit on number of scraped samples that will be accepted.                                   | `""`                         |
 
 ### Blackbox Exporter Deployment Parameters
 
@@ -677,7 +677,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `kubeApiServer.serviceMonitor.relabelings`                | Relabel configs                                                                                                                 | `[]`          |
 | `kubeApiServer.serviceMonitor.labels`                     | Extra labels for the ServiceMonitor                                                                                             | `{}`          |
 | `kubeApiServer.serviceMonitor.annotations`                | Extra annotations for the ServiceMonitor                                                                                        | `{}`          |
-| `kubeApiServer.serviceMonitor.sampleLimit`                | Per-scrape limit on number of scraped samples that will be accepted                                                             | `""`          |
+| `kubeApiServer.serviceMonitor.sampleLimit`                | Per-scrape limit on number of scraped samples that will be accepted.                                                            | `""`          |
 | `kubeControllerManager.enabled`                           | Create a ServiceMonitor to scrape kube-controller-manager service                                                               | `true`        |
 | `kubeControllerManager.endpoints`                         | If your kube controller manager is not deployed as a pod, specify IPs it can be found on                                        | `[]`          |
 | `kubeControllerManager.namespace`                         | Namespace where kube-controller-manager service is deployed.                                                                    | `kube-system` |
@@ -695,7 +695,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `kubeControllerManager.serviceMonitor.relabelings`        | Relabel configs                                                                                                                 | `[]`          |
 | `kubeControllerManager.serviceMonitor.labels`             | Extra labels for the ServiceMonitor                                                                                             | `{}`          |
 | `kubeControllerManager.serviceMonitor.annotations`        | Extra annotations for the ServiceMonitor                                                                                        | `{}`          |
-| `kubeControllerManager.serviceMonitor.sampleLimit`        | Per-scrape limit on number of scraped samples that will be accepted                                                             | `""`          |
+| `kubeControllerManager.serviceMonitor.sampleLimit`        | Per-scrape limit on number of scraped samples that will be accepted.                                                            | `""`          |
 | `kubeScheduler.enabled`                                   | Create a ServiceMonitor to scrape kube-scheduler service                                                                        | `true`        |
 | `kubeScheduler.endpoints`                                 | If your kube scheduler is not deployed as a pod, specify IPs it can be found on                                                 | `[]`          |
 | `kubeScheduler.namespace`                                 | Namespace where kube-scheduler service is deployed.                                                                             | `kube-system` |
@@ -713,7 +713,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `kubeScheduler.serviceMonitor.relabelings`                | Relabel configs                                                                                                                 | `[]`          |
 | `kubeScheduler.serviceMonitor.labels`                     | Extra labels for the ServiceMonitor                                                                                             | `{}`          |
 | `kubeScheduler.serviceMonitor.annotations`                | Extra annotations for the ServiceMonitor                                                                                        | `{}`          |
-| `kubeScheduler.serviceMonitor.sampleLimit`                | Per-scrape limit on number of scraped samples that will be accepted                                                             | `""`          |
+| `kubeScheduler.serviceMonitor.sampleLimit`                | Per-scrape limit on number of scraped samples that will be accepted.                                                            | `""`          |
 | `coreDns.enabled`                                         | Create a ServiceMonitor to scrape coredns service                                                                               | `true`        |
 | `coreDns.namespace`                                       | Namespace where core dns service is deployed.                                                                                   | `kube-system` |
 | `coreDns.service.enabled`                                 | Whether or not to create a Service object for coredns                                                                           | `true`        |
@@ -727,7 +727,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `coreDns.serviceMonitor.relabelings`                      | Relabel configs to apply to samples before ingestion.                                                                           | `[]`          |
 | `coreDns.serviceMonitor.labels`                           | Extra labels for the ServiceMonitor                                                                                             | `{}`          |
 | `coreDns.serviceMonitor.annotations`                      | Extra annotations for the ServiceMonitor                                                                                        | `{}`          |
-| `coreDns.serviceMonitor.sampleLimit`                      | Per-scrape limit on number of scraped samples that will be accepted                                                             | `""`          |
+| `coreDns.serviceMonitor.sampleLimit`                      | Per-scrape limit on number of scraped samples that will be accepted.                                                            | `""`          |
 | `kubeProxy.enabled`                                       | Create a ServiceMonitor to scrape the kube-proxy Service                                                                        | `true`        |
 | `kubeProxy.endpoints`                                     | If your kube-proxy is not deployed as a pod, specify IPs it can be found on                                                     | `[]`          |
 | `kubeProxy.namespace`                                     | Namespace where kube-proxy service is deployed.                                                                                 | `kube-system` |
@@ -743,7 +743,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `kubeProxy.serviceMonitor.relabelings`                    | Relabel configs                                                                                                                 | `[]`          |
 | `kubeProxy.serviceMonitor.labels`                         | Extra labels for the ServiceMonitor                                                                                             | `{}`          |
 | `kubeProxy.serviceMonitor.annotations`                    | Extra annotations for the ServiceMonitor                                                                                        | `{}`          |
-| `kubeProxy.serviceMonitor.sampleLimit`                    | Per-scrape limit on number of scraped samples that will be accepted                                                             | `""`          |
+| `kubeProxy.serviceMonitor.sampleLimit`                    | Per-scrape limit on number of scraped samples that will be accepted.                                                            | `""`          |
 
 ### RBAC parameters
 
