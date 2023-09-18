@@ -121,7 +121,7 @@ spec:
               value: {{ .Values.matomoWebsiteName | quote }}
             - name: MATOMO_WEBSITE_HOST
               value: {{ .Values.matomoWebsiteHost | quote }}
-            {{- if .Values.smtpAuth -}}
+            {{- if .Values.smtpAuth }}
             - name: MATOMO_SMTP_AUTH
               value: {{ .Values.smtpAuth | quote }}
             {{- end }}

@@ -230,12 +230,12 @@ spec:
         {{- if .Values.aggregator.initScriptsCM }}
         - name: custom-init-scripts-cm
           configMap:
-            name: {{ template ".Values.initScriptsCM" . }}
+            name: {{ template "fluentd.aggregator.initScriptsCM" . }}
         {{- end }}
         {{- if .Values.aggregator.initScriptsSecret }}
         - name: custom-init-scripts-secret
           secret:
-            secretName: {{ template ".Values.initScriptsSecret" . }}
+            secretName: {{ template "fluentd.aggregator.initScriptsSecret" . }}
             defaultMode: 0755
         {{- end }}
 
