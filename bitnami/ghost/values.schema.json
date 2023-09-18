@@ -1,1063 +1,186 @@
 {
-    "title": "Chart Values",
-    "type": "object",
-    "properties": {
-        "global": {
-            "type": "object",
-            "properties": {
-                "imageRegistry": {
-                    "type": "string",
-                    "description": "Global Docker image registry",
-                    "default": ""
-                },
-                "imagePullSecrets": {
-                    "type": "array",
-                    "description": "Global Docker registry secret names as an array",
-                    "default": [],
-                    "items": {}
-                },
-                "storageClass": {
-                    "type": "string",
-                    "description": "Global StorageClass for Persistent Volume(s)",
-                    "default": ""
-                }
-            }
-        },
-        "kubeVersion": {
-            "type": "string",
-            "description": "Override Kubernetes version",
-            "default": ""
-        },
-        "nameOverride": {
-            "type": "string",
-            "description": "String to partially override common.names.fullname",
-            "default": ""
-        },
-        "fullnameOverride": {
-            "type": "string",
-            "description": "String to fully override common.names.fullname",
-            "default": ""
-        },
-        "commonLabels": {
-            "type": "object",
-            "description": "Labels to add to all deployed objects",
-            "default": {}
-        },
-        "commonAnnotations": {
-            "type": "object",
-            "description": "Annotations to add to all deployed objects",
-            "default": {}
-        },
-        "clusterDomain": {
-            "type": "string",
-            "description": "Kubernetes cluster domain name",
-            "default": "cluster.local"
-        },
-        "extraDeploy": {
-            "type": "array",
-            "description": "Array of extra objects to deploy with the release",
-            "default": [],
-            "items": {}
-        },
-        "diagnosticMode": {
-            "type": "object",
-            "properties": {
-                "enabled": {
-                    "type": "boolean",
-                    "description": "Enable diagnostic mode (all probes will be disabled and the command will be overridden)",
-                    "default": false
-                },
-                "command": {
-                    "type": "array",
-                    "description": "Command to override all containers in the deployment",
-                    "default": [
-                        "sleep"
-                    ],
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "args": {
-                    "type": "array",
-                    "description": "Args to override all containers in the deployment",
-                    "default": [
-                        "infinity"
-                    ],
-                    "items": {
-                        "type": "string"
-                    }
-                }
-            }
-        },
-        "image": {
-            "type": "object",
-            "properties": {
-                "registry": {
-                    "type": "string",
-                    "description": "Ghost image registry",
-                    "default": "docker.io"
-                },
-                "repository": {
-                    "type": "string",
-                    "description": "Ghost image repository",
-                    "default": "bitnami/ghost"
-                },
-                "tag": {
-                    "type": "string",
-                    "description": "Ghost image tag (immutable tags are recommended)",
-                    "default": "5.61.3-debian-11-r0"
-                },
-                "digest": {
-                    "type": "string",
-                    "description": "Ghost image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag",
-                    "default": ""
-                },
-                "pullPolicy": {
-                    "type": "string",
-                    "description": "Ghost image pull policy",
-                    "default": "IfNotPresent"
-                },
-                "pullSecrets": {
-                    "type": "array",
-                    "description": "Ghost image pull secrets",
-                    "default": [],
-                    "items": {}
-                },
-                "debug": {
-                    "type": "boolean",
-                    "description": "Enable image debug mode",
-                    "default": false
-                }
-            }
-        },
-        "ghostUsername": {
-            "type": "string",
-            "description": "Ghost user name",
-            "default": "user"
-        },
-        "ghostPassword": {
-            "type": "string",
-            "description": "Ghost user password",
-            "default": ""
-        },
-        "existingSecret": {
-            "type": "string",
-            "description": "Name of existing secret containing Ghost credentials",
-            "default": ""
-        },
-        "ghostEmail": {
-            "type": "string",
-            "description": "Ghost user email",
-            "default": "user@example.com"
-        },
-        "ghostBlogTitle": {
-            "type": "string",
-            "description": "Ghost Blog title",
-            "default": "User's Blog"
-        },
-        "ghostHost": {
-            "type": "string",
-            "description": "Ghost host to create application URLs",
-            "default": ""
-        },
-        "ghostPath": {
-            "type": "string",
-            "description": "URL sub path where to server the Ghost application",
-            "default": "/"
-        },
-        "ghostEnableHttps": {
-            "type": "boolean",
-            "description": "Configure Ghost to build application URLs using https",
-            "default": false
-        },
-        "smtpHost": {
-            "type": "string",
-            "description": "SMTP server host",
-            "default": ""
-        },
-        "smtpPort": {
-            "type": "string",
-            "description": "SMTP server port",
-            "default": ""
-        },
-        "smtpUser": {
-            "type": "string",
-            "description": "SMTP username",
-            "default": ""
-        },
-        "smtpPassword": {
-            "type": "string",
-            "description": "SMTP user password",
-            "default": ""
-        },
-        "smtpService": {
-            "type": "string",
-            "description": "SMTP service",
-            "default": ""
-        },
-        "smtpProtocol": {
-            "type": "string",
-            "description": "SMTP protocol (ssl or tls)",
-            "default": ""
-        },
-        "smtpExistingSecret": {
-            "type": "string",
-            "description": "The name of an existing secret with SMTP credentials",
-            "default": ""
-        },
-        "allowEmptyPassword": {
-            "type": "boolean",
-            "description": "Allow the container to be started with blank passwords",
-            "default": true
-        },
-        "ghostSkipInstall": {
-            "type": "boolean",
-            "description": "Skip performing the initial bootstrapping for Ghost",
-            "default": false
-        },
-        "command": {
-            "type": "array",
-            "description": "Override default container command (useful when using custom images)",
-            "default": [],
-            "items": {}
-        },
-        "args": {
-            "type": "array",
-            "description": "Override default container args (useful when using custom images)",
-            "default": [],
-            "items": {}
-        },
-        "extraEnvVars": {
-            "type": "array",
-            "description": "Array with extra environment variables to add to the Ghost container",
-            "default": [],
-            "items": {}
-        },
-        "extraEnvVarsCM": {
-            "type": "string",
-            "description": "Name of existing ConfigMap containing extra env vars",
-            "default": ""
-        },
-        "extraEnvVarsSecret": {
-            "type": "string",
-            "description": "Name of existing Secret containing extra env vars",
-            "default": ""
-        },
-        "replicaCount": {
-            "type": "number",
-            "description": "Number of Ghost replicas to deploy",
-            "default": 1
-        },
-        "updateStrategy": {
-            "type": "object",
-            "properties": {
-                "type": {
-                    "type": "string",
-                    "description": "Ghost deployment strategy type",
-                    "default": "RollingUpdate"
-                }
-            }
-        },
-        "priorityClassName": {
-            "type": "string",
-            "description": "Ghost pod priority class name",
-            "default": ""
-        },
-        "schedulerName": {
-            "type": "string",
-            "description": "Name of the k8s scheduler (other than default)",
-            "default": ""
-        },
-        "topologySpreadConstraints": {
-            "type": "array",
-            "description": "Topology Spread Constraints for pod assignment",
-            "default": [],
-            "items": {}
-        },
-        "hostAliases": {
-            "type": "array",
-            "description": "Ghost pod host aliases",
-            "default": [],
-            "items": {}
-        },
-        "extraVolumes": {
-            "type": "array",
-            "description": "Optionally specify extra list of additional volumes for Ghost pods",
-            "default": [],
-            "items": {}
-        },
-        "extraVolumeMounts": {
-            "type": "array",
-            "description": "Optionally specify extra list of additional volumeMounts for Ghost container(s)",
-            "default": [],
-            "items": {}
-        },
-        "sidecars": {
-            "type": "array",
-            "description": "Add additional sidecar containers to the Ghost pod",
-            "default": [],
-            "items": {}
-        },
-        "initContainers": {
-            "type": "array",
-            "description": "Add additional init containers to the Ghost pods",
-            "default": [],
-            "items": {}
-        },
-        "lifecycleHooks": {
-            "type": "object",
-            "description": "Add lifecycle hooks to the Ghost deployment",
-            "default": {}
-        },
-        "podLabels": {
-            "type": "object",
-            "description": "Extra labels for Ghost pods",
-            "default": {}
-        },
-        "podAnnotations": {
-            "type": "object",
-            "description": "Annotations for Ghost pods",
-            "default": {}
-        },
-        "podAffinityPreset": {
-            "type": "string",
-            "description": "Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`",
-            "default": ""
-        },
-        "podAntiAffinityPreset": {
-            "type": "string",
-            "description": "Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`",
-            "default": "soft"
-        },
-        "nodeAffinityPreset": {
-            "type": "object",
-            "properties": {
-                "type": {
-                    "type": "string",
-                    "description": "Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`",
-                    "default": ""
-                },
-                "key": {
-                    "type": "string",
-                    "description": "Node label key to match. Ignored if `affinity` is set",
-                    "default": ""
-                },
-                "values": {
-                    "type": "array",
-                    "description": "Node label values to match. Ignored if `affinity` is set",
-                    "default": [],
-                    "items": {}
-                }
-            }
-        },
-        "affinity": {
-            "type": "object",
-            "description": "Affinity for pod assignment",
-            "default": {}
-        },
-        "nodeSelector": {
-            "type": "object",
-            "description": "Node labels for pod assignment",
-            "default": {}
-        },
-        "tolerations": {
-            "type": "array",
-            "description": "Tolerations for pod assignment",
-            "default": [],
-            "items": {}
-        },
-        "resources": {
-            "type": "object",
-            "properties": {
-                "limits": {
-                    "type": "object",
-                    "description": "The resources limits for the Ghost container",
-                    "default": {}
-                },
-                "requests": {
-                    "type": "object",
-                    "description": "The requested resources for the Ghost container",
-                    "default": {}
-                }
-            }
-        },
-        "containerPorts": {
-            "type": "object",
-            "properties": {
-                "http": {
-                    "type": "number",
-                    "description": "Ghost HTTP container port",
-                    "default": 2368
-                },
-                "https": {
-                    "type": "number",
-                    "description": "Ghost HTTPS container port",
-                    "default": 2368
-                }
-            }
-        },
-        "podSecurityContext": {
-            "type": "object",
-            "properties": {
-                "enabled": {
-                    "type": "boolean",
-                    "description": "Enabled Ghost pods' Security Context",
-                    "default": true
-                },
-                "fsGroup": {
-                    "type": "number",
-                    "description": "Set Ghost pod's Security Context fsGroup",
-                    "default": 1001
-                }
-            }
-        },
-        "containerSecurityContext": {
-            "type": "object",
-            "properties": {
-                "enabled": {
-                    "type": "boolean",
-                    "description": "Enabled Ghost containers' Security Context",
-                    "default": true
-                },
-                "runAsUser": {
-                    "type": "number",
-                    "description": "Set Ghost container's Security Context runAsUser",
-                    "default": 1001
-                },
-                "runAsNonRoot": {
-                    "type": "boolean",
-                    "description": "Set Ghost container's Security Context runAsNonRoot",
-                    "default": true
-                }
-            }
-        },
-        "startupProbe": {
-            "type": "object",
-            "properties": {
-                "enabled": {
-                    "type": "boolean",
-                    "description": "Enable startupProbe",
-                    "default": false
-                },
-                "initialDelaySeconds": {
-                    "type": "number",
-                    "description": "Initial delay seconds for startupProbe",
-                    "default": 120
-                },
-                "periodSeconds": {
-                    "type": "number",
-                    "description": "Period seconds for startupProbe",
-                    "default": 10
-                },
-                "timeoutSeconds": {
-                    "type": "number",
-                    "description": "Timeout seconds for startupProbe",
-                    "default": 5
-                },
-                "failureThreshold": {
-                    "type": "number",
-                    "description": "Failure threshold for startupProbe",
-                    "default": 6
-                },
-                "successThreshold": {
-                    "type": "number",
-                    "description": "Success threshold for startupProbe",
-                    "default": 1
-                }
-            }
-        },
-        "livenessProbe": {
-            "type": "object",
-            "properties": {
-                "enabled": {
-                    "type": "boolean",
-                    "description": "Enable livenessProbe",
-                    "default": true
-                },
-                "initialDelaySeconds": {
-                    "type": "number",
-                    "description": "Initial delay seconds for livenessProbe",
-                    "default": 120
-                },
-                "periodSeconds": {
-                    "type": "number",
-                    "description": "Period seconds for livenessProbe",
-                    "default": 10
-                },
-                "timeoutSeconds": {
-                    "type": "number",
-                    "description": "Timeout seconds for livenessProbe",
-                    "default": 5
-                },
-                "failureThreshold": {
-                    "type": "number",
-                    "description": "Failure threshold for livenessProbe",
-                    "default": 6
-                },
-                "successThreshold": {
-                    "type": "number",
-                    "description": "Success threshold for livenessProbe",
-                    "default": 1
-                }
-            }
-        },
-        "readinessProbe": {
-            "type": "object",
-            "properties": {
-                "enabled": {
-                    "type": "boolean",
-                    "description": "Enable readinessProbe",
-                    "default": true
-                },
-                "initialDelaySeconds": {
-                    "type": "number",
-                    "description": "Initial delay seconds for readinessProbe",
-                    "default": 30
-                },
-                "periodSeconds": {
-                    "type": "number",
-                    "description": "Period seconds for readinessProbe",
-                    "default": 5
-                },
-                "timeoutSeconds": {
-                    "type": "number",
-                    "description": "Timeout seconds for readinessProbe",
-                    "default": 3
-                },
-                "failureThreshold": {
-                    "type": "number",
-                    "description": "Failure threshold for readinessProbe",
-                    "default": 6
-                },
-                "successThreshold": {
-                    "type": "number",
-                    "description": "Success threshold for readinessProbe",
-                    "default": 1
-                }
-            }
-        },
-        "customLivenessProbe": {
-            "type": "object",
-            "description": "Custom livenessProbe that overrides the default one",
-            "default": {}
-        },
-        "customReadinessProbe": {
-            "type": "object",
-            "description": "Custom readinessProbe that overrides the default one",
-            "default": {}
-        },
-        "service": {
-            "type": "object",
-            "properties": {
-                "type": {
-                    "type": "string",
-                    "description": "Ghost service type",
-                    "default": "LoadBalancer"
-                },
-                "ports": {
-                    "type": "object",
-                    "properties": {
-                        "http": {
-                            "type": "number",
-                            "description": "Ghost service HTTP port",
-                            "default": 80
-                        },
-                        "https": {
-                            "type": "number",
-                            "description": "Ghost service HTTPS port",
-                            "default": 443
-                        }
-                    }
-                },
-                "nodePorts": {
-                    "type": "object",
-                    "properties": {
-                        "http": {
-                            "type": "string",
-                            "description": "Node port for HTTP",
-                            "default": ""
-                        },
-                        "https": {
-                            "type": "string",
-                            "description": "Node port for HTTPS",
-                            "default": ""
-                        }
-                    }
-                },
-                "clusterIP": {
-                    "type": "string",
-                    "description": "Ghost service Cluster IP",
-                    "default": ""
-                },
-                "loadBalancerIP": {
-                    "type": "string",
-                    "description": "Ghost service Load Balancer IP",
-                    "default": ""
-                },
-                "loadBalancerSourceRanges": {
-                    "type": "array",
-                    "description": "Ghost service Load Balancer sources",
-                    "default": [],
-                    "items": {}
-                },
-                "externalTrafficPolicy": {
-                    "type": "string",
-                    "description": "Ghost service external traffic policy",
-                    "default": "Cluster"
-                },
-                "annotations": {
-                    "type": "object",
-                    "description": "Additional custom annotations for Ghost service",
-                    "default": {}
-                },
-                "extraPorts": {
-                    "type": "array",
-                    "description": "Extra port to expose on Ghost service",
-                    "default": [],
-                    "items": {}
-                },
-                "sessionAffinity": {
-                    "type": "string",
-                    "description": "Session Affinity for Kubernetes service, can be \"None\" or \"ClientIP\"",
-                    "default": "None"
-                },
-                "sessionAffinityConfig": {
-                    "type": "object",
-                    "description": "Additional settings for the sessionAffinity",
-                    "default": {}
-                }
-            }
-        },
-        "ingress": {
-            "type": "object",
-            "properties": {
-                "enabled": {
-                    "type": "boolean",
-                    "description": "Enable ingress record generation for Ghost",
-                    "default": false
-                },
-                "pathType": {
-                    "type": "string",
-                    "description": "Ingress path type",
-                    "default": "ImplementationSpecific"
-                },
-                "apiVersion": {
-                    "type": "string",
-                    "description": "Force Ingress API version (automatically detected if not set)",
-                    "default": ""
-                },
-                "hostname": {
-                    "type": "string",
-                    "description": "Default host for the ingress record",
-                    "default": "ghost.local"
-                },
-                "path": {
-                    "type": "string",
-                    "description": "Default path for the ingress record",
-                    "default": "/"
-                },
-                "annotations": {
-                    "type": "object",
-                    "description": "Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.",
-                    "default": {}
-                },
-                "tls": {
-                    "type": "boolean",
-                    "description": "Enable TLS configuration for the host defined at `ingress.hostname` parameter",
-                    "default": false
-                },
-                "selfSigned": {
-                    "type": "boolean",
-                    "description": "Create a TLS secret for this ingress record using self-signed certificates generated by Helm",
-                    "default": false
-                },
-                "extraHosts": {
-                    "type": "array",
-                    "description": "An array with additional hostname(s) to be covered with the ingress record",
-                    "default": [],
-                    "items": {}
-                },
-                "extraPaths": {
-                    "type": "array",
-                    "description": "An array with additional arbitrary paths that may need to be added to the ingress under the main host",
-                    "default": [],
-                    "items": {}
-                },
-                "extraTls": {
-                    "type": "array",
-                    "description": "TLS configuration for additional hostname(s) to be covered with this ingress record",
-                    "default": [],
-                    "items": {}
-                },
-                "secrets": {
-                    "type": "array",
-                    "description": "Custom TLS certificates as secrets",
-                    "default": [],
-                    "items": {}
-                },
-                "ingressClassName": {
-                    "type": "string",
-                    "description": "IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)",
-                    "default": ""
-                },
-                "extraRules": {
-                    "type": "array",
-                    "description": "Additional rules to be covered with this ingress record",
-                    "default": [],
-                    "items": {}
-                }
-            }
-        },
-        "persistence": {
-            "type": "object",
-            "properties": {
-                "enabled": {
-                    "type": "boolean",
-                    "description": "Enable persistence using Persistent Volume Claims",
-                    "default": true
-                },
-                "storageClass": {
-                    "type": "string",
-                    "description": "Persistent Volume storage class",
-                    "default": ""
-                },
-                "annotations": {
-                    "type": "object",
-                    "description": "Additional custom annotations for the PVC",
-                    "default": {}
-                },
-                "accessModes": {
-                    "type": "array",
-                    "description": "Persistent Volume access modes",
-                    "default": [
-                        "ReadWriteOnce"
-                    ],
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "size": {
-                    "type": "string",
-                    "description": "Persistent Volume size",
-                    "default": "8Gi"
-                },
-                "existingClaim": {
-                    "type": "string",
-                    "description": "The name of an existing PVC to use for persistence",
-                    "default": ""
-                },
-                "subPath": {
-                    "type": "string",
-                    "description": "The name of a volume's sub path to mount for persistence",
-                    "default": ""
-                }
-            }
-        },
-        "volumePermissions": {
-            "type": "object",
-            "properties": {
-                "enabled": {
-                    "type": "boolean",
-                    "description": "Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`",
-                    "default": false
-                },
-                "image": {
-                    "type": "object",
-                    "properties": {
-                        "registry": {
-                            "type": "string",
-                            "description": "OS Shell + Utility image registry",
-                            "default": "docker.io"
-                        },
-                        "repository": {
-                            "type": "string",
-                            "description": "OS Shell + Utility image repository",
-                            "default": "bitnami/os-shell"
-                        },
-                        "tag": {
-                            "type": "string",
-                            "description": "OS Shell + Utility image tag (immutable tags are recommended)",
-                            "default": "11-debian-11-r60"
-                        },
-                        "digest": {
-                            "type": "string",
-                            "description": "OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag",
-                            "default": ""
-                        },
-                        "pullPolicy": {
-                            "type": "string",
-                            "description": "OS Shell + Utility image pull policy",
-                            "default": "IfNotPresent"
-                        },
-                        "pullSecrets": {
-                            "type": "array",
-                            "description": "OS Shell + Utility image pull secrets",
-                            "default": [],
-                            "items": {}
-                        }
-                    }
-                },
-                "resources": {
-                    "type": "object",
-                    "properties": {
-                        "limits": {
-                            "type": "object",
-                            "description": "The resources limits for the init container",
-                            "default": {}
-                        },
-                        "requests": {
-                            "type": "object",
-                            "description": "The requested resources for the init container",
-                            "default": {}
-                        }
-                    }
-                },
-                "securityContext": {
-                    "type": "object",
-                    "properties": {
-                        "runAsUser": {
-                            "type": "number",
-                            "description": "Set init container's Security Context runAsUser",
-                            "default": 0
-                        }
-                    }
-                }
-            }
-        },
-        "mysql": {
-            "type": "object",
-            "properties": {
-                "enabled": {
-                    "type": "boolean",
-                    "description": "Deploy a MySQL server to satisfy the applications database requirements",
-                    "default": true
-                },
-                "architecture": {
-                    "type": "string",
-                    "description": "MySQL architecture. Allowed values: `standalone` or `replication`",
-                    "default": "standalone"
-                },
-                "auth": {
-                    "type": "object",
-                    "properties": {
-                        "rootPassword": {
-                            "type": "string",
-                            "description": "MySQL root password",
-                            "default": ""
-                        },
-                        "database": {
-                            "type": "string",
-                            "description": "MySQL custom database",
-                            "default": "bitnami_ghost"
-                        },
-                        "username": {
-                            "type": "string",
-                            "description": "MySQL custom user name",
-                            "default": "bn_ghost"
-                        },
-                        "password": {
-                            "type": "string",
-                            "description": "MySQL custom user password",
-                            "default": ""
-                        },
-                        "existingSecret": {
-                            "type": "string",
-                            "description": "Existing secret with MySQL credentials",
-                            "default": ""
-                        }
-                    }
-                },
-                "primary": {
-                    "type": "object",
-                    "properties": {
-                        "persistence": {
-                            "type": "object",
-                            "properties": {
-                                "enabled": {
-                                    "type": "boolean",
-                                    "description": "Enable persistence on MySQL using PVC(s)",
-                                    "default": true
-                                },
-                                "storageClass": {
-                                    "type": "string",
-                                    "description": "Persistent Volume storage class",
-                                    "default": ""
-                                },
-                                "accessModes": {
-                                    "type": "array",
-                                    "description": "Persistent Volume access modes",
-                                    "default": [
-                                        "ReadWriteOnce"
-                                    ],
-                                    "items": {
-                                        "type": "string"
-                                    }
-                                },
-                                "size": {
-                                    "type": "string",
-                                    "description": "Persistent Volume size",
-                                    "default": "8Gi"
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-        },
-        "externalDatabase": {
-            "type": "object",
-            "properties": {
-                "host": {
-                    "type": "string",
-                    "description": "External Database server host",
-                    "default": "localhost"
-                },
-                "port": {
-                    "type": "number",
-                    "description": "External Database server port",
-                    "default": 3306
-                },
-                "user": {
-                    "type": "string",
-                    "description": "External Database username",
-                    "default": "bn_ghost"
-                },
-                "password": {
-                    "type": "string",
-                    "description": "External Database user password",
-                    "default": ""
-                },
-                "database": {
-                    "type": "string",
-                    "description": "External Database database name",
-                    "default": "bitnami_ghost"
-                },
-                "existingSecret": {
-                    "type": "string",
-                    "description": "The name of an existing secret with database credentials",
-                    "default": ""
-                },
-                "ssl": {
-                    "type": "boolean",
-                    "description": "External Database ssl",
-                    "default": false
-                },
-                "sslCaFile": {
-                    "type": "string",
-                    "description": "External Database ssl CA filepath",
-                    "default": ""
-                }
-            }
-        },
-        "networkPolicy": {
-            "type": "object",
-            "properties": {
-                "enabled": {
-                    "type": "boolean",
-                    "description": "Enable network policies",
-                    "default": false
-                },
-                "ingress": {
-                    "type": "object",
-                    "properties": {
-                        "enabled": {
-                            "type": "boolean",
-                            "description": "Enable network policy for Ingress Proxies",
-                            "default": false
-                        },
-                        "namespaceSelector": {
-                            "type": "object",
-                            "description": "Ingress Proxy namespace selector labels. These labels will be used to identify the Ingress Proxy's namespace.",
-                            "default": {}
-                        },
-                        "podSelector": {
-                            "type": "object",
-                            "description": "Ingress Proxy pods selector labels. These labels will be used to identify the Ingress Proxy pods.",
-                            "default": {}
-                        }
-                    }
-                },
-                "ingressRules": {
-                    "type": "object",
-                    "properties": {
-                        "backendOnlyAccessibleByFrontend": {
-                            "type": "boolean",
-                            "description": "Enable ingress rule that makes the backend (mysql) only accessible by Ghost's pods.",
-                            "default": false
-                        },
-                        "customBackendSelector": {
-                            "type": "object",
-                            "description": "Backend selector labels. These labels will be used to identify the backend pods.",
-                            "default": {}
-                        },
-                        "accessOnlyFrom": {
-                            "type": "object",
-                            "properties": {
-                                "enabled": {
-                                    "type": "boolean",
-                                    "description": "Enable ingress rule that makes Ghost only accessible from a particular origin",
-                                    "default": false
-                                },
-                                "namespaceSelector": {
-                                    "type": "object",
-                                    "description": "Namespace selector label that is allowed to access Ghost. This label will be used to identified the allowed namespace(s).",
-                                    "default": {}
-                                },
-                                "podSelector": {
-                                    "type": "object",
-                                    "description": "Pods selector label that is allowed to access Ghost. This label will be used to identified the allowed pod(s).",
-                                    "default": {}
-                                }
-                            }
-                        },
-                        "customRules": {
-                            "type": "object",
-                            "description": "Custom network policy ingress rule",
-                            "default": {}
-                        }
-                    }
-                },
-                "egressRules": {
-                    "type": "object",
-                    "properties": {
-                        "denyConnectionsToExternal": {
-                            "type": "boolean",
-                            "description": "Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).",
-                            "default": false
-                        },
-                        "customRules": {
-                            "type": "object",
-                            "description": "Custom network policy rule",
-                            "default": {}
-                        }
-                    }
-                }
-            }
-        },
-        "serviceAccount": {
-            "type": "object",
-            "properties": {
-                "create": {
-                    "type": "boolean",
-                    "description": "Specifies whether a ServiceAccount should be created",
-                    "default": true
-                },
-                "name": {
-                    "type": "string",
-                    "description": "Name of the service account to use. If not set and create is true, a name is generated using the fullname template.",
-                    "default": ""
-                },
-                "automountServiceAccountToken": {
-                    "type": "boolean",
-                    "description": "Automount service account token for the server service account",
-                    "default": true
-                },
-                "annotations": {
-                    "type": "object",
-                    "description": "Annotations for service account. Evaluated as a template. Only used if `create` is `true`.",
-                    "default": {}
-                }
-            }
+  "$schema": "http://json-schema.org/schema#",
+  "type": "object",
+  "properties": {
+    "ghostUsername": {
+      "type": "string",
+      "title": "User",
+      "form": true
+    },
+    "ghostPassword": {
+      "type": "string",
+      "title": "Password",
+      "form": true,
+      "description": "Defaults to a random 10-character alphanumeric string if not set"
+    },
+    "ghostEmail": {
+      "type": "string",
+      "title": "Admin email",
+      "form": true
+    },
+    "ghostBlogTitle": {
+      "type": "string",
+      "title": "Blog Name",
+      "form": true
+    },
+    "ghostHost": {
+      "type": "string",
+      "title": "Host",
+      "form": true,
+      "description": "Hostname used to generate application URLs"
+    },
+    "persistence": {
+      "type": "object",
+      "properties": {
+        "size": {
+          "type": "string",
+          "title": "Persistent Volume Size",
+          "form": true,
+          "render": "slider",
+          "sliderMin": 1,
+          "sliderMax": 100,
+          "sliderUnit": "Gi"
         }
+      }
+    },
+    "mysql": {
+      "type": "object",
+      "form": true,
+      "title": "MySQL Details",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "Use a new MySQL database hosted in the cluster",
+          "form": true,
+          "description": "Whether to deploy a mysql server to satisfy the applications database requirements. To use an external database switch this off and configure the external database parameters"
+        },
+        "primary": {
+          "type": "object",
+          "properties": {
+            "persistence": {
+              "type": "object",
+              "properties": {
+                "size": {
+                  "type": "string",
+                  "title": "Volume Size",
+                  "form": true,
+                  "hidden": {
+                    "value": false,
+                    "path": "mysql/enabled"
+                  },
+                  "render": "slider",
+                  "sliderMin": 1,
+                  "sliderMax": 100,
+                  "sliderUnit": "Gi"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "externalDatabase": {
+      "type": "object",
+      "title": "External Database Details",
+      "description": "If MySQL is disabled. Use this section to specify the external database details",
+      "form": true,
+      "properties": {
+        "host": {
+          "type": "string",
+          "form": true,
+          "title": "Database Host",
+          "hidden": "mysql/enabled"
+        },
+        "user": {
+          "type": "string",
+          "form": true,
+          "title": "Database Username",
+          "hidden": "mysql/enabled"
+        },
+        "password": {
+          "type": "string",
+          "form": true,
+          "title": "Database Password",
+          "hidden": "mysql/enabled"
+        },
+        "database": {
+          "type": "string",
+          "form": true,
+          "title": "Database Name",
+          "hidden": "mysql/enabled"
+        },
+        "port": {
+          "type": "integer",
+          "form": true,
+          "title": "Database Port",
+          "hidden": "mysql/enabled"
+        },
+        "ssl": {
+          "type": "boolean",
+          "form": true,
+          "title": "Database SSL",
+          "hidden": "mysql/enabled"
+        },
+        "sslCaFile": {
+          "type": "string",
+          "form": true,
+          "title": "Database SSL CA filepath",
+          "hidden": "mysql/enabled"
+        }
+      }
+    },
+    "resources": {
+      "type": "object",
+      "title": "Required Resources",
+      "description": "Configure resource requests",
+      "form": true,
+      "properties": {
+        "requests": {
+          "type": "object",
+          "properties": {
+            "memory": {
+              "type": "string",
+              "form": true,
+              "render": "slider",
+              "title": "Memory Request",
+              "sliderMin": 10,
+              "sliderMax": 2048,
+              "sliderUnit": "Mi"
+            },
+            "cpu": {
+              "type": "string",
+              "form": true,
+              "render": "slider",
+              "title": "CPU Request",
+              "sliderMin": 10,
+              "sliderMax": 2000,
+              "sliderUnit": "m"
+            }
+          }
+        }
+      }
+    },
+    "securityContext": {
+      "type": "object",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "Enable Pod Security Context",
+          "description": "When disabled, an initContainer will be used to set required folder permissions",
+          "form": true
+        }
+      }
+    },
+    "serviceAccount": {
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string",
+          "title": "Service Account Name",
+          "description": "Service Account Name to use",
+          "form": true
+        }
+      }
     }
+  }
 }
