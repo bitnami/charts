@@ -241,7 +241,7 @@ aws:
   ## @param aws.zonesCacheDuration If the list of Route53 zones managed by ExternalDNS doesn't change frequently, cache it by setting a TTL
   ## (default 0 - disabled, can be set to time interval like 1m or 1h)
   ##
-  zonesCacheDuration: 0
+  zonesCacheDuration: "0"
   ## @param aws.zoneTags When using the AWS provider, filter for zones with these tags
   ##
   zoneTags: []

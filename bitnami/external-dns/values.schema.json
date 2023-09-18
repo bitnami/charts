@@ -352,9 +352,9 @@
                     "default": 1000
                 },
                 "zonesCacheDuration": {
-                    "type": "number",
+                    "type": "string",
                     "description": "If the list of Route53 zones managed by ExternalDNS doesn't change frequently, cache it by setting a TTL",
-                    "default": 0
+                    "default": "0"
                 },
                 "zoneTags": {
                     "type": "array",
