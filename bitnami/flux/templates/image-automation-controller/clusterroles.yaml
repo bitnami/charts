@@ -4,11 +4,13 @@ SPDX-License-Identifier: APACHE-2.0
 */}}
 
 {{- if and .Values.imageAutomationController.enabled .Values.imageAutomationController.rbac.create }}
+{{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.imageAutomationController.image "chart" .Chart ) ) }}
+{{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
 kind: ClusterRole
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 metadata:
   name: {{ printf "%s-manager" (include "flux.image-automation-controller.fullname.namespace" .) | trunc 63 | trimSuffix "-" }}
-  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: flux
     app.kubernetes.io/component: image-automation-controller
   {{- if .Values.commonAnnotations }}
@@ -63,7 +65,7 @@ kind: ClusterRole
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 metadata:
   name: {{ printf "%s-imgupdaut-editor" (include "flux.image-automation-controller.fullname.namespace" .) | trunc 63 | trimSuffix "-" }}
-  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: flux
     app.kubernetes.io/component: image-automation-controller
   {{- if .Values.commonAnnotations }}
@@ -93,7 +95,7 @@ kind: ClusterRole
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 metadata:
   name: {{ printf "%s-imgupdaut-viewer" (include "flux.image-automation-controller.fullname.namespace" .) | trunc 63 | trimSuffix "-" }}
-  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: flux
     app.kubernetes.io/component: image-automation-controller
   {{- if .Values.commonAnnotations }}
