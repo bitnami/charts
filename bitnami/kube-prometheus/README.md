@@ -581,7 +581,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `kubelet.serviceMonitor.annotations`               | Extra annotations for the ServiceMonitor                                                               | `{}`                         |
 | `kubelet.serviceMonitor.sampleLimit`                | Per-scrape limit on number of scraped samples that will be accepted                                   | `""`                         |
 
-
 ### Blackbox Exporter Deployment Parameters
 
 | Name                                                           | Description                                                                                                       | Value                       |
@@ -745,7 +744,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `kubeProxy.serviceMonitor.labels`                         | Extra labels for the ServiceMonitor                                                                                             | `{}`          |
 | `kubeProxy.serviceMonitor.annotations`                    | Extra annotations for the ServiceMonitor                                                                                        | `{}`          |
 | `kubeProxy.serviceMonitor.sampleLimit`                    | Per-scrape limit on number of scraped samples that will be accepted                                                             | `""`          |
-
 
 ### RBAC parameters
 
