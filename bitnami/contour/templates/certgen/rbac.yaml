@@ -4,6 +4,8 @@ SPDX-License-Identifier: APACHE-2.0
 */}}
 
 {{- if and .Values.rbac.create .Values.contour.enabled (include "contour.contour-certgen.enabled" .) }}
+{{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.contour.image "chart" .Chart ) ) }}
+{{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: Role
 metadata:
@@ -15,7 +17,7 @@ metadata:
     {{- if .Values.commonAnnotations }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
     {{- end }}
-  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: contour-certgen
 rules:
   - apiGroups:
@@ -34,7 +36,7 @@ metadata:
   annotations:
     "helm.sh/hook": "pre-install,pre-upgrade"
     "helm.sh/hook-delete-policy": before-hook-creation,hook-succeeded
-  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: contour-certgen
 roleRef:
   apiGroup: rbac.authorization.k8s.io
