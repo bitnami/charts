@@ -9,7 +9,8 @@ kind: ServiceMonitor
 metadata:
   name: {{ template "apisix.ingress-controller.fullname" . }}
   namespace: {{ default (include "common.names.namespace" .) .Values.ingressController.metrics.serviceMonitor.namespace | quote }}
-  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.ingressController.metrics.serviceMonitor.labels .Values.commonLabels ) "context" . ) }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.ingressController.image "chart" .Chart ) ) }}  
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.ingressController.metrics.serviceMonitor.labels .Values.commonLabels $versionLabel ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: apisix
     app.kubernetes.io/component: ingress-controller
