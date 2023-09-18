@@ -2618,7 +2618,7 @@ kubeControllerManager:
     ## @param kubeControllerManager.serviceMonitor.annotations Extra annotations for the ServiceMonitor
     ##
     annotations: { }
-    ## @param operator.serviceMonitor.sampleLimit Per-scrape limit on number of scraped samples that will be accepted.
+    ## @param kubeControllerManager.serviceMonitor.sampleLimit Per-scrape limit on number of scraped samples that will be accepted.
     ##
     sampleLimit: ""
 ## Component scraping kube scheduler
@@ -2696,7 +2696,7 @@ kubeScheduler:
     ## @param kubeScheduler.serviceMonitor.annotations Extra annotations for the ServiceMonitor
     ##
     annotations: {}
-    ## @param operator.serviceMonitor.sampleLimit Per-scrape limit on number of scraped samples that will be accepted.
+    ## @param kubeScheduler.serviceMonitor.sampleLimit Per-scrape limit on number of scraped samples that will be accepted.
     ##
     sampleLimit: ""
 ## Component scraping coreDns
@@ -2757,7 +2757,7 @@ coreDns:
     ## @param coreDns.serviceMonitor.annotations Extra annotations for the ServiceMonitor
     ##
     annotations: {}
-    ## @param operator.serviceMonitor.sampleLimit Per-scrape limit on number of scraped samples that will be accepted.
+    ## @param coreDns.serviceMonitor.sampleLimit Per-scrape limit on number of scraped samples that will be accepted.
     ##
     sampleLimit: ""
 ## Component scraping the kube-proxy
@@ -2820,7 +2820,7 @@ kubeProxy:
     ## @param kubeProxy.serviceMonitor.annotations Extra annotations for the ServiceMonitor
     ##
     annotations: {}
-    ## @param operator.serviceMonitor.sampleLimit Per-scrape limit on number of scraped samples that will be accepted.
+    ## @param kubeProxy.serviceMonitor.sampleLimit Per-scrape limit on number of scraped samples that will be accepted.
     ##
     sampleLimit: ""
 
