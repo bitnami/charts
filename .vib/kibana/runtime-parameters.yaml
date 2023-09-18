@@ -15,7 +15,7 @@ service:
 elasticsearch:
   hosts:
     - localhost
-  port: "9200"
+  port: 9200
 sidecars:
  - name: elasticsearch
    image: bitnami/elasticsearch:latest
