@@ -3,8 +3,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.11.1
-  creationTimestamp: null
+    controller-gen.kubebuilder.io/version: v0.12.0
   name: helmcharts.source.toolkit.fluxcd.io
 spec:
   group: source.toolkit.fluxcd.io
@@ -347,8 +346,9 @@ spec:
                   at in the SourceRef.
                 type: string
               interval:
-                description: Interval is the interval at which to check the Source
-                  for updates.
+                description: Interval at which the HelmChart SourceRef is checked
+                  for updates. This interval is approximate and may be subject to
+                  jitter to ensure efficient use of resources.
                 pattern: ^([0-9]+(\.[0-9]+)?(ms|s|m|h))+$
                 type: string
               reconcileStrategy:
@@ -451,10 +451,6 @@ spec:
                 description: Artifact represents the output of the last successful
                   reconciliation.
                 properties:
-                  checksum:
-                    description: 'Checksum is the SHA256 checksum of the Artifact
-                      file. Deprecated: use Artifact.Digest instead.'
-                    type: string
                   digest:
                     description: Digest is the digest of the file in the form of '<algorithm>:<checksum>'.
                     pattern: ^[a-z0-9]+(?:[.+_-][a-z0-9]+)*:[a-zA-Z0-9=_-]+$
@@ -490,7 +486,9 @@ spec:
                       the Artifact contents.
                     type: string
                 required:
+                - lastUpdateTime
                 - path
+                - revision
                 - url
                 type: object
               conditions:
