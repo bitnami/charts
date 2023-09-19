@@ -1050,8 +1050,7 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ### To 18.0.0
 
-This major update the harbor notary server and harbor notary signer are deprecated. This was depreacates in the version 2.9.0 of harbor
-[Here](https://github.com/goharbor/harbor/wiki/Harbor-Deprecates-Notary-v1-Support-in-v2.9.0)
+This major deprecates harbor notary server and harbor notary signer components. These components were deprecated in Harbor 2.9.0, find more information in [Harbor wiki](https://github.com/goharbor/harbor/wiki/Harbor-Deprecates-Notary-v1-Support-in-v2.9.0).
 
 ### To 17.0.0
 
