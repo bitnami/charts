@@ -127,14 +127,6 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- ternary "postgres" .Values.externalDatabase.user .Values.postgresql.enabled -}}
 {{- end -}}
 
-{{- define "harbor.database.notaryServerUsername" -}}
-{{- ternary "postgres" (default .Values.externalDatabase.user .Values.externalDatabase.notaryServerUsername) .Values.postgresql.enabled -}}
-{{- end -}}
-
-{{- define "harbor.database.notarySignerUsername" -}}
-{{- ternary "postgres" (default .Values.externalDatabase.user .Values.externalDatabase.notarySignerUsername) .Values.postgresql.enabled -}}
-{{- end -}}
-
 {{- define "harbor.database.rawPassword" -}}
 {{- if .Values.postgresql.enabled }}
     {{- if .Values.global.postgresql }}
@@ -151,22 +143,6 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- end -}}
 {{- end -}}
 
-{{- define "harbor.database.notaryServerRawPassword" -}}
-{{- ternary (include "harbor.database.rawPassword" .) (default .Values.externalDatabase.password .Values.externalDatabase.notaryServerPassword) .Values.postgresql.enabled -}}
-{{- end -}}
-
-{{- define "harbor.database.notarySignerRawPassword" -}}
-{{- ternary (include "harbor.database.rawPassword" .) (default .Values.externalDatabase.password .Values.externalDatabase.notarySignerPassword) .Values.postgresql.enabled -}}
-{{- end -}}
-
-{{ define "harbor.database.escapedNotaryServerRawPassword" -}}
-  {{- include "harbor.database.notaryServerRawPassword" . | urlquery | replace "+" "%20" -}}
-{{- end -}}
-
-{{- define "harbor.database.escapedNotarySignerRawPassword" -}}
-  {{- include "harbor.database.notarySignerRawPassword" . | urlquery | replace "+" "%20" -}}
-{{- end -}}
-
 {{- define "harbor.database.encryptedPassword" -}}
   {{- include "harbor.database.rawPassword" . | b64enc | quote -}}
 {{- end -}}
@@ -175,24 +151,8 @@ We truncate at 63 chars because some Kubernetes name fields are limited to this 
 {{- ternary "registry" .Values.externalDatabase.coreDatabase .Values.postgresql.enabled -}}
 {{- end -}}
 
-{{- define "harbor.database.notaryServerDatabase" -}}
-{{- ternary "notaryserver" .Values.externalDatabase.notaryServerDatabase .Values.postgresql.enabled -}}
-{{- end -}}
-
-{{- define "harbor.database.notarySignerDatabase" -}}
-{{- ternary "notarysigner" .Values.externalDatabase.notarySignerDatabase .Values.postgresql.enabled -}}
-{{- end -}}
-
 {{- define "harbor.database.sslmode" -}}
 {{- ternary "disable" .Values.externalDatabase.sslmode .Values.postgresql.enabled -}}
-{{- end -}}
-
-{{- define "harbor.database.notaryServer" -}}
-postgres://{{ template "harbor.database.notaryServerUsername" . }}:{{ template "harbor.database.escapedNotaryServerRawPassword" . }}@{{ template "harbor.database.host" . }}:{{ template "harbor.database.port" . }}/{{ template "harbor.database.notaryServerDatabase" . }}?sslmode={{ template "harbor.database.sslmode" . }}
-{{- end -}}
-
-{{- define "harbor.database.notarySigner" -}}
-postgres://{{ template "harbor.database.notarySignerUsername" . }}:{{ template "harbor.database.escapedNotarySignerRawPassword" . }}@{{ template "harbor.database.host" . }}:{{ template "harbor.database.port" . }}/{{ template "harbor.database.notarySignerDatabase" . }}?sslmode={{ template "harbor.database.sslmode" . }}
 {{- end -}}
 
 {{/*
@@ -353,14 +313,6 @@ Return whether Redis&reg; uses password authentication or not
   {{- printf "%s-trivy" (include "common.names.fullname" .) -}}
 {{- end -}}
 
-{{- define "harbor.notary-server" -}}
-  {{- printf "%s-notary-server" (include "common.names.fullname" .) -}}
-{{- end -}}
-
-{{- define "harbor.notary-signer" -}}
-  {{- printf "%s-notary-signer" (include "common.names.fullname" .) -}}
-{{- end -}}
-
 {{- define "harbor.nginx" -}}
   {{- printf "%s-nginx" (include "common.names.fullname" .) -}}
 {{- end -}}
@@ -373,12 +325,8 @@ Return whether Redis&reg; uses password authentication or not
   {{- printf "%s-ingress" (include "common.names.fullname" .) -}}
 {{- end -}}
 
-{{- define "harbor.ingress-notary" -}}
-  {{- printf "%s-ingress-notary" (include "common.names.fullname" .) -}}
-{{- end -}}
-
 {{- define "harbor.noProxy" -}}
-  {{- printf "%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s" (include "harbor.core" .) (include "harbor.jobservice" .) (include "harbor.database" .) (include "harbor.notary-server" .) (include "harbor.notary-signer" .) (include "harbor.registry" .) (include "harbor.portal" .) (include "harbor.trivy" .) .Values.proxy.noProxy -}}
+  {{- printf "%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s" (include "harbor.core" .) (include "harbor.jobservice" .) (include "harbor.database" .) (include "harbor.registry" .) (include "harbor.portal" .) (include "harbor.trivy" .) .Values.proxy.noProxy -}}
 {{- end -}}
 
 {{/*
@@ -417,20 +365,6 @@ Return the proper Harbor Job Service image name
 {{- end -}}
 
 {{/*
-Return the proper Harbor Notary Server image name
-*/}}
-{{- define "harbor.notary.server.image" -}}
-{{- include "common.images.image" ( dict "imageRoot" .Values.notary.server.image "global" .Values.global ) -}}
-{{- end -}}
-
-{{/*
-Return the proper Harbor Notary Signer image name
-*/}}
-{{- define "harbor.notary.signer.image" -}}
-{{- include "common.images.image" ( dict "imageRoot" .Values.notary.signer.image "global" .Values.global ) -}}
-{{- end -}}
-
-{{/*
 Return the proper Harbor Registry image name
 */}}
 {{- define "harbor.registry.server.image" -}}
@@ -462,7 +396,7 @@ Return the proper image name (for the init container volume-permissions image)
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "harbor.imagePullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.core.image .Values.exporter.image .Values.portal.image .Values.jobservice.image .Values.trivy.image .Values.notary.server.image .Values.notary.signer.image .Values.registry.server.image .Values.registry.controller.image .Values.nginx.image .Values.volumePermissions.image) "global" .Values.global) -}}
+{{- include "common.images.pullSecrets" (dict "images" (list .Values.core.image .Values.exporter.image .Values.portal.image .Values.jobservice.image .Values.trivy.image .Values.registry.server.image .Values.registry.controller.image .Values.nginx.image .Values.volumePermissions.image) "global" .Values.global) -}}
 {{- end -}}
 
 {{/* Check if there are rolling tags in the images */}}
