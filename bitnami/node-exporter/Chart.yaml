@@ -6,26 +6,26 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: node-exporter
-      image: docker.io/bitnami/node-exporter:1.6.1-debian-11-r32
+      image: docker.io/bitnami/node-exporter:1.6.1-debian-11-r58
 apiVersion: v2
 appVersion: 1.6.1
 dependencies:
-  - name: common
-    repository: oci://registry-1.docker.io/bitnamicharts
-    tags:
-      - bitnami-common
-    version: 2.x.x
+- name: common
+  repository: oci://registry-1.docker.io/bitnamicharts
+  tags:
+  - bitnami-common
+  version: 2.x.x
 description: Prometheus exporter for hardware and OS metrics exposed by UNIX kernels, with pluggable metric collectors.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/node-exporter/img/node-exporter-stack-220x234.png
 keywords:
-  - prometheus
-  - node-exporter
-  - monitoring
+- prometheus
+- node-exporter
+- monitoring
 maintainers:
-  - name: VMware, Inc.
-    url: https://github.com/bitnami/charts
+- name: VMware, Inc.
+  url: https://github.com/bitnami/charts
 name: node-exporter
 sources:
-  - https://github.com/bitnami/charts/tree/main/bitnami/node-exporter
-version: 3.7.1
+- https://github.com/bitnami/charts/tree/main/bitnami/node-exporter
+version: 3.7.2
