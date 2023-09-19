@@ -21,11 +21,11 @@ dependencies:
 - condition: exporters.enabled,exporters.node-exporter.enabled
   name: node-exporter
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 3.8.x
+  version: 3.x.x
 - condition: exporters.enabled,exporters.kube-state-metrics.enabled
   name: kube-state-metrics
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 3.7.x
+  version: 3.x.x
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
   tags:
