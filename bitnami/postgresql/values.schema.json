@@ -1782,9 +1782,14 @@
                             "description": "Set the cronjob parameter restartPolicy",
                             "default": "OnFailure"
                         },
-                        "securityContext": {
+                        "podSecurityContext": {
                             "type": "object",
                             "properties": {
+                                "enabled": {
+                                    "type": "boolean",
+                                    "description": "Enable PodSecurityContext for CronJob/Backup",
+                                    "default": false
+                                },
                                 "fsGroup": {
                                     "type": "number",
                                     "description": "Group ID for the CronJob",
