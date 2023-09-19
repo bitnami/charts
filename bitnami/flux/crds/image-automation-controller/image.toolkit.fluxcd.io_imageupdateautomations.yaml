@@ -3,8 +3,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.11.1
-  creationTimestamp: null
+    controller-gen.kubebuilder.io/version: v0.12.0
   name: imageupdateautomations.image.toolkit.fluxcd.io
 spec:
   group: image.toolkit.fluxcd.io
@@ -136,8 +135,20 @@ spec:
                           to the branch named. The branch is created using `.spec.checkout.branch`
                           as the starting point, if it doesn't already exist.
                         type: string
-                    required:
-                    - branch
+                      options:
+                        additionalProperties:
+                          type: string
+                        description: 'Options specifies the push options that are
+                          sent to the Git server when performing a push operation.
+                          For details, see: https://git-scm.com/docs/git-push#Documentation/git-push.txt---push-optionltoptiongt'
+                        type: object
+                      refspec:
+                        description: 'Refspec specifies the Git Refspec to use for
+                          a push operation. If both Branch and Refspec are provided,
+                          then the commit is pushed to the branch and also using the
+                          specified refspec. For more details about Git Refspecs,
+                          see: https://git-scm.com/book/en/v2/Git-Internals-The-Refspec'
+                        type: string
                     type: object
                 required:
                 - commit
