@@ -56,16 +56,6 @@ spec:
       nodePort: null
       {{- end }}
     {{- end }}
-    {{- if .Values.notary.enabled }}
-    - name: notary
-      port: {{ .Values.service.ports.notary }}
-      targetPort: notary
-      {{- if and (or (eq .Values.service.type "NodePort") (eq .Values.service.type "LoadBalancer")) (not (empty .Values.service.nodePorts.notary)) }}
-      nodePort: {{ .Values.service.nodePorts.notary }}
-      {{- else if eq .Values.service.type "ClusterIP" }}
-      nodePort: null
-      {{- end }}
-    {{- end }}
     {{- if .Values.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}

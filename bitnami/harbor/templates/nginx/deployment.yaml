@@ -115,8 +115,6 @@ spec:
               name: http
             - containerPort: {{ .Values.nginx.containerPorts.https }}
               name: https
-            - containerPort: {{ .Values.nginx.containerPorts.notary }}
-              name: notary
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.nginx.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.nginx.customStartupProbe "context" $) | nindent 12 }}
