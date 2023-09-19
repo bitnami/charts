@@ -251,7 +251,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `volumePermissions.enabled`                            | Enable init container that changes the owner and group of the persistent volume                                                   | `false`            |
 | `volumePermissions.image.registry`                     | Init container volume-permissions image registry                                                                                  | `docker.io`        |
 | `volumePermissions.image.repository`                   | Init container volume-permissions image repository                                                                                | `bitnami/os-shell` |
-| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r69` |
+| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r72` |
 | `volumePermissions.image.digest`                       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`               |
 | `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`     |
 | `volumePermissions.image.pullSecrets`                  | Init container volume-permissions image pull secrets                                                                              | `[]`               |
@@ -338,7 +338,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ----------------------- |
 | `portal.image.registry`                        | Harbor Portal image registry                                                                                             | `docker.io`             |
 | `portal.image.repository`                      | Harbor Portal image repository                                                                                           | `bitnami/harbor-portal` |
-| `portal.image.tag`                             | Harbor Portal image tag (immutable tags are recommended)                                                                 | `2.9.0-debian-11-r17`   |
+| `portal.image.tag`                             | Harbor Portal image tag (immutable tags are recommended)                                                                 | `2.9.0-debian-11-r21`   |
 | `portal.image.digest`                          | Harbor Portal image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag            | `""`                    |
 | `portal.image.pullPolicy`                      | Harbor Portal image pull policy                                                                                          | `IfNotPresent`          |
 | `portal.image.pullSecrets`                     | Harbor Portal image pull secrets                                                                                         | `[]`                    |
