@@ -20,7 +20,7 @@ This chart bootstraps a [Gitea](https://github.com/bitnami/containers/tree/main/
 
 It also packages the [Bitnami PostgreSQL chart](https://github.com/bitnami/charts/tree/main/bitnami/postgresql) which is required for bootstrapping a PostgreSQL deployment as a database for the Gitea application.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 Looking to use Gitea in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 

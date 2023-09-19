@@ -108,7 +108,7 @@
                         "tag": {
                             "type": "string",
                             "description": "Milvus image tag (immutable tags are recommended)",
-                            "default": "2.2.14-debian-11-r10"
+                            "default": "2.2.10-debian-11-r3"
                         },
                         "digest": {
                             "type": "string",
@@ -160,18 +160,13 @@
                             "type": "string",
                             "description": "Name of a secret containing the Milvus password",
                             "default": ""
-                        },
-                        "existingSecretPasswordKey": {
-                            "type": "string",
-                            "description": "Name of the secret key containing the Milvus password",
-                            "default": ""
                         }
                     }
                 },
                 "defaultConfig": {
                     "type": "string",
                     "description": "Milvus components default configuration",
-                    "default": "# etcd configuration\netcd:\n  endpoints:\n    {{- if .Values.etcd.enabled  }}\n      {{- $replicas := $.Values.etcd.replicaCount | int }}\n      {{- range $i, $_e := until $replicas }}\n    - {{ printf \"%s://%s-%d.%s:%v\" (ternary \"https\" \"http\" $.Values.etcd.auth.client.secureTransport) (include \"milvus.etcd.fullname\" $ ) $i (include \"milvus.etcd.headlessServiceName\" $) ( include \"milvus.etcd.port\" $ ) }}          {{- end }}\n    {{- else }}\n    {{- range $node := .Values.externalEtcd.servers }}\n    - {{ ternary \"https\" \"http\" $.Values.externalEtcd.secureTransport }}://{{ printf \"%s:%v\" $node (include \"milvus.etcd.port\" $) }}\n    {{- end }}\n    {{- end }}\nmetastore:\n  type: etcd\n\n# S3 configuration\nminio:\n  address: {{ include \"milvus.s3.host\" . }}\n  port: {{ include \"milvus.s3.port\" . }}\n  accessKeyID: {{ print \"{{ MILVUS_S3_ACCESS_ID }}\" | quote }}\n  secretAccessKey: {{ print \"{{ MILVUS_S3_SECRET_ACCESS_KEY }}\" | quote }}\n  useSSL: {{ include \"milvus.s3.useSSL\" . }}\n  bucketName: {{ include \"milvus.s3.bucket\" . }}\n  rootPath: {{ include \"milvus.s3.rootPath\" . }}\n  useIAM: {{ include \"milvus.s3.useIAM\" . }}\n  {{- if not .Values.minio.enabled }}\n  cloudProvider: {{ .Values.externalS3.cloudProvider }}\n  iamEndpoint: {{ .Values.externalS3.iamEndpoint }}\n  {{- end }}\n\n# Kafka configuration\nkafka:\n  brokerList:\n    {{- if .Values.kafka.enabled  }}\n      {{- $brokerReplicas := $.Values.kafka.broker.replicaCount | int }}\n      {{- $controllerReplicas := 0 }}\n      {{- if or (not .Values.kafka.kraft.enabled) (not .Values.kafka.controller.controllerOnly)}}\n      {{- $controllerReplicas = $.Values.kafka.controller.replicaCount | int }}\n      {{- end }}\n      {{- range $i, $_e := until $brokerReplicas }}\n    - {{ printf \"%s-broker-%d.%s:%v\" (include \"milvus.kafka.fullname\" $ ) $i (include \"milvus.kafka.broker.headlessServiceName\" $) ( include \"milvus.kafka.port\" $ ) }}\n      {{- end }}\n      {{- range $i, $_e := until $controllerReplicas }}\n    - {{ printf \"%s-controller-%d.%s:%v\" (include \"milvus.kafka.fullname\" $ ) $i (include \"milvus.kafka.controller.headlessServiceName\" $) ( include \"milvus.kafka.port\" $ ) }}\n      {{- end }}\n    {{- else }}\n    {{- range $node := .Values.externalKafka.servers }}\n    - {{ printf \"%s:%v\" $node (include \"milvus.kafka.port\" $) }}\n    {{- end }}\n    {{- end }}\n  securityProtocol: {{ include \"milvus.kafka.securityProtocol\" . }}\n  {{- if include \"milvus.kafka.authEnabled\" . }}\n  saslMechanisms: {{ include \"milvus.kafka.saslMechanisms\" . }}\n  saslUsername: {{ include \"milvus.kafka.user\" . }}\n  saslPassword: {{ print \"{{ MILVUS_KAFKA_PASSWORD }}\" | quote }}\n  {{- end }}\n\n# Data coordinator\ndataCoord:\n  address: {{ include \"milvus.data-coordinator.fullname\" . }}\n  port: {{ .Values.dataCoord.service.ports.grpc }}\n\n# Root coordinator\nrootCoord:\n  address: {{ include \"milvus.root-coordinator.fullname\" . }}\n  port: {{ .Values.rootCoord.service.ports.grpc }}\n\n# Index coordinator\nindexCoord:\n  address: {{ include \"milvus.index-coordinator.fullname\" . }}\n  port: {{ .Values.indexCoord.service.ports.grpc }}\n\n# Query coordinator\nqueryCoord:\n  address: {{ include \"milvus.query-coordinator.fullname\" . }}\n  port: {{ .Values.queryCoord.service.ports.grpc }}\n\n# Data node\ndataNode:\n  port: {{ .Values.dataNode.service.ports.grpc }}\n\n# Index node\nindexNode:\n  port: {{ .Values.indexNode.service.ports.grpc }}\n\n# Query node\nqueryNode:\n  port: {{ .Values.queryNode.service.ports.grpc }}\n\nproxy:\n  port: {{ .Values.proxy.service.ports.grpc }}\n  accessLog:\n    localPath: /dev\n    filename: stdout\n  http:\n    enabled: true\n\n# Log configuration\nlog:\n  level: {{ ternary \"debug\" \"info\" .Values.milvus.image.debug }}\n  stdout: true\n\n# Common configuration\ncommon:\n  storageType: minio\n  security:\n    authorizationEnabled: {{ .Values.milvus.auth.enabled }}\n    {{- if .Values.milvus.auth.enabled }}\n    superUsers:\n      - {{ .Values.milvus.auth.username }}\n    {{- end }}\n"
+                    "default": "# etcd configuration\netcd:\n  endpoints:\n    {{- if .Values.etcd.enabled  }}\n      {{- $replicas := $.Values.etcd.replicaCount | int }}\n      {{- range $i, $_e := until $replicas }}\n    - {{ printf \"%s://%s-%d.%s:%v\" (ternary \"https\" \"http\" $.Values.etcd.auth.client.secureTransport) (include \"milvus.etcd.fullname\" $ ) $i (include \"milvus.etcd.headlessServiceName\" $) ( include \"milvus.etcd.port\" $ ) }}          {{- end }}\n    {{- else }}\n    {{- range $node := .Values.externalEtcd.servers }}\n    - {{ ternary \"https\" \"http\" $.Values.externalEtcd.secureTransport }}://{{ printf \"%s:%v\" $node (include \"milvus.etcd.port\" $) }}\n    {{- end }}\n    {{- end }}\nmetastore:\n  type: etcd\n\n# S3 configuration\nminio:\n  address: {{ include \"milvus.s3.host\" . }}\n  port: {{ include \"milvus.s3.port\" . }}\n  accessKeyID: {{ print \"{{ MILVUS_S3_ACCESS_ID }}\" | quote }}\n  secretAccessKey: {{ print \"{{ MILVUS_S3_SECRET_ACCESS_KEY }}\" | quote }}\n  useSSL: {{ include \"milvus.s3.useSSL\" . }}\n  bucketName: {{ include \"milvus.s3.bucket\" . }}\n  rootPath: {{ include \"milvus.s3.rootPath\" . }}\n  useIAM: {{ include \"milvus.s3.useIAM\" . }}\n  {{- if not .Values.minio.enabled }}\n  cloudProvider: {{ .Values.externalS3.cloudProvider }}\n  iamEndpoint: {{ .Values.externalS3.iamEndpoint }}\n  {{- end }}\n\n# Kafka configuration\nkafka:\n  brokerList:\n    {{- if .Values.kafka.enabled  }}\n      {{- $replicas := $.Values.kafka.replicaCount | int }}\n      {{- range $i, $_e := until $replicas }}\n    - {{ printf \"%s-%d.%s:%v\" (include \"milvus.kafka.fullname\" $ ) $i (include \"milvus.kafka.headlessServiceName\" $) ( include \"milvus.kafka.port\" $ ) }}\n      {{- end }}\n    {{- else }}\n    {{- range $node := .Values.kafka.servers }}\n    - {{ printf \"%s:%v\" $node (include \"milvus.kafka.port\" $) }}\n    {{- end }}\n    {{- end }}\n  securityProtocol: {{ include \"milvus.kafka.securityProtocol\" . }}\n  {{- if include \"milvus.kafka.authEnabled\" . }}\n  saslMechanisms: {{ include \"milvus.kafka.saslMechanisms\" . }}\n  saslUsername: {{ include \"milvus.kafka.user\" . }}\n  saslPassword: {{ print \"{{ MILVUS_KAFKA_PASSWORD }}\" | quote }}\n  {{- end }}\n\n# Data coordinator\ndataCoord:\n  address: {{ include \"milvus.data-coordinator.fullname\" . }}\n  port: {{ .Values.dataCoord.service.ports.grpc }}\n\n# Root coordinator\nrootCoord:\n  address: {{ include \"milvus.root-coordinator.fullname\" . }}\n  port: {{ .Values.rootCoord.service.ports.grpc }}\n\n# Index coordinator\nindexCoord:\n  address: {{ include \"milvus.index-coordinator.fullname\" . }}\n  port: {{ .Values.indexCoord.service.ports.grpc }}\n\n# Query coordinator\nqueryCoord:\n  address: {{ include \"milvus.query-coordinator.fullname\" . }}\n  port: {{ .Values.queryCoord.service.ports.grpc }}\n\n# Data node\ndataNode:\n  port: {{ .Values.dataNode.service.ports.grpc }}\n\n# Index node\nindexNode:\n  port: {{ .Values.indexNode.service.ports.grpc }}\n\n# Query node\nqueryNode:\n  port: {{ .Values.queryNode.service.ports.grpc }}\n\nproxy:\n  port: {{ .Values.proxy.service.ports.grpc }}\n  accessLog:\n    localPath: /dev\n    filename: stdout\n  http:\n    enabled: true\n\n# Log configuration\nlog:\n  level: {{ ternary \"debug\" \"info\" .Values.milvus.image.debug }}\n  stdout: true\n\n# Common configuration\ncommon:\n  storageType: minio\n  security:\n    authorizationEnabled: {{ .Values.milvus.auth.enabled }}\n    {{- if .Values.milvus.auth.enabled }}\n    superUsers:\n      - {{ .Values.milvus.auth.username }}\n    {{- end }}\n"
                 },
                 "extraConfig": {
                     "type": "object",
@@ -214,7 +209,7 @@
                         "tag": {
                             "type": "string",
                             "description": "PyMilvus image tag (immutable tags are recommended)",
-                            "default": "2.3.0-debian-11-r11"
+                            "default": "2.2.13-debian-11-r1"
                         },
                         "digest": {
                             "type": "string",
@@ -6378,7 +6373,7 @@
                         "tag": {
                             "type": "string",
                             "description": "Attu image tag (immutable tags are recommended)",
-                            "default": "2.3.0-debian-11-r0"
+                            "default": "2.2.6-debian-11-r1"
                         },
                         "digest": {
                             "type": "string",
@@ -7110,7 +7105,7 @@
                         "tag": {
                             "type": "string",
                             "description": "Init container wait-container image tag",
-                            "default": "11-debian-11-r57"
+                            "default": "11-debian-11-r2"
                         },
                         "digest": {
                             "type": "string",
@@ -7280,46 +7275,6 @@
                     "type": "number",
                     "description": "External Kafka port",
                     "default": 9092
-                },
-                "listener": {
-                    "type": "object",
-                    "properties": {
-                        "protocol": {
-                            "type": "string",
-                            "description": "Kafka listener protocol. Allowed protocols: PLAINTEXT, SASL_PLAINTEXT, SASL_SSL and SSL",
-                            "default": "PLAINTEXT"
-                        }
-                    }
-                },
-                "sasl": {
-                    "type": "object",
-                    "properties": {
-                        "user": {
-                            "type": "string",
-                            "description": "User for SASL authentication",
-                            "default": "user"
-                        },
-                        "password": {
-                            "type": "string",
-                            "description": "Password for SASL authentication",
-                            "default": ""
-                        },
-                        "existingSecret": {
-                            "type": "string",
-                            "description": "Name of the existing secret containing a password for SASL authentication (under the key named \"client-passwords\")",
-                            "default": ""
-                        },
-                        "existingSecretPasswordKey": {
-                            "type": "string",
-                            "description": "Name of the secret key containing the Kafka client user password",
-                            "default": "kafka-root-password"
-                        },
-                        "enabledMechanisms": {
-                            "type": "string",
-                            "description": "Kafka enabled SASL mechanisms",
-                            "default": "PLAIN"
-                        }
-                    }
                 }
             }
         },
@@ -7471,15 +7426,10 @@
                     "description": "Enable/disable Kafka chart installation",
                     "default": true
                 },
-                "controller": {
-                    "type": "object",
-                    "properties": {
-                        "replicaCount": {
-                            "type": "number",
-                            "description": "Number of Kafka controller eligible (controller+broker) nodes",
-                            "default": 1
-                        }
-                    }
+                "replicaCount": {
+                    "type": "number",
+                    "description": "Number of Kafka brokers",
+                    "default": 1
                 },
                 "service": {
                     "type": "object",
@@ -7496,45 +7446,35 @@
                         }
                     }
                 },
-                "extraConfig": {
-                    "type": "string",
-                    "description": "Additional configuration to be appended at the end of the generated Kafka configuration file.",
-                    "default": "offsets.topic.replication.factor=1"
-                },
-                "listeners": {
+                "auth": {
                     "type": "object",
                     "properties": {
-                        "client": {
-                            "type": "object",
-                            "properties": {
-                                "protocol": {
-                                    "type": "string",
-                                    "description": "Kafka authentication protocol for the client listener",
-                                    "default": "SASL_PLAINTEXT"
-                                }
-                            }
-                        }
-                    }
-                },
-                "sasl": {
-                    "type": "object",
-                    "properties": {
-                        "enabledMechanisms": {
+                        "clientProtocol": {
                             "type": "string",
-                            "description": "Kafka enabled SASL mechanisms",
-                            "default": "PLAIN"
+                            "description": "Kafka authentication protocol for the client",
+                            "default": "sasl"
                         },
-                        "client": {
+                        "sasl": {
                             "type": "object",
                             "properties": {
-                                "users": {
-                                    "type": "array",
-                                    "description": "Kafka client users",
-                                    "default": [
-                                        "user"
-                                    ],
-                                    "items": {
-                                        "type": "string"
+                                "mechanisms": {
+                                    "type": "string",
+                                    "description": "Kafka authentication mechanisms for SASL",
+                                    "default": "plain"
+                                },
+                                "jaas": {
+                                    "type": "object",
+                                    "properties": {
+                                        "clientUsers": {
+                                            "type": "array",
+                                            "description": "Kafka client users",
+                                            "default": [
+                                                "user"
+                                            ],
+                                            "items": {
+                                                "type": "string"
+                                            }
+                                        }
                                     }
                                 }
                             }

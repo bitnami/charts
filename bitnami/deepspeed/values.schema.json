@@ -105,7 +105,7 @@
                 "tag": {
                     "type": "string",
                     "description": "Deepspeed image tag (immutable tags are recommended)",
-                    "default": "0.10.2-debian-11-r0"
+                    "default": "0.10.0-debian-11-r17"
                 },
                 "digest": {
                     "type": "string",
@@ -1394,7 +1394,7 @@
                 "tag": {
                     "type": "string",
                     "description": "Git image tag (immutable tags are recommended)",
-                    "default": "2.42.0-debian-11-r8"
+                    "default": "2.41.0-debian-11-r16"
                 },
                 "digest": {
                     "type": "string",
@@ -1438,7 +1438,7 @@
                         "tag": {
                             "type": "string",
                             "description": "Init container volume-permissions image tag (immutable tags are recommended)",
-                            "default": "11-debian-11-r54"
+                            "default": "11-debian-11-r16"
                         },
                         "digest": {
                             "type": "string",

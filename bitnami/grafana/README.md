@@ -310,6 +310,7 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `service.ports.grafana`            | Grafana service port                                                                                                             | `3000`                   |
 | `service.nodePorts.grafana`        | Specify the nodePort value for the LoadBalancer and NodePort service types                                                       | `""`                     |
 | `service.loadBalancerIP`           | loadBalancerIP if Grafana service type is `LoadBalancer` (optional, cloud specific)                                              | `""`                     |
+| `service.loadBalancerClass`        | loadBalancerClass if Grafana service type is `LoadBalancer` (optional, cloud specific)                                           | `""`                     |
 | `service.loadBalancerSourceRanges` | loadBalancerSourceRanges if Grafana service type is `LoadBalancer` (optional, cloud specific)                                    | `[]`                     |
 | `service.annotations`              | Provide any additional annotations which may be required.                                                                        | `{}`                     |
 | `service.externalTrafficPolicy`    | Grafana service external traffic policy                                                                                          | `Cluster`                |

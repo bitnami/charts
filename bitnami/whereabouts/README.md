@@ -18,7 +18,7 @@ helm install my-release oci://registry-1.docker.io/bitnamicharts/whereabouts
 
 This chart bootstraps a [Whereabouts](https://github.com/bitnami/containers/tree/main/bitnami/whereabouts) deployment on a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 Looking to use Whereabouts in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
