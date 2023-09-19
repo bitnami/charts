@@ -38,8 +38,8 @@ spec:
           annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 12 }}
           {{- end }}
         spec:
-          {{- if .Values.backup.nodeSelector }}
-          nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.backup.nodeSelector "context" $) | nindent 12 }}
+          {{- if .Values.backup.cronjob.nodeSelector }}
+          nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.backup.cronjob.nodeSelector "context" $) | nindent 12 }}
           {{- end }}
           containers:
           - name: {{ include "postgresql.v1.primary.fullname" . }}-pgdumpall
