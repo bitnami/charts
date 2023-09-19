@@ -36,6 +36,9 @@ spec:
   {{- if and (eq .Values.alertmanager.service.type "LoadBalancer") (not (empty .Values.alertmanager.service.loadBalancerIP)) }}
   loadBalancerIP: {{ .Values.alertmanager.service.loadBalancerIP }}
   {{- end }}
+  {{- if and (eq .Values.alertmanager.service.type "LoadBalancer") (not (empty .Values.alertmanager.service.loadBalancerClass)) }}
+  loadBalancerClass: {{ .Values.alertmanager.service.loadBalancerClass }}
+  {{- end }}
   ports:
     - name: http
       port: {{ .Values.alertmanager.service.ports.http }}
