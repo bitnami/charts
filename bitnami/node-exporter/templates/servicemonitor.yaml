@@ -16,6 +16,9 @@ metadata:
     {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
+  {{- if .Values.serviceMonitor.sampleLimit }}
+  sampleLimit: {{ .Values.serviceMonitor.sampleLimit }}
+  {{- end }}
   {{- if .Values.serviceMonitor.jobLabel }}
   jobLabel: {{ .Values.serviceMonitor.jobLabel }}
   {{- end }}
