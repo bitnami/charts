@@ -30,8 +30,6 @@ data:
   JOBSERVICE_URL: {{ include "harbor.jobservice.url" . | quote }}
   REGISTRY_URL: {{ include "harbor.registry.url" . | quote }}
   TOKEN_SERVICE_URL: {{ include "harbor.tokenService.url" . | quote }}
-  WITH_NOTARY: {{ .Values.notary.enabled | quote }}
-  NOTARY_URL: {{ printf "http://%s:4443" (include "harbor.notary-server" .) | quote }}
   CORE_LOCAL_URL: {{ printf "%s://127.0.0.1:%d" $scheme $port | quote }}
   CFG_EXPIRATION: "5"
   ADMIRAL_URL: "NA"
