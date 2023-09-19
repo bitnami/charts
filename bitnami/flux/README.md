@@ -866,7 +866,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.containerSecurityContext.enabled`                | Enable init container's Security Context                                                                           | `true`             |
 | `volumePermissions.containerSecurityContext.runAsUser`              | Set init container's Security Context runAsUser                                                                    | `0`                |
 
-
 There are cases where you may want to deploy extra objects, such as HelmRelease, Kustomization, amongst others. For covering this case, the chart allows adding the full specification of other objects using the `extraDeploy` parameter. The following example would activate a plugin at deployment time.
 
 ```yaml
