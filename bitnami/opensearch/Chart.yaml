@@ -14,20 +14,20 @@ annotations:
 apiVersion: v2
 appVersion: 2.9.0
 dependencies:
-- name: common
-  repository: oci://registry-1.docker.io/bitnamicharts
-  tags:
-  - bitnami-common
-  version: 2.x.x
+  - name: common
+    repository: oci://registry-1.docker.io/bitnamicharts
+    tags:
+      - bitnami-common
+    version: 2.x.x
 description: OpenSearch is a scalable open-source solution for search, analytics, and observability. Features full-text queries, natural language processing, custom dictionaries, amongst others.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/opensearch/img/opensearch-stack-220x234.png
 keywords:
-- opensearch
+  - opensearch
 maintainers:
-- name: VMware, Inc.
-  url: https://github.com/bitnami/charts
+  - name: VMware, Inc.
+    url: https://github.com/bitnami/charts
 name: opensearch
 sources:
-- https://github.com/bitnami/charts/tree/main/bitnami/opensearch
-version: 0.2.1
+  - https://github.com/bitnami/charts/tree/main/bitnami/opensearch
+version: 0.2.2

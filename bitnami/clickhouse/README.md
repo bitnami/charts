@@ -20,7 +20,7 @@ Bitnami charts for Helm are carefully engineered, actively maintained and are th
 
 This chart bootstraps a [ClickHouse](https://github.com/clickhouse/clickhouse) Deployment in a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 [Learn more about the default configuration of the chart](https://docs.bitnami.com/kubernetes/infrastructure/clickhouse/get-started/).
 
@@ -281,17 +281,17 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Persistence Parameters
 
-| Name                        | Description                                                            | Value               |
-| --------------------------- | ---------------------------------------------------------------------- | ------------------- |
-| `persistence.enabled`       | Enable persistence using Persistent Volume Claims                      | `true`              |
-| `persistence.existingClaim` | Name of an existing PVC to use                                         | `""`                |
-| `persistence.storageClass`  | Storage class of backing PVC                                           | `""`                |
-| `persistence.labels`        | Persistent Volume Claim labels                                         | `{}`                |
-| `persistence.annotations`   | Persistent Volume Claim annotations                                    | `{}`                |
-| `persistence.accessModes`   | Persistent Volume Access Modes                                         | `["ReadWriteOnce"]` |
-| `persistence.size`          | Size of data volume                                                    | `8Gi`               |
-| `persistence.selector`      | Selector to match an existing Persistent Volume for WordPress data PVC | `{}`                |
-| `persistence.dataSource`    | Custom PVC data source                                                 | `{}`                |
+| Name                        | Description                                                             | Value               |
+| --------------------------- | ----------------------------------------------------------------------- | ------------------- |
+| `persistence.enabled`       | Enable persistence using Persistent Volume Claims                       | `true`              |
+| `persistence.existingClaim` | Name of an existing PVC to use                                          | `""`                |
+| `persistence.storageClass`  | Storage class of backing PVC                                            | `""`                |
+| `persistence.labels`        | Persistent Volume Claim labels                                          | `{}`                |
+| `persistence.annotations`   | Persistent Volume Claim annotations                                     | `{}`                |
+| `persistence.accessModes`   | Persistent Volume Access Modes                                          | `["ReadWriteOnce"]` |
+| `persistence.size`          | Size of data volume                                                     | `8Gi`               |
+| `persistence.selector`      | Selector to match an existing Persistent Volume for ClickHouse data PVC | `{}`                |
+| `persistence.dataSource`    | Custom PVC data source                                                  | `{}`                |
 
 ### Init Container Parameters
 

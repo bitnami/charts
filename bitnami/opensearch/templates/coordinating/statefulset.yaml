@@ -16,14 +16,14 @@ metadata:
     app: coordinating-only
     {{- end }}
   {{- if or .Values.coordinating.annotations .Values.commonAnnotations }}
-  {{- $annotations := merge .Values.coordinating.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.coordinating.annotations .Values.commonAnnotations ) "context" . ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
   {{- if not .Values.coordinating.autoscaling.hpa.enabled }}
   replicas: {{ .Values.coordinating.replicaCount }}
   {{- end }}
-  {{- $podLabels := merge .Values.coordinating.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.coordinating.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: coordinating-only
