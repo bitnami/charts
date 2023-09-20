@@ -81,7 +81,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                                                                                   | `["infinity"]`       |
 | `image.registry`         | Mastodon image registry                                                                                                                             | `docker.io`          |
 | `image.repository`       | Mastodon image repository                                                                                                                           | `bitnami/mastodon`   |
-| `image.tag`              | Mastodon image tag (immutable tags are recommended)                                                                                                 | `4.1.8-debian-11-r0` |
+| `image.tag`              | Mastodon image tag (immutable tags are recommended)                                                                                                 | `4.1.9-debian-11-r0` |
 | `image.digest`           | Mastodon image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended) | `""`                 |
 | `image.pullPolicy`       | Mastodon image pull policy                                                                                                                          | `IfNotPresent`       |
 | `image.pullSecrets`      | Mastodon image pull secrets                                                                                                                         | `[]`                 |
