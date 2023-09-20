@@ -3,8 +3,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.11.1
-  creationTimestamp: null
+    controller-gen.kubebuilder.io/version: v0.12.0
   name: helmreleases.helm.toolkit.fluxcd.io
 spec:
   group: helm.toolkit.fluxcd.io
@@ -51,6 +50,27 @@ spec:
                 description: Chart defines the template of the v1beta2.HelmChart that
                   should be created for this HelmRelease.
                 properties:
+                  metadata:
+                    description: ObjectMeta holds the template for metadata like labels
+                      and annotations.
+                    properties:
+                      annotations:
+                        additionalProperties:
+                          type: string
+                        description: 'Annotations is an unstructured key value map
+                          stored with a resource that may be set by external tools
+                          to store and retrieve arbitrary metadata. They are not queryable
+                          and should be preserved when modifying objects. More info:
+                          https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/'
+                        type: object
+                      labels:
+                        additionalProperties:
+                          type: string
+                        description: 'Map of string keys and values that can be used
+                          to organize and categorize (scope and select) objects. More
+                          info: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/'
+                        type: object
+                    type: object
                   spec:
                     description: Spec holds the template for the v1beta2.HelmChartSpec
                       for this HelmRelease.
@@ -262,7 +282,9 @@ spec:
                     type: string
                 type: object
               interval:
-                description: Interval at which to reconcile the Helm release.
+                description: Interval at which to reconcile the Helm release. This
+                  interval is approximate and may be subject to jitter to ensure efficient
+                  use of resources.
                 pattern: ^([0-9]+(\.[0-9]+)?(ms|s|m|h))+$
                 type: string
               kubeConfig:
@@ -301,6 +323,17 @@ spec:
                   this HelmRelease. Use '0' for an unlimited number of revisions;
                   defaults to '10'.
                 type: integer
+              persistentClient:
+                description: "PersistentClient tells the controller to use a persistent
+                  Kubernetes client for this release. When enabled, the client will
+                  be reused for the duration of the reconciliation, instead of being
+                  created and destroyed for each (step of a) Helm action. \n This
+                  can improve performance, but may cause issues with some Helm charts
+                  that for example do create Custom Resource Definitions during installation
+                  outside Helm's CRD lifecycle hooks, which are then not observed
+                  to be available by e.g. post-install hooks. \n If not set, it defaults
+                  to true."
+                type: boolean
               postRenderers:
                 description: PostRenderers holds an array of Helm PostRenderers, which
                   will be applied in order of their definition.
@@ -393,6 +426,8 @@ spec:
                                       selecting resources. https://github.com/kubernetes/community/blob/master/contributors/design-proposals/api-machinery/api-group.md
                                     type: string
                                 type: object
+                            required:
+                            - patch
                             type: object
                           type: array
                         patchesJson6902:
@@ -592,6 +627,15 @@ spec:
                 description: Uninstall holds the configuration for Helm uninstall
                   actions for this HelmRelease.
                 properties:
+                  deletionPropagation:
+                    default: background
+                    description: DeletionPropagation specifies the deletion propagation
+                      policy when a Helm uninstall is performed.
+                    enum:
+                    - background
+                    - foreground
+                    - orphan
+                    type: string
                   disableHooks:
                     description: DisableHooks prevents hooks from running during the
                       Helm rollback action.

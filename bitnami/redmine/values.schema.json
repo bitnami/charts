@@ -1,1459 +1,174 @@
 {
-    "title": "Chart Values",
-    "type": "object",
-    "properties": {
-        "global": {
-            "type": "object",
-            "properties": {
-                "imageRegistry": {
-                    "type": "string",
-                    "description": "Global Docker image registry",
-                    "default": ""
-                },
-                "imagePullSecrets": {
-                    "type": "array",
-                    "description": "Global Docker registry secret names as an array",
-                    "default": [],
-                    "items": {}
-                },
-                "storageClass": {
-                    "type": "string",
-                    "description": "Global StorageClass for Persistent Volume(s)",
-                    "default": ""
+  "$schema": "http://json-schema.org/schema#",
+  "type": "object",
+  "properties": {
+    "redmineUsername": {
+      "type": "string",
+      "title": "Username",
+      "form": true
+    },
+    "redminePassword": {
+      "type": "string",
+      "title": "Password",
+      "form": true,
+      "description": "Defaults to a random 10-character alphanumeric string if not set"
+    },
+    "redmineEmail": {
+      "type": "string",
+      "title": "Admin email",
+      "form": true
+    },
+    "persistence": {
+      "type": "object",
+      "title": "Persistence for Redmine replicas",
+      "form": true,
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "form": true,
+          "title": "Enable persistence",
+          "description": "Enable persistence using Persistent Volume Claims"
+        },
+        "size": {
+          "type": "string",
+          "title": "Persistent Volume Size",
+          "form": true,
+          "render": "slider",
+          "sliderMin": 1,
+          "sliderMax": 100,
+          "sliderUnit": "Gi",
+          "hidden": {
+            "value": false,
+            "path": "persistence/enabled"
+          }
+        }
+      }
+    },
+    "ingress": {
+      "type": "object",
+      "form": true,
+      "title": "Ingress Configuration",
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "form": true,
+          "title": "Use a custom hostname",
+          "description": "Enable the ingress resource that allows you to access the Redmine installation."
+        },
+        "hostname": {
+          "type": "string",
+          "form": true,
+          "title": "Hostname",
+          "hidden": {
+            "value": false,
+            "path": "ingress/enabled"
+          }
+        },
+        "tls": {
+          "type": "boolean",
+          "form": true,
+          "title": "Enable TLS configuration",
+          "hidden": {
+            "value": false,
+            "path": "ingress/enabled"
+          }
+        }
+      }
+    },
+    "service": {
+      "type": "object",
+      "form": true,
+      "title": "Service Configuration",
+      "properties": {
+        "type": {
+          "type": "string",
+          "form": true,
+          "title": "Service Type",
+          "description": "Allowed values: \"ClusterIP\", \"NodePort\" and \"LoadBalancer\""
+        }
+      }
+    },
+    "databaseType": {
+      "type": "string",
+      "form": true,
+      "enum": ["mariadb", "postgresql"],
+      "title": "Database Type",
+      "description": "Allowed values: \"mariadb\" and \"postgresql\""
+    },
+    "mariadb": {
+      "type": "object",
+      "title": "MariaDB Details",
+      "form": true,
+      "hidden": {
+        "value": "postgresql",
+        "path": "databaseType"
+      },
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "Use a new MariaDB database hosted in the cluster",
+          "form": true,
+          "description": "Whether to deploy a mariadb server to satisfy the applications database requirements. To use an external database switch this off and configure the external database details"
+        },
+        "primary": {
+          "type": "object",
+          "properties": {
+            "persistence": {
+              "type": "object",
+              "properties": {
+                "size": {
+                  "type": "string",
+                  "title": "Volume Size",
+                  "form": true,
+                  "hidden": {
+                    "value": false,
+                    "path": "mariadb/enabled"
+                  },
+                  "render": "slider",
+                  "sliderMin": 1,
+                  "sliderMax": 100,
+                  "sliderUnit": "Gi"
                 }
+              }
             }
-        },
-        "kubeVersion": {
-            "type": "string",
-            "description": "Override Kubernetes version",
-            "default": ""
-        },
-        "nameOverride": {
-            "type": "string",
-            "description": "String to partially override common.names.fullname",
-            "default": ""
-        },
-        "fullnameOverride": {
-            "type": "string",
-            "description": "String to fully override common.names.fullname",
-            "default": ""
-        },
-        "commonLabels": {
-            "type": "object",
-            "description": "Labels to add to all deployed objects",
-            "default": {}
-        },
-        "commonAnnotations": {
-            "type": "object",
-            "description": "Annotations to add to all deployed objects",
-            "default": {}
-        },
-        "clusterDomain": {
-            "type": "string",
-            "description": "Default Kubernetes cluster domain",
-            "default": "cluster.local"
-        },
-        "extraDeploy": {
-            "type": "array",
-            "description": "Array of extra objects to deploy with the release",
-            "default": [],
-            "items": {}
-        },
-        "diagnosticMode": {
-            "type": "object",
-            "properties": {
-                "enabled": {
-                    "type": "boolean",
-                    "description": "Enable diagnostic mode (all probes will be disabled and the command will be overridden)",
-                    "default": false
-                },
-                "command": {
-                    "type": "array",
-                    "description": "Command to override all containers in the the deployment",
-                    "default": [
-                        "sleep"
-                    ],
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "args": {
-                    "type": "array",
-                    "description": "Args to override all containers in the the deployment",
-                    "default": [
-                        "infinity"
-                    ],
-                    "items": {
-                        "type": "string"
-                    }
-                }
-            }
-        },
-        "image": {
-            "type": "object",
-            "properties": {
-                "registry": {
-                    "type": "string",
-                    "description": "Redmine image registry",
-                    "default": "docker.io"
-                },
-                "repository": {
-                    "type": "string",
-                    "description": "Redmine image repository",
-                    "default": "bitnami/redmine"
-                },
-                "tag": {
-                    "type": "string",
-                    "description": "Redmine image tag (immutable tags are recommended)",
-                    "default": "5.0.5-debian-11-r71"
-                },
-                "digest": {
-                    "type": "string",
-                    "description": "Redmine image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag",
-                    "default": ""
-                },
-                "pullPolicy": {
-                    "type": "string",
-                    "description": "Redmine image pull policy",
-                    "default": "IfNotPresent"
-                },
-                "pullSecrets": {
-                    "type": "array",
-                    "description": "Redmine image pull secrets",
-                    "default": [],
-                    "items": {}
-                },
-                "debug": {
-                    "type": "boolean",
-                    "description": "Enable image debug mode",
-                    "default": false
-                }
-            }
-        },
-        "redmineUsername": {
-            "type": "string",
-            "description": "Redmine username",
-            "default": "user"
-        },
-        "redminePassword": {
-            "type": "string",
-            "description": "Redmine user password",
-            "default": ""
-        },
-        "redmineEmail": {
-            "type": "string",
-            "description": "Redmine user email",
-            "default": "user@example.com"
-        },
-        "redmineLanguage": {
-            "type": "string",
-            "description": "Redmine default data language",
-            "default": "en"
-        },
-        "allowEmptyPassword": {
-            "type": "boolean",
-            "description": "Allow the container to be started with blank passwords",
-            "default": false
-        },
-        "smtpHost": {
-            "type": "string",
-            "description": "SMTP server host",
-            "default": ""
-        },
-        "smtpPort": {
-            "type": "string",
-            "description": "SMTP server port",
-            "default": ""
-        },
-        "smtpUser": {
-            "type": "string",
-            "description": "SMTP username",
-            "default": ""
-        },
-        "smtpPassword": {
-            "type": "string",
-            "description": "SMTP user password",
-            "default": ""
-        },
-        "smtpProtocol": {
-            "type": "string",
-            "description": "SMTP protocol",
-            "default": ""
-        },
-        "existingSecret": {
-            "type": "string",
-            "description": "Name of existing secret containing Redmine credentials",
-            "default": ""
-        },
-        "smtpExistingSecret": {
-            "type": "string",
-            "description": "The name of an existing secret with SMTP credentials",
-            "default": ""
-        },
-        "customPostInitScripts": {
-            "type": "object",
-            "description": "Custom post-init.d user scripts",
-            "default": {}
-        },
-        "command": {
-            "type": "array",
-            "description": "Override default container command (useful when using custom images)",
-            "default": [],
-            "items": {}
-        },
-        "args": {
-            "type": "array",
-            "description": "Override default container args (useful when using custom images)",
-            "default": [],
-            "items": {}
-        },
-        "extraEnvVars": {
-            "type": "array",
-            "description": "Array with extra environment variables to add to the Redmine container",
-            "default": [],
-            "items": {}
-        },
-        "extraEnvVarsCM": {
-            "type": "string",
-            "description": "Name of existing ConfigMap containing extra env vars",
-            "default": ""
-        },
-        "extraEnvVarsSecret": {
-            "type": "string",
-            "description": "Name of existing Secret containing extra env vars",
-            "default": ""
-        },
-        "replicaCount": {
-            "type": "number",
-            "description": "Number of Redmine replicas to deploy",
-            "default": 1
-        },
-        "containerPorts": {
-            "type": "object",
-            "properties": {
-                "http": {
-                    "type": "number",
-                    "description": "Redmine HTTP container port",
-                    "default": 3000
-                }
-            }
-        },
-        "resources": {
-            "type": "object",
-            "properties": {
-                "limits": {
-                    "type": "object",
-                    "description": "The resources limits for the Redmine container",
-                    "default": {}
-                },
-                "requests": {
-                    "type": "object",
-                    "properties": {
-                        "memory": {
-                            "type": "string",
-                            "description": "",
-                            "default": "512Mi"
-                        },
-                        "cpu": {
-                            "type": "string",
-                            "description": "",
-                            "default": "300m"
-                        }
-                    }
-                }
-            }
-        },
-        "podSecurityContext": {
-            "type": "object",
-            "properties": {
-                "enabled": {
-                    "type": "boolean",
-                    "description": "Enabled Redmine pods' Security Context",
-                    "default": false
-                },
-                "fsGroup": {
-                    "type": "number",
-                    "description": "Set Redmine pod's Security Context fsGroup",
-                    "default": 1001
-                }
-            }
-        },
-        "containerSecurityContext": {
-            "type": "object",
-            "properties": {
-                "enabled": {
-                    "type": "boolean",
-                    "description": "Enabled Redmine containers' Security Context",
-                    "default": false
-                },
-                "runAsUser": {
-                    "type": "number",
-                    "description": "Set Redmine container's Security Context runAsUser",
-                    "default": 1001
-                }
-            }
-        },
-        "livenessProbe": {
-            "type": "object",
-            "properties": {
-                "enabled": {
-                    "type": "boolean",
-                    "description": "Enable livenessProbe on Redmine containers",
-                    "default": true
-                },
-                "path": {
-                    "type": "string",
-                    "description": "Path for to check for livenessProbe",
-                    "default": "/"
-                },
-                "initialDelaySeconds": {
-                    "type": "number",
-                    "description": "Initial delay seconds for livenessProbe",
-                    "default": 300
-                },
-                "periodSeconds": {
-                    "type": "number",
-                    "description": "Period seconds for livenessProbe",
-                    "default": 10
-                },
-                "timeoutSeconds": {
-                    "type": "number",
-                    "description": "Timeout seconds for livenessProbe",
-                    "default": 5
-                },
-                "failureThreshold": {
-                    "type": "number",
-                    "description": "Failure threshold for livenessProbe",
-                    "default": 6
-                },
-                "successThreshold": {
-                    "type": "number",
-                    "description": "Success threshold for livenessProbe",
-                    "default": 1
-                }
-            }
-        },
-        "readinessProbe": {
-            "type": "object",
-            "properties": {
-                "enabled": {
-                    "type": "boolean",
-                    "description": "Enable readinessProbe on Redmine containers",
-                    "default": true
-                },
-                "path": {
-                    "type": "string",
-                    "description": "Path to check for readinessProbe",
-                    "default": "/"
-                },
-                "initialDelaySeconds": {
-                    "type": "number",
-                    "description": "Initial delay seconds for readinessProbe",
-                    "default": 5
-                },
-                "periodSeconds": {
-                    "type": "number",
-                    "description": "Period seconds for readinessProbe",
-                    "default": 10
-                },
-                "timeoutSeconds": {
-                    "type": "number",
-                    "description": "Timeout seconds for readinessProbe",
-                    "default": 5
-                },
-                "failureThreshold": {
-                    "type": "number",
-                    "description": "Failure threshold for readinessProbe",
-                    "default": 6
-                },
-                "successThreshold": {
-                    "type": "number",
-                    "description": "Success threshold for readinessProbe",
-                    "default": 1
-                }
-            }
-        },
-        "startupProbe": {
-            "type": "object",
-            "properties": {
-                "enabled": {
-                    "type": "boolean",
-                    "description": "Enable startupProbe on Redmine containers",
-                    "default": false
-                },
-                "path": {
-                    "type": "string",
-                    "description": "Path to check for startupProbe",
-                    "default": "/"
-                },
-                "initialDelaySeconds": {
-                    "type": "number",
-                    "description": "Initial delay seconds for startupProbe",
-                    "default": 300
-                },
-                "periodSeconds": {
-                    "type": "number",
-                    "description": "Period seconds for startupProbe",
-                    "default": 10
-                },
-                "timeoutSeconds": {
-                    "type": "number",
-                    "description": "Timeout seconds for startupProbe",
-                    "default": 5
-                },
-                "failureThreshold": {
-                    "type": "number",
-                    "description": "Failure threshold for startupProbe",
-                    "default": 6
-                },
-                "successThreshold": {
-                    "type": "number",
-                    "description": "Success threshold for startupProbe",
-                    "default": 1
-                }
-            }
-        },
-        "customLivenessProbe": {
-            "type": "object",
-            "description": "Custom livenessProbe that overrides the default one",
-            "default": {}
-        },
-        "customReadinessProbe": {
-            "type": "object",
-            "description": "Custom readinessProbe that overrides the default one",
-            "default": {}
-        },
-        "customStartupProbe": {
-            "type": "object",
-            "description": "Custom startupProbe that overrides the default one",
-            "default": {}
-        },
-        "lifecycleHooks": {
-            "type": "object",
-            "description": "LifecycleHooks to set additional configuration at startup",
-            "default": {}
-        },
-        "hostAliases": {
-            "type": "array",
-            "description": "Redmine pod host aliases",
-            "default": [],
-            "items": {}
-        },
-        "podLabels": {
-            "type": "object",
-            "description": "Extra labels for Redmine pods",
-            "default": {}
-        },
-        "podAnnotations": {
-            "type": "object",
-            "description": "Annotations for Redmine pods",
-            "default": {}
-        },
-        "podAffinityPreset": {
-            "type": "string",
-            "description": "Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`",
-            "default": ""
-        },
-        "podAntiAffinityPreset": {
-            "type": "string",
-            "description": "Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`",
-            "default": "soft"
-        },
-        "nodeAffinityPreset": {
-            "type": "object",
-            "properties": {
-                "type": {
-                    "type": "string",
-                    "description": "Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`",
-                    "default": ""
-                },
-                "key": {
-                    "type": "string",
-                    "description": "Node label key to match. Ignored if `affinity` is set",
-                    "default": ""
-                },
-                "values": {
-                    "type": "array",
-                    "description": "Node label values to match. Ignored if `affinity` is set",
-                    "default": [],
-                    "items": {}
-                }
-            }
-        },
-        "affinity": {
-            "type": "object",
-            "description": "Affinity for pod assignment",
-            "default": {}
-        },
-        "nodeSelector": {
-            "type": "object",
-            "description": "Node labels for pod assignment",
-            "default": {}
-        },
-        "tolerations": {
-            "type": "array",
-            "description": "Tolerations for pod assignment",
-            "default": [],
-            "items": {}
-        },
-        "priorityClassName": {
-            "type": "string",
-            "description": "Redmine pods' Priority Class Name",
-            "default": ""
-        },
-        "schedulerName": {
-            "type": "string",
-            "description": "Alternate scheduler",
-            "default": ""
-        },
-        "terminationGracePeriodSeconds": {
-            "type": "string",
-            "description": "Seconds Redmine pod needs to terminate gracefully",
-            "default": ""
-        },
-        "topologySpreadConstraints": {
-            "type": "array",
-            "description": "Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template",
-            "default": [],
-            "items": {}
-        },
-        "updateStrategy": {
-            "type": "object",
-            "properties": {
-                "type": {
-                    "type": "string",
-                    "description": "Redmine statefulset strategy type",
-                    "default": "RollingUpdate"
-                },
-                "rollingUpdate": {
-                    "type": "object",
-                    "description": "Redmine statefulset rolling update configuration parameters",
-                    "default": {}
-                }
-            }
-        },
-        "extraVolumes": {
-            "type": "array",
-            "description": "Optionally specify extra list of additional volumes for Redmine pods",
-            "default": [],
-            "items": {}
-        },
-        "extraVolumeMounts": {
-            "type": "array",
-            "description": "Optionally specify extra list of additional volumeMounts for Redmine container(s)",
-            "default": [],
-            "items": {}
-        },
-        "initContainers": {
-            "type": "array",
-            "description": "Add additional init containers to the Redmine pods",
-            "default": [],
-            "items": {}
-        },
-        "sidecars": {
-            "type": "array",
-            "description": "Add additional sidecar containers to the Redmine pod",
-            "default": [],
-            "items": {}
-        },
-        "service": {
-            "type": "object",
-            "properties": {
-                "type": {
-                    "type": "string",
-                    "description": "Redmine service type",
-                    "default": "LoadBalancer"
-                },
-                "ports": {
-                    "type": "object",
-                    "properties": {
-                        "http": {
-                            "type": "number",
-                            "description": "Redmine service HTTP port",
-                            "default": 80
-                        }
-                    }
-                },
-                "nodePorts": {
-                    "type": "object",
-                    "properties": {
-                        "http": {
-                            "type": "string",
-                            "description": "NodePort for the Redmine HTTP endpoint",
-                            "default": ""
-                        }
-                    }
-                },
-                "sessionAffinity": {
-                    "type": "string",
-                    "description": "Control where client requests go, to the same pod or round-robin",
-                    "default": "None"
-                },
-                "sessionAffinityConfig": {
-                    "type": "object",
-                    "description": "Additional settings for the sessionAffinity",
-                    "default": {}
-                },
-                "clusterIP": {
-                    "type": "string",
-                    "description": "Redmine service Cluster IP",
-                    "default": ""
-                },
-                "loadBalancerIP": {
-                    "type": "string",
-                    "description": "Redmine service Load Balancer IP",
-                    "default": ""
-                },
-                "loadBalancerSourceRanges": {
-                    "type": "array",
-                    "description": "Redmine service Load Balancer sources",
-                    "default": [],
-                    "items": {}
-                },
-                "externalTrafficPolicy": {
-                    "type": "string",
-                    "description": "Redmine service external traffic policy",
-                    "default": "Cluster"
-                },
-                "annotations": {
-                    "type": "object",
-                    "description": "Additional custom annotations for Redmine service",
-                    "default": {}
-                },
-                "extraPorts": {
-                    "type": "array",
-                    "description": "Extra port to expose on Redmine service",
-                    "default": [],
-                    "items": {}
-                }
-            }
-        },
-        "ingress": {
-            "type": "object",
-            "properties": {
-                "enabled": {
-                    "type": "boolean",
-                    "description": "Enable ingress record generation for Redmine",
-                    "default": false
-                },
-                "ingressClassName": {
-                    "type": "string",
-                    "description": "IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)",
-                    "default": ""
-                },
-                "pathType": {
-                    "type": "string",
-                    "description": "Ingress path type",
-                    "default": "ImplementationSpecific"
-                },
-                "apiVersion": {
-                    "type": "string",
-                    "description": "Force Ingress API version (automatically detected if not set)",
-                    "default": ""
-                },
-                "hostname": {
-                    "type": "string",
-                    "description": "Default host for the ingress record",
-                    "default": "redmine.local"
-                },
-                "path": {
-                    "type": "string",
-                    "description": "Default path for the ingress record",
-                    "default": "/"
-                },
-                "annotations": {
-                    "type": "object",
-                    "description": "Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.",
-                    "default": {}
-                },
-                "tls": {
-                    "type": "boolean",
-                    "description": "Enable TLS configuration for the host defined at `ingress.hostname` parameter",
-                    "default": false
-                },
-                "selfSigned": {
-                    "type": "boolean",
-                    "description": "Create a TLS secret for this ingress record using self-signed certificates generated by Helm",
-                    "default": false
-                },
-                "extraHosts": {
-                    "type": "array",
-                    "description": "An array with additional hostname(s) to be covered with the ingress record",
-                    "default": [],
-                    "items": {}
-                },
-                "extraPaths": {
-                    "type": "array",
-                    "description": "An array with additional arbitrary paths that may need to be added to the ingress under the main host",
-                    "default": [],
-                    "items": {}
-                },
-                "extraTls": {
-                    "type": "array",
-                    "description": "The tls configuration for additional hostnames to be covered with this ingress record.",
-                    "default": [],
-                    "items": {}
-                },
-                "secrets": {
-                    "type": "array",
-                    "description": "If you're providing your own certificates, please use this to add the certificates as secrets",
-                    "default": [],
-                    "items": {}
-                },
-                "extraRules": {
-                    "type": "array",
-                    "description": "Additional rules to be covered with this ingress record",
-                    "default": [],
-                    "items": {}
-                }
-            }
+          }
+        }
+      }
+    },
+    "postgresql": {
+      "type": "object",
+      "title": "PostgreSQL Details",
+      "form": true,
+      "hidden": {
+        "value": "mariadb",
+        "pathe": "databaseType"
+      },
+      "properties": {
+        "enabled": {
+          "type": "boolean",
+          "title": "Use a new PostgreSQL database hosted in the cluster",
+          "form": true,
+          "description": "Whether to deploy a postgresql server to satisfy the applications database requirements. To use an external database switch this off and configure the external database details"
         },
         "persistence": {
-            "type": "object",
-            "properties": {
-                "enabled": {
-                    "type": "boolean",
-                    "description": "Enable persistence using Persistent Volume Claims",
-                    "default": true
-                },
-                "storageClass": {
-                    "type": "string",
-                    "description": "Persistent Volume storage class",
-                    "default": ""
-                },
-                "accessModes": {
-                    "type": "array",
-                    "description": "Persistent Volume access modes",
-                    "default": [
-                        "ReadWriteOnce"
-                    ],
-                    "items": {
-                        "type": "string"
-                    }
-                },
-                "size": {
-                    "type": "string",
-                    "description": "Persistent Volume size",
-                    "default": "8Gi"
-                },
-                "dataSource": {
-                    "type": "object",
-                    "description": "Custom PVC data source",
-                    "default": {}
-                },
-                "annotations": {
-                    "type": "object",
-                    "description": "Annotations for the PVC",
-                    "default": {}
-                },
-                "selector": {
-                    "type": "object",
-                    "description": "Selector to match an existing Persistent Volume (this value is evaluated as a template)",
-                    "default": {}
-                },
-                "existingClaim": {
-                    "type": "string",
-                    "description": "The name of an existing PVC to use for persistence",
-                    "default": ""
-                }
+          "type": "object",
+          "properties": {
+            "size": {
+              "type": "string",
+              "title": "Volume Size",
+              "form": true,
+              "hidden": {
+                "value": false,
+                "path": "postgresql/enabled"
+              },
+              "render": "slider",
+              "sliderMin": 1,
+              "sliderMax": 100,
+              "sliderUnit": "Gi"
             }
-        },
-        "volumePermissions": {
-            "type": "object",
-            "properties": {
-                "enabled": {
-                    "type": "boolean",
-                    "description": "Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`",
-                    "default": false
-                },
-                "resources": {
-                    "type": "object",
-                    "properties": {
-                        "limits": {
-                            "type": "object",
-                            "description": "The resources limits for the init container",
-                            "default": {}
-                        },
-                        "requests": {
-                            "type": "object",
-                            "description": "The requested resources for the init container",
-                            "default": {}
-                        }
-                    }
-                },
-                "containerSecurityContext": {
-                    "type": "object",
-                    "properties": {
-                        "enabled": {
-                            "type": "boolean",
-                            "description": "Enable init container's Security Context",
-                            "default": true
-                        },
-                        "runAsUser": {
-                            "type": "number",
-                            "description": "Set init container's Security Context runAsUser",
-                            "default": 0
-                        }
-                    }
-                }
-            }
-        },
-        "serviceAccount": {
-            "type": "object",
-            "properties": {
-                "create": {
-                    "type": "boolean",
-                    "description": "Specifies whether a ServiceAccount should be created",
-                    "default": true
-                },
-                "name": {
-                    "type": "string",
-                    "description": "The name of the ServiceAccount to create (name generated using common.names.fullname template otherwise)",
-                    "default": ""
-                },
-                "automountServiceAccountToken": {
-                    "type": "boolean",
-                    "description": "Auto-mount the service account token in the pod",
-                    "default": false
-                },
-                "annotations": {
-                    "type": "object",
-                    "description": "Additional custom annotations for the ServiceAccount",
-                    "default": {}
-                }
-            }
-        },
-        "pdb": {
-            "type": "object",
-            "properties": {
-                "create": {
-                    "type": "boolean",
-                    "description": "Enable a Pod Disruption Budget creation",
-                    "default": false
-                },
-                "minAvailable": {
-                    "type": "string",
-                    "description": "Minimum number/percentage of pods that should remain scheduled",
-                    "default": ""
-                },
-                "maxUnavailable": {
-                    "type": "string",
-                    "description": "Maximum number/percentage of pods that may be made unavailable",
-                    "default": ""
-                }
-            }
-        },
-        "autoscaling": {
-            "type": "object",
-            "properties": {
-                "enabled": {
-                    "type": "boolean",
-                    "description": "Enable Horizontal POD autoscaling for Redmine",
-                    "default": false
-                },
-                "minReplicas": {
-                    "type": "number",
-                    "description": "Minimum number of Redmine replicas",
-                    "default": 1
-                },
-                "maxReplicas": {
-                    "type": "number",
-                    "description": "Maximum number of Redmine replicas",
-                    "default": 11
-                },
-                "targetCPU": {
-                    "type": "number",
-                    "description": "Target CPU utilization percentage",
-                    "default": 50
-                },
-                "targetMemory": {
-                    "type": "number",
-                    "description": "Target Memory utilization percentage",
-                    "default": 50
-                }
-            }
-        },
-        "databaseType": {
-            "type": "string",
-            "description": "Redmine database type. Allowed values: `mariadb` and `postgresql`",
-            "default": "mariadb"
-        },
-        "mariadb": {
-            "type": "object",
-            "properties": {
-                "enabled": {
-                    "type": "boolean",
-                    "description": "Switch to enable or disable the MariaDB helm chart",
-                    "default": true
-                },
-                "auth": {
-                    "type": "object",
-                    "properties": {
-                        "rootPassword": {
-                            "type": "string",
-                            "description": "MariaDB root password",
-                            "default": ""
-                        },
-                        "username": {
-                            "type": "string",
-                            "description": "MariaDB username",
-                            "default": "bn_redmine"
-                        },
-                        "password": {
-                            "type": "string",
-                            "description": "MariaDB password",
-                            "default": ""
-                        },
-                        "existingSecret": {
-                            "type": "string",
-                            "description": "Name of existing secret to use for MariaDB credentials",
-                            "default": ""
-                        }
-                    }
-                },
-                "architecture": {
-                    "type": "string",
-                    "description": "MariaDB architecture. Allowed values: `standalone` or `replication`",
-                    "default": "standalone"
-                }
-            }
-        },
-        "postgresql": {
-            "type": "object",
-            "properties": {
-                "enabled": {
-                    "type": "boolean",
-                    "description": "Switch to enable or disable the PostgreSQL helm chart",
-                    "default": true
-                },
-                "auth": {
-                    "type": "object",
-                    "properties": {
-                        "username": {
-                            "type": "string",
-                            "description": "Name for a custom user to create",
-                            "default": "bn_redmine"
-                        },
-                        "password": {
-                            "type": "string",
-                            "description": "Password for the custom user to create",
-                            "default": ""
-                        },
-                        "database": {
-                            "type": "string",
-                            "description": "Name for a custom database to create",
-                            "default": "bitnami_redmine"
-                        },
-                        "existingSecret": {
-                            "type": "string",
-                            "description": "Name of existing secret to use for PostgreSQL credentials",
-                            "default": ""
-                        }
-                    }
-                },
-                "architecture": {
-                    "type": "string",
-                    "description": "PostgreSQL architecture (`standalone` or `replication`)",
-                    "default": "standalone"
-                }
-            }
-        },
-        "externalDatabase": {
-            "type": "object",
-            "properties": {
-                "host": {
-                    "type": "string",
-                    "description": "Database host",
-                    "default": ""
-                },
-                "port": {
-                    "type": "number",
-                    "description": "Database port number",
-                    "default": 5432
-                },
-                "user": {
-                    "type": "string",
-                    "description": "Non-root username for Redmine",
-                    "default": "bn_redmine"
-                },
-                "password": {
-                    "type": "string",
-                    "description": "Password for the non-root username for Redmine",
-                    "default": ""
-                },
-                "database": {
-                    "type": "string",
-                    "description": "Redmine database name",
-                    "default": "bitnami_redmine"
-                },
-                "existingSecret": {
-                    "type": "string",
-                    "description": "Name of an existing secret resource containing the database credentials",
-                    "default": ""
-                },
-                "existingSecretPasswordKey": {
-                    "type": "string",
-                    "description": "Name of an existing secret key containing the database credentials",
-                    "default": ""
-                }
-            }
-        },
-        "mailReceiver": {
-            "type": "object",
-            "properties": {
-                "enabled": {
-                    "type": "boolean",
-                    "description": "Whether to enable scheduled mail-to-task CronJob",
-                    "default": false
-                },
-                "schedule": {
-                    "type": "string",
-                    "description": "Kubernetes CronJob schedule",
-                    "default": "*/5 * * * *"
-                },
-                "suspend": {
-                    "type": "boolean",
-                    "description": "Whether to create suspended CronJob",
-                    "default": true
-                },
-                "mailProtocol": {
-                    "type": "string",
-                    "description": "Mail protocol to use for reading emails. Allowed values: `IMAP` and `POP3`",
-                    "default": "IMAP"
-                },
-                "host": {
-                    "type": "string",
-                    "description": "Server to receive emails from",
-                    "default": ""
-                },
-                "port": {
-                    "type": "number",
-                    "description": "TCP port on the `host`",
-                    "default": 993
-                },
-                "username": {
-                    "type": "string",
-                    "description": "Login to authenticate on the `host`",
-                    "default": ""
-                },
-                "password": {
-                    "type": "string",
-                    "description": "Password to authenticate on the `host`",
-                    "default": ""
-                },
-                "ssl": {
-                    "type": "boolean",
-                    "description": "Whether use SSL/TLS to connect to the `host`",
-                    "default": true
-                },
-                "startTLS": {
-                    "type": "boolean",
-                    "description": "Whether use StartTLS to connect to the `host`",
-                    "default": false
-                },
-                "imapFolder": {
-                    "type": "string",
-                    "description": "IMAP only. Folder to read emails from",
-                    "default": "INBOX"
-                },
-                "moveOnSuccess": {
-                    "type": "string",
-                    "description": "IMAP only. Folder to move processed emails to",
-                    "default": ""
-                },
-                "moveOnFailure": {
-                    "type": "string",
-                    "description": "IMAP only. Folder to move emails with processing errors to",
-                    "default": ""
-                },
-                "unknownUserAction": {
-                    "type": "string",
-                    "description": "Action to perform is an email received from unregistered user",
-                    "default": "ignore"
-                },
-                "noPermissionCheck": {
-                    "type": "number",
-                    "description": "Whether skip permission check during creating a new task",
-                    "default": 0
-                },
-                "noAccountNotice": {
-                    "type": "number",
-                    "description": "Whether send an email to an unregistered user created during a new task creation",
-                    "default": 1
-                },
-                "defaultGroup": {
-                    "type": "string",
-                    "description": "Defines a group list to add created user to",
-                    "default": ""
-                },
-                "project": {
-                    "type": "string",
-                    "description": "Defines identifier of the target project for a new task",
-                    "default": ""
-                },
-                "projectFromSubaddress": {
-                    "type": "string",
-                    "description": "Defines email address to select project from subaddress",
-                    "default": ""
-                },
-                "status": {
-                    "type": "string",
-                    "description": "Defines a new task status",
-                    "default": ""
-                },
-                "tracker": {
-                    "type": "string",
-                    "description": "Defines a new task tracker",
-                    "default": ""
-                },
-                "category": {
-                    "type": "string",
-                    "description": "Defines a new task category",
-                    "default": ""
-                },
-                "priority": {
-                    "type": "string",
-                    "description": "Defines a new task priority",
-                    "default": ""
-                },
-                "assignedTo": {
-                    "type": "string",
-                    "description": "Defines a new task assignee",
-                    "default": ""
-                },
-                "allowOverride": {
-                    "type": "string",
-                    "description": "Defines if email content is allowed to set attributes values. Values is a comma separated list of attributes or `all` to allow all attributes",
-                    "default": ""
-                },
-                "command": {
-                    "type": "array",
-                    "description": "Override default container command (useful when using custom images)",
-                    "default": [],
-                    "items": {}
-                },
-                "args": {
-                    "type": "array",
-                    "description": "Override default container args (useful when using custom images)",
-                    "default": [],
-                    "items": {}
-                },
-                "extraEnvVars": {
-                    "type": "array",
-                    "description": "Extra environment variables to be set on mailReceiver container",
-                    "default": [],
-                    "items": {}
-                },
-                "extraEnvVarsCM": {
-                    "type": "string",
-                    "description": "Name of existing ConfigMap containing extra env vars",
-                    "default": ""
-                },
-                "extraEnvVarsSecret": {
-                    "type": "string",
-                    "description": "Name of existing Secret containing extra env vars",
-                    "default": ""
-                },
-                "podSecurityContext": {
-                    "type": "object",
-                    "properties": {
-                        "enabled": {
-                            "type": "boolean",
-                            "description": "Enabled Redmine pods' Security Context",
-                            "default": true
-                        },
-                        "fsGroup": {
-                            "type": "number",
-                            "description": "Set Redmine pod's Security Context fsGroup",
-                            "default": 1001
-                        }
-                    }
-                },
-                "containerSecurityContext": {
-                    "type": "object",
-                    "properties": {
-                        "enabled": {
-                            "type": "boolean",
-                            "description": "mailReceiver Container securityContext",
-                            "default": false
-                        },
-                        "runAsUser": {
-                            "type": "number",
-                            "description": "User ID for the mailReceiver container",
-                            "default": 1001
-                        },
-                        "runAsNonRoot": {
-                            "type": "boolean",
-                            "description": "Whether to run the mailReceiver container as a non-root user",
-                            "default": true
-                        }
-                    }
-                },
-                "podAnnotations": {
-                    "type": "object",
-                    "description": "Additional pod annotations",
-                    "default": {}
-                },
-                "podLabels": {
-                    "type": "object",
-                    "description": "Additional pod labels",
-                    "default": {}
-                },
-                "podAffinityPreset": {
-                    "type": "string",
-                    "description": "Pod affinity preset. Ignored if `mailReceiver.affinity` is set. Allowed values: `soft` or `hard`",
-                    "default": ""
-                },
-                "podAntiAffinityPreset": {
-                    "type": "string",
-                    "description": "Pod anti-affinity preset. Ignored if `mailReceiver.affinity` is set. Allowed values: `soft` or `hard`",
-                    "default": "soft"
-                },
-                "nodeAffinityPreset": {
-                    "type": "object",
-                    "properties": {
-                        "type": {
-                            "type": "string",
-                            "description": "Node affinity preset. Ignored if `mailReceiver.affinity` is set. Allowed values: `soft` or `hard`",
-                            "default": ""
-                        },
-                        "key": {
-                            "type": "string",
-                            "description": "Node label key to match. Ignored if `mailReceiver.affinity` is set.",
-                            "default": ""
-                        },
-                        "values": {
-                            "type": "array",
-                            "description": "Node label values to match. Ignored if `mailReceiver.affinity` is set.",
-                            "default": [],
-                            "items": {}
-                        }
-                    }
-                },
-                "affinity": {
-                    "type": "object",
-                    "description": "Affinity for pod assignment",
-                    "default": {}
-                },
-                "nodeSelector": {
-                    "type": "object",
-                    "description": "Node labels for pod assignment",
-                    "default": {}
-                },
-                "tolerations": {
-                    "type": "array",
-                    "description": "Tolerations for pod assignment",
-                    "default": [],
-                    "items": {}
-                },
-                "priorityClassName": {
-                    "type": "string",
-                    "description": "Redmine pods' priority.",
-                    "default": ""
-                },
-                "initContainers": {
-                    "type": "array",
-                    "description": "Add additional init containers to the mailReceiver pods",
-                    "default": [],
-                    "items": {}
-                },
-                "sidecars": {
-                    "type": "array",
-                    "description": "Add additional sidecar containers to the mailReceiver pods",
-                    "default": [],
-                    "items": {}
-                },
-                "extraVolumes": {
-                    "type": "array",
-                    "description": "Optionally specify extra list of additional volumes for mailReceiver container",
-                    "default": [],
-                    "items": {}
-                },
-                "extraVolumeMounts": {
-                    "type": "array",
-                    "description": "Optionally specify extra list of additional volumeMounts for mailReceiver container",
-                    "default": [],
-                    "items": {}
-                }
-            }
-        },
-        "certificates": {
-            "type": "object",
-            "properties": {
-                "customCertificate": {
-                    "type": "object",
-                    "properties": {
-                        "certificateSecret": {
-                            "type": "string",
-                            "description": "Secret containing the certificate and key to add",
-                            "default": ""
-                        },
-                        "certificateLocation": {
-                            "type": "string",
-                            "description": "Location in the container to store the certificate",
-                            "default": "/etc/ssl/certs/ssl-cert-snakeoil.pem"
-                        },
-                        "keyLocation": {
-                            "type": "string",
-                            "description": "Location in the container to store the private key",
-                            "default": "/etc/ssl/private/ssl-cert-snakeoil.key"
-                        },
-                        "chainLocation": {
-                            "type": "string",
-                            "description": "Location in the container to store the certificate chain",
-                            "default": "/etc/ssl/certs/mychain.pem"
-                        },
-                        "chainSecret": {
-                            "type": "object",
-                            "properties": {
-                                "name": {
-                                    "type": "string",
-                                    "description": "Name of the secret containing the certificate chain",
-                                    "default": ""
-                                },
-                                "key": {
-                                    "type": "string",
-                                    "description": "Key of the certificate chain file inside the secret",
-                                    "default": ""
-                                }
-                            }
-                        }
-                    }
-                },
-                "customCA": {
-                    "type": "array",
-                    "description": "Defines a list of secrets to import into the container trust store",
-                    "default": [],
-                    "items": {}
-                },
-                "image": {
-                    "type": "object",
-                    "properties": {
-                        "registry": {
-                            "type": "string",
-                            "description": "Redmine image registry",
-                            "default": "docker.io"
-                        },
-                        "repository": {
-                            "type": "string",
-                            "description": "Redmine image repository",
-                            "default": "bitnami/os-shell"
-                        },
-                        "tag": {
-                            "type": "string",
-                            "description": "Redmine image tag (immutable tags are recommended)",
-                            "default": "11-debian-11-r43"
-                        },
-                        "digest": {
-                            "type": "string",
-                            "description": "Redmine image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag",
-                            "default": ""
-                        },
-                        "pullPolicy": {
-                            "type": "string",
-                            "description": "Redmine image pull policy",
-                            "default": "IfNotPresent"
-                        },
-                        "pullSecrets": {
-                            "type": "array",
-                            "description": "Redmine image pull secrets",
-                            "default": [],
-                            "items": {}
-                        }
-                    }
-                },
-                "extraEnvVars": {
-                    "type": "array",
-                    "description": "Container sidecar extra environment variables (e.g. proxy)",
-                    "default": [],
-                    "items": {}
-                }
-            }
-        },
-        "networkPolicy": {
-            "type": "object",
-            "properties": {
-                "enabled": {
-                    "type": "boolean",
-                    "description": "Enable network policies",
-                    "default": false
-                },
-                "ingress": {
-                    "type": "object",
-                    "properties": {
-                        "enabled": {
-                            "type": "boolean",
-                            "description": "Enable network policy for Ingress Proxies",
-                            "default": false
-                        },
-                        "namespaceSelector": {
-                            "type": "object",
-                            "description": "Ingress Proxy namespace selector labels. These labels will be used to identify the Ingress Proxy's namespace.",
-                            "default": {}
-                        },
-                        "podSelector": {
-                            "type": "object",
-                            "description": "Ingress Proxy pods selector labels. These labels will be used to identify the Ingress Proxy pods.",
-                            "default": {}
-                        }
-                    }
-                },
-                "ingressRules": {
-                    "type": "object",
-                    "properties": {
-                        "backendOnlyAccessibleByFrontend": {
-                            "type": "boolean",
-                            "description": "Enable ingress rule that makes the backend (mariadb) only accessible by Redmine's pods.",
-                            "default": false
-                        },
-                        "customBackendSelector": {
-                            "type": "object",
-                            "description": "Backend selector labels. These labels will be used to identify the backend pods.",
-                            "default": {}
-                        },
-                        "accessOnlyFrom": {
-                            "type": "object",
-                            "properties": {
-                                "enabled": {
-                                    "type": "boolean",
-                                    "description": "Enable ingress rule that makes Redmine only accessible from a particular origin",
-                                    "default": false
-                                },
-                                "namespaceSelector": {
-                                    "type": "object",
-                                    "description": "Namespace selector label that is allowed to access Redmine. This label will be used to identified the allowed namespace(s).",
-                                    "default": {}
-                                },
-                                "podSelector": {
-                                    "type": "object",
-                                    "description": "Pods selector label that is allowed to access Redmine. This label will be used to identified the allowed pod(s).",
-                                    "default": {}
-                                }
-                            }
-                        },
-                        "customRules": {
-                            "type": "object",
-                            "description": "Custom network policy ingress rule",
-                            "default": {}
-                        }
-                    }
-                },
-                "egressRules": {
-                    "type": "object",
-                    "properties": {
-                        "denyConnectionsToExternal": {
-                            "type": "boolean",
-                            "description": "Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).",
-                            "default": false
-                        },
-                        "customRules": {
-                            "type": "object",
-                            "description": "Custom network policy rule",
-                            "default": {}
-                        }
-                    }
-                }
-            }
+          }
         }
+      }
     }
+  }
 }

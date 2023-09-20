@@ -298,6 +298,9 @@ operator:
     ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#monitoring.coreos.com/v1.Endpoint
     ##
     extraParameters: {}
+    ## @param operator.serviceMonitor.sampleLimit Per-scrape limit on number of scraped samples that will be accepted.
+    ##
+    sampleLimit: ""
   ## @param operator.resources Configure resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ##
@@ -663,6 +666,9 @@ prometheus:
     ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config
     ##
     relabelings: []
+    ## @param prometheus.serviceMonitor.sampleLimit Per-scrape limit on number of scraped samples that will be accepted.
+    ##
+    sampleLimit: ""
 
   ## Configure the ingress resource that allows you to access the
   ## Prometheus installation. Set up the URL
@@ -1555,6 +1561,9 @@ prometheus:
       ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config
       ##
       relabelings: []
+      ## @param prometheus.configReloader.serviceMonitor.sampleLimit Per-scrape limit on number of scraped samples that will be accepted.
+      ##
+      sampleLimit: ""
   ## @param prometheus.portName Port name used for the pods and governing service. This defaults to web
   ##
   portName: web
@@ -1749,6 +1758,9 @@ alertmanager:
     ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#monitoring.coreos.com/v1.Endpoint
     ##
     extraParameters: {}
+    ## @param alertmanager.serviceMonitor.sampleLimit Per-scrape limit on number of scraped samples that will be accepted.
+    ##
+    sampleLimit: ""
   ## Configure the ingress resource that allows you to access the
   ## Alertmanager installation. Set up the URL
   ## ref: https://kubernetes.io/docs/user-guide/ingress/
@@ -2148,6 +2160,9 @@ kubelet:
     ## @param kubelet.serviceMonitor.annotations Extra annotations for the ServiceMonitor
     ##
     annotations: {}
+    ## @param kubelet.serviceMonitor.sampleLimit Per-scrape limit on number of scraped samples that will be accepted.
+    ##
+    sampleLimit: ""
 
 ## @section Blackbox Exporter Deployment Parameters
 ##
@@ -2533,6 +2548,9 @@ kubeApiServer:
     ## @param kubeApiServer.serviceMonitor.annotations Extra annotations for the ServiceMonitor
     ##
     annotations: { }
+    ## @param kubeApiServer.serviceMonitor.sampleLimit Per-scrape limit on number of scraped samples that will be accepted.
+    ##
+    sampleLimit: ""
 ## Component scraping the kube-controller-manager
 ##
 kubeControllerManager:
@@ -2600,6 +2618,9 @@ kubeControllerManager:
     ## @param kubeControllerManager.serviceMonitor.annotations Extra annotations for the ServiceMonitor
     ##
     annotations: { }
+    ## @param kubeControllerManager.serviceMonitor.sampleLimit Per-scrape limit on number of scraped samples that will be accepted.
+    ##
+    sampleLimit: ""
 ## Component scraping kube scheduler
 ##
 kubeScheduler:
@@ -2675,6 +2696,9 @@ kubeScheduler:
     ## @param kubeScheduler.serviceMonitor.annotations Extra annotations for the ServiceMonitor
     ##
     annotations: {}
+    ## @param kubeScheduler.serviceMonitor.sampleLimit Per-scrape limit on number of scraped samples that will be accepted.
+    ##
+    sampleLimit: ""
 ## Component scraping coreDns
 ##
 coreDns:
@@ -2733,6 +2757,9 @@ coreDns:
     ## @param coreDns.serviceMonitor.annotations Extra annotations for the ServiceMonitor
     ##
     annotations: {}
+    ## @param coreDns.serviceMonitor.sampleLimit Per-scrape limit on number of scraped samples that will be accepted.
+    ##
+    sampleLimit: ""
 ## Component scraping the kube-proxy
 ##
 kubeProxy:
@@ -2793,6 +2820,9 @@ kubeProxy:
     ## @param kubeProxy.serviceMonitor.annotations Extra annotations for the ServiceMonitor
     ##
     annotations: {}
+    ## @param kubeProxy.serviceMonitor.sampleLimit Per-scrape limit on number of scraped samples that will be accepted.
+    ##
+    sampleLimit: ""
 
 ## @section RBAC parameters
 ##
