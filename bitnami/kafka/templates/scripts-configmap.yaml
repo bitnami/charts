@@ -182,8 +182,9 @@ data:
     }
     {{- if (include "kafka.sslEnabled" .) }}
     configure_kafka_tls() {
-      # Remove previously existing keystores
+      # Remove previously existing keystores and certificates, if any
       rm -f /certs/kafka.keystore.jks /certs/kafka.truststore.jks
+      rm -f /certs/tls.crt /certs/tls.key /certs/ca.crt
       if [[ "${KAFKA_TLS_TYPE}" = "PEM" ]]; then
         # Copy PEM certificate and key
         if [[ -f "/mounted-certs/kafka-${POD_ROLE}-${POD_ID}.crt" && "/mounted-certs/kafka-${POD_ROLE}-${POD_ID}.key" ]]; then
