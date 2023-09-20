@@ -191,7 +191,7 @@ Returns true if AdmissionConfiguration is supported
 {{- end -}}
 
 {{/*
-Return the appropriate apiVersion for Vertical Pod Autoscaler.
+Return the appropriate apiVersion for AdmissionConfiguration.
 */}}
 {{- define "common.capabilities.admisionConfiguration.apiVersion" -}}
 {{- if semverCompare "<1.23-0" (include "common.capabilities.kubeVersion" .) -}}
@@ -200,6 +200,19 @@ Return the appropriate apiVersion for Vertical Pod Autoscaler.
 {{- print "apiserver.config.k8s.io/v1beta1" -}}
 {{- else -}}
 {{- print "apiserver.config.k8s.io/v1" -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the appropriate apiVersion for PodSecurityConfiguration.
+*/}}
+{{- define "common.capabilities.podSecurityConfiguration.apiVersion" -}}
+{{- if semverCompare "<1.23-0" (include "common.capabilities.kubeVersion" .) -}}
+{{- print "pod-security.admission.config.k8s.io/v1alpha1" -}}
+{{- else if semverCompare "<1.25-0" (include "common.capabilities.kubeVersion" .) -}}
+{{- print "pod-security.admission.config.k8s.io/v1beta1" -}}
+{{- else -}}
+{{- print "pod-security.admission.config.k8s.io/v1" -}}
 {{- end -}}
 {{- end -}}
 
