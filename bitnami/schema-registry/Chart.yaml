@@ -33,5 +33,5 @@ maintainers:
   url: https://github.com/bitnami/charts
 name: schema-registry
 sources:
-- https://github.com/bitnami/charts/tree/main/bitnami/schema-registry
-version: 14.0.2
+  - https://github.com/bitnami/charts/tree/main/bitnami/schema-registry
+version: 14.1.0
