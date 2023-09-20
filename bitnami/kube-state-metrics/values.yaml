@@ -517,6 +517,9 @@ serviceMonitor:
   ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#monitoring.coreos.com/v1.Endpoint
   ##
   extraParameters: {}
+  ## @param serviceMonitor.sampleLimit Per-scrape limit on number of scraped samples that will be accepted.
+  ##
+  sampleLimit: ""
 ## selfMonitor configuration
 ##
 selfMonitor:
