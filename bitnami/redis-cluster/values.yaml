@@ -654,6 +654,10 @@ updateJob:
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
+  ## @param updateJob.helmHook Job Helm hook
+  ## https://helm.sh/docs/topics/charts_hooks/#the-available-hooks
+  ##
+  helmHook: post-upgrade
   ## @param updateJob.annotations Job annotations
   ##
   annotations: {}

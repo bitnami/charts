@@ -742,8 +742,8 @@ service:
   ## @param service.ports.https Service HTTPS port
   ##
   ports:
-    http: 8080
-    https: 8443
+    http: 80
+    https: 443
   ## @param service.nodePorts.http Kubernetes http node port
   ## @param service.nodePorts.https Kubernetes https node port
   ## e.g:

@@ -81,7 +81,7 @@ helm delete my-release
 | ------------------- | ---------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`    | kong image registry                                                                                  | `docker.io`           |
 | `image.repository`  | kong image repository                                                                                | `bitnami/kong`        |
-| `image.tag`         | kong image tag (immutable tags are recommended)                                                      | `3.4.0-debian-11-r22` |
+| `image.tag`         | kong image tag (immutable tags are recommended)                                                      | `3.4.0-debian-11-r34` |
 | `image.digest`      | kong image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
 | `image.pullPolicy`  | kong image pull policy                                                                               | `IfNotPresent`        |
 | `image.pullSecrets` | Specify docker-registry secret names as an array                                                     | `[]`                  |
@@ -215,7 +215,7 @@ helm delete my-release
 | `ingressController.enabled`                                     | Enable/disable the Kong Ingress Controller                                                                                                    | `true`                            |
 | `ingressController.image.registry`                              | Kong Ingress Controller image registry                                                                                                        | `docker.io`                       |
 | `ingressController.image.repository`                            | Kong Ingress Controller image name                                                                                                            | `bitnami/kong-ingress-controller` |
-| `ingressController.image.tag`                                   | Kong Ingress Controller image tag                                                                                                             | `2.11.1-debian-11-r5`             |
+| `ingressController.image.tag`                                   | Kong Ingress Controller image tag                                                                                                             | `2.11.1-debian-11-r17`            |
 | `ingressController.image.digest`                                | Kong Ingress Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                       | `""`                              |
 | `ingressController.image.pullPolicy`                            | Kong Ingress Controller image pull policy                                                                                                     | `IfNotPresent`                    |
 | `ingressController.image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                                              | `[]`                              |
@@ -290,7 +290,7 @@ helm delete my-release
 | `postgresql.architecture`                       | PostgreSQL architecture (`standalone` or `replication`)                                                    | `standalone`           |
 | `postgresql.image.registry`                     | PostgreSQL image registry                                                                                  | `docker.io`            |
 | `postgresql.image.repository`                   | PostgreSQL image repository                                                                                | `bitnami/postgresql`   |
-| `postgresql.image.tag`                          | PostgreSQL image tag (immutable tags are recommended)                                                      | `14.9.0-debian-11-r24` |
+| `postgresql.image.tag`                          | PostgreSQL image tag (immutable tags are recommended)                                                      | `14.9.0-debian-11-r34` |
 | `postgresql.image.digest`                       | PostgreSQL image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
 | `postgresql.external.host`                      | Database host                                                                                              | `""`                   |
 | `postgresql.external.port`                      | Database port number                                                                                       | `5432`                 |

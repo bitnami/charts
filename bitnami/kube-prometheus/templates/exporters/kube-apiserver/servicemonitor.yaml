@@ -25,6 +25,9 @@ spec:
   namespaceSelector:
     matchNames:
       - default
+  {{- with .Values.kubeApiServer.serviceMonitor.sampleLimit }}
+  sampleLimit: {{ . }}
+  {{- end }}
   endpoints:
     - port: https
       scheme: https
