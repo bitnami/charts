@@ -106,10 +106,10 @@ spec:
           {{- if .Values.cloneStaticSiteFromGit.extraEnvVars }}
           env: {{- include "common.tplvalues.render" (dict "value" .Values.cloneStaticSiteFromGit.extraEnvVars "context" $) | nindent 12 }}
           {{- end }}
-          {{- if .Values.cloneStaticSiteFromGit.gitClone.extraEnvVarsSecret }}
+          {{- if .Values.cloneStaticSiteFromGit.extraEnvVarsSecret }}
           envFrom:
             - secretRef:
-                name: {{ include "common.tplvalues.render" (dict "value" .Values.cloneStaticSiteFromGit.gitClone.extraEnvVarsSecret "context" $) }}
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.cloneStaticSiteFromGit.extraEnvVarsSecret "context" $) }}
           {{- end }}
         {{- end }}
         {{- if .Values.initContainers }}
@@ -150,6 +150,11 @@ spec:
             {{- end }}
           {{- if .Values.cloneStaticSiteFromGit.extraEnvVars }}
           env: {{- include "common.tplvalues.render" (dict "value" .Values.cloneStaticSiteFromGit.extraEnvVars "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.cloneStaticSiteFromGit.extraEnvVarsSecret }}
+          envFrom:
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.cloneStaticSiteFromGit.extraEnvVarsSecret "context" $) }}
           {{- end }}
         {{- end }}
         - name: nginx

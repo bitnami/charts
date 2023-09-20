@@ -174,6 +174,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                                 | Description                                                                                         | Value                  |
 | ---------------------------------------------------- | --------------------------------------------------------------------------------------------------- | ---------------------- |
 | `cloneStaticSiteFromGit.enabled`                     | Get the server static content from a Git repository                                                 | `false`                |
+| `cloneStaticSiteFromGit.extraEnvVarsSecret`          | Secret with extra environment variables                                                             | `""`                   |
 | `cloneStaticSiteFromGit.image.registry`              | Git image registry                                                                                  | `docker.io`            |
 | `cloneStaticSiteFromGit.image.repository`            | Git image repository                                                                                | `bitnami/git`          |
 | `cloneStaticSiteFromGit.image.tag`                   | Git image tag (immutable tags are recommended)                                                      | `2.41.0-debian-11-r76` |
@@ -185,7 +186,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cloneStaticSiteFromGit.interval`                    | Interval for sidecar container pull from the Git repository                                         | `60`                   |
 | `cloneStaticSiteFromGit.gitClone.command`            | Override default container command for git-clone-repository                                         | `[]`                   |
 | `cloneStaticSiteFromGit.gitClone.args`               | Override default container args for git-clone-repository                                            | `[]`                   |
-| `cloneStaticSiteFromGit.gitClone.extraEnvVarsSecret` | Secret with extra environment variables                                                             | `""`                   |
 | `cloneStaticSiteFromGit.gitSync.command`             | Override default container command for git-repo-syncer                                              | `[]`                   |
 | `cloneStaticSiteFromGit.gitSync.args`                | Override default container args for git-repo-syncer                                                 | `[]`                   |
 | `cloneStaticSiteFromGit.gitSync.resources.limits`    | The resources limits for the git-repo-syncer container                                              | `{}`                   |

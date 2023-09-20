@@ -452,6 +452,9 @@ cloneStaticSiteFromGit:
   ## @param cloneStaticSiteFromGit.interval Interval for sidecar container pull from the Git repository
   ##
   interval: 60
+  ## @param cloneStaticSiteFromGit.extraEnvVarsSecret Secret with extra environment variables
+  ##
+  extraEnvVarsSecret: ""
   ## Additional configuration for git-clone-repository initContainer
   ##
   gitClone:
@@ -461,9 +464,6 @@ cloneStaticSiteFromGit:
     ## @param cloneStaticSiteFromGit.gitClone.args Override default container args for git-clone-repository
     ##
     args: []
-    ## @param cloneStaticSiteFromGit.gitClone.extraEnvVarsSecret Secret with extra environment variables
-    ##
-    extraEnvVarsSecret: ""
   ## Additional configuration for the git-repo-syncer container
   ##
   gitSync:
