@@ -81,7 +81,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
 | `image.registry`     | MediaWiki image registry                                                                                                                           | `docker.io`            |
 | `image.repository`   | MediaWiki image repository                                                                                                                         | `bitnami/mediawiki`    |
-| `image.tag`          | MediaWiki image tag (immutable tags are recommended)                                                                                               | `1.40.0-debian-11-r45` |
+| `image.tag`          | MediaWiki image tag (immutable tags are recommended)                                                                                               | `1.40.0-debian-11-r70` |
 | `image.digest`       | MediaWiki image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                          | `""`                   |
 | `image.pullPolicy`   | Image pull policy                                                                                                                                  | `IfNotPresent`         |
 | `image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                                   | `[]`                   |
@@ -233,7 +233,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                          | Start a side-car prometheus exporter                                                                            | `false`                   |
 | `metrics.image.registry`                   | Apache exporter image registry                                                                                  | `docker.io`               |
 | `metrics.image.repository`                 | Apache exporter image repository                                                                                | `bitnami/apache-exporter` |
-| `metrics.image.tag`                        | Apache exporter image tag (immutable tags are recommended)                                                      | `1.0.1-debian-11-r21`     |
+| `metrics.image.tag`                        | Apache exporter image tag (immutable tags are recommended)                                                      | `1.0.1-debian-11-r50`     |
 | `metrics.image.digest`                     | Apache exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
 | `metrics.image.pullPolicy`                 | Image pull policy                                                                                               | `IfNotPresent`            |
 | `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                                                                | `[]`                      |

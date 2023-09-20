@@ -3,8 +3,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.11.1
-  creationTimestamp: null
+    controller-gen.kubebuilder.io/version: v0.12.0
   name: buckets.source.toolkit.fluxcd.io
 spec:
   group: source.toolkit.fluxcd.io
@@ -327,7 +326,9 @@ spec:
                 description: Insecure allows connecting to a non-TLS HTTP Endpoint.
                 type: boolean
               interval:
-                description: Interval at which to check the Endpoint for updates.
+                description: Interval at which the Bucket Endpoint is checked for
+                  updates. This interval is approximate and may be subject to jitter
+                  to ensure efficient use of resources.
                 pattern: ^([0-9]+(\.[0-9]+)?(ms|s|m|h))+$
                 type: string
               provider:
@@ -376,10 +377,6 @@ spec:
               artifact:
                 description: Artifact represents the last successful Bucket reconciliation.
                 properties:
-                  checksum:
-                    description: 'Checksum is the SHA256 checksum of the Artifact
-                      file. Deprecated: use Artifact.Digest instead.'
-                    type: string
                   digest:
                     description: Digest is the digest of the file in the form of '<algorithm>:<checksum>'.
                     pattern: ^[a-z0-9]+(?:[.+_-][a-z0-9]+)*:[a-zA-Z0-9=_-]+$
@@ -415,7 +412,9 @@ spec:
                       the Artifact contents.
                     type: string
                 required:
+                - lastUpdateTime
                 - path
+                - revision
                 - url
                 type: object
               conditions:
