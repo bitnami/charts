@@ -20,7 +20,7 @@ annotations:
     - name: oauth2-proxy
       image: docker.io/bitnami/oauth2-proxy:7.4.0-debian-11-r281
 apiVersion: v2
-appVersion: 2.8.0
+appVersion: 2.9.0
 dependencies:
   - condition: packaging.flux.enabled
     name: redis
@@ -50,4 +50,4 @@ maintainers:
 name: kubeapps
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/kubeapps
-version: 13.1.1
+version: 13.2.0

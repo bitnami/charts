@@ -535,6 +535,57 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `kubeappsapis.serviceAccount.automountServiceAccountToken`                                      | Automount service account token for the server service account                                                                                                             | `true`                             |
 | `kubeappsapis.serviceAccount.annotations`                                                       | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                                                                                 | `{}`                               |
 
+### OCI Catalog chart configuration
+
+| Name                                               | Description                                                                                                 | Value                          |
+| -------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- | ------------------------------ |
+| `ociCatalog.enabled`                               | Enable the OCI catalog gRPC service for cataloging                                                          | `false`                        |
+| `ociCatalog.image.registry`                        | OCI Catalog image registry                                                                                  | `docker.io`                    |
+| `ociCatalog.image.repository`                      | OCI Catalog image repository                                                                                | `bitnami/kubeapps-oci-catalog` |
+| `ociCatalog.image.tag`                             | OCI Catalog image tag (immutable tags are recommended)                                                      | `latest`                       |
+| `ociCatalog.image.digest`                          | OCI Catalog image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                           |
+| `ociCatalog.image.pullPolicy`                      | OCI Catalog image pull policy                                                                               | `IfNotPresent`                 |
+| `ociCatalog.image.pullSecrets`                     | Dashboard image pull secrets                                                                                | `[]`                           |
+| `ociCatalog.image.debug`                           | Enable image debug mode                                                                                     | `false`                        |
+| `ociCatalog.extraFlags`                            | Additional command line flags for OCI Catalog                                                               | `[]`                           |
+| `ociCatalog.extraEnvVars`                          | Array with extra environment variables to add to the oci-catalog container                                  | `[]`                           |
+| `ociCatalog.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars for the OCI Catalog container                          | `""`                           |
+| `ociCatalog.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for the OCI Catalog container                             | `""`                           |
+| `ociCatalog.containerPorts.grpc`                   | OCI Catalog gRPC container port                                                                             | `50061`                        |
+| `ociCatalog.resources.limits.cpu`                  | The CPU limits for the OCI Catalog container                                                                | `250m`                         |
+| `ociCatalog.resources.limits.memory`               | The memory limits for the OCI Catalog container                                                             | `256Mi`                        |
+| `ociCatalog.resources.requests.cpu`                | The requested CPU for the OCI Catalog container                                                             | `25m`                          |
+| `ociCatalog.resources.requests.memory`             | The requested memory for the OCI Catalog container                                                          | `32Mi`                         |
+| `ociCatalog.containerSecurityContext.enabled`      | Enabled OCI Catalog containers' Security Context                                                            | `true`                         |
+| `ociCatalog.containerSecurityContext.runAsUser`    | Set OCI Catalog container's Security Context runAsUser                                                      | `1001`                         |
+| `ociCatalog.containerSecurityContext.runAsNonRoot` | Set OCI Catalog container's Security Context runAsNonRoot                                                   | `true`                         |
+| `ociCatalog.livenessProbe.enabled`                 | Enable livenessProbe                                                                                        | `true`                         |
+| `ociCatalog.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                     | `60`                           |
+| `ociCatalog.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                            | `10`                           |
+| `ociCatalog.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                           | `5`                            |
+| `ociCatalog.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                         | `6`                            |
+| `ociCatalog.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                         | `1`                            |
+| `ociCatalog.readinessProbe.enabled`                | Enable readinessProbe                                                                                       | `true`                         |
+| `ociCatalog.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                    | `0`                            |
+| `ociCatalog.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                           | `10`                           |
+| `ociCatalog.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                          | `5`                            |
+| `ociCatalog.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                        | `6`                            |
+| `ociCatalog.readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                        | `1`                            |
+| `ociCatalog.startupProbe.enabled`                  | Enable startupProbe                                                                                         | `false`                        |
+| `ociCatalog.startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                      | `0`                            |
+| `ociCatalog.startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                             | `10`                           |
+| `ociCatalog.startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                            | `5`                            |
+| `ociCatalog.startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                          | `6`                            |
+| `ociCatalog.startupProbe.successThreshold`         | Success threshold for startupProbe                                                                          | `1`                            |
+| `ociCatalog.customLivenessProbe`                   | Custom livenessProbe that overrides the default one                                                         | `{}`                           |
+| `ociCatalog.customReadinessProbe`                  | Custom readinessProbe that overrides the default one                                                        | `{}`                           |
+| `ociCatalog.customStartupProbe`                    | Custom startupProbe that overrides the default one                                                          | `{}`                           |
+| `ociCatalog.lifecycleHooks`                        | Custom lifecycle hooks for OCI Catalog containers                                                           | `{}`                           |
+| `ociCatalog.command`                               | Override default container command (useful when using custom images)                                        | `[]`                           |
+| `ociCatalog.args`                                  | Override default container args (useful when using custom images)                                           | `[]`                           |
+| `ociCatalog.extraVolumes`                          | Optionally specify extra list of additional volumes for the OCI Catalog pod(s)                              | `[]`                           |
+| `ociCatalog.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the OCI Catalog container(s)                   | `[]`                           |
+
 ### Redis&reg; chart configuration
 
 | Name                                | Description                                                      | Value                                                    |
@@ -591,7 +642,7 @@ kubectl get services --namespace kubeapps --watch
 
 #### Ingress
 
-This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application.
+This chart provides support for ingress resources. If you have an ingress controller installed on your cluster, such as nginx-ingress or traefik you can utilize the ingress controller to expose Kubeapps.
 
 To enable ingress integration, please set `ingress.enabled` to `true`
 
