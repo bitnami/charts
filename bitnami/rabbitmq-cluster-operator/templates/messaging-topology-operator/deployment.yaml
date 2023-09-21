@@ -9,7 +9,9 @@ kind: Deployment
 metadata:
   name: {{ template "rmqco.msgTopologyOperator.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.msgTopologyOperator.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: messaging-topology-operator
     app.kubernetes.io/part-of: rabbitmq
   {{- if .Values.commonAnnotations }}
@@ -20,7 +22,7 @@ spec:
   {{- if .Values.msgTopologyOperator.updateStrategy }}
   strategy: {{- toYaml .Values.msgTopologyOperator.updateStrategy | nindent 4 }}
   {{- end }}
-  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.msgTopologyOperator.podLabels .Values.commonLabels ) "context" . ) }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.msgTopologyOperator.podLabels .Values.commonLabels $versionLabel ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: messaging-topology-operator
