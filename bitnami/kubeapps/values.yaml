@@ -1855,7 +1855,7 @@ ociCatalog:
   ## @param ociCatalog.image.tag OCI Catalog image tag (immutable tags are recommended)
   ## @param ociCatalog.image.digest OCI Catalog image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param ociCatalog.image.pullPolicy OCI Catalog image pull policy
-  ## @param ociCatalog.image.pullSecrets Dashboard image pull secrets
+  ## @param ociCatalog.image.pullSecrets OCI Catalog image pull secrets
   ## @param ociCatalog.image.debug Enable image debug mode
   ##
   image:
