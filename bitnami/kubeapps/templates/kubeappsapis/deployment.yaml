@@ -262,6 +262,7 @@ spec:
             {{- if .Values.ociCatalog.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.ociCatalog.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
+          {{- if or .Values.ociCatalog.extraEnvVarsCM .Values.ociCatalog.extraEnvVarsSecret }}
           envFrom:
             {{- if .Values.ociCatalog.extraEnvVarsCM }}
             - configMapRef:
@@ -271,6 +272,7 @@ spec:
             - secretRef:
                 name: {{ include "common.tplvalues.render" (dict "value" .Values.ociCatalog.extraEnvVarsSecret "context" $) }}
             {{- end }}
+          {{- end }}
           ports:
             - name: grpc
               containerPort: {{ .Values.ociCatalog.containerPorts.grpc }}
