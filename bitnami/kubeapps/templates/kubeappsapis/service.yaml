@@ -21,7 +21,7 @@ spec:
       targetPort: grpc-http
       protocol: TCP
       name: grpc-http
-  {{- $podLabels := merge .Values.kubeappsapis.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.kubeappsapis.podLabels .Values.commonLabels ) "context" . ) }}
     {{- if .Values.ociCatalog.enabled }}
     - port: {{ .Values.ociCatalog.containerPorts.grpc }}
       targetPort: grpc
