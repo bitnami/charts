@@ -3,8 +3,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.11.1
-  creationTimestamp: null
+    controller-gen.kubebuilder.io/version: v0.12.0
   name: ocirepositories.source.toolkit.fluxcd.io
 spec:
   group: source.toolkit.fluxcd.io
@@ -51,13 +50,15 @@ spec:
             description: OCIRepositorySpec defines the desired state of OCIRepository
             properties:
               certSecretRef:
-                description: "CertSecretRef can be given the name of a secret containing
-                  either or both of \n - a PEM-encoded client certificate (`certFile`)
-                  and private key (`keyFile`); - a PEM-encoded CA certificate (`caFile`)
+                description: "CertSecretRef can be given the name of a Secret containing
+                  either or both of \n - a PEM-encoded client certificate (`tls.crt`)
+                  and private key (`tls.key`); - a PEM-encoded CA certificate (`ca.crt`)
                   \n and whichever are supplied, will be used for connecting to the
                   registry. The client cert and key are useful if you are authenticating
                   with a certificate; the CA cert is useful if you are using a self-signed
-                  server certificate."
+                  server certificate. The Secret must be of type `Opaque` or `kubernetes.io/tls`.
+                  \n Note: Support for the `caFile`, `certFile` and `keyFile` keys
+                  have been deprecated."
                 properties:
                   name:
                     description: Name of the referent.
@@ -76,7 +77,9 @@ spec:
                   registry.
                 type: boolean
               interval:
-                description: The interval at which to check for image updates.
+                description: Interval at which the OCIRepository URL is checked for
+                  updates. This interval is approximate and may be subject to jitter
+                  to ensure efficient use of resources.
                 pattern: ^([0-9]+(\.[0-9]+)?(ms|s|m|h))+$
                 type: string
               layerSelector:
@@ -194,10 +197,6 @@ spec:
                 description: Artifact represents the output of the last successful
                   OCI Repository sync.
                 properties:
-                  checksum:
-                    description: 'Checksum is the SHA256 checksum of the Artifact
-                      file. Deprecated: use Artifact.Digest instead.'
-                    type: string
                   digest:
                     description: Digest is the digest of the file in the form of '<algorithm>:<checksum>'.
                     pattern: ^[a-z0-9]+(?:[.+_-][a-z0-9]+)*:[a-zA-Z0-9=_-]+$
@@ -233,7 +232,9 @@ spec:
                       the Artifact contents.
                     type: string
                 required:
+                - lastUpdateTime
                 - path
+                - revision
                 - url
                 type: object
               conditions:
