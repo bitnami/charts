@@ -452,9 +452,6 @@ cloneStaticSiteFromGit:
   ## @param cloneStaticSiteFromGit.interval Interval for sidecar container pull from the Git repository
   ##
   interval: 60
-  ## @param cloneStaticSiteFromGit.extraEnvVarsSecret Secret with extra environment variables
-  ##
-  extraEnvVarsSecret: ""
   ## Additional configuration for git-clone-repository initContainer
   ##
   gitClone:
@@ -488,6 +485,9 @@ cloneStaticSiteFromGit:
   ##     value: BAR
   ##
   extraEnvVars: []
+  ## @param cloneStaticSiteFromGit.extraEnvVarsSecret Secret with extra environment variables
+  ##
+  extraEnvVarsSecret: ""
   ## @param cloneStaticSiteFromGit.extraVolumeMounts Add extra volume mounts for the Git containers
   ## Useful to mount keys to connect through ssh. (normally used with extraVolumes)
   ## E.g:

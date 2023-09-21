@@ -183,7 +183,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cloneStaticSiteFromGit.repository`                 | Git Repository to clone static content from                                                         | `""`                   |
 | `cloneStaticSiteFromGit.branch`                     | Git branch to checkout                                                                              | `""`                   |
 | `cloneStaticSiteFromGit.interval`                   | Interval for sidecar container pull from the Git repository                                         | `60`                   |
-| `cloneStaticSiteFromGit.extraEnvVarsSecret`         | Secret with extra environment variables                                                             | `""`                   |
 | `cloneStaticSiteFromGit.gitClone.command`           | Override default container command for git-clone-repository                                         | `[]`                   |
 | `cloneStaticSiteFromGit.gitClone.args`              | Override default container args for git-clone-repository                                            | `[]`                   |
 | `cloneStaticSiteFromGit.gitSync.command`            | Override default container command for git-repo-syncer                                              | `[]`                   |
@@ -191,6 +190,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cloneStaticSiteFromGit.gitSync.resources.limits`   | The resources limits for the git-repo-syncer container                                              | `{}`                   |
 | `cloneStaticSiteFromGit.gitSync.resources.requests` | The requested resources for the git-repo-syncer container                                           | `{}`                   |
 | `cloneStaticSiteFromGit.extraEnvVars`               | Additional environment variables to set for the in the containers that clone static site from git   | `[]`                   |
+| `cloneStaticSiteFromGit.extraEnvVarsSecret`         | Secret with extra environment variables                                                             | `""`                   |
 | `cloneStaticSiteFromGit.extraVolumeMounts`          | Add extra volume mounts for the Git containers                                                      | `[]`                   |
 | `serverBlock`                                       | Custom server block to be added to NGINX configuration                                              | `""`                   |
 | `existingServerBlockConfigmap`                      | ConfigMap with custom server block to be added to NGINX configuration                               | `""`                   |
