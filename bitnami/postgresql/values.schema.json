@@ -175,7 +175,7 @@
                 "tag": {
                     "type": "string",
                     "description": "PostgreSQL image tag (immutable tags are recommended)",
-                    "default": "15.4.0-debian-11-r34"
+                    "default": "15.4.0-debian-11-r39"
                 },
                 "digest": {
                     "type": "string",
@@ -1788,7 +1788,7 @@
                                 "enabled": {
                                     "type": "boolean",
                                     "description": "Enable PodSecurityContext for CronJob/Backup",
-                                    "default": false
+                                    "default": true
                                 },
                                 "fsGroup": {
                                     "type": "number",
@@ -1872,6 +1872,11 @@
                         "annotations": {
                             "type": "object",
                             "description": "Set the cronjob annotations",
+                            "default": {}
+                        },
+                        "nodeSelector": {
+                            "type": "object",
+                            "description": "Node labels for PostgreSQL backup CronJob pod assignment",
                             "default": {}
                         },
                         "storage": {
@@ -2035,7 +2040,7 @@
                         "tag": {
                             "type": "string",
                             "description": "Init container volume-permissions image tag (immutable tags are recommended)",
-                            "default": "11-debian-11-r69"
+                            "default": "11-debian-11-r72"
                         },
                         "digest": {
                             "type": "string",
@@ -2187,7 +2192,7 @@
                         "tag": {
                             "type": "string",
                             "description": "PostgreSQL Prometheus Exporter image tag (immutable tags are recommended)",
-                            "default": "0.13.2-debian-11-r50"
+                            "default": "0.14.0-debian-11-r0"
                         },
                         "digest": {
                             "type": "string",
