@@ -545,7 +545,7 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `ociCatalog.image.tag`                             | OCI Catalog image tag (immutable tags are recommended)                                                      | `latest`                       |
 | `ociCatalog.image.digest`                          | OCI Catalog image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                           |
 | `ociCatalog.image.pullPolicy`                      | OCI Catalog image pull policy                                                                               | `IfNotPresent`                 |
-| `ociCatalog.image.pullSecrets`                     | Dashboard image pull secrets                                                                                | `[]`                           |
+| `ociCatalog.image.pullSecrets`                     | OCI Catalog image pull secrets                                                                              | `[]`                           |
 | `ociCatalog.image.debug`                           | Enable image debug mode                                                                                     | `false`                        |
 | `ociCatalog.extraFlags`                            | Additional command line flags for OCI Catalog                                                               | `[]`                           |
 | `ociCatalog.extraEnvVars`                          | Array with extra environment variables to add to the oci-catalog container                                  | `[]`                           |
