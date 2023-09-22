@@ -1387,14 +1387,12 @@ networkPolicy:
   ingressNSPodMatchLabels: {}
 
   metrics:
-    ## @param networkPolicy.allowExternal Don't require client label for connections
-    ## When set to false, only pods with the correct client label will have network access to the ports
-    ## Redis&reg; is listening on. When true, Redis&reg; will accept connections from any source
-    ## (with the correct destination port).
+    ## @param networkPolicy.metrics.allowExternal Don't require client label for connections for metrics endpoint
+    ## When set to false, only pods with the correct client label will have network access to the metrics port
     ##
     allowExternal: true
-    ## @param networkPolicy.ingressNSMatchLabels Labels to match to allow traffic from other namespaces
-    ## @param networkPolicy.ingressNSPodMatchLabels Pod labels to match to allow traffic from other namespaces
+    ## @param networkPolicy.metrics.ingressNSMatchLabels Labels to match to allow traffic from other namespaces to metrics endpoint
+    ## @param networkPolicy.metrics.ingressNSPodMatchLabels Pod labels to match to allow traffic from other namespaces to metrics endpoint
     ##
     ingressNSMatchLabels: {}
     ingressNSPodMatchLabels: {}
