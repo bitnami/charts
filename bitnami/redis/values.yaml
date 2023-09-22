@@ -1385,6 +1385,20 @@ networkPolicy:
   ##
   ingressNSMatchLabels: {}
   ingressNSPodMatchLabels: {}
+
+  metrics:
+    ## @param networkPolicy.allowExternal Don't require client label for connections
+    ## When set to false, only pods with the correct client label will have network access to the ports
+    ## Redis&reg; is listening on. When true, Redis&reg; will accept connections from any source
+    ## (with the correct destination port).
+    ##
+    allowExternal: true
+    ## @param networkPolicy.ingressNSMatchLabels Labels to match to allow traffic from other namespaces
+    ## @param networkPolicy.ingressNSPodMatchLabels Pod labels to match to allow traffic from other namespaces
+    ##
+    ingressNSMatchLabels: {}
+    ingressNSPodMatchLabels: {}
+  
 ## PodSecurityPolicy configuration
 ## ref: https://kubernetes.io/docs/concepts/policy/pod-security-policy/
 ##
