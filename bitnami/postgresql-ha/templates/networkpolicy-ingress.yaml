@@ -14,7 +14,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  {{- $postgresqlPodLabels := merge .Values.postgresql.podLabels .Values.commonLabels }}
+  {{- $postgresqlPodLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.postgresql.podLabels .Values.commonLabels ) "context" . ) }}
   podSelector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $postgresqlPodLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: postgresql

@@ -9,7 +9,7 @@ kind: PrometheusRule
 metadata:
   name: {{ include "common.names.fullname" . }}
   namespace: {{ default .Release.Namespace .Values.metrics.prometheusRule.namespace }}
-  {{- $labels := merge .Values.metrics.prometheusRule.labels .Values.commonLabels }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.metrics.prometheusRule.labels .Values.commonLabels ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: metrics
   {{- if .Values.commonAnnotations }}

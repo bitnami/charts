@@ -20,7 +20,7 @@ spec:
   {{- if .Values.studio.updateStrategy }}
   strategy: {{- toYaml .Values.studio.updateStrategy | nindent 4 }}
   {{- end }}
-  {{- $podLabels := merge .Values.studio.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.studio.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: studio

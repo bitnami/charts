@@ -26,7 +26,7 @@ metadata:
     prometheus-operator/monitor: 'true'
     {{- end }}
   {{- if or $.Values.storegateway.service.annotations $.Values.commonAnnotations }}
-  {{- $annotations := merge $.Values.storegateway.service.annotations $.Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list $.Values.storegateway.service.annotations $.Values.commonAnnotations ) "context" $ ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
@@ -69,7 +69,7 @@ spec:
     {{- if $.Values.storegateway.service.labelSelectorsOverride }}
     {{- include "common.tplvalues.render" (dict "value" $.Values.storegateway.service.labelSelectorsOverride "context" $) | nindent 4 }}
     {{- else }}
-    {{- $podLabels := merge $.Values.storegateway.podLabels $.Values.commonLabels }}
+    {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list $.Values.storegateway.podLabels $.Values.commonLabels ) "context" $ ) }}
     {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: storegateway
     shard: {{ $index | quote }}

@@ -12,7 +12,7 @@ metadata:
     app.kubernetes.io/part-of: grafana-mimir
     app.kubernetes.io/component: mimir
   {{- if or .Values.commonAnnotations .Values.mimir.gossipRing.service.annotations }}
-  {{- $annotations := merge .Values.mimir.gossipRing.service.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.mimir.gossipRing.service.annotations .Values.commonAnnotations ) "context" . ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:

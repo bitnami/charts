@@ -6,7 +6,7 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: metrics-server
-      image: docker.io/bitnami/metrics-server:0.6.4-debian-11-r24
+      image: docker.io/bitnami/metrics-server:0.6.4-debian-11-r50
 apiVersion: v2
 appVersion: 0.6.4
 dependencies:
@@ -27,5 +27,5 @@ maintainers:
   url: https://github.com/bitnami/charts
 name: metrics-server
 sources:
-  - https://github.com/bitnami/charts/tree/main/bitnami/metrics-server
-version: 6.5.0
+- https://github.com/bitnami/charts/tree/main/bitnami/metrics-server
+version: 6.5.2

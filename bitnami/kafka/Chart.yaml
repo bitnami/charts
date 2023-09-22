@@ -10,7 +10,7 @@ annotations:
     - name: kafka-exporter
       image: docker.io/bitnami/kafka-exporter:1.7.0-debian-11-r102
     - name: kafka
-      image: docker.io/bitnami/kafka:3.5.1-debian-11-r41
+      image: docker.io/bitnami/kafka:3.5.1-debian-11-r44
     - name: kubectl
       image: docker.io/bitnami/kubectl:1.25.13-debian-11-r11
     - name: os-shell
@@ -41,5 +41,5 @@ maintainers:
     url: https://github.com/bitnami/charts
 name: kafka
 sources:
-  - https://github.com/bitnami/charts/tree/main/bitnami/kafka
-version: 25.1.8
+- https://github.com/bitnami/charts/tree/main/bitnami/kafka
+version: 25.1.11

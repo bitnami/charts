@@ -21,7 +21,7 @@ spec:
     metadata:
       labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 8 }}
       {{- if or .Values.commonAnnotations .Values.grafana.persistence.annotations }}
-      {{- $annotations := merge .Values.grafana.persistence.annotations .Values.commonAnnotations }}
+      {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.grafana.persistence.annotations .Values.commonAnnotations ) "context" . ) }}
       annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 8 }}
       {{- end }}
     spec:
@@ -39,7 +39,7 @@ spec:
   {{- end }}
   service:
     {{- if or .Values.commonAnnotations .Values.grafana.service.annotations }}
-    {{- $annotations := merge .Values.grafana.service.annotations .Values.commonAnnotations }}
+    {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.grafana.service.annotations .Values.commonAnnotations ) "context" . ) }}
     metadata:
       annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 8 }}
     {{- end }}
@@ -186,10 +186,10 @@ spec:
           secretName: {{ .Values.grafana.ingress.tlsSecret }}
       {{- end }}
     metadata:
-      {{- $labels := merge .Values.grafana.ingress.labels .Values.grafana.labels .Values.commonLabels }}
+      {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.grafana.ingress.labels .Values.grafana.labels .Values.commonLabels ) "context" . ) }}
       labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 8 }}
       {{- if or .Values.commonAnnotations .Values.grafana.ingress.annotations }}
-      {{- $annotations := merge .Values.grafana.ingress.annotations .Values.commonAnnotations }}
+      {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.grafana.ingress.annotations .Values.commonAnnotations ) "context" . ) }}
       annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 8 }}
       {{- end }}
   {{- end }}

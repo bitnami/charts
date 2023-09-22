@@ -21,7 +21,7 @@ spec:
       targetPort: metrics
       protocol: TCP
       name: metrics
-  {{- $podLabels := merge .Values.operator.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.operator.podLabels .Values.commonLabels ) "context" . ) }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
 ---
 apiVersion: monitoring.coreos.com/v1
@@ -29,7 +29,7 @@ kind: ServiceMonitor
 metadata:
   name: {{ include "common.names.fullname" . }}
   namespace: {{ default (include "common.names.namespace" .) .Values.operator.prometheus.serviceMonitor.namespace }}
-  {{- $labels := merge .Values.operator.prometheus.serviceMonitor.labels .Values.commonLabels }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.operator.prometheus.serviceMonitor.labels .Values.commonLabels ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}

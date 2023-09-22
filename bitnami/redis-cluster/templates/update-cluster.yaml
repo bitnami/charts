@@ -11,19 +11,19 @@ metadata:
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
   annotations:
-    "helm.sh/hook": post-upgrade
+    "helm.sh/hook": {{ .Values.updateJob.helmHook }}
     {{- if or .Values.updateJob.annotations .Values.commonAnnotations }}
-    {{- $annotations := merge .Values.updateJob.annotations .Values.commonAnnotations }}
+    {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.updateJob.annotations .Values.commonAnnotations ) "context" . ) }}
     {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
     {{- end }}
 spec:
   activeDeadlineSeconds: {{ .Values.updateJob.activeDeadlineSeconds }}
   template:
     metadata:
-      {{- $labels := merge .Values.updateJob.podLabels .Values.commonLabels }}
+      {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.updateJob.podLabels .Values.commonLabels ) "context" . ) }}
       labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 8 }}
       {{- if or .Values.updateJob.podAnnotations .Values.commonAnnotations }}
-      {{- $annotations := merge .Values.updateJob.annotations .Values.commonAnnotations }}
+      {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.updateJob.annotations .Values.commonAnnotations ) "context" . ) }}
       annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 8 }}
       {{- end }}
     spec:

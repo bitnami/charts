@@ -9,12 +9,13 @@ kind: ServiceMonitor
 metadata:
   name: {{ template "flux.kustomize-controller.fullname" . }}
   namespace: {{ default (include "common.names.namespace" .) .Values.kustomizeController.metrics.serviceMonitor.namespace | quote }}
-  {{- $labels := merge .Values.kustomizeController.metrics.serviceMonitor.labels .Values.commonLabels }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.kustomizeController.image "chart" .Chart ) ) }}  
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.kustomizeController.metrics.serviceMonitor.labels .Values.commonLabels $versionLabel ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: flux
     app.kubernetes.io/component: kustomize-controller
   {{- if or .Values.kustomizeController.metrics.serviceMonitor.annotations .Values.commonAnnotations }}
-  {{- $annotations := merge .Values.kustomizeController.metrics.serviceMonitor.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.kustomizeController.metrics.serviceMonitor.annotations .Values.commonAnnotations ) "context" . ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:

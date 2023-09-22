@@ -12,7 +12,7 @@ metadata:
     app.kubernetes.io/part-of: supabase
     app.kubernetes.io/component: storage
   {{- if or .Values.storage.service.annotations .Values.commonAnnotations }}
-  {{- $annotations := merge .Values.storage.service.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.storage.service.annotations .Values.commonAnnotations ) "context" . ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
@@ -49,6 +49,6 @@ spec:
     {{- if .Values.storage.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.storage.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}
-  {{- $podLabels := merge .Values.storage.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.storage.podLabels .Values.commonLabels ) "context" . ) }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: storage
