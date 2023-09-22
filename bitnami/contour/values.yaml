@@ -112,7 +112,7 @@ contour:
     ##
     pullSecrets: []
     debug: false
-  ## @param contour.contourConfigName Contour Deployment with Contourconfiguration CRD.
+  ## @param contour.contourConfigName Contour Deployment with ContourConfiguration CRD.
   # 
   contourConfigName: "contour"
   ## @param contour.configPath Contour Deployment with configmap.
