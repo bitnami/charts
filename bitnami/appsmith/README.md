@@ -531,6 +531,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 2.0.0
+
+This major updates the MongoDB&reg; subchart to its newest major, [14.0.0](https://github.com/bitnami/charts/tree/main/bitnami/mongodb#to-1400). No major issues are expected during the upgrade.
+
 ### To 1.0.0
 
 This major updates the Redis&reg; subchart to its newest major, 18.0.0. [Here](https://github.com/bitnami/charts/tree/main/bitnami/redis#to-1800) you can find more information about the changes introduced in that version.
