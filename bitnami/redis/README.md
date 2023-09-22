@@ -443,9 +443,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `networkPolicy.extraEgress`                     | Add extra egress rules to the NetworkPolicy                                                                                                 | `[]`    |
 | `networkPolicy.ingressNSMatchLabels`            | Labels to match to allow traffic from other namespaces                                                                                      | `{}`    |
 | `networkPolicy.ingressNSPodMatchLabels`         | Pod labels to match to allow traffic from other namespaces                                                                                  | `{}`    |
-| `networkPolicy.metrics.allowExternal`           | Don't require client label for connections (metrics endpoint)                                                                               | `true`  |
-| `networkPolicy.metrics.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces (metrics endpoint)                                                                   | `{}`    |
-| `networkPolicy.metrics.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces (metrics endpoint)                                                               | `{}`    |
+| `networkPolicy.metrics.allowExternal`           | Don't require client label for connections for metrics endpoint                                                                             | `true`  |
+| `networkPolicy.metrics.ingressNSMatchLabels`    | Labels to match to allow traffic from other namespaces to metrics endpoint                                                                  | `{}`    |
+| `networkPolicy.metrics.ingressNSPodMatchLabels` | Pod labels to match to allow traffic from other namespaces to metrics endpoint                                                              | `{}`    |
 | `podSecurityPolicy.create`                      | Whether to create a PodSecurityPolicy. WARNING: PodSecurityPolicy is deprecated in Kubernetes v1.21 or later, unavailable in v1.25 or later | `false` |
 | `podSecurityPolicy.enabled`                     | Enable PodSecurityPolicy's RBAC rules                                                                                                       | `false` |
 | `rbac.create`                                   | Specifies whether RBAC resources should be created                                                                                          | `false` |
