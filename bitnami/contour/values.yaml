@@ -112,7 +112,10 @@ contour:
     ##
     pullSecrets: []
     debug: false
-  ## @param contour.replicaCount Number of Contour Pod replicas
+  ## @param contour.replicaCount Number of Contour Pod replicas 
+  #  
+  configPath: true
+  ## @param contour.configPath Contour Deployment with configmap.
   ##
   replicaCount: 1
   ## @param contour.priorityClassName Priority class assigned to the pods
