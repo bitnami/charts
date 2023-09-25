@@ -23,7 +23,7 @@ spec:
   {{- if .Values.queryFrontend.pdb.maxUnavailable }}
   maxUnavailable: {{ .Values.queryFrontend.pdb.maxUnavailable }}
   {{- end  }}
-  {{- $podLabels := merge .Values.queryFrontend.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.queryFrontend.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/part-of: grafana-mimir

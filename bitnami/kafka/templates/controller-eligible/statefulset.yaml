@@ -439,7 +439,7 @@ spec:
         resources:
           requests:
             storage: {{ .Values.controller.logPersistence.size | quote }}
-        {{- include "common.storage.class" (dict "persistence" .Values.controller.persistence "global" .Values.global) | nindent 8 }}
+        {{- include "common.storage.class" (dict "persistence" .Values.controller.logPersistence "global" .Values.global) | nindent 8 }}
         {{- if .Values.controller.logPersistence.selector }}
         selector: {{- include "common.tplvalues.render" (dict "value" .Values.controller.logPersistence.selector "context" $) | nindent 10 }}
         {{- end -}}

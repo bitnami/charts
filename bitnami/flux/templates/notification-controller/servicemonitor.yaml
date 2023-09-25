@@ -9,12 +9,13 @@ kind: ServiceMonitor
 metadata:
   name: {{ template "flux.notification-controller.fullname" . }}
   namespace: {{ default (include "common.names.namespace" .) .Values.notificationController.metrics.serviceMonitor.namespace | quote }}
-  {{- $labels := merge .Values.notificationController.metrics.serviceMonitor.labels .Values.commonLabels }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.notificationController.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.notificationController.metrics.serviceMonitor.labels .Values.commonLabels $versionLabel ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: flux
     app.kubernetes.io/component: notification-controller
   {{- if or .Values.notificationController.metrics.serviceMonitor.annotations .Values.commonAnnotations }}
-  {{- $annotations := merge .Values.notificationController.metrics.serviceMonitor.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.notificationController.metrics.serviceMonitor.annotations .Values.commonAnnotations ) "context" . ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:

@@ -10,7 +10,7 @@ Compactor pod template. Shared between Cronjob and deployment
 */}}
 {{- define "thanos.compactor.podTemplate" -}}
 metadata:
-  {{- $podLabels := merge .Values.compactor.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.compactor.podLabels .Values.commonLabels ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: compactor
   annotations:

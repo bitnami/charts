@@ -15,7 +15,7 @@ metadata:
     helm.sh/resource-policy: {{ .Values.persistence.resourcePolicy | quote }}
     {{- end }}
     {{- if or .Values.persistence.annotations .Values.commonAnnotations }}
-    {{- $annotations := merge .Values.persistence.annotations .Values.commonAnnotations }}
+    {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.persistence.annotations .Values.commonAnnotations ) "context" . ) }}
     {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
     {{- end }}
 spec:

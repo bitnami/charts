@@ -18,7 +18,7 @@ spec:
   {{- if .Values.metricsGenerator.updateStrategy }}
   strategy: {{- toYaml .Values.metricsGenerator.updateStrategy | nindent 4 }}
   {{- end }}
-  {{- $podLabels := merge .Values.metricsGenerator.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.metricsGenerator.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: metrics-generator

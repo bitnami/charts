@@ -306,8 +306,11 @@ podSecurityContext:
 ## @param containerSecurityContext.runAsUser Set etcd container's Security Context runAsUser
 ## @param containerSecurityContext.runAsNonRoot Set etcd container's Security Context runAsNonRoot
 ## @param containerSecurityContext.allowPrivilegeEscalation Force the child process to be run as nonprivilege
+## @param containerSecurityContext.seccompProfile.type indicates that the container will use the default Seccomp profile provided by the runtime environment
 ##
 containerSecurityContext:
+  seccompProfile:
+    type: RuntimeDefault
   enabled: true
   runAsUser: 1001
   runAsNonRoot: true

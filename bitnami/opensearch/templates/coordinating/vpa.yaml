@@ -13,7 +13,7 @@ metadata:
     app.kubernetes.io/part-of: opensearch
     app.kubernetes.io/component: coordinating-only
   {{- if or .Values.coordinating.autoscaling.vpa.annotations .Values.commonAnnotations }}
-  {{- $annotations := merge .Values.coordinating.autoscaling.vpa.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.coordinating.autoscaling.vpa.annotations .Values.commonAnnotations ) "context" . ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:

@@ -21,7 +21,7 @@ spec:
   {{- if .Values.query.updateStrategy }}
   strategy: {{- toYaml .Values.query.updateStrategy | nindent 4 }}
   {{- end }}
-  {{- $podLabels := merge .Values.query.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.query.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: query

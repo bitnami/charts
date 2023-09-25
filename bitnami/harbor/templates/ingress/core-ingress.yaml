@@ -43,7 +43,7 @@ metadata:
     {{- end }}
   {{- end }}
   {{- if or .Values.ingress.core.annotations .Values.commonAnnotations }}
-    {{- $annotations := merge .Values.ingress.core.annotations .Values.commonAnnotations }}
+    {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.ingress.core.annotations .Values.commonAnnotations ) "context" . ) }}
     {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
