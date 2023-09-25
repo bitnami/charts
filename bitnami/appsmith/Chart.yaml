@@ -37,4 +37,4 @@ maintainers:
 name: appsmith
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/appsmith
-version: 1.0.5
+version: 1.0.6
