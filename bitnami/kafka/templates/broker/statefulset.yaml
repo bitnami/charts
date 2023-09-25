@@ -152,7 +152,7 @@ spec:
             - name: KAFKA_KRAFT_CLUSTER_ID
               valueFrom:
                 secretKeyRef:
-                  name: {{ printf "%s-kraft-cluster-id" (include "common.names.fullname" .) }}
+                  name: {{ ternary (printf "%s-kraft-cluster-id" (include "common.names.fullname" .)) .Values.kraft.existingClusterIdSecret  (not .Values.kraft.existingClusterIdSecret) }}
                   key: kraft-cluster-id
             {{- if .Values.broker.zookeeperMigrationMode }}
             - name: KAFKA_SKIP_KRAFT_STORAGE_INIT
