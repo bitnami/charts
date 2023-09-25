@@ -3,7 +3,7 @@ Copyright VMware, Inc.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- $podLabels := merge .Values.podLabels .Values.commonLabels }}
+{{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
 {{- if and .Values.networkPolicy.enabled .Values.networkPolicy.ingressRules.backendOnlyAccessibleByFrontend }}
 apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
 kind: NetworkPolicy

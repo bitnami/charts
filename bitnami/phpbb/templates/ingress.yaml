@@ -13,7 +13,7 @@ metadata:
     app.kubernetes.io/component: phpbb
   annotations:
     {{- if or .Values.ingress.annotations .Values.commonAnnotations }}
-    {{- $annotations := merge .Values.ingress.annotations .Values.commonAnnotations }}
+    {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.ingress.annotations .Values.commonAnnotations ) "context" . ) }}
     {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
     {{- end }}
     {{- if .certManager }}

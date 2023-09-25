@@ -20,7 +20,7 @@ envoy:
   enabled: true
   containerPorts:
     http: 8080
-    https: 8080
+    https: 8443
   service:
     type: LoadBalancer
     externalTrafficPolicy: Local

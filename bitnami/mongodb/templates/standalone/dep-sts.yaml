@@ -9,11 +9,11 @@ kind: {{ if .Values.useStatefulSet }}StatefulSet{{- else }}Deployment{{- end }}
 metadata:
   name: {{ include "mongodb.fullname" . }}
   namespace: {{ include "mongodb.namespace" . | quote }}
-  {{- $labels := merge .Values.labels .Values.commonLabels }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.labels .Values.commonLabels ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: mongodb
   {{- if or .Values.annotations .Values.commonAnnotations }}
-  {{- $annotations := merge .Values.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.annotations .Values.commonAnnotations ) "context" . ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
@@ -29,7 +29,7 @@ spec:
   {{- end }}
     {{- toYaml .Values.updateStrategy | nindent 4 }}
   {{- end}}
-  {{- $podLabels := merge .Values.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: mongodb

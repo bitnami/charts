@@ -22,7 +22,7 @@ spec:
     spec:
       template:
         metadata:
-          {{- $podLabels := merge .Values.podLabels .Values.commonLabels }}
+          {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
           labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 12 }}
             app.kubernetes.io/component: mail-receiver
           {{- if .Values.mailReceiver.podAnnotations }}

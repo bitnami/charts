@@ -20,7 +20,7 @@ metadata:
   labels: {{- include "common.labels.standard" ( dict "customLabels" $root.Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: mongodb
   {{- if or $root.Values.service.annotations $root.Values.commonAnnotations }}
-  {{- $annotations := merge $root.Values.service.annotations $root.Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list $root.Values.service.annotations $root.Values.commonAnnotations ) "context" $ ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
@@ -32,7 +32,7 @@ spec:
     {{- if $root.Values.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" $root.Values.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}
-  {{- $podLabels := merge $root.Values.podLabels $root.Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list $root.Values.podLabels $root.Values.commonLabels ) "context" $ ) }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: mongodb
     statefulset.kubernetes.io/pod-name: {{ $targetPod }}

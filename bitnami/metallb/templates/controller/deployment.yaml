@@ -19,7 +19,7 @@ spec:
   strategy: {{- toYaml .Values.controller.updateStrategy | nindent 4 }}
   {{- end }}
   revisionHistoryLimit: {{ .Values.controller.revisionHistoryLimit }}
-  {{- $podLabels := merge .Values.controller.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.controller.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: controller

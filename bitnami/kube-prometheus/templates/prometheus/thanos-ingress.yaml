@@ -11,16 +11,10 @@ metadata:
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "kube-prometheus.prometheus.labels" . | nindent 4 }}
     app.kubernetes.io/subcomponent: thanos
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
-  annotations:
-    {{- if .Values.prometheus.thanos.ingress.annotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.prometheus.thanos.ingress.annotations "context" $ ) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-    {{- end }}
+  {{- if or .Values.prometheus.thanos.ingress.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.prometheus.thanos.ingress.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   {{- if and .Values.prometheus.thanos.ingress.ingressClassName (include "common.ingress.supportsIngressClassname" .) }}
   ingressClassName: {{ .Values.prometheus.thanos.ingress.ingressClassName | quote }}

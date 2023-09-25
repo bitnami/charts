@@ -13,13 +13,13 @@ metadata:
     app.kubernetes.io/part-of: deepspeed
     app.kubernetes.io/component: worker
   {{- if or .Values.commonAnnotations .Values.worker.headlessServiceAnnotations }}
-  {{- $annotations := merge .Values.worker.headlessServiceAnnotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.worker.headlessServiceAnnotations .Values.commonAnnotations ) "context" . ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
   type: ClusterIP
   clusterIP: None
-  {{- $podLabels := merge .Values.worker.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.worker.podLabels .Values.commonLabels ) "context" . ) }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: deepspeed
     app.kubernetes.io/component: worker

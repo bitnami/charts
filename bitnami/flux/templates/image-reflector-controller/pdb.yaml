@@ -9,7 +9,9 @@ kind: PodDisruptionBudget
 metadata:
   name: {{ template "flux.image-reflector-controller.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.imageReflectorController.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: flux
     app.kubernetes.io/component: image-reflector-controller
   {{- if .Values.commonAnnotations }}
@@ -22,7 +24,7 @@ spec:
   {{- if .Values.imageReflectorController.pdb.maxUnavailable }}
   maxUnavailable: {{ .Values.imageReflectorController.pdb.maxUnavailable }}
   {{- end }}
-  {{- $podLabels := merge .Values.imageReflectorController.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.imageReflectorController.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: image-reflector-controller

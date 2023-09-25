@@ -13,7 +13,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  {{- $podLabels := merge .Values.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
   {{- if .Values.updateStrategy }}
@@ -187,7 +187,7 @@ spec:
               value: {{ .Values.matomoWebsiteName | quote }}
             - name: MATOMO_WEBSITE_HOST
               value: {{ .Values.matomoWebsiteHost | quote }}
-            {{- if .Values.smtpAuth -}}
+            {{- if .Values.smtpAuth }}
             - name: MATOMO_SMTP_AUTH
               value: {{ .Values.smtpAuth | quote }}
             {{- end }}

@@ -13,7 +13,7 @@ kind: Service
 metadata:
   name: {{ printf "%s-%d-external" (include "common.names.fullname" $) $i | trunc 63 | trimSuffix "-" }}
   namespace: {{ include "common.names.namespace" $ | quote }}
-  {{- $labels := merge $.Values.externalAccess.broker.service.labels $.Values.commonLabels }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list $.Values.externalAccess.broker.service.labels $.Values.commonLabels ) "context" $ ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: kafka
     pod: {{ $targetPod }}
@@ -23,7 +23,7 @@ metadata:
     {{ include "common.tplvalues.render" ( dict "value" (index $.Values.externalAccess.broker.service.loadBalancerAnnotations $i) "context" $) | nindent 4 }}
     {{- end }}
     {{- if or $.Values.externalAccess.broker.service.annotations $.Values.commonAnnotations }}
-    {{- $annotations := merge $.Values.externalAccess.broker.service.annotations $.Values.commonAnnotations }}
+    {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list $.Values.externalAccess.broker.service.annotations $.Values.commonAnnotations ) "context" $ ) }}
     {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
     {{- end }}
   {{- end }}
@@ -53,7 +53,7 @@ spec:
   {{- if and (eq $.Values.externalAccess.broker.service.type "NodePort") (le (add $i 1) (len $.Values.externalAccess.broker.service.externalIPs)) }}
   externalIPs: [{{ index $.Values.externalAccess.broker.service.externalIPs $i | quote }}]
   {{- end }}
-  {{- $podLabels := merge $.Values.broker.podLabels $.Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list $.Values.broker.podLabels $.Values.commonLabels ) "context" $ ) }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: kafka
     app.kubernetes.io/component: broker

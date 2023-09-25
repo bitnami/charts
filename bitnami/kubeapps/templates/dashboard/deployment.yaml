@@ -19,7 +19,7 @@ spec:
   {{- if .Values.dashboard.updateStrategy }}
   strategy: {{- toYaml .Values.dashboard.updateStrategy | nindent 4 }}
   {{- end }}
-  {{- $podLabels := merge .Values.dashboard.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.dashboard.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: dashboard

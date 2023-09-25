@@ -17,7 +17,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" $.Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  {{- $podLabels := merge $.Values.shardsvr.arbiter.podLabels $.Values.common.podLabels $.Values.common.podLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list $.Values.shardsvr.arbiter.podLabels $.Values.common.podLabels $.Values.common.podLabels ) "context" $ ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: shardsvr-arbiter
@@ -33,7 +33,7 @@ spec:
       {{- if or $.Values.common.podAnnotations $.Values.shardsvr.arbiter.podAnnotations $.Values.metrics.enabled }}
       annotations:
         {{- if or $.Values.common.podAnnotations $.Values.shardsvr.arbiter.podAnnotations }}
-        {{- $annotations := merge $.Values.shardsvr.arbiter.podAnnotations $.Values.common.podAnnotations }}
+        {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list $.Values.shardsvr.arbiter.podAnnotations $.Values.common.podAnnotations ) "context" $ ) }}
         {{- include "common.tplvalues.render" ( dict "value" $annotations  "context" $ ) | nindent 8 }}
         {{- end }}
         {{- if $.Values.metrics.enabled }}

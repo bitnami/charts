@@ -11,7 +11,7 @@ metadata:
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: frontend
   {{- if or .Values.frontend.service.annotations .Values.commonAnnotations }}
-  {{- $annotations := merge .Values.frontend.service.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.frontend.service.annotations .Values.commonAnnotations ) "context" . ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
@@ -51,7 +51,7 @@ spec:
     {{- if .Values.frontend.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.frontend.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}
-  {{- $podLabels := merge .Values.frontend.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.frontend.podLabels .Values.commonLabels ) "context" . ) }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: frontend
 {{- if .Values.pinnipedProxy.enabled }}
@@ -66,7 +66,7 @@ metadata:
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: frontend
   {{- if or .Values.pinnipedProxy.service.annotations .Values.commonAnnotations }}
-  {{- $annotations := merge .Values.pinnipedProxy.service.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.pinnipedProxy.service.annotations .Values.commonAnnotations ) "context" . ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
@@ -76,7 +76,7 @@ spec:
       targetPort: pinniped-proxy
       protocol: TCP
       name: pinniped-proxy
-  {{- $podLabels := merge .Values.frontend.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.frontend.podLabels .Values.commonLabels ) "context" . ) }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: frontend
 {{- end }}

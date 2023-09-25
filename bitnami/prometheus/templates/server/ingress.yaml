@@ -13,7 +13,7 @@ metadata:
     app.kubernetes.io/part-of: prometheus
     app.kubernetes.io/component: alertmanager
   {{- if or .Values.server.ingress.annotations .Values.commonAnnotations }}
-  {{- $annotations := merge .Values.server.ingress.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.server.ingress.annotations .Values.commonAnnotations ) "context" . ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:

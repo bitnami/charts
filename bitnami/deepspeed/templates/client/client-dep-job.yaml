@@ -9,16 +9,16 @@ kind: {{ ternary "Job" "Deployment" .Values.client.useJob }}
 metadata:
   name: {{ include "deepspeed.v0.client.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  {{- $labels := merge .Values.client.labels .Values.commonLabels }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.client.labels .Values.commonLabels ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: deepspeed
     app.kubernetes.io/component: client
   {{- if or .Values.client.annotations .Values.commonAnnotations }}
-  {{- $annotations := merge .Values.client.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.client.annotations .Values.commonAnnotations ) "context" . ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
-  {{- $podLabels := merge .Values.client.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.client.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/part-of: deepspeed
@@ -40,7 +40,7 @@ spec:
         checksum/source: {{ include (print $.Template.BasePath "/client/source-configmap.yaml") . | sha256sum }}
         {{- end }}
         {{- if or .Values.client.podAnnotations .Values.commonAnnotations }}
-        {{- $annotations := merge .Values.client.podAnnotations .Values.commonAnnotations }}
+        {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.client.podAnnotations .Values.commonAnnotations ) "context" . ) }}
         {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 8 }}
         {{- end }}
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}

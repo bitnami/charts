@@ -9,12 +9,12 @@ kind: Service
 metadata:
   name: {{ include "common.names.fullname" . }}-storegateway
   namespace: {{ .Release.Namespace | quote }}
-  {{- $labels := merge .Values.storegateway.service.labels .Values.commonLabels }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.storegateway.service.labels .Values.commonLabels ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: storegateway
     {{- include "thanos.servicemonitor.matchLabels" . | nindent 4 -}}
   {{- if or .Values.storegateway.service.annotations .Values.commonAnnotations }}
-  {{- $annotations := merge .Values.storegateway.service.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.storegateway.service.annotations .Values.commonAnnotations ) "context" . ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
@@ -57,7 +57,7 @@ spec:
     {{- if .Values.storegateway.service.labelSelectorsOverride }}
     {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.service.labelSelectorsOverride "context" $) | nindent 4 }}
     {{- else }}
-    {{- $podLabels := merge .Values.storegateway.podLabels .Values.commonLabels }}
+    {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.storegateway.podLabels .Values.commonLabels ) "context" . ) }}
     {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: storegateway
     {{- end }}

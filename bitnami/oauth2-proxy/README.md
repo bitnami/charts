@@ -116,7 +116,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | ------------------------------------------------------------------------------------------------------------ | ---------------------- |
 | `image.registry`    | OAuth2 Proxy image registry                                                                                  | `docker.io`            |
 | `image.repository`  | OAuth2 Proxy image repository                                                                                | `bitnami/oauth2-proxy` |
-| `image.tag`         | OAuth2 Proxy image tag (immutable tags are recommended)                                                      | `7.4.0-debian-11-r278` |
+| `image.tag`         | OAuth2 Proxy image tag (immutable tags are recommended)                                                      | `7.5.0-debian-11-r3`   |
 | `image.digest`      | OAuth2 Proxy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
 | `image.pullPolicy`  | OAuth2 Proxy image pull policy                                                                               | `IfNotPresent`         |
 | `image.pullSecrets` | OAuth2 Proxy image pull secrets                                                                              | `[]`                   |
@@ -276,7 +276,7 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 ### Ingress
 
-This chart provides support for Ingress resources. If an Ingress controller, such as nginx-ingress or traefik, that Ingress controller can be used to serve OAuth2 Proxy.
+This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application.
 
 To enable Ingress integration, set `ingress.enabled` to `true`. The `ingress.hostname` property can be used to set the host name. The `ingress.tls` parameter can be used to add the TLS configuration for this host. It is also possible to have more than one host, with a separate TLS configuration for each host.
 

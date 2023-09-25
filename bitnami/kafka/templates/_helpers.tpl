@@ -286,10 +286,52 @@ Return the Kafka controller-eligible configuration configmap
 {{- end -}}
 
 {{/*
+Return the Kafka controller-eligible secret configuration
+*/}}
+{{- define "kafka.controller.secretConfigName" -}}
+{{- if .Values.controller.existingSecretConfig -}}
+    {{- include "common.tplvalues.render" (dict "value" .Values.controller.existingSecretConfig "context" $) -}}
+{{- else if .Values.existingSecretConfig -}}
+    {{- include "common.tplvalues.render" (dict "value" .Values.existingSecretConfig "context" $) -}}
+{{- else -}}
+    {{- printf "%s-controller-secret-configuration" (include "common.names.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the Kafka controller-eligible secret configuration values 
+*/}}
+{{- define "kafka.controller.secretConfig" -}}
+{{- if .Values.secretConfig }}
+{{- include "common.tplvalues.render" ( dict "value" .Values.secretConfig "context" $ ) }}
+{{- end }}
+{{- if .Values.controller.secretConfig }}
+{{- include "common.tplvalues.render" ( dict "value" .Values.controller.secretConfig "context" $ ) }}
+{{- end }}
+{{- end -}}
+
+{{/*
 Return true if a configmap object should be created for controller-eligible pods
 */}}
 {{- define "kafka.controller.createConfigmap" -}}
 {{- if and (not .Values.controller.existingConfigmap) (not .Values.existingConfigmap) }}
+    {{- true -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return true if a secret object with config should be created for controller-eligible pods
+*/}}
+{{- define "kafka.controller.createSecretConfig" -}}
+{{- if and (or .Values.controller.secretConfig .Values.secretConfig) (and (not .Values.controller.existingSecretConfig) (not .Values.existingSecretConfig)) }}
+    {{- true -}}
+{{- end -}}
+{{- end -}}
+{{/*
+Return true if a secret object with config exists for controller-eligible pods
+*/}}
+{{- define "kafka.controller.secretConfigExists" -}}
+{{- if or .Values.controller.secretConfig .Values.secretConfig .Values.controller.existingSecretConfig .Values.existingSecretConfig }}
     {{- true -}}
 {{- end -}}
 {{- end -}}
@@ -308,10 +350,53 @@ Return the Kafka broker configuration configmap
 {{- end -}}
 
 {{/*
+Return the Kafka broker secret configuration
+*/}}
+{{- define "kafka.broker.secretConfigName" -}}
+{{- if .Values.broker.existingSecretConfig -}}
+    {{- include "common.tplvalues.render" (dict "value" .Values.broker.existingSecretConfig "context" $) -}}
+{{- else if .Values.existingSecretConfig -}}
+    {{- include "common.tplvalues.render" (dict "value" .Values.existingSecretConfig "context" $) -}}
+{{- else -}}
+    {{- printf "%s-broker-secret-configuration" (include "common.names.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return the Kafka broker secret configuration values 
+*/}}
+{{- define "kafka.broker.secretConfig" -}}
+{{- if .Values.secretConfig }}
+{{- include "common.tplvalues.render" ( dict "value" .Values.secretConfig "context" $ ) }}
+{{- end }}
+{{- if .Values.broker.secretConfig }}
+{{- include "common.tplvalues.render" ( dict "value" .Values.broker.secretConfig "context" $ ) }}
+{{- end }}
+{{- end -}}
+
+{{/*
 Return true if a configmap object should be created for broker pods
 */}}
 {{- define "kafka.broker.createConfigmap" -}}
 {{- if and (not .Values.broker.existingConfigmap) (not .Values.existingConfigmap) }}
+    {{- true -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return true if a secret object with config should be created for broker pods
+*/}}
+{{- define "kafka.broker.createSecretConfig" -}}
+{{- if and (or .Values.broker.secretConfig .Values.secretConfig) (and (not .Values.broker.existingSecretConfig) (not .Values.existingSecretConfig)) }}
+    {{- true -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
+Return true if a secret object with config exists for broker pods
+*/}}
+{{- define "kafka.broker.secretConfigExists" -}}
+{{- if or .Values.broker.secretConfig .Values.secretConfig .Values.broker.existingSecretConfig .Values.existingSecretConfig }}
     {{- true -}}
 {{- end -}}
 {{- end -}}
@@ -747,6 +832,8 @@ Init container definition for Kafka initialization
       mountPath: /config
     - name: kafka-configmaps
       mountPath: /configmaps
+    - name: kafka-secret-config
+      mountPath: /secret-config
     - name: scripts
       mountPath: /scripts
     - name: tmp

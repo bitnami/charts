@@ -12,11 +12,11 @@ kind: StatefulSet
 metadata:
   name: {{ printf "%s-hidden" (include "mongodb.fullname" .) }}
   namespace: {{ include "mongodb.namespace" . | quote }}
-  {{- $labels := merge .Values.hidden.labels .Values.commonLabels }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.hidden.labels .Values.commonLabels ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: hidden
   {{- if or .Values.hidden.annotations .Values.commonAnnotations }}
-  {{- $annotations := merge .Values.hidden.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.hidden.annotations .Values.commonAnnotations ) "context" . ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
@@ -26,7 +26,7 @@ spec:
   {{- if .Values.hidden.updateStrategy }}
   updateStrategy: {{- toYaml .Values.hidden.updateStrategy | nindent 4 }}
   {{- end }}
-  {{- $podLabels := merge .Values.hidden.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.hidden.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: hidden

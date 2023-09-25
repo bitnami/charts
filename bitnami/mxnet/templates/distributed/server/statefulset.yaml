@@ -20,7 +20,7 @@ spec:
   updateStrategy: {{- toYaml .Values.server.updateStrategy | nindent 4 }}
   {{- end }}
   podManagementPolicy: {{ .Values.server.podManagementPolicy }}
-  {{- $podLabels := merge .Values.server.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.server.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: server
@@ -247,7 +247,7 @@ spec:
     - metadata:
         name: data
         {{- if or .Values.persistence.annotations .Values.commonAnnotations }}
-        {{- $claimAnnotations := merge .Values.persistence.annotations .Values.commonAnnotations }}
+        {{- $claimAnnotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.persistence.annotations .Values.commonAnnotations ) "context" . ) }}
         annotations: {{- include "common.tplvalues.render" ( dict "value" $claimAnnotations "context" $) | nindent 4 }}
         {{- end }}
         {{- if .Values.commonLabels }}

@@ -9,7 +9,9 @@ apiVersion: {{ include "common.capabilities.policy.apiVersion" . }}
 metadata:
   name: {{ printf "%s-scheduler" (include "common.names.fullname" .) }}
   namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.scheduler.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: scheduler
 spec:
   {{- if .Values.scheduler.pdb.minAvailable }}
@@ -18,7 +20,7 @@ spec:
   {{- if .Values.scheduler.pdb.maxUnavailable }}
   maxUnavailable: {{ .Values.scheduler.pdb.maxUnavailable }}
   {{- end }}
-  {{- $podLabels := merge .Values.scheduler.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.scheduler.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: scheduler

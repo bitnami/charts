@@ -19,7 +19,7 @@ metadata:
   labels: {{- include "common.labels.standard" ( dict "customLabels" $root.Values.commonLabels "context" $ ) | nindent 4 }}
     pod: {{ $targetPod }}
   {{- if or $root.Values.cluster.externalAccess.service.annotations $root.Values.commonAnnotations }}
-  {{- $annotations := merge $root.Values.cluster.externalAccess.service.annotations $root.Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list $root.Values.cluster.externalAccess.service.annotations $root.Values.commonAnnotations ) "context" $ ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
@@ -37,7 +37,7 @@ spec:
     - name: tcp-redis-bus
       targetPort: tcp-redis-bus
       port: {{ $root.Values.redis.containerPorts.bus }}
-  {{- $podLabels := merge $root.Values.redis.podLabels $root.Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list $root.Values.redis.podLabels $root.Values.commonLabels ) "context" $ ) }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     statefulset.kubernetes.io/pod-name: {{ $targetPod }}
 ---

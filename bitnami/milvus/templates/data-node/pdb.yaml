@@ -22,7 +22,7 @@ spec:
   {{- if .Values.dataNode.pdb.maxUnavailable }}
   maxUnavailable: {{ .Values.dataNode.pdb.maxUnavailable }}
   {{- end }}
-  {{- $podLabels := merge .Values.dataNode.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.dataNode.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/part-of: milvus

@@ -10,7 +10,7 @@ metadata:
   name: {{ include "common.names.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
-  {{- $annotations := merge (include "minio.ingress.annotations" . | fromYaml) .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list (include "minio.ingress.annotations" . | fromYaml) .Values.commonAnnotations ) "context" . ) }}
   {{- if $annotations }}
   annotations: {{- include "common.tplvalues.render" (dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
@@ -45,9 +45,10 @@ spec:
     {{- if .Values.ingress.extraRules }}
     {{- include "common.tplvalues.render" (dict "value" .Values.ingress.extraRules "context" $) | nindent 4 }}
     {{- end }}
-  {{- if or (and .Values.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" $annotations )) .Values.ingress.selfSigned)) .Values.ingress.extraTls }}
+  {{- $annotationsMap := include "common.tplvalues.render" (dict "value" $annotations "context" $) | fromYaml }}
+  {{- if or (and .Values.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" $annotationsMap )) .Values.ingress.selfSigned)) .Values.ingress.extraTls }}
   tls:
-    {{- if and .Values.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" $annotations )) .Values.ingress.selfSigned) }}
+    {{- if and .Values.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" $annotationsMap )) .Values.ingress.selfSigned) }}
     - hosts:
         - {{ include "minio.ingress.hostname" . }}
       secretName: {{ printf "%s-tls" (include "minio.ingress.hostname" .) }}

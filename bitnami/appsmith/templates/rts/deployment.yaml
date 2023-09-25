@@ -18,7 +18,7 @@ spec:
   {{- if .Values.rts.updateStrategy }}
   strategy: {{- toYaml .Values.rts.updateStrategy | nindent 4 }}
   {{- end }}
-  {{- $podLabels := merge .Values.rts.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.rts.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: rts

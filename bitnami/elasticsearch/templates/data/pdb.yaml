@@ -21,7 +21,7 @@ spec:
   {{- if .Values.data.pdb.maxUnavailable }}
   maxUnavailable: {{ .Values.data.pdb.maxUnavailable }}
   {{- end }}
-  {{- $podLabels := merge .Values.data.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.data.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: data

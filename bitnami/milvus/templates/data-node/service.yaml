@@ -15,7 +15,7 @@ metadata:
   {{- if or .Values.commonAnnotations .Values.dataNode.service.annotations (and .Values.dataNode.metrics.enabled .Values.dataNode.metrics.annotations) }}
   annotations:
     {{- if or .Values.dataNode.service.annotations .Values.commonAnnotations }}
-    {{- $annotations := merge .Values.dataNode.service.annotations .Values.commonAnnotations }}
+    {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.dataNode.service.annotations .Values.commonAnnotations ) "context" . ) }}
     {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
     {{- end }}
     {{- if and .Values.dataNode.metrics.enabled .Values.dataNode.metrics.annotations }}
@@ -66,7 +66,7 @@ spec:
     {{- if .Values.dataNode.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.dataNode.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}
-  {{- $podLabels := merge .Values.dataNode.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.dataNode.podLabels .Values.commonLabels ) "context" . ) }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: milvus
     app.kubernetes.io/component: data-node

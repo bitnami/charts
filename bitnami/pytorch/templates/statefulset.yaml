@@ -16,7 +16,7 @@ spec:
   replicas: 1
   podManagementPolicy: {{ .Values.podManagementPolicy | quote }}
   serviceName: {{ printf "%s-headless" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
-  {{- $podLabels := merge .Values.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: worker
@@ -230,7 +230,7 @@ spec:
     - metadata:
         name: data
         {{- if or .Values.commonAnnotations .Values.persistence.annotations }}
-        {{- $annotations := merge .Values.persistence.annotations .Values.commonAnnotations }}
+        {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.persistence.annotations .Values.commonAnnotations ) "context" . ) }}
         annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 10 }}
         {{- end }}
         {{- if .Values.commonLabels }}

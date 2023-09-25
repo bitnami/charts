@@ -16,7 +16,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
-  {{- $clientPodLabels := merge .Values.client.podLabels .Values.commonLabels }}
+  {{- $clientPodLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.client.podLabels .Values.commonLabels ) "context" . ) }}
   podSelector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $clientPodLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/part-of: deepspeed
@@ -36,7 +36,7 @@ spec:
         - port: {{ .Values.worker.containerPorts.ssh }}
         - port: {{ .Values.worker.externalAccess.service.ports.ssh }}
       to:
-        {{- $workerPodLabels := merge .Values.worker.podLabels .Values.commonLabels }}
+        {{- $workerPodLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.worker.podLabels .Values.commonLabels ) "context" . ) }}
         - podSelector:
             matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $workerPodLabels "context" $ ) | nindent 14 }}
               app.kubernetes.io/part-of: deepspeed

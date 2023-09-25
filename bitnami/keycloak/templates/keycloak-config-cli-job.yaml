@@ -7,12 +7,12 @@ SPDX-License-Identifier: APACHE-2.0
 apiVersion: batch/v1
 kind: Job
 metadata:
-  name: {{ printf "%s-keycloak-config-cli" (tpl "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+  name: {{ printf "%s-keycloak-config-cli" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: keycloak-config-cli
   {{- if or .Values.keycloakConfigCli.annotations .Values.commonAnnotations }}
-  {{- $annotations := merge .Values.keycloakConfigCli.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.keycloakConfigCli.annotations .Values.commonAnnotations ) "context" . ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
@@ -22,7 +22,7 @@ spec:
   {{- end }}
   template:
     metadata:
-      {{- $podLabels := merge .Values.keycloakConfigCli.podLabels .Values.commonLabels }}
+      {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.keycloakConfigCli.podLabels .Values.commonLabels ) "context" . ) }}
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: keycloak-config-cli
       annotations:

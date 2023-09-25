@@ -2,7 +2,7 @@
 # SPDX-License-Identifier: APACHE-2.0
 
 http:
-  https://ejbca:{{ .Vars.service.ports.https }}:
+  https://ejbca:{{ .Vars.service.ports.https }}/ejbca/doc:
     status: 200
     allow-insecure: true
 file:

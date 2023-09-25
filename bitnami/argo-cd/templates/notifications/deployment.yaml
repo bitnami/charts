@@ -18,7 +18,7 @@ spec:
   replicas: 1
   strategy:
     type: Recreate
-  {{- $podLabels := merge .Values.notifications.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.notifications.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: notifications

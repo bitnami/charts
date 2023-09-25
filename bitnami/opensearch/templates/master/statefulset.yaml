@@ -16,7 +16,7 @@ metadata:
     app: master
     {{- end }}
   {{- if or .Values.master.annotations .Values.commonAnnotations }}
-  {{- $annotations := merge .Values.master.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.master.annotations .Values.commonAnnotations ) "context" . ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
@@ -24,7 +24,7 @@ spec:
   replicas: {{ .Values.master.replicaCount }}
   {{- end }}
   podManagementPolicy: {{ .Values.master.podManagementPolicy }}
-  {{- $podLabels := merge .Values.master.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.master.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: master
@@ -341,7 +341,7 @@ spec:
     - metadata:
         name: "data"
         {{- if or .Values.master.persistence.annotations .Values.commonAnnotations }}
-        {{- $claimAnnotations := merge .Values.master.persistence.annotations .Values.commonAnnotations }}
+        {{- $claimAnnotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.master.persistence.annotations .Values.commonAnnotations ) "context" . ) }}
         annotations: {{- include "common.tplvalues.render" ( dict "value" $claimAnnotations "context" $) | nindent 4 }}
         {{- end }}
         {{- if .Values.commonLabels }}

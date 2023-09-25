@@ -14,7 +14,7 @@ metadata:
   labels: {{- include "common.labels.standard" ( dict "customLabels" $.Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: mongos
   {{- if or $.Values.commonAnnotations $.Values.mongos.servicePerReplica.annotations }}
-  {{- $annotations := merge $.Values.mongos.servicePerReplica.annotations $.Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list $.Values.mongos.servicePerReplica.annotations $.Values.commonAnnotations ) "context" $ ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
@@ -58,7 +58,7 @@ spec:
     {{- if $.Values.mongos.servicePerReplica.extraPorts }}
       {{- include "common.tplvalues.render" (dict "value" $.Values.mongos.servicePerReplica.extraPorts "context" $context) | nindent 4 }}
     {{- end }}
-  {{- $podLabels := merge $.Values.mongos.podLabels $.Values.common.podLabels $.Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list $.Values.mongos.podLabels $.Values.common.podLabels $.Values.commonLabels ) "context" $ ) }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: mongos
     statefulset.kubernetes.io/pod-name: {{ printf "%s-mongos-%d" (include "common.names.fullname" $) $i }}

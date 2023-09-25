@@ -44,7 +44,7 @@ spec:
     - ports:
         - port: {{ coalesce .Values.hub.containerPorts.http .Values.hub.containerPort }}
       to:
-        {{- $hubPodLabels := merge .Values.hub.podLabels .Values.commonLabels }}
+        {{- $hubPodLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.hub.podLabels .Values.commonLabels ) "context" . ) }}
         - podSelector:
             matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $hubPodLabels "context" $ ) | nindent 14 }}
               app.kubernetes.io/component: hub

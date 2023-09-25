@@ -15,7 +15,7 @@ metadata:
 spec:
   podManagementPolicy: {{ .Values.podManagementPolicy }}
   replicas: {{ .Values.replicaCount }}
-  {{- $podLabels := merge .Values.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
   serviceName: {{ printf "%s-headless" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
@@ -465,7 +465,7 @@ spec:
   volumeClaimTemplates:
     - metadata:
         name: data
-        {{- $claimLabels := merge .Values.persistence.labels .Values.commonLabels }}
+        {{- $claimLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.persistence.labels .Values.commonLabels ) "context" . ) }}
         labels: {{- include "common.labels.matchLabels" ( dict "customLabels" $claimLabels "context" $ ) | nindent 10 }}
           app.kubernetes.io/managed-by: {{ .Release.Service }}
         {{- if .Values.persistence.annotations }}

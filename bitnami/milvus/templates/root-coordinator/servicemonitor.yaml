@@ -9,12 +9,12 @@ kind: ServiceMonitor
 metadata:
   name: {{ template "milvus.root-coordinator.fullname" . }}
   namespace: {{ default (include "common.names.namespace" .) .Values.rootCoord.metrics.serviceMonitor.namespace | quote }}
-  {{- $labels := merge .Values.rootCoord.metrics.serviceMonitor.labels .Values.commonLabels }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.rootCoord.metrics.serviceMonitor.labels .Values.commonLabels ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: milvus
     app.kubernetes.io/component: root-coordinator
   {{- if or .Values.commonAnnotations .Values.rootCoord.metrics.serviceMonitor.annotations }}
-  {{- $annotations := merge .Values.rootCoord.metrics.serviceMonitor.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.rootCoord.metrics.serviceMonitor.annotations .Values.commonAnnotations ) "context" . ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:

@@ -13,7 +13,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  {{- $podLabels := merge .Values.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
   replicas: {{ .Values.replicaCount }}
@@ -113,7 +113,7 @@ spec:
             - name: EJBCA_HTTP_PORT_NUMBER
               value: {{ .Values.containerPorts.http | quote }}
             - name: EJBCA_HTTPS_PORT_NUMBER
-              value: {{ .Values.service.httpsPort | quote }}
+              value: {{ .Values.containerPorts.https | quote }}
             - name: EJBCA_HTTPS_ADVERTISED_PORT_NUMBER
               value: {{ .Values.service.advertisedHttpsPort | quote }}
             {{- if .Values.ejbcaKeystoreExistingSecret }}
@@ -160,7 +160,7 @@ spec:
             successThreshold: {{ .Values.startupProbe.successThreshold }}
             failureThreshold: {{ .Values.startupProbe.failureThreshold }}
             httpGet:
-              path: /ejbca
+              path: /ejbca/doc
               port: http
           {{- end }}
           {{- if .Values.customLivenessProbe }}
@@ -173,7 +173,7 @@ spec:
             successThreshold: {{ .Values.livenessProbe.successThreshold }}
             failureThreshold: {{ .Values.livenessProbe.failureThreshold }}
             httpGet:
-              path: /ejbca
+              path: /ejbca/doc
               port: http
           {{- end }}
           {{- if .Values.customReadinessProbe }}
@@ -186,7 +186,7 @@ spec:
             successThreshold: {{ .Values.readinessProbe.successThreshold }}
             failureThreshold: {{ .Values.readinessProbe.failureThreshold }}
             httpGet:
-              path: /ejbca
+              path: /ejbca/doc
               port: http
           {{- end }}
           {{- end }}

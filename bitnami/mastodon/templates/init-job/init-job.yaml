@@ -19,7 +19,7 @@ spec:
   backoffLimit: {{ .Values.initJob.backoffLimit }}
   template:
     metadata:
-      {{- $podLabels := merge .Values.initJob.podLabels .Values.commonLabels }}
+      {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.initJob.podLabels .Values.commonLabels ) "context" . ) }}
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: init
       {{- if .Values.initJob.podAnnotations }}

@@ -6,33 +6,33 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: alertmanager
-      image: docker.io/bitnami/alertmanager:0.25.0-debian-11-r188
+      image: docker.io/bitnami/alertmanager:0.26.0-debian-11-r11
     - name: os-shell
-      image: docker.io/bitnami/os-shell:11-debian-11-r43
+      image: docker.io/bitnami/os-shell:11-debian-11-r57
     - name: prometheus
-      image: docker.io/bitnami/prometheus:2.46.0-debian-11-r23
+      image: docker.io/bitnami/prometheus:2.47.0-debian-11-r0
     - name: thanos
-      image: docker.io/bitnami/thanos:0.31.0-debian-11-r15
+      image: docker.io/bitnami/thanos:0.32.2-debian-11-r2
 apiVersion: v2
-appVersion: 2.46.0
+appVersion: 2.47.0
 dependencies:
-- name: common
-  repository: oci://registry-1.docker.io/bitnamicharts
-  tags:
-  - bitnami-common
-  version: 2.x.x
+  - name: common
+    repository: oci://registry-1.docker.io/bitnamicharts
+    tags:
+      - bitnami-common
+    version: 2.x.x
 description: Prometheus is an open source monitoring and alerting system. It enables sysadmins to monitor their infrastructures by collecting metrics from configured targets at given intervals.
 home: https://github.com/prometheus/prometheus
 icon: https://bitnami.com/assets/stacks/prometheus/img/prometheus-stack-220x234.png
 keywords:
-- prometheus
-- monitoring
+  - prometheus
+  - monitoring
 maintainers:
-- name: Bitnami
-  url: https://github.com/bitnami/charts
+  - name: Bitnami
+    url: https://github.com/bitnami/charts
 name: prometheus
 sources:
-- https://github.com/bitnami/containers/tree/main/bitnami/prometheus
-- https://github.com/prometheus/prometheus
-- https://github.com/prometheus-community/helm-charts
-version: 0.2.0
+  - https://github.com/bitnami/containers/tree/main/bitnami/prometheus
+  - https://github.com/prometheus/prometheus
+  - https://github.com/prometheus-community/helm-charts
+version: 0.2.3

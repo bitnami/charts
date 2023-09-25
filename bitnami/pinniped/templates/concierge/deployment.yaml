@@ -20,7 +20,7 @@ spec:
   {{- if .Values.concierge.updateStrategy }}
   strategy: {{- toYaml .Values.concierge.updateStrategy | nindent 4 }}
   {{- end }}
-  {{- $podLabels := merge .Values.concierge.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.concierge.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: concierge

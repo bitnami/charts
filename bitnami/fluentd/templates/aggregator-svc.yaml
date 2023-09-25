@@ -13,7 +13,7 @@ metadata:
     app.kubernetes.io/component: aggregator
     app: aggregator
   {{- if or .Values.commonAnnotations .Values.aggregator.service.annotations }}
-  {{- $annotations := merge .Values.aggregator.service.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.aggregator.service.annotations .Values.commonAnnotations ) "context" . ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
@@ -41,7 +41,7 @@ spec:
     - name: {{ $key }}
       {{ toYaml $value | nindent 6 }}
   {{- end }}
-  {{- $podLabels := merge .Values.aggregator.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.aggregator.podLabels .Values.commonLabels ) "context" . ) }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: aggregator
 {{- end -}}

@@ -11,14 +11,14 @@ metadata:
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: migration
   {{- if or .Values.migration.annotations .Values.commonAnnotations }}
-  {{- $annotations := merge .Values.migration.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.migration.annotations .Values.commonAnnotations ) "context" . ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
   ttlSecondsAfterFinished: 30
   template:
     metadata:
-      {{- $podLabels := merge .Values.migration.podLabels .Values.commonLabels }}
+      {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.migration.podLabels .Values.commonLabels ) "context" . ) }}
       labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: migration
       {{- if .Values.migration.podAnnotations }}

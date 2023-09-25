@@ -13,7 +13,7 @@ metadata:
     app.kubernetes.io/component: secondary
   annotations:
     {{- if or .Values.secondary.service.annotations .Values.commonAnnotations }}
-    {{- $annotations := merge .Values.secondary.service.annotations .Values.commonAnnotations }}
+    {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.secondary.service.annotations .Values.commonAnnotations ) "context" . ) }}
     {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
     {{- end }}
     {{- if and .Values.metrics.enabled .Values.metrics.annotations }}
@@ -58,7 +58,7 @@ spec:
     {{- if .Values.secondary.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.secondary.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}
-  {{- $podLabels := merge .Values.secondary.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.secondary.podLabels .Values.commonLabels ) "context" . ) }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: secondary
 {{- end }}

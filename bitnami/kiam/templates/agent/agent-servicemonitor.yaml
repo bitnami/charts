@@ -9,7 +9,7 @@ kind: ServiceMonitor
 metadata:
   name: {{ template "common.names.fullname" . }}-agent
   namespace: {{ default .Release.Namespace .Values.agent.metrics.serviceMonitor.namespace | quote }}
-  {{- $labels := merge .Values.agent.metrics.serviceMonitor.labels .Values.commonLabels }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.agent.metrics.serviceMonitor.labels .Values.commonLabels ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: agent
   {{- if .Values.commonAnnotations }}
@@ -18,7 +18,7 @@ metadata:
 spec:
   jobLabel: {{ .Values.agent.metrics.serviceMonitor.jobLabel | quote }}
   selector:
-    {{- $svcLabels := merge .Values.agent.metrics.serviceMonitor.selector .Values.commonLabels }}
+    {{- $svcLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.agent.metrics.serviceMonitor.selector .Values.commonLabels ) "context" . ) }}
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $svcLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: agent
   endpoints:

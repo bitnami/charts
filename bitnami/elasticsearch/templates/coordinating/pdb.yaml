@@ -21,7 +21,7 @@ spec:
   {{- if .Values.coordinating.pdb.maxUnavailable }}
   maxUnavailable: {{ .Values.coordinating.pdb.maxUnavailable }}
   {{- end }}
-  {{- $podLabels := merge .Values.coordinating.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.coordinating.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: coordinating-only

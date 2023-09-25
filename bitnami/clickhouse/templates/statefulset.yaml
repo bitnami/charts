@@ -18,7 +18,7 @@ metadata:
 spec:
   replicas: {{ $.Values.replicaCount }}
   podManagementPolicy: {{ $.Values.podManagementPolicy | quote }}
-  {{- $podLabels := merge $.Values.podLabels $.Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list $.Values.podLabels $.Values.commonLabels ) "context" $ ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: clickhouse
@@ -52,7 +52,7 @@ spec:
       {{- else }}
       affinity:
         podAffinity: {{- include "common.affinities.pods" (dict "type" $.Values.podAffinityPreset "component" "clickhouse" "customLabels" $podLabels "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" $.Values.podAntiAffinityPreset "component" "clickhouse" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" $.Values.podAntiAffinityPreset "component" "clickhouse" "customLabels" $podLabels "extraPodAffinityTerms" (ternary (list (dict "extraMatchLabels" (dict "shard" $i) "topologyKey" "topology.kubernetes.io/zone")) (list) $.Values.distributeReplicasByZone) "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" $.Values.nodeAffinityPreset.type "key" $.Values.nodeAffinityPreset.key "values" $.Values.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if $.Values.nodeSelector }}
@@ -403,11 +403,11 @@ spec:
   volumeClaimTemplates:
     - metadata:
         name: data
-        {{- if or $.Values.persistence.annotations $.Values.commonAnnotations }}}
-        {{- $claimAnnotations := merge $.Values.persistence.annotations $.Values.commonLabels }}
+        {{- if or $.Values.persistence.annotations $.Values.commonAnnotations }}
+        {{- $claimAnnotations := include "common.tplvalues.merge" ( dict "values" ( list $.Values.persistence.annotations $.Values.commonLabels ) "context" $ ) }}
         annotations: {{- include "common.tplvalues.render" ( dict "value" $claimAnnotations "context" $ ) | nindent 10 }}
         {{- end }}
-        {{- $claimLabels := merge $.Values.persistence.labels $.Values.commonLabels }}
+        {{- $claimLabels := include "common.tplvalues.merge" ( dict "values" ( list $.Values.persistence.labels $.Values.commonLabels ) "context" $ ) }}
         labels: {{- include "common.labels.matchLabels" ( dict "customLabels" $claimLabels "context" $ ) | nindent 10 }}
           app.kubernetes.io/component: clickhouse
       spec:

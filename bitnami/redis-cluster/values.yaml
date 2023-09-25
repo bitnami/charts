@@ -76,7 +76,7 @@ image:
   ## Bitnami Redis&reg; image tag
   ## ref: https://github.com/bitnami/containers/tree/main/bitnami/redis#supported-tags-and-respective-dockerfile-links
   ##
-  tag: 7.2.0-debian-11-r0
+  tag: 7.2.1-debian-11-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -362,7 +362,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r48
+    tag: 11-debian-11-r60
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -654,6 +654,10 @@ updateJob:
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
   hostAliases: []
+  ## @param updateJob.helmHook Job Helm hook
+  ## https://helm.sh/docs/topics/charts_hooks/#the-available-hooks
+  ##
+  helmHook: post-upgrade
   ## @param updateJob.annotations Job annotations
   ##
   annotations: {}
@@ -842,7 +846,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/redis-exporter
-    tag: 1.53.0-debian-11-r0
+    tag: 1.54.0-debian-11-r0
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1011,7 +1015,7 @@ sysctlImage:
   ##
   registry: docker.io
   repository: bitnami/os-shell
-  tag: 11-debian-11-r48
+  tag: 11-debian-11-r60
   digest: ""
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.

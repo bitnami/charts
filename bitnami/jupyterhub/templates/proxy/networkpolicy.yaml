@@ -7,7 +7,9 @@ SPDX-License-Identifier: APACHE-2.0
 apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
 kind: NetworkPolicy
 metadata:
-  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.proxy.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: proxy
   name: {{ include "jupyterhub.proxy.name" . }}
   namespace: {{ .Release.Namespace | quote }}
@@ -15,7 +17,7 @@ metadata:
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
-  {{- $proxyPodLabels := merge .Values.proxy.podLabels .Values.commonLabels }}
+  {{- $proxyPodLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.proxy.podLabels .Values.commonLabels ) "context" . ) }}
   podSelector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $proxyPodLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: proxy
@@ -45,7 +47,7 @@ spec:
     - ports:
         - port: {{ coalesce .Values.hub.containerPorts.http .Values.hub.containerPort }}
       to:
-        {{- $hubPodLabels := merge .Values.hub.podLabels .Values.commonLabels }}
+        {{- $hubPodLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.hub.podLabels .Values.commonLabels ) "context" . ) }}
         - podSelector:
             matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $hubPodLabels "context" $ ) | nindent 14 }}
               app.kubernetes.io/component: hub

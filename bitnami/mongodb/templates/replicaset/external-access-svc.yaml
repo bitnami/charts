@@ -20,7 +20,7 @@ metadata:
     app.kubernetes.io/component: mongodb
     pod: {{ $targetPod }}
   {{- if or $root.Values.externalAccess.service.annotations $root.Values.commonAnnotations }}
-  {{- $annotations := merge $root.Values.externalAccess.service.annotations $root.Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list $root.Values.externalAccess.service.annotations $root.Values.commonAnnotations ) "context" $ ) }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
@@ -60,7 +60,7 @@ spec:
     {{- if $root.Values.externalAccess.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" $root.Values.externalAccess.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}
-  {{- $podLabels := merge $root.Values.podLabels $root.Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list $root.Values.podLabels $root.Values.commonLabels ) "context" $ ) }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: mongodb
     statefulset.kubernetes.io/pod-name: {{ $targetPod }}

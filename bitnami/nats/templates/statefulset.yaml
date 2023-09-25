@@ -15,7 +15,7 @@ metadata:
   {{- end }}
 spec:
   replicas: {{ .Values.replicaCount }}
-  {{- $podLabels := merge .Values.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
   serviceName: {{ printf "%s-headless" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
@@ -202,7 +202,7 @@ spec:
     - metadata:
         name: data
         {{- if or .Values.persistence.annotations .Values.commonAnnotations }}
-        {{- $annotations := merge .Values.persistence.annotations .Values.commonAnnotations }}
+        {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.persistence.annotations .Values.commonAnnotations ) "context" . ) }}
         annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 10 }}
         {{- end }}
         {{- if .Values.commonLabels }}

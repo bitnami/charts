@@ -21,6 +21,6 @@ spec:
       port: {{ .Values.metrics.port }}
       protocol: TCP
       targetPort: metrics
-  {{- $podLabels := merge .Values.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
 {{- end }}

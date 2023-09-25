@@ -21,7 +21,7 @@ spec:
   {{- if .Values.arbiter.pdb.maxUnavailable }}
   maxUnavailable: {{ .Values.arbiter.pdb.maxUnavailable }}
   {{- end }}
-  {{- $podLabels := merge .Values.arbiter.podLabels .Values.commonLabels }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.arbiter.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: arbiter
