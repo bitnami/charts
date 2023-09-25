@@ -128,7 +128,7 @@
                         "tag": {
                             "type": "string",
                             "description": "Alertmanager image tag (immutable tags are recommended)",
-                            "default": "0.26.0-debian-11-r11"
+                            "default": "0.25.0-debian-11-r48"
                         },
                         "digest": {
                             "type": "string",
@@ -788,7 +788,7 @@
                         "tag": {
                             "type": "string",
                             "description": "Prometheus image tag (immutable tags are recommended)",
-                            "default": "2.47.0-debian-11-r0"
+                            "default": "2.44.0-debian-11-r0"
                         },
                         "digest": {
                             "type": "string",
@@ -811,7 +811,7 @@
                 "configuration": {
                     "type": "string",
                     "description": "Promethus configuration. This content will be stored in the the prometheus.yaml file and the content can be a template.",
-                    "default": "global:\n  {{- if .Values.server.scrapeInterval }}\n  scrape_interval: {{ .Values.server.scrapeInterval }}\n  {{- end }}\n  {{- if .Values.server.scrapeTimeout }}\n  scrape_timeout: {{ .Values.server.scrapeTimeout }}\n  {{- end }}\n  {{- if .Values.server.evaluationInterval }}\n  evaluation_interval: {{ .Values.server.evaluationInterval }}\n  {{- end }}\n  external_labels:\n    monitor: {{ template \"common.names.fullname\" . }}\n    {{- if .Values.server.externalLabels }}\n    {{- include \"common.tplvalues.render\" (dict \"value\" .Values.server.externalLabels \"context\" $) | nindent 4 }}\n    {{- end }}\n{{- if .Values.server.remoteWrite }}\nremote_write: {{- include \"common.tplvalues.render\" (dict \"value\" .Values.server.remoteWrite \"context\" $) | nindent 4 }}\n{{- end }}\nscrape_configs:\n  - job_name: prometheus\n  {{- include \"prometheus.scrape_config\" (dict \"component\" \"server\" \"context\" $) | nindent 4 }}\n{{- if .Values.alertmanager.enabled }}\n  - job_name: alertmanager\n    {{- include \"prometheus.scrape_config\" (dict \"component\" \"alertmanager\" \"context\" $) | nindent 4 }}\n{{- end }}\n{{- if .Values.server.extraScrapeConfigs}}\n{{- include \"common.tplvalues.render\" (dict \"value\" .Values.server.extraScrapeConfigs \"context\" $) | nindent 2 }}\n{{- end }}\n{{- if or .Values.alertmanager.enabled .Values.server.alertingEndpoints}}\nalerting:\n  alertmanagers:\n    {{- if .Values.server.alertingEndpoints }}\n    {{- include \"common.tplvalues.render\" (dict \"value\" .Values.server.alertingEndpoints \"context\" $) | nindent 4 }}\n    {{- end }}\n    - scheme: HTTP\n      static_configs:\n        - targets: [ \"{{ printf \"%s.%s.svc.%s:%d\" (include \"prometheus.alertmanager.fullname\" .) (include \"common.names.namespace\" .) .Values.clusterDomain (int .Values.alertmanager.service.ports.http) }}\" ]\nrule_files:\n  - rules.yaml\n{{- end }}\n"
+                    "default": "global:\n  {{- if .Values.server.scrapeInterval }}\n  scrape_interval: {{ .Values.server.scrapeInterval }}\n  {{- end }}\n  {{- if .Values.server.scrapeTimeout }}\n  scrape_timeout: {{ .Values.server.scrapeTimeout }}\n  {{- end }}\n  {{- if .Values.server.evaluationInterval }}\n  evaluation_interval: {{ .Values.server.evaluationInterval }}\n  {{- end }}\n  external_labels:\n    monitor: {{ template \"common.names.fullname\" . }}\n    {{- if .Values.server.externalLabels }}\n    {{- include \"common.tplvalues.render\" (dict \"value\" .Values.server.externalLabels \"context\" $) | nindent 4 }}\n    {{- end }}\n{{- if .Values.server.remoteWrite }}\nremote_write: {{- include \"common.tplvalues.render\" (dict \"value\" .Values.server.remoteWrite \"context\" $) | nindent 4 }}\n{{- end }}\nscrape_configs:\n  - job_name: prometheus\n  {{- include \"prometheus.scrape_config\" (dict \"component\" \"server\" \"context\" $) | nindent 4 }}\n{{- if .Values.alertmanager.enabled }}\n  - job_name: alertmanager\n    {{- include \"prometheus.scrape_config\" (dict \"component\" \"alertmanager\" \"context\" $) | nindent 4 }}\n{{- end }}\n{{- if .Values.server.extraScrapeConfigs}}\n{{- include \"common.tplvalues.render\" (dict \"value\" .Values.server.extraScrapeConfigs \"context\" $) | nindent 2 }}\n{{- end }}\n{{- if or .Values.alertmanager.enabled .Values.server.alertingEndpoints}}\nalerting:\n  alertmanagers:\n    {{- if .Values.server.alertingEndpoints }}\n    {{- include \"common.tplvalues.render\" (dict \"value\" .Values.server.alertingEndpoints \"context\" $) | nindent 4 }}\n    {{- end }}\n    - scheme: HTTP\n      static_configs:\n        - targets: [ {{ printf \"%s:%d\" (include \"prometheus.alertmanager.fullname\" .) (int .Values.alertmanager.service.ports.http) }}]\nrule_files:\n  - rules.yaml\n{{- end }}\n"
                 },
                 "alertingRules": {
                     "type": "object",
@@ -1298,7 +1298,7 @@
                                 "tag": {
                                     "type": "string",
                                     "description": "Thanos image tag",
-                                    "default": "0.32.2-debian-11-r2"
+                                    "default": "0.31.0-scratch-r3"
                                 },
                                 "digest": {
                                     "type": "string",
@@ -1908,7 +1908,7 @@
                         "tag": {
                             "type": "string",
                             "description": "OS Shell + Utility image tag (immutable tags are recommended)",
-                            "default": "11-debian-11-r57"
+                            "default": "11-debian-11-r2"
                         },
                         "pullPolicy": {
                             "type": "string",

@@ -8,7 +8,8 @@ kind: Service
 metadata:
   name: {{ include "postgresql-ha.pgpool" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.pgpool.serviceLabels .Values.commonLabels ) "context" . ) }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.pgpool.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.pgpool.serviceLabels .Values.commonLabels $versionLabel ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: pgpool
   {{- if or .Values.pgpool.serviceAnnotations .Values.service.annotations .Values.commonAnnotations }}

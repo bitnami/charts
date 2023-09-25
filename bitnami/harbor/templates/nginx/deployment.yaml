@@ -9,14 +9,16 @@ kind: Deployment
 metadata:
   name: {{ include "harbor.nginx" . }}
   namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.nginx.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: nginx
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
   replicas: {{ .Values.nginx.replicaCount }}
-  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.nginx.podLabels .Values.commonLabels ) "context" . ) }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.nginx.podLabels .Values.commonLabels $versionLabel ) "context" . ) }}
   selector:
     matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: nginx
@@ -113,8 +115,6 @@ spec:
               name: http
             - containerPort: {{ .Values.nginx.containerPorts.https }}
               name: https
-            - containerPort: {{ .Values.nginx.containerPorts.notary }}
-              name: notary
           {{- if not .Values.diagnosticMode.enabled }}
           {{- if .Values.nginx.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.nginx.customStartupProbe "context" $) | nindent 12 }}

@@ -224,12 +224,12 @@ spec:
         {{- if .Values.forwarder.initScriptsCM }}
         - name: custom-init-scripts-cm
           configMap:
-            name: {{ template ".Values.initScriptsCM" . }}
+            name: {{ template "fluentd.forwarder.initScriptsCM" . }}
         {{- end }}
         {{- if .Values.forwarder.initScriptsSecret }}
         - name: custom-init-scripts-secret
           secret:
-            secretName: {{ template ".Values.initScriptsSecret" . }}
+            secretName: {{ template "fluentd.forwarder.initScriptsSecret" . }}
             defaultMode: 0755
         {{- end }}
         - name: fluentd-config

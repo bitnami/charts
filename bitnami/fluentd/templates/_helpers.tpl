@@ -204,3 +204,31 @@ Get the initialization aggregator scripts volume name.
 {{- define "fluentd.aggregator.initScripts" -}}
 {{- printf "%s-aggregator-init-scripts" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
+
+{{/*
+Get the initialization forwarder scripts ConfigMap name.
+*/}}
+{{- define "fluentd.forwarder.initScriptsCM" -}}
+{{- printf "%s" .Values.forwarder.initScriptsCM -}}
+{{- end -}}
+
+{{/*
+Get the initialization aggregator scripts ConfigMap name.
+*/}}
+{{- define "fluentd.aggregator.initScriptsCM" -}}
+{{- printf "%s" .Values.aggregator.initScriptsCM -}}
+{{- end -}}
+
+{{/*
+Get the initialization forwarder scripts Secret name.
+*/}}
+{{- define "fluentd.forwarder.initScriptsSecret" -}}
+{{- printf "%s" .Values.forwarder.initScriptsSecret -}}
+{{- end -}}
+
+{{/*
+Get the initialization aggregator scripts Secret name.
+*/}}
+{{- define "fluentd.aggregator.initScriptsSecret" -}}
+{{- printf "%s" .Values.aggregator.initScriptsSecret -}}
+{{- end -}}
