@@ -34,6 +34,9 @@ spec:
   {{- if and (eq .Values.blackboxExporter.service.type "LoadBalancer") (not (empty .Values.blackboxExporter.service.loadBalancerIP)) }}
   loadBalancerIP: {{ .Values.blackboxExporter.service.loadBalancerIP }}
   {{- end }}
+  {{- if and (eq .Values.blackboxExporter.service.type "LoadBalancer") (not (empty .Values.blackboxExporter.service.loadBalancerClass)) }}
+  loadBalancerClass: {{ .Values.blackboxExporter.service.loadBalancerClass }}
+  {{- end }}
   publishNotReadyAddresses: true
   ports:
     - name: http

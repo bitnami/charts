@@ -1398,10 +1398,10 @@ pgpool:
   ## @param pgpool.useLoadBalancing Use Pgpool Load-Balancing
   ##
   useLoadBalancing: true
-  ## @param pgpool.loadBalancingOnWrite LoadBalancer on write actions behavior
+  ## @param pgpool.disableLoadBalancingOnWrite LoadBalancer on write actions behavior
   ## one of: [off, transaction, trans_transaction, always]
   ##
-  loadBalancingOnWrite: transaction
+  disableLoadBalancingOnWrite: transaction
   ## @param pgpool.configuration Pgpool configuration
   ## You can use this parameter to specify the content for pgpool.conf
   ## Otherwise, a repmgr.conf will be generated based on the environment variables
