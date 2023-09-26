@@ -112,8 +112,14 @@ contour:
     ##
     pullSecrets: []
     debug: false
-  ## @param contour.replicaCount Number of Contour Pod replicas
+  ## @param contour.contourConfigName Contour Deployment with ContourConfiguration CRD.
+  # 
+  contourConfigName: "contour"
+  ## @param contour.configPath Contour Deployment with configmap.
   ##
+  configPath: true
+  ## @param contour.replicaCount Number of Contour Pod replicas 
+  # 
   replicaCount: 1
   ## @param contour.priorityClassName Priority class assigned to the pods
   ## ref: https://kubernetes.io/docs/concepts/configuration/pod-priority-preemption/#priorityclass
