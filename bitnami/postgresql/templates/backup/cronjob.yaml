@@ -38,12 +38,14 @@ spec:
           annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 12 }}
           {{- end }}
         spec:
+          {{- include "postgresql.v1.imagePullSecrets" . | nindent 10 }}
           {{- if .Values.backup.cronjob.nodeSelector }}
           nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.backup.cronjob.nodeSelector "context" $) | nindent 12 }}
           {{- end }}
           containers:
           - name: {{ include "postgresql.v1.primary.fullname" . }}-pgdumpall
             image: {{ include "postgresql.v1.image" . }}
+            imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
             env:
               - name: PGUSER
               {{- if .Values.auth.enablePostgresUser }}
