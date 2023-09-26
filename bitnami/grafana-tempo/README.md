@@ -85,7 +85,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------- | ------------------------------------------------------------------------------------------------------------- | ----------------------------- |
 | `tempo.image.registry`                 | Grafana Tempo image registry                                                                                  | `docker.io`                   |
 | `tempo.image.repository`               | Grafana Tempo image repository                                                                                | `bitnami/grafana-tempo`       |
-| `tempo.image.tag`                      | Grafana Tempo image tag (immutable tags are recommended)                                                      | `2.2.3-debian-11-r11`         |
+| `tempo.image.tag`                      | Grafana Tempo image tag (immutable tags are recommended)                                                      | `2.2.3-debian-11-r13`         |
 | `tempo.image.digest`                   | Grafana Tempo image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                          |
 | `tempo.image.pullPolicy`               | Grafana Tempo image pull policy                                                                               | `IfNotPresent`                |
 | `tempo.image.pullSecrets`              | Grafana Tempo image pull secrets                                                                              | `[]`                          |
