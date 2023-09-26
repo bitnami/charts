@@ -10,7 +10,7 @@ annotations:
     - name: postgres-exporter
       image: docker.io/bitnami/postgres-exporter:0.14.0-debian-11-r2
     - name: postgresql
-      image: docker.io/bitnami/postgresql:15.4.0-debian-11-r44
+      image: docker.io/bitnami/postgresql:15.4.0-debian-11-r45
 apiVersion: v2
 appVersion: 15.4.0
 dependencies:
@@ -35,4 +35,4 @@ maintainers:
 name: postgresql
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/postgresql
-version: 12.12.7
+version: 12.12.8
