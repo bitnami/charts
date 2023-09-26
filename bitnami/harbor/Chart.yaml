@@ -8,9 +8,9 @@ annotations:
     - name: harbor-adapter-trivy
       image: docker.io/bitnami/harbor-adapter-trivy:2.9.0-debian-11-r14
     - name: harbor-core
-      image: docker.io/bitnami/harbor-core:2.9.0-debian-11-r11
+      image: docker.io/bitnami/harbor-core:2.9.0-debian-11-r14
     - name: harbor-exporter
-      image: docker.io/bitnami/harbor-exporter:2.9.0-debian-11-r11
+      image: docker.io/bitnami/harbor-exporter:2.9.0-debian-11-r14
     - name: harbor-jobservice
       image: docker.io/bitnami/harbor-jobservice:2.9.0-debian-11-r11
     - name: harbor-registry
@@ -55,4 +55,4 @@ maintainers:
 name: harbor
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/harbor
-version: 18.0.2
+version: 18.0.3
