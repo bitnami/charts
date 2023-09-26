@@ -151,7 +151,7 @@ spec:
             - name: KAFKA_KRAFT_CLUSTER_ID
               valueFrom:
                 secretKeyRef:
-                  name: {{ ternary (printf "%s-kraft-cluster-id" (include "common.names.fullname" .)) .Values.kraft.existingClusterIdSecret  (not .Values.kraft.existingClusterIdSecret) }}
+                  name: {{ default (printf "%s-kraft-cluster-id" (include "common.names.fullname" .)) .Values.kraft.existingClusterIdSecret }}
                   key: kraft-cluster-id
             {{- if and (include "kafka.saslEnabled" .) (or (regexFind "SCRAM" (upper .Values.sasl.enabledMechanisms)) (regexFind "SCRAM" (upper .Values.sasl.controllerMechanism)) (regexFind "SCRAM" (upper .Values.sasl.interBrokerMechanism))) }}
             - name: KAFKA_KRAFT_BOOTSTRAP_SCRAM_USERS
