@@ -75,7 +75,7 @@ tempo:
   image:
     registry: docker.io
     repository: bitnami/grafana-tempo
-    tag: 2.2.3-debian-11-r13
+    tag: 2.2.3-debian-11-r14
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
