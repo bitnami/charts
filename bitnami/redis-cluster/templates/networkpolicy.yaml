@@ -8,19 +8,15 @@ kind: NetworkPolicy
 apiVersion: {{ template "networkPolicy.apiVersion" . }}
 metadata:
   name: {{ template "common.names.fullname" . }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
   namespace: {{ .Release.Namespace | quote }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.redis.podLabels .Values.commonLabels ) "context" . ) }}
   podSelector:
-    matchLabels:
-      app.kubernetes.io/name: {{ template "common.names.name" . }}
-      app.kubernetes.io/instance: {{ .Release.Name }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
   policyTypes:
     - Ingress
     - Egress
@@ -35,7 +31,7 @@ spec:
         - port: {{ .Values.redis.containerPorts.bus }}
       to:
         - podSelector:
-            matchLabels: {{- include "common.labels.matchLabels" . | nindent 14 }}
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 14 }}
   ingress:
     # Allow inbound connections
     - ports:
@@ -47,7 +43,7 @@ spec:
             matchLabels:
               {{ template "common.names.fullname" . }}-client: "true"
         - podSelector:
-            matchLabels: {{- include "common.labels.matchLabels" . | nindent 14 }}
+             matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 14 }}
         {{- end }}
         {{- if .Values.networkPolicy.ingressNSMatchLabels }}
         - namespaceSelector:

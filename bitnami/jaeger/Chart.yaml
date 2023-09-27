@@ -4,8 +4,13 @@
 annotations:
   category: Infrastructure
   licenses: Apache-2.0
+  images: |
+    - name: cassandra
+      image: docker.io/bitnami/cassandra:4.0.11-debian-11-r49
+    - name: jaeger
+      image: docker.io/bitnami/jaeger:1.49.0-debian-11-r0
 apiVersion: v2
-appVersion: 1.47.0
+appVersion: 1.49.0
 dependencies:
   - name: common
     repository: oci://registry-1.docker.io/bitnamicharts
@@ -29,4 +34,4 @@ maintainers:
 name: jaeger
 sources:
   - https://github.com/bitnami/charts/tree/main/bitnami/jaeger
-version: 1.2.8
+version: 1.3.2

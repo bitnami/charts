@@ -9,14 +9,10 @@ kind: StatefulSet
 metadata:
   name: {{ include "postgresql-ha.postgresql" . }}-witness
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
-    app.kubernetes.io/component: postgresql-witness
-    {{- if .Values.witness.labels }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.witness.labels "context" $) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.witness.labels .Values.commonLabels ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: postgresql
+    role: witness
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -25,18 +21,16 @@ spec:
   podManagementPolicy: Parallel
   serviceName: {{ printf "%s-witness" (include "postgresql-ha.postgresql" .) }}
   updateStrategy: {{- toYaml .Values.witness.updateStrategy | nindent 4 }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.witness.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: postgresql
       role: witness
   template:
     metadata:
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: postgresql
         role: witness
-        {{- if .Values.witness.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.witness.podLabels "context" $) | nindent 8 }}
-        {{- end }}
       {{- if or .Values.witness.podAnnotations (and .Values.metrics.enabled .Values.metrics.annotations) }}
       annotations:
       {{- if .Values.witness.podAnnotations }}
@@ -55,8 +49,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.witness.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.witness.podAffinityPreset "component" "postgresql" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.witness.podAntiAffinityPreset "component" "" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.witness.podAffinityPreset "component" "postgresql" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.witness.podAntiAffinityPreset "component" "postgresql" "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.witness.nodeAffinityPreset.type "key" .Values.witness.nodeAffinityPreset.key "values" .Values.witness.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.witness.nodeSelector }}

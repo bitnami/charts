@@ -79,7 +79,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/clickhouse
-  tag: 23.7.4-debian-11-r0
+  tag: 23.8.2-debian-11-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -105,6 +105,10 @@ shards: 2
 ## if keeper enable, same as keeper count, keeper cluster by shards.
 ##
 replicaCount: 3
+
+## @param distributeReplicasByZone Schedules replicas of the same shard to different availability zones
+##
+distributeReplicasByZone: false
 ## @param containerPorts.http ClickHouse HTTP container port
 ## @param containerPorts.https ClickHouse HTTPS container port
 ## @param containerPorts.tcp ClickHouse TCP container port
@@ -266,6 +270,8 @@ defaultConfigurationOverrides: |
             <replica>
                 <host>{{ printf "%s-shard%d-%d.%s.%s.svc.%s" (include "common.names.fullname" $ ) $shard $i (include "clickhouse.headlessServiceName" $) (include "common.names.namespace" $) $.Values.clusterDomain }}</host>
                 <port>{{ $.Values.service.ports.tcp }}</port>
+                <user from_env="CLICKHOUSE_ADMIN_USER"></user>
+                <password from_env="CLICKHOUSE_ADMIN_PASSWORD"></password>
             </replica>
             {{- end }}
         </shard>
@@ -734,7 +740,7 @@ externalAccess:
     ##   - Y.Y.Y.Y
     ##
     loadBalancerIPs: []
-    ## @param externalAccess.service.loadBalancerAnnotations Array of load balancer annotations for each ClickHouse . Length must be the same as replicaCount
+    ## @param externalAccess.service.loadBalancerAnnotations Array of load balancer annotations for each ClickHouse . Length must be the same as shards multiplied by replicaCount
     ## e.g:
     ## loadBalancerAnnotations:
     ##   - external-dns.alpha.kubernetes.io/hostname: 1.external.example.com.
@@ -927,7 +933,7 @@ persistence:
   ## @param persistence.size Size of data volume
   ##
   size: 8Gi
-  ## @param persistence.selector Selector to match an existing Persistent Volume for WordPress data PVC
+  ## @param persistence.selector Selector to match an existing Persistent Volume for ClickHouse data PVC
   ## If set, the PVC can't have a PV dynamically provisioned for it
   ## E.g.
   ## selector:
@@ -960,7 +966,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r37
+    tag: 11-debian-11-r60
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1104,6 +1110,17 @@ externalZookeeper:
 ##
 zookeeper:
   enabled: true
+  ## Override zookeeper default image as 3.9 is not supported https://github.com/ClickHouse/ClickHouse/issues/53749
+  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/zookeeper
+  ## @param zookeeper.image.registry Zookeeper image registry
+  ## @param zookeeper.image.repository Zookeeper image repository
+  ## @param zookeeper.image.tag Zookeeper image tag (immutable tags are recommended)
+  ## @param zookeeper.image.pullPolicy Zookeeper image pull policy
+  image:
+    registry: docker.io
+    repository: bitnami/zookeeper
+    tag: 3.8.2-debian-11-r43
+    pullPolicy: IfNotPresent
   replicaCount: 3
   service:
     ports:

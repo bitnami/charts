@@ -8,13 +8,16 @@ kind: Service
 metadata:
   name: {{ include "certmanager.webhook.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.webhook.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: webhook
 spec:
   type: ClusterIP
-  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
-    app.kubernetes.io/component: webhook
   ports:
     - name: https
       port: {{ .Values.webhook.httpsPort }}
       targetPort: {{ .Values.webhook.containerPort }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.webhook.podLabels .Values.commonLabels ) "context" . ) }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: webhook

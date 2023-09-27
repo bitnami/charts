@@ -9,17 +9,15 @@ kind: StatefulSet
 metadata:
   name: {{ printf "%s-configsvr" (include "common.names.fullname" .) }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: configsvr
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.configsvr.podLabels .Values.common.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: configsvr
   serviceName: {{ printf "%s-headless" (include "common.names.fullname" .) }}
   replicas: {{ .Values.configsvr.replicaCount }}
@@ -27,24 +25,16 @@ spec:
   updateStrategy: {{- toYaml .Values.configsvr.updateStrategy | nindent 4 }}
   template:
     metadata:
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: configsvr
-        {{- if .Values.configsvr.podLabels }}
-          {{- include "common.tplvalues.render" ( dict "value" .Values.configsvr.podLabels "context" $ ) | nindent 8 }}
-        {{- end }}
-        {{- if .Values.common.podLabels }}
-          {{- include "common.tplvalues.render" ( dict "value" .Values.common.podLabels "context" $ ) | nindent 8 }}
-        {{- end }}
       {{- if or .Values.common.podAnnotations .Values.configsvr.podAnnotations .Values.metrics.enabled }}
       annotations:
-        {{- if .Values.common.podAnnotations }}
-           {{- include "common.tplvalues.render" ( dict "value" .Values.common.podAnnotations "context" $ ) | nindent 8 }}
-        {{- end }}
-        {{- if .Values.configsvr.podAnnotations }}
-          {{- include "common.tplvalues.render" ( dict "value" .Values.configsvr.podAnnotations "context" $ ) | nindent 8 }}
+        {{- if or .Values.common.podAnnotations .Values.configsvr.podAnnotations }}
+        {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.configsvr.podAnnotations .Values.common.podAnnotations ) "context" . ) }}
+        {{- include "common.tplvalues.render" ( dict "value" $annotations  "context" $ ) | nindent 8 }}
         {{- end }}
         {{- if .Values.metrics.enabled }}
-           {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.podAnnotations "context" $ ) | nindent 8 }}
+        {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.podAnnotations "context" $ ) | nindent 8 }}
         {{- end }}
       {{- end }}
     spec:
@@ -59,8 +49,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.configsvr.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.configsvr.podAffinityPreset "component" "configsvr" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.configsvr.podAntiAffinityPreset "component" "configsvr" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.configsvr.podAffinityPreset "component" "configsvr" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.configsvr.podAntiAffinityPreset "component" "configsvr" "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.configsvr.nodeAffinityPreset.type "key" .Values.configsvr.nodeAffinityPreset.key "values" .Values.configsvr.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.configsvr.nodeSelector }}

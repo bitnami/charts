@@ -20,7 +20,7 @@ Bitnami charts for Helm are carefully engineered, actively maintained and are th
 
 This chart bootstraps an [Appsmith](https://www.appsmith.com/) Deployment in a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 [Learn more about the default configuration of the chart](https://docs.bitnami.com/kubernetes/apps/appsmith/get-started/).
 
@@ -67,26 +67,26 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common parameters
 
-| Name                     | Description                                                                                                                                         | Value                 |
-| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
-| `kubeVersion`            | Override Kubernetes version                                                                                                                         | `""`                  |
-| `nameOverride`           | String to partially override common.names.name                                                                                                      | `""`                  |
-| `fullnameOverride`       | String to fully override common.names.fullname                                                                                                      | `""`                  |
-| `namespaceOverride`      | String to fully override common.names.namespace                                                                                                     | `""`                  |
-| `commonLabels`           | Labels to add to all deployed objects                                                                                                               | `{}`                  |
-| `commonAnnotations`      | Annotations to add to all deployed objects                                                                                                          | `{}`                  |
-| `clusterDomain`          | Kubernetes cluster domain name                                                                                                                      | `cluster.local`       |
-| `extraDeploy`            | Array of extra objects to deploy with the release                                                                                                   | `[]`                  |
-| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                                                             | `false`               |
-| `diagnosticMode.command` | Command to override all containers in the deployment                                                                                                | `["sleep"]`           |
-| `diagnosticMode.args`    | Args to override all containers in the deployment                                                                                                   | `["infinity"]`        |
-| `image.registry`         | Appsmith image registry                                                                                                                             | `docker.io`           |
-| `image.repository`       | Appsmith image repository                                                                                                                           | `bitnami/appsmith`    |
-| `image.tag`              | Appsmith image tag (immutable tags are recommended)                                                                                                 | `1.9.32-debian-11-r0` |
-| `image.digest`           | Appsmith image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended) | `""`                  |
-| `image.pullPolicy`       | Appsmith image pull policy                                                                                                                          | `IfNotPresent`        |
-| `image.pullSecrets`      | Appsmith image pull secrets                                                                                                                         | `[]`                  |
-| `image.debug`            | Enable Appsmith image debug mode                                                                                                                    | `false`               |
+| Name                     | Description                                                                                                                                         | Value                  |
+| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
+| `kubeVersion`            | Override Kubernetes version                                                                                                                         | `""`                   |
+| `nameOverride`           | String to partially override common.names.name                                                                                                      | `""`                   |
+| `fullnameOverride`       | String to fully override common.names.fullname                                                                                                      | `""`                   |
+| `namespaceOverride`      | String to fully override common.names.namespace                                                                                                     | `""`                   |
+| `commonLabels`           | Labels to add to all deployed objects                                                                                                               | `{}`                   |
+| `commonAnnotations`      | Annotations to add to all deployed objects                                                                                                          | `{}`                   |
+| `clusterDomain`          | Kubernetes cluster domain name                                                                                                                      | `cluster.local`        |
+| `extraDeploy`            | Array of extra objects to deploy with the release                                                                                                   | `[]`                   |
+| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                                                             | `false`                |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                                                                                | `["sleep"]`            |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                                                                                   | `["infinity"]`         |
+| `image.registry`         | Appsmith image registry                                                                                                                             | `docker.io`            |
+| `image.repository`       | Appsmith image repository                                                                                                                           | `bitnami/appsmith`     |
+| `image.tag`              | Appsmith image tag (immutable tags are recommended)                                                                                                 | `1.9.37-debian-11-r10` |
+| `image.digest`           | Appsmith image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended) | `""`                   |
+| `image.pullPolicy`       | Appsmith image pull policy                                                                                                                          | `IfNotPresent`         |
+| `image.pullSecrets`      | Appsmith image pull secrets                                                                                                                         | `[]`                   |
+| `image.debug`            | Enable Appsmith image debug mode                                                                                                                    | `false`                |
 
 ### Appsmith Client Parameters
 
@@ -367,7 +367,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`            |
 | `volumePermissions.image.registry`                     | OS Shell + Utility image registry                                                               | `docker.io`        |
 | `volumePermissions.image.repository`                   | OS Shell + Utility image repository                                                             | `bitnami/os-shell` |
-| `volumePermissions.image.tag`                          | OS Shell + Utility image tag (immutable tags are recommended)                                   | `11-debian-11-r34` |
+| `volumePermissions.image.tag`                          | OS Shell + Utility image tag (immutable tags are recommended)                                   | `11-debian-11-r77` |
 | `volumePermissions.image.pullPolicy`                   | OS Shell + Utility image pull policy                                                            | `IfNotPresent`     |
 | `volumePermissions.image.pullSecrets`                  | OS Shell + Utility image pull secrets                                                           | `[]`               |
 | `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`               |
@@ -528,6 +528,22 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 ## Troubleshooting
 
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+
+## Upgrading
+
+### To 2.0.0
+
+This major updates the MongoDB&reg; subchart to its newest major, [14.0.0](https://github.com/bitnami/charts/tree/main/bitnami/mongodb#to-1400). No major issues are expected during the upgrade.
+
+### To 1.0.0
+
+This major updates the Redis&reg; subchart to its newest major, 18.0.0. [Here](https://github.com/bitnami/charts/tree/main/bitnami/redis#to-1800) you can find more information about the changes introduced in that version.
+
+NOTE: Due to an error in our release process, Redis&reg;' chart versions higher or equal than 17.15.4 already use Redis&reg; 7.2 by default.
+
+### To any previous version
+
+Refer to the [chart documentation for more information about how to upgrade from previous releases](https://docs.bitnami.com/kubernetes/apps/appsmith/administration/upgrade/).
 
 ## License
 

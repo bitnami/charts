@@ -9,12 +9,11 @@ kind: Deployment
 metadata:
   name: {{ template "vault.injector.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.injector.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: vault
     app.kubernetes.io/component: injector
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -25,8 +24,9 @@ spec:
   {{- if .Values.injector.updateStrategy }}
   strategy: {{- toYaml .Values.injector.updateStrategy | nindent 4 }}
   {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.injector.podLabels .Values.commonLabels $versionLabel ) "context" . ) }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/part-of: vault
       app.kubernetes.io/component: injector
   template:
@@ -34,15 +34,9 @@ spec:
       {{- if .Values.injector.podAnnotations }}
       annotations: {{- include "common.tplvalues.render" (dict "value" .Values.injector.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/part-of: vault
         app.kubernetes.io/component: injector
-        {{- if .Values.injector.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.injector.podLabels "context" $) | nindent 8 }}
-        {{- end }}
-        {{- if .Values.commonLabels }}
-        {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
-        {{- end }}
     spec:
       serviceAccountName: {{ template "vault.injector.serviceAccountName" . }}
       {{- include "vault.imagePullSecrets" . | nindent 6 }}
@@ -53,8 +47,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.injector.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.injector.podAffinityPreset "component" "injector" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.injector.podAntiAffinityPreset "component" "injector" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.injector.podAffinityPreset "component" "injector" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.injector.podAntiAffinityPreset "component" "injector" "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.injector.nodeAffinityPreset.type "key" .Values.injector.nodeAffinityPreset.key "values" .Values.injector.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.injector.nodeSelector }}

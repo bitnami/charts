@@ -78,28 +78,28 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common Concourse Parameters
 
-| Name                            | Description                                                                                                                            | Value                 |
-| ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
-| `image.registry`                | image registry                                                                                                                         | `docker.io`           |
-| `image.repository`              | image repository                                                                                                                       | `bitnami/concourse`   |
-| `image.tag`                     | image tag (immutable tags are recommended)                                                                                             | `7.10.0-debian-11-r2` |
-| `image.digest`                  | image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                        | `""`                  |
-| `image.pullPolicy`              | image pull policy                                                                                                                      | `IfNotPresent`        |
-| `image.pullSecrets`             | image pull secrets                                                                                                                     | `[]`                  |
-| `secrets.localAuth.enabled`     | the use of local authentication (basic auth).                                                                                          | `true`                |
-| `secrets.localUsers`            | List of `username:password` or `username:bcrypted_password` combinations for all your local concourse users. Auto-generated if not set | `""`                  |
-| `secrets.teamAuthorizedKeys`    | Array of team names and public keys for team external workers                                                                          | `[]`                  |
-| `secrets.conjurAccount`         | Account for Conjur auth provider.                                                                                                      | `""`                  |
-| `secrets.conjurAuthnLogin`      | Host username for Conjur auth provider.                                                                                                | `""`                  |
-| `secrets.conjurAuthnApiKey`     | API key for host used for Conjur auth provider. Either API key or token file can be used, but not both.                                | `""`                  |
-| `secrets.conjurAuthnTokenFile`  | Token file used for Conjur auth provider if running in Kubernetes or IAM. Either token file or API key can be used, but not both.      | `""`                  |
-| `secrets.conjurCACert`          | CA Certificate to specify if conjur instance is deployed with a self-signed cert                                                       | `""`                  |
-| `secrets.hostKey`               | Concourse Host Keys.                                                                                                                   | `""`                  |
-| `secrets.hostKeyPub`            | Concourse Host Keys.                                                                                                                   | `""`                  |
-| `secrets.sessionSigningKey`     | Concourse Session Signing Keys.                                                                                                        | `""`                  |
-| `secrets.workerKey`             | Concourse Worker Keys.                                                                                                                 | `""`                  |
-| `secrets.workerKeyPub`          | Concourse Worker Keys.                                                                                                                 | `""`                  |
-| `secrets.workerAdditionalCerts` | Additional certificates to add to the worker nodes                                                                                     | `""`                  |
+| Name                            | Description                                                                                                                            | Value                  |
+| ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
+| `image.registry`                | image registry                                                                                                                         | `docker.io`            |
+| `image.repository`              | image repository                                                                                                                       | `bitnami/concourse`    |
+| `image.tag`                     | image tag (immutable tags are recommended)                                                                                             | `7.10.0-debian-11-r47` |
+| `image.digest`                  | image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                        | `""`                   |
+| `image.pullPolicy`              | image pull policy                                                                                                                      | `IfNotPresent`         |
+| `image.pullSecrets`             | image pull secrets                                                                                                                     | `[]`                   |
+| `secrets.localAuth.enabled`     | the use of local authentication (basic auth).                                                                                          | `true`                 |
+| `secrets.localUsers`            | List of `username:password` or `username:bcrypted_password` combinations for all your local concourse users. Auto-generated if not set | `""`                   |
+| `secrets.teamAuthorizedKeys`    | Array of team names and public keys for team external workers                                                                          | `[]`                   |
+| `secrets.conjurAccount`         | Account for Conjur auth provider.                                                                                                      | `""`                   |
+| `secrets.conjurAuthnLogin`      | Host username for Conjur auth provider.                                                                                                | `""`                   |
+| `secrets.conjurAuthnApiKey`     | API key for host used for Conjur auth provider. Either API key or token file can be used, but not both.                                | `""`                   |
+| `secrets.conjurAuthnTokenFile`  | Token file used for Conjur auth provider if running in Kubernetes or IAM. Either token file or API key can be used, but not both.      | `""`                   |
+| `secrets.conjurCACert`          | CA Certificate to specify if conjur instance is deployed with a self-signed cert                                                       | `""`                   |
+| `secrets.hostKey`               | Concourse Host Keys.                                                                                                                   | `""`                   |
+| `secrets.hostKeyPub`            | Concourse Host Keys.                                                                                                                   | `""`                   |
+| `secrets.sessionSigningKey`     | Concourse Session Signing Keys.                                                                                                        | `""`                   |
+| `secrets.workerKey`             | Concourse Worker Keys.                                                                                                                 | `""`                   |
+| `secrets.workerKeyPub`          | Concourse Worker Keys.                                                                                                                 | `""`                   |
+| `secrets.workerAdditionalCerts` | Additional certificates to add to the worker nodes                                                                                     | `""`                   |
 
 ### Concourse Web parameters
 
@@ -356,7 +356,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner and group of the persistent volume                                                   | `false`            |
 | `volumePermissions.image.registry`                     | Init container volume-permissions image registry                                                                                  | `docker.io`        |
 | `volumePermissions.image.repository`                   | Init container volume-permissions image repository                                                                                | `bitnami/os-shell` |
-| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r34` |
+| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r77` |
 | `volumePermissions.image.digest`                       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`               |
 | `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`     |
 | `volumePermissions.image.pullSecrets`                  | Init container volume-permissions image pull secrets                                                                              | `[]`               |
@@ -429,7 +429,7 @@ Refer to the [chart documentation on using an external database](https://docs.bi
 
 ### Configure Ingress
 
-This chart provides support for Ingress resources. If you have an Ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application.
+This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application.
 
 To enable Ingress integration, set `ingress.enabled` to `true`. The `ingress.hostname` property can be used to set the host name. The `ingress.tls` parameter can be used to add the TLS configuration for this host. It is also possible to have more than one host, with a separate TLS configuration for each host. [Learn more about configuring and using Ingress](https://docs.bitnami.com/kubernetes/infrastructure/concourse/configuration/configure-ingress/).
 

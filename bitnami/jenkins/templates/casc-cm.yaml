@@ -9,10 +9,7 @@ kind: ConfigMap
 metadata:
   name: {{ printf "%s-casc" (include "common.names.fullname" .) }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -37,7 +34,7 @@ data:
             podLabels:
               - key: "app.kubernetes.io/component"
                 value: "jenkins-agent"
-              {{- $podLabels := (include "common.labels.standard" . | fromYaml) }}
+              {{- $podLabels := (include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | fromYaml) }}
               {{- if .Values.agent.podLabels }}
               {{- $podLabels = merge $podLabels .Values.agent.podLabels }}
               {{- end }}

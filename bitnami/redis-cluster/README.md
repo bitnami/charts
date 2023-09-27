@@ -94,7 +94,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.args`                                   | Args to override all containers in the deployment                                                                                                   | `["infinity"]`          |
 | `image.registry`                                        | Redis&reg; cluster image registry                                                                                                                   | `docker.io`             |
 | `image.repository`                                      | Redis&reg; cluster image repository                                                                                                                 | `bitnami/redis-cluster` |
-| `image.tag`                                             | Redis&reg; cluster image tag (immutable tags are recommended)                                                                                       | `7.0.12-debian-11-r15`  |
+| `image.tag`                                             | Redis&reg; cluster image tag (immutable tags are recommended)                                                                                       | `7.2.1-debian-11-r0`    |
 | `image.digest`                                          | Redis&reg; cluster image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                  | `""`                    |
 | `image.pullPolicy`                                      | Redis&reg; cluster image pull policy                                                                                                                | `IfNotPresent`          |
 | `image.pullSecrets`                                     | Specify docker-registry secret names as an array                                                                                                    | `[]`                    |
@@ -161,7 +161,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                             | Enable init container that changes volume permissions in the registry (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
 | `volumePermissions.image.registry`                      | Init container volume-permissions image registry                                                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`                    | Init container volume-permissions image repository                                                                                                  | `bitnami/os-shell`      |
-| `volumePermissions.image.tag`                           | Init container volume-permissions image tag                                                                                                         | `11-debian-11-r19`      |
+| `volumePermissions.image.tag`                           | Init container volume-permissions image tag                                                                                                         | `11-debian-11-r60`      |
 | `volumePermissions.image.digest`                        | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                   | `""`                    |
 | `volumePermissions.image.pullPolicy`                    | Init container volume-permissions image pull policy                                                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                   | Specify docker-registry secret names as an array                                                                                                    | `[]`                    |
@@ -237,32 +237,33 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Cluster update job parameters
 
-| Name                                  | Description                                                                                                    | Value  |
-| ------------------------------------- | -------------------------------------------------------------------------------------------------------------- | ------ |
-| `updateJob.activeDeadlineSeconds`     | Number of seconds the Job to create the cluster will be waiting for the Nodes to be ready.                     | `600`  |
-| `updateJob.command`                   | Container command (using container default if not set)                                                         | `[]`   |
-| `updateJob.args`                      | Container args (using container default if not set)                                                            | `[]`   |
-| `updateJob.hostAliases`               | Deployment pod host aliases                                                                                    | `[]`   |
-| `updateJob.annotations`               | Job annotations                                                                                                | `{}`   |
-| `updateJob.podAnnotations`            | Job pod annotations                                                                                            | `{}`   |
-| `updateJob.podLabels`                 | Pod extra labels                                                                                               | `{}`   |
-| `updateJob.extraEnvVars`              | An array to add extra environment variables                                                                    | `[]`   |
-| `updateJob.extraEnvVarsCM`            | ConfigMap containing extra environment variables                                                               | `""`   |
-| `updateJob.extraEnvVarsSecret`        | Secret containing extra environment variables                                                                  | `""`   |
-| `updateJob.extraVolumes`              | Extra volumes to add to the deployment                                                                         | `[]`   |
-| `updateJob.extraVolumeMounts`         | Extra volume mounts to add to the container                                                                    | `[]`   |
-| `updateJob.initContainers`            | Extra init containers to add to the deployment                                                                 | `[]`   |
-| `updateJob.podAffinityPreset`         | Update job pod affinity preset. Ignored if `updateJob.affinity` is set. Allowed values: `soft` or `hard`       | `""`   |
-| `updateJob.podAntiAffinityPreset`     | Update job pod anti-affinity preset. Ignored if `updateJob.affinity` is set. Allowed values: `soft` or `hard`  | `soft` |
-| `updateJob.nodeAffinityPreset.type`   | Update job node affinity preset type. Ignored if `updateJob.affinity` is set. Allowed values: `soft` or `hard` | `""`   |
-| `updateJob.nodeAffinityPreset.key`    | Update job node label key to match Ignored if `updateJob.affinity` is set.                                     | `""`   |
-| `updateJob.nodeAffinityPreset.values` | Update job node label values to match. Ignored if `updateJob.affinity` is set.                                 | `[]`   |
-| `updateJob.affinity`                  | Affinity for update job pods assignment                                                                        | `{}`   |
-| `updateJob.nodeSelector`              | Node labels for update job pods assignment                                                                     | `{}`   |
-| `updateJob.tolerations`               | Tolerations for update job pods assignment                                                                     | `[]`   |
-| `updateJob.priorityClassName`         | Priority class name                                                                                            | `""`   |
-| `updateJob.resources.limits`          | The resources limits for the container                                                                         | `{}`   |
-| `updateJob.resources.requests`        | The requested resources for the container                                                                      | `{}`   |
+| Name                                  | Description                                                                                                    | Value          |
+| ------------------------------------- | -------------------------------------------------------------------------------------------------------------- | -------------- |
+| `updateJob.activeDeadlineSeconds`     | Number of seconds the Job to create the cluster will be waiting for the Nodes to be ready.                     | `600`          |
+| `updateJob.command`                   | Container command (using container default if not set)                                                         | `[]`           |
+| `updateJob.args`                      | Container args (using container default if not set)                                                            | `[]`           |
+| `updateJob.hostAliases`               | Deployment pod host aliases                                                                                    | `[]`           |
+| `updateJob.helmHook`                  | Job Helm hook                                                                                                  | `post-upgrade` |
+| `updateJob.annotations`               | Job annotations                                                                                                | `{}`           |
+| `updateJob.podAnnotations`            | Job pod annotations                                                                                            | `{}`           |
+| `updateJob.podLabels`                 | Pod extra labels                                                                                               | `{}`           |
+| `updateJob.extraEnvVars`              | An array to add extra environment variables                                                                    | `[]`           |
+| `updateJob.extraEnvVarsCM`            | ConfigMap containing extra environment variables                                                               | `""`           |
+| `updateJob.extraEnvVarsSecret`        | Secret containing extra environment variables                                                                  | `""`           |
+| `updateJob.extraVolumes`              | Extra volumes to add to the deployment                                                                         | `[]`           |
+| `updateJob.extraVolumeMounts`         | Extra volume mounts to add to the container                                                                    | `[]`           |
+| `updateJob.initContainers`            | Extra init containers to add to the deployment                                                                 | `[]`           |
+| `updateJob.podAffinityPreset`         | Update job pod affinity preset. Ignored if `updateJob.affinity` is set. Allowed values: `soft` or `hard`       | `""`           |
+| `updateJob.podAntiAffinityPreset`     | Update job pod anti-affinity preset. Ignored if `updateJob.affinity` is set. Allowed values: `soft` or `hard`  | `soft`         |
+| `updateJob.nodeAffinityPreset.type`   | Update job node affinity preset type. Ignored if `updateJob.affinity` is set. Allowed values: `soft` or `hard` | `""`           |
+| `updateJob.nodeAffinityPreset.key`    | Update job node label key to match Ignored if `updateJob.affinity` is set.                                     | `""`           |
+| `updateJob.nodeAffinityPreset.values` | Update job node label values to match. Ignored if `updateJob.affinity` is set.                                 | `[]`           |
+| `updateJob.affinity`                  | Affinity for update job pods assignment                                                                        | `{}`           |
+| `updateJob.nodeSelector`              | Node labels for update job pods assignment                                                                     | `{}`           |
+| `updateJob.tolerations`               | Tolerations for update job pods assignment                                                                     | `[]`           |
+| `updateJob.priorityClassName`         | Priority class name                                                                                            | `""`           |
+| `updateJob.resources.limits`          | The resources limits for the container                                                                         | `{}`           |
+| `updateJob.resources.requests`        | The requested resources for the container                                                                      | `{}`           |
 
 ### Cluster management parameters
 
@@ -272,6 +273,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cluster.nodes`                                           | The number of master nodes should always be >= 3, otherwise cluster creation will fail        | `6`            |
 | `cluster.replicas`                                        | Number of replicas for every master in the cluster                                            | `1`            |
 | `cluster.externalAccess.enabled`                          | Enable access to the Redis                                                                    | `false`        |
+| `cluster.externalAccess.hostMode`                         | Set cluster preferred endpoint type as hostname                                               | `false`        |
 | `cluster.externalAccess.service.type`                     | Type for the services used to expose every Pod                                                | `LoadBalancer` |
 | `cluster.externalAccess.service.port`                     | Port for the services used to expose every Pod                                                | `6379`         |
 | `cluster.externalAccess.service.loadBalancerIP`           | Array of load balancer IPs for each Redis&reg; node. Length must be the same as cluster.nodes | `[]`           |
@@ -289,7 +291,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                                           | Start a side-car prometheus exporter                                                                                               | `false`                  |
 | `metrics.image.registry`                                    | Redis&reg; exporter image registry                                                                                                 | `docker.io`              |
 | `metrics.image.repository`                                  | Redis&reg; exporter image name                                                                                                     | `bitnami/redis-exporter` |
-| `metrics.image.tag`                                         | Redis&reg; exporter image tag                                                                                                      | `1.52.0-debian-11-r0`    |
+| `metrics.image.tag`                                         | Redis&reg; exporter image tag                                                                                                      | `1.54.0-debian-11-r0`    |
 | `metrics.image.digest`                                      | Redis&reg; exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                | `""`                     |
 | `metrics.image.pullPolicy`                                  | Redis&reg; exporter image pull policy                                                                                              | `IfNotPresent`           |
 | `metrics.image.pullSecrets`                                 | Specify docker-registry secret names as an array                                                                                   | `[]`                     |
@@ -329,7 +331,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sysctlImage.command`                             | sysctlImage command to execute                                                                                       | `[]`               |
 | `sysctlImage.registry`                            | sysctlImage Init container registry                                                                                  | `docker.io`        |
 | `sysctlImage.repository`                          | sysctlImage Init container repository                                                                                | `bitnami/os-shell` |
-| `sysctlImage.tag`                                 | sysctlImage Init container tag                                                                                       | `11-debian-11-r19` |
+| `sysctlImage.tag`                                 | sysctlImage Init container tag                                                                                       | `11-debian-11-r60` |
 | `sysctlImage.digest`                              | sysctlImage Init container digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`               |
 | `sysctlImage.pullPolicy`                          | sysctlImage Init container pull policy                                                                               | `IfNotPresent`     |
 | `sysctlImage.pullSecrets`                         | Specify docker-registry secret names as an array                                                                     | `[]`               |
@@ -650,6 +652,12 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 9.0.0
+
+This major version updates the Redis&reg; docker image version used from `7.0` to `7.2`, the new stable version. There are no major changes in the chart, but we recommend checking the [Redis&reg; 7.2 release notes](https://raw.githubusercontent.com/redis/redis/7.2/00-RELEASENOTES) before upgrading.
+
+NOTE: Due to an error in our release process, versions higher or equal than 8.8.1 already use 7.2 by default.
 
 ### To 7.0.0
 

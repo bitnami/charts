@@ -65,6 +65,21 @@
               "password": "ComplicatedPassword123!4"
             }
           }
+        },
+        {
+          "action_id": "ginkgo",
+          "params": {
+            "resources": {
+              "path": "/.vib/rabbitmq/ginkgo"
+            },
+            "params": {
+              "kubeconfig": "{{kubeconfig}}",
+              "namespace": "{{namespace}}",
+              "name": "rabbitmq",
+              "username": "test_user",
+              "password": "ComplicatedPassword123!4"
+            }
+          }
         }
       ]
     }

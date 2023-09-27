@@ -10,32 +10,27 @@ kind: StatefulSet
 metadata:
   name: {{ printf "%s-broker" (include "common.names.fullname" .) }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: broker
     app.kubernetes.io/part-of: kafka
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
   podManagementPolicy: {{ .Values.broker.podManagementPolicy }}
   replicas: {{ .Values.broker.replicaCount }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.broker.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: broker
       app.kubernetes.io/part-of: kafka
   serviceName: {{ printf "%s-broker-headless" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   updateStrategy: {{- include "common.tplvalues.render" (dict "value" .Values.broker.updateStrategy "context" $ ) | nindent 4 }}
   template:
     metadata:
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: broker
         app.kubernetes.io/part-of: kafka
-        {{- if .Values.broker.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.broker.podLabels "context" $) | nindent 8 }}
-        {{- end }}
       annotations:
         {{- if (include "kafka.broker.createConfigmap" .) }}
         checksum/configuration: {{ include (print $.Template.BasePath "/broker/configmap.yaml") . | sha256sum }}
@@ -66,8 +61,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.broker.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.broker.podAffinityPreset "component" "kafka" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.broker.podAntiAffinityPreset "component" "kafka" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.broker.podAffinityPreset "component" "broker" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.broker.podAntiAffinityPreset "component" "broker" "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.broker.nodeAffinityPreset.type "key" .Values.broker.nodeAffinityPreset.key "values" .Values.broker.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.broker.nodeSelector }}
@@ -340,6 +335,13 @@ spec:
         - name: kafka-configmaps
           configMap:
             name: {{ include "kafka.broker.configmapName" . }}
+        - name: kafka-secret-config
+        {{- if (include "kafka.broker.secretConfigExists" .) }}
+          secret:
+            secretName: {{ include "kafka.broker.secretConfigName" . }}
+        {{- else }}
+          emptyDir: {}
+        {{- end }}
         - name: kafka-config
           emptyDir: {}
         - name: tmp

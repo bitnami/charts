@@ -9,14 +9,9 @@ kind: Service
 metadata:
   name: {{ template "kube-prometheus.fullname" . }}-kube-controller-manager
   namespace: {{ .Values.kubeControllerManager.namespace }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.kubeControllerManager.service.labels .Values.commonLabels ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: kube-controller-manager
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.kubeControllerManager.service.labels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.kubeControllerManager.service.labels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}

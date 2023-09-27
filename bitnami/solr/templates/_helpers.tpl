@@ -106,13 +106,20 @@ Return Solr admin password
 {{- end -}}
 
 {{/*
-Return the proper Zookeeper host
+Return proper Zookeeper hosts
 */}}
-{{- define "solr.zookeeper.host" -}}
+{{- define "solr.zookeeper.hosts" -}}
 {{- if .Values.externalZookeeper.servers -}}
     {{- include "common.tplvalues.render" (dict "value" (join "," .Values.externalZookeeper.servers) "context" $) -}}
 {{- else -}}
-    {{- printf "%s:%d" (include "solr.zookeeper.fullname" .) (int .Values.zookeeper.containerPorts.client) -}}
+    {{- $zookeeperList := list -}}
+    {{- $releaseNamespace :=  default .Release.Namespace .Values.zookeeper.namespaceOverride -}}
+    {{- $clusterDomain := .Values.clusterDomain -}}
+    {{- $zookeeperFullname := include "solr.zookeeper.fullname" . -}}
+    {{- range $e, $i := until (int .Values.zookeeper.replicaCount) -}}
+        {{- $zookeeperList = append $zookeeperList (printf "%s-%d.%s-headless.%s.svc.%s:%d" $zookeeperFullname $i $zookeeperFullname $releaseNamespace $clusterDomain (int $.Values.zookeeper.containerPorts.client))  -}}
+    {{- end -}}
+    {{- include "common.tplvalues.render" (dict "value" (join "," $zookeeperList) "context" $) -}}
 {{- end -}}
 {{- end -}}
 

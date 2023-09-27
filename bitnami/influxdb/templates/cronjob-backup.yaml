@@ -9,11 +9,7 @@ kind: CronJob
 metadata:
   name: "{{ template "common.names.fullname" . }}-backup"
   namespace: {{ .Release.Namespace | quote }}
-  labels:
-    {{- include "common.labels.standard" . | nindent 4 }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -26,10 +22,10 @@ spec:
     spec:
       template:
         metadata:
-          labels:
-            {{- include "common.labels.matchLabels" . | nindent 12 }}
-          annotations:
-            {{- include "common.tplvalues.render" (dict "value" .Values.backup.cronjob.podAnnotations "context" $) | nindent 12 }}
+          labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 12 }}
+          {{- if .Values.backup.cronjob.podAnnotations }}
+          annotations: {{- include "common.tplvalues.render" (dict "value" .Values.backup.cronjob.podAnnotations "context" $) | nindent 12 }}
+          {{- end }}
         spec:
           {{- if .Values.backup.cronjob.securityContext.enabled }}
           securityContext: {{- omit .Values.backup.cronjob.securityContext "enabled" | toYaml | nindent 12 }}
@@ -60,8 +56,8 @@ spec:
           affinity: {{- include "common.tplvalues.render" (dict "value" .Values.backup.affinity "context" $) | nindent 12 }}
           {{- else }}
           affinity:
-            podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.backup.podAffinityPreset "component" "influxdb" "context" $) | nindent 14 }}
-            podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.backup.podAntiAffinityPreset "component" "influxdb" "context" $) | nindent 14 }}
+            podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.backup.podAffinityPreset "component" "influxdb" "customLabels" .Values.commonLabels "context" $) | nindent 14 }}
+            podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.backup.podAntiAffinityPreset "component" "influxdb" "customLabels" .Values.commonLabels "context" $) | nindent 14 }}
             nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.backup.nodeAffinityPreset.type "key" .Values.backup.nodeAffinityPreset.key "values" .Values.backup.nodeAffinityPreset.values) | nindent 14 }}
           {{- end }}
           {{- if .Values.backup.nodeSelector }}

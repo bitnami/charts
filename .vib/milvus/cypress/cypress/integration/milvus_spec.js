@@ -12,7 +12,7 @@ it('allows to create a collection', () => {
   cy.login();
   // Go to the collections page
   cy.visit('#/collections');
-  cy.get('button').contains('Create Collection').click({force: true});
+  cy.get('button').contains('Collection').click({force: true});
   // Create a collection
   cy.fixture('collection').then((c) => {
     cy.get('[data-cy="collection_name"]').type(`${c.collection.name}${random}`);
@@ -27,7 +27,7 @@ it('allows to create a collection', () => {
     cy.contains('Overview');
     cy.visit('#/collections');
     cy.get(`[href$="${c.collection.name}${random}"]`).click();
-    cy.get('[role="button"]').contains('Create Index').click({force: true});
+    cy.get('td [role="button"]').contains('Index').click({force: true});
     cy.get('[type="number"]').type(`${c.collection.nlist}{enter}`);
     // Return to the collections page
     cy.visit('/');

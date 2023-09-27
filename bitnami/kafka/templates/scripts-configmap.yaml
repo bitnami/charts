@@ -11,10 +11,7 @@ kind: ConfigMap
 metadata:
   name: {{ printf "%s-scripts" $fullname }}
   namespace: {{ $releaseNamespace  | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -143,6 +140,13 @@ data:
       sed -i "s/$placeholder/$password/g" "$KAFKA_CONFIG_FILE"
     }
 
+    append_file_to_kafka_conf() {
+        local file="${1:?missing source file}"
+        local conf="${2:?missing kafka conf file}"
+
+        cat "$1" >> "$2"
+    }
+
     configure_external_access() {
       # Configure external hostname
       if [[ -f "/shared/external-host.txt" ]]; then
@@ -190,6 +194,10 @@ data:
           cp "/mounted-certs/kafka.crt" /certs/tls.crt
           # Copy the PEM key ensuring the key used PEM format with PKCS#8
           openssl pkcs8 -topk8 -nocrypt -in "/mounted-certs/kafka.key" > /certs/tls.key
+        elif [[ -f /mounted-certs/tls.crt && -f /mounted-certs/tls.key ]]; then
+          cp "/mounted-certs/tls.crt" /certs/tls.crt
+          # Copy the PEM key ensuring the key used PEM format with PKCS#8
+          openssl pkcs8 -topk8 -nocrypt -in "/mounted-certs/tls.key" > /certs/tls.key
         else
           error "PEM key and cert files not found"
         fi
@@ -198,6 +206,8 @@ data:
         # Copy CA certificate
         if [[ -f /mounted-certs/kafka-ca.crt ]]; then
           cp /mounted-certs/kafka-ca.crt /certs/ca.crt
+        elif [[ -f /mounted-certs/ca.crt ]]; then
+          cp /mounted-certs/ca.crt /certs/ca.crt
         else
           error "CA certificate file not found"
         fi
@@ -350,5 +360,8 @@ data:
     {{- if and .Values.tls.zookeeper.enabled .Values.tls.zookeeper.existingSecret }}
     configure_zookeeper_tls
     {{- end }}
+    if [ -f /secret-config/server-secret.properties ]; then
+      append_file_to_kafka_conf /secret-config/server-secret.properties $KAFKA_CONFIG_FILE
+    fi
     {{- include "common.tplvalues.render" ( dict "value" .Values.extraInit "context" $ ) | nindent 4 }}
 

@@ -9,10 +9,7 @@ kind: Grafana
 metadata:
   name: {{ printf "%s-grafana" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -22,18 +19,10 @@ spec:
   {{- if .Values.grafana.persistence.enabled }}
   persistentVolumeClaim:
     metadata:
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
-        {{- if .Values.commonLabels }}
-        {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
-        {{- end }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 8 }}
       {{- if or .Values.commonAnnotations .Values.grafana.persistence.annotations }}
-      annotations:
-        {{- if .Values.commonAnnotations }}
-        {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
-        {{- end }}
-        {{- if .Values.grafana.persistence.annotations }}
-        {{- include "common.tplvalues.render" ( dict "value" .Values.grafana.persistence.annotations "context" $ ) | nindent 8 }}
-        {{- end }}
+      {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.grafana.persistence.annotations .Values.commonAnnotations ) "context" . ) }}
+      annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 8 }}
       {{- end }}
     spec:
       accessModes:
@@ -50,13 +39,9 @@ spec:
   {{- end }}
   service:
     {{- if or .Values.commonAnnotations .Values.grafana.service.annotations }}
-    annotations:
-      {{- if .Values.grafana.service.annotations }}
-      {{- include "common.tplvalues.render" ( dict "value" .Values.grafana.service.annotations "context" $) | nindent 6 }}
-      {{- end }}
-      {{- if .Values.commonAnnotations }}
-      {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 6 }}
-      {{- end }}
+    {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.grafana.service.annotations .Values.commonAnnotations ) "context" . ) }}
+    metadata:
+      annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 8 }}
     {{- end }}
     spec:
       type: {{ .Values.grafana.service.type }}
@@ -69,15 +54,23 @@ spec:
   {{- end }}
   deployment:
     metadata:
+      labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 8 }}
+        app.kubernetes.io/component: grafana
       {{- if .Values.commonAnnotations }}
       annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
       {{- end }}
     spec:
       replicas: {{ .Values.grafana.replicaCount }}
+      selector:
+        matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 10 }}
+          app.kubernetes.io/component: grafana
       {{- if .Values.grafana.updateStrategy }}
       strategy: {{ toYaml .Values.grafana.updateStrategy | nindent 8 }}
       {{- end }}
       template:
+        metadata:
+          labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 12 }}
+            app.kubernetes.io/component: grafana
         spec:
           {{- include "common.images.pullSecrets" (dict "images" (list .Values.grafana.image) "global" .Values.global) | nindent 10 }}
           {{- if .Values.grafana.affinity }}
@@ -85,10 +78,10 @@ spec:
           {{- else }}
           affinity:
             {{- if not (empty .Values.grafana.podAffinityPreset) }}
-            podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.grafana.podAffinityPreset "component" "grafana" "context" $) | nindent 14 }}
+            podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.grafana.podAffinityPreset "component" "grafana" "customLabels" .Values.commonLabels "context" $) | nindent 14 }}
             {{- end }}
             {{- if not (empty .Values.grafana.podAntiAffinityPreset) }}
-            podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.grafana.podAntiAffinityPreset "component" "grafana" "context" $) | nindent 14 }}
+            podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.grafana.podAntiAffinityPreset "component" "grafana" "customLabels" .Values.commonLabels "context" $) | nindent 14 }}
             {{- end }}
             {{- if not (empty .Values.grafana.nodeAffinityPreset.type) }}
             nodeAffinity: {{- (dict "type" .Values.grafana.nodeAffinityPreset.type "key" .Values.grafana.nodeAffinityPreset.key "values" .Values.grafana.nodeAffinityPreset.values) | nindent 14 }}
@@ -103,8 +96,14 @@ spec:
           {{- if .Values.grafana.nodeSelector }}
           nodeSelector: {{ toYaml .Values.grafana.nodeSelector | nindent 12 }}
           {{- end }}
-          {{- if .Values.grafana.extraVolumes | or .Values.grafana.secrets }}
           volumes:
+            - name: grafana-data
+              {{- if .Values.grafana.persistence.enabled }}
+              persistentVolumeClaim:
+                claimName: {{ printf "%s-grafana-pvc" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
+              {{- else }}
+              emptyDir: {}
+              {{- end }}
             {{- range .Values.grafana.secrets }}
             - name: '{{.}}'
               secret:
@@ -115,7 +114,6 @@ spec:
             {{- if .Values.grafana.extraVolumes }}
             {{- include "common.tplvalues.render" (dict "value" .Values.grafana.extraVolumes "context" $) | nindent 12 }}
             {{- end }}
-          {{- end }}
           containers:
             - name: grafana
               image: {{ include "common.images.image" (dict "imageRoot" .Values.grafana.image "global" .Values.global) }}
@@ -188,24 +186,11 @@ spec:
           secretName: {{ .Values.grafana.ingress.tlsSecret }}
       {{- end }}
     metadata:
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
-        {{- if .Values.commonLabels }}
-        {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
-        {{- end }}
-        {{- if .Values.grafana.labels }}
-        {{- include "common.tplvalues.render" ( dict "value" .Values.grafana.labels "context" $ ) | nindent 8 }}
-        {{- end }}
-        {{- if .Values.grafana.ingress.labels }}
-        {{- include "common.tplvalues.render" ( dict "value" .Values.grafana.ingress.labels "context" $ ) | nindent 8 }}
-        {{- end }}
+      {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.grafana.ingress.labels .Values.grafana.labels .Values.commonLabels ) "context" . ) }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 8 }}
       {{- if or .Values.commonAnnotations .Values.grafana.ingress.annotations }}
-      annotations:
-        {{- if .Values.commonAnnotations }}
-        {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 8 }}
-        {{- end }}
-        {{- if .Values.grafana.ingress.annotations }}
-        {{- include "common.tplvalues.render" ( dict "value" .Values.grafana.ingress.annotations "context" $ ) | nindent 8 }}
-        {{- end }}
+      {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.grafana.ingress.annotations .Values.commonAnnotations ) "context" . ) }}
+      annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 8 }}
       {{- end }}
   {{- end }}
   config: {{- include "common.tplvalues.render" ( dict "value" .Values.grafana.config "context" $ ) | nindent 4 }}

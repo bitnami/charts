@@ -7,36 +7,32 @@ SPDX-License-Identifier: APACHE-2.0
 {{- $releaseNamespace := include "common.names.namespace" . -}}
 {{- $clusterDomain := .Values.clusterDomain -}}
 {{- $fullname := include "common.names.fullname" . -}}
-{{- $servicePort := int .Values.service.ports.client -}}
+{{- $containerPort := int .Values.listeners.client.containerPort -}}
 apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ include "kafka.metrics.kafka.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.metrics.kafka.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: cluster-metrics
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
   replicas: 1
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.metrics.kafka.podLabels .Values.commonLabels $versionLabel ) "context" . ) }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: cluster-metrics
   template:
     metadata:
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: cluster-metrics
-        {{- if .Values.metrics.kafka.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.metrics.kafka.podLabels "context" $) | nindent 8 }}
-        {{- end }}
-      annotations:
-        {{- if .Values.metrics.kafka.podAnnotations }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.metrics.kafka.podAnnotations "context" $) | nindent 8 }}
-        {{- end }}
+      {{- if .Values.metrics.kafka.podAnnotations }}
+      annotations: {{- include "common.tplvalues.render" (dict "value" .Values.metrics.kafka.podAnnotations "context" $) | nindent 8 }}
+      {{- end }}
     spec:
       {{- include "kafka.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.metrics.kafka.hostAliases }}
@@ -46,8 +42,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.kafka.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.metrics.kafka.podAffinityPreset "component" "metrics" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.metrics.kafka.podAntiAffinityPreset "component" "metrics" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.metrics.kafka.podAffinityPreset "component" "cluster-metrics"  "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.metrics.kafka.podAntiAffinityPreset "component" "cluster-metrics"  "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.metrics.kafka.nodeAffinityPreset.type "key" .Values.metrics.kafka.nodeAffinityPreset.key "values" .Values.metrics.kafka.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.metrics.kafka.nodeSelector }}
@@ -98,10 +94,10 @@ spec:
             - |
               kafka_exporter \
               {{- range $i := until (int .Values.controller.replicaCount) }}
-              --kafka.server={{ $fullname }}-controller-{{ $i }}.{{ $fullname }}-controller-headless.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ $servicePort }} \
+              --kafka.server={{ $fullname }}-controller-{{ $i }}.{{ $fullname }}-controller-headless.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ $containerPort }} \
               {{- end }}
               {{- range $i := until (int .Values.broker.replicaCount) }}
-              --kafka.server={{ $fullname }}-broker-{{ $i }}.{{ $fullname }}-broker-headless.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ $servicePort }} \
+              --kafka.server={{ $fullname }}-broker-{{ $i }}.{{ $fullname }}-broker-headless.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}:{{ $containerPort }} \
               {{- end }}
               {{- if regexFind "SASL" (upper .Values.listeners.client.protocol) }}
               --sasl.enabled \

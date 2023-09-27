@@ -51,6 +51,21 @@
               }
             }
           }
+        },
+        {
+          "action_id": "ginkgo",
+          "params": {
+            "resources": {
+              "path": "/.vib/mariadb-galera/ginkgo"
+            },
+            "params": {
+              "kubeconfig": "{{kubeconfig}}",
+              "namespace": "{{namespace}}",
+              "name": "mariadb-galera",
+              "username": "bitnamiroot",
+              "password": "ComplicatedPassword123!4"
+            }
+          }
         }
       ]
     },

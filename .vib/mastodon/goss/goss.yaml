@@ -9,6 +9,7 @@ command:
     # or the one randomly defined by openshift (larger values). Otherwise, the chart is still using the default value.
     exec: if [ $(id -u) -lt {{ $uid }} ] || [ $(id -G | awk '{print $2}') -lt {{ $gid }} ]; then exit 1; fi
     exit-status: 0
+  {{- if .Vars.web.containerSecurityContext.enabled }}
   check-no-capabilities:
     exec: cat /proc/1/status
     exit-status: 0
@@ -18,6 +19,7 @@ command:
     - "CapEff:	0000000000000000"
     - "CapBnd:	0000000000000000"
     - "CapAmb:	0000000000000000"
+  {{- end }}
   conf-vars:
     exec: |
       bash -ec ". /opt/bitnami/scripts/mastodon-env.sh && env"

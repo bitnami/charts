@@ -9,12 +9,9 @@ kind: {{ ternary "DaemonSet" "Deployment" .Values.controlPlane.useDaemonSet }}
 metadata:
   name: {{ template "apisix.control-plane.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: apisix
     app.kubernetes.io/component: control-plane
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -25,8 +22,9 @@ spec:
   {{- if .Values.controlPlane.updateStrategy }}
   {{ ternary "updateStrategy" "strategy" .Values.controlPlane.useDaemonSet }}: {{- toYaml .Values.controlPlane.updateStrategy | nindent 4 }}
   {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.controlPlane.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/part-of: apisix
       app.kubernetes.io/component: control-plane
   template:
@@ -41,15 +39,9 @@ spec:
         {{- if .Values.commonAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 8 }}
         {{- end }}
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/part-of: apisix
         app.kubernetes.io/component: control-plane
-        {{- if .Values.controlPlane.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.controlPlane.podLabels "context" $) | nindent 8 }}
-        {{- end }}
-        {{- if .Values.commonLabels }}
-        {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
-        {{- end }}
     spec:
       serviceAccountName: {{ template "apisix.control-plane.serviceAccountName" . }}
       {{- if .Values.controlPlane.hostNetwork }}
@@ -63,8 +55,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.controlPlane.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.controlPlane.podAffinityPreset "component" "control-plane" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.controlPlane.podAntiAffinityPreset "component" "control-plane" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.controlPlane.podAffinityPreset "component" "control-plane" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.controlPlane.podAntiAffinityPreset "component" "control-plane" "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.controlPlane.nodeAffinityPreset.type "key" .Values.controlPlane.nodeAffinityPreset.key "values" .Values.controlPlane.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.controlPlane.nodeSelector }}

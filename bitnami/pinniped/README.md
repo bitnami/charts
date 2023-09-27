@@ -20,7 +20,7 @@ Bitnami charts for Helm are carefully engineered, actively maintained and are th
 
 This chart bootstraps a [Pinniped](https://pinniped.dev/) Deployment in a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters. This Helm chart has been tested on top of [Bitnami Kubernetes Production Runtime](https://kubeprod.io/) (BKPR). Deploy BKPR to get automated TLS certificates, logging and monitoring for your applications.
 
 [Learn more about the default configuration of the chart](https://docs.bitnami.com/kubernetes/infrastructure/pinniped/get-started/).
 
@@ -65,22 +65,22 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common parameters
 
-| Name                | Description                                                                                              | Value               |
-| ------------------- | -------------------------------------------------------------------------------------------------------- | ------------------- |
-| `kubeVersion`       | Override Kubernetes version                                                                              | `""`                |
-| `nameOverride`      | String to partially override common.names.name                                                           | `""`                |
-| `fullnameOverride`  | String to fully override common.names.fullname                                                           | `""`                |
-| `namespaceOverride` | String to fully override common.names.namespace                                                          | `""`                |
-| `commonLabels`      | Labels to add to all deployed objects                                                                    | `{}`                |
-| `commonAnnotations` | Annotations to add to all deployed objects                                                               | `{}`                |
-| `clusterDomain`     | Kubernetes cluster domain name                                                                           | `cluster.local`     |
-| `extraDeploy`       | Array of extra objects to deploy with the release                                                        | `[]`                |
-| `image.registry`    | Pinniped image registry                                                                                  | `docker.io`         |
-| `image.repository`  | Pinniped image repository                                                                                | `bitnami/pinniped`  |
-| `image.tag`         | Pinniped image tag (immutable tags are recommended)                                                      | `0.25.0-scratch-r0` |
-| `image.digest`      | Pinniped image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                |
-| `image.pullPolicy`  | Pinniped image pull policy                                                                               | `IfNotPresent`      |
-| `image.pullSecrets` | Pinniped image pull secrets                                                                              | `[]`                |
+| Name                | Description                                                                                              | Value                  |
+| ------------------- | -------------------------------------------------------------------------------------------------------- | ---------------------- |
+| `kubeVersion`       | Override Kubernetes version                                                                              | `""`                   |
+| `nameOverride`      | String to partially override common.names.name                                                           | `""`                   |
+| `fullnameOverride`  | String to fully override common.names.fullname                                                           | `""`                   |
+| `namespaceOverride` | String to fully override common.names.namespace                                                          | `""`                   |
+| `commonLabels`      | Labels to add to all deployed objects                                                                    | `{}`                   |
+| `commonAnnotations` | Annotations to add to all deployed objects                                                               | `{}`                   |
+| `clusterDomain`     | Kubernetes cluster domain name                                                                           | `cluster.local`        |
+| `extraDeploy`       | Array of extra objects to deploy with the release                                                        | `[]`                   |
+| `image.registry`    | Pinniped image registry                                                                                  | `docker.io`            |
+| `image.repository`  | Pinniped image repository                                                                                | `bitnami/pinniped`     |
+| `image.tag`         | Pinniped image tag (immutable tags are recommended)                                                      | `0.25.0-debian-11-r34` |
+| `image.digest`      | Pinniped image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
+| `image.pullPolicy`  | Pinniped image pull policy                                                                               | `IfNotPresent`         |
+| `image.pullSecrets` | Pinniped image pull secrets                                                                              | `[]`                   |
 
 ### Concierge Parameters
 
