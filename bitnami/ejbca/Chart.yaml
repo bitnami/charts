@@ -6,9 +6,9 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: ejbca
-      image: docker.io/bitnami/ejbca:8.0.20230531-debian-11-r29
+      image: docker.io/bitnami/ejbca:8.0.0-debian-11-r2
 apiVersion: v2
-appVersion: 8.0.20230531
+appVersion: 8.0.0
 dependencies:
 - condition: mariadb.enabled
   name: mariadb
@@ -35,4 +35,4 @@ maintainers:
 name: ejbca
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/ejbca
-version: 9.0.2
+version: 9.0.4
