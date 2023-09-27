@@ -9,11 +9,8 @@ kind: StatefulSet
 metadata:
   name: {{ include "common.names.fullname" . }}-storegateway
   namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: storegateway
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -26,19 +23,14 @@ spec:
   {{- if .Values.storegateway.updateStrategy }}
   updateStrategy: {{- toYaml .Values.storegateway.updateStrategy | nindent 4 }}
   {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.storegateway.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: storegateway
   template:
     metadata:
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: storegateway
-        {{- if .Values.commonLabels }}
-        {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
-        {{- end }}
-        {{- if .Values.storegateway.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.podLabels "context" $) | nindent 8 }}
-        {{- end }}
       annotations:
         checksum/objstore-configuration: {{ include (print $.Template.BasePath "/objstore-secret.yaml") . | sha256sum }}
         {{- if (include "thanos.storegateway.createConfigmap" .) }}
@@ -58,8 +50,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.storegateway.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.storegateway.podAffinityPreset "component" "storegateway" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.storegateway.podAntiAffinityPreset "component" "storegateway" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.storegateway.podAffinityPreset "component" "storegateway" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.storegateway.podAntiAffinityPreset "component" "storegateway" "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.storegateway.nodeAffinityPreset.type "key" .Values.storegateway.nodeAffinityPreset.key "values" .Values.storegateway.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.storegateway.dnsConfig }}

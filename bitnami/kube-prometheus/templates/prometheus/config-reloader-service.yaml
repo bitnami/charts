@@ -11,23 +11,20 @@ metadata:
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "kube-prometheus.prometheus.labels" . | nindent 4 }}
     app.kubernetes.io/subcomponent: config-reloader
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
     {{- if .Values.prometheus.configReloader.service.labels }}
     {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.configReloader.service.labels "context" $) | nindent 4 }}
     {{- end }}
-  annotations:
-    {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.prometheus.configReloader.service.annotations }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.configReloader.service.annotations "context" $) | nindent 4 }}
-    {{- end }}
+  {{- if or .Values.prometheus.configReloader.service.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.prometheus.configReloader.service.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
+  {{- end }}
 spec:
   type: {{ .Values.prometheus.configReloader.service.type }}
   {{- if and (eq .Values.prometheus.configReloader.service.type "LoadBalancer") (not (empty .Values.prometheus.configReloader.service.loadBalancerIP)) }}
   loadBalancerIP: {{ .Values.prometheus.configReloader.service.loadBalancerIP }}
+  {{- end }}
+  {{- if and (eq .Values.prometheus.configReloader.service.type "LoadBalancer") (not (empty .Values.prometheus.configReloader.service.loadBalancerClass)) }}
+  loadBalancerClass: {{ .Values.prometheus.configReloader.service.loadBalancerClass }}
   {{- end }}
   {{- if and (eq .Values.prometheus.configReloader.service.type "LoadBalancer") (not (empty .Values.prometheus.configReloader.service.loadBalancerSourceRanges)) }}
   loadBalancerSourceRanges: {{ .Values.prometheus.configReloader.service.loadBalancerSourceRanges }}
@@ -55,7 +52,6 @@ spec:
     {{- if .Values.prometheus.configReloader.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.prometheus.configReloader.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}
-  selector:
-    app.kubernetes.io/name: prometheus
+  selector: {{- include "kube-prometheus.prometheus.matchLabels" . | nindent 4 }}
     prometheus: {{ template "kube-prometheus.prometheus.fullname" . }}
 {{- end }}

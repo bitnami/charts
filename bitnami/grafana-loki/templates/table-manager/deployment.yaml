@@ -9,12 +9,11 @@ kind: Deployment
 metadata:
   name: {{ template "grafana-loki.table-manager.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.loki.image "chart" .Chart ) ) }}  
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: grafana-loki
     app.kubernetes.io/component: table-manager
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -23,8 +22,9 @@ spec:
   {{- if .Values.tableManager.updateStrategy }}
   strategy: {{- toYaml .Values.tableManager.updateStrategy | nindent 4 }}
   {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.tableManager.podLabels .Values.commonLabels $versionLabel ) "context" . ) }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/part-of: grafana-loki
       app.kubernetes.io/component: table-manager
   template:
@@ -34,13 +34,10 @@ spec:
         {{- if .Values.tableManager.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.tableManager.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/part-of: grafana-loki
         app.kubernetes.io/component: table-manager
         loki-gossip-member: "true"
-        {{- if .Values.tableManager.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.tableManager.podLabels "context" $) | nindent 8 }}
-        {{- end }}
     spec:
       serviceAccountName: {{ template "grafana-loki.serviceAccountName" . }}
       {{- include "grafana-loki.imagePullSecrets" . | nindent 6 }}
@@ -51,8 +48,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.tableManager.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.tableManager.podAffinityPreset "component" "tableManager" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.tableManager.podAntiAffinityPreset "component" "tableManager" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.tableManager.podAffinityPreset "component" "tableManager" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.tableManager.podAntiAffinityPreset "component" "tableManager" "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.tableManager.nodeAffinityPreset.type "key" .Values.tableManager.nodeAffinityPreset.key "values" .Values.tableManager.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.tableManager.nodeSelector }}

@@ -10,24 +10,17 @@ kind: StatefulSet
 metadata:
   name: {{ printf "%s-node" (include "common.names.fullname" .) }}
   namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: node
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if or .Values.commonAnnotations .Values.sentinel.annotations }}
-  annotations:
-    {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.sentinel.annotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.sentinel.annotations "context" $ ) | nindent 4 }}
-    {{- end }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.sentinel.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
   replicas: {{ .Values.replica.replicaCount }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.replica.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: node
   serviceName: {{ printf "%s-headless" (include "common.names.fullname" .) }}
   {{- if .Values.replica.updateStrategy }}
@@ -41,14 +34,8 @@ spec:
   {{- end }}
   template:
     metadata:
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: node
-        {{- if .Values.replica.podLabels }}
-        {{- include "common.tplvalues.render" ( dict "value" .Values.replica.podLabels "context" $ ) | nindent 8 }}
-        {{- end }}
-        {{- if .Values.commonLabels }}
-        {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
-        {{- end }}
         {{- if and .Values.metrics.enabled .Values.metrics.podLabels }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.metrics.podLabels "context" $ ) | nindent 8 }}
         {{- end }}
@@ -82,8 +69,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.replica.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.replica.podAffinityPreset "component" "node" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.replica.podAntiAffinityPreset "component" "node" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.replica.podAffinityPreset "component" "node" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.replica.podAntiAffinityPreset "component" "node" "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.replica.nodeAffinityPreset.type "key" .Values.replica.nodeAffinityPreset.key "values" .Values.replica.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.replica.nodeSelector }}
@@ -107,6 +94,7 @@ spec:
       {{- if .Values.replica.dnsConfig }}
       dnsConfig: {{- include "common.tplvalues.render" (dict "value" .Values.replica.dnsConfig "context" $) | nindent 8 }}
       {{- end }}
+      enableServiceLinks: {{ .Values.sentinel.enableServiceLinks }}
       terminationGracePeriodSeconds: {{ .Values.sentinel.terminationGracePeriodSeconds }}
       containers:
         - name: redis
@@ -743,7 +731,7 @@ spec:
   volumeClaimTemplates:
     - metadata:
         name: redis-data
-        labels: {{- include "common.labels.matchLabels" . | nindent 10 }}
+        labels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 10 }}
           app.kubernetes.io/component: node
         {{- if .Values.replica.persistence.annotations }}
         annotations: {{- toYaml .Values.replica.persistence.annotations | nindent 10 }}
@@ -763,11 +751,9 @@ spec:
     {{- if .Values.sentinel.persistence.enabled }}
     - metadata:
         name: sentinel-data
-        labels: {{- include "common.labels.matchLabels" . | nindent 10 }}
+        {{- $claimLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.sentinel.persistence.labels .Values.commonLabels ) "context" . ) }}
+        labels: {{- include "common.labels.matchLabels" ( dict "customLabels" $claimLabels "context" $ ) | nindent 10 }}
           app.kubernetes.io/component: node
-          {{- if .Values.sentinel.persistence.labels }}
-          {{- toYaml .Values.sentinel.persistence.labels | nindent 4 }}
-          {{- end }}
         {{- if .Values.sentinel.persistence.annotations }}
         annotations: {{- toYaml .Values.sentinel.persistence.annotations | nindent 10 }}
         {{- end }}

@@ -5,14 +5,18 @@ file:
   /app:
     exists: true
     filetype: directory
+    {{- if ne .Vars.target_platform_kind "OPENSHIFT" }}
     mode: "0777"
     owner: root
     group: root
+    {{- else }}
+    mode: "2777"
+    {{- end }}
 command:
-  {{ if and .Vars.serviceAccount.create .Vars.serviceAccount.automountServiceAccountToken }}
+  {{- if and .Vars.serviceAccount.create .Vars.serviceAccount.automountServiceAccountToken }}
   check-sa:
     exec: cat /var/run/secrets/kubernetes.io/serviceaccount/token | cut -d '.' -f 2 | xargs -I '{}' echo '{}====' | fold -w 4 | sed '$ d' | tr -d '\n' | base64 -d
     exit-status: 0
     stdout:
     - /serviceaccount.*name.*{{.Env.BITNAMI_APP_NAME }}/
-  {{ end }}
+  {{- end }}

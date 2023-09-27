@@ -8,11 +8,8 @@ apiVersion: {{ include "common.capabilities.hpa.apiVersion" ( dict "context" $ )
 kind: HorizontalPodAutoscaler
 metadata:
   name: {{ include "scdf.fullname" . }}-prometheus-proxy
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: prometheus-proxy
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   namespace: {{ .Release.Namespace }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}

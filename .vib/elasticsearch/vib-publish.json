@@ -61,6 +61,19 @@
             "endpoint": "lb-elasticsearch-tcp-rest-api",
             "app_protocol": "HTTP"
           }
+        },
+        {
+          "action_id": "ginkgo",
+          "params": {
+            "resources": {
+              "path": "/.vib/elasticsearch/ginkgo"
+            },
+            "params": {
+              "kubeconfig": "{{kubeconfig}}",
+              "namespace": "{{namespace}}",
+              "name": "elasticsearch"
+            }
+          }
         }
       ]
     },

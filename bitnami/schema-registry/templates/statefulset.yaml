@@ -7,8 +7,6 @@ SPDX-License-Identifier: APACHE-2.0
 {{- $releaseNamespace := .Release.Namespace }}
 {{- $clusterDomain := .Values.clusterDomain }}
 {{- $kafkaProtocol := upper (ternary .Values.kafka.listeners.client.protocol .Values.externalKafka.listener.protocol .Values.kafka.enabled) }}
-{{- $kafkaBrokerReplicaCount := int .Values.kafka.broker.replicaCount }}
-{{- $kafkaControllerReplicaCount := ternary 0 (int .Values.kafka.controller.replicaCount) (or (not .Values.kafka.kraft.enabled) (.Values.kafka.controller.controllerOnly)) }}
 {{- $kafkaFullname := include "schema-registry.kafka.fullname" . }}
 {{- $kafkaPort := int .Values.kafka.service.ports.client }}
 apiVersion: {{ include "common.capabilities.statefulset.apiVersion" $ }}
@@ -16,7 +14,7 @@ kind: StatefulSet
 metadata:
   name: {{ $fullname | quote }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -25,8 +23,9 @@ spec:
   replicas: {{ .Values.replicaCount }}
   {{- end }}
   podManagementPolicy: {{ .Values.podManagementPolicy | quote }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
   serviceName: {{ printf "%s-headless" $fullname }}
   {{- if .Values.updateStrategy }}
   updateStrategy: {{- toYaml .Values.updateStrategy | nindent 4 }}
@@ -45,10 +44,7 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
       {{- end }}
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
-        {{- if .Values.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.podLabels "context" $) | nindent 8 }}
-        {{- end }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
     spec:
       {{- include "schema-registry.imagePullSecrets" . | indent 6 }}
       serviceAccountName: {{ include "schema-registry.serviceAccountName" . }}
@@ -59,8 +55,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAffinityPreset "component" "" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "component" "" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAffinityPreset "customLabels" $podLabels  "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "customLabels" $podLabels  "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.nodeAffinityPreset.type "key" .Values.nodeAffinityPreset.key "values" .Values.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.nodeSelector }}
@@ -151,6 +147,8 @@ spec:
             - name: SCHEMA_REGISTRY_KAFKA_BROKERS
               {{- if .Values.kafka.enabled }}
               {{- $brokers := list }}
+              {{- $kafkaBrokerReplicaCount := int .Values.kafka.broker.replicaCount }}
+              {{- $kafkaControllerReplicaCount := ternary 0 (int .Values.kafka.controller.replicaCount) (or (not .Values.kafka.kraft.enabled) (.Values.kafka.controller.controllerOnly)) }}
               {{- range $e, $i := until $kafkaBrokerReplicaCount }}
               {{- $brokers = append $brokers (printf "%s://%s-broker-%d.%s-broker-headless.%s.svc.%s:%d" $kafkaProtocol $kafkaFullname $i $kafkaFullname $releaseNamespace $clusterDomain $kafkaPort) }}
               {{- end }}
@@ -259,7 +257,7 @@ spec:
         {{- if .Values.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
-      {{- if or .Values.configuration .Values.existingConfigmap  .Values.log4j .Values.existingLog4jConfigMap (contains "SSL" $kafkaProtocol) .Values.extraVolumes }}
+      {{- if or .Values.configuration .Values.existingConfigmap  .Values.log4j .Values.existingLog4jConfigMap (contains "SSL" $kafkaProtocol) .Values.auth.tls.enabled .Values.extraVolumes }}
       volumes:
         {{- if or .Values.configuration .Values.existingConfigmap }}
         - name: configuration
@@ -271,11 +269,19 @@ spec:
           configMap:
             name: {{ include "schema-registry.log4j.configmapName" . }}
         {{ end }}
-        {{- if contains "SSL" $kafkaProtocol }}
+        {{- if or (contains "SSL" $kafkaProtocol) .Values.auth.tls.enabled }}
         - name: certificates
-          secret:
-            secretName: {{ printf "%s" (tpl .Values.auth.kafka.jksSecret $) }}
-            defaultMode: 256
+          projected:
+            defaultMode: 0400
+            sources:
+            {{- if contains "SSL" $kafkaProtocol }}
+            - secret:
+                name: {{ printf "%s" (tpl .Values.auth.kafka.jksSecret $) }}
+            {{- end }}
+            {{- if .Values.auth.tls.enabled }}
+            - secret:
+                name: {{ printf "%s" (tpl .Values.auth.tls.jksSecret $) }}
+            {{- end }}
         {{- end }}
         {{- if .Values.extraVolumes }}
         {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}

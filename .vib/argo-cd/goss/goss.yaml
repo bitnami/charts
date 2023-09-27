@@ -26,6 +26,7 @@ command:
   check-argocd-cli:
     exec: argocd login argo-cd-server --insecure --username admin --password {{ $password }}
     exit-status: 0
+  {{- if .Vars.server.containerSecurityContext.enabled }}
   check-no-capabilities:
     exec: cat /proc/1/status
     exit-status: 0
@@ -35,6 +36,7 @@ command:
     - "CapEff:	0000000000000000"
     - "CapBnd:	0000000000000000"
     - "CapAmb:	0000000000000000"
+  {{- end }}
   {{- $uid := .Vars.server.containerSecurityContext.runAsUser }}
   {{- $gid := .Vars.server.podSecurityContext.fsGroup }}
   check-user-info:

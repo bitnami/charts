@@ -6,7 +6,7 @@ metadata:
   name: orders.acme.cert-manager.io
   annotations:
     cert-manager.io/inject-ca-from-secret: '{{ template "certmanager.webhook.caRef" . }}'
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app: {{ template "common.names.name" . }}
 spec:
   group: acme.cert-manager.io

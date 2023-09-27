@@ -9,27 +9,19 @@ kind: Job
 metadata:
   name: {{ include "common.names.fullname" . }}-jwt-init
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: supabase
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
-  annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.jwt.autoGenerate.annotations "context" $ ) | nindent 4 }}
-    {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-    {{- end }}
+  {{- if or .Values.jwt.autoGenerate.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.jwt.autoGenerate.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
 spec:
   backoffLimit: {{ .Values.jwt.autoGenerate.backoffLimit }}
   template:
     metadata:
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.jwt.autoGenerate.podLabels .Values.commonLabels ) "context" . ) }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: init
-        {{- if .Values.jwt.autoGenerate.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.jwt.autoGenerate.podLabels "context" $) | nindent 8 }}
-        {{- end }}
-        {{- if .Values.commonLabels }}
-        {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
-        {{- end }}
       {{- if .Values.jwt.autoGenerate.podAnnotations }}
       annotations: {{- include "common.tplvalues.render" (dict "value" .Values.jwt.autoGenerate.podAnnotations "context" $) | nindent 8 }}
       {{- end }}

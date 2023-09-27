@@ -10,17 +10,12 @@ metadata:
   name: {{ template "kube-prometheus.alertmanager.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "kube-prometheus.alertmanager.labels" . | nindent 4 }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
   selector:
-    matchLabels:
-      app.kubernetes.io/name: alertmanager
-      alertmanager: {{ template "kube-prometheus.alertmanager.fullname" . }}
+    matchLabels: {{- include "kube-prometheus.alertmanager.matchLabels" . | nindent 6 }}
   {{- if .Values.alertmanager.pdb.minAvailable }}
   minAvailable: {{ .Values.alertmanager.pdb.minAvailable }}
   {{- end }}

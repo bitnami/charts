@@ -71,7 +71,7 @@ hub:
   image:
     registry: docker.io
     repository: bitnami/jupyterhub
-    tag: 4.0.2-debian-11-r0
+    tag: 4.0.2-debian-11-r44
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -166,10 +166,7 @@ hub:
       extraLabels:
         hub.jupyter.org/network-access-hub: "true"
         app.kubernetes.io/component: singleuser
-        {{- include "common.labels.standard" . | nindent 4 }}
-        {{- if .Values.commonLabels }}
-        {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-        {{- end }}
+        {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
         {{- if .Values.singleuser.podLabels }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.singleuser.podLabels "context" $ ) | nindent 4 }}
         {{- end }}
@@ -200,7 +197,7 @@ hub:
         {{- end }}
         extraLabels:
           app.kubernetes.io/component: singleuser
-          {{- include "common.labels.standard" . | nindent 6 }}
+          {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 6 }}
         {{- if .Values.singleuser.extraVolumes }}
         extraVolumes: {{- include "common.tplvalues.render" ( dict "value" .Values.singleuser.extraVolumes "context" $ ) | nindent 4 }}
         {{- end }}
@@ -639,7 +636,7 @@ proxy:
   image:
     registry: docker.io
     repository: bitnami/configurable-http-proxy
-    tag: 4.5.5-debian-11-r124
+    tag: 4.6.0-debian-11-r5
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1416,7 +1413,7 @@ singleuser:
   image:
     registry: docker.io
     repository: bitnami/jupyter-base-notebook
-    tag: 4.0.1-debian-11-r50
+    tag: 4.0.2-debian-11-r45
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1600,7 +1597,7 @@ singleuser:
 auxiliaryImage:
   registry: docker.io
   repository: bitnami/os-shell
-  tag: 11-debian-11-r34
+  tag: 11-debian-11-r77
   digest: ""
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.

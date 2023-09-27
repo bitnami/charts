@@ -9,18 +9,12 @@ kind: Ingress
 metadata:
   name: {{ include "common.names.fullname" . }}-bucketweb
   namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: bucketweb
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
-  annotations:
-    {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.bucketweb.ingress.annotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.bucketweb.ingress.annotations "context" $ ) | nindent 4 }}
-    {{- end }}
+  {{- if or .Values.bucketweb.ingress.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.bucketweb.ingress.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
 spec:
   {{- if and .Values.bucketweb.ingress.ingressClassName (include "common.ingress.supportsIngressClassname" .) }}
   ingressClassName: {{ .Values.bucketweb.ingress.ingressClassName | quote }}

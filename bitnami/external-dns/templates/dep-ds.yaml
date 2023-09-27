@@ -12,10 +12,7 @@ kind: Deployment
 metadata:
   name: {{ template "external-dns.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
-  labels: {{ include "external-dns.labels" . | nindent 4 }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -26,11 +23,12 @@ spec:
   {{- if .Values.updateStrategy }}
   strategy: {{- toYaml .Values.updateStrategy | nindent 4 }}
   {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
-    matchLabels: {{ include "external-dns.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
   template:
     metadata:
-      labels: {{ include "external-dns.labels" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
       {{- if or .Values.podAnnotations (and .Values.metrics.enabled .Values.metrics.podAnnotations) (include "external-dns.createSecret" .) (and (eq .Values.provider "designate") .Values.designate.customCA.enabled) }}
       annotations:
         {{- if or .Values.podAnnotations (and .Values.metrics.enabled .Values.metrics.podAnnotations) }}
@@ -52,8 +50,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAffinityPreset "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAffinityPreset "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.podAntiAffinityPreset "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.nodeAffinityPreset.type "key" .Values.nodeAffinityPreset.key "values" .Values.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.schedulerName }}
@@ -213,6 +211,12 @@ spec:
             {{- if .Values.aws.preferCNAME }}
             - --aws-prefer-cname
             {{- end }}
+            {{- if .Values.aws.dynamodbTable }}
+            - --dynamodb-table={{ .Values.aws.dynamodbTable }}
+            {{- end }}
+            {{- if .Values.aws.dynamodbRegion }}
+            - --dynamodb-region={{ .Values.aws.dynamodbRegion }}
+            {{- end }}
             {{- if and (kindIs "bool" .Values.aws.evaluateTargetHealth) (not .Values.aws.evaluateTargetHealth) }}
             - --no-aws-evaluate-target-health
             {{- end }}
@@ -361,7 +365,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ .Values.aws.credentials.secretAccessKeySecretRef.name}}
-                  key: {{ .Values.aws.credentials.secretAccessKeySecretRef.key }}  
+                  key: {{ .Values.aws.credentials.secretAccessKeySecretRef.key }}
             {{- end }}
             {{- end }}
             {{- if eq .Values.provider "cloudflare" }}
@@ -592,7 +596,7 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: {{ template "external-dns.secretName" . }}
-                  key: {{ .Values.rfc2136.tsigKeyname }}
+                  key: rfc2136_tsig_secret
             {{- end }}
             {{- end }}
             {{- if eq .Values.provider "pdns" }}
@@ -786,6 +790,9 @@ spec:
           {{- if or .Values.azure.secretName (and .Values.azure.resourceGroup .Values.azure.tenantId .Values.azure.subscriptionId) }}
           secret:
             secretName: {{ template "external-dns.secretName" . }}
+          {{- else if .Values.azure.useWorkloadIdentityExtension }}
+          secret:
+            secretName: {{ template "external-dns.fullname" . }}
           {{- else if .Values.azure.useManagedIdentityExtension }}
           secret:
             secretName: {{ template "external-dns.fullname" . }}

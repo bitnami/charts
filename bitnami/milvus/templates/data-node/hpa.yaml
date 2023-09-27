@@ -9,20 +9,12 @@ kind: HorizontalPodAutoscaler
 metadata:
   name: {{ template "milvus.data-node.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: milvus
     app.kubernetes.io/component: data-node
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if or .Values.commonAnnotations .Values.dataNode.autoscaling.hpa.annotations }}
-  annotations:
-    {{- if .Values.dataNode.autoscaling.hpa.annotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.dataNode.autoscaling.hpa.annotations "context" $ ) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-    {{- end }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.dataNode.autoscaling.hpa.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
   scaleTargetRef:

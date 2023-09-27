@@ -98,7 +98,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/postgresql
-  tag: 15.4.0-debian-11-r0
+  tag: 15.4.0-debian-11-r45
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -698,6 +698,19 @@ primary:
     ## @param primary.persistence.dataSource Custom PVC data source
     ##
     dataSource: {}
+  ## PostgreSQL Primary Persistent Volume Claim Retention Policy
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#persistentvolumeclaim-retention
+  ##
+  persistentVolumeClaimRetentionPolicy:
+    ## @param primary.persistentVolumeClaimRetentionPolicy.enabled Enable Persistent volume retention policy for Primary Statefulset
+    ##
+    enabled: false
+    ## @param primary.persistentVolumeClaimRetentionPolicy.whenScaled Volume retention behavior when the replica count of the StatefulSet is reduced
+    ##
+    whenScaled: Retain
+    ## @param primary.persistentVolumeClaimRetentionPolicy.whenDeleted Volume retention behavior that applies when the StatefulSet is deleted
+    ##
+    whenDeleted: Retain
 
 ## @section PostgreSQL read only replica parameters (only used when `architecture` is set to `replication`)
 ##
@@ -1048,6 +1061,19 @@ readReplicas:
     ## @param readReplicas.persistence.dataSource Custom PVC data source
     ##
     dataSource: {}
+  ## PostgreSQL Read only Persistent Volume Claim Retention Policy
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/#persistentvolumeclaim-retention
+  ##
+  persistentVolumeClaimRetentionPolicy:
+    ## @param readReplicas.persistentVolumeClaimRetentionPolicy.enabled Enable Persistent volume retention policy for read only Statefulset
+    ##
+    enabled: false
+    ## @param readReplicas.persistentVolumeClaimRetentionPolicy.whenScaled Volume retention behavior when the replica count of the StatefulSet is reduced
+    ##
+    whenScaled: Retain
+    ## @param readReplicas.persistentVolumeClaimRetentionPolicy.whenDeleted Volume retention behavior that applies when the StatefulSet is deleted
+    ##
+    whenDeleted: Retain
 
 
 ## @section Backup parameters
@@ -1073,6 +1099,11 @@ backup:
     ttlSecondsAfterFinished: ""
     ## @param backup.cronjob.restartPolicy Set the cronjob parameter restartPolicy
     restartPolicy: OnFailure
+    ## @param backup.cronjob.podSecurityContext.enabled Enable PodSecurityContext for CronJob/Backup
+    ## @param backup.cronjob.podSecurityContext.fsGroup Group ID for the CronJob
+    podSecurityContext:
+      enabled: true
+      fsGroup: 1001
     ## backup container's Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
     ## @param backup.cronjob.containerSecurityContext.runAsUser User ID for the backup container
@@ -1103,6 +1134,10 @@ backup:
     labels: {}
     ## @param backup.cronjob.annotations Set the cronjob annotations
     annotations: {}
+    ## @param backup.cronjob.nodeSelector Node labels for PostgreSQL backup CronJob pod assignment
+    ## ref: https://kubernetes.io/docs/user-guide/node-selection/
+    ##
+    nodeSelector: {}
     storage:
       ## @param backup.cronjob.storage.existingClaim Provide an existing `PersistentVolumeClaim` (only when `architecture=standalone`)
       ## If defined, PVC must be created manually before volume will be bound
@@ -1260,7 +1295,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r34
+    tag: 11-debian-11-r77
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1361,7 +1396,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/postgres-exporter
-    tag: 0.13.2-debian-11-r15
+    tag: 0.14.0-debian-11-r2
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

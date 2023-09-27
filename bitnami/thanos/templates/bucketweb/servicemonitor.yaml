@@ -9,14 +9,9 @@ kind: ServiceMonitor
 metadata:
   name: {{ include "common.names.fullname" . }}-bucketweb
   namespace: {{ default .Release.Namespace .Values.metrics.serviceMonitor.namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.metrics.serviceMonitor.labels .Values.commonLabels ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: bucketweb
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.metrics.serviceMonitor.labels }}
-    {{- toYaml .Values.metrics.serviceMonitor.labels | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -48,7 +43,7 @@ spec:
     matchNames:
       - {{ .Release.Namespace | quote }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: bucketweb
       {{- include "thanos.servicemonitor.selector" . | nindent 6 -}}
 {{- end }}

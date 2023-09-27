@@ -9,17 +9,11 @@ kind: Ingress
 metadata:
   name: {{ include "common.names.fullname" . }}-health
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
-  annotations:
-    {{- if .Values.healthIngress.annotations }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.healthIngress.annotations "context" $) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-    {{- end }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  {{- if or .Values.healthIngress.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.healthIngress.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
 spec:
   {{- if and .Values.healthIngress.ingressClassName (eq "true" (include "common.ingress.supportsIngressClassname" .)) }}
   ingressClassName: {{ .Values.healthIngress.ingressClassName | quote }}

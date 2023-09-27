@@ -33,8 +33,8 @@ const APP_NAME = "NGINX Ingress Controller"
 
 var kubeconfig = flag.String("kubeconfig", "", "absolute path to the kubeconfig file")
 var namespace = flag.String("namespace", "", "namespace where the resources are deployed")
-var svcName = flag.String("service-name", "", "service name used to serve the kuard deployment")
-var svcPort = flag.String("service-port", "", "service port used to serve the kuard deployment")
+var svcName = flag.String("service-name", "", "service name used to serve the dokuwiki deployment")
+var svcPort = flag.String("service-port", "", "service port used to serve the dokuwiki deployment")
 
 func clusterConfigOrDie() *rest.Config {
 	var config *rest.Config
@@ -207,10 +207,10 @@ func CheckRequirements() {
 		panic(fmt.Sprintf("The namespace where %s is deployed must be provided. Use the '--namespace' flag", APP_NAME))
 	}
 	if *svcName == "" {
-		panic(fmt.Sprintln("The testing service name used to serve the kuard deployment must be provided. Use the '--service-name' flag"))
+		panic(fmt.Sprintln("The testing service name used to serve the dokuwiki deployment must be provided. Use the '--service-name' flag"))
 	}
 	if *svcPort == "" {
-		panic(fmt.Sprintln("The testing service port used to serve the kuard deployment must be provided. Use the '--service-port' flag"))
+		panic(fmt.Sprintln("The testing service port used to serve the dokuwiki deployment must be provided. Use the '--service-port' flag"))
 	}
 }
 

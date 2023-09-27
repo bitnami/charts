@@ -74,21 +74,21 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### phpMyAdmin parameters
 
-| Name                 | Description                                                                                                | Value                 |
-| -------------------- | ---------------------------------------------------------------------------------------------------------- | --------------------- |
-| `image.registry`     | phpMyAdmin image registry                                                                                  | `docker.io`           |
-| `image.repository`   | phpMyAdmin image repository                                                                                | `bitnami/phpmyadmin`  |
-| `image.tag`          | phpMyAdmin image tag (immutable tags are recommended)                                                      | `5.2.1-debian-11-r60` |
-| `image.digest`       | phpMyAdmin image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
-| `image.pullPolicy`   | Image pull policy                                                                                          | `IfNotPresent`        |
-| `image.pullSecrets`  | Specify docker-registry secret names as an array                                                           | `[]`                  |
-| `image.debug`        | Enable phpmyadmin image debug mode                                                                         | `false`               |
-| `command`            | Override default container command (useful when using custom images)                                       | `[]`                  |
-| `args`               | Override default container args (useful when using custom images)                                          | `[]`                  |
-| `lifecycleHooks`     | for the phpmyadmin container(s) to automate configuration before or after startup                          | `{}`                  |
-| `extraEnvVars`       | Extra environment variables to be set on PhpMyAdmin container                                              | `[]`                  |
-| `extraEnvVarsCM`     | Name of a existing ConfigMap containing extra env vars                                                     | `""`                  |
-| `extraEnvVarsSecret` | Name of a existing Secret containing extra env vars                                                        | `""`                  |
+| Name                 | Description                                                                                                | Value                  |
+| -------------------- | ---------------------------------------------------------------------------------------------------------- | ---------------------- |
+| `image.registry`     | phpMyAdmin image registry                                                                                  | `docker.io`            |
+| `image.repository`   | phpMyAdmin image repository                                                                                | `bitnami/phpmyadmin`   |
+| `image.tag`          | phpMyAdmin image tag (immutable tags are recommended)                                                      | `5.2.1-debian-11-r103` |
+| `image.digest`       | phpMyAdmin image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
+| `image.pullPolicy`   | Image pull policy                                                                                          | `IfNotPresent`         |
+| `image.pullSecrets`  | Specify docker-registry secret names as an array                                                           | `[]`                   |
+| `image.debug`        | Enable phpmyadmin image debug mode                                                                         | `false`                |
+| `command`            | Override default container command (useful when using custom images)                                       | `[]`                   |
+| `args`               | Override default container args (useful when using custom images)                                          | `[]`                   |
+| `lifecycleHooks`     | for the phpmyadmin container(s) to automate configuration before or after startup                          | `{}`                   |
+| `extraEnvVars`       | Extra environment variables to be set on PhpMyAdmin container                                              | `[]`                   |
+| `extraEnvVarsCM`     | Name of a existing ConfigMap containing extra env vars                                                     | `""`                   |
+| `extraEnvVarsSecret` | Name of a existing Secret containing extra env vars                                                        | `""`                   |
 
 ### phpMyAdmin deployment parameters
 
@@ -215,7 +215,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                          | Start a side-car prometheus exporter                                                                            | `false`                   |
 | `metrics.image.registry`                   | Apache exporter image registry                                                                                  | `docker.io`               |
 | `metrics.image.repository`                 | Apache exporter image repository                                                                                | `bitnami/apache-exporter` |
-| `metrics.image.tag`                        | Apache exporter image tag (immutable tags are recommended)                                                      | `1.0.1-debian-11-r2`      |
+| `metrics.image.tag`                        | Apache exporter image tag (immutable tags are recommended)                                                      | `1.0.1-debian-11-r50`     |
 | `metrics.image.digest`                     | Apache exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
 | `metrics.image.pullPolicy`                 | Image pull policy                                                                                               | `IfNotPresent`            |
 | `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                                                                | `[]`                      |
@@ -289,7 +289,7 @@ Bitnami will release a new chart updating its containers if a new version of the
 
 ### Ingress
 
-This chart provides support for ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application.
+This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application.
 
 To enable ingress integration, please set `ingress.enabled` to `true`.
 

@@ -58,7 +58,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/argo-cd
-  tag: 2.8.0-debian-11-r4
+  tag: 2.8.4-debian-11-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2701,7 +2701,7 @@ dex:
   image:
     registry: docker.io
     repository: bitnami/dex
-    tag: 2.37.0-debian-11-r39
+    tag: 2.37.0-debian-11-r84
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -3192,6 +3192,16 @@ config:
     #   ...
     #   -----END PGP PUBLIC KEY BLOCK-----
 
+  ## @param config.rbac Role-based authentication configuration
+  ##
+  rbac: {}
+    # policy.default: role:readonly
+    # policy.csv: |
+    #   # Grant all members of the group 'my-org:team-alpha; the ability to sync apps in 'my-project'
+    #   p, my-org:team-alpha, applications, sync, my-project/*, allow
+    #   # Grant all members of 'my-org:team-beta' admins
+    #   g, my-org:team-beta, role:admin
+
   ## Argo CD general secret configuration
   ##
   secret:
@@ -3314,7 +3324,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r34
+    tag: 11-debian-11-r77
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -3367,7 +3377,7 @@ redis:
   image:
     registry: docker.io
     repository: bitnami/redis
-    tag: 7.0.12-debian-11-r26
+    tag: 7.2.1-debian-11-r16
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

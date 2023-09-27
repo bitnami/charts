@@ -9,11 +9,8 @@ kind: Deployment
 metadata:
   name: {{ template "grafana-tempo.compactor.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: compactor
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -22,8 +19,9 @@ spec:
   {{- if .Values.compactor.updateStrategy }}
   strategy: {{- toYaml .Values.compactor.updateStrategy | nindent 4 }}
   {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.compactor.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: compactor
   template:
     metadata:
@@ -32,12 +30,9 @@ spec:
         {{- if .Values.compactor.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.compactor.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: compactor
         tempo-gossip-member: "true"
-        {{- if .Values.compactor.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.compactor.podLabels "context" $) | nindent 8 }}
-        {{- end }}
     spec:
       serviceAccountName: {{ template "grafana-tempo.serviceAccountName" . }}
       {{- include "grafana-tempo.imagePullSecrets" . | nindent 6 }}
@@ -48,8 +43,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.compactor.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.compactor.podAffinityPreset "component" "compactor" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.compactor.podAntiAffinityPreset "component" "compactor" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.compactor.podAffinityPreset "component" "compactor" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.compactor.podAntiAffinityPreset "component" "compactor" "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.compactor.nodeAffinityPreset.type "key" .Values.compactor.nodeAffinityPreset.key "values" .Values.compactor.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.compactor.nodeSelector }}

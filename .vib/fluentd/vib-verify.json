@@ -32,17 +32,13 @@
       },
       "actions": [
         {
-          "action_id": "health-check",
-          "params": {
-            "endpoint": "lb-fluentd-forwarder-http",
-            "app_protocol": "HTTP"
-          }
-        },
-        {
           "action_id": "goss",
           "params": {
             "resources": {
               "path": "/.vib"
+            },
+            "wait": {
+              "file": "fluentd/goss/goss-wait.yaml"
             },
             "tests_file": "fluentd/goss/goss.yaml",
             "remote": {

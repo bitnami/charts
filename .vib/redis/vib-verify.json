@@ -50,6 +50,20 @@
               }
             }
           }
+        },
+        {
+          "action_id": "ginkgo",
+          "params": {
+            "resources": {
+              "path": "/.vib/redis/ginkgo"
+            },
+            "params": {
+              "kubeconfig": "{{kubeconfig}}",
+              "namespace": "{{namespace}}",
+              "name": "redis-master",
+              "password": "ComplicatedPassword123!4"
+            }
+          }
         }
       ]
     }

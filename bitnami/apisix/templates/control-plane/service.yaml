@@ -9,22 +9,17 @@ kind: Service
 metadata:
   name: {{ include "apisix.control-plane.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: apisix
     app.kubernetes.io/component: control-plane
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
-  {{- if or .Values.controlPlane.service.annotations .Values.commonAnnotations }}
+  {{- if or .Values.controlPlane.service.annotations .Values.commonAnnotations (and .Values.controlPlane.metrics.enabled .Values.controlPlane.metrics.annotations) }}
   annotations:
-    {{- if .Values.controlPlane.service.annotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.controlPlane.service.annotations "context" $) | nindent 4 }}
+    {{- if or .Values.controlPlane.service.annotations .Values.commonAnnotations }}
+    {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.controlPlane.service.annotations .Values.commonAnnotations ) "context" . ) }}
+    {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
     {{- end }}
     {{- if and .Values.controlPlane.metrics.enabled .Values.controlPlane.metrics.annotations }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.controlPlane.metrics.annotations "context" $) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
     {{- end }}
   {{- end }}
 spec:
@@ -80,7 +75,8 @@ spec:
     {{- if .Values.controlPlane.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.controlPlane.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}
-  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.controlPlane.podLabels .Values.commonLabels ) "context" . ) }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: apisix
     app.kubernetes.io/component: control-plane
 {{- end }}

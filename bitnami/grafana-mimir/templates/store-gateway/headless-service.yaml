@@ -8,20 +8,12 @@ kind: Service
 metadata:
   name:  {{ template "grafana-mimir.store-gateway.fullname" . }}-headless
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: grafana-mimir
     app.kubernetes.io/component: store-gateway
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if or .Values.commonAnnotations .Values.storeGateway.service.headless.annotations }}
-  annotations:
-    {{- if .Values.storeGateway.service.headless.annotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.storeGateway.service.headless.annotations "context" $ ) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-    {{- end }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.storeGateway.service.headless.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
   publishNotReadyAddresses: true
@@ -49,6 +41,7 @@ spec:
     {{- if .Values.storeGateway.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.storeGateway.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}
-  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.storeGateway.podLabels .Values.commonLabels ) "context" . ) }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: grafana-mimir
     app.kubernetes.io/component: store-gateway

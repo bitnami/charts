@@ -74,7 +74,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/nginx
-  tag: 1.25.1-debian-11-r39
+  tag: 1.25.2-debian-11-r37
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -428,7 +428,7 @@ cloneStaticSiteFromGit:
   image:
     registry: docker.io
     repository: bitnami/git
-    tag: 2.41.0-debian-11-r53
+    tag: 2.42.0-debian-11-r32
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -485,6 +485,9 @@ cloneStaticSiteFromGit:
   ##     value: BAR
   ##
   extraEnvVars: []
+  ## @param cloneStaticSiteFromGit.extraEnvVarsSecret Secret with extra environment variables
+  ##
+  extraEnvVarsSecret: ""
   ## @param cloneStaticSiteFromGit.extraVolumeMounts Add extra volume mounts for the Git containers
   ## Useful to mount keys to connect through ssh. (normally used with extraVolumes)
   ## E.g:
@@ -788,7 +791,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/nginx-exporter
-    tag: 0.11.0-debian-11-r300
+    tag: 0.11.0-debian-11-r358
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

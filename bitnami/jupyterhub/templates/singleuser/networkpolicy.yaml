@@ -7,11 +7,8 @@ SPDX-License-Identifier: APACHE-2.0
 apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
 kind: NetworkPolicy
 metadata:
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: singleuser
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   name: {{ printf "%s-singleuser" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   namespace: {{ .Release.Namespace | quote }}
   {{- if .Values.commonAnnotations }}
@@ -19,7 +16,7 @@ metadata:
   {{- end }}
 spec:
   podSelector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: singleuser
   policyTypes:
     - Ingress
@@ -47,8 +44,9 @@ spec:
     - ports:
         - port: {{ coalesce .Values.hub.containerPorts.http .Values.hub.containerPort }}
       to:
+        {{- $hubPodLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.hub.podLabels .Values.commonLabels ) "context" . ) }}
         - podSelector:
-            matchLabels: {{- include "common.labels.matchLabels" . | nindent 14 }}
+            matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $hubPodLabels "context" $ ) | nindent 14 }}
               app.kubernetes.io/component: hub
     {{- if not .Values.singleuser.networkPolicy.allowCloudMetadataAccess }}
     ## Limit access to the Cloud Metadata API

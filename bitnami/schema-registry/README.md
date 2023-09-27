@@ -18,7 +18,7 @@ helm install my-release oci://registry-1.docker.io/bitnamicharts/schema-registry
 
 This chart bootstraps a [Schema Registry](https://github.com/bitnami/containers/tree/main/bitnami/schema-registry) statefulset on a [Kubernetes](http://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
 
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 Looking to use Confluent Schema Registry in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
@@ -80,7 +80,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | ------------------------- |
 | `image.registry`                                | Schema Registry image registry                                                                                  | `docker.io`               |
 | `image.repository`                              | Schema Registry image repository                                                                                | `bitnami/schema-registry` |
-| `image.tag`                                     | Schema Registry image tag (immutable tags are recommended)                                                      | `7.4.1-debian-11-r7`      |
+| `image.tag`                                     | Schema Registry image tag (immutable tags are recommended)                                                      | `7.4.1-debian-11-r53`     |
 | `image.digest`                                  | Schema Registry image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
 | `image.pullPolicy`                              | Schema Registry image pull policy                                                                               | `IfNotPresent`            |
 | `image.pullSecrets`                             | Schema Registry image pull secrets                                                                              | `[]`                      |
@@ -390,8 +390,7 @@ externalKafka.auth.jaas.existingSecret=my-secret
 
 ### Ingress
 
-This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your Schema Registry.
-
+This chart provides support for Ingress resources. If you have an ingress controller installed on your cluster, such as [nginx-ingress-controller](https://github.com/bitnami/charts/tree/main/bitnami/nginx-ingress-controller) or [contour](https://github.com/bitnami/charts/tree/main/bitnami/contour) you can utilize the ingress controller to serve your application.
 To enable Ingress integration, set `ingress.enabled` to `true`. The `ingress.hostname` property can be used to set the host name.
 
 #### Hosts
@@ -403,6 +402,10 @@ For each host indicated at `ingress.extraHosts`, please indicate a `name`, `path
 For annotations, please see [this document](https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md). Not all annotations are supported by all ingress controllers, but this document does a good job of indicating which annotation is supported by many popular ingress controllers.
 
 ## Upgrading
+
+### To 14.0.0
+
+This major updates the Kafka subchart to its newest major, 25.0.0. For more information on this subchart's major, please refer to [Kafka upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/kafka#to-2500).
 
 ### To 13.0.0
 

@@ -9,10 +9,7 @@ kind: PodMonitoring
 metadata:
   name: {{ template "external-dns.fullname" . }}
   namespace: {{ default .Release.Namespace .Values.metrics.googlePodMonitor.namespace | quote }}
-  labels: {{ include "external-dns.labels" . | nindent 4 }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
 spec:
   endpoints:
     - port: http
@@ -22,6 +19,7 @@ spec:
       {{- with .Values.metrics.googlePodMonitor.interval }}
       interval: {{ . }}
       {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
-    matchLabels: {{ include "external-dns.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
 {{- end }}

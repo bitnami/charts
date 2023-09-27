@@ -9,11 +9,9 @@ apiVersion: v1
 metadata:
   name: {{ printf "redis-data-%s-master" (include "common.names.fullname" .) }}
   namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.matchLabels" . | nindent 4 }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.master.persistence.labels .Values.commonLabels ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: master
-    {{- if .Values.master.persistence.labels }}
-    {{- toYaml .Values.master.persistence.labels | nindent 4 }}
-    {{- end }}
   {{- if .Values.master.persistence.annotations }}
   annotations: {{- toYaml .Values.master.persistence.annotations | nindent 4 }}
   {{- end }}

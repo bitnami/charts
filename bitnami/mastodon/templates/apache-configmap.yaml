@@ -9,22 +9,20 @@ kind: ConfigMap
 metadata:
   name: {{ include "mastodon.apache.vhostconfigmap" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: mastodon
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 data:
   mastodon-vhost.conf: |-
-    <VirtualHost VirtualHost 127.0.0.1:{{ .Values.apache.containerPorts.http }} _default_:{{ .Values.apache.containerPorts.http }}>
+    <VirtualHost 127.0.0.1:{{ .Values.apache.containerPorts.http }} _default_:{{ .Values.apache.containerPorts.http }}>
       ServerName {{ include "mastodon.web.domain" . }}
       ServerAlias *
       <Location "/">
         ProxyPass http://{{ include "mastodon.web.fullname" . }}:{{ .Values.web.service.ports.http }}/
         ProxyPassReverse {{ include "mastodon.web.domain" . }}
+        ProxyPreserveHost on
         Order allow,deny
         Allow from all
       </Location>

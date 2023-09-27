@@ -10,9 +10,6 @@ metadata:
   name: {{ template "kube-prometheus.alertmanager.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
   labels: {{- include "kube-prometheus.alertmanager.labels" . | nindent 4 }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -53,13 +50,10 @@ spec:
   storage:
     volumeClaimTemplate:
       metadata:
-        annotations:
-          {{- if .Values.alertmanager.persistence.annotations }}
-          {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.persistence.annotations "context" $) | nindent 10 }}
-          {{- end }}
-          {{- if .Values.commonAnnotations }}
-          {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 10 }}
-          {{- end }}
+        {{- if or .Values.alertmanager.persistence.annotations .Values.commonAnnotations }}
+        {{- $claimAnnotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.alertmanager.persistence.annotations .Values.commonAnnotations ) "context" . ) }}
+        annotations: {{- include "common.tplvalues.render" ( dict "value" $claimAnnotations "context" $ ) | nindent 10 }}
+        {{- end }}
         {{- if .Values.commonLabels }}
         labels: {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 10 }}
         {{- end }}
@@ -74,20 +68,11 @@ spec:
         {{- include "common.storage.class" (dict "persistence" .Values.alertmanager.persistence "global" .Values.global) | nindent 8 }}
   {{- end }}
   {{- end }}
-  {{- if or .Values.alertmanager.podMetadata.labels .Values.alertmanager.podMetadata.annotations (eq .Values.alertmanager.podAntiAffinityPreset "soft") (eq .Values.alertmanager.podAntiAffinityPreset "hard") }}
   podMetadata:
-    labels:
-    {{- if .Values.alertmanager.podMetadata.labels }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.podMetadata.labels "context" $) | nindent 6 }}
-    {{- end }}
-    {{- if or (eq .Values.alertmanager.podAntiAffinityPreset "soft") (eq .Values.alertmanager.podAntiAffinityPreset "hard") }}
-    {{- include "kube-prometheus.alertmanager.matchLabels" . | nindent 6 }}
-    {{- end }}
+    labels: {{- include "kube-prometheus.alertmanager.matchLabels" . | nindent 6 }}
     {{- if .Values.alertmanager.podMetadata.annotations }}
-    annotations:
-    {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.podMetadata.annotations "context" $) | nindent 6 }}
+    annotations: {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.podMetadata.annotations "context" $) | nindent 6 }}
     {{- end }}
-  {{- end }}
   {{- if .Values.alertmanager.affinity }}
   affinity: {{- include "common.tplvalues.render" (dict "value" .Values.alertmanager.affinity "context" $) | nindent 4 }}
   {{- else }}

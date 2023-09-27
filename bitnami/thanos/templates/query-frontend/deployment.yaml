@@ -10,11 +10,8 @@ kind: Deployment
 metadata:
   name: {{ include "common.names.fullname" . }}-query-frontend
   namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: query-frontend
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -25,19 +22,14 @@ spec:
   {{- if .Values.queryFrontend.updateStrategy }}
   strategy: {{- toYaml .Values.queryFrontend.updateStrategy | nindent 4 }}
   {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.queryFrontend.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: query-frontend
   template:
     metadata:
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: query-frontend
-        {{- if .Values.commonLabels }}
-        {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
-        {{- end }}
-        {{- if .Values.queryFrontend.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.podLabels "context" $) | nindent 8 }}
-        {{- end }}
       {{- if or .Values.queryFrontend.podAnnotations (include "thanos.queryFrontend.createConfigmap" .) }}
       annotations:
         {{- if (include "thanos.queryFrontend.createConfigmap" .) }}
@@ -58,8 +50,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.queryFrontend.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.queryFrontend.podAffinityPreset "component" "query-frontend" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.queryFrontend.podAntiAffinityPreset "component" "query-frontend" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.queryFrontend.podAffinityPreset "component" "query-frontend" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.queryFrontend.podAntiAffinityPreset "component" "query-frontend" "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.queryFrontend.nodeAffinityPreset.type "key" .Values.queryFrontend.nodeAffinityPreset.key "values" .Values.queryFrontend.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.queryFrontend.dnsConfig }}

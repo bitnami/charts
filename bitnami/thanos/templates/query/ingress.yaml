@@ -9,18 +9,12 @@ kind: Ingress
 metadata:
   name: {{ include "common.names.fullname" . }}-query
   namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: query
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
-  annotations:
-    {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.query.ingress.annotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.query.ingress.annotations "context" $ ) | nindent 4 }}
-    {{- end }}
+  {{- if or .Values.query.ingress.annotations .Values.commonAnnotations }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.query.ingress.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
+  {{- end }}
 spec:
   {{- if and .Values.query.ingress.ingressClassName (include "common.ingress.supportsIngressClassname" .) }}
   ingressClassName: {{ .Values.query.ingress.ingressClassName | quote }}
@@ -54,7 +48,7 @@ spec:
     {{- if and .Values.query.ingress.tls (or (include "common.ingress.certManagerRequest" ( dict "annotations" .Values.query.ingress.annotations )) .Values.query.ingress.selfSigned) }}
     - hosts:
         - {{ .Values.query.ingress.hostname }}
-      secretName: {{ printf "%s-tls" .Values.query.ingress.hostname }}
+      secretName: {{ .Values.query.ingress.secretName | default (printf "%s-tls" .Values.query.ingress.hostname) }}
     {{- end }}
     {{- if .Values.query.ingress.extraTls }}
     {{- toYaml .Values.query.ingress.extraTls | nindent 4 }}

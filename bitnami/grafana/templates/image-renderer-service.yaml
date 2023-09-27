@@ -9,17 +9,15 @@ kind: Service
 metadata:
   name: {{ include "common.names.fullname" . }}-image-renderer
   namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: image-renderer
-  {{- if and .Values.imageRenderer.metrics.enabled .Values.imageRenderer.metrics.annotations }}
-  annotations: {{- include "common.tplvalues.render" (dict "value" .Values.imageRenderer.metrics.annotations "context" $) | nindent 4 }}
+  annotations: 
+    {{- if and .Values.imageRenderer.metrics.enabled .Values.imageRenderer.metrics.annotations }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.imageRenderer.metrics.annotations "context" $) | nindent 4 }}
+    {{- end }}
     {{- if .Values.commonAnnotations }}
     {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 4 }}
     {{- end }}
-  {{- end }}
 spec:
   type: {{ .Values.imageRenderer.service.type }}
   {{- if and (eq .Values.imageRenderer.service.type "LoadBalancer") (not (empty .Values.imageRenderer.service.loadBalancerIP)) }}
@@ -53,6 +51,7 @@ spec:
     {{- if .Values.imageRenderer.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.imageRenderer.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}
-  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.imageRenderer.podLabels .Values.commonLabels ) "context" . ) }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: image-renderer
 {{- end }}

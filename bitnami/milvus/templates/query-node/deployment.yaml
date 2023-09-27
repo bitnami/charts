@@ -9,12 +9,9 @@ kind: Deployment
 metadata:
   name: {{ template "milvus.query-node.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: milvus
     app.kubernetes.io/component: query-node
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -25,8 +22,9 @@ spec:
   {{- if .Values.queryNode.updateStrategy }}
   strategy: {{- toYaml .Values.queryNode.updateStrategy | nindent 4 }}
   {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.queryNode.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/part-of: milvus
       app.kubernetes.io/component: query-node
   template:
@@ -38,12 +36,9 @@ spec:
         {{- if .Values.queryNode.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.queryNode.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/part-of: milvus
         app.kubernetes.io/component: query-node
-        {{- if .Values.queryNode.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.queryNode.podLabels "context" $) | nindent 8 }}
-        {{- end }}
     spec:
       serviceAccountName: {{ template "milvus.query-node.serviceAccountName" . }}
       {{- include "milvus.imagePullSecrets" . | nindent 6 }}
@@ -54,8 +49,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.queryNode.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.queryNode.podAffinityPreset "component" "query-node" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.queryNode.podAntiAffinityPreset "component" "query-node" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.queryNode.podAffinityPreset "component" "query-node" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.queryNode.podAntiAffinityPreset "component" "query-node" "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.queryNode.nodeAffinityPreset.type "key" .Values.queryNode.nodeAffinityPreset.key "values" .Values.queryNode.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.queryNode.nodeSelector }}

@@ -8,11 +8,8 @@ kind: StatefulSet
 metadata:
   name: {{ template "grafana-tempo.ingester.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: ingester
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -21,8 +18,9 @@ spec:
   {{- if .Values.ingester.updateStrategy }}
   updateStrategy: {{- toYaml .Values.ingester.updateStrategy | nindent 4 }}
   {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.ingester.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: ingester
   serviceName: {{ template "grafana-tempo.ingester.fullname" . }}
   template:
@@ -32,12 +30,9 @@ spec:
         {{- if .Values.ingester.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.ingester.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: ingester
         tempo-gossip-member: "true"
-        {{- if .Values.ingester.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.ingester.podLabels "context" $) | nindent 8 }}
-        {{- end }}
     spec:
       serviceAccountName: {{ template "grafana-tempo.serviceAccountName" . }}
       {{- include "grafana-tempo.imagePullSecrets" . | nindent 6 }}
@@ -48,8 +43,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.ingester.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.ingester.podAffinityPreset "component" "ingester" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.ingester.podAntiAffinityPreset "component" "ingester" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.ingester.podAffinityPreset "component" "ingester" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.ingester.podAntiAffinityPreset "component" "ingester" "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.ingester.nodeAffinityPreset.type "key" .Values.ingester.nodeAffinityPreset.key "values" .Values.ingester.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.ingester.nodeSelector }}
@@ -201,16 +196,13 @@ spec:
   volumeClaimTemplates:
     - metadata:
         name: data
+        {{- if or .Values.ingester.persistence.annotations .Values.commonAnnotations }}
+        {{- $claimAnnotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.ingester.persistence.annotations .Values.commonAnnotations ) "context" . ) }}
+        annotations: {{- include "common.tplvalues.render" ( dict "value" $claimAnnotations "context" $) | nindent 10 }}
+        {{- end }}
         {{- if .Values.commonLabels }}
         labels: {{- include "common.tplvalues.render" (dict "value" .Values.commonLabels "context" $) | nindent 10 }}
         {{- end }}
-        annotations:
-          {{- if .Values.ingester.persistence.annotations }}
-          {{- include "common.tplvalues.render" (dict "value" .Values.ingester.persistence.annotations "context" $) | nindent 10 }}
-          {{- end }}
-          {{- if .Values.commonAnnotations }}
-          {{- include "common.tplvalues.render" (dict "value" .Values.commonAnnotations "context" $) | nindent 10 }}
-          {{- end }}
       spec:
         accessModes:
         {{- range .Values.ingester.persistence.accessModes }}

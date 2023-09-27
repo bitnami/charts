@@ -8,10 +8,7 @@ kind: ConfigMap
 metadata:
   name: {{ include "common.names.fullname" . }}-default
   namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -454,9 +451,7 @@ data:
     # You can set these explicitly by uncommenting the following line.
     #
     # save 3600 1 300 100 60 10000
-    save 900 1
-    save 300 10
-    save 60 10000
+    save 900 1 300 10 60 10000
     # By default Redis will stop accepting writes if RDB snapshots are enabled
     # (at least one save point) and the latest background save failed.
     # This will make the user aware (in a hard way) that data is not persisting

@@ -9,11 +9,8 @@ kind: Deployment
 metadata:
   name: {{ include "common.names.fullname" . }}-receive-distributor
   namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: receive-distributor
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -24,19 +21,14 @@ spec:
   {{- if .Values.receiveDistributor.updateStrategy }}
   strategy: {{- toYaml .Values.receiveDistributor.updateStrategy | nindent 4 }}
   {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.receiveDistributor.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: receive-distributor
   template:
     metadata:
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: receive-distributor
-        {{- if .Values.commonLabels }}
-        {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
-        {{- end }}
-        {{- if .Values.receiveDistributor.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.receiveDistributor.podLabels "context" $) | nindent 8 }}
-        {{- end }}
       annotations:
         checksum/objstore-configuration: {{ include (print $.Template.BasePath "/objstore-secret.yaml") . | sha256sum }}
         {{- if (include "thanos.receive.createConfigmap" .) }}
@@ -56,8 +48,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.receiveDistributor.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.receiveDistributor.podAffinityPreset "component" "receive-distributor" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.receiveDistributor.podAntiAffinityPreset "component" "receive-distributor" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.receiveDistributor.podAffinityPreset "component" "receive-distributor" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.receiveDistributor.podAntiAffinityPreset "component" "receive-distributor" "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.receiveDistributor.nodeAffinityPreset.type "key" .Values.receiveDistributor.nodeAffinityPreset.key "values" .Values.receiveDistributor.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.receiveDistributor.dnsConfig }}

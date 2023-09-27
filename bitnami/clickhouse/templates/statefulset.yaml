@@ -10,19 +10,17 @@ kind: StatefulSet
 metadata:
   name: {{ printf "%s-shard%d" (include "common.names.fullname" $ ) $i }}
   namespace: {{ include "common.names.namespace" $ | quote }}
-  labels: {{- include "common.labels.standard" $ | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $.Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: clickhouse
-    {{- if $.Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" $.Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if $.Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" $.Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
   replicas: {{ $.Values.replicaCount }}
   podManagementPolicy: {{ $.Values.podManagementPolicy | quote }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list $.Values.podLabels $.Values.commonLabels ) "context" $ ) }}
   selector:
-    matchLabels: {{ include "common.labels.matchLabels" $ | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: clickhouse
   serviceName: {{ printf "%s-headless" (include "common.names.fullname" $) }}
   {{- if $.Values.updateStrategy }}
@@ -40,11 +38,8 @@ spec:
         {{- if and $.Values.metrics.enabled $.Values.metrics.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" $.Values.metrics.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
-      labels: {{- include "common.labels.standard" $ | nindent 8 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: clickhouse
-        {{- if $.Values.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" $.Values.podLabels "context" $) | nindent 8 }}
-        {{- end }}
         shard: {{ $i | quote }}
     spec:
       serviceAccountName: {{ template "clickhouse.serviceAccountName" $ }}
@@ -56,8 +51,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" ( dict "value" $.Values.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" $.Values.podAffinityPreset "component" "clickhouse" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" $.Values.podAntiAffinityPreset "component" "clickhouse" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" $.Values.podAffinityPreset "component" "clickhouse" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" $.Values.podAntiAffinityPreset "component" "clickhouse" "customLabels" $podLabels "extraPodAffinityTerms" (ternary (list (dict "extraMatchLabels" (dict "shard" $i) "topologyKey" "topology.kubernetes.io/zone")) (list) $.Values.distributeReplicasByZone) "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" $.Values.nodeAffinityPreset.type "key" $.Values.nodeAffinityPreset.key "values" $.Values.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if $.Values.nodeSelector }}
@@ -408,21 +403,13 @@ spec:
   volumeClaimTemplates:
     - metadata:
         name: data
-        annotations:
-          {{- if $.Values.persistence.annotations }}
-          {{- include "common.tplvalues.render" (dict "value" $.Values.persistence.annotations "context" $) | nindent 10 }}
-          {{- end }}
-          {{- if $.Values.commonAnnotations }}
-          {{- include "common.tplvalues.render" (dict "value" $.Values.commonAnnotations "context" $) | nindent 10 }}
-          {{- end }}
-        labels: {{- include "common.labels.standard" $ | nindent 10 }}
+        {{- if or $.Values.persistence.annotations $.Values.commonAnnotations }}
+        {{- $claimAnnotations := include "common.tplvalues.merge" ( dict "values" ( list $.Values.persistence.annotations $.Values.commonLabels ) "context" $ ) }}
+        annotations: {{- include "common.tplvalues.render" ( dict "value" $claimAnnotations "context" $ ) | nindent 10 }}
+        {{- end }}
+        {{- $claimLabels := include "common.tplvalues.merge" ( dict "values" ( list $.Values.persistence.labels $.Values.commonLabels ) "context" $ ) }}
+        labels: {{- include "common.labels.matchLabels" ( dict "customLabels" $claimLabels "context" $ ) | nindent 10 }}
           app.kubernetes.io/component: clickhouse
-          {{- if $.Values.commonLabels }}
-          {{- include "common.tplvalues.render" (dict "value" $.Values.commonLabels "context" $) | nindent 10 }}
-          {{- end }}
-          {{- if $.Values.persistence.labels }}
-          {{- include "common.tplvalues.render" (dict "value" $.Values.persistence.labels "context" $) | nindent 10 }}
-          {{- end }}
       spec:
         accessModes:
         {{- range $.Values.persistence.accessModes }}
