@@ -259,7 +259,7 @@ clustering:
   ## ref: https://www.rabbitmq.com/rabbitmqctl.8.html#force_boot
   ##
   forceBoot: false
-  ## @param clustering.partitionHandling Switch Partition Handling Strategy. Either `autoheal` or `pause-minority` or `pause-if-all-down` or `ignore`
+  ## @param clustering.partitionHandling Switch Partition Handling Strategy. Either `autoheal` or `pause_minority` or `pause_if_all_down` or `ignore`
   ## ref: https://www.rabbitmq.com/partitions.html#automatic-handling
   ##
   partitionHandling: autoheal
