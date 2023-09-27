@@ -231,8 +231,8 @@ clusterOperator:
     runAsNonRoot: true
     readOnlyRootFilesystem: true
     capabilities:
-          drop:
-          - ALL
+      drop:
+        - ALL
     allowPrivilegeEscalation: false
     seccompProfile:
       type: RuntimeDefault
