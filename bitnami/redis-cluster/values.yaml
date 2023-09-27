@@ -73,9 +73,6 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/redis-cluster
-  ## Bitnami Redis&reg; image tag
-  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/redis#supported-tags-and-respective-dockerfile-links
-  ##
   tag: 7.0.12-debian-11-r15
   digest: ""
   ## Specify a imagePullPolicy
