@@ -4,7 +4,7 @@
  */
 
 const COMMAND_DELAY = 2000;
-const BASE_URL = 'http://vmware-suitecrm.my/';
+const BASE_URL = 'http://vmware-suitecrm.my';
 
 for (const command of ['click']) {
   Cypress.Commands.overwrite(command, (originalFn, ...args) => {
@@ -26,8 +26,8 @@ Cypress.Commands.add(
   'login',
   (username = Cypress.env('username'), password = Cypress.env('password')) => {
     cy.visit('/');
-    cy.get('#user_name').type(username);
-    cy.get('#username_password').type(password);
-    cy.get('#bigbutton').click();
+    cy.get('[placeholder="Username"]').type(username);
+    cy.get('[placeholder="Password"]').type(password);
+    cy.get('#login-button').click();
   }
 );
