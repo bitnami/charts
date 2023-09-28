@@ -374,6 +374,7 @@ mariadbConfiguration: |-
   plugin_dir=/opt/bitnami/mariadb/plugin
 
   [mysqld]
+  explicit_defaults_for_timestamp
   default_storage_engine=InnoDB
   basedir=/opt/bitnami/mariadb
   datadir=/bitnami/mariadb/data
