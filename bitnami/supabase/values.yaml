@@ -2649,4 +2649,4 @@ externalDatabase:
   database: postgres
   password: ""
   existingSecret: ""
-  existingSecretPasswordKey: "db-password"
+  existingSecretPasswordKey: ""
