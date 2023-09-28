@@ -737,6 +737,33 @@ kibana:
         enabled: true
 ```
 
+### How to deploy a single node
+
+This chart allows you to deploy Elasticsearch as a "single-node" cluster (one master node replica) that assumes all the roles. The following inputs should be provided:
+
+```yaml
+master:
+  masterOnly: false
+  replicaCount: 1
+data:
+  replicaCount: 0
+coordinating:
+  replicaCount: 0
+ingest:
+  replicaCount: 0
+```
+
+The "single-node" cluster will be configured with [single-node discovery](https://www.elastic.co/guide/en/elasticsearch/reference/current/bootstrap-checks.html#single-node-discovery).
+
+If you want to scale up to more replicas, make sure you refresh the configuration of the existing StatefulSet. For example, scale down to 0 replicas first to avoid inconsistencies in the configuration:
+
+```console
+kubectl scale statefulset <DEPLOYMENT_NAME>-master --replicas=0
+helm upgrade <DEPLOYMENT_NAME> oci://registry-1.docker.io/bitnamicharts/elasticsearch --reset-values --set master.masterOnly=false
+```
+
+Please note that the master nodes should continue assuming all the roles (`master.masterOnly: false`) since there is shard data on the first replica.
+
 ### Adding extra environment variables
 
 In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` property.
