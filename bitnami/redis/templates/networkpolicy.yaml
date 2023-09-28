@@ -77,6 +77,27 @@ spec:
     # Allow prometheus scrapes for metrics
     - ports:
         - port: 9121
+      {{- if not .Values.networkPolicy.metrics.allowExternal }}
+      from:
+        {{- if or .Values.networkPolicy.metrics.ingressNSMatchLabels .Values.networkPolicy.metrics.ingressNSPodMatchLabels }}
+        - namespaceSelector:
+            matchLabels:
+              {{- if .Values.networkPolicy.metrics.ingressNSMatchLabels }}
+                {{- range $key, $value := .Values.networkPolicy.metrics.ingressNSMatchLabels }}
+                {{ $key | quote }}: {{ $value | quote }}
+                {{- end }}
+              {{ else }}
+                {}
+              {{- end }}
+          {{- if .Values.networkPolicy.metrics.ingressNSPodMatchLabels }}
+          podSelector:
+            matchLabels:
+              {{- range $key, $value := .Values.networkPolicy.metrics.ingressNSPodMatchLabels }}
+              {{ $key | quote }}: {{ $value | quote }}
+              {{- end }}
+          {{- end }}
+        {{- end }}
+      {{- end }}
     {{- end }}
     {{- if .Values.networkPolicy.extraIngress }}
     {{- include "common.tplvalues.render" ( dict "value" .Values.networkPolicy.extraIngress "context" $ ) | nindent 4 }}
