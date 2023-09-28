@@ -29,5 +29,6 @@ Cypress.Commands.add(
     cy.get('[placeholder="Username"]').type(username);
     cy.get('[placeholder="Password"]').type(password);
     cy.get('#login-button').click();
+    cy.contains("Search");
   }
 );
