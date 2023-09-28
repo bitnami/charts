@@ -11,7 +11,6 @@ it('allows to import accounts and list them', () => {
   // SuiteCRM 8.x uses an iframe that fails with Cypress.
   // That is why we use the legacy url directly
   cy.visit('/legacy/index.php?import_module=Accounts&return_module=Accounts&return_action=index&module=Import&action=Step1');
-  cy.contains('Import').click({ force: true });
 
   const accountsFile = 'cypress/fixtures/accounts.csv';
   cy.readFile(accountsFile).then((data) => {
@@ -34,6 +33,8 @@ it('allows to import accounts and list them', () => {
 it('allows adding a new contact', () => {
   cy.login();
   cy.visit('/#/contacts/index');
+  //Wait for Dom content load before clicking
+  cy.wait(5000);
   cy.get('.action-button:contains("New")').click({ force: true });
   cy.fixture('contacts').then((contact) => {
     cy.get('.dynamic-field-name-last_name input').type(`${contact.newContact.lastName}.${random}`, { force: true });
