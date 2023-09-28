@@ -403,7 +403,7 @@ spec:
   volumeClaimTemplates:
     - metadata:
         name: data
-        {{- if or $.Values.persistence.annotations $.Values.commonAnnotations }}}
+        {{- if or $.Values.persistence.annotations $.Values.commonAnnotations }}
         {{- $claimAnnotations := include "common.tplvalues.merge" ( dict "values" ( list $.Values.persistence.annotations $.Values.commonLabels ) "context" $ ) }}
         annotations: {{- include "common.tplvalues.render" ( dict "value" $claimAnnotations "context" $ ) | nindent 10 }}
         {{- end }}

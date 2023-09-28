@@ -87,7 +87,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ---------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
 | `image.registry`                                     | MongoDB(&reg;) Sharded image registry                                                                                                                     | `docker.io`               |
 | `image.repository`                                   | MongoDB(&reg;) Sharded Image name                                                                                                                         | `bitnami/mongodb-sharded` |
-| `image.tag`                                          | MongoDB(&reg;) Sharded image tag (immutable tags are recommended)                                                                                         | `6.0.10-debian-11-r0`     |
+| `image.tag`                                          | MongoDB(&reg;) Sharded image tag (immutable tags are recommended)                                                                                         | `7.0.1-debian-11-r1`      |
 | `image.digest`                                       | MongoDB(&reg;) Sharded image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                    | `""`                      |
 | `image.pullPolicy`                                   | MongoDB(&reg;) Sharded image pull policy                                                                                                                  | `IfNotPresent`            |
 | `image.pullSecrets`                                  | Specify docker-registry secret names as an array                                                                                                          | `[]`                      |
@@ -125,7 +125,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                          | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                   |
 | `volumePermissions.image.registry`                   | Init container volume-permissions image registry                                                                                                          | `docker.io`               |
 | `volumePermissions.image.repository`                 | Init container volume-permissions image name                                                                                                              | `bitnami/os-shell`        |
-| `volumePermissions.image.tag`                        | Init container volume-permissions image tag                                                                                                               | `11-debian-11-r66`        |
+| `volumePermissions.image.tag`                        | Init container volume-permissions image tag                                                                                                               | `11-debian-11-r77`        |
 | `volumePermissions.image.digest`                     | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                         | `""`                      |
 | `volumePermissions.image.pullPolicy`                 | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`            |
 | `volumePermissions.image.pullSecrets`                | Init container volume-permissions image pull secrets                                                                                                      | `[]`                      |
@@ -472,7 +472,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                                         | Start a side-car prometheus exporter                                                                                  | `false`                    |
 | `metrics.image.registry`                                  | MongoDB&reg; exporter image registry                                                                                  | `docker.io`                |
 | `metrics.image.repository`                                | MongoDB&reg; exporter image name                                                                                      | `bitnami/mongodb-exporter` |
-| `metrics.image.tag`                                       | MongoDB&reg; exporter image tag                                                                                       | `0.39.0-debian-11-r100`    |
+| `metrics.image.tag`                                       | MongoDB&reg; exporter image tag                                                                                       | `0.39.0-debian-11-r112`    |
 | `metrics.image.digest`                                    | MongoDB&reg; exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
 | `metrics.image.pullPolicy`                                | MongoDB&reg; exporter image pull policy                                                                               | `Always`                   |
 | `metrics.image.pullSecrets`                               | MongoDB&reg; exporter image pull secrets                                                                              | `[]`                       |
@@ -635,6 +635,12 @@ helm upgrade my-release oci://registry-1.docker.io/bitnamicharts/mongodb-sharded
 ```
 
 > Note: you need to substitute the placeholders [PASSWORD] and [auth.replicaSetKey] with the values obtained in the installation notes.
+
+### To 7.0.0
+
+This major version updates the MongoDB&reg; container image version used from 6.0 to 7.0, the new stable version. There are no major changes in the chart, but we recommend checking the [MongoDB&reg; 7.0 release notes](https://www.mongodb.com/docs/manual/release-notes/7.0/) before upgrading.
+
+> Note: Due to an error in our release process, the latest version in the previous major branch (6.6.8) already uses 7.0 by default, see [PR#19575](https://github.com/bitnami/charts/pull/19575)
 
 ### To 5.0.0
 
