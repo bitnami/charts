@@ -638,7 +638,7 @@ helm upgrade my-release oci://registry-1.docker.io/bitnamicharts/mongodb-sharded
 
 ### To 7.0.0
 
-This major version updates the MongoDB container image version used from 6.0 to 7.0, the new stable version. There are no major changes in the chart, but we recommend checking the [MongoDB 7.0 release notes](https://www.mongodb.com/docs/manual/release-notes/7.0/) before upgrading.
+This major version updates the MongoDB&reg; container image version used from 6.0 to 7.0, the new stable version. There are no major changes in the chart, but we recommend checking the [MongoDB&reg; 7.0 release notes](https://www.mongodb.com/docs/manual/release-notes/7.0/) before upgrading.
 
 > Note: Due to an error in our release process, the latest version in the previous major branch (6.6.8) already uses 7.0 by default, see [PR#19575](https://github.com/bitnami/charts/pull/19575)
 
