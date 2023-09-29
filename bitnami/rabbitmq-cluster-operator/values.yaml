@@ -220,12 +220,23 @@ clusterOperator:
   ## @param clusterOperator.containerSecurityContext.runAsUser Set RabbitMQ Cluster Operator containers' Security Context runAsUser
   ## @param clusterOperator.containerSecurityContext.runAsNonRoot Force running the container as non root
   ## @param clusterOperator.containerSecurityContext.readOnlyRootFilesystem mount / (root) as a readonly filesystem on cluster operator containers
+  ## @param clusterOperator.containerSecurityContext.capabilities.drop Drop all linux capabilities except the ones explicitly defined
+  ## @param clusterOperator.containerSecurityContext.allowPrivilegeEscalation Allow privilege escalation for cluster operator containers
+  ## @param clusterOperator.containerSecurityContext.seccompProfile.type Enable seccomp profile for cluster operator containers
+
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
     readOnlyRootFilesystem: true
+    capabilities:
+      drop:
+        - ALL
+    allowPrivilegeEscalation: false
+    seccompProfile:
+      type: RuntimeDefault
+
 
   ## @param clusterOperator.command Override default container command (useful when using custom images)
   ##
