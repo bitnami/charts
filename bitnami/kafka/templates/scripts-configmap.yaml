@@ -134,6 +134,29 @@ data:
         fi
     }
 
+    kafka_configure_from_environment_variables() {
+      # List of special cases to apply to the variables
+      local -r exception_regexps=(
+          "s/sasl\.ssl/sasl_ssl/g"
+          "s/sasl\.plaintext/sasl_plaintext/g"
+      )
+      # Map environment variables to config properties
+      for var in "${!KAFKA_CFG_@}"; do
+          key="$(echo "$var" | sed -e 's/^KAFKA_CFG_//g' -e 's/_/\./g' | tr '[:upper:]' '[:lower:]')"
+
+          # Exception for the camel case in this environment variable
+          [[ "$var" == "KAFKA_CFG_ZOOKEEPER_CLIENTCNXNSOCKET" ]] && key="zookeeper.clientCnxnSocket"
+
+          # Apply exception regexps
+          for regex in "${exception_regexps[@]}"; do
+              key="$(echo "$key" | sed "$regex")"
+          done
+
+          value="${!var}"
+          kafka_conf_set "$KAFKA_CONFIG_FILE" "$key" "$value"
+      done
+    }
+
     replace_placeholder() {
       local placeholder="${1:?missing placeholder value}"
       local password="${2:?missing password value}"
@@ -345,6 +368,9 @@ data:
         kafka_conf_set "$KAFKA_CONFIG_FILE" "broker.id" "$ID"
         {{- end }}
     fi
+    {{- if or .Values.broker.extraEnvVars .Values.controller.extraEnvVars .Values.extraEnvVars  }}
+    kafka_configure_from_environment_variables
+    {{- end }}
     {{- if not .Values.listeners.advertisedListeners }}
     replace_placeholder "advertised-address-placeholder" "${MY_POD_NAME}.{{ $fullname }}-${POD_ROLE}-headless.{{ $releaseNamespace }}.svc.{{ $clusterDomain }}"
     if [[ "${EXTERNAL_ACCESS_ENABLED:-false}" =~ ^(yes|true)$ ]]; then
@@ -364,4 +390,3 @@ data:
       append_file_to_kafka_conf /secret-config/server-secret.properties $KAFKA_CONFIG_FILE
     fi
     {{- include "common.tplvalues.render" ( dict "value" .Values.extraInit "context" $ ) | nindent 4 }}
-

@@ -299,7 +299,7 @@ Return the Kafka controller-eligible secret configuration
 {{- end -}}
 
 {{/*
-Return the Kafka controller-eligible secret configuration values 
+Return the Kafka controller-eligible secret configuration values
 */}}
 {{- define "kafka.controller.secretConfig" -}}
 {{- if .Values.secretConfig }}
@@ -363,7 +363,7 @@ Return the Kafka broker secret configuration
 {{- end -}}
 
 {{/*
-Return the Kafka broker secret configuration values 
+Return the Kafka broker secret configuration values
 */}}
 {{- define "kafka.broker.secretConfig" -}}
 {{- if .Values.secretConfig }}
@@ -824,6 +824,15 @@ Init container definition for Kafka initialization
           key: {{ .context.Values.tls.zookeeper.passwordsSecretTruststoreKey | quote }}
     {{- end }}
     {{- end }}
+    {{- end }}
+    {{- if .context.Values.controller.extraEnvVars }}
+    {{- include "common.tplvalues.render" ( dict "value" .context.Values.controller.extraEnvVars "context" $) | nindent 4 }}
+    {{- end }}
+    {{- if .context.Values.broker.extraEnvVars }}
+    {{- include "common.tplvalues.render" ( dict "value" .context.Values.broker.extraEnvVars "context" $) | nindent 4 }}
+    {{- end }}
+    {{- if .context.Values.extraEnvVars }}
+    {{- include "common.tplvalues.render" ( dict "value" .context.Values.extraEnvVars "context" $) | nindent 4 }}
     {{- end }}
   volumeMounts:
     - name: data
