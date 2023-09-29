@@ -240,6 +240,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `pdb.create`                            | Enable/disable a Pod Disruption Budget creation                                                                          | `false`         |
 | `pdb.minAvailable`                      | Minimum number/percentage of pods that should remain scheduled                                                           | `1`             |
 | `pdb.maxUnavailable`                    | Maximum number/percentage of pods that may be made unavailable                                                           | `""`            |
+| `enableServiceLinks`                    | Whether information about services should be injected into pod's environment                                             | `true`          |
 
 ### RBAC parameters
 
