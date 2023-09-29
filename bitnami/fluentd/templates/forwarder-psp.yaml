@@ -3,8 +3,7 @@ Copyright VMware, Inc.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- $pspAvailable := (semverCompare "<1.25-0" (include "common.capabilities.kubeVersion" .)) -}}
-{{- if and $pspAvailable .Values.forwarder.enabled .Values.forwarder.rbac.create .Values.forwarder.rbac.pspEnabled }}
+{{- if and (include "common.capabilities.psp.supported" .) .Values.forwarder.enabled .Values.forwarder.rbac.create .Values.forwarder.rbac.pspEnabled }}
 apiVersion: policy/v1beta1
 kind: PodSecurityPolicy
 metadata:
