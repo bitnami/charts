@@ -142,3 +142,76 @@ mariadb-password
 db-password
 {{- end -}}
 {{- end -}}
+
+{{/*
+Return the matomo pods needed initContainers
+*/}}
+{{- define "matomo.initContainers" -}}
+{{- if and .Values.volumePermissions.enabled .Values.persistence.enabled }}
+- name: volume-permissions
+  image: {{ include "matomo.volumePermissions.image" . }}
+  imagePullPolicy: {{ .Values.volumePermissions.image.pullPolicy | quote }}
+  command:
+    - sh
+    - -c
+    - |
+      mkdir -p "/bitnami/matomo"
+      chown -R "{{ .Values.containerSecurityContext.runAsUser }}:{{ .Values.podSecurityContext.fsGroup }}" "/bitnami/matomo"
+  securityContext:
+    runAsUser: 0
+  {{- if .Values.volumePermissions.resources }}
+  resources: {{- toYaml .Values.volumePermissions.resources | nindent 4 }}
+  {{- end }}
+  volumeMounts:
+    - name: matomo-data
+      mountPath: /bitnami/matomo
+{{- end }}
+{{- if .Values.certificates.customCAs }}
+- name: certificates
+  image: {{ template "certificates.image" . }}
+  imagePullPolicy: {{ default .Values.image.pullPolicy .Values.certificates.image.pullPolicy }}
+  imagePullSecrets:
+  {{- range (default .Values.image.pullSecrets .Values.certificates.image.pullSecrets) }}
+    - name: {{ . }}
+  {{- end }}
+  command:
+  {{- if .Values.certificates.command }}
+  command: {{- include "common.tplvalues.render" (dict "value" .Values.certificates.command "context" $) | nindent 4 }}
+  {{- else if .Values.certificates.customCertificate.certificateSecret }}
+  - sh
+  - -c
+  - install_packages ca-certificates openssl
+  {{- else }}
+  - sh
+  - -c
+  - install_packages ca-certificates openssl
+    && openssl req -new -x509 -days 3650 -nodes -sha256
+      -subj "/CN=$(hostname)" -addext "subjectAltName = DNS:$(hostname)"
+      -out  /etc/ssl/certs/ssl-cert-snakeoil.pem
+      -keyout /etc/ssl/private/ssl-cert-snakeoil.key -extensions v3_req
+  {{- end }}
+  {{- if .Values.certificates.args }}
+  args: {{- include "common.tplvalues.render" (dict "value" .Values.certificates.args "context" $) | nindent 4 }}
+  {{- end }}
+  env: {{- include "common.tplvalues.render" (dict "value" .Values.certificates.extraEnvVars "context" $) | nindent 4 }}
+  envFrom:
+    {{- if .Values.certificates.extraEnvVarsCM }}
+    - configMapRef:
+        name: {{ include "common.tplvalues.render" (dict "value" .Values.certificates.extraEnvVarsCM "context" $) }}
+    {{- end }}
+    {{- if .Values.certificates.extraEnvVarsSecret }}
+    - secretRef:
+        name: {{ include "common.tplvalues.render" (dict "value" .Values.certificates.extraEnvVarsSecret "context" $) }}
+    {{- end }}
+  volumeMounts:
+    - name: etc-ssl-certs
+      mountPath: /etc/ssl/certs
+      readOnly: false
+    - name: etc-ssl-private
+      mountPath: /etc/ssl/private
+      readOnly: false
+    - name: custom-ca-certificates
+      mountPath: /usr/local/share/ca-certificates
+      readOnly: true
+{{- end }}
+{{- end }}
