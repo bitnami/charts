@@ -32,5 +32,5 @@ maintainers:
   url: https://github.com/bitnami/charts
 name: mariadb-galera
 sources:
-  - https://github.com/bitnami/charts/tree/main/bitnami/mariadb-galera
-version: 9.1.4
+- https://github.com/bitnami/charts/tree/main/bitnami/mariadb-galera
+version: 9.2.1

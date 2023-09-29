@@ -329,8 +329,8 @@ Return the Redis Secret Name
 {{- define "appsmith.redis.secretName" -}}
 {{- if .Values.redis.enabled }}
     {{- printf "%s" (include "appsmith.redis.fullname" .) -}}
-{{- else if .Values.externalDatabase.existingSecret -}}
-    {{- printf "%s" .Values.externalDatabase.existingSecret -}}
+{{- else if .Values.externalRedis.existingSecret -}}
+    {{- printf "%s" .Values.externalRedis.existingSecret -}}
 {{- else -}}
     {{- printf "%s-externalredis" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
