@@ -6,30 +6,30 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: cassandra-exporter
-      image: docker.io/bitnami/cassandra-exporter:2.3.8-debian-11-r394
+      image: docker.io/bitnami/cassandra-exporter:2.3.8-debian-11-r423
     - name: cassandra
-      image: docker.io/bitnami/cassandra:4.1.3-debian-11-r37
+      image: docker.io/bitnami/cassandra:4.1.3-debian-11-r63
     - name: os-shell
-      image: docker.io/bitnami/os-shell:11-debian-11-r54
+      image: docker.io/bitnami/os-shell:11-debian-11-r83
 apiVersion: v2
 appVersion: 4.1.3
 dependencies:
-  - name: common
-    repository: oci://registry-1.docker.io/bitnamicharts
-    tags:
-      - bitnami-common
-    version: 2.x.x
+- name: common
+  repository: oci://registry-1.docker.io/bitnamicharts
+  tags:
+  - bitnami-common
+  version: 2.x.x
 description: Apache Cassandra is an open source distributed database management system designed to handle large amounts of data across many servers, providing high availability with no single point of failure.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/cassandra/img/cassandra-stack-220x234.png
 keywords:
-  - cassandra
-  - database
-  - nosql
+- cassandra
+- database
+- nosql
 maintainers:
-  - name: VMware, Inc.
-    url: https://github.com/bitnami/charts
+- name: VMware, Inc.
+  url: https://github.com/bitnami/charts
 name: cassandra
 sources:
-  - https://github.com/bitnami/charts/tree/main/bitnami/cassandra
-version: 10.5.4
+- https://github.com/bitnami/charts/tree/main/bitnami/cassandra
+version: 10.5.5
