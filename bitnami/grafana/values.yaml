@@ -320,6 +320,9 @@ grafana:
   ##
   containerPorts:
     grafana: 3000
+  ## @param grafana.extraPorts Extra ports for Grafana deployment
+  ##
+  extraPorts: []
   ## Node affinity preset
   ## Ref: https://kubernetes.io/docs/concepts/scheduling-eviction/assign-pod-node/#node-affinity
   ## @param grafana.nodeAffinityPreset.type Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`
@@ -617,7 +620,7 @@ service:
   ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
   ##
   externalTrafficPolicy: Cluster
-  ## @param service.extraPorts Extra port to expose on Redmine service
+  ## @param service.extraPorts Extra port to expose on Grafana service
   ##
   extraPorts: []
   ## @param service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
@@ -1014,7 +1017,7 @@ imageRenderer:
     ## ref https://kubernetes.io/docs/tasks/access-application-cluster/create-external-load-balancer/#preserving-the-client-source-ip
     ##
     externalTrafficPolicy: Cluster
-    ## @param imageRenderer.service.extraPorts Extra port to expose on Redmine service
+    ## @param imageRenderer.service.extraPorts Extra port to expose on Grafana service
     ##
     extraPorts: []
     ## @param imageRenderer.service.sessionAffinity Session Affinity for Kubernetes service, can be "None" or "ClientIP"
