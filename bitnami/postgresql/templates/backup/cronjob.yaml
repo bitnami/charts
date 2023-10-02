@@ -77,10 +77,7 @@ spec:
                 value: {{- printf "/tmp/certs/%s" .Values.tls.certCAFilename -}}
                 {{- end }}
               {{- end }}
-            command:
-            {{- range .Values.backup.cronjob.command }}
-            - {{ . }}
-            {{- end }}
+            command: {{- include "common.tplvalues.render" (dict "value" .Values.backup.cronjob.command "context" $) | nindent 14 }}
             volumeMounts:
               {{- if .Values.tls.enabled }}
               - name: certs
