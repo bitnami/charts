@@ -2285,6 +2285,8 @@ kraft:
   ## @param kraft.enabled Switch to enable or disable the KRaft mode for Kafka
   ##
   enabled: true
+  ## @param kraft.existingClusterIdSecret Name of the secret containing the cluster ID for the Kafka KRaft cluster. This is incompatible with the clusterId parameter. If both are set, the existingClusterIdSecret will be used
+  existingClusterIdSecret: ""
   ## @param kraft.clusterId Kafka Kraft cluster ID. If not set, a random cluster ID will be generated the first time Kraft is initialized.
   ## NOTE: Already initialized Kafka nodes will use cluster ID stored in their persisted storage.
   ## If reusing existing PVCs or migrating from Zookeeper mode, make sure the cluster ID is set matching the stored cluster ID, otherwise new nodes will fail to join the cluster.
