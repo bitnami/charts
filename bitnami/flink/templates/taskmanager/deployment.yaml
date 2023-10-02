@@ -34,6 +34,7 @@ spec:
       annotations: {{- include "common.tplvalues.render" (dict "value" $podAnnotations "context" $) | nindent 8 }}
       {{- end }}
     spec:
+      {{- include "flink.imagePullSecrets" . | nindent 6 }}
       {{- if .Values.taskmanager.schedulerName }}
       schedulerName: {{ .Values.taskmanager.schedulerName }}
       {{- end }}
@@ -144,7 +145,7 @@ spec:
           resources: {{- toYaml .Values.taskmanager.resources | nindent 12 }}
           {{- end }}
           {{- if .Values.taskmanager.extraVolumeMounts }}
-            {{- include "common.tplvalues.render" ( dict "value" .Values.taskmanager.extraVolumeMounts "context" $) | nindent 12 }}
+          volumeMounts: {{- include "common.tplvalues.render" ( dict "value" .Values.taskmanager.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
         {{- if .Values.taskmanager.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.taskmanager.sidecars "context" $) | nindent 8 }}
