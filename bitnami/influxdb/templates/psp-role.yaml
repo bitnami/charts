@@ -3,7 +3,7 @@ Copyright VMware, Inc.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if .Values.rbac.create }}
+{{- if and (include "common.capabilities.psp.supported" .) .Values.rbac.create .Values.psp.create }}
 kind: Role
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 metadata:
@@ -14,12 +14,9 @@ metadata:
   {{- end }}
   namespace: {{ .Release.Namespace | quote }}
 rules:
-  {{- $pspAvailable := (semverCompare "<1.25-0" (include "common.capabilities.kubeVersion" .)) -}}
-  {{- if and $pspAvailable .Values.psp.create }}
   - apiGroups: ["extensions"]
     resources: ["podsecuritypolicies"]
     verbs: ["use"]
     resourceNames:
       - {{ template "common.names.fullname" . }}
-  {{- end }}
 {{- end }}

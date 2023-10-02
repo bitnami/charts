@@ -1,0 +1,10 @@
+# Copyright VMware, Inc.
+# SPDX-License-Identifier: APACHE-2.0
+
+command:
+  # Fluentd requires to be stable before tracking log entries,
+  # increasing the resiliency of the tests.
+  wait-to-be-available:
+    exec: "sleep 300"
+    exit-status: 0
+    timeout: 310000
