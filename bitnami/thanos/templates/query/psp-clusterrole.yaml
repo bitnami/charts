@@ -4,8 +4,7 @@ SPDX-License-Identifier: APACHE-2.0
 */}}
 
 {{- $query := (include "thanos.query.values" . | fromYaml) }}
-{{- $pspAvailable := (semverCompare "<1.25-0" (include "common.capabilities.kubeVersion" .)) }}
-{{- if and $pspAvailable $query.enabled $query.pspEnabled $query.rbac.create }}
+{{- if and (include "common.capabilities.psp.supported" .) $query.enabled $query.pspEnabled $query.rbac.create }}
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
 metadata:
