@@ -325,6 +325,7 @@ cloneStaticSiteFromGit.branch=master
 ### Providing a custom http block
 
 You can use the `httpBlock` value to provide a custom http block for NGINX to use. To do this, create a values files with your http block and install the chart using it:
+
 ```yaml
 httpBlock: |-
     worker_processes  auto;
