@@ -226,6 +226,7 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `grafana.podAffinityPreset`                  | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                     | `""`            |
 | `grafana.podAntiAffinityPreset`              | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                | `soft`          |
 | `grafana.containerPorts.grafana`             | Grafana container port                                                                                  | `3000`          |
+| `grafana.extraPorts`                         | Extra ports for Grafana deployment                                                                      | `[]`            |
 | `grafana.nodeAffinityPreset.type`            | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`               | `""`            |
 | `grafana.nodeAffinityPreset.key`             | Node label key to match Ignored if `affinity` is set.                                                   | `""`            |
 | `grafana.nodeAffinityPreset.values`          | Node label values to match. Ignored if `affinity` is set.                                               | `[]`            |
@@ -314,7 +315,7 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `service.loadBalancerSourceRanges` | loadBalancerSourceRanges if Grafana service type is `LoadBalancer` (optional, cloud specific)                                    | `[]`                     |
 | `service.annotations`              | Provide any additional annotations which may be required.                                                                        | `{}`                     |
 | `service.externalTrafficPolicy`    | Grafana service external traffic policy                                                                                          | `Cluster`                |
-| `service.extraPorts`               | Extra port to expose on Redmine service                                                                                          | `[]`                     |
+| `service.extraPorts`               | Extra port to expose on Grafana service                                                                                          | `[]`                     |
 | `service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                             | `None`                   |
 | `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
 | `ingress.enabled`                  | Set to true to enable ingress record generation                                                                                  | `false`                  |
@@ -399,7 +400,7 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `imageRenderer.service.loadBalancerSourceRanges`         | loadBalancerSourceRanges if Grafana service type is `LoadBalancer` (optional, cloud specific)                                             | `[]`                             |
 | `imageRenderer.service.annotations`                      | Provide any additional annotations which may be required.                                                                                 | `{}`                             |
 | `imageRenderer.service.externalTrafficPolicy`            | Grafana service external traffic policy                                                                                                   | `Cluster`                        |
-| `imageRenderer.service.extraPorts`                       | Extra port to expose on Redmine service                                                                                                   | `[]`                             |
+| `imageRenderer.service.extraPorts`                       | Extra port to expose on Grafana service                                                                                                   | `[]`                             |
 | `imageRenderer.service.sessionAffinity`                  | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                                      | `None`                           |
 | `imageRenderer.service.sessionAffinityConfig`            | Additional settings for the sessionAffinity                                                                                               | `{}`                             |
 | `imageRenderer.metrics.enabled`                          | Enable the export of Prometheus metrics                                                                                                   | `false`                          |
