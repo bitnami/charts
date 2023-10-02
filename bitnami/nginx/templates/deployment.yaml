@@ -234,6 +234,10 @@ spec:
           resources: {{- toYaml .Values.resources | nindent 12 }}
           {{- end }}
           volumeMounts:
+            {{- if or .Values.httpBlock .Values.existingHttpBlockConfigmap }}
+            - name: nginx-http-block
+              mountPath: /opt/bitnami/nginx/conf
+            {{- end }}
             {{- if or .Values.serverBlock .Values.existingServerBlockConfigmap }}
             - name: nginx-server-block
               mountPath: /opt/bitnami/nginx/conf/server_blocks
@@ -276,6 +280,11 @@ spec:
         {{- include "common.tplvalues.render" ( dict "value" .Values.sidecars "context" $) | nindent 8 }}
         {{- end }}
       volumes:
+        {{- if or .Values.httpBlock .Values.existingHttpBlockConfigmap }}
+        - name: nginx-http-block
+          configMap:
+            name: {{ include "nginx.httpBlockConfigmapName" . }}
+        {{- end }}
         {{- if or .Values.serverBlock .Values.existingServerBlockConfigmap }}
         - name: nginx-server-block
           configMap:

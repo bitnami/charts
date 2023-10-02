@@ -57,6 +57,17 @@ persistentVolumeClaim:
 {{- end -}}
 
 {{/*
+Return the custom NGINX http block configmap.
+*/}}
+{{- define "nginx.httpBlockConfigmapName" -}}
+{{- if .Values.existingHttpBlockConfigmap -}}
+    {{- printf "%s" (tpl .Values.existingHttpBlockConfigmap $) -}}
+{{- else -}}
+    {{- printf "%s-http-block" (include "common.names.fullname" .) -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the custom NGINX server block configmap.
 */}}
 {{- define "nginx.serverBlockConfigmapName" -}}
