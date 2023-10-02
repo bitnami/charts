@@ -16,7 +16,7 @@ Return the proper flink image name
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "flink.imagePullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (dict "images" (list .Values.image) "global" .Values.global) -}}
+{{- include "common.images.pullSecrets" (dict "images" (list .Values.image) "global" .Values.global) -}}
 {{- end -}}
 
 {{/*
