@@ -192,6 +192,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `cloneStaticSiteFromGit.extraEnvVars`               | Additional environment variables to set for the in the containers that clone static site from git   | `[]`                   |
 | `cloneStaticSiteFromGit.extraEnvVarsSecret`         | Secret with extra environment variables                                                             | `""`                   |
 | `cloneStaticSiteFromGit.extraVolumeMounts`          | Add extra volume mounts for the Git containers                                                      | `[]`                   |
+| `httpBlock`                                         | customs http block to be added to NGINX configuration                                               | `""`                   |
+| `existingHttpBlockConfigmap`                        | ConfigMap with custom http block to be added to NGINX configuration                                 | `""`                   |
 | `serverBlock`                                       | Custom server block to be added to NGINX configuration                                              | `""`                   |
 | `existingServerBlockConfigmap`                      | ConfigMap with custom server block to be added to NGINX configuration                               | `""`                   |
 | `staticSiteConfigmap`                               | Name of existing ConfigMap with the server static site content                                      | `""`                   |
@@ -321,6 +323,80 @@ cloneStaticSiteFromGit.enabled=true
 cloneStaticSiteFromGit.repository=https://github.com/mdn/beginner-html-site-styled.git
 cloneStaticSiteFromGit.branch=master
 ```
+
+### Providing a custom http block
+
+You can use the `httpBlock` value to provide a custom http block for NGINX to use. To do this, create a values files with your http block and install the chart using it:
+
+```yaml
+httpBlock: |-
+    worker_processes  auto;
+    error_log         "/opt/bitnami/nginx/logs/error.log";
+    pid               "/opt/bitnami/nginx/tmp/nginx.pid";
+
+    events {
+        worker_connections  1024;
+    }
+
+    http {
+        default_type  application/octet-stream;
+        log_format    main '$remote_addr - $remote_user [$time_local] '
+                           '"$request" $status  $body_bytes_sent "$http_referer" '
+                           '"$http_user_agent" "$http_x_forwarded_for"';
+        access_log    "/opt/bitnami/nginx/logs/access.log" main;
+        add_header    X-Frame-Options SAMEORIGIN;
+
+        client_body_temp_path  "/opt/bitnami/nginx/tmp/client_body" 1 2;
+        proxy_temp_path        "/opt/bitnami/nginx/tmp/proxy" 1 2;
+        fastcgi_temp_path      "/opt/bitnami/nginx/tmp/fastcgi" 1 2;
+        scgi_temp_path         "/opt/bitnami/nginx/tmp/scgi" 1 2;
+        uwsgi_temp_path        "/opt/bitnami/nginx/tmp/uwsgi" 1 2;
+
+        sendfile           on;
+        tcp_nopush         on;
+        tcp_nodelay        off;
+        gzip               on;
+        gzip_http_version  1.0;
+        gzip_comp_level    2;
+        gzip_proxied       any;
+        gzip_types         text/plain text/css application/javascript text/xml application/xml+rss;
+        keepalive_timeout  65;
+        ssl_protocols      TLSv1 TLSv1.1 TLSv1.2 TLSv1.3;
+        ssl_ciphers        HIGH:!aNULL:!MD5;
+
+        client_max_body_size 80M;
+
+        proxy_buffering on;
+        proxy_buffer_size  128k;
+        proxy_buffers      4 256k;
+
+        server_tokens off;
+
+        absolute_redirect  off;
+        port_in_redirect   off;
+
+        include  "/opt/bitnami/nginx/conf/server_blocks/*.conf";
+
+        # HTTP Server
+        server {
+            # Port to listen on, can also be set in IP:PORT format
+            listen  8080;
+
+            include  "/opt/bitnami/nginx/conf/bitnami/*.conf";
+
+            location /status {
+                stub_status on;
+                access_log   off;
+                allow 127.0.0.1;
+                deny all;
+            }
+        }
+    }
+```
+
+> Warning: The httpBlock overwrites the default `nginx.conf` file. It's recommended to copy the above example and make the changes instead of rewriting your own config.
+
+In addition, you can also set an external ConfigMap with the configuration file. This is done by setting the `existingHttpBlockConfigmap` parameter. Note that this will override the previous option.
 
 ### Providing a custom server block
 

@@ -496,6 +496,77 @@ cloneStaticSiteFromGit:
   ##     mountPath: /root/.ssh/
   ##
   extraVolumeMounts: []
+## @param httpBlock customs http block to be added to NGINX configuration
+## PHP-FPM example http block:
+## httpBlock: |-
+#    worker_processes  auto;
+#    error_log         "/opt/bitnami/nginx/logs/error.log";
+#    pid               "/opt/bitnami/nginx/tmp/nginx.pid";
+#
+#    events {
+#        worker_connections  1024;
+#    }
+#
+#    http {
+#        default_type  application/octet-stream;
+#        log_format    main '$remote_addr - $remote_user [$time_local] '
+#                           '"$request" $status  $body_bytes_sent "$http_referer" '
+#                           '"$http_user_agent" "$http_x_forwarded_for"';
+#        access_log    "/opt/bitnami/nginx/logs/access.log" main;
+#        add_header    X-Frame-Options SAMEORIGIN;
+#
+#        client_body_temp_path  "/opt/bitnami/nginx/tmp/client_body" 1 2;
+#        proxy_temp_path        "/opt/bitnami/nginx/tmp/proxy" 1 2;
+#        fastcgi_temp_path      "/opt/bitnami/nginx/tmp/fastcgi" 1 2;
+#        scgi_temp_path         "/opt/bitnami/nginx/tmp/scgi" 1 2;
+#        uwsgi_temp_path        "/opt/bitnami/nginx/tmp/uwsgi" 1 2;
+#
+#        sendfile           on;
+#        tcp_nopush         on;
+#        tcp_nodelay        off;
+#        gzip               on;
+#        gzip_http_version  1.0;
+#        gzip_comp_level    2;
+#        gzip_proxied       any;
+#        gzip_types         text/plain text/css application/javascript text/xml application/xml+rss;
+#        keepalive_timeout  65;
+#        ssl_protocols      TLSv1 TLSv1.1 TLSv1.2 TLSv1.3;
+#        ssl_ciphers        HIGH:!aNULL:!MD5;
+#
+#        client_max_body_size 80M;
+#
+#        proxy_buffering on;
+#        proxy_buffer_size  128k;
+#        proxy_buffers      4 256k;
+#
+#        server_tokens off;
+#
+#        absolute_redirect  off;
+#        port_in_redirect   off;
+#
+#        include  "/opt/bitnami/nginx/conf/server_blocks/*.conf";
+#
+#        # HTTP Server
+#        server {
+#            # Port to listen on, can also be set in IP:PORT format
+#            listen  8080;
+#
+#            include  "/opt/bitnami/nginx/conf/bitnami/*.conf";
+#
+#            location /status {
+#                stub_status on;
+#                access_log   off;
+#                allow 127.0.0.1;
+#                deny all;
+#            }
+#        }
+#    }
+#
+httpBlock: ""
+## @param existingHttpBlockConfigmap ConfigMap with custom http block to be added to NGINX configuration
+## NOTE: This will override httpBlock
+##
+existingHttpBlockConfigmap: ""
 ## @param serverBlock Custom server block to be added to NGINX configuration
 ## PHP-FPM example server block:
 ## serverBlock: |-
