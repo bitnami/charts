@@ -2469,7 +2469,7 @@ ingressController:
       apisix_version: "apisix.apache.org/v2"
       plugin_metadata_cm: ""
     apisix:
-      admin_api_version: "v3"
+      admin_api_version: "v2"
       default_cluster_base_url: {{ ternary "https" "http" .Values.controlPlane.tls.enabled }}://{{ include "apisix.control-plane.fullname" . }}:{{ .Values.controlPlane.service.ports.adminAPI }}/apisix/admin
       default_cluster_admin_key: "{{ print "{{APISIX_ADMIN_API_TOKEN}}" }}"
       default_cluster_name: "default"

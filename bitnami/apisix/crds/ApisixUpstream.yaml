@@ -1,0 +1,855 @@
+# Taken from https://github.com/apache/apisix-helm-chart/blob/apisix-ingress-controller-0.12.2/charts/apisix-ingress-controller/crds
+#
+# Licensed to the Apache Software Foundation (ASF) under one or more
+# contributor license agreements.  See the NOTICE file distributed with
+# this work for additional information regarding copyright ownership.
+# The ASF licenses this file to You under the Apache License, Version 2.0
+# (the "License"); you may not use this file except in compliance with
+# the License.  You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+#
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  labels:
+    apisix.apache.org/app: ingress-apisix
+  name: apisixupstreams.apisix.apache.org
+spec:
+  group: apisix.apache.org
+  names:
+    kind: ApisixUpstream
+    plural: apisixupstreams
+    shortNames:
+      - au
+    singular: apisixupstream
+  scope: Namespaced
+  versions:
+    - deprecated: true
+      name: v2beta3
+      schema:
+        openAPIV3Schema:
+          properties:
+            spec:
+              properties:
+                healthCheck:
+                  anyOf:
+                    - required:
+                        - active
+                    - required:
+                        - active
+                        - passive
+                  properties:
+                    active:
+                      properties:
+                        concurrency:
+                          minimum: 1
+                          type: integer
+                        healthy:
+                          properties:
+                            httpCodes:
+                              items:
+                                maximum: 599
+                                minimum: 200
+                                type: integer
+                              minItems: 1
+                              type: array
+                            interval:
+                              type: string
+                            successes:
+                              maximum: 254
+                              minimum: 1
+                              type: integer
+                          type: object
+                        host:
+                          pattern: ^\*?[0-9a-zA-Z-._]+$
+                          type: string
+                        httpPath:
+                          minLength: 1
+                          type: string
+                        port:
+                          maximum: 65535
+                          minimum: 1
+                          type: integer
+                        requestHeaders:
+                          items:
+                            type: string
+                          minItems: 1
+                          type: array
+                        strictTLS:
+                          type: boolean
+                        timeout:
+                          minimum: 0
+                          type: number
+                        type:
+                          enum:
+                            - http
+                            - https
+                            - tcp
+                          type: string
+                        unhealthy:
+                          properties:
+                            httpCodes:
+                              items:
+                                maximum: 599
+                                minimum: 200
+                                type: integer
+                              minItems: 1
+                              type: array
+                            httpFailures:
+                              maximum: 254
+                              minimum: 1
+                              type: integer
+                            interval:
+                              type: string
+                            tcpFailures:
+                              maximum: 254
+                              minimum: 1
+                              type: integer
+                            timeouts:
+                              minimum: 0
+                              type: integer
+                          type: object
+                      type: object
+                    passive:
+                      properties:
+                        healthy:
+                          properties:
+                            httpCodes:
+                              items:
+                                maximum: 599
+                                minimum: 200
+                                type: integer
+                              minItems: 1
+                              type: array
+                            successes:
+                              maximum: 254
+                              minimum: 1
+                              type: integer
+                          type: object
+                        type:
+                          enum:
+                            - http
+                            - https
+                            - tcp
+                          type: string
+                        unhealthy:
+                          properties:
+                            httpCodes:
+                              items:
+                                maximum: 599
+                                minimum: 200
+                                type: integer
+                              minItems: 1
+                              type: array
+                            httpFailures:
+                              maximum: 254
+                              minimum: 1
+                              type: integer
+                            tcpFailures:
+                              maximum: 254
+                              minimum: 1
+                              type: integer
+                            timeouts:
+                              minimum: 0
+                              type: integer
+                          type: object
+                      type: object
+                  type: object
+                loadbalancer:
+                  properties:
+                    hashOn:
+                      enum:
+                        - vars
+                        - vars_combinations
+                        - header
+                        - cookie
+                        - consumer
+                      type: string
+                    key:
+                      type: string
+                    type:
+                      enum:
+                        - roundrobin
+                        - chash
+                        - ewma
+                        - least_conn
+                      type: string
+                  required:
+                    - type
+                  type: object
+                portLevelSettings:
+                  items:
+                    properties:
+                      healthCheck:
+                        anyOf:
+                          - required:
+                              - active
+                          - required:
+                              - active
+                              - passive
+                        properties:
+                          active:
+                            properties:
+                              concurrency:
+                                minimum: 1
+                                type: integer
+                              healthy:
+                                properties:
+                                  httpCodes:
+                                    items:
+                                      maximum: 599
+                                      minimum: 200
+                                      type: integer
+                                    minItems: 1
+                                    type: array
+                                  interval:
+                                    type: string
+                                  successes:
+                                    maximum: 254
+                                    minimum: 1
+                                    type: integer
+                                type: object
+                              host:
+                                pattern: "^\\*?[0-9a-zA-Z-._]+$"
+                                type: string
+                              httpPath:
+                                minLength: 1
+                                type: string
+                              port:
+                                maximum: 65535
+                                minimum: 1
+                                type: integer
+                              requestHeaders:
+                                items:
+                                  type: string
+                                minItems: 1
+                                type: array
+                              strictTLS:
+                                type: boolean
+                              timeout:
+                                minimum: 0
+                                type: number
+                              type:
+                                enum:
+                                  - http
+                                  - https
+                                  - tcp
+                                type: string
+                              unhealthy:
+                                properties:
+                                  httpCodes:
+                                    items:
+                                      maximum: 599
+                                      minimum: 200
+                                      type: integer
+                                    minItems: 1
+                                    type: array
+                                  httpFailures:
+                                    maximum: 254
+                                    minimum: 1
+                                    type: integer
+                                  interval:
+                                    type: string
+                                  tcpFailures:
+                                    maximum: 254
+                                    minimum: 1
+                                    type: integer
+                                  timeout:
+                                    type: string
+                                type: object
+                            type: object
+                          passive:
+                            properties:
+                              healthy:
+                                properties:
+                                  httpCodes:
+                                    items:
+                                      maximum: 599
+                                      minimum: 200
+                                      type: integer
+                                    minItems: 1
+                                    type: array
+                                  successes:
+                                    maximum: 254
+                                    minimum: 1
+                                    type: integer
+                                type: object
+                              type:
+                                enum:
+                                  - http
+                                  - https
+                                  - tcp
+                                type: string
+                              unhealthy:
+                                properties:
+                                  httpCodes:
+                                    items:
+                                      maximum: 599
+                                      minimum: 200
+                                      type: integer
+                                    minItems: 1
+                                    type: array
+                                  httpFailures:
+                                    maximum: 254
+                                    minimum: 1
+                                    type: integer
+                                  tcpFailures:
+                                    maximum: 254
+                                    minimum: 1
+                                    type: integer
+                                  timeout:
+                                    type: string
+                                type: object
+                            type: object
+                        type: object
+                      loadbalancer:
+                        properties:
+                          hashOn:
+                            enum:
+                              - vars
+                              - vars_combinations
+                              - header
+                              - cookie
+                              - consumer
+                            type: string
+                          key:
+                            type: string
+                          type:
+                            enum:
+                              - roundrobin
+                              - chash
+                              - ewma
+                              - least_conn
+                            type: string
+                        required:
+                          - type
+                        type: object
+                      port:
+                        maximum: 65535
+                        minimum: 1
+                        type: integer
+                      retries:
+                        minimum: 0
+                        type: integer
+                      scheme:
+                        enum:
+                          - http
+                          - grpc
+                        type: string
+                      timeout:
+                        properties:
+                          connect:
+                            type: string
+                          read:
+                            type: string
+                          send:
+                            type: string
+                        type: object
+                    type: object
+                  type: array
+                retries:
+                  minimum: 0
+                  type: integer
+                scheme:
+                  enum:
+                    - http
+                    - grpc
+                    - https
+                    - grpcs
+                  type: string
+                subsets:
+                  items:
+                    properties:
+                      labels:
+                        type: object
+                        x-kubernetes-preserve-unknown-fields: true
+                      name:
+                        minLength: 1
+                        type: string
+                    required:
+                      - name
+                      - labels
+                    type: object
+                  type: array
+                timeout:
+                  properties:
+                    connect:
+                      type: string
+                    read:
+                      type: string
+                    send:
+                      type: string
+                  type: object
+                tlsSecret:
+                  description: ApisixSecret describes the Kubernetes Secret name and namespace.
+                  properties:
+                    name:
+                      minLength: 1
+                      type: string
+                    namespace:
+                      minLength: 1
+                      type: string
+                  required:
+                    - name
+                    - namespace
+                  type: object
+              type: object
+            status:
+              properties:
+                conditions:
+                  items:
+                    properties:
+                      message:
+                        type: string
+                      observedGeneration:
+                        type: integer
+                      reason:
+                        type: string
+                      status:
+                        type: string
+                      type:
+                        type: string
+                    type: object
+                  type: array
+              type: object
+          type: object
+      served: true
+      storage: false
+      subresources:
+        status: {}
+    - name: v2
+      schema:
+        openAPIV3Schema:
+          properties:
+            spec:
+              properties:
+                discovery:
+                  description: Discovery is used to configure service discovery for upstream
+                  properties:
+                    args:
+                      type: object
+                      x-kubernetes-preserve-unknown-fields: true
+                    serviceName:
+                      type: string
+                    type:
+                      type: string
+                  type: object
+                externalNodes:
+                  description: ExternalNodes contains external nodes the Upstream should use If this field is set, the upstream will use these nodes directly without any further resolves
+                  items:
+                    description: ApisixUpstreamExternalNode is the external node conf
+                    properties:
+                      name:
+                        type: string
+                      port:
+                        type: integer
+                      type:
+                        type: string
+                      weight:
+                        type: integer
+                    type: object
+                  type: array
+                healthCheck:
+                  anyOf:
+                    - required:
+                        - active
+                    - required:
+                        - active
+                        - passive
+                  properties:
+                    active:
+                      properties:
+                        concurrency:
+                          minimum: 1
+                          type: integer
+                        healthy:
+                          properties:
+                            httpCodes:
+                              items:
+                                maximum: 599
+                                minimum: 200
+                                type: integer
+                              minItems: 1
+                              type: array
+                            interval:
+                              type: string
+                            successes:
+                              maximum: 254
+                              minimum: 1
+                              type: integer
+                          type: object
+                        host:
+                          pattern: ^\*?[0-9a-zA-Z-._]+$
+                          type: string
+                        httpPath:
+                          minLength: 1
+                          type: string
+                        port:
+                          maximum: 65535
+                          minimum: 1
+                          type: integer
+                        requestHeaders:
+                          items:
+                            type: string
+                          minItems: 1
+                          type: array
+                        strictTLS:
+                          type: boolean
+                        timeout:
+                          minimum: 0
+                          type: number
+                        type:
+                          enum:
+                            - http
+                            - https
+                            - tcp
+                          type: string
+                        unhealthy:
+                          properties:
+                            httpCodes:
+                              items:
+                                maximum: 599
+                                minimum: 200
+                                type: integer
+                              minItems: 1
+                              type: array
+                            httpFailures:
+                              maximum: 254
+                              minimum: 1
+                              type: integer
+                            interval:
+                              type: string
+                            tcpFailures:
+                              maximum: 254
+                              minimum: 1
+                              type: integer
+                            timeouts:
+                              minimum: 0
+                              type: integer
+                          type: object
+                      type: object
+                    passive:
+                      properties:
+                        healthy:
+                          properties:
+                            httpCodes:
+                              items:
+                                maximum: 599
+                                minimum: 200
+                                type: integer
+                              minItems: 1
+                              type: array
+                            successes:
+                              maximum: 254
+                              minimum: 1
+                              type: integer
+                          type: object
+                        type:
+                          enum:
+                            - http
+                            - https
+                            - tcp
+                          type: string
+                        unhealthy:
+                          properties:
+                            httpCodes:
+                              items:
+                                maximum: 599
+                                minimum: 200
+                                type: integer
+                              minItems: 1
+                              type: array
+                            httpFailures:
+                              maximum: 254
+                              minimum: 1
+                              type: integer
+                            tcpFailures:
+                              maximum: 254
+                              minimum: 1
+                              type: integer
+                            timeouts:
+                              minimum: 0
+                              type: integer
+                          type: object
+                      type: object
+                  type: object
+                ingressClassName:
+                  type: string
+                loadbalancer:
+                  properties:
+                    hashOn:
+                      enum:
+                        - vars
+                        - vars_combinations
+                        - header
+                        - cookie
+                        - consumer
+                      type: string
+                    key:
+                      type: string
+                    type:
+                      enum:
+                        - roundrobin
+                        - chash
+                        - ewma
+                        - least_conn
+                      type: string
+                  required:
+                    - type
+                  type: object
+                passHost:
+                  enum:
+                    - pass
+                    - node
+                    - rewrite
+                  type: string
+                portLevelSettings:
+                  items:
+                    properties:
+                      healthCheck:
+                        anyOf:
+                          - required:
+                              - active
+                          - required:
+                              - active
+                              - passive
+                        properties:
+                          active:
+                            properties:
+                              concurrency:
+                                minimum: 1
+                                type: integer
+                              healthy:
+                                properties:
+                                  httpCodes:
+                                    items:
+                                      maximum: 599
+                                      minimum: 200
+                                      type: integer
+                                    minItems: 1
+                                    type: array
+                                  interval:
+                                    type: string
+                                  successes:
+                                    maximum: 254
+                                    minimum: 1
+                                    type: integer
+                                type: object
+                              host:
+                                pattern: ^\*?[0-9a-zA-Z-._]+$
+                                type: string
+                              httpPath:
+                                minLength: 1
+                                type: string
+                              port:
+                                maximum: 65535
+                                minimum: 1
+                                type: integer
+                              requestHeaders:
+                                items:
+                                  type: string
+                                minItems: 1
+                                type: array
+                              strictTLS:
+                                type: boolean
+                              timeout:
+                                minimum: 0
+                                type: number
+                              type:
+                                enum:
+                                  - http
+                                  - https
+                                  - tcp
+                                type: string
+                              unhealthy:
+                                properties:
+                                  httpCodes:
+                                    items:
+                                      maximum: 599
+                                      minimum: 200
+                                      type: integer
+                                    minItems: 1
+                                    type: array
+                                  httpFailures:
+                                    maximum: 254
+                                    minimum: 1
+                                    type: integer
+                                  interval:
+                                    type: string
+                                  tcpFailures:
+                                    maximum: 254
+                                    minimum: 1
+                                    type: integer
+                                  timeout:
+                                    type: string
+                                type: object
+                            type: object
+                          passive:
+                            properties:
+                              healthy:
+                                properties:
+                                  httpCodes:
+                                    items:
+                                      maximum: 599
+                                      minimum: 200
+                                      type: integer
+                                    minItems: 1
+                                    type: array
+                                  successes:
+                                    maximum: 254
+                                    minimum: 1
+                                    type: integer
+                                type: object
+                              type:
+                                enum:
+                                  - http
+                                  - https
+                                  - tcp
+                                type: string
+                              unhealthy:
+                                properties:
+                                  httpCodes:
+                                    items:
+                                      maximum: 599
+                                      minimum: 200
+                                      type: integer
+                                    minItems: 1
+                                    type: array
+                                  httpFailures:
+                                    maximum: 254
+                                    minimum: 1
+                                    type: integer
+                                  tcpFailures:
+                                    maximum: 254
+                                    minimum: 1
+                                    type: integer
+                                  timeout:
+                                    type: string
+                                type: object
+                            type: object
+                        type: object
+                      loadbalancer:
+                        properties:
+                          hashOn:
+                            enum:
+                              - vars
+                              - vars_combinations
+                              - header
+                              - cookie
+                              - consumer
+                            type: string
+                          key:
+                            type: string
+                          type:
+                            enum:
+                              - roundrobin
+                              - chash
+                              - ewma
+                              - least_conn
+                            type: string
+                        required:
+                          - type
+                        type: object
+                      port:
+                        maximum: 65535
+                        minimum: 1
+                        type: integer
+                      retries:
+                        minimum: 0
+                        type: integer
+                      scheme:
+                        enum:
+                          - http
+                          - grpc
+                        type: string
+                      timeout:
+                        properties:
+                          connect:
+                            type: string
+                          read:
+                            type: string
+                          send:
+                            type: string
+                        type: object
+                    type: object
+                  type: array
+                retries:
+                  minimum: 0
+                  type: integer
+                scheme:
+                  enum:
+                    - http
+                    - grpc
+                    - https
+                    - grpcs
+                  type: string
+                subsets:
+                  items:
+                    properties:
+                      labels:
+                        type: object
+                        x-kubernetes-preserve-unknown-fields: true
+                      name:
+                        minLength: 1
+                        type: string
+                    required:
+                      - name
+                      - labels
+                    type: object
+                  type: array
+                timeout:
+                  properties:
+                    connect:
+                      type: string
+                    read:
+                      type: string
+                    send:
+                      type: string
+                  type: object
+                tlsSecret:
+                  description: ApisixSecret describes the Kubernetes Secret name and namespace.
+                  properties:
+                    name:
+                      minLength: 1
+                      type: string
+                    namespace:
+                      minLength: 1
+                      type: string
+                  required:
+                    - name
+                    - namespace
+                  type: object
+                upstreamHost:
+                  pattern: ^\*?[0-9a-zA-Z-._]+$
+                  type: string
+              type: object
+            status:
+              properties:
+                conditions:
+                  items:
+                    properties:
+                      message:
+                        type: string
+                      observedGeneration:
+                        type: integer
+                      reason:
+                        type: string
+                      status:
+                        type: string
+                      type:
+                        type: string
+                    type: object
+                  type: array
+              type: object
+          type: object
+      served: true
+      storage: true
+      subresources:
+        status: {}
