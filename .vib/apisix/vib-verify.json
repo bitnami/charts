@@ -48,6 +48,9 @@
               "pod": {
                 "workload": "deploy-apisix-data-plane"
               }
+            },
+            "wait": {
+              "file": "ejbca/goss/goss-wait.yaml"
             }
           }
         },
