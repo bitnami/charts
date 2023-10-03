@@ -208,6 +208,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `master.persistence.selector`                              | Additional labels to match for the PVC                                                                | `{}`                     |
 | `master.persistence.dataSource`                            | Custom PVC data source                                                                                | `{}`                     |
 | `master.persistence.existingClaim`                         | Use a existing PVC which must be created manually before bound                                        | `""`                     |
+| `master.persistentVolumeClaimRetentionPolicy.enabled`      | Controls if and how PVCs are deleted during the lifecycle of a StatefulSet                            | `false`                  |
+| `master.persistentVolumeClaimRetentionPolicy.whenScaled`   | Volume retention behavior when the replica count of the StatefulSet is reduced                        | `Retain`                 |
+| `master.persistentVolumeClaimRetentionPolicy.whenDeleted`  | Volume retention behavior that applies when the StatefulSet is deleted                                | `Retain`                 |
 | `master.service.type`                                      | Redis&reg; master service type                                                                        | `ClusterIP`              |
 | `master.service.ports.redis`                               | Redis&reg; master service port                                                                        | `6379`                   |
 | `master.service.nodePorts.redis`                           | Node port for Redis&reg; master                                                                       | `""`                     |
@@ -317,6 +320,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `replica.persistence.selector`                              | Additional labels to match for the PVC                                                                  | `{}`                     |
 | `replica.persistence.dataSource`                            | Custom PVC data source                                                                                  | `{}`                     |
 | `replica.persistence.existingClaim`                         | Use a existing PVC which must be created manually before bound                                          | `""`                     |
+| `replica.persistentVolumeClaimRetentionPolicy.enabled`      | Controls if and how PVCs are deleted during the lifecycle of a StatefulSet                            | `false`                  |
+| `replica.persistentVolumeClaimRetentionPolicy.whenScaled`   | Volume retention behavior when the replica count of the StatefulSet is reduced                        | `Retain`                 |
+| `replica.persistentVolumeClaimRetentionPolicy.whenDeleted`  | Volume retention behavior that applies when the StatefulSet is deleted                                | `Retain`                 |
 | `replica.service.type`                                      | Redis&reg; replicas service type                                                                        | `ClusterIP`              |
 | `replica.service.ports.redis`                               | Redis&reg; replicas service port                                                                        | `6379`                   |
 | `replica.service.nodePorts.redis`                           | Node port for Redis&reg; replicas                                                                       | `""`                     |
@@ -404,6 +410,9 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sentinel.persistence.dataSource`                            | Custom PVC data source                                                                                                                      | `{}`                     |
 | `sentinel.persistence.medium`                                | Provide a medium for `emptyDir` volumes.                                                                                                    | `""`                     |
 | `sentinel.persistence.sizeLimit`                             | Set this to enable a size limit for `emptyDir` volumes.                                                                                     | `""`                     |
+| `sentinel.persistentVolumeClaimRetentionPolicy.enabled`      | Controls if and how PVCs are deleted during the lifecycle of a StatefulSet                            | `false`                  |
+| `sentinel.persistentVolumeClaimRetentionPolicy.whenScaled`   | Volume retention behavior when the replica count of the StatefulSet is reduced                        | `Retain`                 |
+| `sentinel.persistentVolumeClaimRetentionPolicy.whenDeleted`  | Volume retention behavior that applies when the StatefulSet is deleted                                | `Retain`                 |
 | `sentinel.resources.limits`                                  | The resources limits for the Redis&reg; Sentinel containers                                                                                 | `{}`                     |
 | `sentinel.resources.requests`                                | The requested resources for the Redis&reg; Sentinel containers                                                                              | `{}`                     |
 | `sentinel.containerSecurityContext.enabled`                  | Enabled Redis&reg; Sentinel containers' Security Context                                                                                    | `true`                   |
