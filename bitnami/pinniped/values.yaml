@@ -60,7 +60,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/pinniped
-  tag: 0.25.0-debian-11-r34
+  tag: 0.26.0-debian-11-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -142,6 +142,7 @@ concierge:
     kubeCertAgent:
       namePrefix: {{ printf "%s-%s" (include "pinniped.concierge.fullname" .) "kube-cert-agent" | trunc 63 | trimSuffix "-" }}-
       image: {{ template "pinniped.image" . }}
+      {{- include "pinniped.imagePullSecrets" . | indent 2 }}
   ## @param concierge.credentialIssuerConfig [string] Configuration for the credential issuer
   ##
   credentialIssuerConfig: |

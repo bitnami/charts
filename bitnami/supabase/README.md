@@ -100,7 +100,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `jwt.autoGenerate.image.pullSecrets`                                 | JWT CLI image pull secrets                                                                                                                         | `[]`                  |
 | `jwt.autoGenerate.kubectlImage.registry`                             | Kubectl image registry                                                                                                                             | `docker.io`           |
 | `jwt.autoGenerate.kubectlImage.repository`                           | Kubectl image repository                                                                                                                           | `bitnami/kubectl`     |
-| `jwt.autoGenerate.kubectlImage.tag`                                  | Kubectl image tag (immutable tags are recommended)                                                                                                 | `1.28.2-debian-11-r2` |
+| `jwt.autoGenerate.kubectlImage.tag`                                  | Kubectl image tag (immutable tags are recommended)                                                                                                 | `1.28.2-debian-11-r5` |
 | `jwt.autoGenerate.kubectlImage.digest`                               | Kubectl image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                            | `""`                  |
 | `jwt.autoGenerate.kubectlImage.pullPolicy`                           | Kubectl image pull policy                                                                                                                          | `IfNotPresent`        |
 | `jwt.autoGenerate.kubectlImage.pullSecrets`                          | Kubectl image pull secrets                                                                                                                         | `[]`                  |
@@ -321,7 +321,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `realtime.extraConfigExistingConfigmap`                    | The name of an existing ConfigMap with extra configuration                                                                                          | `""`                        |
 | `realtime.image.registry`                                  | Realtime image registry                                                                                                                             | `docker.io`                 |
 | `realtime.image.repository`                                | Realtime image repository                                                                                                                           | `bitnami/supabase-realtime` |
-| `realtime.image.tag`                                       | Realtime image tag (immutable tags are recommended)                                                                                                 | `2.22.21-debian-11-r0`      |
+| `realtime.image.tag`                                       | Realtime image tag (immutable tags are recommended)                                                                                                 | `2.22.21-debian-11-r2`      |
 | `realtime.image.digest`                                    | Realtime image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended) | `""`                        |
 | `realtime.image.pullPolicy`                                | Realtime image pull policy                                                                                                                          | `IfNotPresent`              |
 | `realtime.image.pullSecrets`                               | Realtime image pull secrets                                                                                                                         | `[]`                        |
@@ -410,7 +410,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `rest.extraConfigExistingConfigmap`                    | The name of an existing ConfigMap with extra configuration                                                                                           | `""`                   |
 | `rest.image.registry`                                  | PostgREST image registry                                                                                                                             | `docker.io`            |
 | `rest.image.repository`                                | PostgREST image repository                                                                                                                           | `bitnami/postgrest`    |
-| `rest.image.tag`                                       | PostgREST image tag (immutable tags are recommended)                                                                                                 | `11.2.0-debian-11-r39` |
+| `rest.image.tag`                                       | PostgREST image tag (immutable tags are recommended)                                                                                                 | `11.2.0-debian-11-r42` |
 | `rest.image.digest`                                    | PostgREST image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended) | `""`                   |
 | `rest.image.pullPolicy`                                | PostgREST image pull policy                                                                                                                          | `IfNotPresent`         |
 | `rest.image.pullSecrets`                               | PostgREST image pull secrets                                                                                                                         | `[]`                   |
@@ -710,7 +710,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `psqlImage.registry`                                   | PostgreSQL client image registry                                                                | `docker.io`                 |
 | `psqlImage.repository`                                 | PostgreSQL client image repository                                                              | `bitnami/supabase-postgres` |
 | `psqlImage.digest`                                     | PostgreSQL client image digest (overrides image tag)                                            | `""`                        |
-| `psqlImage.tag`                                        | PostgreSQL client image tag (immutable tags are recommended)                                    | `15.1.0-debian-11-r164`     |
+| `psqlImage.tag`                                        | PostgreSQL client image tag (immutable tags are recommended)                                    | `15.1.0-debian-11-r165`     |
 | `psqlImage.pullPolicy`                                 | PostgreSQL client image pull policy                                                             | `IfNotPresent`              |
 | `psqlImage.pullSecrets`                                | PostgreSQL client image pull secrets                                                            | `[]`                        |
 | `psqlImage.debug`                                      | Enable PostgreSQL client image debug mode                                                       | `false`                     |
@@ -754,7 +754,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `postgresql.service.ports.postgresql`         | PostgreSQL service port                                                                                    | `5432`                                                                                                                       |
 | `postgresql.image.registry`                   | PostgreSQL image registry                                                                                  | `docker.io`                                                                                                                  |
 | `postgresql.image.repository`                 | PostgreSQL image repository                                                                                | `bitnami/supabase-postgres`                                                                                                  |
-| `postgresql.image.tag`                        | PostgreSQL image tag (immutable tags are recommended)                                                      | `15.1.0-debian-11-r164`                                                                                                      |
+| `postgresql.image.tag`                        | PostgreSQL image tag (immutable tags are recommended)                                                      | `15.1.0-debian-11-r165`                                                                                                      |
 | `postgresql.image.digest`                     | PostgreSQL image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                                                                                                                         |
 | `postgresql.image.pullPolicy`                 | PostgreSQL image pull policy                                                                               | `IfNotPresent`                                                                                                               |
 | `postgresql.image.pullSecrets`                | Specify image pull secrets                                                                                 | `[]`                                                                                                                         |
@@ -857,6 +857,12 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 ## Troubleshooting
 
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+
+## Upgrading
+
+### To 1.0.0
+
+This major updates the PostgreSQL subchart to its newest major, 13.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#to-1300) you can find more information about the changes introduced in that version.
 
 ## License
 

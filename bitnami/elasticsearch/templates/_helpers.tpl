@@ -221,6 +221,15 @@ Returns true if at least one ingest-only node replica has been configured.
 {{- end -}}
 
 {{/*
+Returns true if only one master node replica has been configured to assume all the roles
+*/}}
+{{- define "elasticsearch.singleNode.enabled" -}}
+{{- if and (eq (int .Values.master.replicaCount) 1) (not (or .Values.master.masterOnly .Values.master.autoscaling.enabled (include "elasticsearch.data.enabled" .) (include "elasticsearch.coordinating.enabled" .) (include "elasticsearch.ingest.enabled" .))) -}}
+    {{- true -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return the hostname of every ElasticSearch seed node
 */}}
 {{- define "elasticsearch.hosts" -}}

@@ -628,11 +628,12 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### KRaft chart parameters
 
-| Name                           | Description                                                                                                                                                   | Value  |
-| ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| `kraft.enabled`                | Switch to enable or disable the KRaft mode for Kafka                                                                                                          | `true` |
-| `kraft.clusterId`              | Kafka Kraft cluster ID. If not set, a random cluster ID will be generated the first time Kraft is initialized.                                                | `""`   |
-| `kraft.controllerQuorumVoters` | Override the Kafka controller quorum voters of the Kafka Kraft cluster. If not set, it will be automatically configured to use all controller-elegible nodes. | `""`   |
+| Name                            | Description                                                                                                                                                                            | Value  |
+| ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| `kraft.enabled`                 | Switch to enable or disable the KRaft mode for Kafka                                                                                                                                   | `true` |
+| `kraft.existingClusterIdSecret` | Name of the secret containing the cluster ID for the Kafka KRaft cluster. This is incompatible with the clusterId parameter. If both are set, the existingClusterIdSecret will be used | `""`   |
+| `kraft.clusterId`               | Kafka Kraft cluster ID. If not set, a random cluster ID will be generated the first time Kraft is initialized.                                                                         | `""`   |
+| `kraft.controllerQuorumVoters`  | Override the Kafka controller quorum voters of the Kafka Kraft cluster. If not set, it will be automatically configured to use all controller-elegible nodes.                          | `""`   |
 
 ### ZooKeeper chart parameters
 
