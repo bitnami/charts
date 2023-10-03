@@ -46,7 +46,7 @@ var _ = Describe("Elasticsearch", Ordered, func() {
 
 			Eventually(func() (*appsv1.StatefulSet, error) {
 				return c.AppsV1().StatefulSets(namespace).Get(ctx, stsName, getOpts)
-			}, timeout, PollingInterval).Should(WithTransform(getAvailableReplicas, Equal(origReplicas)))
+			}, timeout, PollingInterval).Should(WithTransform(getReadyReplicas, Equal(origReplicas)))
 
 			svc, err := c.CoreV1().Services(namespace).Get(ctx, releaseName, getOpts)
 			Expect(err).NotTo(HaveOccurred())
