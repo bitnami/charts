@@ -15,7 +15,6 @@ metadata:
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
-
 spec:
   replicas: {{ .Values.supervisor.replicaCount }}
   {{- if .Values.supervisor.updateStrategy }}
