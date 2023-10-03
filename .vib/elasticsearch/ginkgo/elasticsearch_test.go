@@ -32,8 +32,8 @@ var _ = Describe("Elasticsearch", Ordered, func() {
 
 	When("an index is created and Elasticsearch is scaled down to 0 replicas and back up", func() {
 		It("should have access to the created index", func() {
-			getReplicaCount := func(ss *appsv1.StatefulSet) int32 { return ss.Status.replicas }
-			getReadyReplicas := func(ss *appsv1.StatefulSet) int32 { return ss.Status.readyReplicas }
+			getReplicaCount := func(ss *appsv1.StatefulSet) int32 { return ss.Status.Replicas }
+			getReadyReplicas := func(ss *appsv1.StatefulSet) int32 { return ss.Status.ReadyReplicas }
 			getSucceededJobs := func(j *batchv1.Job) int32 { return j.Status.Succeeded }
 			getOpts := metav1.GetOptions{}
 
