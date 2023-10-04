@@ -13,6 +13,13 @@ Return the proper flink image name
 {{- end -}}
 
 {{/*
+Return the proper Docker Image Registry Secret Names
+*/}}
+{{- define "flink.imagePullSecrets" -}}
+{{- include "common.images.pullSecrets" (dict "images" (list .Values.image) "global" .Values.global) -}}
+{{- end -}}
+
+{{/*
 Create the name of the jobmanager deployment
 */}}
 {{- define "flink.jobmanager.fullname" -}}

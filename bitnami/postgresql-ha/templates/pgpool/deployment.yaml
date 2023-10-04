@@ -223,7 +223,7 @@ spec:
               value: {{ ternary "yes" "no" .Values.pgpool.useLoadBalancing | quote }}
             {{- if .Values.pgpool.useLoadBalancing }}
             - name: PGPOOL_DISABLE_LOAD_BALANCE_ON_WRITE
-              value: {{ .Values.pgpool.loadBalancingOnWrite | quote }}
+              value: {{ .Values.pgpool.disableLoadBalancingOnWrite | quote }}
             {{- end }}
             - name: PGPOOL_ENABLE_LOG_CONNECTIONS
               value: {{ ternary "yes" "no" .Values.pgpool.logConnections | quote }}

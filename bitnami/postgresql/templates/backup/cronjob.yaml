@@ -38,12 +38,14 @@ spec:
           annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 12 }}
           {{- end }}
         spec:
+          {{- include "postgresql.v1.imagePullSecrets" . | nindent 10 }}
           {{- if .Values.backup.cronjob.nodeSelector }}
           nodeSelector: {{- include "common.tplvalues.render" (dict "value" .Values.backup.cronjob.nodeSelector "context" $) | nindent 12 }}
           {{- end }}
           containers:
           - name: {{ include "postgresql.v1.primary.fullname" . }}-pgdumpall
             image: {{ include "postgresql.v1.image" . }}
+            imagePullPolicy: {{ .Values.image.pullPolicy | quote }}
             env:
               - name: PGUSER
               {{- if .Values.auth.enablePostgresUser }}
@@ -64,7 +66,7 @@ spec:
               - name: PGHOST
                 value: {{ include "postgresql.v1.primary.fullname" . }}
               - name: PGPORT
-                value: {{ .Values.containerPorts.postgresql | quote }}
+                value: {{ include "postgresql.v1.service.port" . | quote }}
               - name: PGDUMP_DIR
                 value: {{ .Values.backup.cronjob.storage.mountPath }}
               {{- if .Values.tls.enabled }}
@@ -75,10 +77,7 @@ spec:
                 value: {{- printf "/tmp/certs/%s" .Values.tls.certCAFilename -}}
                 {{- end }}
               {{- end }}
-            command:
-            {{- range .Values.backup.cronjob.command }}
-            - {{ . }}
-            {{- end }}
+            command: {{- include "common.tplvalues.render" (dict "value" .Values.backup.cronjob.command "context" $) | nindent 14 }}
             volumeMounts:
               {{- if .Values.tls.enabled }}
               - name: certs
@@ -87,9 +86,14 @@ spec:
               - name: datadir
                 mountPath: {{ .Values.backup.cronjob.storage.mountPath }}
                 subPath: {{ .Values.backup.cronjob.storage.subPath }}
-            securityContext:
-              {{- include "common.tplvalues.render" ( dict "value" .Values.backup.cronjob.containerSecurityContext "context" $) | nindent 14 }}
+            {{- if .Values.backup.cronjob.containerSecurityContext.enabled }}
+            securityContext: {{- omit .Values.backup.cronjob.containerSecurityContext "enabled" | toYaml | nindent 14 }}
+            {{- end }}
           restartPolicy: {{ .Values.backup.cronjob.restartPolicy }}
+          {{- if .Values.backup.cronjob.podSecurityContext.enabled }}
+          securityContext:
+            fsGroup: {{ .Values.backup.cronjob.podSecurityContext.fsGroup }}
+          {{- end }}
           volumes:
             {{- if .Values.tls.enabled }}
             - name: raw-certificates

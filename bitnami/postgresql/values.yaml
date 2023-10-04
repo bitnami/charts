@@ -98,7 +98,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/postgresql
-  tag: 15.4.0-debian-11-r39
+  tag: 16.0.0-debian-11-r3
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1099,8 +1099,14 @@ backup:
     ttlSecondsAfterFinished: ""
     ## @param backup.cronjob.restartPolicy Set the cronjob parameter restartPolicy
     restartPolicy: OnFailure
+    ## @param backup.cronjob.podSecurityContext.enabled Enable PodSecurityContext for CronJob/Backup
+    ## @param backup.cronjob.podSecurityContext.fsGroup Group ID for the CronJob
+    podSecurityContext:
+      enabled: true
+      fsGroup: 1001
     ## backup container's Security Context
     ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+    ## @param backup.cronjob.containerSecurityContext.enabled Enable container security context
     ## @param backup.cronjob.containerSecurityContext.runAsUser User ID for the backup container
     ## @param backup.cronjob.containerSecurityContext.runAsGroup Group ID for the backup container
     ## @param backup.cronjob.containerSecurityContext.runAsNonRoot Set backup container's Security Context runAsNonRoot
@@ -1109,6 +1115,7 @@ backup:
     ## @param backup.cronjob.containerSecurityContext.seccompProfile.type Set backup container's Security Context seccompProfile type
     ## @param backup.cronjob.containerSecurityContext.capabilities.drop Set backup container's Security Context capabilities to drop
     containerSecurityContext:
+      enabled: true
       runAsUser: 1001
       runAsGroup: 0
       runAsNonRoot: true
@@ -1120,7 +1127,7 @@ backup:
         drop:
           - ALL
     ## @param backup.cronjob.command Set backup container's command to run
-    command: 
+    command:
       - /bin/sh
       - -c
       - "pg_dumpall --clean --if-exists --load-via-partition-root --quote-all-identifiers --no-password --file=${PGDUMP_DIR}/pg_dumpall-$(date '+%Y-%m-%d-%H-%M').pgdump"
@@ -1158,7 +1165,7 @@ backup:
       ## @param backup.cronjob.storage.annotations PVC annotations
       ##
       annotations: {}
-      ## @param backup.cronjob.storage.mountPath Path to mount the volume at 
+      ## @param backup.cronjob.storage.mountPath Path to mount the volume at
       ##
       mountPath: /backup/pgdump
       ## @param backup.cronjob.storage.subPath Subdirectory of the volume to mount at
@@ -1290,7 +1297,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r72
+    tag: 11-debian-11-r77
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1391,7 +1398,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/postgres-exporter
-    tag: 0.14.0-debian-11-r0
+    tag: 0.14.0-debian-11-r5
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

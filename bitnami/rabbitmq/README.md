@@ -66,7 +66,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | -------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`    | RabbitMQ image registry                                                                                  | `docker.io`           |
 | `image.repository`  | RabbitMQ image repository                                                                                | `bitnami/rabbitmq`    |
-| `image.tag`         | RabbitMQ image tag (immutable tags are recommended)                                                      | `3.12.4-debian-11-r0` |
+| `image.tag`         | RabbitMQ image tag (immutable tags are recommended)                                                      | `3.12.6-debian-11-r4` |
 | `image.digest`      | RabbitMQ image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
 | `image.pullPolicy`  | RabbitMQ image pull policy                                                                               | `IfNotPresent`        |
 | `image.pullSecrets` | Specify docker-registry secret names as an array                                                         | `[]`                  |
@@ -86,6 +86,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `servicenameOverride`                        | String to partially override headless service name                                                                                                                      | `""`                                              |
 | `commonLabels`                               | Labels to add to all deployed objects                                                                                                                                   | `{}`                                              |
 | `serviceBindings.enabled`                    | Create secret for service binding (Experimental)                                                                                                                        | `false`                                           |
+| `enableServiceLinks`                         | Whether information about services should be injected into pod's environment variable                                                                                   | `true`                                            |
 | `diagnosticMode.enabled`                     | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                                                                                 | `false`                                           |
 | `diagnosticMode.command`                     | Command to override all containers in the deployment                                                                                                                    | `["sleep"]`                                       |
 | `diagnosticMode.args`                        | Args to override all containers in the deployment                                                                                                                       | `["infinity"]`                                    |
@@ -357,7 +358,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup`              | `false`            |
 | `volumePermissions.image.registry`                     | Init container volume-permissions image registry                                                                                  | `docker.io`        |
 | `volumePermissions.image.repository`                   | Init container volume-permissions image repository                                                                                | `bitnami/os-shell` |
-| `volumePermissions.image.tag`                          | Init container volume-permissions image tag                                                                                       | `11-debian-11-r45` |
+| `volumePermissions.image.tag`                          | Init container volume-permissions image tag                                                                                       | `11-debian-11-r77` |
 | `volumePermissions.image.digest`                       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`               |
 | `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`     |
 | `volumePermissions.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                                  | `[]`               |
