@@ -25,7 +25,7 @@ Looking to use Sealed Secrets in production? Try [VMware Application Catalog](ht
 ## Prerequisites
 
 - Kubernetes 1.16+
-- Helm 3.1.0
+- Helm 3.8.0+
 
 ## Installing the Chart
 

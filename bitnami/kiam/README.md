@@ -28,8 +28,8 @@ Looking to use Kiam in production? Try [VMware Application Catalog](https://bitn
 
 ## Prerequisites
 
-- Kubernetes 1.19+ in AWS
-- Helm 3.2.0+
+- Kubernetes 1.23+ in AWS
+- Helm 3.8.0+
 
 ## Installing the Chart
 

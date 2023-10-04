@@ -26,8 +26,8 @@ Looking to use Contour in production? Try [VMware Application Catalog](https://b
 
 ## Prerequisites
 
-- Kubernetes 1.19+
-- Helm 3.2.0+
+- Kubernetes 1.23+
+- Helm 3.8.0+
 - An Operator for `ServiceType: LoadBalancer` like [MetalLB](https://github.com/bitnami/charts/tree/main/bitnami/metallb)
 
 ## Installing the Chart

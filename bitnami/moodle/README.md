@@ -26,8 +26,8 @@ Looking to use Bitnami LMS powered by Moodle## Prerequisitestrade; LMS in produc
 
 ## Prerequisites
 
-- Kubernetes 1.19+
-- Helm 3.2.0+
+- Kubernetes 1.23+
+- Helm 3.8.0+
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 

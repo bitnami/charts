@@ -24,8 +24,8 @@ Looking to use Kubernetes Event Exporter in production? Try [VMware Application 
 
 ## Prerequisites
 
-- Kubernetes 1.19+
-- Helm 3.2.0+
+- Kubernetes 1.23+
+- Helm 3.8.0+
 
 ## Installing the Chart
 
