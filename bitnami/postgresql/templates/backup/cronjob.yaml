@@ -77,10 +77,7 @@ spec:
                 value: {{- printf "/tmp/certs/%s" .Values.tls.certCAFilename -}}
                 {{- end }}
               {{- end }}
-            command:
-            {{- range .Values.backup.cronjob.command }}
-            - {{ . }}
-            {{- end }}
+            command: {{- include "common.tplvalues.render" (dict "value" .Values.backup.cronjob.command "context" $) | nindent 14 }}
             volumeMounts:
               {{- if .Values.tls.enabled }}
               - name: certs
@@ -89,8 +86,9 @@ spec:
               - name: datadir
                 mountPath: {{ .Values.backup.cronjob.storage.mountPath }}
                 subPath: {{ .Values.backup.cronjob.storage.subPath }}
-            securityContext:
-              {{- include "common.tplvalues.render" ( dict "value" .Values.backup.cronjob.containerSecurityContext "context" $) | nindent 14 }}
+            {{- if .Values.backup.cronjob.containerSecurityContext.enabled }}
+            securityContext: {{- omit .Values.backup.cronjob.containerSecurityContext "enabled" | toYaml | nindent 14 }}
+            {{- end }}
           restartPolicy: {{ .Values.backup.cronjob.restartPolicy }}
           {{- if .Values.backup.cronjob.podSecurityContext.enabled }}
           securityContext:
