@@ -787,6 +787,9 @@ backend:
     ## @param backend.persistence.subPath The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services
     ##
     subPath: ""
+    ## @param backend.persistence.gitDataPath The subdirectory in `/mountPath` or `/mountPath/subPath` where git connected apps will store their local git data.
+    ##
+    gitDataPath: ""
     ## @param backend.persistence.storageClass Storage class of backing PVC
     ## If defined, storageClassName: <storageClass>
     ## If set to "-", storageClassName: "", which disables dynamic provisioning

@@ -269,18 +269,19 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Backend Persistence Parameters
 
-| Name                                | Description                                                                                             | Value               |
-| ----------------------------------- | ------------------------------------------------------------------------------------------------------- | ------------------- |
-| `backend.persistence.enabled`       | Enable persistence using Persistent Volume Claims                                                       | `true`              |
-| `backend.persistence.mountPath`     | Path to mount the volume at.                                                                            | `/bitnami/appsmith` |
-| `backend.persistence.subPath`       | The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services | `""`                |
-| `backend.persistence.storageClass`  | Storage class of backing PVC                                                                            | `""`                |
-| `backend.persistence.annotations`   | Persistent Volume Claim annotations                                                                     | `{}`                |
-| `backend.persistence.accessModes`   | Persistent Volume Access Modes                                                                          | `["ReadWriteOnce"]` |
-| `backend.persistence.size`          | Size of data volume                                                                                     | `8Gi`               |
-| `backend.persistence.existingClaim` | The name of an existing PVC to use for persistence                                                      | `""`                |
-| `backend.persistence.selector`      | Selector to match an existing Persistent Volume for WordPress data PVC                                  | `{}`                |
-| `backend.persistence.dataSource`    | Custom PVC data source                                                                                  | `{}`                |
+| Name                                | Description                                                                                                        | Value               |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------ | ------------------- |
+| `backend.persistence.enabled`       | Enable persistence using Persistent Volume Claims                                                                  | `true`              |
+| `backend.persistence.mountPath`     | Path to mount the volume at.                                                                                       | `/bitnami/appsmith` |
+| `backend.persistence.subPath`       | The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services            | `""`                |
+| `backend.persistence.gitDataPath`   | The subdirectory in `/mountPath` or `/mountPath/subPath` where git connected apps will store their local git data. | `""`                |
+| `backend.persistence.storageClass`  | Storage class of backing PVC                                                                                       | `""`                |
+| `backend.persistence.annotations`   | Persistent Volume Claim annotations                                                                                | `{}`                |
+| `backend.persistence.accessModes`   | Persistent Volume Access Modes                                                                                     | `["ReadWriteOnce"]` |
+| `backend.persistence.size`          | Size of data volume                                                                                                | `8Gi`               |
+| `backend.persistence.existingClaim` | The name of an existing PVC to use for persistence                                                                 | `""`                |
+| `backend.persistence.selector`      | Selector to match an existing Persistent Volume for WordPress data PVC                                             | `{}`                |
+| `backend.persistence.dataSource`    | Custom PVC data source                                                                                             | `{}`                |
 
 ### Appsmith RTS Parameters
 
