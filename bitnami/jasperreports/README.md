@@ -165,7 +165,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `persistence.size`                      | PVC Storage Request for Jasperreports volume                                              | `8Gi`                      |
 | `persistence.existingClaim`             | An Existing PVC name for Jasperreports volume                                             | `""`                       |
 | `persistence.annotations`               | Persistent Volume Claim annotations                                                       | `{}`                       |
-
+| `dnsConfig`                             | Deployment pod DNS configuration                                                          | `{}`                       |
 ### Exposure parameters
 
 | Name                               | Description                                                                                                                      | Value                    |

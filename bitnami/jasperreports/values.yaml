@@ -150,6 +150,22 @@ hostAliases: []
 ##
 containerPorts:
   http: 8080
+
+## @param dnsConfig Pod DNS configuration.
+## ref: https://kubernetes.io/docs/concepts/services-networking/dns-pod-service/#pod-dns-config
+## e.g:
+## dnsConfig:
+##   nameservers:
+##   - 8.8.8.8
+##   - 8.8.4.4
+##   options:
+##   - name: ndots
+##     value: "2"
+##   searches:
+##   - example.com
+##
+dnsConfig: {}
+
 ## JasperReports pods' Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ## @param podSecurityContext.enabled Enable pod's Security Context
