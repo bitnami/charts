@@ -83,7 +83,7 @@ server:
   image:
     registry: docker.io
     repository: bitnami/vault
-    tag: 1.15.0-debian-11-r4
+    tag: 1.15.0-debian-11-r5
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -732,7 +732,7 @@ csiProvider:
   image:
     registry: docker.io
     repository: bitnami/vault-csi-provider
-    tag: 1.4.0-debian-11-r134
+    tag: 1.4.0-debian-11-r137
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1167,7 +1167,7 @@ injector:
   image:
     registry: docker.io
     repository: bitnami/vault-k8s
-    tag: 1.3.0-debian-11-r17
+    tag: 1.3.0-debian-11-r20
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
