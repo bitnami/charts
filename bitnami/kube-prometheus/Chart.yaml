@@ -12,7 +12,7 @@ annotations:
     - name: prometheus-operator
       image: docker.io/bitnami/prometheus-operator:0.68.0-debian-11-r24
     - name: prometheus
-      image: docker.io/bitnami/prometheus:2.47.0-debian-11-r23
+      image: docker.io/bitnami/prometheus:2.47.0-debian-11-r26
     - name: thanos
       image: docker.io/bitnami/thanos:0.32.3-debian-11-r11
 apiVersion: v2
@@ -46,4 +46,4 @@ maintainers:
 name: kube-prometheus
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/kube-prometheus
-version: 8.21.1
+version: 8.21.2
