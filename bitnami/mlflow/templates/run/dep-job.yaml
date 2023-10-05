@@ -96,7 +96,7 @@ spec:
         {{- end }}
         {{- if and .Values.tracking.auth.enabled }}
         # Wait for tracking service
-        {{- include "mlflow.v0.waitForServiceInitContainer" (dict "target" "database" "host" (include "mlflow.v0.tracking.fullname" .) "port" (include "mlflow.v0.tracking.port" .) "context" $) | nindent 8 }}
+        {{- include "mlflow.v0.waitForServiceInitContainer" (dict "target" "tracking" "host" (include "mlflow.v0.tracking.fullname" .) "port" (include "mlflow.v0.tracking.port" .) "context" $) | nindent 8 }}
         {{- end }}
         {{- end }}
         {{- if .Values.run.initContainers }}
