@@ -81,7 +81,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`                        | Gitea image registry                                                                                                  | `docker.io`           |
 | `image.repository`                      | Gitea Image name                                                                                                      | `bitnami/gitea`       |
-| `image.tag`                             | Gitea Image tag                                                                                                       | `1.20.5-debian-11-r0` |
+| `image.tag`                             | Gitea Image tag                                                                                                       | `1.20.5-debian-11-r2` |
 | `image.digest`                          | Gitea image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                 | `""`                  |
 | `image.pullPolicy`                      | Gitea image pull policy                                                                                               | `IfNotPresent`        |
 | `image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                      | `[]`                  |
