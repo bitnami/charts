@@ -214,15 +214,7 @@ data:
           error "CA certificate file not found"
         fi
         {{- else }}
-        # Extract CA certificate from PEM cert
-        cat /certs/tls.crt | csplit - -s -z '/\-*END CERTIFICATE\-*/+1' '{*}' -f /certs/xx
-        FIND_CA_RESULT=$(find /certs -not -name 'xx00' -name 'xx*')
-        if [[ $(echo $FIND_CA_RESULT | wc -l)  < 1 ]]; then
-          error "auth.tls.pemChainIncluded was set, but PEM chain only contained 1 cert"
-        fi
-        echo $FIND_CA_RESULT | sort | xargs cat >> /certs/ca.crt
-        cat /certs/xx00 > /certs/tls.crt
-        find /certs -name "xx*" -exec rm {} \;
+        cp /certs/tls.crt /certs/ca.crt
         {{- end }}
 
         # Create JKS keystore from PEM cert and key
