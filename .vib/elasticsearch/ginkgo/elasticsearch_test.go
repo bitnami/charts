@@ -32,7 +32,8 @@ var _ = Describe("Elasticsearch", Ordered, func() {
 
 	When("an index is created and Elasticsearch is scaled down to 0 replicas and back up", func() {
 		It("should have access to the created index", func() {
-			getAvailableReplicas := func(ss *appsv1.StatefulSet) int32 { return ss.Status.AvailableReplicas }
+			getReplicaCount := func(ss *appsv1.StatefulSet) int32 { return ss.Status.Replicas }
+			getReadyReplicas := func(ss *appsv1.StatefulSet) int32 { return ss.Status.ReadyReplicas }
 			getSucceededJobs := func(j *batchv1.Job) int32 { return j.Status.Succeeded }
 			getOpts := metav1.GetOptions{}
 
@@ -45,7 +46,7 @@ var _ = Describe("Elasticsearch", Ordered, func() {
 
 			Eventually(func() (*appsv1.StatefulSet, error) {
 				return c.AppsV1().StatefulSets(namespace).Get(ctx, stsName, getOpts)
-			}, timeout, PollingInterval).Should(WithTransform(getAvailableReplicas, Equal(origReplicas)))
+			}, timeout, PollingInterval).Should(WithTransform(getReadyReplicas, Equal(origReplicas)))
 
 			svc, err := c.CoreV1().Services(namespace).Get(ctx, releaseName, getOpts)
 			Expect(err).NotTo(HaveOccurred())
@@ -77,7 +78,7 @@ var _ = Describe("Elasticsearch", Ordered, func() {
 
 			Eventually(func() (*appsv1.StatefulSet, error) {
 				return c.AppsV1().StatefulSets(namespace).Get(ctx, stsName, getOpts)
-			}, timeout, PollingInterval).Should(WithTransform(getAvailableReplicas, BeZero()))
+			}, timeout, PollingInterval).Should(WithTransform(getReplicaCount, BeZero()))
 
 			By("scaling up to the original replicas")
 			ss, err = utils.StsScale(
@@ -86,7 +87,7 @@ var _ = Describe("Elasticsearch", Ordered, func() {
 
 			Eventually(func() (*appsv1.StatefulSet, error) {
 				return c.AppsV1().StatefulSets(namespace).Get(ctx, stsName, getOpts)
-			}, timeout, PollingInterval).Should(WithTransform(getAvailableReplicas, Equal(origReplicas)))
+			}, timeout, PollingInterval).Should(WithTransform(getReadyReplicas, Equal(origReplicas)))
 
 			By("creating a job check the index")
 			deleteDBJobName := fmt.Sprintf("%s-get-%s",

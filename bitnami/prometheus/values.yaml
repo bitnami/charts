@@ -84,7 +84,7 @@ alertmanager:
   image:
     registry: docker.io
     repository: bitnami/alertmanager
-    tag: 0.26.0-debian-11-r11
+    tag: 0.26.0-debian-11-r38
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -501,6 +501,10 @@ alertmanager:
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
     ##
     loadBalancerIP: ""
+    ## @param alertmanager.service.loadBalancerClass Alertmanager service Load Balancer class if service type is `LoadBalancer` (optional, cloud specific)
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerClass: ""
     ## @param alertmanager.service.loadBalancerSourceRanges Alertmanager service Load Balancer sources
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ## e.g:
@@ -580,7 +584,7 @@ server:
   image:
     registry: docker.io
     repository: bitnami/prometheus
-    tag: 2.47.0-debian-11-r0
+    tag: 2.47.1-debian-11-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -948,7 +952,7 @@ server:
     image:
       registry: docker.io
       repository: bitnami/thanos
-      tag: 0.32.2-debian-11-r2
+      tag: 0.32.4-debian-11-r0
       digest: ""
       ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1090,6 +1094,10 @@ server:
       ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
       ##
       loadBalancerIP: ""
+      ## @param server.thanos.service.loadBalancerClass Thanos service Load Balancer class if service type is `LoadBalancer` (optional, cloud specific)
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+      ##
+      loadBalancerClass: ""
       ## @param server.thanos.service.loadBalancerSourceRanges Address that are allowed when svc is `LoadBalancer`
       ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
       ## e.g:
@@ -1363,6 +1371,10 @@ server:
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
     ##
     loadBalancerIP: ""
+    ## @param server.service.loadBalancerClass Prometheus service Load Balancer class if service type is `LoadBalancer` (optional, cloud specific)
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerClass: ""
     ## @param server.service.loadBalancerSourceRanges Prometheus service Load Balancer sources
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ## e.g:
@@ -1482,7 +1494,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r57
+    tag: 11-debian-11-r86
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.

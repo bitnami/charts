@@ -135,6 +135,11 @@ spec:
                 {{- else if regexFind "SCRAM-SHA-512" ( upper .Values.sasl.enabledMechanisms) }}
                 kafka_common_conf_set "$CLIENT_CONF" sasl.mechanism SCRAM-SHA-512
                 kafka_common_conf_set "$CLIENT_CONF" sasl.jaas.config "org.apache.kafka.common.security.scram.ScramLoginModule required username=\"$SASL_USERNAME\" password=\"$SASL_USER_PASSWORD\";"
+                {{- else if regexFind "OAUTHBEARER" ( upper .Values.sasl.enabledMechanisms) }}
+                kafka_common_conf_set "$CLIENT_CONF" sasl.mechanism OAUTHBEARER
+                kafka_common_conf_set "$CLIENT_CONF" sasl.jaas.config "org.apache.kafka.common.security.oauthbearer.OAuthBearerLoginModule required clientId=\"$SASL_CLIENT_ID\" password=\"$SASL_CLIENT_SECRET\";"
+                kafka_common_conf_set "$CLIENT_CONF" sasl.login.callback.handler.class "org.apache.kafka.common.security.oauthbearer.secured.OAuthBearerLoginCallbackHandler"
+                kafka_common_conf_set "$CLIENT_CONF" sasl.oauthbearer.token.endpoint.url {{ .Values.sasl.oauthbearer.tokenEndpointUrl | quote }}
                 {{- end }}
                 {{- end }}
               fi
@@ -199,6 +204,7 @@ spec:
             - name: KAFKA_SERVICE
               value: {{ printf "%s:%d" (include "common.names.fullname" .) (.Values.service.ports.client | int64) }}
             {{- if regexFind "SASL" (upper .Values.listeners.client.protocol) }}
+            {{- if (include "kafka.saslUserPasswordsEnabled" .) }}
             - name: SASL_USERNAME
               value: {{ index .Values.sasl.client.users 0 | quote }}
             - name: SASL_USER_PASSWORD
@@ -206,6 +212,16 @@ spec:
                 secretKeyRef:
                   name: {{ include "kafka.saslSecretName" . }}
                   key: system-user-password
+            {{- end }}
+            {{- if (include "kafka.saslClientSecretsEnabled" .) }}
+            - name: SASL_CLIENT_ID
+              value: {{ .Values.sasl.interbroker.clientId | quote }}
+            - name: SASL_USER_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "kafka.saslSecretName" . }}
+                  key: inter-broker-client-secret
+            {{- end }}
             {{- end }}
             {{- if .Values.provisioning.extraEnvVars }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.provisioning.extraEnvVars "context" $) | nindent 12 }}

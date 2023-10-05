@@ -67,7 +67,7 @@ operator:
   image:
     registry: docker.io
     repository: bitnami/prometheus-operator
-    tag: 0.68.0-debian-11-r0
+    tag: 0.68.0-debian-11-r24
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -224,8 +224,11 @@ operator:
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##
     loadBalancerIP: ""
+    ## @param operator.service.loadBalancerClass Operator service Load Balancer class if service type is `LoadBalancer` (optional, cloud specific)
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerClass: ""
     ## @param operator.service.loadBalancerSourceRanges Address that are allowed when svc is `LoadBalancer`
-    ## Set the LoadBalancer service type to internal only
     ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ## e.g:
     ## loadBalancerSourceRanges:
@@ -521,7 +524,7 @@ prometheus:
   image:
     registry: docker.io
     repository: bitnami/prometheus
-    tag: 2.47.0-debian-11-r0
+    tag: 2.47.0-debian-11-r26
     digest: ""
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -608,13 +611,16 @@ prometheus:
     nodePorts:
       http: ""
     ## @param prometheus.service.loadBalancerIP `loadBalancerIP` if service type is `LoadBalancer`
-    ## Set the LoadBalancer service type to internal only
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##
     loadBalancerIP: ""
+    ## @param prometheus.service.loadBalancerClass Prometheus service Load Balancer class if service type is `LoadBalancer` (optional, cloud specific)
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerClass: ""
     ## @param prometheus.service.loadBalancerSourceRanges Address that are allowed when service is `LoadBalancer`
     ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
-    ##
+    ## e.g:
     ## loadBalancerSourceRanges:
     ## - 10.10.10.0/24
     ##
@@ -1196,7 +1202,7 @@ prometheus:
     image:
       registry: docker.io
       repository: bitnami/thanos
-      tag: 0.32.2-debian-11-r5
+      tag: 0.32.3-debian-11-r11
       digest: ""
       ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1332,10 +1338,13 @@ prometheus:
       nodePorts:
         grpc: ""
       ## @param prometheus.thanos.service.loadBalancerIP `loadBalancerIP` if service type is `LoadBalancer`
-      ## Set the LoadBalancer service type to internal only
       ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
       ##
       loadBalancerIP: ""
+      ## @param prometheus.thanos.service.loadBalancerClass Thanos service Load Balancer class if service type is `LoadBalancer` (optional, cloud specific)
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+      ##
+      loadBalancerClass: ""
       ## @param prometheus.thanos.service.loadBalancerSourceRanges Address that are allowed when svc is `LoadBalancer`
       ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
       ## e.g:
@@ -1497,10 +1506,13 @@ prometheus:
       nodePorts:
         http: ""
       ## @param prometheus.configReloader.service.loadBalancerIP `loadBalancerIP` if service type is `LoadBalancer`
-      ## Set the LoadBalancer service type to internal only
       ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
       ##
       loadBalancerIP: ""
+      ## @param prometheus.configReloader.service.loadBalancerClass Prometheus Config Reloader service Load Balancer class if service type is `LoadBalancer` (optional, cloud specific)
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+      ##
+      loadBalancerClass: ""
       ## @param prometheus.configReloader.service.loadBalancerSourceRanges Address that are allowed when svc is `LoadBalancer`
       ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
       ## e.g:
@@ -1589,7 +1601,7 @@ alertmanager:
   image:
     registry: docker.io
     repository: bitnami/alertmanager
-    tag: 0.26.0-debian-11-r14
+    tag: 0.26.0-debian-11-r38
     digest: ""
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1678,6 +1690,10 @@ alertmanager:
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##
     loadBalancerIP: ""
+    ## @param alertmanager.service.loadBalancerClass Alertmanager service Load Balancer class if service type is `LoadBalancer` (optional, cloud specific)
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerClass: ""
     ## @param alertmanager.service.loadBalancerSourceRanges Address that are allowed when svc is `LoadBalancer`
     ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ## e.g:
@@ -2182,7 +2198,7 @@ blackboxExporter:
   image:
     registry: docker.io
     repository: bitnami/blackbox-exporter
-    tag: 0.24.0-debian-11-r109
+    tag: 0.24.0-debian-11-r135
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -2502,6 +2518,10 @@ blackboxExporter:
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
     ##
     loadBalancerIP: ""
+    ## @param blackboxExporter.service.loadBalancerClass Blackbox Exporter service Load Balancer class if service type is `LoadBalancer` (optional, cloud specific)
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerClass: ""
     ## @param blackboxExporter.service.loadBalancerSourceRanges Blackbox Exporter service Load Balancer sources
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ## e.g:
