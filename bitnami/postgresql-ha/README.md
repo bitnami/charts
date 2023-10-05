@@ -783,6 +783,12 @@ helm upgrade my-release oci://registry-1.docker.io/bitnamicharts/postgresql-ha \
 > Note: you need to substitute the placeholders *[POSTGRES_PASSWORD]*, and *[REPMGR_PASSWORD]* with the values obtained from instructions in the installation notes.
 > Note: As general rule, it is always wise to do a backup before the upgrading procedures.
 
+### To 12.0.0
+
+This major version updates the PostgreSQL container image version used from 15 to 16, the new stable version. There are no major changes in the chart, but we recommend checking the [PostgreSQL 16 release notes](https://www.postgresql.org/docs/current/release-16.html) before upgrading.
+
+> Note: Due to an error in our release process, the latest version in the previous major branch (11.9.8) already uses 16 by default, see [PR#19590](https://github.com/bitnami/charts/pull/19590)
+
 ### To 10.0.0
 
 This major version changes the default PostgreSQL image from 14.x to 15.x. Follow the [official instructions](https://www.postgresql.org/docs/15/upgrading.html) to upgrade to 15.x.

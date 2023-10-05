@@ -120,20 +120,28 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Kafka SASL parameters
 
-| Name                        | Description                                                                                                                                                     | Value                               |
-| --------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------- |
-| `sasl.enabledMechanisms`    | Comma-separated list of allowed SASL mechanisms when SASL listeners are configured. Allowed types: `PLAIN`, `SCRAM-SHA-256`, `SCRAM-SHA-512`                    | `PLAIN,SCRAM-SHA-256,SCRAM-SHA-512` |
-| `sasl.interBrokerMechanism` | SASL mechanism for inter broker communication.                                                                                                                  | `PLAIN`                             |
-| `sasl.controllerMechanism`  | SASL mechanism for controller communications.                                                                                                                   | `PLAIN`                             |
-| `sasl.interbroker.user`     | Username for inter-broker communications when SASL is enabled                                                                                                   | `inter_broker_user`                 |
-| `sasl.interbroker.password` | Password for inter-broker communications when SASL is enabled. If not set and SASL is enabled for the controller listener, a random password will be generated. | `""`                                |
-| `sasl.controller.user`      | Username for controller communications when SASL is enabled                                                                                                     | `controller_user`                   |
-| `sasl.controller.password`  | Password for controller communications when SASL is enabled. If not set and SASL is enabled for the inter-broker listener, a random password will be generated. | `""`                                |
-| `sasl.client.users`         | Comma-separated list of usernames for client communications when SASL is enabled                                                                                | `["user1"]`                         |
-| `sasl.client.passwords`     | Comma-separated list of passwords for client communications when SASL is enabled, must match the number of client.users                                         | `""`                                |
-| `sasl.zookeeper.user`       | Username for zookeeper communications when SASL is enabled.                                                                                                     | `""`                                |
-| `sasl.zookeeper.password`   | Password for zookeeper communications when SASL is enabled.                                                                                                     | `""`                                |
-| `sasl.existingSecret`       | Name of the existing secret containing credentials for clientUsers, interBrokerUser, controllerUser and zookeeperUser                                           | `""`                                |
+| Name                                | Description                                                                                                                                                                                   | Value                               |
+| ----------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------- |
+| `sasl.enabledMechanisms`            | Comma-separated list of allowed SASL mechanisms when SASL listeners are configured. Allowed types: `PLAIN`, `SCRAM-SHA-256`, `SCRAM-SHA-512`, `OAUTHBEARER`                                   | `PLAIN,SCRAM-SHA-256,SCRAM-SHA-512` |
+| `sasl.interBrokerMechanism`         | SASL mechanism for inter broker communication.                                                                                                                                                | `PLAIN`                             |
+| `sasl.controllerMechanism`          | SASL mechanism for controller communications.                                                                                                                                                 | `PLAIN`                             |
+| `sasl.oauthbearer.tokenEndpointUrl` | The URL for the OAuth/OIDC identity provider                                                                                                                                                  | `""`                                |
+| `sasl.oauthbearer.jwksEndpointUrl`  | The OAuth/OIDC provider URL from which the provider's JWKS (JSON Web Key Set) can be retrieved                                                                                                | `""`                                |
+| `sasl.oauthbearer.expectedAudience` | The comma-delimited setting for the broker to use to verify that the JWT was issued for one of the expected audiences                                                                         | `""`                                |
+| `sasl.oauthbearer.subClaimName`     | The OAuth claim name for the subject.                                                                                                                                                         | `sub`                               |
+| `sasl.interbroker.user`             | Username for inter-broker communications when SASL is enabled                                                                                                                                 | `inter_broker_user`                 |
+| `sasl.interbroker.password`         | Password for inter-broker communications when SASL is enabled. If not set and SASL is enabled for the controller listener, a random password will be generated.                               | `""`                                |
+| `sasl.interbroker.clientId`         | Client ID for inter-broker communications when SASL is enabled with mechanism OAUTHBEARER                                                                                                     | `inter_broker_client`               |
+| `sasl.interbroker.clientSecret`     | Client Secret for inter-broker communications when SASL is enabled with mechanism OAUTHBEARER. If not set and SASL is enabled for the controller listener, a random secret will be generated. | `""`                                |
+| `sasl.controller.user`              | Username for controller communications when SASL is enabled                                                                                                                                   | `controller_user`                   |
+| `sasl.controller.password`          | Password for controller communications when SASL is enabled. If not set and SASL is enabled for the inter-broker listener, a random password will be generated.                               | `""`                                |
+| `sasl.controller.clientId`          | Client ID for controller communications when SASL is enabled with mechanism OAUTHBEARER                                                                                                       | `controller_broker_client`          |
+| `sasl.controller.clientSecret`      | Client Secret for controller communications when SASL is enabled with mechanism OAUTHBEARER. If not set and SASL is enabled for the inter-broker listener, a random secret will be generated. | `""`                                |
+| `sasl.client.users`                 | Comma-separated list of usernames for client communications when SASL is enabled                                                                                                              | `["user1"]`                         |
+| `sasl.client.passwords`             | Comma-separated list of passwords for client communications when SASL is enabled, must match the number of client.users                                                                       | `""`                                |
+| `sasl.zookeeper.user`               | Username for zookeeper communications when SASL is enabled.                                                                                                                                   | `""`                                |
+| `sasl.zookeeper.password`           | Password for zookeeper communications when SASL is enabled.                                                                                                                                   | `""`                                |
+| `sasl.existingSecret`               | Name of the existing secret containing credentials for clientUsers, interBrokerUser, controllerUser and zookeeperUser                                                                         | `""`                                |
 
 ### Kafka TLS parameters
 
@@ -620,11 +628,12 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### KRaft chart parameters
 
-| Name                           | Description                                                                                                                                                   | Value  |
-| ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
-| `kraft.enabled`                | Switch to enable or disable the KRaft mode for Kafka                                                                                                          | `true` |
-| `kraft.clusterId`              | Kafka Kraft cluster ID. If not set, a random cluster ID will be generated the first time Kraft is initialized.                                                | `""`   |
-| `kraft.controllerQuorumVoters` | Override the Kafka controller quorum voters of the Kafka Kraft cluster. If not set, it will be automatically configured to use all controller-elegible nodes. | `""`   |
+| Name                            | Description                                                                                                                                                                            | Value  |
+| ------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| `kraft.enabled`                 | Switch to enable or disable the KRaft mode for Kafka                                                                                                                                   | `true` |
+| `kraft.existingClusterIdSecret` | Name of the secret containing the cluster ID for the Kafka KRaft cluster. This is incompatible with the clusterId parameter. If both are set, the existingClusterIdSecret will be used | `""`   |
+| `kraft.clusterId`               | Kafka Kraft cluster ID. If not set, a random cluster ID will be generated the first time Kraft is initialized.                                                                         | `""`   |
+| `kraft.controllerQuorumVoters`  | Override the Kafka controller quorum voters of the Kafka Kraft cluster. If not set, it will be automatically configured to use all controller-elegible nodes.                          | `""`   |
 
 ### ZooKeeper chart parameters
 

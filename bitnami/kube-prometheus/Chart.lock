@@ -4,9 +4,9 @@ dependencies:
   version: 3.8.0
 - name: kube-state-metrics
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 3.7.0
+  version: 3.7.3
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
   version: 2.13.0
-digest: sha256:e67e85066aa6faf82513348efb6e81d5850d666e13e24d63338185eb860a22d5
-generated: "2023-09-29T11:01:12.843146+02:00"
+digest: sha256:91296ae38d6b7f2599d05f59ad5ed344dd35014e7f23ab37f4a0cdb5a3f95dd0
+generated: "2023-10-04T07:10:18.057410732Z"

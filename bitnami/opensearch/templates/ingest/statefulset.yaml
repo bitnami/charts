@@ -197,9 +197,8 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ingest.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.ingest.livenessProbe.enabled }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.ingest.livenessProbe "enabled") "context" $) | nindent 12 }}
-            exec:
-              command:
-                - /opt/bitnami/scripts/opensearch/healthcheck.sh
+            tcpSocket:
+              port: rest-api
           {{- end }}
           {{- if .Values.ingest.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ingest.customReadinessProbe "context" $) | nindent 12 }}
