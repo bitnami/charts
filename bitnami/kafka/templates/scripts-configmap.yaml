@@ -214,6 +214,8 @@ data:
           error "CA certificate file not found"
         fi
         {{- else }}
+        # CA certificates are also included in the same certificate
+        # All public certs will be included in the truststore
         cp /certs/tls.crt /certs/ca.crt
         {{- end }}
 
