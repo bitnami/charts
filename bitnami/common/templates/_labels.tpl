@@ -15,7 +15,7 @@ Kubernetes standard labels
 {{- with .context.Chart.AppVersion -}}
 {{- $_ := set $default "app.kubernetes.io/version" . -}}
 {{- end -}}
-{{ template "common.tplvalues.merge" (dict "values" (list .customLabels $default) "context" .) }}
+{{ template "common.tplvalues.merge" (dict "values" (list .customLabels $default) "context" .context) }}
 {{- else -}}
 app.kubernetes.io/name: {{ include "common.names.name" . }}
 helm.sh/chart: {{ include "common.names.chart" . }}
