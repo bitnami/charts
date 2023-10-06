@@ -241,8 +241,8 @@ data:
       elif [[ "${KAFKA_TLS_TYPE}" = "JKS" ]]; then
         if [[ -f "/mounted-certs/kafka-${POD_ROLE}-${POD_ID}.keystore.jks" ]]; then
           cp "/mounted-certs/kafka-${POD_ROLE}-${POD_ID}.keystore.jks" /certs/kafka.keystore.jks
-        elif [[ -f /mounted-certs/kafka.keystore.jks ]]; then
-          cp /mounted-certs/kafka.keystore.jks /certs/kafka.keystore.jks
+        elif [[ -f {{ printf "/mounted-certs/%s" ( default "kafka.keystore.jks" .Values.tls.jksKeystoreKey) | quote }} ]]; then
+          cp {{ printf "/mounted-certs/%s" ( default "kafka.keystore.jks" .Values.tls.jksKeystoreKey) | quote }} /certs/kafka.keystore.jks
         else
           error "Keystore file not found"
         fi
