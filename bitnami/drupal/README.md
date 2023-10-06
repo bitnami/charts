@@ -81,7 +81,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`                              | Drupal image registry                                                                                                  | `docker.io`           |
 | `image.repository`                            | Drupal Image name                                                                                                      | `bitnami/drupal`      |
-| `image.tag`                                   | Drupal Image tag                                                                                                       | `10.1.5-debian-11-r0` |
+| `image.tag`                                   | Drupal Image tag                                                                                                       | `10.1.5-debian-11-r1` |
 | `image.digest`                                | Drupal image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                 | `""`                  |
 | `image.pullPolicy`                            | Drupal image pull policy                                                                                               | `IfNotPresent`        |
 | `image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                       | `[]`                  |
