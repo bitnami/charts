@@ -127,10 +127,16 @@ revisionHistoryLimit: 10
 ## @param updateStrategy.type NGINX deployment strategy type
 ## @param updateStrategy.rollingUpdate NGINX deployment rolling update configuration parameters
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
+## NOTE: Set it to `Recreate` if you use a PV that cannot be mounted on multiple pods
+## e.g:
+## updateStrategy:
+##  type: RollingUpdate
+##  rollingUpdate:
+##    maxSurge: 25%
+##    maxUnavailable: 25%
 ##
 updateStrategy:
   type: RollingUpdate
-  rollingUpdate: {}
 ## @param podLabels Additional labels for NGINX pods
 ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
 ##
