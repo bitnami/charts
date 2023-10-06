@@ -85,7 +85,7 @@ helm delete --purge my-release
 | ------------------------------- | ---------------------------------------------------------------------------------------------------------------- | ---------------------- |
 | `image.registry`                | HashiCorp Consul image registry                                                                                  | `docker.io`            |
 | `image.repository`              | HashiCorp Consul image repository                                                                                | `bitnami/consul`       |
-| `image.tag`                     | HashiCorp Consul image tag (immutable tags are recommended)                                                      | `1.16.2-debian-11-r13` |
+| `image.tag`                     | HashiCorp Consul image tag (immutable tags are recommended)                                                      | `1.16.2-debian-11-r15` |
 | `image.digest`                  | HashiCorp Consul image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
 | `image.pullPolicy`              | HashiCorp Consul image pull policy                                                                               | `IfNotPresent`         |
 | `image.pullSecrets`             | HashiCorp Consul image pull secrets                                                                              | `[]`                   |
@@ -234,7 +234,7 @@ helm delete --purge my-release
 | `metrics.enabled`                               | Start a side-car prometheus exporter                                                                                                 | `false`                   |
 | `metrics.image.registry`                        | HashiCorp Consul Prometheus Exporter image registry                                                                                  | `docker.io`               |
 | `metrics.image.repository`                      | HashiCorp Consul Prometheus Exporter image repository                                                                                | `bitnami/consul-exporter` |
-| `metrics.image.tag`                             | HashiCorp Consul Prometheus Exporter image tag (immutable tags are recommended)                                                      | `0.9.0-debian-11-r295`    |
+| `metrics.image.tag`                             | HashiCorp Consul Prometheus Exporter image tag (immutable tags are recommended)                                                      | `0.9.0-debian-11-r297`    |
 | `metrics.image.digest`                          | HashiCorp Consul Prometheus Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
 | `metrics.image.pullPolicy`                      | HashiCorp Consul Prometheus Exporter image pull policy                                                                               | `IfNotPresent`            |
 | `metrics.image.pullSecrets`                     | HashiCorp Consul Prometheus Exporter image pull secrets                                                                              | `[]`                      |
