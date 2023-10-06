@@ -34,8 +34,8 @@ Looking to use Prometheus Operator in production? Try [VMware Application Catalo
 
 ## Prerequisites
 
-- Kubernetes 1.16+
-- Helm 3.2.0+
+- Kubernetes 1.23+
+- Helm 3.8.0+
 
 ## Installing the Chart
 

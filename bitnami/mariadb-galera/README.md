@@ -24,8 +24,8 @@ Looking to use MariaDB Galera in production? Try [VMware Application Catalog](ht
 
 ## Prerequisites
 
-- Kubernetes 1.10+
-- Helm 3.2.0+
+- Kubernetes 1.23+
+- Helm 3.8.0+
 - PV provisioner support in the underlying infrastructure
 
 ## Installing the Chart
