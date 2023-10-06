@@ -109,7 +109,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | --------------------- |
 | `web.image.registry`                        | Airflow image registry                                                                                                   | `docker.io`           |
 | `web.image.repository`                      | Airflow image repository                                                                                                 | `bitnami/airflow`     |
-| `web.image.tag`                             | Airflow image tag (immutable tags are recommended)                                                                       | `2.7.1-debian-11-r26` |
+| `web.image.tag`                             | Airflow image tag (immutable tags are recommended)                                                                       | `2.7.1-debian-11-r28` |
 | `web.image.digest`                          | Airflow image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                  | `""`                  |
 | `web.image.pullPolicy`                      | Airflow image pull policy                                                                                                | `IfNotPresent`        |
 | `web.image.pullSecrets`                     | Airflow image pull secrets                                                                                               | `[]`                  |
@@ -238,7 +238,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ---------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ------------------------ |
 | `worker.image.registry`                        | Airflow Worker image registry                                                                                            | `docker.io`              |
 | `worker.image.repository`                      | Airflow Worker image repository                                                                                          | `bitnami/airflow-worker` |
-| `worker.image.tag`                             | Airflow Worker image tag (immutable tags are recommended)                                                                | `2.7.1-debian-11-r25`    |
+| `worker.image.tag`                             | Airflow Worker image tag (immutable tags are recommended)                                                                | `2.7.1-debian-11-r27`    |
 | `worker.image.digest`                          | Airflow Worker image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag           | `""`                     |
 | `worker.image.pullPolicy`                      | Airflow Worker image pull policy                                                                                         | `IfNotPresent`           |
 | `worker.image.pullSecrets`                     | Airflow Worker image pull secrets                                                                                        | `[]`                     |
