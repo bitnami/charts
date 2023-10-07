@@ -125,7 +125,6 @@ replicaCount: 1
 ##
 revisionHistoryLimit: 10
 ## @param updateStrategy.type NGINX deployment strategy type
-## @param updateStrategy.rollingUpdate NGINX deployment rolling update configuration parameters
 ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/deployment/#strategy
 ## NOTE: Set it to `Recreate` if you use a PV that cannot be mounted on multiple pods
 ## e.g:
