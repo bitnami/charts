@@ -100,6 +100,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------------- | ----------------------------------------------------------------------------------------- | --------------- |
 | `replicaCount`                                | Number of NGINX replicas to deploy                                                        | `1`             |
 | `revisionHistoryLimit`                        | The number of old history to retain to allow rollback                                     | `10`            |
+| `updateStrategy.type`                         | NGINX deployment strategy type                                                            | `RollingUpdate` |
 | `podLabels`                                   | Additional labels for NGINX pods                                                          | `{}`            |
 | `podAnnotations`                              | Annotations for NGINX pods                                                                | `{}`            |
 | `podAffinityPreset`                           | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`       | `""`            |
