@@ -329,7 +329,7 @@ tls:
   ## Note: ignored when using 'tls.passwordsSecret'
   ##
   keyPassword: ""
-  ## @param tls.jksKeystoreSecret The secret key from the `tls.existingSecret` or `tls.jksKeystoreKey` containing the truststore
+  ## @param tls.jksKeystoreKey The secret key from the `tls.existingSecret` containing the keystore
   ## Note: ignored when using 'pem' format for certificates.
   ##
   jksKeystoreKey: ""
