@@ -1154,7 +1154,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `memcachedchunks.enabled`                 | Deploy memcached sub-chart                                                                                | `true`                  |
 | `memcachedchunks.image.registry`          | Memcached image registry                                                                                  | `docker.io`             |
 | `memcachedchunks.image.repository`        | Memcached image repository                                                                                | `bitnami/memcached`     |
-| `memcachedchunks.image.tag`               | Memcached image tag (immutable tags are recommended)                                                      | `1.6.21-debian-11-r104` |
+| `memcachedchunks.image.tag`               | Memcached image tag (immutable tags are recommended)                                                      | `1.6.21-debian-11-r107` |
 | `memcachedchunks.image.digest`            | Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `memcachedchunks.nameOverride`            | override the subchart name                                                                                | `""`                    |
 | `memcachedchunks.architecture`            | Memcached architecture                                                                                    | `high-availability`     |
@@ -1174,7 +1174,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `memcachedfrontend.enabled`                 | Deploy memcached sub-chart                                                                                | `true`                  |
 | `memcachedfrontend.image.registry`          | Memcached image registry                                                                                  | `docker.io`             |
 | `memcachedfrontend.image.repository`        | Memcached image repository                                                                                | `bitnami/memcached`     |
-| `memcachedfrontend.image.tag`               | Memcached image tag (immutable tags are recommended)                                                      | `1.6.21-debian-11-r104` |
+| `memcachedfrontend.image.tag`               | Memcached image tag (immutable tags are recommended)                                                      | `1.6.21-debian-11-r107` |
 | `memcachedfrontend.image.digest`            | Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `memcachedfrontend.architecture`            | Memcached architecture                                                                                    | `high-availability`     |
 | `memcachedfrontend.nameOverride`            | override the subchart name                                                                                | `""`                    |
@@ -1194,7 +1194,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `memcachedindex.enabled`                 | Deploy memcached sub-chart                                                                                | `true`                  |
 | `memcachedindex.image.registry`          | Memcached image registry                                                                                  | `docker.io`             |
 | `memcachedindex.image.repository`        | Memcached image repository                                                                                | `bitnami/memcached`     |
-| `memcachedindex.image.tag`               | Memcached image tag (immutable tags are recommended)                                                      | `1.6.21-debian-11-r104` |
+| `memcachedindex.image.tag`               | Memcached image tag (immutable tags are recommended)                                                      | `1.6.21-debian-11-r107` |
 | `memcachedindex.image.digest`            | Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `memcachedindex.architecture`            | Memcached architecture                                                                                    | `high-availability`     |
 | `memcachedindex.nameOverride`            | override the subchart name                                                                                | `""`                    |
@@ -1214,7 +1214,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `memcachedmetadata.enabled`                 | Deploy memcached sub-chart                                                                                | `true`                  |
 | `memcachedmetadata.image.registry`          | Memcached image registry                                                                                  | `docker.io`             |
 | `memcachedmetadata.image.repository`        | Memcached image repository                                                                                | `bitnami/memcached`     |
-| `memcachedmetadata.image.tag`               | Memcached image tag (immutable tags are recommended)                                                      | `1.6.21-debian-11-r104` |
+| `memcachedmetadata.image.tag`               | Memcached image tag (immutable tags are recommended)                                                      | `1.6.21-debian-11-r107` |
 | `memcachedmetadata.image.digest`            | Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `memcachedmetadata.architecture`            | Memcached architecture                                                                                    | `high-availability`     |
 | `memcachedmetadata.nameOverride`            | override the subchart name                                                                                | `""`                    |
