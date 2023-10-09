@@ -8,7 +8,7 @@ annotations:
     - name: grafana-mimir
       image: docker.io/bitnami/grafana-mimir:2.10.0-debian-11-r14
     - name: memcached
-      image: docker.io/bitnami/memcached:1.6.21-debian-11-r104
+      image: docker.io/bitnami/memcached:1.6.21-debian-11-r107
     - name: nginx
       image: docker.io/bitnami/nginx:1.25.2-debian-11-r45
     - name: os-shell
@@ -59,4 +59,4 @@ maintainers:
 name: grafana-mimir
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/grafana-mimir
-version: 0.6.7
+version: 0.6.8

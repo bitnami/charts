@@ -4103,7 +4103,7 @@ memcachedchunks:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.21-debian-11-r104
+    tag: 1.6.21-debian-11-r107
     digest: ""
   ## @param memcachedchunks.nameOverride override the subchart name
   ##
@@ -4144,7 +4144,7 @@ memcachedfrontend:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.21-debian-11-r104
+    tag: 1.6.21-debian-11-r107
     digest: ""
   ## @param memcachedfrontend.architecture Memcached architecture
   ##
@@ -4186,7 +4186,7 @@ memcachedindex:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.21-debian-11-r104
+    tag: 1.6.21-debian-11-r107
     digest: ""
   ## @param memcachedindex.architecture Memcached architecture
   ##
@@ -4227,7 +4227,7 @@ memcachedmetadata:
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.21-debian-11-r104
+    tag: 1.6.21-debian-11-r107
     digest: ""
   ## @param memcachedmetadata.architecture Memcached architecture
   ##
