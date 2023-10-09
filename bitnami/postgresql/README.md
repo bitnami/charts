@@ -461,7 +461,7 @@ kubectl delete pvc -l release=my-release
 | `metrics.enabled`                                           | Start a prometheus exporter                                                                                | `false`                     |
 | `metrics.image.registry`                                    | PostgreSQL Prometheus Exporter image registry                                                              | `docker.io`                 |
 | `metrics.image.repository`                                  | PostgreSQL Prometheus Exporter image repository                                                            | `bitnami/postgres-exporter` |
-| `metrics.image.tag`                                         | PostgreSQL Prometheus Exporter image tag (immutable tags are recommended)                                  | `0.14.0-debian-11-r12`      |
+| `metrics.image.tag`                                         | PostgreSQL Prometheus Exporter image tag (immutable tags are recommended)                                  | `0.14.0-debian-11-r14`      |
 | `metrics.image.digest`                                      | PostgreSQL image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                        |
 | `metrics.image.pullPolicy`                                  | PostgreSQL Prometheus Exporter image pull policy                                                           | `IfNotPresent`              |
 | `metrics.image.pullSecrets`                                 | Specify image pull secrets                                                                                 | `[]`                        |
