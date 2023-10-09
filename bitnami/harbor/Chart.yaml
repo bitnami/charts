@@ -20,7 +20,7 @@ annotations:
     - name: harbor-portal
       image: docker.io/bitnami/harbor-portal:2.9.0-debian-11-r35
     - name: nginx
-      image: docker.io/bitnami/nginx:1.25.2-debian-11-r45
+      image: docker.io/bitnami/nginx:1.25.2-debian-11-r46
     - name: os-shell
       image: docker.io/bitnami/os-shell:11-debian-11-r89
     - name: postgresql
@@ -55,4 +55,4 @@ maintainers:
 name: harbor
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/harbor
-version: 19.0.1
+version: 19.0.2
