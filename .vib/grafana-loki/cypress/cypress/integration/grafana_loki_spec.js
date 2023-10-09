@@ -15,7 +15,7 @@ it('checks Loki range endpoint', () => {
   }).then((response) => {
     expect(response.status).to.eq(200);
     expect(response.headers['content-type']).to.eq(
-      'application/json; charset=UTF-8'
+      'application/json; charset=utf-8'
     );
     expect(response.body.data.stats.summary).not.to.be.empty;
     expect(response.body.data.stats).to.include.all.keys(

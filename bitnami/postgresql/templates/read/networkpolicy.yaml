@@ -7,19 +7,17 @@ SPDX-License-Identifier: APACHE-2.0
 apiVersion: {{ include "common.capabilities.networkPolicy.apiVersion" . }}
 kind: NetworkPolicy
 metadata:
-  name: {{ printf "%s-ingress" (include "postgresql.readReplica.fullname" .) }}
+  name: {{ printf "%s-ingress" (include "postgresql.v1.readReplica.fullname" .) }}
   namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: read
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.readReplicas.podLabels .Values.commonLabels ) "context" . ) }}
   podSelector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: read
   ingress:
     {{- if and .Values.networkPolicy.ingressRules.readReplicasAccessOnlyFrom.enabled (or .Values.networkPolicy.ingressRules.readReplicasAccessOnlyFrom.namespaceSelector .Values.networkPolicy.ingressRules.readReplicasAccessOnlyFrom.podSelector) }}

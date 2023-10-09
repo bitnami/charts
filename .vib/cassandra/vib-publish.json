@@ -50,6 +50,21 @@
               }
             }
           }
+        },
+        {
+          "action_id": "ginkgo",
+          "params": {
+            "resources": {
+              "path": "/.vib/cassandra/ginkgo"
+            },
+            "params": {
+              "kubeconfig": "{{kubeconfig}}",
+              "namespace": "{{namespace}}",
+              "name": "cassandra",
+              "username": "test_cassandra",
+              "password": "ComplicatedPassword123!4"
+            }
+          }
         }
       ]
     },

@@ -8,19 +8,19 @@ apiVersion: {{ include "common.capabilities.deployment.apiVersion" . }}
 kind: Deployment
 metadata:
   name: {{ include "scdf.fullname" . }}-skipper
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.skipper.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: skipper
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   namespace: {{ .Release.Namespace }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
   replicas: {{ .Values.skipper.replicaCount }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.skipper.podLabels .Values.commonLabels $versionLabel ) "context" . ) }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: skipper
   {{- if .Values.skipper.updateStrategy }}
   strategy: {{- include "common.tplvalues.render" (dict "value" .Values.skipper.updateStrategy "context" $) | nindent 4 }}
@@ -36,11 +36,8 @@ spec:
         {{- include "common.tplvalues.render" (dict "value" .Values.skipper.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
       {{- end }}
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: skipper
-        {{- if .Values.skipper.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.skipper.podLabels "context" $) | nindent 8 }}
-        {{- end }}
     spec:
       {{- include "scdf.imagePullSecrets" . | nindent 6 }}
       serviceAccountName: {{ include "scdf.serviceAccountName" . }}
@@ -51,8 +48,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.skipper.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.skipper.podAffinityPreset "component" "skipper" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.skipper.podAntiAffinityPreset "component" "skipper" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.skipper.podAffinityPreset "component" "skipper" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.skipper.podAntiAffinityPreset "component" "skipper" "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.skipper.nodeAffinityPreset.type "key" .Values.skipper.nodeAffinityPreset.key "values" .Values.skipper.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.skipper.nodeSelector }}

@@ -28,3 +28,4 @@ Cypress.Commands.add(
     cy.get('#wp-submit').click();
   }
 );
+

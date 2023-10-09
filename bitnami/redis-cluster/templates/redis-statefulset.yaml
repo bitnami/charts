@@ -9,10 +9,7 @@ kind: StatefulSet
 metadata:
   name: {{ include "common.names.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -20,35 +17,30 @@ spec:
   {{- if .Values.redis.updateStrategy }}
   updateStrategy: {{- toYaml .Values.redis.updateStrategy | nindent 4 }}
   {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.redis.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
   replicas: {{ .Values.cluster.nodes }}
   serviceName: {{ include "common.names.fullname" . }}-headless
   podManagementPolicy: {{ .Values.redis.podManagementPolicy }}
   template:
     metadata:
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
-      {{- if .Values.redis.podLabels }}
-      {{- toYaml .Values.redis.podLabels | nindent 8 }}
-      {{- end }}
-      {{- if .Values.commonLabels }}
-      {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 8 }}
-      {{- end }}
-      {{- if and .Values.metrics.enabled .Values.metrics.podLabels }}
-      {{- toYaml .Values.metrics.podLabels | nindent 8 }}
-      {{- end }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
+        {{- if and .Values.metrics.enabled .Values.metrics.podLabels }}
+        {{- toYaml .Values.metrics.podLabels | nindent 8 }}
+        {{- end }}
       annotations:
         checksum/scripts: {{ include (print $.Template.BasePath "/scripts-configmap.yaml") . | sha256sum }}
         {{- if not .Values.existingSecret }}
         checksum/secret: {{ include (print $.Template.BasePath "/secret.yaml") . | sha256sum }}
         {{- end }}
         checksum/config: {{ include (print $.Template.BasePath "/configmap.yaml") . | sha256sum }}
-      {{- if .Values.redis.podAnnotations }}
-      {{- toYaml .Values.redis.podAnnotations | nindent 8 }}
-      {{- end }}
-      {{- if and .Values.metrics.enabled .Values.metrics.podAnnotations }}
-      {{- toYaml .Values.metrics.podAnnotations | nindent 8 }}
-      {{- end }}
+        {{- if .Values.redis.podAnnotations }}
+        {{- toYaml .Values.redis.podAnnotations | nindent 8 }}
+        {{- end }}
+        {{- if and .Values.metrics.enabled .Values.metrics.podAnnotations }}
+        {{- toYaml .Values.metrics.podAnnotations | nindent 8 }}
+        {{- end }}
     spec:
       hostNetwork: {{ .Values.redis.hostNetwork }}
       {{- if semverCompare ">= 1.13" (include "common.capabilities.kubeVersion" .) }}
@@ -69,8 +61,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.redis.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.redis.podAffinityPreset "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.redis.podAntiAffinityPreset "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.redis.podAffinityPreset "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.redis.podAntiAffinityPreset "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.redis.nodeAffinityPreset.type "key" .Values.redis.nodeAffinityPreset.key "values" .Values.redis.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.redis.nodeSelector }}
@@ -116,7 +108,11 @@ spec:
               pod_index=($(echo "$POD_NAME" | tr "-" "\n"))
               pod_index="${pod_index[-1]}"
               ips=($(echo "{{ .Values.cluster.externalAccess.service.loadBalancerIP }}" | cut -d [ -f2 | cut -d ] -f 1))
+              {{- if .Values.cluster.externalAccess.hostMode }}
+              export REDIS_CLUSTER_ANNOUNCE_HOSTNAME="${ips[$pod_index]}"
+              {{- else }}
               export REDIS_CLUSTER_ANNOUNCE_IP="${ips[$pod_index]}"
+              {{- end }}
               export REDIS_NODES="${ips[@]}"
               {{- if .Values.cluster.init }}
               if [[ "$pod_index" == "0" ]]; then
@@ -148,7 +144,12 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.name
-            {{- if .Values.cluster.externalAccess.enabled }}
+            {{- if and .Values.cluster.externalAccess.enabled .Values.cluster.externalAccess.hostMode }}
+            - name: REDIS_CLUSTER_DYNAMIC_IPS
+              value: "yes"
+            - name: REDIS_CLUSTER_PREFERRED_ENDPOINT_TYPE
+              value: "hostname"
+            {{- else if .Values.cluster.externalAccess.enabled }}
             - name: REDIS_CLUSTER_DYNAMIC_IPS
               value: "no"
             {{- else }}
@@ -446,7 +447,7 @@ spec:
   volumeClaimTemplates:
     - metadata:
         name: redis-data
-        labels: {{- include "common.labels.matchLabels" . | nindent 10 }}
+        labels: {{- include "common.labels.matchLabels" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 10 }}
         {{- if .Values.persistence.annotations }}
         annotations: {{- include "common.tplvalues.render" (dict "value" .Values.persistence.annotations "context" $) | nindent 10 }}
         {{- end }}

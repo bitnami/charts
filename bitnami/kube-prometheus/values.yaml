@@ -67,7 +67,7 @@ operator:
   image:
     registry: docker.io
     repository: bitnami/prometheus-operator
-    tag: 0.67.1-debian-11-r0
+    tag: 0.68.0-debian-11-r24
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -224,8 +224,11 @@ operator:
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##
     loadBalancerIP: ""
+    ## @param operator.service.loadBalancerClass Operator service Load Balancer class if service type is `LoadBalancer` (optional, cloud specific)
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerClass: ""
     ## @param operator.service.loadBalancerSourceRanges Address that are allowed when svc is `LoadBalancer`
-    ## Set the LoadBalancer service type to internal only
     ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ## e.g:
     ## loadBalancerSourceRanges:
@@ -298,6 +301,9 @@ operator:
     ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#monitoring.coreos.com/v1.Endpoint
     ##
     extraParameters: {}
+    ## @param operator.serviceMonitor.sampleLimit Per-scrape limit on number of scraped samples that will be accepted.
+    ##
+    sampleLimit: ""
   ## @param operator.resources Configure resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ##
@@ -518,7 +524,7 @@ prometheus:
   image:
     registry: docker.io
     repository: bitnami/prometheus
-    tag: 2.46.0-debian-11-r5
+    tag: 2.47.0-debian-11-r26
     digest: ""
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -605,13 +611,16 @@ prometheus:
     nodePorts:
       http: ""
     ## @param prometheus.service.loadBalancerIP `loadBalancerIP` if service type is `LoadBalancer`
-    ## Set the LoadBalancer service type to internal only
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##
     loadBalancerIP: ""
+    ## @param prometheus.service.loadBalancerClass Prometheus service Load Balancer class if service type is `LoadBalancer` (optional, cloud specific)
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerClass: ""
     ## @param prometheus.service.loadBalancerSourceRanges Address that are allowed when service is `LoadBalancer`
     ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
-    ##
+    ## e.g:
     ## loadBalancerSourceRanges:
     ## - 10.10.10.0/24
     ##
@@ -663,6 +672,9 @@ prometheus:
     ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config
     ##
     relabelings: []
+    ## @param prometheus.serviceMonitor.sampleLimit Per-scrape limit on number of scraped samples that will be accepted.
+    ##
+    sampleLimit: ""
 
   ## Configure the ingress resource that allows you to access the
   ## Prometheus installation. Set up the URL
@@ -829,6 +841,12 @@ prometheus:
   ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config
   ##
   scrapeTimeout: ""
+  ## @param prometheus.sampleLimit Per-scrape max number of scraped samples. Requires Prometheus v2.45.0 and newer
+  ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#scrape_config
+  sampleLimit: ""
+  ## @param prometheus.enforcedSampleLimit Override sampleLimits set by ServiceMonitor, PodMonitor or Probe objects
+  ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#monitoring.coreos.com/v1.PrometheusSpec
+  enforcedSampleLimit: ""
   ## @param prometheus.listenLocal ListenLocal makes the Prometheus server listen on loopback
   ##
   listenLocal: false
@@ -1184,7 +1202,7 @@ prometheus:
     image:
       registry: docker.io
       repository: bitnami/thanos
-      tag: 0.31.0-scratch-r12
+      tag: 0.32.3-debian-11-r11
       digest: ""
       ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
       ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -1320,10 +1338,13 @@ prometheus:
       nodePorts:
         grpc: ""
       ## @param prometheus.thanos.service.loadBalancerIP `loadBalancerIP` if service type is `LoadBalancer`
-      ## Set the LoadBalancer service type to internal only
       ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
       ##
       loadBalancerIP: ""
+      ## @param prometheus.thanos.service.loadBalancerClass Thanos service Load Balancer class if service type is `LoadBalancer` (optional, cloud specific)
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+      ##
+      loadBalancerClass: ""
       ## @param prometheus.thanos.service.loadBalancerSourceRanges Address that are allowed when svc is `LoadBalancer`
       ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
       ## e.g:
@@ -1485,10 +1506,13 @@ prometheus:
       nodePorts:
         http: ""
       ## @param prometheus.configReloader.service.loadBalancerIP `loadBalancerIP` if service type is `LoadBalancer`
-      ## Set the LoadBalancer service type to internal only
       ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
       ##
       loadBalancerIP: ""
+      ## @param prometheus.configReloader.service.loadBalancerClass Prometheus Config Reloader service Load Balancer class if service type is `LoadBalancer` (optional, cloud specific)
+      ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+      ##
+      loadBalancerClass: ""
       ## @param prometheus.configReloader.service.loadBalancerSourceRanges Address that are allowed when svc is `LoadBalancer`
       ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
       ## e.g:
@@ -1549,6 +1573,9 @@ prometheus:
       ## ref: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config
       ##
       relabelings: []
+      ## @param prometheus.configReloader.serviceMonitor.sampleLimit Per-scrape limit on number of scraped samples that will be accepted.
+      ##
+      sampleLimit: ""
   ## @param prometheus.portName Port name used for the pods and governing service. This defaults to web
   ##
   portName: web
@@ -1574,7 +1601,7 @@ alertmanager:
   image:
     registry: docker.io
     repository: bitnami/alertmanager
-    tag: 0.25.0-debian-11-r171
+    tag: 0.26.0-debian-11-r38
     digest: ""
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1663,6 +1690,10 @@ alertmanager:
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#internal-load-balancer
     ##
     loadBalancerIP: ""
+    ## @param alertmanager.service.loadBalancerClass Alertmanager service Load Balancer class if service type is `LoadBalancer` (optional, cloud specific)
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerClass: ""
     ## @param alertmanager.service.loadBalancerSourceRanges Address that are allowed when svc is `LoadBalancer`
     ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ## e.g:
@@ -1743,6 +1774,9 @@ alertmanager:
     ## ref: https://github.com/prometheus-operator/prometheus-operator/blob/main/Documentation/api.md#monitoring.coreos.com/v1.Endpoint
     ##
     extraParameters: {}
+    ## @param alertmanager.serviceMonitor.sampleLimit Per-scrape limit on number of scraped samples that will be accepted.
+    ##
+    sampleLimit: ""
   ## Configure the ingress resource that allows you to access the
   ## Alertmanager installation. Set up the URL
   ## ref: https://kubernetes.io/docs/user-guide/ingress/
@@ -2142,6 +2176,9 @@ kubelet:
     ## @param kubelet.serviceMonitor.annotations Extra annotations for the ServiceMonitor
     ##
     annotations: {}
+    ## @param kubelet.serviceMonitor.sampleLimit Per-scrape limit on number of scraped samples that will be accepted.
+    ##
+    sampleLimit: ""
 
 ## @section Blackbox Exporter Deployment Parameters
 ##
@@ -2161,7 +2198,7 @@ blackboxExporter:
   image:
     registry: docker.io
     repository: bitnami/blackbox-exporter
-    tag: 0.24.0-debian-11-r76
+    tag: 0.24.0-debian-11-r135
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -2481,6 +2518,10 @@ blackboxExporter:
     ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
     ##
     loadBalancerIP: ""
+    ## @param blackboxExporter.service.loadBalancerClass Blackbox Exporter service Load Balancer class if service type is `LoadBalancer` (optional, cloud specific)
+    ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-loadbalancer
+    ##
+    loadBalancerClass: ""
     ## @param blackboxExporter.service.loadBalancerSourceRanges Blackbox Exporter service Load Balancer sources
     ## ref: https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
     ## e.g:
@@ -2527,6 +2568,9 @@ kubeApiServer:
     ## @param kubeApiServer.serviceMonitor.annotations Extra annotations for the ServiceMonitor
     ##
     annotations: { }
+    ## @param kubeApiServer.serviceMonitor.sampleLimit Per-scrape limit on number of scraped samples that will be accepted.
+    ##
+    sampleLimit: ""
 ## Component scraping the kube-controller-manager
 ##
 kubeControllerManager:
@@ -2594,6 +2638,9 @@ kubeControllerManager:
     ## @param kubeControllerManager.serviceMonitor.annotations Extra annotations for the ServiceMonitor
     ##
     annotations: { }
+    ## @param kubeControllerManager.serviceMonitor.sampleLimit Per-scrape limit on number of scraped samples that will be accepted.
+    ##
+    sampleLimit: ""
 ## Component scraping kube scheduler
 ##
 kubeScheduler:
@@ -2669,6 +2716,9 @@ kubeScheduler:
     ## @param kubeScheduler.serviceMonitor.annotations Extra annotations for the ServiceMonitor
     ##
     annotations: {}
+    ## @param kubeScheduler.serviceMonitor.sampleLimit Per-scrape limit on number of scraped samples that will be accepted.
+    ##
+    sampleLimit: ""
 ## Component scraping coreDns
 ##
 coreDns:
@@ -2727,6 +2777,9 @@ coreDns:
     ## @param coreDns.serviceMonitor.annotations Extra annotations for the ServiceMonitor
     ##
     annotations: {}
+    ## @param coreDns.serviceMonitor.sampleLimit Per-scrape limit on number of scraped samples that will be accepted.
+    ##
+    sampleLimit: ""
 ## Component scraping the kube-proxy
 ##
 kubeProxy:
@@ -2787,6 +2840,9 @@ kubeProxy:
     ## @param kubeProxy.serviceMonitor.annotations Extra annotations for the ServiceMonitor
     ##
     annotations: {}
+    ## @param kubeProxy.serviceMonitor.sampleLimit Per-scrape limit on number of scraped samples that will be accepted.
+    ##
+    sampleLimit: ""
 
 ## @section RBAC parameters
 ##

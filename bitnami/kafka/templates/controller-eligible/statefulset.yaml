@@ -10,32 +10,27 @@ kind: StatefulSet
 metadata:
   name: {{ printf "%s-controller" (include "common.names.fullname" .) }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: controller-eligible
     app.kubernetes.io/part-of: kafka
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
   podManagementPolicy: {{ .Values.controller.podManagementPolicy }}
   replicas: {{ .Values.controller.replicaCount }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.controller.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: controller-eligible
       app.kubernetes.io/part-of: kafka
   serviceName: {{ printf "%s-controller-headless" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" }}
   updateStrategy: {{- include "common.tplvalues.render" (dict "value" .Values.controller.updateStrategy "context" $ ) | nindent 4 }}
   template:
     metadata:
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: controller-eligible
         app.kubernetes.io/part-of: kafka
-        {{- if .Values.controller.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.controller.podLabels "context" $) | nindent 8 }}
-        {{- end }}
       annotations:
         {{- if (include "kafka.controller.createConfigmap" .) }}
         checksum/configuration: {{ include (print $.Template.BasePath "/controller-eligible/configmap.yaml") . | sha256sum }}
@@ -66,8 +61,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.controller.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.controller.podAffinityPreset "component" "kafka" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.controller.podAntiAffinityPreset "component" "kafka" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.controller.podAffinityPreset "component" "controller-eligible" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.controller.podAntiAffinityPreset "component" "controller-eligible" "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.controller.nodeAffinityPreset.type "key" .Values.controller.nodeAffinityPreset.key "values" .Values.controller.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.controller.nodeSelector }}
@@ -156,12 +151,12 @@ spec:
             - name: KAFKA_KRAFT_CLUSTER_ID
               valueFrom:
                 secretKeyRef:
-                  name: {{ printf "%s-kraft-cluster-id" (include "common.names.fullname" .) }}
+                  name: {{ default (printf "%s-kraft-cluster-id" (include "common.names.fullname" .)) .Values.kraft.existingClusterIdSecret }}
                   key: kraft-cluster-id
             {{- if and (include "kafka.saslEnabled" .) (or (regexFind "SCRAM" (upper .Values.sasl.enabledMechanisms)) (regexFind "SCRAM" (upper .Values.sasl.controllerMechanism)) (regexFind "SCRAM" (upper .Values.sasl.interBrokerMechanism))) }}
             - name: KAFKA_KRAFT_BOOTSTRAP_SCRAM_USERS
               value: "true"
-            {{- if and (include "kafka.client.saslEnabled" . ) .Values.sasl.client.users }}
+            {{- if and (include "kafka.client.saslEnabled" . ) .Values.sasl.client.users (include "kafka.saslUserPasswordsEnabled" .) }}
             - name: KAFKA_CLIENT_USERS
               value: {{ join "," .Values.sasl.client.users | quote }}
             - name: KAFKA_CLIENT_PASSWORDS
@@ -171,6 +166,7 @@ spec:
                   key: client-passwords
             {{- end }}
             {{- if regexFind "SASL" (upper .Values.listeners.interbroker.protocol) }}
+            {{- if (include "kafka.saslUserPasswordsEnabled" .) }}
             - name: KAFKA_INTER_BROKER_USER
               value: {{ .Values.sasl.interbroker.user | quote }}
             - name: KAFKA_INTER_BROKER_PASSWORD
@@ -179,7 +175,18 @@ spec:
                   name: {{ include "kafka.saslSecretName" . }}
                   key: inter-broker-password
             {{- end }}
+            {{- if (include "kafka.saslClientSecretsEnabled" .) }}
+            - name: KAFKA_INTER_BROKER_CLIENT_ID
+              value: {{ .Values.sasl.interbroker.clientId | quote }}
+            - name: KAFKA_INTER_BROKER_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "kafka.saslSecretName" . }}
+                  key: inter-broker-client-secret
+            {{- end }}
+            {{- end }}
             {{- if regexFind "SASL" (upper .Values.listeners.controller.protocol) }}
+            {{- if (include "kafka.saslUserPasswordsEnabled" .) }}
             - name: KAFKA_CONTROLLER_USER
               value: {{ .Values.sasl.controller.user | quote }}
             - name: KAFKA_CONTROLLER_PASSWORD
@@ -187,6 +194,16 @@ spec:
                 secretKeyRef:
                   name: {{ include "kafka.saslSecretName" . }}
                   key: controller-password
+            {{- end }}
+            {{- if (include "kafka.saslClientSecretsEnabled" .) }}
+            - name: KAFKA_CONTROLLER_CLIENT_ID
+              value: {{ .Values.sasl.controller.clientId | quote }}
+            - name: KAFKA_CONTROLLER_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "kafka.saslSecretName" . }}
+                  key: controller-client-secret
+            {{- end }}
             {{- end }}
             {{- end }}
             {{- if .Values.metrics.jmx.enabled }}
@@ -333,6 +350,13 @@ spec:
         - name: kafka-configmaps
           configMap:
             name: {{ include "kafka.controller.configmapName" . }}
+        - name: kafka-secret-config
+        {{- if (include "kafka.controller.secretConfigExists" .) }}
+          secret:
+            secretName: {{ include "kafka.controller.secretConfigName" . }}
+        {{- else }}
+          emptyDir: {}
+        {{- end }}
         - name: kafka-config
           emptyDir: {}
         - name: tmp
@@ -437,7 +461,7 @@ spec:
         resources:
           requests:
             storage: {{ .Values.controller.logPersistence.size | quote }}
-        {{- include "common.storage.class" (dict "persistence" .Values.controller.persistence "global" .Values.global) | nindent 8 }}
+        {{- include "common.storage.class" (dict "persistence" .Values.controller.logPersistence "global" .Values.global) | nindent 8 }}
         {{- if .Values.controller.logPersistence.selector }}
         selector: {{- include "common.tplvalues.render" (dict "value" .Values.controller.logPersistence.selector "context" $) | nindent 10 }}
         {{- end -}}

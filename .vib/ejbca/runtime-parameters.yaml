@@ -16,8 +16,8 @@ service:
   type: LoadBalancer
   ports:
     http: 80
-    https: 8444
-  advertisedHttpsPort: 8444
+    https: 443
+  advertisedHttpsPort: 443
 mariadb:
   enabled: true
   auth:

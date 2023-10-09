@@ -1,6 +1,5 @@
 {
   "newAdminCert": {
-    "cipherSpec": "RSA_2048",
-    "profile": "ENDUSER"
+    "algorithm": "RSA_2048"
   }
 }

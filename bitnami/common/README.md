@@ -7,7 +7,7 @@ A [Helm Library Chart](https://helm.sh/docs/topics/library_charts/#helm) for gro
 ```yaml
 dependencies:
   - name: common
-    version: 1.x.x
+    version: 2.x.x
     repository: oci://registry-1.docker.io/bitnamicharts
 ```
 
@@ -34,8 +34,8 @@ Looking to use our applications in production? Try [VMware Application Catalog](
 
 ## Prerequisites
 
-- Kubernetes 1.19+
-- Helm 3.2.0+
+- Kubernetes 1.23+
+- Helm 3.8.0+
 
 ## Parameters
 

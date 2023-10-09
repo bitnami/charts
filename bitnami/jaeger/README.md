@@ -24,8 +24,8 @@ Looking to use Jaeger in production? Try [VMware Application Catalog](https://bi
 
 ## Prerequisites
 
-- Kubernetes 1.19+
-- Helm 3.2.0+
+- Kubernetes 1.23+
+- Helm 3.8.0+
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -80,7 +80,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | ------------------------------------------------------------------------------------------------------ | ---------------------- |
 | `image.registry`    | Jaeger image registry                                                                                  | `docker.io`            |
 | `image.repository`  | Jaeger image repository                                                                                | `bitnami/jaeger`       |
-| `image.tag`         | Jaeger image tag (immutable tags are recommended)                                                      | `1.47.0-debian-11-r17` |
+| `image.tag`         | Jaeger image tag (immutable tags are recommended)                                                      | `1.49.0-debian-11-r25` |
 | `image.digest`      | Jaeger image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
 | `image.pullPolicy`  | image pull policy                                                                                      | `IfNotPresent`         |
 | `image.pullSecrets` | Jaeger image pull secrets                                                                              | `[]`                   |
@@ -352,23 +352,23 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Set the image to use for the migration job
 
-| Name                                         | Description                                                                                               | Value                 |
-| -------------------------------------------- | --------------------------------------------------------------------------------------------------------- | --------------------- |
-| `cqlshImage.registry`                        | Cassandra image registry                                                                                  | `docker.io`           |
-| `cqlshImage.repository`                      | Cassandra image repository                                                                                | `bitnami/cassandra`   |
-| `cqlshImage.tag`                             | Cassandra image tag (immutable tags are recommended)                                                      | `4.0.11-debian-11-r7` |
-| `cqlshImage.digest`                          | Cassandra image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
-| `cqlshImage.pullPolicy`                      | image pull policy                                                                                         | `IfNotPresent`        |
-| `cqlshImage.pullSecrets`                     | Cassandra image pull secrets                                                                              | `[]`                  |
-| `cqlshImage.debug`                           | Enable image debug mode                                                                                   | `false`               |
-| `externalDatabase.host`                      | External database host                                                                                    | `""`                  |
-| `externalDatabase.port`                      | External database port                                                                                    | `9042`                |
-| `externalDatabase.dbUser.user`               | Cassandra admin user                                                                                      | `bn_jaeger`           |
-| `externalDatabase.dbUser.password`           | Password for `dbUser.user`. Randomly generated if empty                                                   | `""`                  |
-| `externalDatabase.existingSecret`            | Name of existing secret containing the database secret                                                    | `""`                  |
-| `externalDatabase.existingSecretPasswordKey` | Name of existing secret key containing the database password secret key                                   | `""`                  |
-| `externalDatabase.cluster.datacenter`        | Name for cassandra's jaeger datacenter                                                                    | `dc1`                 |
-| `externalDatabase.keyspace`                  | Name for cassandra's jaeger keyspace                                                                      | `bitnami_jaeger`      |
+| Name                                         | Description                                                                                               | Value                  |
+| -------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ---------------------- |
+| `cqlshImage.registry`                        | Cassandra image registry                                                                                  | `docker.io`            |
+| `cqlshImage.repository`                      | Cassandra image repository                                                                                | `bitnami/cassandra`    |
+| `cqlshImage.tag`                             | Cassandra image tag (immutable tags are recommended)                                                      | `4.0.11-debian-11-r73` |
+| `cqlshImage.digest`                          | Cassandra image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
+| `cqlshImage.pullPolicy`                      | image pull policy                                                                                         | `IfNotPresent`         |
+| `cqlshImage.pullSecrets`                     | Cassandra image pull secrets                                                                              | `[]`                   |
+| `cqlshImage.debug`                           | Enable image debug mode                                                                                   | `false`                |
+| `externalDatabase.host`                      | External database host                                                                                    | `""`                   |
+| `externalDatabase.port`                      | External database port                                                                                    | `9042`                 |
+| `externalDatabase.dbUser.user`               | Cassandra admin user                                                                                      | `bn_jaeger`            |
+| `externalDatabase.dbUser.password`           | Password for `dbUser.user`. Randomly generated if empty                                                   | `""`                   |
+| `externalDatabase.existingSecret`            | Name of existing secret containing the database secret                                                    | `""`                   |
+| `externalDatabase.existingSecretPasswordKey` | Name of existing secret key containing the database password secret key                                   | `""`                   |
+| `externalDatabase.cluster.datacenter`        | Name for cassandra's jaeger datacenter                                                                    | `dc1`                  |
+| `externalDatabase.keyspace`                  | Name for cassandra's jaeger keyspace                                                                      | `bitnami_jaeger`       |
 
 ### Cassandra storage sub-chart
 

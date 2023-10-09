@@ -76,7 +76,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/mxnet
-  tag: 1.9.1-debian-11-r340
+  tag: 1.9.1-debian-11-r408
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1177,7 +1177,7 @@ scheduler:
 git:
   registry: docker.io
   repository: bitnami/git
-  tag: 2.41.0-debian-11-r53
+  tag: 2.42.0-debian-11-r41
   digest: ""
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -1205,7 +1205,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r16
+    tag: 11-debian-11-r86
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

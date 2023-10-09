@@ -8,21 +8,18 @@ kind: Deployment
 metadata:
   name: {{ include "postgresql-ha.pgpool" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{ include "common.labels.standard" . | nindent 4 }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.pgpool.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.pgpool.labels .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: pgpool
-    {{- if .Values.pgpool.labels }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.pgpool.labels "context" $) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
   replicas: {{ .Values.pgpool.replicaCount }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.pgpool.podLabels .Values.commonLabels $versionLabel ) "context" . ) }}
   selector:
-    matchLabels: {{ include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: pgpool
   {{- if .Values.pgpool.updateStrategy }}
   strategy: {{- toYaml .Values.pgpool.updateStrategy | nindent 4 }}
@@ -32,11 +29,8 @@ spec:
   {{- end }}
   template:
     metadata:
-      labels: {{ include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: pgpool
-        {{- if .Values.pgpool.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.pgpool.podLabels "context" $) | nindent 8 }}
-        {{- end }}
       {{- if .Values.pgpool.podAnnotations }}
       annotations: {{- include "common.tplvalues.render" (dict "value" .Values.pgpool.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
@@ -49,8 +43,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" (dict "value" .Values.pgpool.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.pgpool.podAffinityPreset "component" "pgpool" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.pgpool.podAntiAffinityPreset "component" "pgpool" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.pgpool.podAffinityPreset "component" "pgpool" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.pgpool.podAntiAffinityPreset "component" "pgpool" "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.pgpool.nodeAffinityPreset.type "key" .Values.pgpool.nodeAffinityPreset.key "values" .Values.pgpool.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.pgpool.nodeSelector }}
@@ -229,7 +223,7 @@ spec:
               value: {{ ternary "yes" "no" .Values.pgpool.useLoadBalancing | quote }}
             {{- if .Values.pgpool.useLoadBalancing }}
             - name: PGPOOL_DISABLE_LOAD_BALANCE_ON_WRITE
-              value: {{ .Values.pgpool.loadBalancingOnWrite | quote }}
+              value: {{ .Values.pgpool.disableLoadBalancingOnWrite | quote }}
             {{- end }}
             - name: PGPOOL_ENABLE_LOG_CONNECTIONS
               value: {{ ternary "yes" "no" .Values.pgpool.logConnections | quote }}

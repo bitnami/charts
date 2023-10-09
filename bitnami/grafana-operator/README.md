@@ -26,8 +26,8 @@ Looking to use Grafana Operator in production? Try [VMware Application Catalog](
 
 ## Prerequisites
 
-- Kubernetes 1.19+
-- Helm 3.2.0+
+- Kubernetes 1.23+
+- Helm 3.8.0+
 
 ## Installing the Chart
 
@@ -110,7 +110,7 @@ For more information, refer to the [documentation on the differences between the
 | `operator.updateStrategy.type`                               | Set up update strategy for Grafana Operator installation.                                                                                 | `Recreate`                 |
 | `operator.image.registry`                                    | Grafana Operator image registry                                                                                                           | `docker.io`                |
 | `operator.image.repository`                                  | Grafana Operator image name                                                                                                               | `bitnami/grafana-operator` |
-| `operator.image.tag`                                         | Grafana Operator image tag                                                                                                                | `5.3.0-debian-11-r0`       |
+| `operator.image.tag`                                         | Grafana Operator image tag                                                                                                                | `5.4.1-debian-11-r20`      |
 | `operator.image.digest`                                      | Grafana Operator image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                          | `""`                       |
 | `operator.image.pullPolicy`                                  | Grafana Operator image pull policy                                                                                                        | `IfNotPresent`             |
 | `operator.image.pullSecrets`                                 | Grafana Operator image pull secrets                                                                                                       | `[]`                       |
@@ -191,7 +191,7 @@ For more information, refer to the [documentation on the differences between the
 | `grafana.enabled`                                           | Enabled the deployment of the Grafana CRD object into the cluster                                       | `true`                   |
 | `grafana.image.registry`                                    | Grafana image registry                                                                                  | `docker.io`              |
 | `grafana.image.repository`                                  | Grafana image name                                                                                      | `bitnami/grafana`        |
-| `grafana.image.tag`                                         | Grafana image tag                                                                                       | `10.0.2-debian-11-r12`   |
+| `grafana.image.tag`                                         | Grafana image tag                                                                                       | `10.1.4-debian-11-r2`    |
 | `grafana.image.digest`                                      | Grafana image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                     |
 | `grafana.image.pullPolicy`                                  | Grafana image pull policy                                                                               | `IfNotPresent`           |
 | `grafana.image.pullSecrets`                                 | Grafana image pull secrets                                                                              | `[]`                     |

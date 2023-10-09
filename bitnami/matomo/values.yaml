@@ -62,7 +62,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/matomo
-  tag: 4.15.1-debian-11-r0
+  tag: 4.15.1-debian-11-r42
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -197,17 +197,23 @@ tolerations: []
 existingSecret: ""
 ## SMTP mail delivery configuration
 ## ref: https://github.com/bitnami/containers/tree/main/bitnami/matomo/#smtp-configuration
+## @param smtpAuth SMTP authentication mechanism (options: Plain, Login, Crammd5)
 ## @param smtpHost SMTP host
 ## @param smtpPort SMTP port
 ## @param smtpUser SMTP user
 ## @param smtpPassword SMTP password
 ## @param smtpProtocol SMTP Protocol (options: ssl,tls, nil)
+## @param noreplyName Noreply name
+## @param noreplyAddress Noreply address
 ##
+smtpAuth: ""
 smtpHost: ""
 smtpPort: ""
 smtpUser: ""
 smtpPassword: ""
 smtpProtocol: ""
+noreplyName: ""
+noreplyAddress: "" 
 ## @param smtpExistingSecret The name of an existing secret with SMTP credentials
 ## NOTE: Must contain key `smtp-password`
 ## NOTE: When it's set, the `smtpPassword` parameter is ignored
@@ -680,7 +686,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r25
+    tag: 11-debian-11-r69
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -733,7 +739,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/apache-exporter
-    tag: 1.0.1-debian-11-r2
+    tag: 1.0.1-debian-11-r50
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -804,7 +810,7 @@ certificates:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r25
+    tag: 11-debian-11-r69
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -909,3 +915,73 @@ networkPolicy:
     ##             label: example
     ##
     customRules: {}
+
+cronjobs:
+  ## @param cronjobs.enabled Enables cronjobs for archive and scheduler tasks
+  ##
+  enabled: true
+  taskScheduler:
+    ## @param cronjobs.taskScheduler.schedule Kubernetes CronJob schedule
+    ##
+    schedule: "*/5 * * * *"
+    ## @param cronjobs.taskScheduler.suspend Whether to create suspended CronJob
+    ##
+    suspend: false
+    ## @param cronjobs.taskScheduler.command Override default container command (useful when using custom images)
+    ##
+    command: []
+    ## @param cronjobs.taskScheduler.args Override default container args (useful when using custom images)
+    ##
+    args: []
+    ## @param
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+    ## @param cronjobs.taskScheduler.containerSecurityContext.enabled archive Container securityContext
+    ## @param cronjobs.taskScheduler.containerSecurityContext.runAsUser User ID for the archive container
+    ## @param cronjobs.taskScheduler.containerSecurityContext.runAsNonRoot Whether to run the archive container as a non-root user
+    ##
+    containerSecurityContext:
+      enabled: false
+      runAsUser: 1001
+      runAsNonRoot: true
+    ## @param cronjobs.taskScheduler.podAnnotations Additional pod annotations
+    ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+    ##
+    podAnnotations: {}
+    ## @param cronjobs.taskScheduler.podLabels Additional pod labels
+    ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+    ##
+    podLabels: {}
+  archive:
+    ## @param cronjobs.archive.enabled Whether to enable scheduled mail-to-task CronJob
+    ##
+    enabled: false
+    ## @param cronjobs.archive.schedule Kubernetes CronJob schedule
+    ##
+    schedule: "*/5 * * * *"
+    ## @param cronjobs.archive.suspend Whether to create suspended CronJob
+    ##
+    suspend: false
+    ## @param cronjobs.archive.command Override default container command (useful when using custom images)
+    ##
+    command: []
+    ## @param cronjobs.archive.args Override default container args (useful when using custom images)
+    ##
+    args: []
+    ## @param
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+    ## @param cronjobs.archive.containerSecurityContext.enabled archive Container securityContext
+    ## @param cronjobs.archive.containerSecurityContext.runAsUser User ID for the archive container
+    ## @param cronjobs.archive.containerSecurityContext.runAsNonRoot Whether to run the archive container as a non-root user
+    ##
+    containerSecurityContext:
+      enabled: false
+      runAsUser: 1001
+      runAsNonRoot: true
+    ## @param cronjobs.archive.podAnnotations Additional pod annotations
+    ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/annotations/
+    ##
+    podAnnotations: { }
+    ## @param cronjobs.archive.podLabels Additional pod labels
+    ## ref: https://kubernetes.io/docs/concepts/overview/working-with-objects/labels/
+    ##
+    podLabels: { }

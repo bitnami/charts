@@ -19,7 +19,7 @@ helm install my-release oci://registry-1.docker.io/bitnamicharts/supabase
 Bitnami charts for Helm are carefully engineered, actively maintained and are the quickest and easiest way to deploy containers on a Kubernetes cluster that are ready to handle production workloads.
 
 This chart bootstraps a [Supabase](https://www.supabase.com/) deployment in a [Kubernetes](https://kubernetes.io) cluster using the [Helm](https://helm.sh) package manager.
-Bitnami charts can be used with [Kubeapps](https://kubeapps.com/) for deployment and management of Helm Charts in clusters.
+Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
 [Learn more about the default configuration of the chart](https://docs.bitnami.com/kubernetes/infrastructure/supabase/get-started/).
 
@@ -27,8 +27,8 @@ Looking to use Supabase in production? Try [VMware Application Catalog](https://
 
 ## Prerequisites
 
-- Kubernetes 1.19+
-- Helm 3.2.0+
+- Kubernetes 1.23+
+- Helm 3.8.0+
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -86,47 +86,47 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Supabase Common parameters
 
-| Name                                                                 | Description                                                                                                                                        | Value                  |
-| -------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
-| `jwt.secret`                                                         | The secret string used to sign JWT tokens                                                                                                          | `""`                   |
-| `jwt.anonKey`                                                        | JWT string for annonymous users                                                                                                                    | `""`                   |
-| `jwt.serviceKey`                                                     | JWT string for service users                                                                                                                       | `""`                   |
-| `jwt.autoGenerate.forceRun`                                          | Force the run of the JWT generation job                                                                                                            | `false`                |
-| `jwt.autoGenerate.image.registry`                                    | JWT CLI image registry                                                                                                                             | `docker.io`            |
-| `jwt.autoGenerate.image.repository`                                  | JWT CLI image repository                                                                                                                           | `bitnami/jwt-cli`      |
-| `jwt.autoGenerate.image.tag`                                         | JWT CLI image tag (immutable tags are recommended)                                                                                                 | `5.0.3-debian-11-r147` |
-| `jwt.autoGenerate.image.digest`                                      | JWT CLI image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended) | `""`                   |
-| `jwt.autoGenerate.image.pullPolicy`                                  | JWT CLI image pull policy                                                                                                                          | `IfNotPresent`         |
-| `jwt.autoGenerate.image.pullSecrets`                                 | JWT CLI image pull secrets                                                                                                                         | `[]`                   |
-| `jwt.autoGenerate.kubectlImage.registry`                             | Kubectl image registry                                                                                                                             | `docker.io`            |
-| `jwt.autoGenerate.kubectlImage.repository`                           | Kubectl image repository                                                                                                                           | `bitnami/kubectl`      |
-| `jwt.autoGenerate.kubectlImage.tag`                                  | Kubectl image tag (immutable tags are recommended)                                                                                                 | `1.26.7-debian-11-r10` |
-| `jwt.autoGenerate.kubectlImage.digest`                               | Kubectl image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                            | `""`                   |
-| `jwt.autoGenerate.kubectlImage.pullPolicy`                           | Kubectl image pull policy                                                                                                                          | `IfNotPresent`         |
-| `jwt.autoGenerate.kubectlImage.pullSecrets`                          | Kubectl image pull secrets                                                                                                                         | `[]`                   |
-| `jwt.autoGenerate.backoffLimit`                                      | set backoff limit of the job                                                                                                                       | `10`                   |
-| `jwt.autoGenerate.extraVolumes`                                      | Optionally specify extra list of additional volumes for the jwt init job                                                                           | `[]`                   |
-| `jwt.autoGenerate.containerSecurityContext.enabled`                  | Enabled jwt init job containers' Security Context                                                                                                  | `true`                 |
-| `jwt.autoGenerate.containerSecurityContext.runAsUser`                | Set jwt init job containers' Security Context runAsUser                                                                                            | `1001`                 |
-| `jwt.autoGenerate.containerSecurityContext.runAsNonRoot`             | Set jwt init job containers' Security Context runAsNonRoot                                                                                         | `true`                 |
-| `jwt.autoGenerate.containerSecurityContext.readOnlyRootFilesystem`   | Set jwt init job containers' Security Context runAsNonRoot                                                                                         | `false`                |
-| `jwt.autoGenerate.containerSecurityContext.allowPrivilegeEscalation` | Set container's privilege escalation                                                                                                               | `false`                |
-| `jwt.autoGenerate.containerSecurityContext.capabilities.drop`        | Set container's Security Context runAsNonRoot                                                                                                      | `["ALL"]`              |
-| `jwt.autoGenerate.podSecurityContext.enabled`                        | Enabled jwt init job pods' Security Context                                                                                                        | `true`                 |
-| `jwt.autoGenerate.podSecurityContext.fsGroup`                        | Set jwt init job pod's Security Context fsGroup                                                                                                    | `1001`                 |
-| `jwt.autoGenerate.podSecurityContext.seccompProfile.type`            | Set container's Security Context seccomp profile                                                                                                   | `RuntimeDefault`       |
-| `jwt.autoGenerate.extraEnvVars`                                      | Array containing extra env vars to configure the jwt init job                                                                                      | `[]`                   |
-| `jwt.autoGenerate.extraEnvVarsCM`                                    | ConfigMap containing extra env vars to configure the jwt init job                                                                                  | `""`                   |
-| `jwt.autoGenerate.extraEnvVarsSecret`                                | Secret containing extra env vars to configure the jwt init job (in case of sensitive data)                                                         | `""`                   |
-| `jwt.autoGenerate.extraVolumeMounts`                                 | Array of extra volume mounts to be added to the jwt Container (evaluated as template). Normally used with `extraVolumes`.                          | `[]`                   |
-| `jwt.autoGenerate.resources.limits`                                  | The resources limits for the container                                                                                                             | `{}`                   |
-| `jwt.autoGenerate.resources.requests`                                | The requested resources for the container                                                                                                          | `{}`                   |
-| `jwt.autoGenerate.hostAliases`                                       | Add deployment host aliases                                                                                                                        | `[]`                   |
-| `jwt.autoGenerate.annotations`                                       | Add annotations to the job                                                                                                                         | `{}`                   |
-| `jwt.autoGenerate.podLabels`                                         | Additional pod labels                                                                                                                              | `{}`                   |
-| `jwt.autoGenerate.podAnnotations`                                    | Additional pod annotations                                                                                                                         | `{}`                   |
-| `publicURL`                                                          | Supabase API public URL                                                                                                                            | `""`                   |
-| `dbSSL`                                                              | Supabase API database connection mode for SSL. Applied to all components. Allowed values: verify-ca, verify-full, disable, allow, prefer, require  | `disable`              |
+| Name                                                                 | Description                                                                                                                                        | Value                 |
+| -------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
+| `jwt.secret`                                                         | The secret string used to sign JWT tokens                                                                                                          | `""`                  |
+| `jwt.anonKey`                                                        | JWT string for annonymous users                                                                                                                    | `""`                  |
+| `jwt.serviceKey`                                                     | JWT string for service users                                                                                                                       | `""`                  |
+| `jwt.autoGenerate.forceRun`                                          | Force the run of the JWT generation job                                                                                                            | `false`               |
+| `jwt.autoGenerate.image.registry`                                    | JWT CLI image registry                                                                                                                             | `docker.io`           |
+| `jwt.autoGenerate.image.repository`                                  | JWT CLI image repository                                                                                                                           | `bitnami/jwt-cli`     |
+| `jwt.autoGenerate.image.tag`                                         | JWT CLI image tag (immutable tags are recommended)                                                                                                 | `6.0.0-debian-11-r8`  |
+| `jwt.autoGenerate.image.digest`                                      | JWT CLI image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended) | `""`                  |
+| `jwt.autoGenerate.image.pullPolicy`                                  | JWT CLI image pull policy                                                                                                                          | `IfNotPresent`        |
+| `jwt.autoGenerate.image.pullSecrets`                                 | JWT CLI image pull secrets                                                                                                                         | `[]`                  |
+| `jwt.autoGenerate.kubectlImage.registry`                             | Kubectl image registry                                                                                                                             | `docker.io`           |
+| `jwt.autoGenerate.kubectlImage.repository`                           | Kubectl image repository                                                                                                                           | `bitnami/kubectl`     |
+| `jwt.autoGenerate.kubectlImage.tag`                                  | Kubectl image tag (immutable tags are recommended)                                                                                                 | `1.28.2-debian-11-r5` |
+| `jwt.autoGenerate.kubectlImage.digest`                               | Kubectl image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                            | `""`                  |
+| `jwt.autoGenerate.kubectlImage.pullPolicy`                           | Kubectl image pull policy                                                                                                                          | `IfNotPresent`        |
+| `jwt.autoGenerate.kubectlImage.pullSecrets`                          | Kubectl image pull secrets                                                                                                                         | `[]`                  |
+| `jwt.autoGenerate.backoffLimit`                                      | set backoff limit of the job                                                                                                                       | `10`                  |
+| `jwt.autoGenerate.extraVolumes`                                      | Optionally specify extra list of additional volumes for the jwt init job                                                                           | `[]`                  |
+| `jwt.autoGenerate.containerSecurityContext.enabled`                  | Enabled jwt init job containers' Security Context                                                                                                  | `true`                |
+| `jwt.autoGenerate.containerSecurityContext.runAsUser`                | Set jwt init job containers' Security Context runAsUser                                                                                            | `1001`                |
+| `jwt.autoGenerate.containerSecurityContext.runAsNonRoot`             | Set jwt init job containers' Security Context runAsNonRoot                                                                                         | `true`                |
+| `jwt.autoGenerate.containerSecurityContext.readOnlyRootFilesystem`   | Set jwt init job containers' Security Context runAsNonRoot                                                                                         | `false`               |
+| `jwt.autoGenerate.containerSecurityContext.allowPrivilegeEscalation` | Set container's privilege escalation                                                                                                               | `false`               |
+| `jwt.autoGenerate.containerSecurityContext.capabilities.drop`        | Set container's Security Context runAsNonRoot                                                                                                      | `["ALL"]`             |
+| `jwt.autoGenerate.podSecurityContext.enabled`                        | Enabled jwt init job pods' Security Context                                                                                                        | `true`                |
+| `jwt.autoGenerate.podSecurityContext.fsGroup`                        | Set jwt init job pod's Security Context fsGroup                                                                                                    | `1001`                |
+| `jwt.autoGenerate.podSecurityContext.seccompProfile.type`            | Set container's Security Context seccomp profile                                                                                                   | `RuntimeDefault`      |
+| `jwt.autoGenerate.extraEnvVars`                                      | Array containing extra env vars to configure the jwt init job                                                                                      | `[]`                  |
+| `jwt.autoGenerate.extraEnvVarsCM`                                    | ConfigMap containing extra env vars to configure the jwt init job                                                                                  | `""`                  |
+| `jwt.autoGenerate.extraEnvVarsSecret`                                | Secret containing extra env vars to configure the jwt init job (in case of sensitive data)                                                         | `""`                  |
+| `jwt.autoGenerate.extraVolumeMounts`                                 | Array of extra volume mounts to be added to the jwt Container (evaluated as template). Normally used with `extraVolumes`.                          | `[]`                  |
+| `jwt.autoGenerate.resources.limits`                                  | The resources limits for the container                                                                                                             | `{}`                  |
+| `jwt.autoGenerate.resources.requests`                                | The requested resources for the container                                                                                                          | `{}`                  |
+| `jwt.autoGenerate.hostAliases`                                       | Add deployment host aliases                                                                                                                        | `[]`                  |
+| `jwt.autoGenerate.annotations`                                       | Add annotations to the job                                                                                                                         | `{}`                  |
+| `jwt.autoGenerate.podLabels`                                         | Additional pod labels                                                                                                                              | `{}`                  |
+| `jwt.autoGenerate.podAnnotations`                                    | Additional pod annotations                                                                                                                         | `{}`                  |
+| `publicURL`                                                          | Supabase API public URL                                                                                                                            | `""`                  |
+| `dbSSL`                                                              | Supabase API database connection mode for SSL. Applied to all components. Allowed values: verify-ca, verify-full, disable, allow, prefer, require  | `disable`             |
 
 ### Supabase Auth Parameters
 
@@ -140,7 +140,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `auth.extraConfigExistingConfigmap`                    | The name of an existing ConfigMap with extra configuration                                                                                        | `""`                   |
 | `auth.image.registry`                                  | Gotrue image registry                                                                                                                             | `docker.io`            |
 | `auth.image.repository`                                | Gotrue image repository                                                                                                                           | `bitnami/gotrue`       |
-| `auth.image.tag`                                       | Gotrue image tag (immutable tags are recommended)                                                                                                 | `1.0.1-debian-11-r150` |
+| `auth.image.tag`                                       | Gotrue image tag (immutable tags are recommended)                                                                                                 | `1.0.1-debian-11-r204` |
 | `auth.image.digest`                                    | Gotrue image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended) | `""`                   |
 | `auth.image.pullPolicy`                                | Gotrue image pull policy                                                                                                                          | `IfNotPresent`         |
 | `auth.image.pullSecrets`                               | Gotrue image pull secrets                                                                                                                         | `[]`                   |
@@ -229,7 +229,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `meta.extraConfigExistingConfigmap`                    | The name of an existing ConfigMap with extra configuration                                                                                                        | `""`                             |
 | `meta.image.registry`                                  | Supabase Postgres Meta image registry                                                                                                                             | `docker.io`                      |
 | `meta.image.repository`                                | Supabase Postgres Meta image repository                                                                                                                           | `bitnami/supabase-postgres-meta` |
-| `meta.image.tag`                                       | Supabase Postgres Meta image tag (immutable tags are recommended)                                                                                                 | `0.67.0-debian-11-r20`           |
+| `meta.image.tag`                                       | Supabase Postgres Meta image tag (immutable tags are recommended)                                                                                                 | `0.70.0-debian-11-r5`            |
 | `meta.image.digest`                                    | Supabase Postgres Meta image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended) | `""`                             |
 | `meta.image.pullPolicy`                                | Supabase Postgres Meta image pull policy                                                                                                                          | `IfNotPresent`                   |
 | `meta.image.pullSecrets`                               | Supabase Postgres Meta image pull secrets                                                                                                                         | `[]`                             |
@@ -321,7 +321,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `realtime.extraConfigExistingConfigmap`                    | The name of an existing ConfigMap with extra configuration                                                                                          | `""`                        |
 | `realtime.image.registry`                                  | Realtime image registry                                                                                                                             | `docker.io`                 |
 | `realtime.image.repository`                                | Realtime image repository                                                                                                                           | `bitnami/supabase-realtime` |
-| `realtime.image.tag`                                       | Realtime image tag (immutable tags are recommended)                                                                                                 | `2.19.1-debian-11-r4`       |
+| `realtime.image.tag`                                       | Realtime image tag (immutable tags are recommended)                                                                                                 | `2.22.21-debian-11-r2`      |
 | `realtime.image.digest`                                    | Realtime image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended) | `""`                        |
 | `realtime.image.pullPolicy`                                | Realtime image pull policy                                                                                                                          | `IfNotPresent`              |
 | `realtime.image.pullSecrets`                               | Realtime image pull secrets                                                                                                                         | `[]`                        |
@@ -410,7 +410,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `rest.extraConfigExistingConfigmap`                    | The name of an existing ConfigMap with extra configuration                                                                                           | `""`                   |
 | `rest.image.registry`                                  | PostgREST image registry                                                                                                                             | `docker.io`            |
 | `rest.image.repository`                                | PostgREST image repository                                                                                                                           | `bitnami/postgrest`    |
-| `rest.image.tag`                                       | PostgREST image tag (immutable tags are recommended)                                                                                                 | `11.1.0-debian-11-r50` |
+| `rest.image.tag`                                       | PostgREST image tag (immutable tags are recommended)                                                                                                 | `11.2.0-debian-11-r42` |
 | `rest.image.digest`                                    | PostgREST image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended) | `""`                   |
 | `rest.image.pullPolicy`                                | PostgREST image pull policy                                                                                                                          | `IfNotPresent`         |
 | `rest.image.pullSecrets`                               | PostgREST image pull secrets                                                                                                                         | `[]`                   |
@@ -499,7 +499,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `storage.extraConfigExistingConfigmap`                    | The name of an existing ConfigMap with extra configuration                                                                                         | `""`                       |
 | `storage.image.registry`                                  | Storage image registry                                                                                                                             | `docker.io`                |
 | `storage.image.repository`                                | Storage image repository                                                                                                                           | `bitnami/supabase-storage` |
-| `storage.image.tag`                                       | Storage image tag (immutable tags are recommended)                                                                                                 | `0.41.4-debian-11-r1`      |
+| `storage.image.tag`                                       | Storage image tag (immutable tags are recommended)                                                                                                 | `0.41.7-debian-11-r2`      |
 | `storage.image.digest`                                    | Storage image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended) | `""`                       |
 | `storage.image.pullPolicy`                                | Storage image pull policy                                                                                                                          | `IfNotPresent`             |
 | `storage.image.pullSecrets`                               | Storage image pull secrets                                                                                                                         | `[]`                       |
@@ -604,7 +604,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `studio.extraConfigExistingConfigmap`                    | The name of an existing ConfigMap with extra configuration                                                                                        | `""`                      |
 | `studio.image.registry`                                  | Studio image registry                                                                                                                             | `docker.io`               |
 | `studio.image.repository`                                | Studio image repository                                                                                                                           | `bitnami/supabase-studio` |
-| `studio.image.tag`                                       | Studio image tag (immutable tags are recommended)                                                                                                 | `0.23.6-debian-11-r23`    |
+| `studio.image.tag`                                       | Studio image tag (immutable tags are recommended)                                                                                                 | `0.23.8-debian-11-r13`    |
 | `studio.image.digest`                                    | Studio image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended) | `""`                      |
 | `studio.image.pullPolicy`                                | Studio image pull policy                                                                                                                          | `IfNotPresent`            |
 | `studio.image.pullSecrets`                               | Studio image pull secrets                                                                                                                         | `[]`                      |
@@ -701,7 +701,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                     |
 | `volumePermissions.image.registry`                     | OS Shell + Utility image registry                                                               | `docker.io`                 |
 | `volumePermissions.image.repository`                   | OS Shell + Utility image repository                                                             | `bitnami/os-shell`          |
-| `volumePermissions.image.tag`                          | OS Shell + Utility image tag (immutable tags are recommended)                                   | `11-debian-11-r25`          |
+| `volumePermissions.image.tag`                          | OS Shell + Utility image tag (immutable tags are recommended)                                   | `11-debian-11-r77`          |
 | `volumePermissions.image.pullPolicy`                   | OS Shell + Utility image pull policy                                                            | `IfNotPresent`              |
 | `volumePermissions.image.pullSecrets`                  | OS Shell + Utility image pull secrets                                                           | `[]`                        |
 | `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                        |
@@ -710,7 +710,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `psqlImage.registry`                                   | PostgreSQL client image registry                                                                | `docker.io`                 |
 | `psqlImage.repository`                                 | PostgreSQL client image repository                                                              | `bitnami/supabase-postgres` |
 | `psqlImage.digest`                                     | PostgreSQL client image digest (overrides image tag)                                            | `""`                        |
-| `psqlImage.tag`                                        | PostgreSQL client image tag (immutable tags are recommended)                                    | `15.1.0-debian-11-r120`     |
+| `psqlImage.tag`                                        | PostgreSQL client image tag (immutable tags are recommended)                                    | `15.1.0-debian-11-r165`     |
 | `psqlImage.pullPolicy`                                 | PostgreSQL client image pull policy                                                             | `IfNotPresent`              |
 | `psqlImage.pullSecrets`                                | PostgreSQL client image pull secrets                                                            | `[]`                        |
 | `psqlImage.debug`                                      | Enable PostgreSQL client image debug mode                                                       | `false`                     |
@@ -754,7 +754,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `postgresql.service.ports.postgresql`         | PostgreSQL service port                                                                                    | `5432`                                                                                                                       |
 | `postgresql.image.registry`                   | PostgreSQL image registry                                                                                  | `docker.io`                                                                                                                  |
 | `postgresql.image.repository`                 | PostgreSQL image repository                                                                                | `bitnami/supabase-postgres`                                                                                                  |
-| `postgresql.image.tag`                        | PostgreSQL image tag (immutable tags are recommended)                                                      | `15.1.0-debian-11-r120`                                                                                                      |
+| `postgresql.image.tag`                        | PostgreSQL image tag (immutable tags are recommended)                                                      | `15.1.0-debian-11-r165`                                                                                                      |
 | `postgresql.image.digest`                     | PostgreSQL image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                                                                                                                         |
 | `postgresql.image.pullPolicy`                 | PostgreSQL image pull policy                                                                               | `IfNotPresent`                                                                                                               |
 | `postgresql.image.pullSecrets`                | Specify image pull secrets                                                                                 | `[]`                                                                                                                         |
@@ -857,6 +857,12 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 ## Troubleshooting
 
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
+
+## Upgrading
+
+### To 1.0.0
+
+This major updates the PostgreSQL subchart to its newest major, 13.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#to-1300) you can find more information about the changes introduced in that version.
 
 ## License
 

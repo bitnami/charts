@@ -8,7 +8,9 @@ kind: ValidatingWebhookConfiguration
 metadata:
   name: {{ include "certmanager.webhook.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.webhook.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: webhook
   annotations:
     cert-manager.io/inject-ca-from-secret: {{ printf "%s/%s-ca" (include "common.names.namespace" .) (include "certmanager.webhook.fullname" .) | quote }}

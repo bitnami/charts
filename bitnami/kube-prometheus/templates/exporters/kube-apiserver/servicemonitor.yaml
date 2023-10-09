@@ -9,22 +9,12 @@ kind: ServiceMonitor
 metadata:
   name: {{ template "kube-prometheus.fullname" . }}-apiserver
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.kubeApiServer.serviceMonitor.labels .Values.commonLabels ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: apiserver
-    {{- if .Values.kubeApiServer.serviceMonitor.labels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.kubeApiServer.serviceMonitor.labels "context" $ ) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if or .Values.commonAnnotations .Values.kubeApiServer.serviceMonitor.annotations }}
-  annotations:
-    {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.kubeApiServer.serviceMonitor.annotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.kubeApiServer.serviceMonitor.annotations "context" $ ) | nindent 4 }}
-    {{- end }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.kubeApiServer.serviceMonitor.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
   jobLabel: {{ .Values.kubeApiServer.serviceMonitor.jobLabel }}
@@ -35,6 +25,9 @@ spec:
   namespaceSelector:
     matchNames:
       - default
+  {{- with .Values.kubeApiServer.serviceMonitor.sampleLimit }}
+  sampleLimit: {{ . }}
+  {{- end }}
   endpoints:
     - port: https
       scheme: https

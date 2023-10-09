@@ -61,7 +61,7 @@
             "params": {
               "kubeconfig": "{{kubeconfig}}",
               "namespace": "{{namespace}}",
-              "service-name": "kuard-vib",
+              "service-name": "dokuwiki-vib",
               "service-port": "80"
             }
           }

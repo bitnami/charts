@@ -9,12 +9,11 @@ kind: Deployment
 metadata:
   name: {{ template "grafana-loki.query-scheduler.fullname" . }}
   namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.loki.image "chart" .Chart ) ) }}  
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: grafana-loki
     app.kubernetes.io/component: query-scheduler
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -24,8 +23,9 @@ spec:
   {{- if .Values.queryScheduler.updateStrategy }}
   strategy: {{- toYaml .Values.queryScheduler.updateStrategy | nindent 4 }}
   {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.queryScheduler.podLabels .Values.commonLabels $versionLabel ) "context" . ) }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/part-of: grafana-loki
       app.kubernetes.io/component: query-scheduler
   template:
@@ -35,14 +35,11 @@ spec:
         {{- if .Values.queryScheduler.podAnnotations }}
         {{- include "common.tplvalues.render" (dict "value" .Values.queryScheduler.podAnnotations "context" $) | nindent 8 }}
         {{- end }}
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         name: {{ template "grafana-loki.query-scheduler.fullname" . }}
         app.kubernetes.io/part-of: grafana-loki
         app.kubernetes.io/component: query-scheduler
         loki-gossip-member: "true"
-        {{- if .Values.queryScheduler.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.queryScheduler.podLabels "context" $) | nindent 8 }}
-        {{- end }}
     spec:
       serviceAccountName: {{ template "grafana-loki.serviceAccountName" . }}
       {{- include "grafana-loki.imagePullSecrets" . | nindent 6 }}
@@ -53,8 +50,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.queryScheduler.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.queryScheduler.podAffinityPreset "component" "query-scheduler" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.queryScheduler.podAntiAffinityPreset "component" "query-scheduler" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.queryScheduler.podAffinityPreset "component" "query-scheduler" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.queryScheduler.podAntiAffinityPreset "component" "query-scheduler" "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.queryScheduler.nodeAffinityPreset.type "key" .Values.queryScheduler.nodeAffinityPreset.key "values" .Values.queryScheduler.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.queryScheduler.nodeSelector }}

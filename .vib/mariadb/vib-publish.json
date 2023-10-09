@@ -51,6 +51,21 @@
               }
             }
           }
+        },
+        {
+          "action_id": "ginkgo",
+          "params": {
+            "resources": {
+              "path": "/.vib/mariadb/ginkgo"
+            },
+            "params": {
+              "kubeconfig": "{{kubeconfig}}",
+              "namespace": "{{namespace}}",
+              "name": "mariadb-primary",
+              "username": "root",
+              "password": "R0ot)Password"
+            }
+          }
         }
       ]
     },

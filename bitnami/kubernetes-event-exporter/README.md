@@ -24,8 +24,8 @@ Looking to use Kubernetes Event Exporter in production? Try [VMware Application 
 
 ## Prerequisites
 
-- Kubernetes 1.19+
-- Helm 3.2.0+
+- Kubernetes 1.23+
+- Helm 3.8.0+
 
 ## Installing the Chart
 
@@ -82,7 +82,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraContainerPorts`                             | Optionally specify extra list of additional port-mappings for the container                                               | `[]`                                |
 | `image.registry`                                  | Container image registry                                                                                                  | `docker.io`                         |
 | `image.repository`                                | Container image name                                                                                                      | `bitnami/kubernetes-event-exporter` |
-| `image.tag`                                       | Container image tag                                                                                                       | `1.4.0-debian-11-r0`                |
+| `image.tag`                                       | Container image tag                                                                                                       | `1.4.0-debian-11-r57`               |
 | `image.digest`                                    | Container image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                 | `""`                                |
 | `image.pullPolicy`                                | Container image pull policy                                                                                               | `IfNotPresent`                      |
 | `image.pullSecrets`                               | Specify docker-registry secret names as an array                                                                          | `[]`                                |
@@ -153,6 +153,24 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.prometheusRule.namespace`                | Namespace which Prometheus is running in                                                                                  | `""`                                |
 | `metrics.prometheusRule.labels`                   | Additional labels that can be used so PrometheusRule will be discovered by Prometheus                                     | `{}`                                |
 | `metrics.prometheusRule.groups`                   | Groups, containing the alert rules.                                                                                       | `[]`                                |
+
+### Autoscaling
+
+| Name                                  | Description                                                                                    | Value   |
+| ------------------------------------- | ---------------------------------------------------------------------------------------------- | ------- |
+| `autoscaling.vpa.enabled`             | Enable VPA                                                                                     | `false` |
+| `autoscaling.vpa.annotations`         | Annotations for VPA resource                                                                   | `{}`    |
+| `autoscaling.vpa.recommenders`        | Recommender responsible for generating recommendation for the object.                          | `[]`    |
+| `autoscaling.vpa.controlledResources` | VPA List of resources that the vertical pod autoscaler can control. Defaults to cpu and memory | `[]`    |
+| `autoscaling.vpa.maxAllowed`          | VPA Max allowed resources for the pod                                                          | `{}`    |
+| `autoscaling.vpa.minAllowed`          | VPA Min allowed resources for the pod                                                          | `{}`    |
+
+### VPA update policy
+
+| Name                                       | Description                                                                                                                                                            | Value  |
+| ------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| `autoscaling.vpa.updatePolicy.minReplicas` | Specifies minimal number of replicas which need to be alive for VPA Updater to attempt pod eviction                                                                    | `1`    |
+| `autoscaling.vpa.updatePolicy.updateMode`  | Autoscaling update policy Specifies whether recommended updates are applied when a Pod is started and whether recommended updates are applied during the life of a Pod | `Auto` |
 
 ## Configuration and installation details
 

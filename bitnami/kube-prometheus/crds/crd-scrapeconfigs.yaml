@@ -1,4 +1,4 @@
-# https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.67.1/example/prometheus-operator-crd/monitoring.coreos.com_scrapeconfigs.yaml
+# https://raw.githubusercontent.com/prometheus-operator/prometheus-operator/v0.68.0/example/prometheus-operator-crd/monitoring.coreos.com_scrapeconfigs.yaml
 ---
 apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
@@ -526,6 +526,44 @@ spec:
                   - server
                   type: object
                 type: array
+              dnsSDConfigs:
+                description: DNSSDConfigs defines a list of DNS service discovery
+                  configurations.
+                items:
+                  description: DNSSDConfig allows specifying a set of DNS domain names
+                    which are periodically queried to discover a list of targets.
+                    The DNS servers to be contacted are read from /etc/resolv.conf.
+                    See https://prometheus.io/docs/prometheus/latest/configuration/configuration/#dns_sd_config
+                  properties:
+                    names:
+                      description: A list of DNS domain names to be queried.
+                      items:
+                        type: string
+                      minItems: 1
+                      type: array
+                    port:
+                      description: The port number used if the query type is not SRV
+                        Ignored for SRV records
+                      type: integer
+                    refreshInterval:
+                      description: RefreshInterval configures the time after which
+                        the provided names are refreshed. If not set, Prometheus uses
+                        its default value.
+                      pattern: ^(0|(([0-9]+)y)?(([0-9]+)w)?(([0-9]+)d)?(([0-9]+)h)?(([0-9]+)m)?(([0-9]+)s)?(([0-9]+)ms)?)$
+                      type: string
+                    type:
+                      description: The type of DNS query to perform. One of SRV, A,
+                        AAAA or MX. If not set, Prometheus uses its default value.
+                      enum:
+                      - SRV
+                      - A
+                      - AAAA
+                      - MX
+                      type: string
+                  required:
+                  - names
+                  type: object
+                type: array
               fileSDConfigs:
                 description: FileSDConfigs defines a list of file service discovery
                   configurations.
@@ -778,6 +816,12 @@ spec:
                   - url
                   type: object
                 type: array
+              keepDroppedTargets:
+                description: "Per-scrape limit on the number of targets dropped by
+                  relabeling that will be kept in memory. 0 means no limit. \n It
+                  requires Prometheus >= v2.47.0."
+                format: int64
+                type: integer
               kubernetesSDConfigs:
                 description: KubernetesSDConfigs defines a list of Kubernetes service
                   discovery configurations.
@@ -812,6 +856,78 @@ spec:
                   and newer.
                 format: int64
                 type: integer
+              metricRelabelings:
+                description: MetricRelabelConfigs to apply to samples before ingestion.
+                items:
+                  description: "RelabelConfig allows dynamic rewriting of the label
+                    set for targets, alerts, scraped samples and remote write samples.
+                    \n More info: https://prometheus.io/docs/prometheus/latest/configuration/configuration/#relabel_config"
+                  properties:
+                    action:
+                      default: replace
+                      description: "Action to perform based on the regex matching.
+                        \n `Uppercase` and `Lowercase` actions require Prometheus
+                        >= v2.36.0. `DropEqual` and `KeepEqual` actions require Prometheus
+                        >= v2.41.0. \n Default: \"Replace\""
+                      enum:
+                      - replace
+                      - Replace
+                      - keep
+                      - Keep
+                      - drop
+                      - Drop
+                      - hashmod
+                      - HashMod
+                      - labelmap
+                      - LabelMap
+                      - labeldrop
+                      - LabelDrop
+                      - labelkeep
+                      - LabelKeep
+                      - lowercase
+                      - Lowercase
+                      - uppercase
+                      - Uppercase
+                      - keepequal
+                      - KeepEqual
+                      - dropequal
+                      - DropEqual
+                      type: string
+                    modulus:
+                      description: "Modulus to take of the hash of the source label
+                        values. \n Only applicable when the action is `HashMod`."
+                      format: int64
+                      type: integer
+                    regex:
+                      description: Regular expression against which the extracted
+                        value is matched.
+                      type: string
+                    replacement:
+                      description: "Replacement value against which a Replace action
+                        is performed if the regular expression matches. \n Regex capture
+                        groups are available."
+                      type: string
+                    separator:
+                      description: Separator is the string between concatenated SourceLabels.
+                      type: string
+                    sourceLabels:
+                      description: The source labels select values from existing labels.
+                        Their content is concatenated using the configured Separator
+                        and matched against the configured regular expression.
+                      items:
+                        description: LabelName is a valid Prometheus label name which
+                          may only contain ASCII letters, numbers, as well as underscores.
+                        pattern: ^[a-zA-Z_][a-zA-Z0-9_]*$
+                        type: string
+                      type: array
+                    targetLabel:
+                      description: "Label to which the resulting string is written
+                        in a replacement. \n It is mandatory for `Replace`, `HashMod`,
+                        `Lowercase`, `Uppercase`, `KeepEqual` and `DropEqual` actions.
+                        \n Regex capture groups are available."
+                      type: string
+                  type: object
+                type: array
               metricsPath:
                 description: MetricsPath HTTP path to scrape for metrics. If empty,
                   Prometheus uses the default value (e.g. /metrics).

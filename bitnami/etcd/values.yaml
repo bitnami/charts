@@ -1,4 +1,4 @@
-# Copyright VMware, Inc.
+﻿# Copyright VMware, Inc.
 # SPDX-License-Identifier: APACHE-2.0
 
 ## @section Global parameters
@@ -73,7 +73,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/etcd
-  tag: 3.5.9-debian-11-r76
+  tag: 3.5.9-debian-11-r144
   digest: ""
   ## @param image.pullPolicy etcd image pull policy
   ## Specify a imagePullPolicy
@@ -286,10 +286,12 @@ lifecycleHooks: {}
 ## etcd container ports to open
 ## @param containerPorts.client Client port to expose at container level
 ## @param containerPorts.peer Peer port to expose at container level
+## @param containerPorts.metrics Metrics port to expose at container level when metrics.useSeparateEndpoint is true
 ##
 containerPorts:
   client: 2379
   peer: 2380
+  metrics: 9090
 ## etcd pods' Security Context
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param podSecurityContext.enabled Enabled etcd pods' Security Context
@@ -304,8 +306,11 @@ podSecurityContext:
 ## @param containerSecurityContext.runAsUser Set etcd container's Security Context runAsUser
 ## @param containerSecurityContext.runAsNonRoot Set etcd container's Security Context runAsNonRoot
 ## @param containerSecurityContext.allowPrivilegeEscalation Force the child process to be run as nonprivilege
+## @param containerSecurityContext.seccompProfile.type indicates that the container will use the default Seccomp profile provided by the runtime environment
 ##
 containerSecurityContext:
+  seccompProfile:
+    type: RuntimeDefault
   enabled: true
   runAsUser: 1001
   runAsNonRoot: true
@@ -518,23 +523,30 @@ service:
   clusterIP: ""
   ## @param service.ports.client etcd client port
   ## @param service.ports.peer etcd peer port
+  ## @param service.ports.metrics etcd metrics port when metrics.useSeparateEndpoint is true
   ##
   ports:
     client: 2379
     peer: 2380
+    metrics: 9090
   ## @param service.nodePorts.client Specify the nodePort client value for the LoadBalancer and NodePort service types.
   ## @param service.nodePorts.peer Specify the nodePort peer value for the LoadBalancer and NodePort service types.
+  ## @param service.nodePorts.metrics Specify the nodePort metrics value for the LoadBalancer and NodePort service types. The metrics port is only exposed when metrics.useSeparateEndpoint is true.
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#type-nodeport
   ##
   nodePorts:
     client: ""
     peer: ""
+    metrics: ""
   ## @param service.clientPortNameOverride etcd client port name override
   ##
   clientPortNameOverride: ""
   ## @param service.peerPortNameOverride etcd peer port name override
   ##
   peerPortNameOverride: ""
+  ## @param service.metricsPortNameOverride etcd metrics port name override. The metrics port is only exposed when metrics.useSeparateEndpoint is true.
+  ##
+  metricsPortNameOverride: ""
   ## @param service.loadBalancerIP loadBalancerIP for the etcd service (optional, cloud specific)
   ## ref: https://kubernetes.io/docs/user-guide/services/#type-loadbalancer
   ##
@@ -633,7 +645,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r16
+    tag: 11-debian-11-r86
     digest: ""
     ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
     ##
@@ -725,11 +737,14 @@ metrics:
   ## @param metrics.enabled Expose etcd metrics
   ##
   enabled: false
+  ## @param metrics.useSeparateEndpoint Use a separate endpoint for exposing metrics
+  #
+  useSeparateEndpoint: false
   ## @param metrics.podAnnotations [object] Annotations for the Prometheus metrics on etcd pods
   ##
   podAnnotations:
     prometheus.io/scrape: "true"
-    prometheus.io/port: "{{ .Values.containerPorts.client }}"
+    prometheus.io/port: "{{ .Values.metrics.useSeparateEndpoint | ternary .Values.containerPorts.metrics .Values.containerPorts.client }}"
   ## Prometheus Service Monitor
   ## ref: https://github.com/coreos/prometheus-operator/blob/master/Documentation/api.md#endpoint
   ##

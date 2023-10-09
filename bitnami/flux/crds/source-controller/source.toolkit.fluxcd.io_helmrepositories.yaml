@@ -3,8 +3,7 @@ apiVersion: apiextensions.k8s.io/v1
 kind: CustomResourceDefinition
 metadata:
   annotations:
-    controller-gen.kubebuilder.io/version: v0.11.1
-  creationTimestamp: null
+    controller-gen.kubebuilder.io/version: v0.12.0
   name: helmrepositories.source.toolkit.fluxcd.io
 spec:
   group: source.toolkit.fluxcd.io
@@ -297,8 +296,27 @@ spec:
                 required:
                 - namespaceSelectors
                 type: object
+              certSecretRef:
+                description: "CertSecretRef can be given the name of a Secret containing
+                  either or both of \n - a PEM-encoded client certificate (`tls.crt`)
+                  and private key (`tls.key`); - a PEM-encoded CA certificate (`ca.crt`)
+                  \n and whichever are supplied, will be used for connecting to the
+                  registry. The client cert and key are useful if you are authenticating
+                  with a certificate; the CA cert is useful if you are using a self-signed
+                  server certificate. The Secret must be of type `Opaque` or `kubernetes.io/tls`.
+                  \n It takes precedence over the values specified in the Secret referred
+                  to by `.spec.secretRef`."
+                properties:
+                  name:
+                    description: Name of the referent.
+                    type: string
+                required:
+                - name
+                type: object
               interval:
-                description: Interval at which to check the URL for updates.
+                description: Interval at which the HelmRepository URL is checked for
+                  updates. This interval is approximate and may be subject to jitter
+                  to ensure efficient use of resources.
                 pattern: ^([0-9]+(\.[0-9]+)?(ms|s|m|h))+$
                 type: string
               passCredentials:
@@ -324,8 +342,9 @@ spec:
               secretRef:
                 description: SecretRef specifies the Secret containing authentication
                   credentials for the HelmRepository. For HTTP/S basic auth the secret
-                  must contain 'username' and 'password' fields. For TLS the secret
-                  must contain a 'certFile' and 'keyFile', and/or 'caFile' fields.
+                  must contain 'username' and 'password' fields. Support for TLS auth
+                  using the 'certFile' and 'keyFile', and/or 'caFile' keys is deprecated.
+                  Please use `.spec.certSecretRef` instead.
                 properties:
                   name:
                     description: Name of the referent.
@@ -368,10 +387,6 @@ spec:
                 description: Artifact represents the last successful HelmRepository
                   reconciliation.
                 properties:
-                  checksum:
-                    description: 'Checksum is the SHA256 checksum of the Artifact
-                      file. Deprecated: use Artifact.Digest instead.'
-                    type: string
                   digest:
                     description: Digest is the digest of the file in the form of '<algorithm>:<checksum>'.
                     pattern: ^[a-z0-9]+(?:[.+_-][a-z0-9]+)*:[a-zA-Z0-9=_-]+$
@@ -407,7 +422,9 @@ spec:
                       the Artifact contents.
                     type: string
                 required:
+                - lastUpdateTime
                 - path
+                - revision
                 - url
                 type: object
               conditions:

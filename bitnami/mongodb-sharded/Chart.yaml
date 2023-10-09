@@ -4,28 +4,35 @@
 annotations:
   category: Database
   licenses: Apache-2.0
+  images: |
+    - name: mongodb-exporter
+      image: docker.io/bitnami/mongodb-exporter:0.39.0-debian-11-r115
+    - name: mongodb-sharded
+      image: docker.io/bitnami/mongodb-sharded:7.0.2-debian-11-r0
+    - name: os-shell
+      image: docker.io/bitnami/os-shell:11-debian-11-r83
 apiVersion: v2
-appVersion: 6.0.8
+appVersion: 7.0.2
 dependencies:
-  - name: common
-    repository: oci://registry-1.docker.io/bitnamicharts
-    tags:
-      - bitnami-common
-    version: 2.x.x
+- name: common
+  repository: oci://registry-1.docker.io/bitnamicharts
+  tags:
+  - bitnami-common
+  version: 2.x.x
 description: MongoDB(R) is an open source NoSQL database that uses JSON for data storage. MongoDB(TM) Sharded improves scalability and reliability for large datasets by distributing data across multiple machines.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/mongodb/img/mongodb-stack-220x234.png
 keywords:
-  - mongodb
-  - database
-  - nosql
-  - cluster
-  - replicaset
-  - replication
+- mongodb
+- database
+- nosql
+- cluster
+- replicaset
+- replication
 maintainers:
-  - name: VMware, Inc.
-    url: https://github.com/bitnami/charts
+- name: VMware, Inc.
+  url: https://github.com/bitnami/charts
 name: mongodb-sharded
 sources:
-  - https://github.com/bitnami/charts/tree/main/bitnami/mongodb-sharded
-version: 6.5.7
+- https://github.com/bitnami/charts/tree/main/bitnami/mongodb-sharded
+version: 7.0.1

@@ -9,19 +9,11 @@ kind: Service
 metadata:
   name: {{ include "argocd.applicationSet" . }}
   namespace: {{ .Release.Namespace | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: applicationSet
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if or .Values.commonAnnotations .Values.applicationSet.service.annotations }}
-  annotations:
-  {{- if .Values.commonAnnotations }}
-  {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-  {{- end }}
-  {{- if .Values.applicationSet.service.annotations }}
-  {{- include "common.tplvalues.render" ( dict "value" .Values.applicationSet.service.annotations "context" $ ) | nindent 4 }}
-  {{- end }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.applicationSet.service.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $) | nindent 4 }}
   {{- end }}
 spec:
   type: {{ .Values.applicationSet.service.type }}
@@ -55,6 +47,7 @@ spec:
     {{- if .Values.applicationSet.service.extraPorts }}
     {{- include "common.tplvalues.render" (dict "value" .Values.applicationSet.service.extraPorts "context" $) | nindent 4 }}
     {{- end }}
-  selector: {{- include "common.labels.matchLabels" . | nindent 4 }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.applicationSet.podLabels .Values.commonLabels ) "context" . ) }}
+  selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: applicationSet
 {{- end }}

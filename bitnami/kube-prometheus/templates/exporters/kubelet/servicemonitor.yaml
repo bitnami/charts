@@ -9,22 +9,12 @@ kind: ServiceMonitor
 metadata:
   name: {{ template "kube-prometheus.fullname" . }}-kubelet
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.kubelet.serviceMonitor.labels .Values.commonLabels ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: kubelet
-    {{- if .Values.kubelet.serviceMonitor.labels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.kubelet.serviceMonitor.labels "context" $ ) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if or .Values.commonAnnotations .Values.kubelet.serviceMonitor.annotations }}
-  annotations:
-    {{- if .Values.commonAnnotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
-    {{- end }}
-    {{- if .Values.kubelet.serviceMonitor.annotations }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.kubelet.serviceMonitor.annotations "context" $ ) | nindent 4 }}
-    {{- end }}
+  {{- $annotations := include "common.tplvalues.merge" ( dict "values" ( list .Values.kubelet.serviceMonitor.annotations .Values.commonAnnotations ) "context" . ) }}
+  annotations: {{- include "common.tplvalues.render" ( dict "value" $annotations "context" $ ) | nindent 4 }}
   {{- end }}
 spec:
   jobLabel: {{ .Values.kubelet.serviceMonitor.jobLabel }}
@@ -34,6 +24,9 @@ spec:
   namespaceSelector:
     matchNames:
       - {{ .Values.kubelet.namespace }}
+  {{- with .Values.kubelet.serviceMonitor.sampleLimit }}
+  sampleLimit: {{ . }}
+  {{- end }}
   endpoints:
       {{- $scheme := ternary "https" "http" .Values.kubelet.serviceMonitor.https }}
     - port: {{ printf "%s-metrics" $scheme }}

@@ -4,26 +4,33 @@
 annotations:
   category: Analytics
   licenses: Apache-2.0
+  images: |
+    - name: grafana-image-renderer
+      image: docker.io/bitnami/grafana-image-renderer:3.8.3-debian-11-r3
+    - name: grafana
+      image: docker.io/bitnami/grafana:10.1.4-debian-11-r3
+    - name: os-shell
+      image: docker.io/bitnami/os-shell:11-debian-11-r86
 apiVersion: v2
-appVersion: 10.0.3
+appVersion: 10.1.4
 dependencies:
-  - name: common
-    repository: oci://registry-1.docker.io/bitnamicharts
-    tags:
-      - bitnami-common
-    version: 2.x.x
+- name: common
+  repository: oci://registry-1.docker.io/bitnamicharts
+  tags:
+  - bitnami-common
+  version: 2.x.x
 description: Grafana is an open source metric analytics and visualization suite for visualizing time series data that supports various types of data sources.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/grafana/img/grafana-stack-220x234.png
 keywords:
-  - analytics
-  - monitoring
-  - metrics
-  - logs
+- analytics
+- monitoring
+- metrics
+- logs
 maintainers:
-  - name: VMware, Inc.
-    url: https://github.com/bitnami/charts
+- name: VMware, Inc.
+  url: https://github.com/bitnami/charts
 name: grafana
 sources:
-  - https://github.com/bitnami/charts/tree/main/bitnami/grafana
-version: 9.0.5
+- https://github.com/bitnami/charts/tree/main/bitnami/grafana
+version: 9.2.4

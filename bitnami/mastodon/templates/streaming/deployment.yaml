@@ -9,12 +9,9 @@ kind: Deployment
 metadata:
   name: {{ template "mastodon.streaming.fullname" . }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" . | nindent 4 }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: mastodon
     app.kubernetes.io/component: streaming
-    {{- if .Values.commonLabels }}
-    {{- include "common.tplvalues.render" ( dict "value" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
   {{- end }}
@@ -23,19 +20,17 @@ spec:
   {{- if .Values.streaming.updateStrategy }}
   strategy: {{- toYaml .Values.streaming.updateStrategy | nindent 4 }}
   {{- end }}
+  {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.streaming.podLabels .Values.commonLabels ) "context" . ) }}
   selector:
-    matchLabels: {{- include "common.labels.matchLabels" . | nindent 6 }}
+    matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 6 }}
       app.kubernetes.io/component: streaming
   template:
     metadata:
       {{- if .Values.streaming.podAnnotations }}
       annotations: {{- include "common.tplvalues.render" (dict "value" .Values.streaming.podAnnotations "context" $) | nindent 8 }}
       {{- end }}
-      labels: {{- include "common.labels.standard" . | nindent 8 }}
+      labels: {{- include "common.labels.standard" ( dict "customLabels" $podLabels "context" $ ) | nindent 8 }}
         app.kubernetes.io/component: streaming
-        {{- if .Values.streaming.podLabels }}
-        {{- include "common.tplvalues.render" (dict "value" .Values.streaming.podLabels "context" $) | nindent 8 }}
-        {{- end }}
     spec:
       serviceAccountName: {{ template "mastodon.serviceAccountName" . }}
       {{- include "mastodon.imagePullSecrets" . | nindent 6 }}
@@ -46,8 +41,8 @@ spec:
       affinity: {{- include "common.tplvalues.render" ( dict "value" .Values.streaming.affinity "context" $) | nindent 8 }}
       {{- else }}
       affinity:
-        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.streaming.podAffinityPreset "component" "streaming" "context" $) | nindent 10 }}
-        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.streaming.podAntiAffinityPreset "component" "streaming" "context" $) | nindent 10 }}
+        podAffinity: {{- include "common.affinities.pods" (dict "type" .Values.streaming.podAffinityPreset "component" "streaming" "customLabels" $podLabels "context" $) | nindent 10 }}
+        podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.streaming.podAntiAffinityPreset "component" "streaming" "customLabels" $podLabels "context" $) | nindent 10 }}
         nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.streaming.nodeAffinityPreset.type "key" .Values.streaming.nodeAffinityPreset.key "values" .Values.streaming.nodeAffinityPreset.values) | nindent 10 }}
       {{- end }}
       {{- if .Values.streaming.nodeSelector }}
