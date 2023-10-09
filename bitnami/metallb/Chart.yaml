@@ -8,7 +8,7 @@ annotations:
     - name: metallb-speaker
       image: docker.io/bitnami/metallb-speaker:0.13.11-debian-11-r30
     - name: metallb-controller
-      image: docker.io/bitnami/metallb-controller:0.13.11-debian-11-r26
+      image: docker.io/bitnami/metallb-controller:0.13.11-debian-11-r28
 apiVersion: v2
 appVersion: 0.13.11
 dependencies:
@@ -35,4 +35,4 @@ maintainers:
 name: metallb
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/metallb
-version: 4.7.7
+version: 4.7.8
