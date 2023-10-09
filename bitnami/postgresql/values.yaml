@@ -1400,7 +1400,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/postgres-exporter
-    tag: 0.14.0-debian-11-r12
+    tag: 0.14.0-debian-11-r14
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
