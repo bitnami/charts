@@ -6,7 +6,7 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: os-shell
-      image: docker.io/bitnami/os-shell:11-debian-11-r86
+      image: docker.io/bitnami/os-shell:11-debian-11-r89
     - name: postgres-exporter
       image: docker.io/bitnami/postgres-exporter:0.14.0-debian-11-r14
     - name: postgresql
@@ -35,4 +35,4 @@ maintainers:
 name: postgresql
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/postgresql
-version: 13.1.2
+version: 13.1.3
