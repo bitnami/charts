@@ -848,7 +848,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `rbac.create`                             | Specifies whether RBAC resources should be created                                                    | `true`                |
 | `redis.image.registry`                    | Redis image registry                                                                                  | `docker.io`           |
 | `redis.image.repository`                  | Redis image repository                                                                                | `bitnami/redis`       |
-| `redis.image.tag`                         | Redis image tag (immutable tags are recommended)                                                      | `7.2.1-debian-11-r24` |
+| `redis.image.tag`                         | Redis image tag (immutable tags are recommended)                                                      | `7.2.1-debian-11-r26` |
 | `redis.image.digest`                      | Redis image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
 | `redis.image.pullPolicy`                  | Redis image pull policy                                                                               | `IfNotPresent`        |
 | `redis.image.pullSecrets`                 | Redis image pull secrets                                                                              | `[]`                  |
