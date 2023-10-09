@@ -220,7 +220,7 @@ helm delete --purge my-release
 | `volumePermissions.enabled`            | Enable init container that changes the owner and group of the persistent volume                                    | `false`            |
 | `volumePermissions.image.registry`     | OS Shell + Utility image registry                                                                                  | `docker.io`        |
 | `volumePermissions.image.repository`   | OS Shell + Utility image repository                                                                                | `bitnami/os-shell` |
-| `volumePermissions.image.tag`          | OS Shell + Utility image tag (immutable tags are recommended)                                                      | `11-debian-11-r86` |
+| `volumePermissions.image.tag`          | OS Shell + Utility image tag (immutable tags are recommended)                                                      | `11-debian-11-r89` |
 | `volumePermissions.image.digest`       | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`               |
 | `volumePermissions.image.pullPolicy`   | OS Shell + Utility image pull policy                                                                               | `IfNotPresent`     |
 | `volumePermissions.image.pullSecrets`  | OS Shell + Utility image pull secrets                                                                              | `[]`               |
