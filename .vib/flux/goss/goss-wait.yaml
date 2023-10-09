@@ -10,4 +10,13 @@ addr:
   tcp://podinfo:9898:
     reachable: true
     timeout: 2000
+{{ else }}
+# Dummy test for goss not to fail
+command:
+  includetest:
+    exec: echo 'air-gapped'
+    exit-status: 0
+    stdout:
+    - air-gapped
+    stderr: []
 {{ end }}
