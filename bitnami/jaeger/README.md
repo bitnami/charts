@@ -76,15 +76,15 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Jaeger parameters
 
-| Name                | Description                                                                                            | Value                  |
-| ------------------- | ------------------------------------------------------------------------------------------------------ | ---------------------- |
-| `image.registry`    | Jaeger image registry                                                                                  | `docker.io`            |
-| `image.repository`  | Jaeger image repository                                                                                | `bitnami/jaeger`       |
-| `image.tag`         | Jaeger image tag (immutable tags are recommended)                                                      | `1.49.0-debian-11-r25` |
-| `image.digest`      | Jaeger image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
-| `image.pullPolicy`  | image pull policy                                                                                      | `IfNotPresent`         |
-| `image.pullSecrets` | Jaeger image pull secrets                                                                              | `[]`                   |
-| `image.debug`       | Enable image debug mode                                                                                | `false`                |
+| Name                | Description                                                                                            | Value                 |
+| ------------------- | ------------------------------------------------------------------------------------------------------ | --------------------- |
+| `image.registry`    | Jaeger image registry                                                                                  | `docker.io`           |
+| `image.repository`  | Jaeger image repository                                                                                | `bitnami/jaeger`      |
+| `image.tag`         | Jaeger image tag (immutable tags are recommended)                                                      | `1.50.0-debian-11-r0` |
+| `image.digest`      | Jaeger image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
+| `image.pullPolicy`  | image pull policy                                                                                      | `IfNotPresent`        |
+| `image.pullSecrets` | Jaeger image pull secrets                                                                              | `[]`                  |
+| `image.debug`       | Enable image debug mode                                                                                | `false`               |
 
 ### Query deployment parameters
 
@@ -356,7 +356,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ---------------------- |
 | `cqlshImage.registry`                        | Cassandra image registry                                                                                  | `docker.io`            |
 | `cqlshImage.repository`                      | Cassandra image repository                                                                                | `bitnami/cassandra`    |
-| `cqlshImage.tag`                             | Cassandra image tag (immutable tags are recommended)                                                      | `4.0.11-debian-11-r73` |
+| `cqlshImage.tag`                             | Cassandra image tag (immutable tags are recommended)                                                      | `4.0.11-debian-11-r76` |
 | `cqlshImage.digest`                          | Cassandra image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
 | `cqlshImage.pullPolicy`                      | image pull policy                                                                                         | `IfNotPresent`         |
 | `cqlshImage.pullSecrets`                     | Cassandra image pull secrets                                                                              | `[]`                   |
