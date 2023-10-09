@@ -121,7 +121,7 @@ dags:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r86
+    tag: 11-debian-11-r89
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1286,7 +1286,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/airflow-exporter
-    tag: 0.20220314.0-debian-11-r433
+    tag: 0.20220314.0-debian-11-r436
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
