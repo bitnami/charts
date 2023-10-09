@@ -8,7 +8,7 @@ annotations:
     - name: alertmanager
       image: docker.io/bitnami/alertmanager:0.26.0-debian-11-r41
     - name: os-shell
-      image: docker.io/bitnami/os-shell:11-debian-11-r86
+      image: docker.io/bitnami/os-shell:11-debian-11-r89
     - name: prometheus
       image: docker.io/bitnami/prometheus:2.47.1-debian-11-r1
     - name: thanos
@@ -35,4 +35,4 @@ sources:
 - https://github.com/bitnami/containers/tree/main/bitnami/prometheus
 - https://github.com/prometheus/prometheus
 - https://github.com/prometheus-community/helm-charts
-version: 0.3.3
+version: 0.3.4
