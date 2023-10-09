@@ -82,7 +82,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | --------------------- |
 | `server.image.registry`                                  | Parse image registry                                                                                                     | `docker.io`           |
 | `server.image.repository`                                | Parse image repository                                                                                                   | `bitnami/parse`       |
-| `server.image.tag`                                       | Parse image tag (immutable tags are recommended)                                                                         | `6.3.0-debian-11-r17` |
+| `server.image.tag`                                       | Parse image tag (immutable tags are recommended)                                                                         | `6.3.0-debian-11-r19` |
 | `server.image.digest`                                    | Parse image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                    | `""`                  |
 | `server.image.pullPolicy`                                | Image pull policy                                                                                                        | `IfNotPresent`        |
 | `server.image.pullSecrets`                               | Specify docker-registry secret names as an array                                                                         | `[]`                  |
