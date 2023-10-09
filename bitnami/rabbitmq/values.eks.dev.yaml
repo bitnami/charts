@@ -1,0 +1,23 @@
+global:
+  storageClass: "ebs"
+  # for example this change is per env
+
+ingress:
+  ## @param ingress.enabled Enable ingress resource for Management console
+  ##
+  enabled: true
+  # for example this change is per env
+
+  ## @param ingress.path Path for the default host. You may need to set this to '/*' in order to use this with ALB ingress controllers.
+  ##
+  path: /
+
+  ## @param ingress.pathType Ingress path type
+  ##
+  pathType: Prefix
+  ## @param ingress.hostname Default host for the ingress resource
+  ##
+  hostname: rabbitmq-dev.nativeedge.dell.com
+  # for example this change is per env
+
+  

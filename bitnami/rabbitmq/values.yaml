@@ -916,7 +916,9 @@ persistence:
   ##   set, choosing the default provisioner.  (gp2 on AWS, standard on
   ##   GKE, AWS & OpenStack)
   ##
+
   storageClass: ""
+  # for example this change is per env
   ## @param persistence.selector Selector to match an existing Persistent Volume
   ## selector:
   ##   matchLabels:
@@ -1097,6 +1099,7 @@ ingress:
   ## @param ingress.enabled Enable ingress resource for Management console
   ##
   enabled: false
+  # for example this change is per env
 
   ## @param ingress.path Path for the default host. You may need to set this to '/*' in order to use this with ALB ingress controllers.
   ##
@@ -1108,6 +1111,8 @@ ingress:
   ## @param ingress.hostname Default host for the ingress resource
   ##
   hostname: rabbitmq.local
+  # for example this change is per env
+
   ## @param ingress.annotations Additional annotations for the Ingress resource. To enable certificate autogeneration, place here your cert-manager annotations.
   ## For a full list of possible ingress annotations, please see
   ## ref: https://github.com/kubernetes/ingress-nginx/blob/master/docs/user-guide/nginx-configuration/annotations.md
