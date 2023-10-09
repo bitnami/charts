@@ -620,7 +620,7 @@ meta:
   image:
     registry: docker.io
     repository: bitnami/supabase-postgres-meta
-    tag: 0.70.0-debian-11-r13
+    tag: 0.70.0-debian-11-r16
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2389,7 +2389,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r86
+    tag: 11-debian-11-r89
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
