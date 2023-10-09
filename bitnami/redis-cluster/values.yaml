@@ -787,6 +787,12 @@ cluster:
     ##
     hostMode: false
     service:
+      ## @param cluster.externalAccess.service.disableLoadBalancerIP Disable use of `Service.spec.loadBalancerIP`
+      ##
+      disableLoadBalancerIP: false
+      ## @param cluster.externalAccess.service.loadBalancerIPAnnotaion Name of annotation to specify fixed IP for service in. Disables `Service.spec.loadBalancerIP` if not empty
+      ##
+      loadBalancerIPAnnotaion: ""
       ## @param cluster.externalAccess.service.type Type for the services used to expose every Pod
       ## At this moment only LoadBalancer is supported
       ##
