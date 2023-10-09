@@ -81,7 +81,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ---------------------- |
 | `image.registry`                        | Matomo image registry                                                                                                 | `docker.io`            |
 | `image.repository`                      | Matomo Image name                                                                                                     | `bitnami/matomo`       |
-| `image.tag`                             | Matomo Image tag                                                                                                      | `4.15.1-debian-11-r61` |
+| `image.tag`                             | Matomo Image tag                                                                                                      | `4.15.1-debian-11-r62` |
 | `image.digest`                          | Matomo image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                | `""`                   |
 | `image.pullPolicy`                      | Matomo image pull policy                                                                                              | `IfNotPresent`         |
 | `image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                      | `[]`                   |
@@ -248,7 +248,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`           | Start a exporter side-car                                                                                       | `false`                   |
 | `metrics.image.registry`    | Apache exporter image registry                                                                                  | `docker.io`               |
 | `metrics.image.repository`  | Apache exporter image repository                                                                                | `bitnami/apache-exporter` |
-| `metrics.image.tag`         | Apache exporter image tag                                                                                       | `1.0.2-debian-11-r5`      |
+| `metrics.image.tag`         | Apache exporter image tag                                                                                       | `1.0.2-debian-11-r8`      |
 | `metrics.image.digest`      | Apache exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
 | `metrics.image.pullPolicy`  | Image pull policy                                                                                               | `IfNotPresent`            |
 | `metrics.image.pullSecrets` | Specify docker-registry secret names as an array                                                                | `[]`                      |
