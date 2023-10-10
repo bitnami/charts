@@ -586,6 +586,10 @@ master:
 ##
 
 replica:
+  ## @param replica.kind Use either DaemonSet or StatefulSet (default)
+  ## ref: https://kubernetes.io/docs/concepts/workloads/controllers/statefulset/
+  ##
+  kind: StatefulSet
   ## @param replica.replicaCount Number of Redis&reg; replicas to deploy
   ##
   replicaCount: 3

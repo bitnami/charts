@@ -1,0 +1,33 @@
+{{- /*
+Copyright VMware, Inc.
+SPDX-License-Identifier: APACHE-2.0
+*/}}
+
+{{- if and (eq .Values.architecture "replication") (not .Values.sentinel.enabled) (not (eq .Values.replica.kind "StatefulSet")) (.Values.replica.persistence.enabled) (not .Values.replica.persistence.existingClaim) }}
+kind: PersistentVolumeClaim
+apiVersion: v1
+metadata:
+  name: {{ printf "redis-data-%s-replica" (include "common.names.fullname" .) }}
+  namespace: {{ .Release.Namespace | quote }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.replica.persistence.labels .Values.commonLabels ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
+    app.kubernetes.io/component: replica
+  {{- if .Values.replica.persistence.annotations }}
+  annotations: {{- toYaml .Values.replica.persistence.annotations | nindent 4 }}
+  {{- end }}
+spec:
+  accessModes:
+  {{- range .Values.replica.persistence.accessModes }}
+    - {{ . | quote }}
+  {{- end }}
+  resources:
+    requests:
+      storage: {{ .Values.replica.persistence.size | quote }}
+  {{- if .Values.replica.persistence.selector }}
+  selector: {{- include "common.tplvalues.render" (dict "value" .Values.replica.persistence.selector "context" $) | nindent 4 }}
+  {{- end }}
+  {{- if .Values.replica.persistence.dataSource }}
+  dataSource: {{- include "common.tplvalues.render" (dict "value" .Values.replica.persistence.dataSource "context" $) | nindent 4 }}
+  {{- end }}
+  {{- include "common.storage.class" (dict "persistence" .Values.replica.persistence "global" .Values.global) | nindent 2 }}
+{{- end }}
