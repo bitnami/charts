@@ -26,8 +26,8 @@ Looking to use NGINX Ingress Controller in production? Try [VMware Application C
 
 ## Prerequisites
 
-- Kubernetes 1.19+
-- Helm 3.2.0+
+- Kubernetes 1.23+
+- Helm 3.8.0+
 
 ## Installing the Chart
 
@@ -270,6 +270,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `service.labels`                   | Labels for controller service                                                                                                          | `{}`           |
 | `service.clusterIP`                | Controller Internal Cluster Service IP (optional)                                                                                      | `""`           |
 | `service.externalIPs`              | Controller Service external IP addresses                                                                                               | `[]`           |
+| `service.ipFamilyPolicy`           | Controller Service ipFamilyPolicy (optional, cloud specific)                                                                           | `""`           |
+| `service.ipFamilies`               | Controller Service ipFamilies (optional, cloud specific)                                                                               | `[]`           |
 | `service.loadBalancerIP`           | Kubernetes LoadBalancerIP to request for Controller (optional, cloud specific)                                                         | `""`           |
 | `service.loadBalancerSourceRanges` | List of IP CIDRs allowed access to load balancer (if supported)                                                                        | `[]`           |
 | `service.extraPorts`               | Extra ports to expose (normally used with the `sidecar` value)                                                                         | `[]`           |

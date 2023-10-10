@@ -6,11 +6,11 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: apache-exporter
-      image: docker.io/bitnami/apache-exporter:1.0.1-debian-11-r50
+      image: docker.io/bitnami/apache-exporter:1.0.2-debian-11-r8
     - name: mediawiki
-      image: docker.io/bitnami/mediawiki:1.40.0-debian-11-r70
+      image: docker.io/bitnami/mediawiki:1.40.1-debian-11-r3
 apiVersion: v2
-appVersion: 1.40.0
+appVersion: 1.40.1
 dependencies:
 - condition: mariadb.enabled
   name: mariadb
@@ -39,4 +39,4 @@ maintainers:
 name: mediawiki
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/mediawiki
-version: 16.1.2
+version: 16.1.5
