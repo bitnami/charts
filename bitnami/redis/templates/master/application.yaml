@@ -493,10 +493,10 @@ spec:
           persistentVolumeClaim:
             claimName: {{ printf "redis-data-%s-master" (include "common.names.fullname" .) }}
   {{- else }}
-  {{- if .Values.persistentVolumeClaimRetentionPolicy.enabled }}
+  {{- if .Values.master.persistentVolumeClaimRetentionPolicy.enabled }}
   persistentVolumeClaimRetentionPolicy:
-    whenDeleted: {{ .Values.persistentVolumeClaimRetentionPolicy.whenDeleted }}
-    whenScaled: {{ .Values.persistentVolumeClaimRetentionPolicy.whenScaled }}
+    whenDeleted: {{ .Values.master.persistentVolumeClaimRetentionPolicy.whenDeleted }}
+    whenScaled: {{ .Values.master.persistentVolumeClaimRetentionPolicy.whenScaled }}
   {{- end }}
   volumeClaimTemplates:
     - apiVersion: v1
