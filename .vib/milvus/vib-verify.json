@@ -31,12 +31,6 @@
       },
       "actions": [
         {
-          "action_id": "health-check",
-          "params": {
-            "endpoint": "lb-milvus-attu-http"
-          }
-        },
-        {
           "action_id": "goss",
           "params": {
             "resources": {
