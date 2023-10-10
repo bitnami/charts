@@ -145,6 +145,12 @@ publishHostIP: false
 ## @param serviceTypeFilter The service types to take care about (default: all, options: ClusterIP, NodePort, LoadBalancer, ExternalName)
 ##
 serviceTypeFilter: []
+## Chart Validation
+##
+validation:
+  ## @param validation.enabled Enable chart validation
+  ##
+  enabled: true
 ## Akamai configuration to be set via arguments/env. variables
 ##
 akamai:
@@ -1110,3 +1116,4 @@ metrics:
     ## @param  metrics.googlePodMonitor.endpoint The endpoint for Google Managed Prometheus scraping the metrics
     ##
     endpoint: /metrics
+
