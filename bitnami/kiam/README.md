@@ -28,8 +28,8 @@ Looking to use Kiam in production? Try [VMware Application Catalog](https://bitn
 
 ## Prerequisites
 
-- Kubernetes 1.19+ in AWS
-- Helm 3.2.0+
+- Kubernetes 1.23+ in AWS
+- Helm 3.8.0+
 
 ## Installing the Chart
 
@@ -83,7 +83,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | ---------------------------------------------------------------------------------------------------- | ---------------------- |
 | `image.registry`    | kiam image registry                                                                                  | `docker.io`            |
 | `image.repository`  | kiam image name                                                                                      | `bitnami/kiam`         |
-| `image.tag`         | kiam image tag                                                                                       | `4.2.0-debian-11-r403` |
+| `image.tag`         | kiam image tag                                                                                       | `4.2.0-debian-11-r420` |
 | `image.digest`      | kiam image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
 | `image.pullPolicy`  | kiam image pull policy                                                                               | `IfNotPresent`         |
 | `image.pullSecrets` | Specify docker-registry secret names as an array                                                     | `[]`                   |

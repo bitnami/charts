@@ -26,8 +26,8 @@ Looking to use phpMyAdmin in production? Try [VMware Application Catalog](https:
 
 ## Prerequisites
 
-- Kubernetes 1.8+ with Beta APIs enabled
-- Helm 3.2.0+
+- Kubernetes 1.23+
+- Helm 3.8.0+
 
 ## Installing the Chart
 
@@ -78,7 +78,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------- | ---------------------------------------------------------------------------------------------------------- | ---------------------- |
 | `image.registry`     | phpMyAdmin image registry                                                                                  | `docker.io`            |
 | `image.repository`   | phpMyAdmin image repository                                                                                | `bitnami/phpmyadmin`   |
-| `image.tag`          | phpMyAdmin image tag (immutable tags are recommended)                                                      | `5.2.1-debian-11-r103` |
+| `image.tag`          | phpMyAdmin image tag (immutable tags are recommended)                                                      | `5.2.1-debian-11-r123` |
 | `image.digest`       | phpMyAdmin image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
 | `image.pullPolicy`   | Image pull policy                                                                                          | `IfNotPresent`         |
 | `image.pullSecrets`  | Specify docker-registry secret names as an array                                                           | `[]`                   |
@@ -215,7 +215,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                          | Start a side-car prometheus exporter                                                                            | `false`                   |
 | `metrics.image.registry`                   | Apache exporter image registry                                                                                  | `docker.io`               |
 | `metrics.image.repository`                 | Apache exporter image repository                                                                                | `bitnami/apache-exporter` |
-| `metrics.image.tag`                        | Apache exporter image tag (immutable tags are recommended)                                                      | `1.0.1-debian-11-r50`     |
+| `metrics.image.tag`                        | Apache exporter image tag (immutable tags are recommended)                                                      | `1.0.2-debian-11-r8`      |
 | `metrics.image.digest`                     | Apache exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
 | `metrics.image.pullPolicy`                 | Image pull policy                                                                                               | `IfNotPresent`            |
 | `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                                                                | `[]`                      |
