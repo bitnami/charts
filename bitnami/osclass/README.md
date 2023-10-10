@@ -80,7 +80,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | ------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`    | Osclass image registry                                                                                  | `docker.io`           |
 | `image.repository`  | Osclass image repository                                                                                | `bitnami/osclass`     |
-| `image.tag`         | Osclass image tag (immutable tags are recommended)                                                      | `8.1.2-debian-11-r98` |
+| `image.tag`         | Osclass image tag (immutable tags are recommended)                                                      | `8.1.2-debian-11-r99` |
 | `image.digest`      | Osclass image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
 | `image.pullPolicy`  | Osclass image pull policy                                                                               | `IfNotPresent`        |
 | `image.pullSecrets` | Osclass image pull secrets                                                                              | `[]`                  |
