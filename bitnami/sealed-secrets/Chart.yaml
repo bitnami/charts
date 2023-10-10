@@ -6,7 +6,7 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: sealed-secrets
-      image: docker.io/bitnami/sealed-secrets:0.24.1-debian-11-r0
+      image: docker.io/bitnami/sealed-secrets:0.24.1-debian-11-r1
 apiVersion: v2
 appVersion: 0.24.1
 dependencies:
@@ -28,4 +28,4 @@ maintainers:
 name: sealed-secrets
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/sealed-secrets
-version: 1.5.6
+version: 1.5.7
