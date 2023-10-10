@@ -262,7 +262,7 @@ Sometimes it is of interest to run the tests locally, for example during develop
 1. Deploy the target Chart in your cluster, using the same installation parameters specified in the `vib-verify.json` pipeline file
 
     ```bash
-    $ helm install nginx bitnami/nginx -f .vib/nginx/runtime-parameters.yaml
+    helm install nginx bitnami/nginx -f .vib/nginx/runtime-parameters.yaml
     ```
 
 2. Download and install [Cypress](https://www.cypress.io/). The version currently used is `9.5.4`
@@ -393,7 +393,7 @@ Sometimes it is of interest to run the tests locally, for example during develop
 1. Deploy the target Chart in your cluster, using the same installation parameters specified in the `vib-verify.json` pipeline file
 
     ```bash
-    $ helm install metallb bitnami/metallb -f .vib/metallb/runtime-parameters.yaml
+    helm install metallb bitnami/metallb -f .vib/metallb/runtime-parameters.yaml
     ```
 
 2. Download and [install Ginkgo](https://onsi.github.io/ginkgo/#installing-ginkgo) in your system
@@ -464,7 +464,7 @@ Sometimes it is of interest to run the tests locally, for example during develop
 1. Deploy the target Chart in your cluster, using the same installation parameters specified in the `vib-verify.json` pipeline file
 
     ```bash
-    $ helm install nginx bitnami/nginx -f .vib/nginx/runtime-parameters.yaml
+    helm install nginx bitnami/nginx -f .vib/nginx/runtime-parameters.yaml
     ```
 
 2. Download the [GOSS binary for Linux AMD64](https://github.com/goss-org/goss/releases/)
