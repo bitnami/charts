@@ -1,8 +1,8 @@
 # Copyright VMware, Inc.
 # SPDX-License-Identifier: APACHE-2.0
 
-{{ if not ( has "air-gapped" .Vars.target_platform_properties ) }}
 addr:
+  {{ if not ( has "air-gapped" .Vars.target_platform_properties ) }}
   {{- $chartReleaseName := (index .Vars.extraDeploy 3).metadata.name }}
   tcp://{{ $chartReleaseName }}:80:
     reachable: true
@@ -10,13 +10,7 @@ addr:
   tcp://podinfo:9898:
     reachable: true
     timeout: 2000
-{{ else }}
-# Dummy test for goss not to fail
-command:
-  includetest:
-    exec: echo 'air-gapped'
-    exit-status: 0
-    stdout:
-    - air-gapped
-    stderr: []
-{{ end }}
+  {{ end }}
+  tcp://127.0.0.1:{{ .Vars.sourceController.containerPorts.http }}:
+    reachable: true
+    timeout: 2000
