@@ -244,7 +244,7 @@ tls:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.25.2-debian-11-r45
+    tag: 1.25.2-debian-11-r46
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
