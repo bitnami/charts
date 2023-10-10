@@ -35,8 +35,8 @@ Looking to use Kubeapps in production? Try [VMware Application Catalog](https://
 
 ## Prerequisites
 
-- Kubernetes 1.16+ (tested with both bare-metal and managed clusters, including EKS, AKS, GKE and Tanzu Kubernetes Grid, as well as dev clusters, such as Kind, Minikube and Docker for Desktop Kubernetes)
-- Helm 3.0.2+
+- Kubernetes 1.23+
+- Helm 3.8.0+
 - Administrative access to the cluster to create Custom Resource Definitions (CRDs)
 - PV provisioner support in the underlying infrastructure (required for PostgreSQL database)
 

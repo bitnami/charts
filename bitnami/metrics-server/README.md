@@ -24,8 +24,8 @@ Looking to use Metrics Server in production? Try [VMware Application Catalog](ht
 
 ## Prerequisites
 
-- Kubernetes 1.19+
-- Helm 3.2.0+
+- Kubernetes 1.23+
+- Helm 3.8.0+
 
 ## Installing the Chart
 
@@ -79,7 +79,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------ |
 | `image.registry`                                  | Metrics Server image registry                                                                                                                                            | `docker.io`              |
 | `image.repository`                                | Metrics Server image repository                                                                                                                                          | `bitnami/metrics-server` |
-| `image.tag`                                       | Metrics Server image tag (immutable tags are recommended)                                                                                                                | `0.6.4-debian-11-r50`    |
+| `image.tag`                                       | Metrics Server image tag (immutable tags are recommended)                                                                                                                | `0.6.4-debian-11-r69`    |
 | `image.digest`                                    | Metrics Server image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                           | `""`                     |
 | `image.pullPolicy`                                | Metrics Server image pull policy                                                                                                                                         | `IfNotPresent`           |
 | `image.pullSecrets`                               | Metrics Server image pull secrets                                                                                                                                        | `[]`                     |

@@ -26,8 +26,8 @@ Looking to use Joomla! in production? Try [VMware Application Catalog](https://b
 
 ## Prerequisites
 
-- Kubernetes 1.19+
-- Helm 3.2.0+
+- Kubernetes 1.23+
+- Helm 3.8.0+
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -81,7 +81,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`                        | Joomla! image registry                                                                                               | `docker.io`           |
 | `image.repository`                      | Joomla! Image name                                                                                                   | `bitnami/joomla`      |
-| `image.tag`                             | Joomla! Image tag                                                                                                    | `4.3.4-debian-11-r26` |
+| `image.tag`                             | Joomla! Image tag                                                                                                    | `4.3.4-debian-11-r34` |
 | `image.digest`                          | Joomla! image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag              | `""`                  |
 | `image.pullPolicy`                      | Joomla! image pull policy                                                                                            | `IfNotPresent`        |
 | `image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                     | `[]`                  |
@@ -221,7 +221,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`           | Start a side-car prometheus exporter                                                                            | `false`                   |
 | `metrics.image.registry`    | Apache exporter image registry                                                                                  | `docker.io`               |
 | `metrics.image.repository`  | Apache exporter image name                                                                                      | `bitnami/apache-exporter` |
-| `metrics.image.tag`         | Apache exporter image tag                                                                                       | `1.0.2-debian-11-r0`      |
+| `metrics.image.tag`         | Apache exporter image tag                                                                                       | `1.0.2-debian-11-r8`      |
 | `metrics.image.digest`      | Apache exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
 | `metrics.image.pullPolicy`  | Image pull policy                                                                                               | `IfNotPresent`            |
 | `metrics.image.pullSecrets` | Specify docker-registry secret names as an array                                                                | `[]`                      |
