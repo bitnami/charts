@@ -76,25 +76,25 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Memcached parameters
 
-| Name                          | Description                                                                                               | Value                  |
-| ----------------------------- | --------------------------------------------------------------------------------------------------------- | ---------------------- |
-| `image.registry`              | Memcached image registry                                                                                  | `docker.io`            |
-| `image.repository`            | Memcached image repository                                                                                | `bitnami/memcached`    |
-| `image.tag`                   | Memcached image tag (immutable tags are recommended)                                                      | `1.6.21-debian-11-r84` |
-| `image.digest`                | Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
-| `image.pullPolicy`            | Memcached image pull policy                                                                               | `IfNotPresent`         |
-| `image.pullSecrets`           | Specify docker-registry secret names as an array                                                          | `[]`                   |
-| `image.debug`                 | Specify if debug values should be set                                                                     | `false`                |
-| `architecture`                | Memcached architecture. Allowed values: standalone or high-availability                                   | `standalone`           |
-| `auth.enabled`                | Enable Memcached authentication                                                                           | `false`                |
-| `auth.username`               | Memcached admin user                                                                                      | `""`                   |
-| `auth.password`               | Memcached admin password                                                                                  | `""`                   |
-| `auth.existingPasswordSecret` | Existing secret with Memcached credentials (must contain a value for `memcached-password` key)            | `""`                   |
-| `command`                     | Override default container command (useful when using custom images)                                      | `[]`                   |
-| `args`                        | Override default container args (useful when using custom images)                                         | `[]`                   |
-| `extraEnvVars`                | Array with extra environment variables to add to Memcached nodes                                          | `[]`                   |
-| `extraEnvVarsCM`              | Name of existing ConfigMap containing extra env vars for Memcached nodes                                  | `""`                   |
-| `extraEnvVarsSecret`          | Name of existing Secret containing extra env vars for Memcached nodes                                     | `""`                   |
+| Name                          | Description                                                                                               | Value                   |
+| ----------------------------- | --------------------------------------------------------------------------------------------------------- | ----------------------- |
+| `image.registry`              | Memcached image registry                                                                                  | `docker.io`             |
+| `image.repository`            | Memcached image repository                                                                                | `bitnami/memcached`     |
+| `image.tag`                   | Memcached image tag (immutable tags are recommended)                                                      | `1.6.21-debian-11-r107` |
+| `image.digest`                | Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
+| `image.pullPolicy`            | Memcached image pull policy                                                                               | `IfNotPresent`          |
+| `image.pullSecrets`           | Specify docker-registry secret names as an array                                                          | `[]`                    |
+| `image.debug`                 | Specify if debug values should be set                                                                     | `false`                 |
+| `architecture`                | Memcached architecture. Allowed values: standalone or high-availability                                   | `standalone`            |
+| `auth.enabled`                | Enable Memcached authentication                                                                           | `false`                 |
+| `auth.username`               | Memcached admin user                                                                                      | `""`                    |
+| `auth.password`               | Memcached admin password                                                                                  | `""`                    |
+| `auth.existingPasswordSecret` | Existing secret with Memcached credentials (must contain a value for `memcached-password` key)            | `""`                    |
+| `command`                     | Override default container command (useful when using custom images)                                      | `[]`                    |
+| `args`                        | Override default container args (useful when using custom images)                                         | `[]`                    |
+| `extraEnvVars`                | Array with extra environment variables to add to Memcached nodes                                          | `[]`                    |
+| `extraEnvVarsCM`              | Name of existing ConfigMap containing extra env vars for Memcached nodes                                  | `""`                    |
+| `extraEnvVarsSecret`          | Name of existing Secret containing extra env vars for Memcached nodes                                     | `""`                    |
 
 ### Deployment/Statefulset parameters
 
@@ -207,7 +207,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner and group of the persistent volume                                                   | `false`                      |
 | `volumePermissions.image.registry`                     | Init container volume-permissions image registry                                                                                  | `docker.io`                  |
 | `volumePermissions.image.repository`                   | Init container volume-permissions image repository                                                                                | `bitnami/os-shell`           |
-| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r63`           |
+| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r89`           |
 | `volumePermissions.image.digest`                       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                         |
 | `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`               |
 | `volumePermissions.image.pullSecrets`                  | Init container volume-permissions image pull secrets                                                                              | `[]`                         |
@@ -217,7 +217,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                                      | Start a side-car prometheus exporter                                                                                              | `false`                      |
 | `metrics.image.registry`                               | Memcached exporter image registry                                                                                                 | `docker.io`                  |
 | `metrics.image.repository`                             | Memcached exporter image repository                                                                                               | `bitnami/memcached-exporter` |
-| `metrics.image.tag`                                    | Memcached exporter image tag (immutable tags are recommended)                                                                     | `0.13.0-debian-11-r95`       |
+| `metrics.image.tag`                                    | Memcached exporter image tag (immutable tags are recommended)                                                                     | `0.13.0-debian-11-r120`      |
 | `metrics.image.digest`                                 | Memcached exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                | `""`                         |
 | `metrics.image.pullPolicy`                             | Image pull policy                                                                                                                 | `IfNotPresent`               |
 | `metrics.image.pullSecrets`                            | Specify docker-registry secret names as an array                                                                                  | `[]`                         |
