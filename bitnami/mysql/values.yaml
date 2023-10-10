@@ -214,7 +214,6 @@ primary:
     pid-file=/opt/bitnami/mysql/tmp/mysqld.pid
     log-error=/opt/bitnami/mysql/logs/mysqld.log
     character-set-server=UTF8
-    collation-server=utf8_general_ci
     slow_query_log=0
     long_query_time=10.0
 
@@ -592,7 +591,6 @@ secondary:
     pid-file=/opt/bitnami/mysql/tmp/mysqld.pid
     log-error=/opt/bitnami/mysql/logs/mysqld.log
     character-set-server=UTF8
-    collation-server=utf8_general_ci
     slow_query_log=0
     long_query_time=10.0
 

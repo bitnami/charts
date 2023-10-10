@@ -381,7 +381,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `gateway.enabled`                               | Enable Gateway deployment                                                                             | `true`                 |
 | `gateway.image.registry`                        | Nginx image registry                                                                                  | `docker.io`            |
 | `gateway.image.repository`                      | Nginx image repository                                                                                | `bitnami/nginx`        |
-| `gateway.image.tag`                             | Nginx image tag (immutable tags are recommended)                                                      | `1.25.2-debian-11-r42` |
+| `gateway.image.tag`                             | Nginx image tag (immutable tags are recommended)                                                      | `1.25.2-debian-11-r45` |
 | `gateway.image.digest`                          | Nginx image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
 | `gateway.image.pullPolicy`                      | Nginx image pull policy                                                                               | `IfNotPresent`         |
 | `gateway.image.pullSecrets`                     | Nginx image pull secrets                                                                              | `[]`                   |
@@ -1098,7 +1098,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`            |
 | `volumePermissions.image.registry`                     | OS Shell + Utility image registry                                                               | `docker.io`        |
 | `volumePermissions.image.repository`                   | OS Shell + Utility image repository                                                             | `bitnami/os-shell` |
-| `volumePermissions.image.tag`                          | OS Shell + Utility image tag (immutable tags are recommended)                                   | `11-debian-11-r86` |
+| `volumePermissions.image.tag`                          | OS Shell + Utility image tag (immutable tags are recommended)                                   | `11-debian-11-r89` |
 | `volumePermissions.image.pullPolicy`                   | OS Shell + Utility image pull policy                                                            | `IfNotPresent`     |
 | `volumePermissions.image.pullSecrets`                  | OS Shell + Utility image pull secrets                                                           | `[]`               |
 | `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`               |

@@ -90,7 +90,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `dags.existingConfigmap` | Name of an existing ConfigMap with all the DAGs files you want to load in Airflow                                                                                         | `""`               |
 | `dags.image.registry`    | Init container load-dags image registry                                                                                                                                   | `docker.io`        |
 | `dags.image.repository`  | Init container load-dags image repository                                                                                                                                 | `bitnami/os-shell` |
-| `dags.image.tag`         | Init container load-dags image tag (immutable tags are recommended)                                                                                                       | `11-debian-11-r86` |
+| `dags.image.tag`         | Init container load-dags image tag (immutable tags are recommended)                                                                                                       | `11-debian-11-r89` |
 | `dags.image.digest`      | Init container load-dags image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                  | `""`               |
 | `dags.image.pullPolicy`  | Init container load-dags image pull policy                                                                                                                                | `IfNotPresent`     |
 | `dags.image.pullSecrets` | Init container load-dags image pull secrets                                                                                                                               | `[]`               |
@@ -410,7 +410,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                               | Whether or not to create a standalone Airflow exporter to expose Airflow metrics                                 | `false`                       |
 | `metrics.image.registry`                        | Airflow exporter image registry                                                                                  | `docker.io`                   |
 | `metrics.image.repository`                      | Airflow exporter image repository                                                                                | `bitnami/airflow-exporter`    |
-| `metrics.image.tag`                             | Airflow exporter image tag (immutable tags are recommended)                                                      | `0.20220314.0-debian-11-r433` |
+| `metrics.image.tag`                             | Airflow exporter image tag (immutable tags are recommended)                                                      | `0.20220314.0-debian-11-r436` |
 | `metrics.image.digest`                          | Airflow exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                          |
 | `metrics.image.pullPolicy`                      | Airflow exporter image pull policy                                                                               | `IfNotPresent`                |
 | `metrics.image.pullSecrets`                     | Airflow exporter image pull secrets                                                                              | `[]`                          |
