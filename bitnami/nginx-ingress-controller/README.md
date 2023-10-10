@@ -26,8 +26,8 @@ Looking to use NGINX Ingress Controller in production? Try [VMware Application C
 
 ## Prerequisites
 
-- Kubernetes 1.19+
-- Helm 3.2.0+
+- Kubernetes 1.23+
+- Helm 3.8.0+
 
 ## Installing the Chart
 
