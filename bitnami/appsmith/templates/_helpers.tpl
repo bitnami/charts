@@ -95,6 +95,19 @@ Create the name of the service account to use
 {{- end -}}
 
 {{/*
+Set the subdirectory for git connected apps to store their local repo
+*/}}
+{{- define "appsmith.gitDataPath" -}}
+{{- if and .Values.backend.persistence.enabled .Values.backend.persistence.gitDataPath -}}
+    {{- if .Values.backend.persistence.subPath -}}
+        {{- printf "%s/%s/%s" .Values.backend.persistence.mountPath .Values.backend.persistence.subPath .Values.backend.persistence.gitDataPath }}
+    {{- else -}}
+        {{- printf "%s/%s" .Values.backend.persistence.mountPath .Values.backend.persistence.gitDataPath }}
+    {{- end -}}
+{{- end -}}
+{{- end -}}
+
+{{/*
 Return Redis(TM) fullname
 */}}
 {{- define "appsmith.redis.fullname" -}}

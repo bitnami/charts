@@ -34,6 +34,7 @@ rules:
     verbs:
       - create
       - patch
+  {{- if and (include "common.capabilities.psp.supported" .) .Values.psp.create .Values.speaker.psp.create -}}
   - apiGroups:
       - policy
     resourceNames:
@@ -42,6 +43,7 @@ rules:
       - podsecuritypolicies
     verbs:
       - use
+  {{- end }}
   - apiGroups:
       - discovery.k8s.io
     resources:

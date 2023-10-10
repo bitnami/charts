@@ -24,8 +24,8 @@ Looking to use Confluent Schema Registry in production? Try [VMware Application 
 
 ## Prerequisites
 
-- Kubernetes 1.19+
-- Helm 3.2.0+
+- Kubernetes 1.23+
+- Helm 3.8.0+
 
 ## Installing the Chart
 
@@ -80,7 +80,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------------------------------- | --------------------------------------------------------------------------------------------------------------- | ------------------------- |
 | `image.registry`                                | Schema Registry image registry                                                                                  | `docker.io`               |
 | `image.repository`                              | Schema Registry image repository                                                                                | `bitnami/schema-registry` |
-| `image.tag`                                     | Schema Registry image tag (immutable tags are recommended)                                                      | `7.4.1-debian-11-r53`     |
+| `image.tag`                                     | Schema Registry image tag (immutable tags are recommended)                                                      | `7.5.0-debian-11-r0`      |
 | `image.digest`                                  | Schema Registry image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
 | `image.pullPolicy`                              | Schema Registry image pull policy                                                                               | `IfNotPresent`            |
 | `image.pullSecrets`                             | Schema Registry image pull secrets                                                                              | `[]`                      |

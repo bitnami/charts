@@ -80,7 +80,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/kafka
-  tag: 3.5.1-debian-11-r61
+  tag: 3.5.1-debian-11-r71
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -198,7 +198,7 @@ listeners:
 ## Kafka SASL settings for authentication, required if SASL_PLAINTEXT or SASL_SSL listeners are configured
 ##
 sasl:
-  ## @param sasl.enabledMechanisms Comma-separated list of allowed SASL mechanisms when SASL listeners are configured. Allowed types: `PLAIN`, `SCRAM-SHA-256`, `SCRAM-SHA-512`
+  ## @param sasl.enabledMechanisms Comma-separated list of allowed SASL mechanisms when SASL listeners are configured. Allowed types: `PLAIN`, `SCRAM-SHA-256`, `SCRAM-SHA-512`, `OAUTHBEARER`
   ## NOTE: At the moment, Kafka Raft mode does not support SCRAM, that is why only PLAIN is configured.
   ##
   enabledMechanisms: PLAIN,SCRAM-SHA-256,SCRAM-SHA-512
@@ -208,20 +208,39 @@ sasl:
   ## @param sasl.controllerMechanism SASL mechanism for controller communications.
   ##
   controllerMechanism: PLAIN
+  ## Settings for oauthbearer mechanism
+  ## @param sasl.oauthbearer.tokenEndpointUrl The URL for the OAuth/OIDC identity provider
+  ## @param sasl.oauthbearer.jwksEndpointUrl The OAuth/OIDC provider URL from which the provider's JWKS (JSON Web Key Set) can be retrieved
+  ## @param sasl.oauthbearer.expectedAudience The comma-delimited setting for the broker to use to verify that the JWT was issued for one of the expected audiences
+  ## @param sasl.oauthbearer.subClaimName The OAuth claim name for the subject.
+  ##
+  oauthbearer:
+    tokenEndpointUrl: ""
+    jwksEndpointUrl: ""
+    expectedAudience: ""
+    subClaimName: "sub"
   ## Credentials for inter-broker communications.
   ## @param sasl.interbroker.user Username for inter-broker communications when SASL is enabled
   ## @param sasl.interbroker.password Password for inter-broker communications when SASL is enabled. If not set and SASL is enabled for the controller listener, a random password will be generated.
+  ## @param sasl.interbroker.clientId Client ID for inter-broker communications when SASL is enabled with mechanism OAUTHBEARER
+  ## @param sasl.interbroker.clientSecret Client Secret for inter-broker communications when SASL is enabled with mechanism OAUTHBEARER. If not set and SASL is enabled for the controller listener, a random secret will be generated.
   ##
   interbroker:
     user: inter_broker_user
     password: ""
+    clientId: inter_broker_client
+    clientSecret: ""
   ## Credentials for controller communications.
   ## @param sasl.controller.user Username for controller communications when SASL is enabled
   ## @param sasl.controller.password Password for controller communications when SASL is enabled. If not set and SASL is enabled for the inter-broker listener, a random password will be generated.
+  ## @param sasl.controller.clientId Client ID for controller communications when SASL is enabled with mechanism OAUTHBEARER
+  ## @param sasl.controller.clientSecret Client Secret for controller communications when SASL is enabled with mechanism OAUTHBEARER. If not set and SASL is enabled for the inter-broker listener, a random secret will be generated.
   ##
   controller:
     user: controller_user
     password: ""
+    clientId: controller_broker_client
+    clientSecret: ""
   ## Credentials for client communications.
   ## @param sasl.client.users Comma-separated list of usernames for client communications when SASL is enabled
   ## @param sasl.client.passwords Comma-separated list of passwords for client communications when SASL is enabled, must match the number of client.users
@@ -239,8 +258,10 @@ sasl:
     password: ""
   ## @param sasl.existingSecret Name of the existing secret containing credentials for clientUsers, interBrokerUser, controllerUser and zookeeperUser
   ## Create this secret running the command below where SECRET_NAME is the name of the secret you want to create:
-  ##       kubectl create secret generic SECRET_NAME --from-literal=client-passwords=CLIENT_PASSWORD1,CLIENT_PASSWORD2 --from-literal=inter-broker-password=INTER_BROKER_PASSWORD --from-literal=controller-password=CONTROLLER_PASSWORD --from-literal=zookeeper-password=ZOOKEEPER_PASSWORD
-  ##
+  ##       kubectl create secret generic SECRET_NAME --from-literal=client-passwords=CLIENT_PASSWORD1,CLIENT_PASSWORD2 --from-literal=inter-broker-password=INTER_BROKER_PASSWORD --from-literal=inter-broker-client-secret=INTER_BROKER_CLIENT_SECRET --from-literal=controller-password=CONTROLLER_PASSWORD --from-literal=controller-client-secret=CONTROLLER_CLIENT_SECRET --from-literal=zookeeper-password=ZOOKEEPER_PASSWORD
+  ## The client secrets are only required when using oauthbearer as sasl mechanism. 
+  ## Client, interbroker and controller passwords are only required if the sasl mechanism includes something other than oauthbearer.
+  ## 
   existingSecret: ""
 
 ## @section Kafka TLS parameters
@@ -1282,7 +1303,7 @@ externalAccess:
     image:
       registry: docker.io
       repository: bitnami/kubectl
-      tag: 1.28.2-debian-11-r2
+      tag: 1.28.2-debian-11-r14
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1532,7 +1553,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r77
+    tag: 11-debian-11-r89
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1614,7 +1635,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/kafka-exporter
-      tag: 1.7.0-debian-11-r120
+      tag: 1.7.0-debian-11-r130
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1868,7 +1889,7 @@ metrics:
     image:
       registry: docker.io
       repository: bitnami/jmx-exporter
-      tag: 0.19.0-debian-11-r84
+      tag: 0.19.0-debian-11-r92
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2285,6 +2306,8 @@ kraft:
   ## @param kraft.enabled Switch to enable or disable the KRaft mode for Kafka
   ##
   enabled: true
+  ## @param kraft.existingClusterIdSecret Name of the secret containing the cluster ID for the Kafka KRaft cluster. This is incompatible with the clusterId parameter. If both are set, the existingClusterIdSecret will be used
+  existingClusterIdSecret: ""
   ## @param kraft.clusterId Kafka Kraft cluster ID. If not set, a random cluster ID will be generated the first time Kraft is initialized.
   ## NOTE: Already initialized Kafka nodes will use cluster ID stored in their persisted storage.
   ## If reusing existing PVCs or migrating from Zookeeper mode, make sure the cluster ID is set matching the stored cluster ID, otherwise new nodes will fail to join the cluster.

@@ -24,8 +24,8 @@ Looking to use Jenkins in production? Try [VMware Application Catalog](https://b
 
 ## Prerequisites
 
-- Kubernetes 1.19+
-- Helm 3.2.0+
+- Kubernetes 1.23+
+- Helm 3.8.0+
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -78,15 +78,15 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Jenkins Image parameters
 
-| Name                | Description                                                                                             | Value                  |
-| ------------------- | ------------------------------------------------------------------------------------------------------- | ---------------------- |
-| `image.registry`    | Jenkins image registry                                                                                  | `docker.io`            |
-| `image.repository`  | Jenkins image repository                                                                                | `bitnami/jenkins`      |
-| `image.tag`         | Jenkins image tag (immutable tags are recommended)                                                      | `2.414.2-debian-11-r1` |
-| `image.digest`      | Jenkins image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
-| `image.pullPolicy`  | Jenkins image pull policy                                                                               | `IfNotPresent`         |
-| `image.pullSecrets` | Jenkins image pull secrets                                                                              | `[]`                   |
-| `image.debug`       | Enable image debug mode                                                                                 | `false`                |
+| Name                | Description                                                                                             | Value                   |
+| ------------------- | ------------------------------------------------------------------------------------------------------- | ----------------------- |
+| `image.registry`    | Jenkins image registry                                                                                  | `docker.io`             |
+| `image.repository`  | Jenkins image repository                                                                                | `bitnami/jenkins`       |
+| `image.tag`         | Jenkins image tag (immutable tags are recommended)                                                      | `2.414.2-debian-11-r16` |
+| `image.digest`      | Jenkins image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
+| `image.pullPolicy`  | Jenkins image pull policy                                                                               | `IfNotPresent`          |
+| `image.pullSecrets` | Jenkins image pull secrets                                                                              | `[]`                    |
+| `image.debug`       | Enable image debug mode                                                                                 | `false`                 |
 
 ### Jenkins Configuration parameters
 
@@ -160,7 +160,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `agent.enabled`                                                           | Set to true to enable the configuration of Jenkins kubernetes agents                                    | `false`                  |
 | `agent.image.registry`                                                    | Jenkins image registry                                                                                  | `docker.io`              |
 | `agent.image.repository`                                                  | Jenkins image repository                                                                                | `bitnami/jenkins-agent`  |
-| `agent.image.tag`                                                         | Jenkins image tag (immutable tags are recommended)                                                      | `0.3148.0-debian-11-r26` |
+| `agent.image.tag`                                                         | Jenkins image tag (immutable tags are recommended)                                                      | `0.3148.0-debian-11-r43` |
 | `agent.image.digest`                                                      | Jenkins image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                     |
 | `agent.image.pullPolicy`                                                  | Jenkins image pull policy                                                                               | `IfNotPresent`           |
 | `agent.image.pullSecrets`                                                 | Jenkins image pull secrets                                                                              | `[]`                     |
@@ -296,7 +296,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                   | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`                    | `false`            |
 | `volumePermissions.image.registry`            | OS Shell + Utility image registry                                                                                  | `docker.io`        |
 | `volumePermissions.image.repository`          | OS Shell + Utility image repository                                                                                | `bitnami/os-shell` |
-| `volumePermissions.image.tag`                 | OS Shell + Utility image tag (immutable tags are recommended)                                                      | `11-debian-11-r72` |
+| `volumePermissions.image.tag`                 | OS Shell + Utility image tag (immutable tags are recommended)                                                      | `11-debian-11-r89` |
 | `volumePermissions.image.digest`              | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`               |
 | `volumePermissions.image.pullPolicy`          | OS Shell + Utility image pull policy                                                                               | `IfNotPresent`     |
 | `volumePermissions.image.pullSecrets`         | OS Shell + Utility image pull secrets                                                                              | `[]`               |
