@@ -80,7 +80,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | ---------------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`    | SonarQube&trade; image registry                                                                                  | `docker.io`           |
 | `image.repository`  | SonarQube&trade; image repository                                                                                | `bitnami/sonarqube`   |
-| `image.tag`         | SonarQube&trade; image tag (immutable tags are recommended)                                                      | `10.2.1-debian-11-r6` |
+| `image.tag`         | SonarQube&trade; image tag (immutable tags are recommended)                                                      | `10.2.1-debian-11-r9` |
 | `image.digest`      | SonarQube&trade; image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
 | `image.pullPolicy`  | SonarQube&trade; image pull policy                                                                               | `IfNotPresent`        |
 | `image.pullSecrets` | SonarQube&trade; image pull secrets                                                                              | `[]`                  |
