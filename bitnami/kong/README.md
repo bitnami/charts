@@ -290,7 +290,7 @@ helm delete my-release
 | `postgresql.architecture`                       | PostgreSQL architecture (`standalone` or `replication`)                                                    | `standalone`           |
 | `postgresql.image.registry`                     | PostgreSQL image registry                                                                                  | `docker.io`            |
 | `postgresql.image.repository`                   | PostgreSQL image repository                                                                                | `bitnami/postgresql`   |
-| `postgresql.image.tag`                          | PostgreSQL image tag (immutable tags are recommended)                                                      | `14.9.0-debian-11-r50` |
+| `postgresql.image.tag`                          | PostgreSQL image tag (immutable tags are recommended)                                                      | `14.9.0-debian-11-r55` |
 | `postgresql.image.digest`                       | PostgreSQL image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
 | `postgresql.external.host`                      | Database host                                                                                              | `""`                   |
 | `postgresql.external.port`                      | Database port number                                                                                       | `5432`                 |
