@@ -1174,6 +1174,9 @@ memcached:
     ## @param memcached.auth.password Memcached admin password
     ##
     password: ""
+    ## @param memcached.auth.existingPasswordSecret Existing secret with Memcached credentials (must contain a value for `memcached-password` key)
+    ##
+    existingPasswordSecret: ""
   ## Service parameters
   ##
   service:
