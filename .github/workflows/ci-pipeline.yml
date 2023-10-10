@@ -27,7 +27,6 @@ jobs:
     name: Get modified charts
     permissions:
       contents: read
-    if: ${{ github.event.pull_request.state != 'closed' }}
     outputs:
       chart: ${{ steps.get-chart.outputs.chart }}
       result: ${{ steps.get-chart.outputs.result }}
@@ -50,7 +49,11 @@ jobs:
           num_version_bumps="$(filterdiff -s -i "*Chart.yaml" $TEMP_FILE | grep -c "+version" || true)"
           non_readme_files=$(echo "$files_changed" | grep -vc "\.md" || true)
 
-          if [[ "$non_readme_files" -le "0" ]]; then
+          if [[ $(curl -Lks ${{ github.event.pull_request.url }} | jq '.state | index("closed")') != *null* ]]; then
+            # The PR for which this workflow run was launched is now closed -> SKIP
+            echo "error=The PR for which this workflow run was launched is now closed. The tests will be skipped." >> $GITHUB_OUTPUT
+            echo "result=skip" >> $GITHUB_OUTPUT
+          elif [[ "$non_readme_files" -le "0" ]]; then
             # The only changes are .md files -> SKIP
             echo "result=skip" >> $GITHUB_OUTPUT
           elif [[ "$num_charts_changed" -ne "$num_version_bumps" ]]; then
