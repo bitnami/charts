@@ -349,7 +349,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `zookeeper.service.ports.client` | Zookeeper client port                                | `2181`                |
 | `zookeeper.image.registry`       | Zookeeper image registry                             | `docker.io`           |
 | `zookeeper.image.repository`     | Zookeeper image repository                           | `bitnami/zookeeper`   |
-| `zookeeper.image.tag`            | Zookeeper image tag (immutable tags are recommended) | `3.8.2-debian-11-r66` |
+| `zookeeper.image.tag`            | Zookeeper image tag (immutable tags are recommended) | `3.8.2-debian-11-r68` |
 | `zookeeper.image.pullPolicy`     | Zookeeper image pull policy                          | `IfNotPresent`        |
 
 See <https://github.com/bitnami-labs/readme-generator-for-helm> to create the table.
