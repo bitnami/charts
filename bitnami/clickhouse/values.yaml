@@ -1119,7 +1119,7 @@ zookeeper:
   image:
     registry: docker.io
     repository: bitnami/zookeeper
-    tag: 3.8.2-debian-11-r66
+    tag: 3.8.2-debian-11-r68
     pullPolicy: IfNotPresent
   replicaCount: 3
   service:
