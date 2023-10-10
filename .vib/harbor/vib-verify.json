@@ -31,13 +31,6 @@
       },
       "actions": [
         {
-          "action_id": "health-check",
-          "params": {
-            "endpoint": "lb-harbor-https",
-            "app_protocol": "HTTPS"
-          }
-        },
-        {
           "action_id": "goss",
           "params": {
             "resources": {

@@ -109,8 +109,7 @@ data:
     TMP_FIRST_READY_FILE_TS="/tmp/ts-first-ready.mark"
     TMP_DELAY_APPLIED_FILE="/tmp/delay-applied.mark"
 
-
-    DB_CHECK_RESULT=$(echo "SELECT 1" | postgresql_execute "$POSTGRESQL_DATABASE" "$POSTGRESQL_USERNAME" "$POSTGRESQL_PASSWORD" "-h 127.0.0.1 -tA" || "command failed")
+    DB_CHECK_RESULT=$(echo "SELECT 1" | postgresql_execute_print_output "$POSTGRESQL_DATABASE" "$POSTGRESQL_USERNAME" "$POSTGRESQL_PASSWORD" "-h 127.0.0.1 -tA" || echo "command failed")
     if [[ "$DB_CHECK_RESULT" == "1" ]]; then
       if [[ ! -f "$TMP_DELAY_APPLIED_FILE" ]]; then
         # DB up, but initial readiness delay not applied
@@ -120,18 +119,18 @@ data:
           CURRENT_DELAY_SECONDS=$(($EPOCHSECONDS - $FIRST_READY_TS))
           if (( $CURRENT_DELAY_SECONDS > $MIN_DELAY_AFTER_POD_READY_FIRST_TIME )); then
             # minimal delay of the first readiness state passed - report success and mark delay as applied
-            touch "$TMP_DELAY_APPLIED_FILE"      
+            touch "$TMP_DELAY_APPLIED_FILE"
           else
             # minimal delay of the first readiness state not reached yet - report failure
-            return 1
+            exit 1
           fi
         else
           # first ever readiness test success - store timestamp and report failure
           echo $EPOCHSECONDS > $TMP_FIRST_READY_FILE_TS
-          return 1
+          exit 1
         fi
       fi
     else
       # DB test failed - report failure
-      return 1
+      exit 1
     fi

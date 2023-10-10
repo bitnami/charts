@@ -109,7 +109,7 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 | --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`                              | Thanos image registry                                                                                               | `docker.io`           |
 | `image.repository`                            | Thanos image repository                                                                                             | `bitnami/thanos`      |
-| `image.tag`                                   | Thanos image tag (immutable tags are recommended)                                                                   | `0.32.4-debian-11-r0` |
+| `image.tag`                                   | Thanos image tag (immutable tags are recommended)                                                                   | `0.32.4-debian-11-r2` |
 | `image.digest`                                | Thanos image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag              | `""`                  |
 | `image.pullPolicy`                            | Thanos image pull policy                                                                                            | `IfNotPresent`        |
 | `image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                    | `[]`                  |
