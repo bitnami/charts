@@ -344,32 +344,32 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Database Parameters
 
-| Name                                       | Description                                                                                     | Value               |
-| ------------------------------------------ | ----------------------------------------------------------------------------------------------- | ------------------- |
-| `mariadb.enabled`                          | Deploy a MariaDB server to satisfy the applications database requirements                       | `true`              |
-| `mariadb.architecture`                     | MariaDB architecture. Allowed values: `standalone` or `replication`                             | `standalone`        |
-| `mariadb.auth.rootPassword`                | MariaDB root password                                                                           | `""`                |
-| `mariadb.auth.database`                    | MariaDB custom database                                                                         | `bitnami_wordpress` |
-| `mariadb.auth.username`                    | MariaDB custom user name                                                                        | `bn_wordpress`      |
-| `mariadb.auth.password`                    | MariaDB custom user password                                                                    | `""`                |
-| `mariadb.primary.persistence.enabled`      | Enable persistence on MariaDB using PVC(s)                                                      | `true`              |
-| `mariadb.primary.persistence.storageClass` | Persistent Volume storage class                                                                 | `""`                |
-| `mariadb.primary.persistence.accessModes`  | Persistent Volume access modes                                                                  | `[]`                |
-| `mariadb.primary.persistence.size`         | Persistent Volume size                                                                          | `8Gi`               |
-| `externalDatabase.host`                    | External Database server host                                                                   | `localhost`         |
-| `externalDatabase.port`                    | External Database server port                                                                   | `3306`              |
-| `externalDatabase.user`                    | External Database username                                                                      | `bn_wordpress`      |
-| `externalDatabase.password`                | External Database user password                                                                 | `""`                |
-| `externalDatabase.database`                | External Database database name                                                                 | `bitnami_wordpress` |
-| `externalDatabase.existingSecret`          | The name of an existing secret with database credentials. Evaluated as a template               | `""`                |
-| `memcached.enabled`                        | Deploy a Memcached server for caching database queries                                          | `false`             |
-| `memcached.auth.enabled`                   | Enable Memcached authentication                                                                 | `false`             |
-| `memcached.auth.username`                  | Memcached admin user                                                                            | `""`                |
-| `memcached.auth.password`                  | Memcached admin password                                                                        | `""`                |
-| `memcached.auth.existingPasswordSecret`    | Existing secret with Memcached credentials (must contain a value for `memcached-password` key)  | `""`                |
-| `memcached.service.port`                   | Memcached service port                                                                          | `11211`             |
-| `externalCache.host`                       | External cache server host                                                                      | `localhost`         |
-| `externalCache.port`                       | External cache server port                                                                      | `11211`             |
+| Name                                       | Description                                                                                    | Value               |
+| ------------------------------------------ | ---------------------------------------------------------------------------------------------- | ------------------- |
+| `mariadb.enabled`                          | Deploy a MariaDB server to satisfy the applications database requirements                      | `true`              |
+| `mariadb.architecture`                     | MariaDB architecture. Allowed values: `standalone` or `replication`                            | `standalone`        |
+| `mariadb.auth.rootPassword`                | MariaDB root password                                                                          | `""`                |
+| `mariadb.auth.database`                    | MariaDB custom database                                                                        | `bitnami_wordpress` |
+| `mariadb.auth.username`                    | MariaDB custom user name                                                                       | `bn_wordpress`      |
+| `mariadb.auth.password`                    | MariaDB custom user password                                                                   | `""`                |
+| `mariadb.primary.persistence.enabled`      | Enable persistence on MariaDB using PVC(s)                                                     | `true`              |
+| `mariadb.primary.persistence.storageClass` | Persistent Volume storage class                                                                | `""`                |
+| `mariadb.primary.persistence.accessModes`  | Persistent Volume access modes                                                                 | `[]`                |
+| `mariadb.primary.persistence.size`         | Persistent Volume size                                                                         | `8Gi`               |
+| `externalDatabase.host`                    | External Database server host                                                                  | `localhost`         |
+| `externalDatabase.port`                    | External Database server port                                                                  | `3306`              |
+| `externalDatabase.user`                    | External Database username                                                                     | `bn_wordpress`      |
+| `externalDatabase.password`                | External Database user password                                                                | `""`                |
+| `externalDatabase.database`                | External Database database name                                                                | `bitnami_wordpress` |
+| `externalDatabase.existingSecret`          | The name of an existing secret with database credentials. Evaluated as a template              | `""`                |
+| `memcached.enabled`                        | Deploy a Memcached server for caching database queries                                         | `false`             |
+| `memcached.auth.enabled`                   | Enable Memcached authentication                                                                | `false`             |
+| `memcached.auth.username`                  | Memcached admin user                                                                           | `""`                |
+| `memcached.auth.password`                  | Memcached admin password                                                                       | `""`                |
+| `memcached.auth.existingPasswordSecret`    | Existing secret with Memcached credentials (must contain a value for `memcached-password` key) | `""`                |
+| `memcached.service.port`                   | Memcached service port                                                                         | `11211`             |
+| `externalCache.host`                       | External cache server host                                                                     | `localhost`         |
+| `externalCache.port`                       | External cache server port                                                                     | `11211`             |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
