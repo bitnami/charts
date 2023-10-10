@@ -28,8 +28,8 @@ Looking to use Pinniped in production? Try [VMware Application Catalog](https://
 
 ## Prerequisites
 
-- Kubernetes 1.19+
-- Helm 3.2.0+
+- Kubernetes 1.23+
+- Helm 3.8.0+
 
 ## Installing the Chart
 
@@ -77,7 +77,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraDeploy`       | Array of extra objects to deploy with the release                                                        | `[]`                  |
 | `image.registry`    | Pinniped image registry                                                                                  | `docker.io`           |
 | `image.repository`  | Pinniped image repository                                                                                | `bitnami/pinniped`    |
-| `image.tag`         | Pinniped image tag (immutable tags are recommended)                                                      | `0.26.0-debian-11-r4` |
+| `image.tag`         | Pinniped image tag (immutable tags are recommended)                                                      | `0.26.0-debian-11-r6` |
 | `image.digest`      | Pinniped image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
 | `image.pullPolicy`  | Pinniped image pull policy                                                                               | `IfNotPresent`        |
 | `image.pullSecrets` | Pinniped image pull secrets                                                                              | `[]`                  |

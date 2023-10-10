@@ -26,8 +26,8 @@ Looking to use EJBCA in production? Try [VMware Application Catalog](https://bit
 
 ## Prerequisites
 
-- Kubernetes 1.19+
-- Helm 3.2.0+
+- Kubernetes 1.23+
+- Helm 3.8.0+
 - PV provisioner support in the underlying infrastructure
 
 ## Installing the Chart
@@ -83,7 +83,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | ----------------------------------------------------------------------------------------------------------- | -------------------- |
 | `image.registry`                        | EJBCA image registry                                                                                        | `docker.io`          |
 | `image.repository`                      | EJBCA image name                                                                                            | `bitnami/ejbca`      |
-| `image.tag`                             | EJBCA image tag                                                                                             | `8.0.0-debian-11-r2` |
+| `image.tag`                             | EJBCA image tag                                                                                             | `8.0.0-debian-11-r7` |
 | `image.digest`                          | EJBCA image image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                 |
 | `image.pullPolicy`                      | EJBCA image pull policy                                                                                     | `IfNotPresent`       |
 | `image.pullSecrets`                     | Specify docker-registry secret names as an array                                                            | `[]`                 |

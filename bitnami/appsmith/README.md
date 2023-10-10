@@ -28,8 +28,8 @@ Looking to use Appsmith in production? Try [VMware Application Catalog](https://
 
 ## Prerequisites
 
-- Kubernetes 1.19+
-- Helm 3.2.0+
+- Kubernetes 1.23+
+- Helm 3.8.0+
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -67,26 +67,26 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common parameters
 
-| Name                     | Description                                                                                                                                         | Value                  |
-| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
-| `kubeVersion`            | Override Kubernetes version                                                                                                                         | `""`                   |
-| `nameOverride`           | String to partially override common.names.name                                                                                                      | `""`                   |
-| `fullnameOverride`       | String to fully override common.names.fullname                                                                                                      | `""`                   |
-| `namespaceOverride`      | String to fully override common.names.namespace                                                                                                     | `""`                   |
-| `commonLabels`           | Labels to add to all deployed objects                                                                                                               | `{}`                   |
-| `commonAnnotations`      | Annotations to add to all deployed objects                                                                                                          | `{}`                   |
-| `clusterDomain`          | Kubernetes cluster domain name                                                                                                                      | `cluster.local`        |
-| `extraDeploy`            | Array of extra objects to deploy with the release                                                                                                   | `[]`                   |
-| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                                                             | `false`                |
-| `diagnosticMode.command` | Command to override all containers in the deployment                                                                                                | `["sleep"]`            |
-| `diagnosticMode.args`    | Args to override all containers in the deployment                                                                                                   | `["infinity"]`         |
-| `image.registry`         | Appsmith image registry                                                                                                                             | `docker.io`            |
-| `image.repository`       | Appsmith image repository                                                                                                                           | `bitnami/appsmith`     |
-| `image.tag`              | Appsmith image tag (immutable tags are recommended)                                                                                                 | `1.9.37-debian-11-r10` |
-| `image.digest`           | Appsmith image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended) | `""`                   |
-| `image.pullPolicy`       | Appsmith image pull policy                                                                                                                          | `IfNotPresent`         |
-| `image.pullSecrets`      | Appsmith image pull secrets                                                                                                                         | `[]`                   |
-| `image.debug`            | Enable Appsmith image debug mode                                                                                                                    | `false`                |
+| Name                     | Description                                                                                                                                         | Value                 |
+| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
+| `kubeVersion`            | Override Kubernetes version                                                                                                                         | `""`                  |
+| `nameOverride`           | String to partially override common.names.name                                                                                                      | `""`                  |
+| `fullnameOverride`       | String to fully override common.names.fullname                                                                                                      | `""`                  |
+| `namespaceOverride`      | String to fully override common.names.namespace                                                                                                     | `""`                  |
+| `commonLabels`           | Labels to add to all deployed objects                                                                                                               | `{}`                  |
+| `commonAnnotations`      | Annotations to add to all deployed objects                                                                                                          | `{}`                  |
+| `clusterDomain`          | Kubernetes cluster domain name                                                                                                                      | `cluster.local`       |
+| `extraDeploy`            | Array of extra objects to deploy with the release                                                                                                   | `[]`                  |
+| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                                                             | `false`               |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                                                                                | `["sleep"]`           |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                                                                                   | `["infinity"]`        |
+| `image.registry`         | Appsmith image registry                                                                                                                             | `docker.io`           |
+| `image.repository`       | Appsmith image repository                                                                                                                           | `bitnami/appsmith`    |
+| `image.tag`              | Appsmith image tag (immutable tags are recommended)                                                                                                 | `1.9.38-debian-11-r0` |
+| `image.digest`           | Appsmith image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended) | `""`                  |
+| `image.pullPolicy`       | Appsmith image pull policy                                                                                                                          | `IfNotPresent`        |
+| `image.pullSecrets`      | Appsmith image pull secrets                                                                                                                         | `[]`                  |
+| `image.debug`            | Enable Appsmith image debug mode                                                                                                                    | `false`               |
 
 ### Appsmith Client Parameters
 
@@ -269,18 +269,19 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Backend Persistence Parameters
 
-| Name                                | Description                                                                                             | Value               |
-| ----------------------------------- | ------------------------------------------------------------------------------------------------------- | ------------------- |
-| `backend.persistence.enabled`       | Enable persistence using Persistent Volume Claims                                                       | `true`              |
-| `backend.persistence.mountPath`     | Path to mount the volume at.                                                                            | `/bitnami/appsmith` |
-| `backend.persistence.subPath`       | The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services | `""`                |
-| `backend.persistence.storageClass`  | Storage class of backing PVC                                                                            | `""`                |
-| `backend.persistence.annotations`   | Persistent Volume Claim annotations                                                                     | `{}`                |
-| `backend.persistence.accessModes`   | Persistent Volume Access Modes                                                                          | `["ReadWriteOnce"]` |
-| `backend.persistence.size`          | Size of data volume                                                                                     | `8Gi`               |
-| `backend.persistence.existingClaim` | The name of an existing PVC to use for persistence                                                      | `""`                |
-| `backend.persistence.selector`      | Selector to match an existing Persistent Volume for WordPress data PVC                                  | `{}`                |
-| `backend.persistence.dataSource`    | Custom PVC data source                                                                                  | `{}`                |
+| Name                                | Description                                                                                                        | Value               |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------------------------ | ------------------- |
+| `backend.persistence.enabled`       | Enable persistence using Persistent Volume Claims                                                                  | `true`              |
+| `backend.persistence.mountPath`     | Path to mount the volume at.                                                                                       | `/bitnami/appsmith` |
+| `backend.persistence.subPath`       | The subdirectory of the volume to mount to, useful in dev environments and one PV for multiple services            | `""`                |
+| `backend.persistence.gitDataPath`   | The subdirectory in `/mountPath` or `/mountPath/subPath` where git connected apps will store their local git data. | `""`                |
+| `backend.persistence.storageClass`  | Storage class of backing PVC                                                                                       | `""`                |
+| `backend.persistence.annotations`   | Persistent Volume Claim annotations                                                                                | `{}`                |
+| `backend.persistence.accessModes`   | Persistent Volume Access Modes                                                                                     | `["ReadWriteOnce"]` |
+| `backend.persistence.size`          | Size of data volume                                                                                                | `8Gi`               |
+| `backend.persistence.existingClaim` | The name of an existing PVC to use for persistence                                                                 | `""`                |
+| `backend.persistence.selector`      | Selector to match an existing Persistent Volume for WordPress data PVC                                             | `{}`                |
+| `backend.persistence.dataSource`    | Custom PVC data source                                                                                             | `{}`                |
 
 ### Appsmith RTS Parameters
 
@@ -367,7 +368,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`            |
 | `volumePermissions.image.registry`                     | OS Shell + Utility image registry                                                               | `docker.io`        |
 | `volumePermissions.image.repository`                   | OS Shell + Utility image repository                                                             | `bitnami/os-shell` |
-| `volumePermissions.image.tag`                          | OS Shell + Utility image tag (immutable tags are recommended)                                   | `11-debian-11-r77` |
+| `volumePermissions.image.tag`                          | OS Shell + Utility image tag (immutable tags are recommended)                                   | `11-debian-11-r89` |
 | `volumePermissions.image.pullPolicy`                   | OS Shell + Utility image pull policy                                                            | `IfNotPresent`     |
 | `volumePermissions.image.pullSecrets`                  | OS Shell + Utility image pull secrets                                                           | `[]`               |
 | `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`               |

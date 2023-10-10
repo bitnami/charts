@@ -24,8 +24,8 @@ Looking to use Kubernetes Event Exporter in production? Try [VMware Application 
 
 ## Prerequisites
 
-- Kubernetes 1.19+
-- Helm 3.2.0+
+- Kubernetes 1.23+
+- Helm 3.8.0+
 
 ## Installing the Chart
 
@@ -82,7 +82,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraContainerPorts`                             | Optionally specify extra list of additional port-mappings for the container                                               | `[]`                                |
 | `image.registry`                                  | Container image registry                                                                                                  | `docker.io`                         |
 | `image.repository`                                | Container image name                                                                                                      | `bitnami/kubernetes-event-exporter` |
-| `image.tag`                                       | Container image tag                                                                                                       | `1.4.0-debian-11-r57`               |
+| `image.tag`                                       | Container image tag                                                                                                       | `1.4.0-debian-11-r59`               |
 | `image.digest`                                    | Container image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                 | `""`                                |
 | `image.pullPolicy`                                | Container image pull policy                                                                                               | `IfNotPresent`                      |
 | `image.pullSecrets`                               | Specify docker-registry secret names as an array                                                                          | `[]`                                |
