@@ -34,3 +34,4 @@ name: keycloak
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/keycloak
 version: 17.1.0
+
