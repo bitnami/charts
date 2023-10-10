@@ -80,7 +80,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------------- | --------------------------------------------------------------------------------------------------------- | ----------------------- |
 | `image.registry`              | Memcached image registry                                                                                  | `docker.io`             |
 | `image.repository`            | Memcached image repository                                                                                | `bitnami/memcached`     |
-| `image.tag`                   | Memcached image tag (immutable tags are recommended)                                                      | `1.6.21-debian-11-r104` |
+| `image.tag`                   | Memcached image tag (immutable tags are recommended)                                                      | `1.6.21-debian-11-r107` |
 | `image.digest`                | Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `image.pullPolicy`            | Memcached image pull policy                                                                               | `IfNotPresent`          |
 | `image.pullSecrets`           | Specify docker-registry secret names as an array                                                          | `[]`                    |
