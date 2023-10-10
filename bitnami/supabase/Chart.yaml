@@ -18,11 +18,11 @@ annotations:
     - name: supabase-postgres-meta
       image: docker.io/bitnami/supabase-postgres-meta:0.70.0-debian-11-r16
     - name: supabase-postgres
-      image: docker.io/bitnami/supabase-postgres:15.1.0-debian-11-r172
+      image: docker.io/bitnami/supabase-postgres:15.1.0-debian-11-r174
     - name: supabase-realtime
-      image: docker.io/bitnami/supabase-realtime:2.24.0-debian-11-r0
+      image: docker.io/bitnami/supabase-realtime:2.24.0-debian-11-r1
     - name: supabase-storage
-      image: docker.io/bitnami/supabase-storage:0.42.1-debian-11-r0
+      image: docker.io/bitnami/supabase-storage:0.42.1-debian-11-r1
     - name: supabase-studio
       image: docker.io/bitnami/supabase-studio:0.23.9-debian-11-r0
 apiVersion: v2
@@ -53,4 +53,4 @@ maintainers:
 name: supabase
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/supabase
-version: 1.0.3
+version: 1.0.4
