@@ -866,7 +866,7 @@ Additionally, if `persistence.resourcePolicy` is set to `keep`, you should manua
 | `postgresql.primary.initdb.scripts`        | Initdb scripts to create Harbor databases                                                                  | `{}`                           |
 | `postgresql.image.registry`                | PostgreSQL image registry                                                                                  | `docker.io`                    |
 | `postgresql.image.repository`              | PostgreSQL image repository                                                                                | `bitnami/postgresql`           |
-| `postgresql.image.tag`                     | PostgreSQL image tag (immutable tags are recommended)                                                      | `13.12.0-debian-11-r55`        |
+| `postgresql.image.tag`                     | PostgreSQL image tag (immutable tags are recommended)                                                      | `13.12.0-debian-11-r56`        |
 | `postgresql.image.digest`                  | PostgreSQL image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                           |
 | `externalDatabase.host`                    | Database host                                                                                              | `localhost`                    |
 | `externalDatabase.port`                    | Database port number                                                                                       | `5432`                         |
