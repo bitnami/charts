@@ -8,7 +8,8 @@ import { random } from '../support/utils';
 
 it('allows to create and publish a new post with an image', () => {
   cy.login();
-  cy.visit('/ghost/#/editor/post/');
+  cy.visit('/ghost/#/posts');
+    cy.get('span').contains('New post').click();
   cy.fixture('posts').then((posts) => {
     cy.get('textarea[placeholder="Post title"]').type(
       `${posts.newPost.title}-${random}`
