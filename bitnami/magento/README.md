@@ -653,6 +653,10 @@ You can disable the initContainer using the `elasticsearch.sysctlImage.enabled=f
 
 ## Upgrading
 
+### To 24.0.0
+
+This major release bumps the MariaDB version to 11.1. No major issues are expected during the upgrade.
+
 ### To 22.0.0
 
 This major release bumps the MariaDB version to 10.11. Follow the [upstream instructions](https://mariadb.com/kb/en/upgrading-from-mariadb-10-6-to-mariadb-10-11/) for upgrading from MariaDB 10.6 to 10.11. No major issues are expected during the upgrade.

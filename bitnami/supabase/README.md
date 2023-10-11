@@ -770,7 +770,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `externalDatabase.password`                   | Password for the non-root username for PostgreSQL                                                          | `""`                                                                                                                         |
 | `externalDatabase.database`                   | PostgreSQL database name                                                                                   | `postgres`                                                                                                                   |
 | `externalDatabase.existingSecret`             | Name of an existing secret resource containing the database credentials                                    | `""`                                                                                                                         |
-| `externalDatabase.existingSecretPasswordKey`  | Name of an existing secret key containing the database credentials                                         | `db-password`                                                                                                                |
+| `externalDatabase.existingSecretPasswordKey`  | Name of an existing secret key containing the database credentials                                         | `""`                                                                                                                         |
 
 The above parameters map to the env variables defined in [bitnami/supabase-studio](https://github.com/bitnami/containers/tree/main/bitnami/supabase-studio). For more information please refer to the [bitnami/supabase-studio](https://github.com/bitnami/containers/tree/main/bitnami/supabase-studio) image documentation.
 
@@ -859,6 +859,10 @@ As an alternative, use one of the preset configurations for pod affinity, pod an
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 2.0.0
+
+This major updates the Kong subchart to its newest major, 10.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/kong#to-1000) you can find more information about the changes introduced in that version.
 
 ### To 1.0.0
 
