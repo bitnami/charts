@@ -35,7 +35,7 @@ dependencies:
 - condition: kong.enabled
   name: kong
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 9.x.x
+  version: 10.x.x
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
   tags:
@@ -53,4 +53,4 @@ maintainers:
 name: supabase
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/supabase
-version: 1.0.5
+version: 2.0.0

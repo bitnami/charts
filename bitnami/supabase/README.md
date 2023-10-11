@@ -860,6 +860,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 2.0.0
+
+This major updates the Kong subchart to its newest major, 10.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/kong#to-1000) you can find more information about the changes introduced in that version.
+
 ### To 1.0.0
 
 This major updates the PostgreSQL subchart to its newest major, 13.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#to-1300) you can find more information about the changes introduced in that version.
