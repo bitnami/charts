@@ -79,7 +79,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | ------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`    | Argo CD image registry                                                                                  | `docker.io`           |
 | `image.repository`  | Argo CD image repository                                                                                | `bitnami/argo-cd`     |
-| `image.tag`         | Argo CD image tag (immutable tags are recommended)                                                      | `2.8.4-debian-11-r11` |
+| `image.tag`         | Argo CD image tag (immutable tags are recommended)                                                      | `2.8.4-debian-11-r13` |
 | `image.digest`      | Argo CD image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
 | `image.pullPolicy`  | Argo CD image pull policy                                                                               | `IfNotPresent`        |
 | `image.pullSecrets` | Argo CD image pull secrets                                                                              | `[]`                  |
