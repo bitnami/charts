@@ -94,7 +94,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.args`                                   | Args to override all containers in the deployment                                                                                                   | `["infinity"]`          |
 | `image.registry`                                        | Redis&reg; cluster image registry                                                                                                                   | `docker.io`             |
 | `image.repository`                                      | Redis&reg; cluster image repository                                                                                                                 | `bitnami/redis-cluster` |
-| `image.tag`                                             | Redis&reg; cluster image tag (immutable tags are recommended)                                                                                       | `7.2.1-debian-11-r0`    |
+| `image.tag`                                             | Redis&reg; cluster image tag (immutable tags are recommended)                                                                                       | `7.2.1-debian-11-r24`   |
 | `image.digest`                                          | Redis&reg; cluster image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                  | `""`                    |
 | `image.pullPolicy`                                      | Redis&reg; cluster image pull policy                                                                                                                | `IfNotPresent`          |
 | `image.pullSecrets`                                     | Specify docker-registry secret names as an array                                                                                                    | `[]`                    |
@@ -161,7 +161,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                             | Enable init container that changes volume permissions in the registry (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
 | `volumePermissions.image.registry`                      | Init container volume-permissions image registry                                                                                                    | `docker.io`             |
 | `volumePermissions.image.repository`                    | Init container volume-permissions image repository                                                                                                  | `bitnami/os-shell`      |
-| `volumePermissions.image.tag`                           | Init container volume-permissions image tag                                                                                                         | `11-debian-11-r60`      |
+| `volumePermissions.image.tag`                           | Init container volume-permissions image tag                                                                                                         | `11-debian-11-r89`      |
 | `volumePermissions.image.digest`                        | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                   | `""`                    |
 | `volumePermissions.image.pullPolicy`                    | Init container volume-permissions image pull policy                                                                                                 | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`                   | Specify docker-registry secret names as an array                                                                                                    | `[]`                    |
@@ -267,22 +267,24 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Cluster management parameters
 
-| Name                                                      | Description                                                                                   | Value          |
-| --------------------------------------------------------- | --------------------------------------------------------------------------------------------- | -------------- |
-| `cluster.init`                                            | Enable the initialization of the Redis&reg; Cluster                                           | `true`         |
-| `cluster.nodes`                                           | The number of master nodes should always be >= 3, otherwise cluster creation will fail        | `6`            |
-| `cluster.replicas`                                        | Number of replicas for every master in the cluster                                            | `1`            |
-| `cluster.externalAccess.enabled`                          | Enable access to the Redis                                                                    | `false`        |
-| `cluster.externalAccess.hostMode`                         | Set cluster preferred endpoint type as hostname                                               | `false`        |
-| `cluster.externalAccess.service.type`                     | Type for the services used to expose every Pod                                                | `LoadBalancer` |
-| `cluster.externalAccess.service.port`                     | Port for the services used to expose every Pod                                                | `6379`         |
-| `cluster.externalAccess.service.loadBalancerIP`           | Array of load balancer IPs for each Redis&reg; node. Length must be the same as cluster.nodes | `[]`           |
-| `cluster.externalAccess.service.loadBalancerSourceRanges` | Service Load Balancer sources                                                                 | `[]`           |
-| `cluster.externalAccess.service.annotations`              | Annotations to add to the services used to expose every Pod of the Redis&reg; Cluster         | `{}`           |
-| `cluster.update.addNodes`                                 | Boolean to specify if you want to add nodes after the upgrade                                 | `false`        |
-| `cluster.update.currentNumberOfNodes`                     | Number of currently deployed Redis&reg; nodes                                                 | `6`            |
-| `cluster.update.currentNumberOfReplicas`                  | Number of currently deployed Redis&reg; replicas                                              | `1`            |
-| `cluster.update.newExternalIPs`                           | External IPs obtained from the services for the new nodes to add to the cluster               | `[]`           |
+| Name                                                      | Description                                                                                                | Value          |
+| --------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | -------------- |
+| `cluster.init`                                            | Enable the initialization of the Redis&reg; Cluster                                                        | `true`         |
+| `cluster.nodes`                                           | The number of master nodes should always be >= 3, otherwise cluster creation will fail                     | `6`            |
+| `cluster.replicas`                                        | Number of replicas for every master in the cluster                                                         | `1`            |
+| `cluster.externalAccess.enabled`                          | Enable access to the Redis                                                                                 | `false`        |
+| `cluster.externalAccess.hostMode`                         | Set cluster preferred endpoint type as hostname                                                            | `false`        |
+| `cluster.externalAccess.service.disableLoadBalancerIP`    | Disable use of `Service.spec.loadBalancerIP`                                                               | `false`        |
+| `cluster.externalAccess.service.loadBalancerIPAnnotaion`  | Name of annotation to specify fixed IP for service in. Disables `Service.spec.loadBalancerIP` if not empty | `""`           |
+| `cluster.externalAccess.service.type`                     | Type for the services used to expose every Pod                                                             | `LoadBalancer` |
+| `cluster.externalAccess.service.port`                     | Port for the services used to expose every Pod                                                             | `6379`         |
+| `cluster.externalAccess.service.loadBalancerIP`           | Array of load balancer IPs for each Redis&reg; node. Length must be the same as cluster.nodes              | `[]`           |
+| `cluster.externalAccess.service.loadBalancerSourceRanges` | Service Load Balancer sources                                                                              | `[]`           |
+| `cluster.externalAccess.service.annotations`              | Annotations to add to the services used to expose every Pod of the Redis&reg; Cluster                      | `{}`           |
+| `cluster.update.addNodes`                                 | Boolean to specify if you want to add nodes after the upgrade                                              | `false`        |
+| `cluster.update.currentNumberOfNodes`                     | Number of currently deployed Redis&reg; nodes                                                              | `6`            |
+| `cluster.update.currentNumberOfReplicas`                  | Number of currently deployed Redis&reg; replicas                                                           | `1`            |
+| `cluster.update.newExternalIPs`                           | External IPs obtained from the services for the new nodes to add to the cluster                            | `[]`           |
 
 ### Metrics sidecar parameters
 
@@ -291,7 +293,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                                           | Start a side-car prometheus exporter                                                                                               | `false`                  |
 | `metrics.image.registry`                                    | Redis&reg; exporter image registry                                                                                                 | `docker.io`              |
 | `metrics.image.repository`                                  | Redis&reg; exporter image name                                                                                                     | `bitnami/redis-exporter` |
-| `metrics.image.tag`                                         | Redis&reg; exporter image tag                                                                                                      | `1.54.0-debian-11-r0`    |
+| `metrics.image.tag`                                         | Redis&reg; exporter image tag                                                                                                      | `1.54.0-debian-11-r27`   |
 | `metrics.image.digest`                                      | Redis&reg; exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                | `""`                     |
 | `metrics.image.pullPolicy`                                  | Redis&reg; exporter image pull policy                                                                                              | `IfNotPresent`           |
 | `metrics.image.pullSecrets`                                 | Specify docker-registry secret names as an array                                                                                   | `[]`                     |
@@ -331,7 +333,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sysctlImage.command`                             | sysctlImage command to execute                                                                                       | `[]`               |
 | `sysctlImage.registry`                            | sysctlImage Init container registry                                                                                  | `docker.io`        |
 | `sysctlImage.repository`                          | sysctlImage Init container repository                                                                                | `bitnami/os-shell` |
-| `sysctlImage.tag`                                 | sysctlImage Init container tag                                                                                       | `11-debian-11-r60` |
+| `sysctlImage.tag`                                 | sysctlImage Init container tag                                                                                       | `11-debian-11-r89` |
 | `sysctlImage.digest`                              | sysctlImage Init container digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`               |
 | `sysctlImage.pullPolicy`                          | sysctlImage Init container pull policy                                                                               | `IfNotPresent`     |
 | `sysctlImage.pullSecrets`                         | Specify docker-registry secret names as an array                                                                     | `[]`               |

@@ -81,7 +81,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`     | MediaWiki image registry                                                                                                                           | `docker.io`           |
 | `image.repository`   | MediaWiki image repository                                                                                                                         | `bitnami/mediawiki`   |
-| `image.tag`          | MediaWiki image tag (immutable tags are recommended)                                                                                               | `1.40.1-debian-11-r2` |
+| `image.tag`          | MediaWiki image tag (immutable tags are recommended)                                                                                               | `1.40.1-debian-11-r3` |
 | `image.digest`       | MediaWiki image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                          | `""`                  |
 | `image.pullPolicy`   | Image pull policy                                                                                                                                  | `IfNotPresent`        |
 | `image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                                   | `[]`                  |
@@ -233,7 +233,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                          | Start a side-car prometheus exporter                                                                            | `false`                   |
 | `metrics.image.registry`                   | Apache exporter image registry                                                                                  | `docker.io`               |
 | `metrics.image.repository`                 | Apache exporter image repository                                                                                | `bitnami/apache-exporter` |
-| `metrics.image.tag`                        | Apache exporter image tag (immutable tags are recommended)                                                      | `1.0.2-debian-11-r5`      |
+| `metrics.image.tag`                        | Apache exporter image tag (immutable tags are recommended)                                                      | `1.0.2-debian-11-r8`      |
 | `metrics.image.digest`                     | Apache exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
 | `metrics.image.pullPolicy`                 | Image pull policy                                                                                               | `IfNotPresent`            |
 | `metrics.image.pullSecrets`                | Specify docker-registry secret names as an array                                                                | `[]`                      |
@@ -364,6 +364,10 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 17.0.0
+
+This major release bumps the MariaDB version to 11.1. No major issues are expected during the upgrade.
 
 ### To 16.0.0
 

@@ -8,9 +8,9 @@ annotations:
     - name: grafana-image-renderer
       image: docker.io/bitnami/grafana-image-renderer:3.8.3-debian-11-r3
     - name: grafana
-      image: docker.io/bitnami/grafana:10.1.4-debian-11-r3
+      image: docker.io/bitnami/grafana:10.1.4-debian-11-r6
     - name: os-shell
-      image: docker.io/bitnami/os-shell:11-debian-11-r86
+      image: docker.io/bitnami/os-shell:11-debian-11-r89
 apiVersion: v2
 appVersion: 10.1.4
 dependencies:
