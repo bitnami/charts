@@ -118,6 +118,13 @@ Create name for the apprepository-controller based on the fullname
 {{- end -}}
 
 {{/*
+Create name for the apprepository-controller based on the namespace
+*/}}
+{{- define "kubeapps.apprepository.fullname.namespace" -}}
+{{- printf "%s-internal-apprepository-controller" (include "common.names.fullname.namespace" .) | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
 Create name for the dashboard based on the fullname
 */}}
 {{- define "kubeapps.dashboard.fullname" -}}

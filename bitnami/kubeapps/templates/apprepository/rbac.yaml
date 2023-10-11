@@ -47,7 +47,7 @@ rules:
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole
 metadata:
-  name: {{ template "kubeapps.apprepository.fullname" . }}
+  name: {{ template "kubeapps.apprepository.fullname.namespace" . }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: apprepository
   {{- if .Values.commonAnnotations }}
@@ -90,7 +90,7 @@ subjects:
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRoleBinding
 metadata:
-  name: {{ template "kubeapps.apprepository.fullname" . }}
+  name: {{ template "kubeapps.apprepository.fullname.namespace" . }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: apprepository
   {{- if .Values.commonAnnotations }}
@@ -99,7 +99,7 @@ metadata:
 roleRef:
   apiGroup: rbac.authorization.k8s.io
   kind: ClusterRole
-  name: {{ template "kubeapps.apprepository.fullname" . }}
+  name: {{ template "kubeapps.apprepository.fullname.namespace" . }}
 subjects:
   - kind: ServiceAccount
     name: {{ template "kubeapps.apprepository.serviceAccountName" . }}
