@@ -170,6 +170,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `autoscaling.maxReplicas`            | Maximum number of replicas                                                                                               | `11`            |
 | `autoscaling.targetCPU`              | Target CPU utilization percentage                                                                                        | `""`            |
 | `autoscaling.targetMemory`           | Target Memory utilization percentage                                                                                     | `""`            |
+| `autoscaling.customPodMetrics`       | List of custom pod metrics to trigger autoscaling                                                                        | `[]`               |
 
 ### Exposure Parameters
 
