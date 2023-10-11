@@ -995,7 +995,7 @@ keycloakConfigCli:
   ##     clients: []
   ##
   configuration: {}
-  ## @param keycloakConfigCli.existingConfigmap ConfigMap with keycloak-config-cli configuration. This will override `keycloakConfigCli.config`
+  ## @param keycloakConfigCli.existingConfigmap ConfigMap with keycloak-config-cli configuration.
   ## NOTE: This will override keycloakConfigCli.configuration
   ##
   existingConfigmap: ""
