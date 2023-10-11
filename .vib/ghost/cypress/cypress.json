@@ -5,7 +5,7 @@
       "password": "Complicated123!4"
     },
     "hosts": {
-      "vmware-ghost.my": "127.0.0.1"
+      "vmware-ghost.my": "{{ TARGET_IP }}"
     },
     "defaultCommandTimeout": 60000
 }
