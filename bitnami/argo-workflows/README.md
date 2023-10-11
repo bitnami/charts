@@ -81,7 +81,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | --------------------------- |
 | `server.image.registry`                                  | server image registry                                                                                               | `docker.io`                 |
 | `server.image.repository`                                | server image repository                                                                                             | `bitnami/argo-workflow-cli` |
-| `server.image.tag`                                       | server image tag (immutable tags are recommended)                                                                   | `3.4.11-debian-11-r27`      |
+| `server.image.tag`                                       | server image tag (immutable tags are recommended)                                                                   | `3.4.11-debian-11-r28`      |
 | `server.image.digest`                                    | server image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag              | `""`                        |
 | `server.image.pullPolicy`                                | server image pull policy                                                                                            | `IfNotPresent`              |
 | `server.image.pullSecrets`                               | server image pull secrets                                                                                           | `[]`                        |
