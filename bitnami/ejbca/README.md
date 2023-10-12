@@ -312,6 +312,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 10.0.0
+
+This major release bumps the MariaDB version to 11.1. No major issues are expected during the upgrade.
+
 ### To 9.0.0
 
 This major release only bumps the EJBCA version to 8.x. No major issues are expected during the upgrade. Refer to [upstream upgrade notes](https://doc.primekey.com/ejbca/ejbca-release-information/ejbca-upgrade-notes/ejbca-8-0-upgrade-notes) for more info about the changes included in this new major version of the application.

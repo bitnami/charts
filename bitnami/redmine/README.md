@@ -556,6 +556,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 25.0.0
+
+This major release bumps the MariaDB version to 11.1. No major issues are expected during the upgrade.
+
 ### To 24.0.0
 
 This major updates the PostgreSQL subchart to its newest major, 13.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#to-1300) you can find more information about the changes introduced in that version.

@@ -10,9 +10,9 @@ annotations:
     - name: cainjector
       image: docker.io/bitnami/cainjector:1.13.1-debian-11-r9
     - name: cert-manager-webhook
-      image: docker.io/bitnami/cert-manager-webhook:1.13.1-debian-11-r8
+      image: docker.io/bitnami/cert-manager-webhook:1.13.1-debian-11-r10
     - name: cert-manager
-      image: docker.io/bitnami/cert-manager:1.13.1-debian-11-r9
+      image: docker.io/bitnami/cert-manager:1.13.1-debian-11-r11
 apiVersion: v2
 appVersion: 1.13.1
 dependencies:
@@ -35,4 +35,4 @@ maintainers:
 name: cert-manager
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/cert-manager
-version: 0.12.10
+version: 0.12.11

@@ -81,7 +81,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ---------------------- |
 | `image.registry`                       | etcd image registry                                                                                                  | `docker.io`            |
 | `image.repository`                     | etcd image name                                                                                                      | `bitnami/etcd`         |
-| `image.tag`                            | etcd image tag                                                                                                       | `3.5.9-debian-11-r146` |
+| `image.tag`                            | etcd image tag                                                                                                       | `3.5.9-debian-11-r148` |
 | `image.digest`                         | etcd image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                 | `""`                   |
 | `image.pullPolicy`                     | etcd image pull policy                                                                                               | `IfNotPresent`         |
 | `image.pullSecrets`                    | etcd image pull secrets                                                                                              | `[]`                   |
