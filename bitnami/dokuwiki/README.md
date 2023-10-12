@@ -79,7 +79,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ----------------------------- |
 | `image.registry`                        | DokuWiki image registry                                                                                               | `docker.io`                   |
 | `image.repository`                      | DokuWiki image repository                                                                                             | `bitnami/dokuwiki`            |
-| `image.tag`                             | DokuWiki image tag                                                                                                    | `20230404.1.0-debian-11-r100` |
+| `image.tag`                             | DokuWiki image tag                                                                                                    | `20230404.1.0-debian-11-r102` |
 | `image.digest`                          | DokuWiki image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag              | `""`                          |
 | `image.pullPolicy`                      | Image pull policy                                                                                                     | `IfNotPresent`                |
 | `image.pullSecrets`                     | Image pull policy                                                                                                     | `[]`                          |
@@ -192,7 +192,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`            |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                                          | `docker.io`        |
 | `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                                                              | `bitnami/os-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `11-debian-11-r89` |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `11-debian-11-r90` |
 | `volumePermissions.image.digest`       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                         | `""`               |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`     |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                                          | `[]`               |
@@ -206,7 +206,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`           | Start a exporter side-car                                                                                       | `false`                   |
 | `metrics.image.registry`    | Apache exporter image registry                                                                                  | `docker.io`               |
 | `metrics.image.repository`  | Apache exporter image name                                                                                      | `bitnami/apache-exporter` |
-| `metrics.image.tag`         | Apache exporter image tag                                                                                       | `1.0.2-debian-11-r8`      |
+| `metrics.image.tag`         | Apache exporter image tag                                                                                       | `1.0.2-debian-11-r10`     |
 | `metrics.image.digest`      | Apache exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
 | `metrics.image.pullPolicy`  | Image pull policy                                                                                               | `IfNotPresent`            |
 | `metrics.image.pullSecrets` | Specify docker-registry secret names as an array                                                                | `[]`                      |
@@ -231,7 +231,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `certificates.extraEnvVarsSecret`                    | Secret containing extra env vars (in case of sensitive data)                                                      | `""`                                     |
 | `certificates.image.registry`                        | Container sidecar registry                                                                                        | `docker.io`                              |
 | `certificates.image.repository`                      | Container sidecar image                                                                                           | `bitnami/os-shell`                       |
-| `certificates.image.tag`                             | Container sidecar image tag                                                                                       | `11-debian-11-r89`                       |
+| `certificates.image.tag`                             | Container sidecar image tag                                                                                       | `11-debian-11-r90`                       |
 | `certificates.image.digest`                          | Container sidecar image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                                     |
 | `certificates.image.pullPolicy`                      | Container sidecar image pull policy                                                                               | `IfNotPresent`                           |
 | `certificates.image.pullSecrets`                     | Container sidecar image pull secrets                                                                              | `[]`                                     |
