@@ -6,11 +6,11 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: attu
-      image: docker.io/bitnami/attu:2.3.1-debian-11-r20
+      image: docker.io/bitnami/attu:2.3.1-debian-11-r22
     - name: milvus
-      image: docker.io/bitnami/milvus:2.2.14-debian-11-r35
+      image: docker.io/bitnami/milvus:2.2.14-debian-11-r37
     - name: os-shell
-      image: docker.io/bitnami/os-shell:11-debian-11-r89
+      image: docker.io/bitnami/os-shell:11-debian-11-r90
     - name: pymilvus
       image: docker.io/bitnami/pymilvus:2.3.1-debian-11-r12
 apiVersion: v2
@@ -48,4 +48,4 @@ maintainers:
 name: milvus
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/milvus
-version: 3.1.6
+version: 3.1.7
