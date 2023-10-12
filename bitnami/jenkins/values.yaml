@@ -72,7 +72,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/jenkins
-  tag: 2.414.2-debian-11-r16
+  tag: 2.414.2-debian-11-r17
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -344,7 +344,7 @@ agent:
   image:
     registry: docker.io
     repository: bitnami/jenkins-agent
-    tag: 0.3148.0-debian-11-r43
+    tag: 0.3148.0-debian-11-r44
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -898,7 +898,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r89
+    tag: 11-debian-11-r90
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
