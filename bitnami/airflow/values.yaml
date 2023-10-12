@@ -121,7 +121,7 @@ dags:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r89
+    tag: 11-debian-11-r90
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -188,7 +188,7 @@ web:
   image:
     registry: docker.io
     repository: bitnami/airflow
-    tag: 2.7.1-debian-11-r28
+    tag: 2.7.1-debian-11-r30
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -446,7 +446,7 @@ scheduler:
   image:
     registry: docker.io
     repository: bitnami/airflow-scheduler
-    tag: 2.7.1-debian-11-r27
+    tag: 2.7.1-debian-11-r28
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -650,7 +650,7 @@ worker:
   image:
     registry: docker.io
     repository: bitnami/airflow-worker
-    tag: 2.7.1-debian-11-r27
+    tag: 2.7.1-debian-11-r28
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -923,7 +923,7 @@ git:
   image:
     registry: docker.io
     repository: bitnami/git
-    tag: 2.42.0-debian-11-r41
+    tag: 2.42.0-debian-11-r45
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1286,7 +1286,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/airflow-exporter
-    tag: 0.20220314.0-debian-11-r436
+    tag: 0.20220314.0-debian-11-r438
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
