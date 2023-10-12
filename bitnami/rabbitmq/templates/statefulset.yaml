@@ -217,7 +217,7 @@ spec:
             {{- end }}
             - name: RABBITMQ_USE_LONGNAME
               value: "true"
-            - name: RABBITMQ_ERL_COOKIE
+            - name: RABBITMQ_ERLANG_COOKIE
               valueFrom:
                 secretKeyRef:
                   name: {{ template "rabbitmq.secretErlangName" . }}
