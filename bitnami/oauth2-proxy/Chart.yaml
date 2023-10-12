@@ -6,7 +6,7 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: oauth2-proxy
-      image: docker.io/bitnami/oauth2-proxy:7.5.1-debian-11-r7
+      image: docker.io/bitnami/oauth2-proxy:7.5.1-debian-11-r10
 apiVersion: v2
 appVersion: 7.5.1
 dependencies:
@@ -35,4 +35,4 @@ maintainers:
 name: oauth2-proxy
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/oauth2-proxy
-version: 4.1.5
+version: 4.1.6
