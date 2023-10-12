@@ -191,7 +191,7 @@ For more information, refer to the [documentation on the differences between the
 | `grafana.enabled`                                           | Enabled the deployment of the Grafana CRD object into the cluster                                       | `true`                   |
 | `grafana.image.registry`                                    | Grafana image registry                                                                                  | `docker.io`              |
 | `grafana.image.repository`                                  | Grafana image name                                                                                      | `bitnami/grafana`        |
-| `grafana.image.tag`                                         | Grafana image tag                                                                                       | `10.1.4-debian-11-r3`    |
+| `grafana.image.tag`                                         | Grafana image tag                                                                                       | `10.1.4-debian-11-r7`    |
 | `grafana.image.digest`                                      | Grafana image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                     |
 | `grafana.image.pullPolicy`                                  | Grafana image pull policy                                                                               | `IfNotPresent`           |
 | `grafana.image.pullSecrets`                                 | Grafana image pull secrets                                                                              | `[]`                     |
