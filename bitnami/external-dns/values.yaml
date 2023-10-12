@@ -299,8 +299,8 @@ civo:
   ## @param civo.apiToken When using the Civo provider, `CIVO_TOKEN` to set (optional)
   ##
   apiToken: ""
-  ## @param digitalocean.secretName Use an existing secret with key "digitalocean_api_token" defined.
-  ## This ignores digitalocean.apiToken
+  ## @param civo.secretName Use an existing secret with key "apiToken" defined.
+  ## This ignores civo.apiToken
   ##
   secretName: ""
 ## Cloudflare configuration to be set via arguments/env. variables
