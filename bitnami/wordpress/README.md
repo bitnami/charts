@@ -82,7 +82,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | --------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`    | WordPress image registry                                                                                  | `docker.io`           |
 | `image.repository`  | WordPress image repository                                                                                | `bitnami/wordpress`   |
-| `image.tag`         | WordPress image tag (immutable tags are recommended)                                                      | `6.3.1-debian-11-r36` |
+| `image.tag`         | WordPress image tag (immutable tags are recommended)                                                      | `6.3.1-debian-11-r37` |
 | `image.digest`      | WordPress image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
 | `image.pullPolicy`  | WordPress image pull policy                                                                               | `IfNotPresent`        |
 | `image.pullSecrets` | WordPress image pull secrets                                                                              | `[]`                  |
