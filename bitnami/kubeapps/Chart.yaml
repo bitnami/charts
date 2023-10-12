@@ -6,48 +6,50 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: kubeapps-apis
-      image: docker.io/bitnami/kubeapps-apis:2.8.0-debian-11-r49
+      image: docker.io/bitnami/kubeapps-apis:2.9.0-debian-11-r10
     - name: kubeapps-apprepository-controller
-      image: docker.io/bitnami/kubeapps-apprepository-controller:2.8.0-debian-11-r20
+      image: docker.io/bitnami/kubeapps-apprepository-controller:2.9.0-debian-11-r10
     - name: kubeapps-asset-syncer
-      image: docker.io/bitnami/kubeapps-asset-syncer:2.8.0-debian-11-r20
+      image: docker.io/bitnami/kubeapps-asset-syncer:2.9.0-debian-11-r10
+    - name: kubeapps-oci-catalog
+      image: docker.io/bitnami/kubeapps-oci-catalog:2.9.0-debian-11-r4
     - name: kubeapps-pinniped-proxy
-      image: docker.io/bitnami/kubeapps-pinniped-proxy:2.8.0-debian-11-r49
+      image: docker.io/bitnami/kubeapps-pinniped-proxy:2.9.0-debian-11-r9
     - name: kubeapps-dashboard
-      image: docker.io/bitnami/kubeapps-dashboard:2.8.0-debian-11-r50
+      image: docker.io/bitnami/kubeapps-dashboard:2.9.0-debian-11-r11
     - name: nginx
-      image: docker.io/bitnami/nginx:1.25.2-debian-11-r8
+      image: docker.io/bitnami/nginx:1.25.2-debian-11-r46
     - name: oauth2-proxy
-      image: docker.io/bitnami/oauth2-proxy:7.4.0-debian-11-r281
+      image: docker.io/bitnami/oauth2-proxy:7.5.1-debian-11-r10
 apiVersion: v2
-appVersion: 2.8.0
+appVersion: 2.9.0
 dependencies:
-  - condition: packaging.flux.enabled
-    name: redis
-    repository: oci://registry-1.docker.io/bitnamicharts
-    version: 18.x.x
-  - condition: packaging.helm.enabled
-    name: postgresql
-    repository: oci://registry-1.docker.io/bitnamicharts
-    version: 12.x.x
-  - name: common
-    repository: oci://registry-1.docker.io/bitnamicharts
-    tags:
-      - bitnami-common
-    version: 2.x.x
+- condition: packaging.flux.enabled
+  name: redis
+  repository: oci://registry-1.docker.io/bitnamicharts
+  version: 18.x.x
+- condition: packaging.helm.enabled
+  name: postgresql
+  repository: oci://registry-1.docker.io/bitnamicharts
+  version: 13.x.x
+- name: common
+  repository: oci://registry-1.docker.io/bitnamicharts
+  tags:
+  - bitnami-common
+  version: 2.x.x
 description: Kubeapps is a web-based UI for launching and managing applications on Kubernetes. It allows users to deploy trusted applications and operators to control users access to the cluster.
 home: https://bitnami.com
 icon: https://bitnami.com/assets/stacks/kubeapps/img/kubeapps-stack-220x234.png
 keywords:
-  - helm
-  - dashboard
-  - service catalog
-  - deployment
+- helm
+- dashboard
+- service catalog
+- deployment
 kubeVersion: '>=1.21.0-0'
 maintainers:
-  - name: VMware, Inc.
-    url: https://github.com/bitnami/charts
+- name: VMware, Inc.
+  url: https://github.com/bitnami/charts
 name: kubeapps
 sources:
-  - https://github.com/bitnami/charts/tree/main/bitnami/kubeapps
-version: 13.1.1
+- https://github.com/bitnami/charts/tree/main/bitnami/kubeapps
+version: 14.0.1

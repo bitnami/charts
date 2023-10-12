@@ -6,7 +6,7 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: jasperreports
-      image: docker.io/bitnami/jasperreports:8.2.0-debian-11-r92
+      image: docker.io/bitnami/jasperreports:8.2.0-debian-11-r96
 apiVersion: v2
 appVersion: 8.2.0
 dependencies:

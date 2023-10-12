@@ -6,11 +6,11 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: jenkins-agent
-      image: docker.io/bitnami/jenkins-agent:0.3148.0-debian-11-r43
+      image: docker.io/bitnami/jenkins-agent:0.3148.0-debian-11-r44
     - name: jenkins
-      image: docker.io/bitnami/jenkins:2.414.2-debian-11-r16
+      image: docker.io/bitnami/jenkins:2.414.2-debian-11-r17
     - name: os-shell
-      image: docker.io/bitnami/os-shell:11-debian-11-r89
+      image: docker.io/bitnami/os-shell:11-debian-11-r90
 apiVersion: v2
 appVersion: 2.414.2
 dependencies:
@@ -35,4 +35,4 @@ maintainers:
 name: jenkins
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/jenkins
-version: 12.3.7
+version: 12.3.8

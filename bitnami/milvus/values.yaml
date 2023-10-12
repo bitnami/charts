@@ -76,7 +76,7 @@ milvus:
   image:
     registry: docker.io
     repository: bitnami/milvus
-    tag: 2.2.14-debian-11-r35
+    tag: 2.2.14-debian-11-r37
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -4264,7 +4264,7 @@ attu:
   image:
     registry: docker.io
     repository: bitnami/attu
-    tag: 2.3.1-debian-11-r20
+    tag: 2.3.1-debian-11-r22
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -4803,7 +4803,7 @@ waitContainer:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r89
+    tag: 11-debian-11-r90
     digest: ""
     ## @param waitContainer.image.pullPolicy Init container wait-container image pull policy
     ##
