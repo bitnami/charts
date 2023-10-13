@@ -236,15 +236,18 @@ memoryHighWatermark:
   value: 0.4
 
 ## @param plugins List of default plugins to enable (should only be altered to remove defaults; for additional plugins use `extraPlugins`)
-##
+## eg. plugins: "rabbitmq_management rabbitmq_peer_discovery_k8s rabbitmq_web_mqtt rabbitmq_web_stomp rabbitmq_stomp "
+
 plugins: "rabbitmq_management rabbitmq_peer_discovery_k8s"
 ## @param communityPlugins List of Community plugins (URLs) to be downloaded during container initialization
 ## Combine it with extraPlugins to also enable them.
-##
+## eg . communityPlugins: "https://github.com/rabbitmq/rabbitmq-delayed-message-exchange/releases/download/3.11.1/rabbitmq_delayed_message_exchange-3.11.1.ez"
+
 communityPlugins: ""
 ## @param extraPlugins Extra plugins to enable (single string containing a space-separated list)
 ## Use this instead of `plugins` to add new plugins
-##
+## eg. extraPlugins: "rabbitmq_auth_backend_ldap rabbitmq_delayed_message_exchange"
+
 extraPlugins: "rabbitmq_auth_backend_ldap"
 
 ## Clustering settings
@@ -348,8 +351,10 @@ initScriptsSecret: ""
 ## @param extraContainerPorts Extra ports to be included in container spec, primarily informational
 ## E.g:
 ## extraContainerPorts:
-## - name: new_port_name
-##   containerPort: 1234
+## - name: stomp-ws
+##   containerPort: 15674
+## - name: stomp-tcp
+##   containerPorts: 61613  
 ##
 extraContainerPorts: []
 ## @param configuration [string] RabbitMQ Configuration file content: required cluster configuration
@@ -1028,10 +1033,12 @@ service:
   ## @param service.extraPorts Extra ports to expose in the service
   ## E.g.:
   ## extraPorts:
-  ## - name: new_svc_name
-  ##   port: 1234
-  ##   targetPort: 1234
-  ##
+  ## - name: stomp-ws
+  ##   port: 15674
+  ##   targetPort: 15674
+  ## - name: stomp-tcp
+  ##   port: 61613
+  ##   targetPort: 61613
   extraPorts: []
   ## @param service.loadBalancerSourceRanges Address(es) that are allowed when service is `LoadBalancer`
   ## https://kubernetes.io/docs/tasks/access-application-cluster/configure-cloud-provider-firewall/#restrict-access-for-loadbalancer-service
@@ -1141,13 +1148,24 @@ ingress:
   ##
   extraHosts: []
   ## @param ingress.extraPaths An array with additional arbitrary paths that may need to be added to the ingress under the main host
-  ## e.g:
+  ## e.g: https://kubernetes.github.io/ingress-nginx/user-guide/basic-usage/
+  ## if k8s version is < 1.19,
   ## extraPaths:
   ## - path: /*
+  ##   pathType: ImplementationSpecific ## Exact、ImplementationSpecific、Prefix
   ##   backend:
   ##     serviceName: ssl-redirect
   ##     servicePort: use-annotation
   ##
+  ## if k8s version is > 1.19 
+  ## extraPaths:
+  ## - path: /*
+  ##   pathType: ImplementationSpecific ## Exact、ImplementationSpecific、Prefix 
+  ##   backend:
+  ##     service:
+  ##      name: ssl-redirect
+  ##      port: 
+  ##       name: use-annotation
   extraPaths: []
   ## @param ingress.extraRules The list of additional rules to be added to this ingress record. Evaluated as a template
   ## Useful when looking for additional customization, such as using different backend
@@ -1185,7 +1203,7 @@ ingress:
   ## @param ingress.ingressClassName IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)
   ## This is supported in Kubernetes 1.18+ and required if you have more than one IngressClass marked as the default for your cluster .
   ## ref: https://kubernetes.io/blog/2020/04/02/improvements-to-the-ingress-api-in-kubernetes-1.18/
-  ##
+  ## eg: ingressClassName: "nginx"
   ingressClassName: ""
   ## @param ingress.existingSecret It is you own the certificate as secret.
   ##
