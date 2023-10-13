@@ -78,15 +78,15 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### WordPress Image parameters
 
-| Name                | Description                                                                                               | Value                 |
-| ------------------- | --------------------------------------------------------------------------------------------------------- | --------------------- |
-| `image.registry`    | WordPress image registry                                                                                  | `docker.io`           |
-| `image.repository`  | WordPress image repository                                                                                | `bitnami/wordpress`   |
-| `image.tag`         | WordPress image tag (immutable tags are recommended)                                                      | `6.3.1-debian-11-r38` |
-| `image.digest`      | WordPress image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
-| `image.pullPolicy`  | WordPress image pull policy                                                                               | `IfNotPresent`        |
-| `image.pullSecrets` | WordPress image pull secrets                                                                              | `[]`                  |
-| `image.debug`       | Specify if debug values should be set                                                                     | `false`               |
+| Name                | Description                                                                                               | Value                |
+| ------------------- | --------------------------------------------------------------------------------------------------------- | -------------------- |
+| `image.registry`    | WordPress image registry                                                                                  | `docker.io`          |
+| `image.repository`  | WordPress image repository                                                                                | `bitnami/wordpress`  |
+| `image.tag`         | WordPress image tag (immutable tags are recommended)                                                      | `6.3.2-debian-11-r0` |
+| `image.digest`      | WordPress image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                 |
+| `image.pullPolicy`  | WordPress image pull policy                                                                               | `IfNotPresent`       |
+| `image.pullSecrets` | WordPress image pull secrets                                                                              | `[]`                 |
+| `image.debug`       | Specify if debug values should be set                                                                     | `false`              |
 
 ### WordPress Configuration parameters
 
