@@ -259,7 +259,7 @@ dataPlane:
     deployment:
       role: data_plane
       role_data_plane:
-        config_provider: control_plane
+        config_provider: etcd
         {{- if .Values.controlPlane.enabled }}
         control_plane:
           host:
