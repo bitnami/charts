@@ -80,7 +80,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | -------------------- |
 | `image.registry`                        | Moodle image registry                                                                                                 | `docker.io`          |
 | `image.repository`                      | Moodle image repository                                                                                               | `bitnami/moodle`     |
-| `image.tag`                             | Moodle image tag (immutable tags are recommended)                                                                     | `4.2.3-debian-11-r0` |
+| `image.tag`                             | Moodle image tag (immutable tags are recommended)                                                                     | `4.3.0-debian-11-r0` |
 | `image.digest`                          | Moodle image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                | `""`                 |
 | `image.pullPolicy`                      | Moodle image pull policy                                                                                              | `IfNotPresent`       |
 | `image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                      | `[]`                 |
