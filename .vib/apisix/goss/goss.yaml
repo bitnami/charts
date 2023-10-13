@@ -46,9 +46,6 @@ http:
     status: 200
     body:
       - /apisix_ingress_controller.*/
-  https://apisix-ingress-controller:{{ .Vars.ingressController.service.ports.https }}:
-    status: 404
-    allow-insecure: true
 addr:
   # The user needs to add objects of type SSL using the API in order for the radixtree SSL provider to work
   tcp://apisix-data-plane:{{ .Vars.dataPlane.service.ports.https }}:
