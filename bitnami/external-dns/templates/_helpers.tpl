@@ -266,7 +266,7 @@ compartment: {{ .Values.oci.compartmentOCID }}
 {{ end }}
 
 {{- define "external-dns.civo-credentials" }}
-{{ .Values.civo.apiToken }}
+{{- .Values.civo.apiToken }}
 {{ end }}
 
 {{/*
