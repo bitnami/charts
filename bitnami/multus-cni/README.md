@@ -24,8 +24,8 @@ Looking to use Multus CNI in production? Try [VMware Application Catalog](https:
 
 ## Prerequisites
 
-- Kubernetes 1.19+
-- Helm 3.2.0+
+- Kubernetes 1.23+
+- Helm 3.8.0+
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -82,7 +82,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | -------------------------- |
 | `image.registry`                        | Multus CNI image registry                                                                                             | `docker.io`                |
 | `image.repository`                      | Multus CNI Image name                                                                                                 | `bitnami/multus-cni`       |
-| `image.tag`                             | Multus CNI Image tag                                                                                                  | `4.0.2-debian-11-r107`     |
+| `image.tag`                             | Multus CNI Image tag                                                                                                  | `4.0.2-debian-11-r127`     |
 | `image.digest`                          | Multus CNI image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag            | `""`                       |
 | `image.pullPolicy`                      | Multus CNI image pull policy                                                                                          | `IfNotPresent`             |
 | `image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                      | `[]`                       |

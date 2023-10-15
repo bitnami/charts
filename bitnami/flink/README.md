@@ -24,8 +24,8 @@ Looking to use Apache Flink in production? Try [VMware Application Catalog](http
 
 ## Prerequisites
 
-- Kubernetes 1.19+
-- Helm 3.2.0+
+- Kubernetes 1.23+
+- Helm 3.8.0+
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -81,7 +81,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | ------------------------------------------------------------------------------------------------------------ | ----------------------- |
 | `image.registry`    | Apache Flink image registry                                                                                  | `docker.io`             |
 | `image.repository`  | Apache Flink image repository                                                                                | `bitnami/flink`         |
-| `image.tag`         | Apache Flink image tag (immutable tags are recommended)                                                      | `1.17.1-debian-11-r100` |
+| `image.tag`         | Apache Flink image tag (immutable tags are recommended)                                                      | `1.17.1-debian-11-r120` |
 | `image.digest`      | Apache Flink image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `image.pullPolicy`  | image pull policy                                                                                            | `IfNotPresent`          |
 | `image.pullSecrets` | Apache Flink image pull secrets                                                                              | `[]`                    |

@@ -28,8 +28,8 @@ Looking to use Mastodon in production? Try [VMware Application Catalog](https://
 
 ## Prerequisites
 
-- Kubernetes 1.19+
-- Helm 3.2.0+
+- Kubernetes 1.23+
+- Helm 3.8.0+
 - PV provisioner support in the underlying infrastructure
 
 ## Installing the Chart
@@ -81,7 +81,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                                                                                   | `["infinity"]`       |
 | `image.registry`         | Mastodon image registry                                                                                                                             | `docker.io`          |
 | `image.repository`       | Mastodon image repository                                                                                                                           | `bitnami/mastodon`   |
-| `image.tag`              | Mastodon image tag (immutable tags are recommended)                                                                                                 | `4.2.0-debian-11-r0` |
+| `image.tag`              | Mastodon image tag (immutable tags are recommended)                                                                                                 | `4.2.1-debian-11-r1` |
 | `image.digest`           | Mastodon image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended) | `""`                 |
 | `image.pullPolicy`       | Mastodon image pull policy                                                                                                                          | `IfNotPresent`       |
 | `image.pullSecrets`      | Mastodon image pull secrets                                                                                                                         | `[]`                 |
@@ -428,7 +428,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`            |
 | `volumePermissions.image.registry`                     | OS Shell + Utility image registry                                                               | `docker.io`        |
 | `volumePermissions.image.repository`                   | OS Shell + Utility image repository                                                             | `bitnami/os-shell` |
-| `volumePermissions.image.tag`                          | OS Shell + Utility image tag (immutable tags are recommended)                                   | `11-debian-11-r77` |
+| `volumePermissions.image.tag`                          | OS Shell + Utility image tag (immutable tags are recommended)                                   | `11-debian-11-r90` |
 | `volumePermissions.image.pullPolicy`                   | OS Shell + Utility image pull policy                                                            | `IfNotPresent`     |
 | `volumePermissions.image.pullSecrets`                  | OS Shell + Utility image pull secrets                                                           | `[]`               |
 | `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`               |

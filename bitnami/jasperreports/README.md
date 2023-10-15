@@ -26,8 +26,8 @@ Looking to use JasperReports in production? Try [VMware Application Catalog](htt
 
 ## Prerequisites
 
-- Kubernetes 1.19+
-- Helm 3.2.0+
+- Kubernetes 1.23+
+- Helm 3.8.0+
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -81,7 +81,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------------- | ------------------------------------------------------------------------------------------------------------- | ----------------------- |
 | `image.registry`              | JasperReports image registry                                                                                  | `docker.io`             |
 | `image.repository`            | JasperReports image repository                                                                                | `bitnami/jasperreports` |
-| `image.tag`                   | JasperReports image tag (immutable tags are recommended)                                                      | `8.2.0-debian-11-r76`   |
+| `image.tag`                   | JasperReports image tag (immutable tags are recommended)                                                      | `8.2.0-debian-11-r96`   |
 | `image.digest`                | JasperReports image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `image.pullPolicy`            | JasperReports image pull policy                                                                               | `IfNotPresent`          |
 | `image.pullSecrets`           | Specify docker-registry secret names as an array                                                              | `[]`                    |
@@ -322,6 +322,10 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 17.0.0
+
+This major release bumps the MariaDB version to 11.1. No major issues are expected during the upgrade.
 
 ### To 16.0.0
 

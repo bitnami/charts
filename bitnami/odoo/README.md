@@ -26,8 +26,8 @@ Looking to use Odoo in production? Try [VMware Application Catalog](https://bitn
 
 ## Prerequisites
 
-- Kubernetes 1.19+
-- Helm 3.2.0+
+- Kubernetes 1.23+
+- Helm 3.8.0+
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -80,7 +80,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.args`    | Args to override all containers in the the statefulset                                               | `["infinity"]`               |
 | `image.registry`         | Odoo image registry                                                                                  | `docker.io`                  |
 | `image.repository`       | Odoo image repository                                                                                | `bitnami/odoo`               |
-| `image.tag`              | Odoo image tag (immutable tags are recommended)                                                      | `16.0.20230915-debian-11-r8` |
+| `image.tag`              | Odoo image tag (immutable tags are recommended)                                                      | `16.0.20231015-debian-11-r0` |
 | `image.digest`           | Odoo image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                         |
 | `image.pullPolicy`       | Odoo image pull policy                                                                               | `IfNotPresent`               |
 | `image.pullSecrets`      | Odoo image pull secrets                                                                              | `[]`                         |

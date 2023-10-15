@@ -8,3 +8,5 @@ service:
     http: 80
 readinessProbe:
   initialDelaySeconds: 90
+cronjobs:
+  enabled: false

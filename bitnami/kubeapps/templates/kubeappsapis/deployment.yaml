@@ -161,6 +161,10 @@ spec:
                 secretKeyRef:
                   key: postgres-password
                   name: {{ include "kubeapps.postgresql.secretName" . }}
+            {{- if .Values.ociCatalog.enabled }}
+            - name: OCI_CATALOG_URL
+              value: {{ printf ":%d" (int .Values.ociCatalog.containerPorts.grpc) | quote }}
+            {{- end }}
             {{- end }}
             {{- if .Values.kubeappsapis.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.kubeappsapis.extraEnvVars "context" $) | nindent 12 }}
@@ -184,7 +188,6 @@ spec:
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.kubeappsapis.livenessProbe "enabled") "context" $) | nindent 12 }}
             exec:
               command: ["grpc_health_probe", "-addr=:{{ .Values.kubeappsapis.containerPorts.http }}"]
-            initialDelaySeconds: 10
           {{- end }}
           {{- if .Values.kubeappsapis.customReadinessProbe }}
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.kubeappsapis.customReadinessProbe "context" $) | nindent 12 }}
@@ -192,7 +195,6 @@ spec:
           readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.kubeappsapis.readinessProbe "enabled") "context" $) | nindent 12 }}
             exec:
               command: ["grpc_health_probe", "-addr=:{{ .Values.kubeappsapis.containerPorts.http }}"]
-            initialDelaySeconds: 5
           {{- end }}
           {{- if .Values.kubeappsapis.customStartupProbe }}
           startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.kubeappsapis.customStartupProbe "context" $) | nindent 12 }}
@@ -223,6 +225,88 @@ spec:
           {{- if .Values.kubeappsapis.extraVolumeMounts }}
           {{- include "common.tplvalues.render" (dict "value" .Values.kubeappsapis.extraVolumeMounts "context" $) | nindent 12 }}
           {{- end }}
+        {{- if .Values.ociCatalog.enabled }}
+        - name: oci-catalog
+          image: {{ include "kubeapps.ociCatalog.image" . }}
+          imagePullPolicy: {{ .Values.ociCatalog.image.pullPolicy | quote }}
+          {{- if .Values.ociCatalog.containerSecurityContext.enabled }}
+          securityContext: {{- omit .Values.ociCatalog.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+          {{- end }}
+          {{- if .Values.kubeappsapis.lifecycleHooks }}
+          lifecycle: {{- include "common.tplvalues.render" (dict "value" .Values.kubeappsapis.lifecycleHooks "context" $) | nindent 12 }}
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.command "context" $) | nindent 12 }}
+          {{- else if .Values.ociCatalog.command }}
+          command: {{- include "common.tplvalues.render" (dict "value" .Values.ociCatalog.command "context" $) | nindent 12 }}
+          {{- else }}
+          command:
+            - /oci-catalog
+          {{- end }}
+          {{- if .Values.diagnosticMode.enabled }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.diagnosticMode.args "context" $) | nindent 12 }}
+          {{- else if .Values.ociCatalog.args }}
+          args: {{- include "common.tplvalues.render" (dict "value" .Values.kubeappsapis.args "context" $) | nindent 12 }}
+          {{- else }}
+          args:
+            {{- range .Values.ociCatalog.extraFlags }}
+            - {{ . }}
+            {{- end }}
+          {{- end }}
+          env:
+            - name: OCI_CATALOG_PORT
+              value: {{ .Values.ociCatalog.containerPorts.grpc | quote }}
+            - name: RUST_LOG
+              # Use info,pinniped_proxy::pinniped=debug for module control.
+              value: info
+            {{- if .Values.ociCatalog.extraEnvVars }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.ociCatalog.extraEnvVars "context" $) | nindent 12 }}
+            {{- end }}
+          {{- if or .Values.ociCatalog.extraEnvVarsCM .Values.ociCatalog.extraEnvVarsSecret }}
+          envFrom:
+            {{- if .Values.ociCatalog.extraEnvVarsCM }}
+            - configMapRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.ociCatalog.extraEnvVarsCM "context" $) }}
+            {{- end }}
+            {{- if .Values.ociCatalog.extraEnvVarsSecret }}
+            - secretRef:
+                name: {{ include "common.tplvalues.render" (dict "value" .Values.ociCatalog.extraEnvVarsSecret "context" $) }}
+            {{- end }}
+          {{- end }}
+          ports:
+            - name: grpc
+              containerPort: {{ .Values.ociCatalog.containerPorts.grpc }}
+          {{- if not .Values.diagnosticMode.enabled }}
+          {{- if .Values.ociCatalog.customLivenessProbe }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ociCatalog.customLivenessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.ociCatalog.livenessProbe.enabled }}
+          livenessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.kubeappsapis.livenessProbe "enabled") "context" $) | nindent 12 }}
+            exec:
+              command: ["grpc_health_probe", "-addr=:{{ .Values.ociCatalog.containerPorts.grpc }}"]
+          {{- end }}
+          {{- if .Values.ociCatalog.customReadinessProbe }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ociCatalog.customReadinessProbe "context" $) | nindent 12 }}
+          {{- else if .Values.ociCatalog.readinessProbe.enabled }}
+          readinessProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.ociCatalog.readinessProbe "enabled") "context" $) | nindent 12 }}
+            exec:
+              command: ["grpc_health_probe", "-addr=:{{ .Values.ociCatalog.containerPorts.grpc }}"]
+          {{- end }}
+          {{- if .Values.ociCatalog.customStartupProbe }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" .Values.ociCatalog.customStartupProbe "context" $) | nindent 12 }}
+          {{- else if .Values.ociCatalog.startupProbe.enabled }}
+          startupProbe: {{- include "common.tplvalues.render" (dict "value" (omit .Values.ociCatalog.startupProbe "enabled") "context" $) | nindent 12 }}
+            tcpSocket:
+              port: grpc-http
+          {{- end }}
+          {{- end }}
+          {{- if .Values.ociCatalog.resources }}
+          resources: {{- toYaml .Values.ociCatalog.resources | nindent 12 }}
+          {{- end }}
+          volumeMounts:
+          {{- if .Values.ociCatalog.extraVolumeMounts }}
+          {{- include "common.tplvalues.render" (dict "value" .Values.ociCatalog.extraVolumeMounts "context" $) | nindent 12 }}
+          {{- end }}
+        {{- end }}
         {{- if .Values.kubeappsapis.sidecars }}
         {{- include "common.tplvalues.render" (dict "value" .Values.kubeappsapis.sidecars "context" $) | trim | nindent 8 }}
         {{- end }}
