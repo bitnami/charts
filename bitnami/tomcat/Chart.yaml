@@ -6,13 +6,13 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: jmx-exporter
-      image: docker.io/bitnami/jmx-exporter:0.19.0-debian-11-r92
+      image: docker.io/bitnami/jmx-exporter:0.19.0-debian-11-r95
     - name: os-shell
-      image: docker.io/bitnami/os-shell:11-debian-11-r89
+      image: docker.io/bitnami/os-shell:11-debian-11-r90
     - name: tomcat
-      image: docker.io/bitnami/tomcat:10.1.13-debian-11-r36
+      image: docker.io/bitnami/tomcat:10.1.14-debian-11-r0
 apiVersion: v2
-appVersion: 10.1.13
+appVersion: 10.1.14
 dependencies:
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
@@ -35,4 +35,4 @@ maintainers:
 name: tomcat
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/tomcat
-version: 10.10.7
+version: 10.10.9

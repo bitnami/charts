@@ -22,7 +22,7 @@ it('allows managing a helm chart release', () => {
     cy.contains('Deploy').click();
 
     cy.get('#releaseName').type(releaseName);
-    cy.contains('Deploy').click();
+    cy.contains('cds-button', 'Deploy').click();
     cy.get('.application-status-pie-chart-title', { timeout: (Cypress.config('defaultCommandTimeout') * 3) }).should(
       'have.text',
       'Ready'

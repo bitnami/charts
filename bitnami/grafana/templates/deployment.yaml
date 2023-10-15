@@ -217,6 +217,9 @@ spec:
             - name: dashboard
               containerPort: {{ .Values.grafana.containerPorts.grafana }}
               protocol: TCP
+            {{- if .Values.grafana.extraPorts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.grafana.extraPorts "context" $) | nindent 12 }}
+            {{- end }}
           {{- if .Values.grafana.customLivenessProbe }}
           livenessProbe: {{- include "common.tplvalues.render" (dict "value" .Values.grafana.customLivenessProbe "context" $) | nindent 12 }}
           {{- else if .Values.grafana.livenessProbe.enabled }}
