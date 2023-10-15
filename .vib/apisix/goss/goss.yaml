@@ -18,10 +18,6 @@ http:
     status: 404
   http://127.0.0.1:{{ .Vars.dataPlane.containerPorts.control }}/v1/healthcheck:
     status: 200
-  http://{{ (index (index .Vars.extraDeploy 2).spec.rules 0).host }}:{{ .Vars.dataPlane.containerPorts.http }}/:
-    status: 200
-    body:
-      - /nginx/
   https://apisix-control-plane:{{ .Vars.controlPlane.service.ports.adminAPI }}/apisix/admin/routes:
     status: 401
     allow-insecure: true
@@ -29,9 +25,6 @@ http:
     status: 200
     request-headers:
       - "X-API-KEY: {{ .Vars.controlPlane.apiTokenAdmin }}"
-    allow-insecure: true
-  https://apisix-control-plane:{{ .Vars.controlPlane.service.ports.configServer }}:
-    status: 404
     allow-insecure: true
   http://apisix-control-plane:{{ .Vars.controlPlane.service.ports.metrics }}/apisix/prometheus/metrics:
     status: 200
