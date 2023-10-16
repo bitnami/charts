@@ -171,8 +171,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `autoscaling.targetCPU`              | Target CPU utilization percentage                                                                                        | `""`            |
 | `autoscaling.targetMemory`           | Target Memory utilization percentage                                                                                     | `""`            |
 | `autoscaling.customPodMetrics`       | List of custom pod metrics to trigger autoscaling                                                                        | `[]`               |
-| `autoscaling.customPodMetrics.name`           | Name of the metric to trigger autoscaling                                                                       | `""`               |
-| `autoscaling.customPodMetrics.averageValue`   | Average value of metrics to trigger autoscaling                                                                 | `""`               |
+| `autoscaling.customPodMetrics[0].name`           | Name of the metric to trigger autoscaling                                                                       | `""`               |
+| `autoscaling.customPodMetrics[0].averageValue`   | Average value of metrics to trigger autoscaling                                                                 | `""`               |
 
 ### Exposure Parameters
 
