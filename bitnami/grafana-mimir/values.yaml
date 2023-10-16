@@ -263,7 +263,7 @@ mimir:
     alertmanager:
       data_dir: {{ .Values.mimir.dataDir }}/alert-manager
       enable_api: true
-      external_url: {{ .Values.mimir.httpPrefix.prometheus }}
+      external_url: {{ .Values.mimir.httpPrefix.alertmanager }}
     {{- if .Values.minio.enabled }}
     alertmanager_storage:
       backend: s3
