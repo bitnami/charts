@@ -16,13 +16,14 @@ it('allows managing a helm chart release', () => {
   cy.fixture('releases').then((releases) => {
     const releaseName = `${releases.newRelease.name}-${random}`
 
+    cy.get('#search').type(releases.newRelease.application);
     cy.contains('div.card', releases.newRelease.application).click();
     cy.contains(Cypress.env('repoName'));
     cy.contains(Cypress.env('repoURL'));
     cy.contains('Deploy').click();
 
     cy.get('#releaseName').type(releaseName);
-    cy.contains('Deploy').click();
+    cy.contains('cds-button', 'Deploy').click();
     cy.get('.application-status-pie-chart-title', { timeout: (Cypress.config('defaultCommandTimeout') * 3) }).should(
       'have.text',
       'Ready'

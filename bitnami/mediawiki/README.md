@@ -110,6 +110,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                                    | Description                                                                               | Value                                             |
 | --------------------------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------------------- |
+| `replicaCount`                          | Number of Mediawiki replicas to deploy                                                    | `1`                                               |
 | `updateStrategy.type`                   | StrategyType can be set to RollingUpdate or OnDelete                                      | `RollingUpdate`                                   |
 | `podSecurityContext.enabled`            | Enable Mediawiki pods' Security Context                                                   | `true`                                            |
 | `podSecurityContext.fsGroup`            | Group ID for the volumes of the pod                                                       | `1001`                                            |
