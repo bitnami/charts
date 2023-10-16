@@ -208,7 +208,7 @@ frontend:
   image:
     registry: docker.io
     repository: bitnami/nginx
-    tag: 1.25.2-debian-11-r8
+    tag: 1.25.2-debian-11-r46
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -292,7 +292,7 @@ frontend:
   podSecurityContext:
     enabled: true
     fsGroup: 1001
-  ## Configure Container Security Context (only main container)
+  ## Configure Container Security Context for NGINX
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param frontend.containerSecurityContext.enabled Enabled NGINX containers' Security Context
   ## @param frontend.containerSecurityContext.runAsUser Set NGINX container's Security Context runAsUser
@@ -527,7 +527,7 @@ dashboard:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-dashboard
-    tag: 2.8.0-debian-11-r50
+    tag: 2.9.0-debian-11-r11
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -643,7 +643,7 @@ dashboard:
   podSecurityContext:
     enabled: true
     fsGroup: 1001
-  ## Configure Container Security Context (only main container)
+  ## Configure Container Security Context for Dashboard
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param dashboard.containerSecurityContext.enabled Enabled Dashboard containers' Security Context
   ## @param dashboard.containerSecurityContext.runAsUser Set Dashboard container's Security Context runAsUser
@@ -834,7 +834,7 @@ apprepository:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-apprepository-controller
-    tag: 2.8.0-debian-11-r20
+    tag: 2.9.0-debian-11-r10
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -861,7 +861,7 @@ apprepository:
   syncImage:
     registry: docker.io
     repository: bitnami/kubeapps-asset-syncer
-    tag: 2.8.0-debian-11-r20
+    tag: 2.9.0-debian-11-r10
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -990,7 +990,7 @@ apprepository:
   podSecurityContext:
     enabled: true
     fsGroup: 1001
-  ## Configure Container Security Context (only main container)
+  ## Configure Container Security Context for App Repository jobs
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param apprepository.containerSecurityContext.enabled Enabled AppRepository Controller containers' Security Context
   ## @param apprepository.containerSecurityContext.runAsUser Set AppRepository Controller container's Security Context runAsUser
@@ -1145,7 +1145,7 @@ authProxy:
   image:
     registry: docker.io
     repository: bitnami/oauth2-proxy
-    tag: 7.4.0-debian-11-r281
+    tag: 7.5.1-debian-11-r10
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1283,7 +1283,7 @@ pinnipedProxy:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-pinniped-proxy
-    tag: 2.8.0-debian-11-r49
+    tag: 2.9.0-debian-11-r9
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1576,7 +1576,7 @@ kubeappsapis:
   image:
     registry: docker.io
     repository: bitnami/kubeapps-apis
-    tag: 2.8.0-debian-11-r49
+    tag: 2.9.0-debian-11-r10
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1657,7 +1657,7 @@ kubeappsapis:
   podSecurityContext:
     enabled: true
     fsGroup: 1001
-  ## Configure Container Security Context (only main container)
+  ## Configure Container Security Context for Kubeapps APIs
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param kubeappsapis.containerSecurityContext.enabled Enabled KubeappsAPIs containers' Security Context
   ## @param kubeappsapis.containerSecurityContext.runAsUser Set KubeappsAPIs container's Security Context runAsUser
@@ -1842,6 +1842,157 @@ kubeappsapis:
     name: ""
     automountServiceAccountToken: true
     annotations: {}
+
+## @section OCI Catalog chart configuration
+ociCatalog:
+  ## @param ociCatalog.enabled Enable the OCI catalog gRPC service for cataloging
+  ## OCI repositories
+  enabled: false
+  ## Bitnami Kubeapps OCI Catalog image
+  ## ref: https://hub.docker.com/r/bitnami/kubeapps-ocicatalog/
+  ## @param ociCatalog.image.registry OCI Catalog image registry
+  ## @param ociCatalog.image.repository OCI Catalog image repository
+  ## @param ociCatalog.image.tag OCI Catalog image tag (immutable tags are recommended)
+  ## @param ociCatalog.image.digest OCI Catalog image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
+  ## @param ociCatalog.image.pullPolicy OCI Catalog image pull policy
+  ## @param ociCatalog.image.pullSecrets OCI Catalog image pull secrets
+  ## @param ociCatalog.image.debug Enable image debug mode
+  ##
+  image:
+    registry: docker.io
+    repository: bitnami/kubeapps-oci-catalog
+    tag: 2.9.0-debian-11-r4
+    digest: ""
+    ## Specify a imagePullPolicy
+    ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
+    ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
+    ##
+    pullPolicy: IfNotPresent
+    ## Optionally specify an array of imagePullSecrets.
+    ## Secrets must be manually created in the namespace.
+    ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/
+    ## e.g:
+    ## pullSecrets:
+    ##   - myRegistryKeySecretName
+    ##
+    pullSecrets: []
+    ## Enable debug mode
+    ##
+    debug: false
+  ## @param ociCatalog.extraFlags Additional command line flags for OCI Catalog
+  ##
+  extraFlags: []
+  ## @param ociCatalog.extraEnvVars Array with extra environment variables to add to the oci-catalog container
+  ## e.g:
+  ## extraEnvVars:
+  ##   - name: FOO
+  ##     value: "bar"
+  ##
+  extraEnvVars: []
+  ## @param ociCatalog.extraEnvVarsCM Name of existing ConfigMap containing extra env vars for the OCI Catalog container
+  ##
+  extraEnvVarsCM: ""
+  ## @param ociCatalog.extraEnvVarsSecret Name of existing Secret containing extra env vars for the OCI Catalog container
+  ##
+  extraEnvVarsSecret: ""
+  ## @param ociCatalog.containerPorts.grpc OCI Catalog gRPC container port
+  ##
+  containerPorts:
+    grpc: 50061
+  ## OCI Catalog containers' resource requests and limits
+  ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
+  ## @param ociCatalog.resources.limits.cpu The CPU limits for the OCI Catalog container
+  ## @param ociCatalog.resources.limits.memory The memory limits for the OCI Catalog container
+  ## @param ociCatalog.resources.requests.cpu The requested CPU for the OCI Catalog container
+  ## @param ociCatalog.resources.requests.memory The requested memory for the OCI Catalog container
+  ##
+  resources:
+    limits:
+      cpu: 250m
+      memory: 256Mi
+    requests:
+      cpu: 25m
+      memory: 32Mi
+  ## Configure Container Security Context (only main container)
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
+  ## @param ociCatalog.containerSecurityContext.enabled Enabled OCI Catalog containers' Security Context
+  ## @param ociCatalog.containerSecurityContext.runAsUser Set OCI Catalog container's Security Context runAsUser
+  ## @param ociCatalog.containerSecurityContext.runAsNonRoot Set OCI Catalog container's Security Context runAsNonRoot
+  ##
+  containerSecurityContext:
+    enabled: true
+    runAsUser: 1001
+    runAsNonRoot: true
+  ## Configure extra options for OCI Catalog containers' liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/configure-liveness-readiness-probes/#configure-probes
+  ## @param ociCatalog.livenessProbe.enabled Enable livenessProbe
+  ## @param ociCatalog.livenessProbe.initialDelaySeconds Initial delay seconds for livenessProbe
+  ## @param ociCatalog.livenessProbe.periodSeconds Period seconds for livenessProbe
+  ## @param ociCatalog.livenessProbe.timeoutSeconds Timeout seconds for livenessProbe
+  ## @param ociCatalog.livenessProbe.failureThreshold Failure threshold for livenessProbe
+  ## @param ociCatalog.livenessProbe.successThreshold Success threshold for livenessProbe
+  ## OCI Catalog containers' liveness and readiness probes
+  ## ref: https://kubernetes.io/docs/concepts/workloads/pods/pod-lifecycle/#container-probes
+  ##
+  livenessProbe:
+    enabled: true
+    initialDelaySeconds: 60
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+  ## @param ociCatalog.readinessProbe.enabled Enable readinessProbe
+  ## @param ociCatalog.readinessProbe.initialDelaySeconds Initial delay seconds for readinessProbe
+  ## @param ociCatalog.readinessProbe.periodSeconds Period seconds for readinessProbe
+  ## @param ociCatalog.readinessProbe.timeoutSeconds Timeout seconds for readinessProbe
+  ## @param ociCatalog.readinessProbe.failureThreshold Failure threshold for readinessProbe
+  ## @param ociCatalog.readinessProbe.successThreshold Success threshold for readinessProbe
+  ##
+  readinessProbe:
+    enabled: true
+    initialDelaySeconds: 0
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+  ## @param ociCatalog.startupProbe.enabled Enable startupProbe
+  ## @param ociCatalog.startupProbe.initialDelaySeconds Initial delay seconds for startupProbe
+  ## @param ociCatalog.startupProbe.periodSeconds Period seconds for startupProbe
+  ## @param ociCatalog.startupProbe.timeoutSeconds Timeout seconds for startupProbe
+  ## @param ociCatalog.startupProbe.failureThreshold Failure threshold for startupProbe
+  ## @param ociCatalog.startupProbe.successThreshold Success threshold for startupProbe
+  ##
+  startupProbe:
+    enabled: false
+    initialDelaySeconds: 0
+    periodSeconds: 10
+    timeoutSeconds: 5
+    failureThreshold: 6
+    successThreshold: 1
+  ## @param ociCatalog.customLivenessProbe Custom livenessProbe that overrides the default one
+  ##
+  customLivenessProbe: {}
+  ## @param ociCatalog.customReadinessProbe Custom readinessProbe that overrides the default one
+  ##
+  customReadinessProbe: {}
+  ## @param ociCatalog.customStartupProbe Custom startupProbe that overrides the default one
+  ##
+  customStartupProbe: {}
+  ## @param ociCatalog.lifecycleHooks Custom lifecycle hooks for OCI Catalog containers
+  ##
+  lifecycleHooks: {}
+  ## @param ociCatalog.command Override default container command (useful when using custom images)
+  ##
+  command: []
+  ## @param ociCatalog.args Override default container args (useful when using custom images)
+  ##
+  args: []
+  ## @param ociCatalog.extraVolumes Optionally specify extra list of additional volumes for the OCI Catalog pod(s)
+  ##
+  extraVolumes: []
+  ## @param ociCatalog.extraVolumeMounts Optionally specify extra list of additional volumeMounts for the OCI Catalog container(s)
+  ##
+  extraVolumeMounts: []
 
 ## @section Redis&reg; chart configuration
 ## ref: https://github.com/bitnami/charts/blob/main/bitnami/redis/values.yaml

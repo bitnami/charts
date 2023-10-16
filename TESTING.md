@@ -1,11 +1,8 @@
 # Testing information
 
-At Bitnami, we are committed to ensure the quality of the assets we deliver, and as such, tests play a fundamental role in the `bitnami/charts` repository. Bear in mind that every contribution to our charts is ultimately published to our Helm index, where it is made available for the rest of the community to benefit from. Before this happens, different checks are required to succeed. More precisely, tests are run when:
+At Bitnami, we are committed to ensure the quality of the assets we deliver, and as such, tests play a fundamental role in the `bitnami/charts` repository. Bear in mind that every contribution to our charts is ultimately published to our Helm index, where it is made available for the rest of the community to benefit from. Before this happens, different checks are required to succeed. More precisely, tests are run when a new contribution (regardless of its author) is made through a GitHub Pull Request.
 
-1. A new contribution (regardless of its author) is made through a GitHub Pull Request.
-2. Accepted changes are merged to the `main` branch, prior to their release.
-
-This strategy ensures that a set of changes must have succeeded twice before a new version is sent out to the public.
+This strategy ensures that a set of changes must have succeeded before a new version is sent out to the public.
 
 In this section, we will discuss:
 
@@ -115,9 +112,9 @@ This guide will focus in the `verify` phase section, in which there are some thi
 
 ### vib-verify.json vs vib-publish.json
 
-As seen in the introduction, there are two different events that will trigger the execution of the tests. These two files are associated to those two events respectively (`vib-verify.json` to the creation of a PR, meanwhile `vib-publish.json` to the merging of changes to `main`), and define what VIB should do when they are triggered.
+There are different events that will trigger the execution of the workflows and automations in this repository. These two files are associated to two events respectively (`vib-verify.json` to the creation of a PR, meanwhile `vib-publish.json` to the merging of changes to `main`), and define what VIB should do when they are triggered.
 
-Hence, tweaking the files allows to define different action policies depending on the event that was fired. Nevertheless, it was decided that the verification process should be identical in both cases. Therefore, the `verify` section in `vib-verify.json` and `vib-verify.json` files must coincide.
+Hence, tweaking the files allows to define different action policies depending on the event that was fired. It was decided that the verification process (i.e. the tests) should only take place when a new PR is created, and hence that is the reason for `verify` section to appear in `vib-verify.json`.
 
 ## Testing strategy
 
@@ -265,7 +262,7 @@ Sometimes it is of interest to run the tests locally, for example during develop
 1. Deploy the target Chart in your cluster, using the same installation parameters specified in the `vib-verify.json` pipeline file
 
     ```bash
-    $ helm install nginx bitnami/nginx -f .vib/nginx/runtime-parameters.yaml
+    helm install nginx bitnami/nginx -f .vib/nginx/runtime-parameters.yaml
     ```
 
 2. Download and install [Cypress](https://www.cypress.io/). The version currently used is `9.5.4`
@@ -396,7 +393,7 @@ Sometimes it is of interest to run the tests locally, for example during develop
 1. Deploy the target Chart in your cluster, using the same installation parameters specified in the `vib-verify.json` pipeline file
 
     ```bash
-    $ helm install metallb bitnami/metallb -f .vib/metallb/runtime-parameters.yaml
+    helm install metallb bitnami/metallb -f .vib/metallb/runtime-parameters.yaml
     ```
 
 2. Download and [install Ginkgo](https://onsi.github.io/ginkgo/#installing-ginkgo) in your system
@@ -467,7 +464,7 @@ Sometimes it is of interest to run the tests locally, for example during develop
 1. Deploy the target Chart in your cluster, using the same installation parameters specified in the `vib-verify.json` pipeline file
 
     ```bash
-    $ helm install nginx bitnami/nginx -f .vib/nginx/runtime-parameters.yaml
+    helm install nginx bitnami/nginx -f .vib/nginx/runtime-parameters.yaml
     ```
 
 2. Download the [GOSS binary for Linux AMD64](https://github.com/goss-org/goss/releases/)

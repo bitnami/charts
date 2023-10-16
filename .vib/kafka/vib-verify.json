@@ -31,12 +31,6 @@
       },
       "actions": [
         {
-          "action_id": "health-check",
-          "params": {
-            "endpoint": "lb-kafka-controller-0-external-tcp-kafka"
-          }
-        },
-        {
           "action_id": "goss",
           "params": {
             "resources": {

@@ -28,8 +28,8 @@ Looking to use ClickHouse in production? Try [VMware Application Catalog](https:
 
 ## Prerequisites
 
-- Kubernetes 1.19+
-- Helm 3.2.0+
+- Kubernetes 1.23+
+- Helm 3.8.0+
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -91,7 +91,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`                                    | ClickHouse image registry                                                                                  | `docker.io`           |
 | `image.repository`                                  | ClickHouse image repository                                                                                | `bitnami/clickhouse`  |
-| `image.tag`                                         | ClickHouse image tag (immutable tags are recommended)                                                      | `23.8.2-debian-11-r0` |
+| `image.tag`                                         | ClickHouse image tag (immutable tags are recommended)                                                      | `23.9.1-debian-11-r6` |
 | `image.digest`                                      | ClickHouse image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
 | `image.pullPolicy`                                  | ClickHouse image pull policy                                                                               | `IfNotPresent`        |
 | `image.pullSecrets`                                 | ClickHouse image pull secrets                                                                              | `[]`                  |
@@ -300,7 +300,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`            |
 | `volumePermissions.image.registry`                     | OS Shell + Utility image registry                                                               | `docker.io`        |
 | `volumePermissions.image.repository`                   | OS Shell + Utility image repository                                                             | `bitnami/os-shell` |
-| `volumePermissions.image.tag`                          | OS Shell + Utility image tag (immutable tags are recommended)                                   | `11-debian-11-r60` |
+| `volumePermissions.image.tag`                          | OS Shell + Utility image tag (immutable tags are recommended)                                   | `11-debian-11-r90` |
 | `volumePermissions.image.pullPolicy`                   | OS Shell + Utility image pull policy                                                            | `IfNotPresent`     |
 | `volumePermissions.image.pullSecrets`                  | OS Shell + Utility image pull secrets                                                           | `[]`               |
 | `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`               |
@@ -342,15 +342,15 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Zookeeper subchart parameters
 
-| Name                             | Description                                          | Value                 |
-| -------------------------------- | ---------------------------------------------------- | --------------------- |
-| `zookeeper.enabled`              | Deploy Zookeeper subchart                            | `true`                |
-| `zookeeper.replicaCount`         | Number of Zookeeper instances                        | `3`                   |
-| `zookeeper.service.ports.client` | Zookeeper client port                                | `2181`                |
-| `zookeeper.image.registry`       | Zookeeper image registry                             | `docker.io`           |
-| `zookeeper.image.repository`     | Zookeeper image repository                           | `bitnami/zookeeper`   |
-| `zookeeper.image.tag`            | Zookeeper image tag (immutable tags are recommended) | `3.8.2-debian-11-r43` |
-| `zookeeper.image.pullPolicy`     | Zookeeper image pull policy                          | `IfNotPresent`        |
+| Name                             | Description                                          | Value                |
+| -------------------------------- | ---------------------------------------------------- | -------------------- |
+| `zookeeper.enabled`              | Deploy Zookeeper subchart                            | `true`               |
+| `zookeeper.replicaCount`         | Number of Zookeeper instances                        | `3`                  |
+| `zookeeper.service.ports.client` | Zookeeper client port                                | `2181`               |
+| `zookeeper.image.registry`       | Zookeeper image registry                             | `docker.io`          |
+| `zookeeper.image.repository`     | Zookeeper image repository                           | `bitnami/zookeeper`  |
+| `zookeeper.image.tag`            | Zookeeper image tag (immutable tags are recommended) | `3.8.3-debian-11-r1` |
+| `zookeeper.image.pullPolicy`     | Zookeeper image pull policy                          | `IfNotPresent`       |
 
 See <https://github.com/bitnami-labs/readme-generator-for-helm> to create the table.
 

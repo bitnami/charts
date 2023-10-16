@@ -53,26 +53,24 @@ var _ = Describe("Pinniped:", func() {
 		})
 
 		Describe("the logs show that", func() {
-			var minidebLogs []string
+			var cliLogs []string
 
 			BeforeEach(func() {
 				pattern := "Script finished correctly"
 
-				containsPattern, err := retry("containerLogsContainPattern", 5, 5*time.Second, func() (bool, error) {
-					return containerLogsContainPattern(ctx, coreclient, testingPod.GetName(), "vib-minideb", pattern)
+				patternFound, err := retry("containerLogsContainPattern", 5, 5*time.Second, func() (bool, error) {
+					return containerLogsContainPattern(ctx, coreclient, testingPod.GetName(), "vib-cli", pattern)
 				})
 				if err != nil {
 					panic(err.Error())
 				}
-				Expect(containsPattern).To(BeTrue())
-
-				minidebPods := getPodsByLabelOrDie(ctx, coreclient, "app=vib-minideb")
-				minidebLogs = getContainerLogsOrDie(ctx, coreclient, minidebPods.Items[0].GetName(), "vib-minideb")
+				cliPods := getPodsByLabelOrDie(ctx, coreclient, "app=vib-cli")
+				cliLogs = getContainerLogsOrDie(ctx, coreclient, cliPods.Items[0].GetName(), "vib-cli")
 
 				// Debug code left as is, given configuration complexity
-				if !containsPattern {
-					fmt.Println("##### MINIDEB LOGS: #####")
-					fmt.Println(minidebLogs)
+				if !patternFound {
+					fmt.Println("##### CLI LOGS: #####")
+					fmt.Println(cliLogs)
 					fmt.Println("###############")
 
 					openldapPods := getPodsByLabelOrDie(ctx, coreclient, "app=openldap")
@@ -87,21 +85,37 @@ var _ = Describe("Pinniped:", func() {
 					fmt.Println(supervisorLogs)
 					fmt.Println("###############")
 				}
+				Expect(patternFound).To(BeTrue())
 			})
 
 			It("the script was executed entirely", func() {
-				containsPattern, _ := containsPattern(minidebLogs, "Script finished correctly")
-				Expect(containsPattern).To(BeTrue())
+				patternFound, _ := containsPattern(cliLogs, "Script finished correctly")
+				if !patternFound {
+					fmt.Println("##### CLI LOGS: #####")
+					fmt.Println(cliLogs)
+					fmt.Println("###############")
+				}
+				Expect(patternFound).To(BeTrue())
 			})
 
 			It("the pinniped cli produced the kubeconfig", func() {
-				containsPattern, _ := containsPattern(minidebLogs, "connection to the cluster")
-				Expect(containsPattern).To(BeTrue())
+				patternFound, _ := containsPattern(cliLogs, "connection to the cluster")
+				if !patternFound {
+					fmt.Println("##### CLI LOGS: #####")
+					fmt.Println(cliLogs)
+					fmt.Println("###############")
+				}
+				Expect(patternFound).To(BeTrue())
 			})
 
 			It("the pinniped cli configured the cluster auth", func() {
-				containsPattern, _ := containsPattern(minidebLogs, "Username: "+*authUser)
-				Expect(containsPattern).To(BeTrue())
+				patternFound, _ := containsPattern(cliLogs, "Username: "+*authUser)
+				if !patternFound {
+					fmt.Println("##### CLI LOGS: #####")
+					fmt.Println(cliLogs)
+					fmt.Println("###############")
+				}
+				Expect(patternFound).To(BeTrue())
 			})
 		})
 	})

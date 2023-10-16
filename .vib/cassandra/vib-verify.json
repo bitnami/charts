@@ -31,12 +31,6 @@
       },
       "actions": [
         {
-          "action_id": "health-check",
-          "params": {
-            "endpoint": "lb-cassandra-cql"
-          }
-        },
-        {
           "action_id": "goss",
           "params": {
             "resources": {

@@ -62,6 +62,13 @@ Return the proper kubeappsapis image name
 {{- end -}}
 
 {{/*
+Return the proper oci-catalog image name
+*/}}
+{{- define "kubeapps.ociCatalog.image" -}}
+{{- include "common.images.image" (dict "imageRoot" .Values.ociCatalog.image "global" .Values.global) -}}
+{{- end -}}
+
+{{/*
 Create a default fully qualified app name for PostgreSQL dependency.
 We truncate at 63 chars because some Kubernetes name fields are limited to this (by the DNS naming spec).
 */}}
@@ -108,6 +115,13 @@ Create name for the apprepository-controller based on the fullname
 */}}
 {{- define "kubeapps.apprepository.fullname" -}}
 {{- printf "%s-internal-apprepository-controller" (include "common.names.fullname" .) | trunc 63 | trimSuffix "-" -}}
+{{- end -}}
+
+{{/*
+Create name for the apprepository-controller based on the namespace
+*/}}
+{{- define "kubeapps.apprepository.fullname.namespace" -}}
+{{- printf "%s-internal-apprepository-controller" (include "common.names.fullname.namespace" .) | trunc 63 | trimSuffix "-" -}}
 {{- end -}}
 
 {{/*
