@@ -16,7 +16,7 @@ it('can login and access the experiment run', () => {
   // HACK: This approach is not recommended by Cypress but there is no clear way to
   // workaround the following race condition. In some test runs, the `run` Job
   // (check runtime-parameters.yaml) has not finished executing and therefore
-  // it is not visible in the UI. In this case, we need would need to reload the page
+  // it is not visible in the UI. In this case, we would need to reload the page
   // to see if the run is there or not. There is discussion in the Cypress repo on how to
   // workaround that: https://github.com/cypress-io/cypress/issues/3757
   cy.contains('Evaluation');
