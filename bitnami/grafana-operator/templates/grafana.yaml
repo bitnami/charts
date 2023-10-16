@@ -84,7 +84,7 @@ spec:
             podAntiAffinity: {{- include "common.affinities.pods" (dict "type" .Values.grafana.podAntiAffinityPreset "component" "grafana" "customLabels" .Values.commonLabels "context" $) | nindent 14 }}
             {{- end }}
             {{- if not (empty .Values.grafana.nodeAffinityPreset.type) }}
-            nodeAffinity: {{- (dict "type" .Values.grafana.nodeAffinityPreset.type "key" .Values.grafana.nodeAffinityPreset.key "values" .Values.grafana.nodeAffinityPreset.values) | nindent 14 }}
+            nodeAffinity: {{- include "common.affinities.nodes" (dict "type" .Values.grafana.nodeAffinityPreset.type "key".Values.grafana.nodeAffinityPreset.key "values" .Values.grafana.nodeAffinityPreset.values) | nindent 14 }}
             {{- end }}
           {{- end }}
           {{- if .Values.grafana.podSecurityContext.enabled }}
