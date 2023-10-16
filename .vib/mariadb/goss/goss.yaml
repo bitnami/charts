@@ -9,7 +9,7 @@ file:
   /opt/bitnami/mariadb/conf/my.cnf:
     mode: "0644"
     filetype: file
-    contains: [
+    contents: [
       "[mysqld]",
       "basedir=/opt/bitnami/mariadb",
       "socket=/opt/bitnami/mariadb/tmp/mysql.sock"]

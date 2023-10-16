@@ -6,7 +6,7 @@ file:
     exists: true
     filetype: file
     mode: "0664"
-    contains:
+    contents:
     - /http-port.*{{ .Vars.containerPorts.http }}/
     - /log-console-output.*{{ .Vars.logging.output }}/
 command:

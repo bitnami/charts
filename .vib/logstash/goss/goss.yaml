@@ -15,7 +15,7 @@ file:
     filetype: symlink
     mode: "0777"
     owner: root
-    contains:
+    contents:
     - /port.*{{ (index .Vars.containerPorts 0).containerPort }}/
 command:
   {{- $rnd_ip := printf "%s.%s.%s.%s" (randNumeric 2) (randNumeric 2) (randNumeric 2) (randNumeric 2) }}

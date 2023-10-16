@@ -48,6 +48,6 @@ file:
     filetype: file
     mode: "0664"
     group: root
-    contains:
+    contents:
       - /shared_preload_libraries.*{{ .Vars.postgresqlSharedPreloadLibraries }}/
       - /port.*{{ $port }}/

@@ -11,7 +11,7 @@ file:
     exists: true
     filetype: file
     mode: "0644"
-    contains:
+    contents:
       - /port.*{{ .Vars.server.containerPorts.http }}/
       - /database.*{{ .Vars.mongodb.auth.username }}.*{{ .Vars.mongodb.auth.password }}.*{{ .Vars.mongodb.auth.database }}/
 command:

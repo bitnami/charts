@@ -21,7 +21,7 @@ file:
   /opt/bitnami/mysql/conf/my.cnf:
     mode: "0644"
     filetype: file
-    contains:
+    contents:
     - "[mysqld]"
     - "datadir=/bitnami/mysql/data"
     - "socket=/opt/bitnami/mysql/tmp/mysql.sock"
