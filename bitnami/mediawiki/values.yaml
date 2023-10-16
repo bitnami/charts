@@ -152,6 +152,10 @@ extraEnvVarsSecret: ""
 
 ## @section Mediawiki deployment parameters
 
+## @param replicaCount Number of Mediawiki replicas to deploy
+## NOTE: ReadWriteMany PVC(s) are required if replicaCount > 1
+##
+replicaCount: 1
 ## Strategy to use to update Pods
 ## @param updateStrategy.type StrategyType can be set to RollingUpdate or OnDelete
 ##
