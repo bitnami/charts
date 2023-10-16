@@ -8,11 +8,11 @@ annotations:
     - name: memcached-exporter
       image: docker.io/bitnami/memcached-exporter:0.13.0-debian-11-r121
     - name: memcached
-      image: docker.io/bitnami/memcached:1.6.21-debian-11-r107
+      image: docker.io/bitnami/memcached:1.6.22-debian-11-r0
     - name: os-shell
       image: docker.io/bitnami/os-shell:11-debian-11-r90
 apiVersion: v2
-appVersion: 1.6.21
+appVersion: 1.6.22
 dependencies:
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
@@ -31,4 +31,4 @@ maintainers:
 name: memcached
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/memcached
-version: 6.6.6
+version: 6.6.7
