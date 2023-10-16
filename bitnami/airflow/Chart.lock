@@ -1,12 +1,12 @@
 dependencies:
 - name: redis
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 18.1.2
+  version: 18.1.5
 - name: postgresql
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 13.1.0
+  version: 13.1.5
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
   version: 2.13.2
-digest: sha256:794e93c885a8c59672fced77245dba1d8c90fb5cbbb240d9dbca97dddb044f1d
-generated: "2023-10-06T01:22:08.810307204Z"
+digest: sha256:5b0157324635d8a3daca94e01d702a13f41b14d81250b29486b5512db2d6b2e5
+generated: "2023-10-14T17:55:52.376439601Z"

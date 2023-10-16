@@ -22,5 +22,11 @@ spec:
       protocol: TCP
       name: grpc-http
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.kubeappsapis.podLabels .Values.commonLabels ) "context" . ) }}
+    {{- if .Values.ociCatalog.enabled }}
+    - port: {{ .Values.ociCatalog.containerPorts.grpc }}
+      targetPort: grpc
+      protocol: TCP
+      name: grpc
+    {{- end }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: kubeappsapis

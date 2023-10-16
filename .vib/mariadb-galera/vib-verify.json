@@ -31,13 +31,6 @@
       },
       "actions": [
         {
-          "action_id": "health-check",
-          "params": {
-            "endpoint": "lb-mariadb-galera-mysql",
-            "app_protocol": "GENERIC"
-          }
-        },
-        {
           "action_id": "goss",
           "params": {
             "resources": {
