@@ -26,8 +26,8 @@ Looking to use Apache Spark in production? Try [VMware Application Catalog](http
 
 ## Prerequisites
 
-- Kubernetes 1.19+
-- Helm 3.2.0+
+- Kubernetes 1.23+
+- Helm 3.8.0+
 
 ## Installing the Chart
 
@@ -82,16 +82,16 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Spark parameters
 
-| Name                | Description                                                                                           | Value                 |
-| ------------------- | ----------------------------------------------------------------------------------------------------- | --------------------- |
-| `image.registry`    | Spark image registry                                                                                  | `docker.io`           |
-| `image.repository`  | Spark image repository                                                                                | `bitnami/spark`       |
-| `image.tag`         | Spark image tag (immutable tags are recommended)                                                      | `3.4.1-debian-11-r48` |
-| `image.digest`      | Spark image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
-| `image.pullPolicy`  | Spark image pull policy                                                                               | `IfNotPresent`        |
-| `image.pullSecrets` | Specify docker-registry secret names as an array                                                      | `[]`                  |
-| `image.debug`       | Enable image debug mode                                                                               | `false`               |
-| `hostNetwork`       | Enable HOST Network                                                                                   | `false`               |
+| Name                | Description                                                                                           | Value                |
+| ------------------- | ----------------------------------------------------------------------------------------------------- | -------------------- |
+| `image.registry`    | Spark image registry                                                                                  | `docker.io`          |
+| `image.repository`  | Spark image repository                                                                                | `bitnami/spark`      |
+| `image.tag`         | Spark image tag (immutable tags are recommended)                                                      | `3.5.0-debian-11-r0` |
+| `image.digest`      | Spark image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                 |
+| `image.pullPolicy`  | Spark image pull policy                                                                               | `IfNotPresent`       |
+| `image.pullSecrets` | Specify docker-registry secret names as an array                                                      | `[]`                 |
+| `image.debug`       | Enable image debug mode                                                                               | `false`              |
+| `hostNetwork`       | Enable HOST Network                                                                                   | `false`              |
 
 ### Spark master parameters
 

@@ -3,7 +3,7 @@ Copyright VMware, Inc.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if and .Values.rbac.create .Values.rbac.pspEnabled }}
+{{- if and (include "common.capabilities.psp.supported" .) .Values.rbac.create .Values.rbac.pspEnabled }}
 kind: ClusterRoleBinding
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 metadata:

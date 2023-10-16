@@ -36,13 +36,6 @@ command:
     exit-status: 0
     stdout:
       - "vulture"
-  # Due to an upstream issue, 'tempo-cli query api search' test has been temporarily disabled
-  # Ref: https://github.com/grafana/tempo/issues/2913
-  # xk6-client-registered-traces:
-  #   exec: tempo-cli query api search http://grafana-tempo-query-frontend:{{ .Vars.queryFrontend.service.ports.http }}
-  #   exit-status: 0
-  #   stdout:
-  #     - "article-to-cart"
   {{- $uid := .Vars.compactor.containerSecurityContext.runAsUser }}
   {{- $gid := .Vars.compactor.podSecurityContext.fsGroup }}
   check-user-info:

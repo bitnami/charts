@@ -21,6 +21,8 @@ Cypress.Commands.add(
   'login',
   (username = Cypress.env('username'), password = Cypress.env('password')) => {
     cy.visit('/login');
+    // Wait for DOM content to load
+    cy.wait(5000);
     cy.get('form[name="login"]').should('exist').and('be.visible'); // Needed to ensure stability of the test
     cy.get('input#username').type(username);
     cy.get('input#password').type(password);

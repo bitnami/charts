@@ -9,7 +9,9 @@ kind: Service
 metadata:
   name: {{ include "prometheus.alertmanager.fullname" . | quote }}
   namespace: {{ include "common.names.namespace" . | quote }}
-  labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.alertmanager.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.commonLabels $versionLabel ) "context" . ) }}
+  labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/part-of: prometheus
     app.kubernetes.io/component: alertmanager
   {{- if or .Values.alertmanager.service.annotations .Values.commonAnnotations }}
@@ -35,6 +37,9 @@ spec:
   {{- end }}
   {{- if and (eq .Values.alertmanager.service.type "LoadBalancer") (not (empty .Values.alertmanager.service.loadBalancerIP)) }}
   loadBalancerIP: {{ .Values.alertmanager.service.loadBalancerIP }}
+  {{- end }}
+  {{- if and (eq .Values.alertmanager.service.type "LoadBalancer") (not (empty .Values.alertmanager.service.loadBalancerClass)) }}
+  loadBalancerClass: {{ .Values.alertmanager.service.loadBalancerClass }}
   {{- end }}
   ports:
     - name: http

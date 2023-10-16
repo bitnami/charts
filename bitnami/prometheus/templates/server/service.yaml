@@ -35,6 +35,9 @@ spec:
   {{- if and (eq .Values.server.service.type "LoadBalancer") (not (empty .Values.server.service.loadBalancerIP)) }}
   loadBalancerIP: {{ .Values.server.service.loadBalancerIP }}
   {{- end }}
+  {{- if and (eq .Values.server.service.type "LoadBalancer") (not (empty .Values.server.service.loadBalancerClass)) }}
+  loadBalancerClass: {{ .Values.server.service.loadBalancerClass }}
+  {{- end }}
   ports:
     - name: http
       port: {{ .Values.server.service.ports.http }}

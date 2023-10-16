@@ -23,6 +23,9 @@ spec:
   {{- if and (eq .Values.prometheus.configReloader.service.type "LoadBalancer") (not (empty .Values.prometheus.configReloader.service.loadBalancerIP)) }}
   loadBalancerIP: {{ .Values.prometheus.configReloader.service.loadBalancerIP }}
   {{- end }}
+  {{- if and (eq .Values.prometheus.configReloader.service.type "LoadBalancer") (not (empty .Values.prometheus.configReloader.service.loadBalancerClass)) }}
+  loadBalancerClass: {{ .Values.prometheus.configReloader.service.loadBalancerClass }}
+  {{- end }}
   {{- if and (eq .Values.prometheus.configReloader.service.type "LoadBalancer") (not (empty .Values.prometheus.configReloader.service.loadBalancerSourceRanges)) }}
   loadBalancerSourceRanges: {{ .Values.prometheus.configReloader.service.loadBalancerSourceRanges }}
   {{- end }}

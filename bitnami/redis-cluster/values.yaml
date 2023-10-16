@@ -73,10 +73,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/redis-cluster
-  ## Bitnami Redis&reg; image tag
-  ## ref: https://github.com/bitnami/containers/tree/main/bitnami/redis#supported-tags-and-respective-dockerfile-links
-  ##
-  tag: 7.2.1-debian-11-r0
+  tag: 7.2.1-debian-11-r26
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -362,7 +359,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r60
+    tag: 11-debian-11-r90
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -790,6 +787,12 @@ cluster:
     ##
     hostMode: false
     service:
+      ## @param cluster.externalAccess.service.disableLoadBalancerIP Disable use of `Service.spec.loadBalancerIP`
+      ##
+      disableLoadBalancerIP: false
+      ## @param cluster.externalAccess.service.loadBalancerIPAnnotaion Name of annotation to specify fixed IP for service in. Disables `Service.spec.loadBalancerIP` if not empty
+      ##
+      loadBalancerIPAnnotaion: ""
       ## @param cluster.externalAccess.service.type Type for the services used to expose every Pod
       ## At this moment only LoadBalancer is supported
       ##
@@ -846,7 +849,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/redis-exporter
-    tag: 1.54.0-debian-11-r0
+    tag: 1.55.0-debian-11-r0
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1015,7 +1018,7 @@ sysctlImage:
   ##
   registry: docker.io
   repository: bitnami/os-shell
-  tag: 11-debian-11-r60
+  tag: 11-debian-11-r90
   digest: ""
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
