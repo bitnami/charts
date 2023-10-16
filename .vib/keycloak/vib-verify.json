@@ -51,8 +51,8 @@
             "resources": {
               "path": "/.vib/keycloak/cypress"
             },
-            "endpoint": "lb-keycloak-http",
-            "app_protocol": "HTTP",
+            "endpoint": "lb-keycloak-https",
+            "app_protocol": "HTTPS",
             "env": {
               "username": "user",
               "password": "ComplicatedPassword123!4"
