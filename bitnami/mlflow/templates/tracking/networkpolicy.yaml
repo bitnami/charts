@@ -35,6 +35,8 @@ spec:
     - ports:
         - port: {{ .Values.tracking.containerPorts.http }}
         - port: {{ include "mlflow.v0.tracking.port" . }}
+        - port: {{ include "mlflow.v0.database.port" . }}
+        - port: {{ include "mlflow.v0.s3.port" . }}
       to:
         - podSelector:
             matchLabels: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 14 }}

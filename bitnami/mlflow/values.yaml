@@ -528,9 +528,6 @@ tracking:
     ## @param tracking.ingress.pathType Ingress path type
     ##
     pathType: ImplementationSpecific
-    ## @param tracking.ingress.apiVersion Force Ingress API version (automatically detected if not set)
-    ##
-    apiVersion: ""
     ## @param tracking.ingress.hostname Default host for the ingress record
     ##
     hostname: mlflow.local
