@@ -46,13 +46,6 @@
           }
         },
         {
-          "action_id": "health-check",
-          "params": {
-            "endpoint": "lb-external-dns-http",
-            "app_protocol": "HTTP"
-          }
-        },
-        {
           "action_id": "cypress",
           "params": {
             "resources": {

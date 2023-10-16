@@ -65,7 +65,7 @@ diagnosticMode:
 rabbitmqImage:
   registry: docker.io
   repository: bitnami/rabbitmq
-  tag: 3.11.22-debian-11-r2
+  tag: 3.11.23-debian-11-r23
   digest: ""
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
@@ -87,7 +87,7 @@ rabbitmqImage:
 credentialUpdaterImage:
   registry: docker.io
   repository: bitnami/rmq-default-credential-updater
-  tag: 1.0.2-debian-11-r20
+  tag: 1.0.4-debian-11-r0
   digest: ""
   ## Optionally specify an array of imagePullSecrets.
   ## Secrets must be manually created in the namespace.
@@ -111,7 +111,7 @@ clusterOperator:
   image:
     registry: docker.io
     repository: bitnami/rabbitmq-cluster-operator
-    tag: 2.5.0-debian-11-r0
+    tag: 2.5.0-debian-11-r37
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -220,12 +220,23 @@ clusterOperator:
   ## @param clusterOperator.containerSecurityContext.runAsUser Set RabbitMQ Cluster Operator containers' Security Context runAsUser
   ## @param clusterOperator.containerSecurityContext.runAsNonRoot Force running the container as non root
   ## @param clusterOperator.containerSecurityContext.readOnlyRootFilesystem mount / (root) as a readonly filesystem on cluster operator containers
+  ## @param clusterOperator.containerSecurityContext.capabilities.drop Drop all linux capabilities except the ones explicitly defined
+  ## @param clusterOperator.containerSecurityContext.allowPrivilegeEscalation Allow privilege escalation for cluster operator containers
+  ## @param clusterOperator.containerSecurityContext.seccompProfile.type Enable seccomp profile for cluster operator containers
+
   ##
   containerSecurityContext:
     enabled: true
     runAsUser: 1001
     runAsNonRoot: true
     readOnlyRootFilesystem: true
+    capabilities:
+      drop:
+        - ALL
+    allowPrivilegeEscalation: false
+    seccompProfile:
+      type: RuntimeDefault
+
 
   ## @param clusterOperator.command Override default container command (useful when using custom images)
   ##
@@ -505,7 +516,7 @@ msgTopologyOperator:
   image:
     registry: docker.io
     repository: bitnami/rmq-messaging-topology-operator
-    tag: 1.12.0-debian-11-r20
+    tag: 1.12.0-debian-11-r58
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

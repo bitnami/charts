@@ -43,26 +43,3 @@ queryFrontend:
       http: 80
 vulture:
   enabled: true
-extraDeploy:
-- apiVersion: apps/v1
-  kind: Deployment
-  metadata:
-    labels:
-      app: vib-xk6-client-tracing
-    name: vib-xk6-client-tracing
-  spec:
-    replicas: 1
-    selector:
-      matchLabels:
-        app: vib-xk6-client-tracing
-    template:
-      metadata:
-        labels:
-          app: vib-xk6-client-tracing
-      spec:
-        containers:
-        - image: ghcr.io/grafana/xk6-client-tracing:v0.0.2
-          name: xk6-client-tracing
-          env:
-          - name: ENDPOINT
-            value: grafana-tempo-distributor:4317

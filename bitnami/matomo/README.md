@@ -26,8 +26,8 @@ Looking to use Matomo in production? Try [VMware Application Catalog](https://bi
 
 ## Prerequisites
 
-- Kubernetes 1.19+
-- Helm 3.2.0+
+- Kubernetes 1.23+
+- Helm 3.8.0+
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -81,7 +81,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | ---------------------- |
 | `image.registry`                        | Matomo image registry                                                                                                 | `docker.io`            |
 | `image.repository`                      | Matomo Image name                                                                                                     | `bitnami/matomo`       |
-| `image.tag`                             | Matomo Image tag                                                                                                      | `4.15.1-debian-11-r42` |
+| `image.tag`                             | Matomo Image tag                                                                                                      | `4.15.1-debian-11-r63` |
 | `image.digest`                          | Matomo image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                | `""`                   |
 | `image.pullPolicy`                      | Matomo image pull policy                                                                                              | `IfNotPresent`         |
 | `image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                      | `[]`                   |
@@ -234,7 +234,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`            |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                                          | `docker.io`        |
 | `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                                                              | `bitnami/os-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `11-debian-11-r69` |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `11-debian-11-r90` |
 | `volumePermissions.image.digest`       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                         | `""`               |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`     |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                                          | `[]`               |
@@ -248,7 +248,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`           | Start a exporter side-car                                                                                       | `false`                   |
 | `metrics.image.registry`    | Apache exporter image registry                                                                                  | `docker.io`               |
 | `metrics.image.repository`  | Apache exporter image repository                                                                                | `bitnami/apache-exporter` |
-| `metrics.image.tag`         | Apache exporter image tag                                                                                       | `1.0.1-debian-11-r50`     |
+| `metrics.image.tag`         | Apache exporter image tag                                                                                       | `1.0.2-debian-11-r10`     |
 | `metrics.image.digest`      | Apache exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
 | `metrics.image.pullPolicy`  | Image pull policy                                                                                               | `IfNotPresent`            |
 | `metrics.image.pullSecrets` | Specify docker-registry secret names as an array                                                                | `[]`                      |
@@ -273,30 +273,50 @@ The command removes all the Kubernetes components associated with the chart and 
 | `certificates.extraEnvVarsSecret`                    | Secret containing extra env vars (in case of sensitive data)                                                      | `""`                                     |
 | `certificates.image.registry`                        | Container sidecar registry                                                                                        | `docker.io`                              |
 | `certificates.image.repository`                      | Container sidecar image                                                                                           | `bitnami/os-shell`                       |
-| `certificates.image.tag`                             | Container sidecar image tag                                                                                       | `11-debian-11-r69`                       |
+| `certificates.image.tag`                             | Container sidecar image tag                                                                                       | `11-debian-11-r90`                       |
 | `certificates.image.digest`                          | Container sidecar image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                                     |
 | `certificates.image.pullPolicy`                      | Container sidecar image pull policy                                                                               | `IfNotPresent`                           |
 | `certificates.image.pullSecrets`                     | Container sidecar image pull secrets                                                                              | `[]`                                     |
 
 ### NetworkPolicy parameters
 
-| Name                                                          | Description                                                                                                                | Value   |
-| ------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- | ------- |
-| `networkPolicy.enabled`                                       | Enable network policies                                                                                                    | `false` |
-| `networkPolicy.metrics.enabled`                               | Enable network policy for metrics (prometheus)                                                                             | `false` |
-| `networkPolicy.metrics.namespaceSelector`                     | Monitoring namespace selector labels. These labels will be used to identify the prometheus' namespace.                     | `{}`    |
-| `networkPolicy.metrics.podSelector`                           | Monitoring pod selector labels. These labels will be used to identify the Prometheus pods.                                 | `{}`    |
-| `networkPolicy.ingress.enabled`                               | Enable network policy for Ingress Proxies                                                                                  | `false` |
-| `networkPolicy.ingress.namespaceSelector`                     | Ingress Proxy namespace selector labels. These labels will be used to identify the Ingress Proxy's namespace.              | `{}`    |
-| `networkPolicy.ingress.podSelector`                           | Ingress Proxy pods selector labels. These labels will be used to identify the Ingress Proxy pods.                          | `{}`    |
-| `networkPolicy.ingressRules.backendOnlyAccessibleByFrontend`  | Enable ingress rule that makes the backend (mariadb) only accessible by matomo's pods.                                     | `false` |
-| `networkPolicy.ingressRules.customBackendSelector`            | Backend selector labels. These labels will be used to identify the backend pods.                                           | `{}`    |
-| `networkPolicy.ingressRules.accessOnlyFrom.enabled`           | Enable ingress rule that makes matomo only accessible from a particular origin                                             | `false` |
-| `networkPolicy.ingressRules.accessOnlyFrom.namespaceSelector` | Namespace selector label that is allowed to access matomo. This label will be used to identified the allowed namespace(s). | `{}`    |
-| `networkPolicy.ingressRules.accessOnlyFrom.podSelector`       | Pods selector label that is allowed to access matomo. This label will be used to identified the allowed pod(s).            | `{}`    |
-| `networkPolicy.ingressRules.customRules`                      | Custom network policy ingress rule                                                                                         | `{}`    |
-| `networkPolicy.egressRules.denyConnectionsToExternal`         | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).                             | `false` |
-| `networkPolicy.egressRules.customRules`                       | Custom network policy rule                                                                                                 | `{}`    |
+| Name                                                           | Description                                                                                                                | Value         |
+| -------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- | ------------- |
+| `networkPolicy.enabled`                                        | Enable network policies                                                                                                    | `false`       |
+| `networkPolicy.metrics.enabled`                                | Enable network policy for metrics (prometheus)                                                                             | `false`       |
+| `networkPolicy.metrics.namespaceSelector`                      | Monitoring namespace selector labels. These labels will be used to identify the prometheus' namespace.                     | `{}`          |
+| `networkPolicy.metrics.podSelector`                            | Monitoring pod selector labels. These labels will be used to identify the Prometheus pods.                                 | `{}`          |
+| `networkPolicy.ingress.enabled`                                | Enable network policy for Ingress Proxies                                                                                  | `false`       |
+| `networkPolicy.ingress.namespaceSelector`                      | Ingress Proxy namespace selector labels. These labels will be used to identify the Ingress Proxy's namespace.              | `{}`          |
+| `networkPolicy.ingress.podSelector`                            | Ingress Proxy pods selector labels. These labels will be used to identify the Ingress Proxy pods.                          | `{}`          |
+| `networkPolicy.ingressRules.backendOnlyAccessibleByFrontend`   | Enable ingress rule that makes the backend (mariadb) only accessible by matomo's pods.                                     | `false`       |
+| `networkPolicy.ingressRules.customBackendSelector`             | Backend selector labels. These labels will be used to identify the backend pods.                                           | `{}`          |
+| `networkPolicy.ingressRules.accessOnlyFrom.enabled`            | Enable ingress rule that makes matomo only accessible from a particular origin                                             | `false`       |
+| `networkPolicy.ingressRules.accessOnlyFrom.namespaceSelector`  | Namespace selector label that is allowed to access matomo. This label will be used to identified the allowed namespace(s). | `{}`          |
+| `networkPolicy.ingressRules.accessOnlyFrom.podSelector`        | Pods selector label that is allowed to access matomo. This label will be used to identified the allowed pod(s).            | `{}`          |
+| `networkPolicy.ingressRules.customRules`                       | Custom network policy ingress rule                                                                                         | `{}`          |
+| `networkPolicy.egressRules.denyConnectionsToExternal`          | Enable egress rule that denies outgoing traffic outside the cluster, except for DNS (port 53).                             | `false`       |
+| `networkPolicy.egressRules.customRules`                        | Custom network policy rule                                                                                                 | `{}`          |
+| `cronjobs.enabled`                                             | Enables cronjobs for archive and scheduler tasks                                                                           | `true`        |
+| `cronjobs.taskScheduler.schedule`                              | Kubernetes CronJob schedule                                                                                                | `*/5 * * * *` |
+| `cronjobs.taskScheduler.suspend`                               | Whether to create suspended CronJob                                                                                        | `false`       |
+| `cronjobs.taskScheduler.command`                               | Override default container command (useful when using custom images)                                                       | `[]`          |
+| `cronjobs.taskScheduler.args`                                  | Override default container args (useful when using custom images)                                                          | `[]`          |
+| `cronjobs.taskScheduler.containerSecurityContext.enabled`      | archive Container securityContext                                                                                          | `false`       |
+| `cronjobs.taskScheduler.containerSecurityContext.runAsUser`    | User ID for the archive container                                                                                          | `1001`        |
+| `cronjobs.taskScheduler.containerSecurityContext.runAsNonRoot` | Whether to run the archive container as a non-root user                                                                    | `true`        |
+| `cronjobs.taskScheduler.podAnnotations`                        | Additional pod annotations                                                                                                 | `{}`          |
+| `cronjobs.taskScheduler.podLabels`                             | Additional pod labels                                                                                                      | `{}`          |
+| `cronjobs.archive.enabled`                                     | Whether to enable scheduled mail-to-task CronJob                                                                           | `false`       |
+| `cronjobs.archive.schedule`                                    | Kubernetes CronJob schedule                                                                                                | `*/5 * * * *` |
+| `cronjobs.archive.suspend`                                     | Whether to create suspended CronJob                                                                                        | `false`       |
+| `cronjobs.archive.command`                                     | Override default container command (useful when using custom images)                                                       | `[]`          |
+| `cronjobs.archive.args`                                        | Override default container args (useful when using custom images)                                                          | `[]`          |
+| `cronjobs.archive.containerSecurityContext.enabled`            | archive Container securityContext                                                                                          | `false`       |
+| `cronjobs.archive.containerSecurityContext.runAsUser`          | User ID for the archive container                                                                                          | `1001`        |
+| `cronjobs.archive.containerSecurityContext.runAsNonRoot`       | Whether to run the archive container as a non-root user                                                                    | `true`        |
+| `cronjobs.archive.podAnnotations`                              | Additional pod annotations                                                                                                 | `{}`          |
+| `cronjobs.archive.podLabels`                                   | Additional pod labels                                                                                                      | `{}`          |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -391,6 +411,10 @@ helm install my-release --set persistence.existingClaim=PVC_NAME oci://registry-
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 3.0.0
+
+This major release bumps the MariaDB version to 11.1. No major issues are expected during the upgrade.
 
 ### To 2.0.0
 

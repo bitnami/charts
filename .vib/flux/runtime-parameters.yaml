@@ -81,7 +81,7 @@ imageReflectorController:
 extraDeploy:
   # This is for kustomize-controller and source-controller
   # Source: https://fluxcd.io/flux/components/kustomize/kustomization/
-  - apiVersion: source.toolkit.fluxcd.io/v1beta2
+  - apiVersion: source.toolkit.fluxcd.io/v1
     kind: GitRepository
     metadata:
       name: vib-podinfo
@@ -91,7 +91,7 @@ extraDeploy:
       url: https://github.com/stefanprodan/podinfo
       ref:
         branch: master
-  - apiVersion: kustomize.toolkit.fluxcd.io/v1beta2
+  - apiVersion: kustomize.toolkit.fluxcd.io/v1
     kind: Kustomization
     metadata:
       name: vib-podinfo
@@ -106,7 +106,7 @@ extraDeploy:
       prune: false
   # This is for helm-controller and source-controller
   # We use bitnami charts for not causing conflicts with the deployment above
-  - apiVersion: source.toolkit.fluxcd.io/v1beta2
+  - apiVersion: source.toolkit.fluxcd.io/v1
     kind: GitRepository
     metadata:
       name: vib-bitnami-charts
@@ -142,7 +142,7 @@ extraDeploy:
   # This is for image-notification-controller. We will use the metrics to ensure that it is consumed
   # and therefore RBAC is correct. The values do not need to be correct
   # Source: https://fluxcd.io/flux/components/notification/receiver/
-  - apiVersion: notification.toolkit.fluxcd.io/v1beta2
+  - apiVersion: notification.toolkit.fluxcd.io/v1
     kind: Receiver
     metadata:
       name: vib-github-receiver
@@ -155,7 +155,7 @@ extraDeploy:
       secretRef:
         name: receiver-token
       resources:
-        - apiVersion: source.toolkit.fluxcd.io/v1beta2
+        - apiVersion: source.toolkit.fluxcd.io/v1
           kind: GitRepository
           name: bitnami-charts
           namespace: '{{ include "common.names.namespace" . }}'

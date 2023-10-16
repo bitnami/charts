@@ -24,8 +24,8 @@ Looking to use Jaeger in production? Try [VMware Application Catalog](https://bi
 
 ## Prerequisites
 
-- Kubernetes 1.19+
-- Helm 3.2.0+
+- Kubernetes 1.23+
+- Helm 3.8.0+
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -80,7 +80,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | ------------------------------------------------------------------------------------------------------ | --------------------- |
 | `image.registry`    | Jaeger image registry                                                                                  | `docker.io`           |
 | `image.repository`  | Jaeger image repository                                                                                | `bitnami/jaeger`      |
-| `image.tag`         | Jaeger image tag (immutable tags are recommended)                                                      | `1.49.0-debian-11-r0` |
+| `image.tag`         | Jaeger image tag (immutable tags are recommended)                                                      | `1.50.0-debian-11-r1` |
 | `image.digest`      | Jaeger image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
 | `image.pullPolicy`  | image pull policy                                                                                      | `IfNotPresent`        |
 | `image.pullSecrets` | Jaeger image pull secrets                                                                              | `[]`                  |
@@ -356,7 +356,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------------- | --------------------------------------------------------------------------------------------------------- | ---------------------- |
 | `cqlshImage.registry`                        | Cassandra image registry                                                                                  | `docker.io`            |
 | `cqlshImage.repository`                      | Cassandra image repository                                                                                | `bitnami/cassandra`    |
-| `cqlshImage.tag`                             | Cassandra image tag (immutable tags are recommended)                                                      | `4.0.11-debian-11-r49` |
+| `cqlshImage.tag`                             | Cassandra image tag (immutable tags are recommended)                                                      | `4.0.11-debian-11-r76` |
 | `cqlshImage.digest`                          | Cassandra image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
 | `cqlshImage.pullPolicy`                      | image pull policy                                                                                         | `IfNotPresent`         |
 | `cqlshImage.pullSecrets`                     | Cassandra image pull secrets                                                                              | `[]`                   |

@@ -156,6 +156,10 @@ spec:
                   key: {{ include "appsmith.redis.secretKey" . }}
             - name: APPSMITH_RTS_PORT
               value: {{ .Values.rts.containerPorts.http | quote }}
+            {{- if .Values.backend.persistence.gitDataPath }}
+            - name: APPSMITH_GIT_ROOT
+              value: {{ include "appsmith.gitDataPath" . }}
+            {{- end }}
             {{- if .Values.backend.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.backend.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}

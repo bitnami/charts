@@ -23,12 +23,14 @@ spec:
   - {{ . }}
   {{- end }}
   {{- end }}
-  {{- if or $.Values.apprepository.containerSecurityContext.enabled $.Values.apprepository.initialReposProxy.enabled .nodeSelector }}
+  {{- if or $.Values.apprepository.podSecurityContext.enabled $.Values.apprepository.containerSecurityContext.enabled $.Values.apprepository.initialReposProxy.enabled .nodeSelector .tolerations}}
   syncJobPodTemplate:
     spec:
-      {{- if $.Values.apprepository.initialReposProxy.enabled }}
+      {{- if or $.Values.apprepository.initialReposProxy.enabled $.Values.apprepository.containerSecurityContext.enabled }}
       containers:
-        - env:
+        -
+      {{- if $.Values.apprepository.initialReposProxy.enabled }}
+          env:
             - name: https_proxy
               value: {{ $.Values.apprepository.initialReposProxy.httpsProxy }}
             - name: http_proxy
@@ -37,8 +39,11 @@ spec:
               value: {{ $.Values.apprepository.initialReposProxy.noProxy }}
       {{- end }}
       {{- if $.Values.apprepository.containerSecurityContext.enabled }}
-      securityContext:
-        runAsUser: {{ $.Values.apprepository.containerSecurityContext.runAsUser }}
+          securityContext: {{- omit $.Values.apprepository.containerSecurityContext "enabled" | toYaml | nindent 12 }}
+      {{- end }}
+      {{- end }}
+      {{- if $.Values.apprepository.podSecurityContext.enabled }}
+      securityContext: {{- omit $.Values.apprepository.podSecurityContext "enabled" | toYaml | nindent 8 }}
       {{- end }}
       {{- if .nodeSelector }}
       nodeSelector: {{- toYaml .nodeSelector | nindent 8 }}

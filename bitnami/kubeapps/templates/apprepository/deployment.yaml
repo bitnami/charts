@@ -123,6 +123,10 @@ spec:
           env:
             - name: REPO_SYNC_IMAGE
               value: {{ include "kubeapps.apprepository.syncImage" . }}
+            {{- if .Values.ociCatalog.enabled }}
+            - name: OCI_CATALOG_URL
+              value: {{ printf "%s:%d" (include "kubeapps.kubeappsapis.fullname" .) (int .Values.ociCatalog.containerPorts.grpc) | quote }}
+            {{- end }}
             {{- if .Values.apprepository.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.apprepository.extraEnvVars "context" $) | nindent 12 }}
             {{- end }}
