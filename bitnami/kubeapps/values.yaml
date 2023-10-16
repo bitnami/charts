@@ -2064,6 +2064,3 @@ redis:
       ## @param redis.replica.persistence.enabled Enable Redis&reg; replica data persistence using PVC
       ##
       enabled: false
-
-
-### Added for testing purposes only. Will remove before merging
