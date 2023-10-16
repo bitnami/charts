@@ -439,14 +439,12 @@ autoscaling:
   maxReplicas: 11
   targetCPU: ""
   targetMemory: ""
-  ## @param customPodMetrics allows you to set a list of custom metrics to trigger the scaling.
+  ## @param autoscaling.customPodMetrics allows you to set a list of custom metrics to trigger the scaling.
   ## e.g:
   ## customPodMetrics:
   ##   - name: "requests_per_second"
   ##     averageValue: "2000m"
-  customPodMetrics:
-    - name: "requests_per_second"
-      averageValue: "2000m"
+  customPodMetrics: []
 
 ## @section Exposure Parameters
 ## Schema Registry Service paramaters.
