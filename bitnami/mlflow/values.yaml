@@ -110,7 +110,7 @@ image:
 gitImage:
   registry: docker.io
   repository: bitnami/git
-  tag: 2.42.0-debian-11-r20
+  tag: 2.42.0-debian-11-r45
   digest: ""
   pullPolicy: IfNotPresent
   ## Optionally specify an array of imagePullSecrets.
@@ -1158,7 +1158,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r81
+    tag: 11-debian-11-r90
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -1197,7 +1197,7 @@ waitContainer:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r83
+    tag: 11-debian-11-r90
     digest: ""
     ## @param waitContainer.image.pullPolicy Init container wait-container image pull policy
     ##
