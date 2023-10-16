@@ -215,7 +215,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `tracking.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
 | `tracking.ingress.enabled`                       | Enable ingress record generation for mlflow                                                                                      | `false`                  |
 | `tracking.ingress.pathType`                      | Ingress path type                                                                                                                | `ImplementationSpecific` |
-| `tracking.ingress.apiVersion`                    | Force Ingress API version (automatically detected if not set)                                                                    | `""`                     |
 | `tracking.ingress.hostname`                      | Default host for the ingress record                                                                                              | `mlflow.local`           |
 | `tracking.ingress.ingressClassName`              | IngressClass that will be be used to implement the Ingress (Kubernetes 1.18+)                                                    | `""`                     |
 | `tracking.ingress.path`                          | Default path for the ingress record                                                                                              | `/`                      |
