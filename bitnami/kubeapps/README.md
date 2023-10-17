@@ -108,86 +108,86 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 
 ### Frontend parameters
 
-| Name                                             | Description                                                                                           | Value                 |
-| ------------------------------------------------ | ----------------------------------------------------------------------------------------------------- | --------------------- |
-| `frontend.image.registry`                        | NGINX image registry                                                                                  | `docker.io`           |
-| `frontend.image.repository`                      | NGINX image repository                                                                                | `bitnami/nginx`       |
-| `frontend.image.tag`                             | NGINX image tag (immutable tags are recommended)                                                      | `1.25.2-debian-11-r8` |
-| `frontend.image.digest`                          | NGINX image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
-| `frontend.image.pullPolicy`                      | NGINX image pull policy                                                                               | `IfNotPresent`        |
-| `frontend.image.pullSecrets`                     | NGINX image pull secrets                                                                              | `[]`                  |
-| `frontend.image.debug`                           | Enable image debug mode                                                                               | `false`               |
-| `frontend.proxypassAccessTokenAsBearer`          | Use access_token as the Bearer when talking to the k8s api server                                     | `false`               |
-| `frontend.proxypassExtraSetHeader`               | Set an additional proxy header for all requests proxied via NGINX                                     | `""`                  |
-| `frontend.largeClientHeaderBuffers`              | Set large_client_header_buffers in NGINX config                                                       | `4 32k`               |
-| `frontend.replicaCount`                          | Number of frontend replicas to deploy                                                                 | `2`                   |
-| `frontend.updateStrategy.type`                   | Frontend deployment strategy type.                                                                    | `RollingUpdate`       |
-| `frontend.resources.limits.cpu`                  | The CPU limits for the NGINX container                                                                | `250m`                |
-| `frontend.resources.limits.memory`               | The memory limits for the NGINX container                                                             | `128Mi`               |
-| `frontend.resources.requests.cpu`                | The requested CPU for the NGINX container                                                             | `25m`                 |
-| `frontend.resources.requests.memory`             | The requested memory for the NGINX container                                                          | `32Mi`                |
-| `frontend.extraEnvVars`                          | Array with extra environment variables to add to the NGINX container                                  | `[]`                  |
-| `frontend.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars for the NGINX container                          | `""`                  |
-| `frontend.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for the NGINX container                             | `""`                  |
-| `frontend.containerPorts.http`                   | NGINX HTTP container port                                                                             | `8080`                |
-| `frontend.podSecurityContext.enabled`            | Enabled frontend pods' Security Context                                                               | `true`                |
-| `frontend.podSecurityContext.fsGroup`            | Set frontend pod's Security Context fsGroup                                                           | `1001`                |
-| `frontend.containerSecurityContext.enabled`      | Enabled NGINX containers' Security Context                                                            | `true`                |
-| `frontend.containerSecurityContext.runAsUser`    | Set NGINX container's Security Context runAsUser                                                      | `1001`                |
-| `frontend.containerSecurityContext.runAsNonRoot` | Set NGINX container's Security Context runAsNonRoot                                                   | `true`                |
-| `frontend.livenessProbe.enabled`                 | Enable livenessProbe                                                                                  | `true`                |
-| `frontend.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                               | `60`                  |
-| `frontend.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                      | `10`                  |
-| `frontend.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                     | `5`                   |
-| `frontend.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                   | `6`                   |
-| `frontend.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                   | `1`                   |
-| `frontend.readinessProbe.enabled`                | Enable readinessProbe                                                                                 | `true`                |
-| `frontend.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                              | `0`                   |
-| `frontend.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                     | `10`                  |
-| `frontend.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                    | `5`                   |
-| `frontend.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                  | `6`                   |
-| `frontend.readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                  | `1`                   |
-| `frontend.startupProbe.enabled`                  | Enable startupProbe                                                                                   | `false`               |
-| `frontend.startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                | `0`                   |
-| `frontend.startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                       | `10`                  |
-| `frontend.startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                      | `5`                   |
-| `frontend.startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                    | `6`                   |
-| `frontend.startupProbe.successThreshold`         | Success threshold for startupProbe                                                                    | `1`                   |
-| `frontend.customLivenessProbe`                   | Custom livenessProbe that overrides the default one                                                   | `{}`                  |
-| `frontend.customReadinessProbe`                  | Custom readinessProbe that overrides the default one                                                  | `{}`                  |
-| `frontend.customStartupProbe`                    | Custom startupProbe that overrides the default one                                                    | `{}`                  |
-| `frontend.lifecycleHooks`                        | Custom lifecycle hooks for frontend containers                                                        | `{}`                  |
-| `frontend.command`                               | Override default container command (useful when using custom images)                                  | `[]`                  |
-| `frontend.args`                                  | Override default container args (useful when using custom images)                                     | `[]`                  |
-| `frontend.podLabels`                             | Extra labels for frontend pods                                                                        | `{}`                  |
-| `frontend.podAnnotations`                        | Annotations for frontend pods                                                                         | `{}`                  |
-| `frontend.podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                   | `""`                  |
-| `frontend.podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`              | `soft`                |
-| `frontend.nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`             | `""`                  |
-| `frontend.nodeAffinityPreset.key`                | Node label key to match. Ignored if `affinity` is set                                                 | `""`                  |
-| `frontend.nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set                                              | `[]`                  |
-| `frontend.affinity`                              | Affinity for pod assignment                                                                           | `{}`                  |
-| `frontend.nodeSelector`                          | Node labels for pod assignment                                                                        | `{}`                  |
-| `frontend.tolerations`                           | Tolerations for pod assignment                                                                        | `[]`                  |
-| `frontend.priorityClassName`                     | Priority class name for frontend pods                                                                 | `""`                  |
-| `frontend.schedulerName`                         | Name of the k8s scheduler (other than default)                                                        | `""`                  |
-| `frontend.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment                                                        | `[]`                  |
-| `frontend.hostAliases`                           | Custom host aliases for frontend pods                                                                 | `[]`                  |
-| `frontend.extraVolumes`                          | Optionally specify extra list of additional volumes for frontend pods                                 | `[]`                  |
-| `frontend.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for frontend container(s)                    | `[]`                  |
-| `frontend.sidecars`                              | Add additional sidecar containers to the frontend pod                                                 | `[]`                  |
-| `frontend.initContainers`                        | Add additional init containers to the frontend pods                                                   | `[]`                  |
-| `frontend.service.type`                          | Frontend service type                                                                                 | `ClusterIP`           |
-| `frontend.service.ports.http`                    | Frontend service HTTP port                                                                            | `80`                  |
-| `frontend.service.nodePorts.http`                | Node port for HTTP                                                                                    | `""`                  |
-| `frontend.service.clusterIP`                     | Frontend service Cluster IP                                                                           | `""`                  |
-| `frontend.service.loadBalancerIP`                | Frontend service Load Balancer IP                                                                     | `""`                  |
-| `frontend.service.loadBalancerSourceRanges`      | Frontend service Load Balancer sources                                                                | `[]`                  |
-| `frontend.service.externalTrafficPolicy`         | Frontend service external traffic policy                                                              | `Cluster`             |
-| `frontend.service.extraPorts`                    | Extra ports to expose (normally used with the `sidecar` value)                                        | `[]`                  |
-| `frontend.service.annotations`                   | Additional custom annotations for frontend service                                                    | `{}`                  |
-| `frontend.service.sessionAffinity`               | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                  | `None`                |
-| `frontend.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                           | `{}`                  |
+| Name                                             | Description                                                                                           | Value                  |
+| ------------------------------------------------ | ----------------------------------------------------------------------------------------------------- | ---------------------- |
+| `frontend.image.registry`                        | NGINX image registry                                                                                  | `docker.io`            |
+| `frontend.image.repository`                      | NGINX image repository                                                                                | `bitnami/nginx`        |
+| `frontend.image.tag`                             | NGINX image tag (immutable tags are recommended)                                                      | `1.25.2-debian-11-r46` |
+| `frontend.image.digest`                          | NGINX image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
+| `frontend.image.pullPolicy`                      | NGINX image pull policy                                                                               | `IfNotPresent`         |
+| `frontend.image.pullSecrets`                     | NGINX image pull secrets                                                                              | `[]`                   |
+| `frontend.image.debug`                           | Enable image debug mode                                                                               | `false`                |
+| `frontend.proxypassAccessTokenAsBearer`          | Use access_token as the Bearer when talking to the k8s api server                                     | `false`                |
+| `frontend.proxypassExtraSetHeader`               | Set an additional proxy header for all requests proxied via NGINX                                     | `""`                   |
+| `frontend.largeClientHeaderBuffers`              | Set large_client_header_buffers in NGINX config                                                       | `4 32k`                |
+| `frontend.replicaCount`                          | Number of frontend replicas to deploy                                                                 | `2`                    |
+| `frontend.updateStrategy.type`                   | Frontend deployment strategy type.                                                                    | `RollingUpdate`        |
+| `frontend.resources.limits.cpu`                  | The CPU limits for the NGINX container                                                                | `250m`                 |
+| `frontend.resources.limits.memory`               | The memory limits for the NGINX container                                                             | `128Mi`                |
+| `frontend.resources.requests.cpu`                | The requested CPU for the NGINX container                                                             | `25m`                  |
+| `frontend.resources.requests.memory`             | The requested memory for the NGINX container                                                          | `32Mi`                 |
+| `frontend.extraEnvVars`                          | Array with extra environment variables to add to the NGINX container                                  | `[]`                   |
+| `frontend.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars for the NGINX container                          | `""`                   |
+| `frontend.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for the NGINX container                             | `""`                   |
+| `frontend.containerPorts.http`                   | NGINX HTTP container port                                                                             | `8080`                 |
+| `frontend.podSecurityContext.enabled`            | Enabled frontend pods' Security Context                                                               | `true`                 |
+| `frontend.podSecurityContext.fsGroup`            | Set frontend pod's Security Context fsGroup                                                           | `1001`                 |
+| `frontend.containerSecurityContext.enabled`      | Enabled NGINX containers' Security Context                                                            | `true`                 |
+| `frontend.containerSecurityContext.runAsUser`    | Set NGINX container's Security Context runAsUser                                                      | `1001`                 |
+| `frontend.containerSecurityContext.runAsNonRoot` | Set NGINX container's Security Context runAsNonRoot                                                   | `true`                 |
+| `frontend.livenessProbe.enabled`                 | Enable livenessProbe                                                                                  | `true`                 |
+| `frontend.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                               | `60`                   |
+| `frontend.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                      | `10`                   |
+| `frontend.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                     | `5`                    |
+| `frontend.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                   | `6`                    |
+| `frontend.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                   | `1`                    |
+| `frontend.readinessProbe.enabled`                | Enable readinessProbe                                                                                 | `true`                 |
+| `frontend.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                              | `0`                    |
+| `frontend.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                     | `10`                   |
+| `frontend.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                    | `5`                    |
+| `frontend.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                  | `6`                    |
+| `frontend.readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                  | `1`                    |
+| `frontend.startupProbe.enabled`                  | Enable startupProbe                                                                                   | `false`                |
+| `frontend.startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                | `0`                    |
+| `frontend.startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                       | `10`                   |
+| `frontend.startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                      | `5`                    |
+| `frontend.startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                    | `6`                    |
+| `frontend.startupProbe.successThreshold`         | Success threshold for startupProbe                                                                    | `1`                    |
+| `frontend.customLivenessProbe`                   | Custom livenessProbe that overrides the default one                                                   | `{}`                   |
+| `frontend.customReadinessProbe`                  | Custom readinessProbe that overrides the default one                                                  | `{}`                   |
+| `frontend.customStartupProbe`                    | Custom startupProbe that overrides the default one                                                    | `{}`                   |
+| `frontend.lifecycleHooks`                        | Custom lifecycle hooks for frontend containers                                                        | `{}`                   |
+| `frontend.command`                               | Override default container command (useful when using custom images)                                  | `[]`                   |
+| `frontend.args`                                  | Override default container args (useful when using custom images)                                     | `[]`                   |
+| `frontend.podLabels`                             | Extra labels for frontend pods                                                                        | `{}`                   |
+| `frontend.podAnnotations`                        | Annotations for frontend pods                                                                         | `{}`                   |
+| `frontend.podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                   | `""`                   |
+| `frontend.podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`              | `soft`                 |
+| `frontend.nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`             | `""`                   |
+| `frontend.nodeAffinityPreset.key`                | Node label key to match. Ignored if `affinity` is set                                                 | `""`                   |
+| `frontend.nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set                                              | `[]`                   |
+| `frontend.affinity`                              | Affinity for pod assignment                                                                           | `{}`                   |
+| `frontend.nodeSelector`                          | Node labels for pod assignment                                                                        | `{}`                   |
+| `frontend.tolerations`                           | Tolerations for pod assignment                                                                        | `[]`                   |
+| `frontend.priorityClassName`                     | Priority class name for frontend pods                                                                 | `""`                   |
+| `frontend.schedulerName`                         | Name of the k8s scheduler (other than default)                                                        | `""`                   |
+| `frontend.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment                                                        | `[]`                   |
+| `frontend.hostAliases`                           | Custom host aliases for frontend pods                                                                 | `[]`                   |
+| `frontend.extraVolumes`                          | Optionally specify extra list of additional volumes for frontend pods                                 | `[]`                   |
+| `frontend.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for frontend container(s)                    | `[]`                   |
+| `frontend.sidecars`                              | Add additional sidecar containers to the frontend pod                                                 | `[]`                   |
+| `frontend.initContainers`                        | Add additional init containers to the frontend pods                                                   | `[]`                   |
+| `frontend.service.type`                          | Frontend service type                                                                                 | `ClusterIP`            |
+| `frontend.service.ports.http`                    | Frontend service HTTP port                                                                            | `80`                   |
+| `frontend.service.nodePorts.http`                | Node port for HTTP                                                                                    | `""`                   |
+| `frontend.service.clusterIP`                     | Frontend service Cluster IP                                                                           | `""`                   |
+| `frontend.service.loadBalancerIP`                | Frontend service Load Balancer IP                                                                     | `""`                   |
+| `frontend.service.loadBalancerSourceRanges`      | Frontend service Load Balancer sources                                                                | `[]`                   |
+| `frontend.service.externalTrafficPolicy`         | Frontend service external traffic policy                                                              | `Cluster`              |
+| `frontend.service.extraPorts`                    | Extra ports to expose (normally used with the `sidecar` value)                                        | `[]`                   |
+| `frontend.service.annotations`                   | Additional custom annotations for frontend service                                                    | `{}`                   |
+| `frontend.service.sessionAffinity`               | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                  | `None`                 |
+| `frontend.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                           | `{}`                   |
 
 ### Dashboard parameters
 
@@ -196,7 +196,7 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `dashboard.enabled`                               | Specifies whether Kubeapps Dashboard should be deployed or not                                            | `true`                       |
 | `dashboard.image.registry`                        | Dashboard image registry                                                                                  | `docker.io`                  |
 | `dashboard.image.repository`                      | Dashboard image repository                                                                                | `bitnami/kubeapps-dashboard` |
-| `dashboard.image.tag`                             | Dashboard image tag (immutable tags are recommended)                                                      | `2.8.0-debian-11-r50`        |
+| `dashboard.image.tag`                             | Dashboard image tag (immutable tags are recommended)                                                      | `2.9.0-debian-11-r11`        |
 | `dashboard.image.digest`                          | Dashboard image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                         |
 | `dashboard.image.pullPolicy`                      | Dashboard image pull policy                                                                               | `IfNotPresent`               |
 | `dashboard.image.pullSecrets`                     | Dashboard image pull secrets                                                                              | `[]`                         |
@@ -275,13 +275,13 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | ----------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------- |
 | `apprepository.image.registry`                              | Kubeapps AppRepository Controller image registry                                                                                                                                                         | `docker.io`                                 |
 | `apprepository.image.repository`                            | Kubeapps AppRepository Controller image repository                                                                                                                                                       | `bitnami/kubeapps-apprepository-controller` |
-| `apprepository.image.tag`                                   | Kubeapps AppRepository Controller image tag (immutable tags are recommended)                                                                                                                             | `2.8.0-debian-11-r20`                       |
+| `apprepository.image.tag`                                   | Kubeapps AppRepository Controller image tag (immutable tags are recommended)                                                                                                                             | `2.9.0-debian-11-r10`                       |
 | `apprepository.image.digest`                                | Kubeapps AppRepository Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                        | `""`                                        |
 | `apprepository.image.pullPolicy`                            | Kubeapps AppRepository Controller image pull policy                                                                                                                                                      | `IfNotPresent`                              |
 | `apprepository.image.pullSecrets`                           | Kubeapps AppRepository Controller image pull secrets                                                                                                                                                     | `[]`                                        |
 | `apprepository.syncImage.registry`                          | Kubeapps Asset Syncer image registry                                                                                                                                                                     | `docker.io`                                 |
 | `apprepository.syncImage.repository`                        | Kubeapps Asset Syncer image repository                                                                                                                                                                   | `bitnami/kubeapps-asset-syncer`             |
-| `apprepository.syncImage.tag`                               | Kubeapps Asset Syncer image tag (immutable tags are recommended)                                                                                                                                         | `2.8.0-debian-11-r20`                       |
+| `apprepository.syncImage.tag`                               | Kubeapps Asset Syncer image tag (immutable tags are recommended)                                                                                                                                         | `2.9.0-debian-11-r10`                       |
 | `apprepository.syncImage.digest`                            | Kubeapps Asset Syncer image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                    | `""`                                        |
 | `apprepository.syncImage.pullPolicy`                        | Kubeapps Asset Syncer image pull policy                                                                                                                                                                  | `IfNotPresent`                              |
 | `apprepository.syncImage.pullSecrets`                       | Kubeapps Asset Syncer image pull secrets                                                                                                                                                                 | `[]`                                        |
@@ -343,7 +343,7 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `authProxy.enabled`                               | Specifies whether Kubeapps should configure OAuth login/logout                                                                      | `false`                |
 | `authProxy.image.registry`                        | OAuth2 Proxy image registry                                                                                                         | `docker.io`            |
 | `authProxy.image.repository`                      | OAuth2 Proxy image repository                                                                                                       | `bitnami/oauth2-proxy` |
-| `authProxy.image.tag`                             | OAuth2 Proxy image tag (immutable tags are recommended)                                                                             | `7.4.0-debian-11-r281` |
+| `authProxy.image.tag`                             | OAuth2 Proxy image tag (immutable tags are recommended)                                                                             | `7.5.1-debian-11-r10`  |
 | `authProxy.image.digest`                          | OAuth2 Proxy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                        | `""`                   |
 | `authProxy.image.pullPolicy`                      | OAuth2 Proxy image pull policy                                                                                                      | `IfNotPresent`         |
 | `authProxy.image.pullSecrets`                     | OAuth2 Proxy image pull secrets                                                                                                     | `[]`                   |
@@ -383,7 +383,7 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `pinnipedProxy.enabled`                               | Specifies whether Kubeapps should configure Pinniped Proxy                                                     | `false`                           |
 | `pinnipedProxy.image.registry`                        | Pinniped Proxy image registry                                                                                  | `docker.io`                       |
 | `pinnipedProxy.image.repository`                      | Pinniped Proxy image repository                                                                                | `bitnami/kubeapps-pinniped-proxy` |
-| `pinnipedProxy.image.tag`                             | Pinniped Proxy image tag (immutable tags are recommended)                                                      | `2.8.0-debian-11-r49`             |
+| `pinnipedProxy.image.tag`                             | Pinniped Proxy image tag (immutable tags are recommended)                                                      | `2.9.0-debian-11-r9`              |
 | `pinnipedProxy.image.digest`                          | Pinniped Proxy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                              |
 | `pinnipedProxy.image.pullPolicy`                      | Pinniped Proxy image pull policy                                                                               | `IfNotPresent`                    |
 | `pinnipedProxy.image.pullSecrets`                     | Pinniped Proxy image pull secrets                                                                              | `[]`                              |
@@ -463,7 +463,7 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `kubeappsapis.pluginConfig.resources.packages.v1alpha1.trustedNamespaces.headerPattern`         | Optional header pattern for trusted namespaces                                                                                                                             | `""`                               |
 | `kubeappsapis.image.registry`                                                                   | Kubeapps-APIs image registry                                                                                                                                               | `docker.io`                        |
 | `kubeappsapis.image.repository`                                                                 | Kubeapps-APIs image repository                                                                                                                                             | `bitnami/kubeapps-apis`            |
-| `kubeappsapis.image.tag`                                                                        | Kubeapps-APIs image tag (immutable tags are recommended)                                                                                                                   | `2.8.0-debian-11-r49`              |
+| `kubeappsapis.image.tag`                                                                        | Kubeapps-APIs image tag (immutable tags are recommended)                                                                                                                   | `2.9.0-debian-11-r10`              |
 | `kubeappsapis.image.digest`                                                                     | Kubeapps-APIs image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                              | `""`                               |
 | `kubeappsapis.image.pullPolicy`                                                                 | Kubeapps-APIs image pull policy                                                                                                                                            | `IfNotPresent`                     |
 | `kubeappsapis.image.pullSecrets`                                                                | Kubeapps-APIs image pull secrets                                                                                                                                           | `[]`                               |
@@ -534,6 +534,57 @@ Once you have installed Kubeapps follow the [Getting Started Guide](https://gith
 | `kubeappsapis.serviceAccount.name`                                                              | Name of the service account to use. If not set and create is true, a name is generated using the fullname template.                                                        | `""`                               |
 | `kubeappsapis.serviceAccount.automountServiceAccountToken`                                      | Automount service account token for the server service account                                                                                                             | `true`                             |
 | `kubeappsapis.serviceAccount.annotations`                                                       | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                                                                                 | `{}`                               |
+
+### OCI Catalog chart configuration
+
+| Name                                               | Description                                                                                                 | Value                          |
+| -------------------------------------------------- | ----------------------------------------------------------------------------------------------------------- | ------------------------------ |
+| `ociCatalog.enabled`                               | Enable the OCI catalog gRPC service for cataloging                                                          | `false`                        |
+| `ociCatalog.image.registry`                        | OCI Catalog image registry                                                                                  | `docker.io`                    |
+| `ociCatalog.image.repository`                      | OCI Catalog image repository                                                                                | `bitnami/kubeapps-oci-catalog` |
+| `ociCatalog.image.tag`                             | OCI Catalog image tag (immutable tags are recommended)                                                      | `2.9.0-debian-11-r4`           |
+| `ociCatalog.image.digest`                          | OCI Catalog image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                           |
+| `ociCatalog.image.pullPolicy`                      | OCI Catalog image pull policy                                                                               | `IfNotPresent`                 |
+| `ociCatalog.image.pullSecrets`                     | OCI Catalog image pull secrets                                                                              | `[]`                           |
+| `ociCatalog.image.debug`                           | Enable image debug mode                                                                                     | `false`                        |
+| `ociCatalog.extraFlags`                            | Additional command line flags for OCI Catalog                                                               | `[]`                           |
+| `ociCatalog.extraEnvVars`                          | Array with extra environment variables to add to the oci-catalog container                                  | `[]`                           |
+| `ociCatalog.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars for the OCI Catalog container                          | `""`                           |
+| `ociCatalog.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for the OCI Catalog container                             | `""`                           |
+| `ociCatalog.containerPorts.grpc`                   | OCI Catalog gRPC container port                                                                             | `50061`                        |
+| `ociCatalog.resources.limits.cpu`                  | The CPU limits for the OCI Catalog container                                                                | `250m`                         |
+| `ociCatalog.resources.limits.memory`               | The memory limits for the OCI Catalog container                                                             | `256Mi`                        |
+| `ociCatalog.resources.requests.cpu`                | The requested CPU for the OCI Catalog container                                                             | `25m`                          |
+| `ociCatalog.resources.requests.memory`             | The requested memory for the OCI Catalog container                                                          | `32Mi`                         |
+| `ociCatalog.containerSecurityContext.enabled`      | Enabled OCI Catalog containers' Security Context                                                            | `true`                         |
+| `ociCatalog.containerSecurityContext.runAsUser`    | Set OCI Catalog container's Security Context runAsUser                                                      | `1001`                         |
+| `ociCatalog.containerSecurityContext.runAsNonRoot` | Set OCI Catalog container's Security Context runAsNonRoot                                                   | `true`                         |
+| `ociCatalog.livenessProbe.enabled`                 | Enable livenessProbe                                                                                        | `true`                         |
+| `ociCatalog.livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                     | `60`                           |
+| `ociCatalog.livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                            | `10`                           |
+| `ociCatalog.livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                           | `5`                            |
+| `ociCatalog.livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                         | `6`                            |
+| `ociCatalog.livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                         | `1`                            |
+| `ociCatalog.readinessProbe.enabled`                | Enable readinessProbe                                                                                       | `true`                         |
+| `ociCatalog.readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                    | `0`                            |
+| `ociCatalog.readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                           | `10`                           |
+| `ociCatalog.readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                          | `5`                            |
+| `ociCatalog.readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                        | `6`                            |
+| `ociCatalog.readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                        | `1`                            |
+| `ociCatalog.startupProbe.enabled`                  | Enable startupProbe                                                                                         | `false`                        |
+| `ociCatalog.startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                      | `0`                            |
+| `ociCatalog.startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                             | `10`                           |
+| `ociCatalog.startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                            | `5`                            |
+| `ociCatalog.startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                          | `6`                            |
+| `ociCatalog.startupProbe.successThreshold`         | Success threshold for startupProbe                                                                          | `1`                            |
+| `ociCatalog.customLivenessProbe`                   | Custom livenessProbe that overrides the default one                                                         | `{}`                           |
+| `ociCatalog.customReadinessProbe`                  | Custom readinessProbe that overrides the default one                                                        | `{}`                           |
+| `ociCatalog.customStartupProbe`                    | Custom startupProbe that overrides the default one                                                          | `{}`                           |
+| `ociCatalog.lifecycleHooks`                        | Custom lifecycle hooks for OCI Catalog containers                                                           | `{}`                           |
+| `ociCatalog.command`                               | Override default container command (useful when using custom images)                                        | `[]`                           |
+| `ociCatalog.args`                                  | Override default container args (useful when using custom images)                                           | `[]`                           |
+| `ociCatalog.extraVolumes`                          | Optionally specify extra list of additional volumes for the OCI Catalog pod(s)                              | `[]`                           |
+| `ociCatalog.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the OCI Catalog container(s)                   | `[]`                           |
 
 ### Redis&reg; chart configuration
 
@@ -657,6 +708,10 @@ helm upgrade $RELEASE_NAME oci://registry-1.docker.io/bitnamicharts/kubeapps
 ```
 
 If you find issues upgrading Kubeapps, check the [troubleshooting](#error-while-upgrading-the-chart) section.
+
+### To 14.0.0
+
+This major updates the PostgreSQL subchart to its newest major, 13.0.0. [Here](https://github.com/bitnami/charts/tree/master/bitnami/postgresql#to-1300) you can find more information about the changes introduced in that version.
 
 ### To 13.0.0
 

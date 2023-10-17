@@ -6,7 +6,7 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: haproxy
-      image: docker.io/bitnami/haproxy:2.8.3-debian-11-r5
+      image: docker.io/bitnami/haproxy:2.8.3-debian-11-r29
 apiVersion: v2
 appVersion: 2.8.3
 dependencies:
@@ -28,4 +28,4 @@ maintainers:
 name: haproxy
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/haproxy
-version: 0.9.3
+version: 0.9.4

@@ -94,7 +94,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/keycloak
-  tag: 22.0.4-debian-11-r2
+  tag: 22.0.4-debian-11-r3
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -128,6 +128,9 @@ auth:
   ## @param auth.passwordSecretKey Key where the Keycloak admin password is being stored inside the existing secret.
   ##
   passwordSecretKey: ""
+  ## @param auth.annotations Additional custom annotations for Keycloak auth secret object
+  ##
+  annotations: {}
 
 ## HTTPS settings
 ## ref: https://github.com/bitnami/containers/tree/main/bitnami/keycloak#tls-encryption
@@ -861,7 +864,7 @@ keycloakConfigCli:
   image:
     registry: docker.io
     repository: bitnami/keycloak-config-cli
-    tag: 5.8.0-debian-11-r65
+    tag: 5.8.0-debian-11-r68
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -995,7 +998,7 @@ keycloakConfigCli:
   ##     clients: []
   ##
   configuration: {}
-  ## @param keycloakConfigCli.existingConfigmap ConfigMap with keycloak-config-cli configuration. This will override `keycloakConfigCli.config`
+  ## @param keycloakConfigCli.existingConfigmap ConfigMap with keycloak-config-cli configuration
   ## NOTE: This will override keycloakConfigCli.configuration
   ##
   existingConfigmap: ""
@@ -1042,6 +1045,7 @@ postgresql:
 ## @param externalDatabase.existingSecretUserKey Name of an existing secret key containing the database user
 ## @param externalDatabase.existingSecretDatabaseKey Name of an existing secret key containing the database name
 ## @param externalDatabase.existingSecretPasswordKey Name of an existing secret key containing the database credentials
+## @param externalDatabase.annotations Additional custom annotations for external database secret object
 ##
 externalDatabase:
   host: ""
@@ -1055,6 +1059,7 @@ externalDatabase:
   existingSecretUserKey: ""
   existingSecretDatabaseKey: ""
   existingSecretPasswordKey: ""
+  annotations: {}
 
 ## @section Keycloak Cache parameters
 

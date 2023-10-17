@@ -110,6 +110,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                                    | Description                                                                               | Value                                             |
 | --------------------------------------- | ----------------------------------------------------------------------------------------- | ------------------------------------------------- |
+| `replicaCount`                          | Number of Mediawiki replicas to deploy                                                    | `1`                                               |
 | `updateStrategy.type`                   | StrategyType can be set to RollingUpdate or OnDelete                                      | `RollingUpdate`                                   |
 | `podSecurityContext.enabled`            | Enable Mediawiki pods' Security Context                                                   | `true`                                            |
 | `podSecurityContext.fsGroup`            | Group ID for the volumes of the pod                                                       | `1001`                                            |
@@ -364,6 +365,10 @@ As an alternative, you can use of the preset configurations for pod affinity, po
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 17.0.0
+
+This major release bumps the MariaDB version to 11.1. No major issues are expected during the upgrade.
 
 ### To 16.0.0
 
