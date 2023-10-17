@@ -34,6 +34,6 @@ jobs:
 
           for run_id in "${retriable_runs_ids[@]:0:${{ env.MAX_RETRY_SLOTS }}}"; do
             echo "Retrying workflow $(jq --argjson id $run_id '.workflow_runs[] | select(.id==$id) | .html_url' ${{ env.TEMP_FILE }})"
-            rerun_url=$(jq --argjson id $run_id '.workflow_runs[] | select(.id==$id) | .rerun_url' ${{ env.TEMP_FILE }})
+            rerun_url=$(jq -r --argjson id $run_id '.workflow_runs[] | select(.id==$id) | .rerun_url' ${{ env.TEMP_FILE }})
             curl -H 'Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' -X POST -Lks ${rerun_url}
           done
