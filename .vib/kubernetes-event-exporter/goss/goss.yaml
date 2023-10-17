@@ -7,7 +7,7 @@ file:
     filetype: symlink
     mode: "0777"
     owner: root
-    contains:
+    contents:
       - /logLevel.*{{ .Vars.config.logLevel }}/
 command:
   {{- if .Vars.containerSecurityContext.enabled }}

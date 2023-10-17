@@ -14,7 +14,7 @@ file:
     exists: true
     filetype: file
     mode: '0644'
-    contains:
+    contents:
       - /mysql.*{{ .Vars.mariadb.auth.database }}/
       - /username.*{{ .Vars.mariadb.auth.username }}/
       - /password.*{{ .Vars.mariadb.auth.password }}/

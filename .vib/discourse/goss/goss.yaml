@@ -14,7 +14,7 @@ file:
     mode: "0644"
     owner: root
     group: root
-    contains:
+    contents:
       - hostname = {{ .Vars.host }}
       - db_username = {{ .Vars.postgresql.auth.username }}
 command:

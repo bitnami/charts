@@ -34,5 +34,5 @@ file:
     mode: "0755"
     filetype: file
     exists: true
-    contains:
+    contents:
     - SOLR_CLOUD_BOOTSTRAP={{ if .Vars.cloudBootstrap }}yes{{ else }}no{{ end }}

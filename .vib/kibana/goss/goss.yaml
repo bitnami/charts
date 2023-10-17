@@ -17,7 +17,7 @@ file:
     filetype: file
     exists: true
     group: root
-    contains:
+    contents:
     - {{ toJson .Vars.extraConfiguration }}
 command:
   {{- $uid := .Vars.containerSecurityContext.runAsUser }}

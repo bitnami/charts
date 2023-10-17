@@ -14,7 +14,7 @@ file:
     mode: "0664"
     filetype: file
     exists: true
-    contains:
+    contents:
       - "basedir=/opt/bitnami/mariadb"
       - /wsrep_provider=.*libgalera_smm.so/
       - "wsrep_cluster_name={{ .Vars.galera.name }}"

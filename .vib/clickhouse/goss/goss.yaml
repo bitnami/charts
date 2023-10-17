@@ -6,7 +6,7 @@ file:
     mode: "0644"
     filetype: file
     exists: true
-    contains:
+    contents:
       - zookeeper
       - remote_servers
       - logger

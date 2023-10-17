@@ -5,7 +5,7 @@ file:
   /opt/bitnami/fluentd/conf/fluentd-inputs.conf:
     exists: true
     filetype: symlink
-    contains:
+    contents:
       - "type http"
       - "type kubernetes_metadata"
       - "path /var/log/containers/*.log"

@@ -11,5 +11,5 @@ file:
     exists: true
     filetype: file
     mode: "0644"
-    contains:
+    contents:
       - /title.*{{ .Vars.dokuwikiWikiName }}/

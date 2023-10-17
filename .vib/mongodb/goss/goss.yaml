@@ -11,7 +11,7 @@ file:
     exists: true
     filetype: file
     mode: "0660"
-    contains:
+    contents:
       - /port:.*{{ .Vars.containerPorts.mongodb }}/
 command:
   {{- $conn_opts := printf "--quiet --username %s --password '%s' --host mongodb --port %d" .Vars.auth.rootUser .Vars.auth.rootPassword .Vars.service.ports.mongodb }}
