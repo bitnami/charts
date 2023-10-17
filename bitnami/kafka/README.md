@@ -1095,6 +1095,10 @@ This guide is an adaptation from upstream documentation: [Migrate from ZooKeeper
 
 ## Upgrading
 
+### To 26.0.0
+
+This major release bumps the Kafka version to 3.6 [kafka upgrade notes](https://kafka.apache.org/36/documentation.html#upgrade).
+
 ### To 25.0.0
 
 This major updates the Zookeeper subchart to it newest major, 12.0.0. For more information on this subchart's major, please refer to [zookeeper upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/zookeeper#to-1200).
