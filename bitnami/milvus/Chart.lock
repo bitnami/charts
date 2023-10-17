@@ -4,12 +4,12 @@ dependencies:
   version: 9.5.6
 - name: kafka
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 25.3.5
+  version: 26.0.0
 - name: minio
   repository: oci://registry-1.docker.io/bitnamicharts
   version: 12.8.15
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
   version: 2.13.2
-digest: sha256:1ec4dbdcd22071c414c366be2482f74c022949a72de1709dbef1ec6ea1c8a93e
-generated: "2023-10-16T16:33:03.637676436Z"
+digest: sha256:80296916104b4c7b53526a22daa3d92e4d19feab2892222bd3cc40ca5afe94b8
+generated: "2023-10-17T11:56:58.3621531+02:00"
