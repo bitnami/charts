@@ -916,6 +916,9 @@ networkPolicy:
     ##
     customRules: {}
 
+## @section CronJob parameters
+##
+
 cronjobs:
   ## @param cronjobs.enabled Enables cronjobs for archive and scheduler tasks
   ##
