@@ -44,19 +44,6 @@
               }
             }
           }
-        },
-        {
-          "action_id": "ginkgo",
-          "params": {
-            "resources": {
-              "path": "/.vib/zookeeper/ginkgo"
-            },
-            "params": {
-              "kubeconfig": "{{kubeconfig}}",
-              "namespace": "{{namespace}}",
-              "name": "zookeeper"
-            }
-          }
         }
       ]
     }
