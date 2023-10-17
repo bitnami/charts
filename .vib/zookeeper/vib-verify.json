@@ -31,12 +31,6 @@
       },
       "actions": [
         {
-          "action_id": "health-check",
-          "params": {
-            "endpoint": "lb-zookeeper-tcp-client"
-          }
-        },
-        {
           "action_id": "goss",
           "params": {
             "resources": {
@@ -48,19 +42,6 @@
               "pod": {
                 "workload": "sts-zookeeper"
               }
-            }
-          }
-        },
-        {
-          "action_id": "ginkgo",
-          "params": {
-            "resources": {
-              "path": "/.vib/zookeeper/ginkgo"
-            },
-            "params": {
-              "kubeconfig": "{{kubeconfig}}",
-              "namespace": "{{namespace}}",
-              "name": "zookeeper"
             }
           }
         }

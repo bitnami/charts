@@ -85,7 +85,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------- | ------------------------------------------------------------------------------------------------------------- | ----------------------------- |
 | `tempo.image.registry`                 | Grafana Tempo image registry                                                                                  | `docker.io`                   |
 | `tempo.image.repository`               | Grafana Tempo image repository                                                                                | `bitnami/grafana-tempo`       |
-| `tempo.image.tag`                      | Grafana Tempo image tag (immutable tags are recommended)                                                      | `2.2.3-debian-11-r20`         |
+| `tempo.image.tag`                      | Grafana Tempo image tag (immutable tags are recommended)                                                      | `2.2.3-debian-11-r23`         |
 | `tempo.image.digest`                   | Grafana Tempo image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                          |
 | `tempo.image.pullPolicy`               | Grafana Tempo image pull policy                                                                               | `IfNotPresent`                |
 | `tempo.image.pullSecrets`              | Grafana Tempo image pull secrets                                                                              | `[]`                          |
@@ -572,7 +572,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryFrontend.initContainers`                              | Add additional init containers to the queryFrontend pod(s)                                                          | `[]`                          |
 | `queryFrontend.query.image.registry`                        | Grafana Tempo Query image registry                                                                                  | `docker.io`                   |
 | `queryFrontend.query.image.repository`                      | Grafana Tempo Query image repository                                                                                | `bitnami/grafana-tempo-query` |
-| `queryFrontend.query.image.tag`                             | Grafana Tempo Query image tag (immutable tags are recommended)                                                      | `2.2.3-debian-11-r10`         |
+| `queryFrontend.query.image.tag`                             | Grafana Tempo Query image tag (immutable tags are recommended)                                                      | `2.2.3-debian-11-r12`         |
 | `queryFrontend.query.image.digest`                          | Grafana Tempo Query image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                          |
 | `queryFrontend.query.image.pullPolicy`                      | Grafana Tempo Query image pull policy                                                                               | `IfNotPresent`                |
 | `queryFrontend.query.image.pullSecrets`                     | Grafana Tempo Query image pull secrets                                                                              | `[]`                          |
@@ -640,7 +640,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `vulture.enabled`                               | Enable vulture deployment                                                                                       | `true`                          |
 | `vulture.image.registry`                        | Grafana Vulture image registry                                                                                  | `docker.io`                     |
 | `vulture.image.repository`                      | Grafana Vulture image repository                                                                                | `bitnami/grafana-tempo-vulture` |
-| `vulture.image.tag`                             | Grafana Vulture image tag (immutable tags are recommended)                                                      | `2.2.3-debian-11-r7`            |
+| `vulture.image.tag`                             | Grafana Vulture image tag (immutable tags are recommended)                                                      | `2.2.3-debian-11-r10`           |
 | `vulture.image.digest`                          | Grafana Vulture image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                            |
 | `vulture.image.pullPolicy`                      | Grafana Vulture image pull policy                                                                               | `IfNotPresent`                  |
 | `vulture.image.pullSecrets`                     | Grafana Vulture image pull secrets                                                                              | `[]`                            |
@@ -724,7 +724,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`                    | `false`            |
 | `volumePermissions.image.registry`                     | OS Shell + Utility image registry                                                                                  | `docker.io`        |
 | `volumePermissions.image.repository`                   | OS Shell + Utility image repository                                                                                | `bitnami/os-shell` |
-| `volumePermissions.image.tag`                          | OS Shell + Utility image tag (immutable tags are recommended)                                                      | `11-debian-11-r89` |
+| `volumePermissions.image.tag`                          | OS Shell + Utility image tag (immutable tags are recommended)                                                      | `11-debian-11-r90` |
 | `volumePermissions.image.digest`                       | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`               |
 | `volumePermissions.image.pullPolicy`                   | OS Shell + Utility image pull policy                                                                               | `IfNotPresent`     |
 | `volumePermissions.image.pullSecrets`                  | OS Shell + Utility image pull secrets                                                                              | `[]`               |

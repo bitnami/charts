@@ -81,7 +81,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
 | `image.registry`                        | phpBB image registry                                                                                                                                      | `docker.io`             |
 | `image.repository`                      | phpBB image repository                                                                                                                                    | `bitnami/phpbb`         |
-| `image.tag`                             | phpBB image tag (immutable tags are recommended)                                                                                                          | `3.3.10-debian-11-r119` |
+| `image.tag`                             | phpBB image tag (immutable tags are recommended)                                                                                                          | `3.3.10-debian-11-r120` |
 | `image.digest`                          | phpBB image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                     | `""`                    |
 | `image.pullPolicy`                      | phpBB image pull policy                                                                                                                                   | `IfNotPresent`          |
 | `image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                                                          | `[]`                    |
@@ -109,7 +109,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`             | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                 |
 | `volumePermissions.image.registry`      | Init container volume-permissions image registry                                                                                                          | `docker.io`             |
 | `volumePermissions.image.repository`    | Init container volume-permissions image repository                                                                                                        | `bitnami/os-shell`      |
-| `volumePermissions.image.tag`           | Init container volume-permissions image tag (immutable tags are recommended)                                                                              | `11-debian-11-r89`      |
+| `volumePermissions.image.tag`           | Init container volume-permissions image tag (immutable tags are recommended)                                                                              | `11-debian-11-r90`      |
 | `volumePermissions.image.digest`        | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                         | `""`                    |
 | `volumePermissions.image.pullPolicy`    | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`          |
 | `volumePermissions.image.pullSecrets`   | Specify docker-registry secret names as an array                                                                                                          | `[]`                    |
@@ -231,7 +231,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`           | Start a side-car prometheus exporter                                                                            | `false`                   |
 | `metrics.image.registry`    | Apache exporter image registry                                                                                  | `docker.io`               |
 | `metrics.image.repository`  | Apache exporter image repository                                                                                | `bitnami/apache-exporter` |
-| `metrics.image.tag`         | Apache exporter image tag (immutable tags are recommended)                                                      | `1.0.2-debian-11-r8`      |
+| `metrics.image.tag`         | Apache exporter image tag (immutable tags are recommended)                                                      | `1.0.2-debian-11-r10`     |
 | `metrics.image.digest`      | Apache exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
 | `metrics.image.pullPolicy`  | Image pull policy                                                                                               | `IfNotPresent`            |
 | `metrics.image.pullSecrets` | Specify docker-registry secret names as an array                                                                | `[]`                      |
@@ -349,6 +349,10 @@ You may want to review the [PV reclaim policy](https://kubernetes.io/docs/tasks/
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 15.0.0
+
+This major release bumps the MariaDB version to 11.1. No major issues are expected during the upgrade.
 
 ### To 14.0.0
 

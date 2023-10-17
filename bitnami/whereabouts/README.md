@@ -82,7 +82,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | --------------------------------------------------------------------------------------------------------------------- | --------------------------- |
 | `image.registry`                        | Whereabouts image registry                                                                                            | `docker.io`                 |
 | `image.repository`                      | Whereabouts Image name                                                                                                | `bitnami/whereabouts`       |
-| `image.tag`                             | Whereabouts Image tag                                                                                                 | `0.6.2-debian-11-r107`      |
+| `image.tag`                             | Whereabouts Image tag                                                                                                 | `0.6.2-debian-11-r109`      |
 | `image.digest`                          | Whereabouts image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag           | `""`                        |
 | `image.pullPolicy`                      | Whereabouts image pull policy                                                                                         | `IfNotPresent`              |
 | `image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                      | `[]`                        |

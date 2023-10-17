@@ -77,7 +77,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/whereabouts
-  tag: 0.6.2-debian-11-r107
+  tag: 0.6.2-debian-11-r109
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

@@ -134,7 +134,7 @@ jwt:
       ##
       registry: docker.io
       repository: bitnami/kubectl
-      tag: 1.28.2-debian-11-r14
+      tag: 1.28.2-debian-11-r16
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -296,7 +296,7 @@ auth:
   image:
     registry: docker.io
     repository: bitnami/gotrue
-    tag: 1.0.1-debian-11-r214
+    tag: 1.0.1-debian-11-r216
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -620,7 +620,7 @@ meta:
   image:
     registry: docker.io
     repository: bitnami/supabase-postgres-meta
-    tag: 0.70.0-debian-11-r16
+    tag: 0.72.0-debian-11-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -963,7 +963,7 @@ realtime:
   image:
     registry: docker.io
     repository: bitnami/supabase-realtime
-    tag: 2.24.0-debian-11-r1
+    tag: 2.24.2-debian-11-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1285,7 +1285,7 @@ rest:
   image:
     registry: docker.io
     repository: bitnami/postgrest
-    tag: 11.2.1-debian-11-r0
+    tag: 11.2.1-debian-11-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1612,7 +1612,7 @@ storage:
   image:
     registry: docker.io
     repository: bitnami/supabase-storage
-    tag: 0.42.1-debian-11-r1
+    tag: 0.43.3-debian-11-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2389,7 +2389,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r89
+    tag: 11-debian-11-r90
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -2430,7 +2430,7 @@ volumePermissions:
 psqlImage:
   registry: docker.io
   repository: bitnami/supabase-postgres
-  tag: 15.1.0-debian-11-r174
+  tag: 15.1.0-debian-11-r175
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2594,7 +2594,7 @@ postgresql:
   image:
     registry: docker.io
     repository: bitnami/supabase-postgres
-    tag: 15.1.0-debian-11-r174
+    tag: 15.1.0-debian-11-r175
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2649,4 +2649,4 @@ externalDatabase:
   database: postgres
   password: ""
   existingSecret: ""
-  existingSecretPasswordKey: "db-password"
+  existingSecretPasswordKey: ""

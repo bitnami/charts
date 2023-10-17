@@ -6,11 +6,11 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: argo-workflow-controller
-      image: docker.io/bitnami/argo-workflow-controller:3.4.11-debian-11-r27
+      image: docker.io/bitnami/argo-workflow-controller:3.4.11-debian-11-r28
     - name: argo-workflow-exec
       image: docker.io/bitnami/argo-workflow-exec:3.4.11-debian-11-r27
     - name: argo-workflow-cli
-      image: docker.io/bitnami/argo-workflow-cli:3.4.11-debian-11-r27
+      image: docker.io/bitnami/argo-workflow-cli:3.4.11-debian-11-r28
 apiVersion: v2
 appVersion: 3.4.11
 dependencies:
@@ -42,4 +42,4 @@ maintainers:
 name: argo-workflows
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/argo-workflows
-version: 6.0.2
+version: 6.0.4

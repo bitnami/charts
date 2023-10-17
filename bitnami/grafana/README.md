@@ -162,7 +162,7 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | ---------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------- |
 | `image.registry`                   | Grafana image registry                                                                                                                               | `docker.io`                       |
 | `image.repository`                 | Grafana image repository                                                                                                                             | `bitnami/grafana`                 |
-| `image.tag`                        | Grafana image tag (immutable tags are recommended)                                                                                                   | `10.1.4-debian-11-r3`             |
+| `image.tag`                        | Grafana image tag (immutable tags are recommended)                                                                                                   | `10.1.5-debian-11-r0`             |
 | `image.digest`                     | Grafana image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                              | `""`                              |
 | `image.pullPolicy`                 | Grafana image pull policy                                                                                                                            | `IfNotPresent`                    |
 | `image.pullSecrets`                | Grafana image pull secrets                                                                                                                           | `[]`                              |
@@ -226,6 +226,7 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `grafana.podAffinityPreset`                  | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                     | `""`            |
 | `grafana.podAntiAffinityPreset`              | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                | `soft`          |
 | `grafana.containerPorts.grafana`             | Grafana container port                                                                                  | `3000`          |
+| `grafana.extraPorts`                         | Extra ports for Grafana deployment                                                                      | `[]`            |
 | `grafana.nodeAffinityPreset.type`            | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`               | `""`            |
 | `grafana.nodeAffinityPreset.key`             | Node label key to match Ignored if `affinity` is set.                                                   | `""`            |
 | `grafana.nodeAffinityPreset.values`          | Node label values to match. Ignored if `affinity` is set.                                               | `[]`            |
@@ -314,7 +315,7 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `service.loadBalancerSourceRanges` | loadBalancerSourceRanges if Grafana service type is `LoadBalancer` (optional, cloud specific)                                    | `[]`                     |
 | `service.annotations`              | Provide any additional annotations which may be required.                                                                        | `{}`                     |
 | `service.externalTrafficPolicy`    | Grafana service external traffic policy                                                                                          | `Cluster`                |
-| `service.extraPorts`               | Extra port to expose on Redmine service                                                                                          | `[]`                     |
+| `service.extraPorts`               | Extra port to expose on Grafana service                                                                                          | `[]`                     |
 | `service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                             | `None`                   |
 | `service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                                                                      | `{}`                     |
 | `ingress.enabled`                  | Set to true to enable ingress record generation                                                                                  | `false`                  |
@@ -361,7 +362,7 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `imageRenderer.enabled`                                  | Enable using a remote rendering service to render PNG images                                                                              | `false`                          |
 | `imageRenderer.image.registry`                           | Grafana Image Renderer image registry                                                                                                     | `docker.io`                      |
 | `imageRenderer.image.repository`                         | Grafana Image Renderer image repository                                                                                                   | `bitnami/grafana-image-renderer` |
-| `imageRenderer.image.tag`                                | Grafana Image Renderer image tag (immutable tags are recommended)                                                                         | `3.8.3-debian-11-r3`             |
+| `imageRenderer.image.tag`                                | Grafana Image Renderer image tag (immutable tags are recommended)                                                                         | `3.8.3-debian-11-r4`             |
 | `imageRenderer.image.digest`                             | Grafana Image Renderer image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                    | `""`                             |
 | `imageRenderer.image.pullPolicy`                         | Grafana Image Renderer image pull policy                                                                                                  | `IfNotPresent`                   |
 | `imageRenderer.image.pullSecrets`                        | Grafana image Renderer pull secrets                                                                                                       | `[]`                             |
@@ -399,7 +400,7 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `imageRenderer.service.loadBalancerSourceRanges`         | loadBalancerSourceRanges if Grafana service type is `LoadBalancer` (optional, cloud specific)                                             | `[]`                             |
 | `imageRenderer.service.annotations`                      | Provide any additional annotations which may be required.                                                                                 | `{}`                             |
 | `imageRenderer.service.externalTrafficPolicy`            | Grafana service external traffic policy                                                                                                   | `Cluster`                        |
-| `imageRenderer.service.extraPorts`                       | Extra port to expose on Redmine service                                                                                                   | `[]`                             |
+| `imageRenderer.service.extraPorts`                       | Extra port to expose on Grafana service                                                                                                   | `[]`                             |
 | `imageRenderer.service.sessionAffinity`                  | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                                      | `None`                           |
 | `imageRenderer.service.sessionAffinityConfig`            | Additional settings for the sessionAffinity                                                                                               | `{}`                             |
 | `imageRenderer.metrics.enabled`                          | Enable the export of Prometheus metrics                                                                                                   | `false`                          |
@@ -435,7 +436,7 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`                    | `false`            |
 | `volumePermissions.image.registry`                     | OS Shell + Utility image registry                                                                                  | `docker.io`        |
 | `volumePermissions.image.repository`                   | OS Shell + Utility image repository                                                                                | `bitnami/os-shell` |
-| `volumePermissions.image.tag`                          | OS Shell + Utility image tag (immutable tags are recommended)                                                      | `11-debian-11-r89` |
+| `volumePermissions.image.tag`                          | OS Shell + Utility image tag (immutable tags are recommended)                                                      | `11-debian-11-r90` |
 | `volumePermissions.image.digest`                       | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`               |
 | `volumePermissions.image.pullPolicy`                   | OS Shell + Utility image pull policy                                                                               | `IfNotPresent`     |
 | `volumePermissions.image.pullSecrets`                  | OS Shell + Utility image pull secrets                                                                              | `[]`               |

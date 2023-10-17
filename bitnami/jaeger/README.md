@@ -80,7 +80,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | ------------------------------------------------------------------------------------------------------ | --------------------- |
 | `image.registry`    | Jaeger image registry                                                                                  | `docker.io`           |
 | `image.repository`  | Jaeger image repository                                                                                | `bitnami/jaeger`      |
-| `image.tag`         | Jaeger image tag (immutable tags are recommended)                                                      | `1.50.0-debian-11-r0` |
+| `image.tag`         | Jaeger image tag (immutable tags are recommended)                                                      | `1.50.0-debian-11-r1` |
 | `image.digest`      | Jaeger image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
 | `image.pullPolicy`  | image pull policy                                                                                      | `IfNotPresent`        |
 | `image.pullSecrets` | Jaeger image pull secrets                                                                              | `[]`                  |
