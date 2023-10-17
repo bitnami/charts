@@ -82,7 +82,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------- | ---------------------------------------------------------------------------------------------------- | ----------------------- |
 | `image.registry`                 | Solr image registry                                                                                  | `docker.io`             |
 | `image.repository`               | Solr image repository                                                                                | `bitnami/solr`          |
-| `image.tag`                      | Solr image tag (immutable tags are recommended)                                                      | `9.3.0-debian-11-r69`   |
+| `image.tag`                      | Solr image tag (immutable tags are recommended)                                                      | `9.4.0-debian-11-r0`    |
 | `image.digest`                   | Solr image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `image.pullPolicy`               | image pull policy                                                                                    | `IfNotPresent`          |
 | `image.pullSecrets`              | Specify docker-registry secret names as an array                                                     | `[]`                    |
