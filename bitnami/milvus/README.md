@@ -1602,6 +1602,10 @@ The chart also facilitates the creation of TLS secrets for use with the Ingress 
 
 ## Upgrading
 
+### To 4.0.0
+
+This major updates the Kafka subchart to its newest major, 26.0.0. For more information on this subchart's major, please refer to [Kafka upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/kafka#to-2600).
+
 ### To 3.0.0
 
 This major updates the Kafka subchart to its newest major, 25.0.0. For more information on this subchart's major, please refer to [Kafka upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/kafka#to-2500).
