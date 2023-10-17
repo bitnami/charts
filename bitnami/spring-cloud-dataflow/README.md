@@ -192,7 +192,7 @@ helm uninstall my-release
 | `skipper.hostAliases`                        | Deployment pod host aliases                                                                                          | `[]`                           |
 | `skipper.image.registry`                     | Spring Cloud Skipper image registry                                                                                  | `docker.io`                    |
 | `skipper.image.repository`                   | Spring Cloud Skipper image repository                                                                                | `bitnami/spring-cloud-skipper` |
-| `skipper.image.tag`                          | Spring Cloud Skipper image tag (immutable tags are recommended)                                                      | `2.11.0-debian-11-r2`          |
+| `skipper.image.tag`                          | Spring Cloud Skipper image tag (immutable tags are recommended)                                                      | `2.11.1-debian-11-r0`          |
 | `skipper.image.digest`                       | Spring Cloud Skipper image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                           |
 | `skipper.image.pullPolicy`                   | Spring Cloud Skipper image pull policy                                                                               | `IfNotPresent`                 |
 | `skipper.image.pullSecrets`                  | Specify docker-registry secret names as an array                                                                     | `[]`                           |
@@ -661,6 +661,10 @@ Find more information about how to deal with common errors related to Bitnami He
 ## Upgrading
 
 If you enabled RabbitMQ chart to be used as the messaging solution for Skipper to manage streaming content, then it's necessary to set the `rabbitmq.auth.password` and `rabbitmq.auth.erlangCookie` parameters when upgrading for readiness/liveness probes to work properly. Inspect the RabbitMQ secret to obtain the password and the Erlang cookie, then you can upgrade your chart using the command below:
+
+### To 25.0.0
+
+This major updates the Kafka subchart to its newest major, 26.0.0.  For more information on this subchart's major, please refer to [Kafka upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/kafka#to-2600).
 
 ### To 24.0.0
 

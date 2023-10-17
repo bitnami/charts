@@ -266,6 +266,8 @@ This solution allows to easily deploy multiple RabbitMQ instances compared to th
 | `clusterOperator.metrics.serviceMonitor.metricRelabelings` | Specify additional relabeling of metrics                                    | `[]`                     |
 | `clusterOperator.metrics.serviceMonitor.relabelings`       | Specify general relabeling                                                  | `[]`                     |
 | `clusterOperator.metrics.serviceMonitor.labels`            | Extra labels for the ServiceMonitor                                         | `{}`                     |
+| `clusterOperator.metrics.serviceMonitor.path`              | Define the path used by ServiceMonitor to scrap metrics                     | `""`                     |
+| `clusterOperator.metrics.serviceMonitor.params`            | Define the HTTP URL parameters used by ServiceMonitor                       | `{}`                     |
 
 ### RabbitMQ Messaging Topology Operator Parameters
 

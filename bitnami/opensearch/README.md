@@ -82,39 +82,39 @@ helm delete --purge my-release
 
 ### OpenSearch cluster Parameters
 
-| Name                        | Description                                                                                                                                         | Value                  |
-| --------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
-| `clusterName`               | OpenSearch cluster name                                                                                                                             | `open`                 |
-| `containerPorts.restAPI`    | OpenSearch REST API port                                                                                                                            | `9200`                 |
-| `containerPorts.transport`  | OpenSearch Transport port                                                                                                                           | `9300`                 |
-| `plugins`                   | Comma, semi-colon or space separated list of plugins to install at initialization                                                                   | `""`                   |
-| `snapshotRepoPath`          | File System snapshot repository path                                                                                                                | `""`                   |
-| `config`                    | Override opensearch configuration                                                                                                                   | `{}`                   |
-| `extraConfig`               | Append extra configuration to the opensearch node configuration                                                                                     | `{}`                   |
-| `extraHosts`                | A list of external hosts which are part of this cluster                                                                                             | `[]`                   |
-| `extraVolumes`              | A list of volumes to be added to the pod                                                                                                            | `[]`                   |
-| `extraVolumeMounts`         | A list of volume mounts to be added to the pod                                                                                                      | `[]`                   |
-| `initScripts`               | Dictionary of init scripts. Evaluated as a template.                                                                                                | `{}`                   |
-| `initScriptsCM`             | ConfigMap with the init scripts. Evaluated as a template.                                                                                           | `""`                   |
-| `initScriptsSecret`         | Secret containing `/docker-entrypoint-initdb.d` scripts to be executed at initialization time that contain sensitive data. Evaluated as a template. | `""`                   |
-| `extraEnvVars`              | Array containing extra env vars to be added to all pods (evaluated as a template)                                                                   | `[]`                   |
-| `extraEnvVarsCM`            | ConfigMap containing extra env vars to be added to all pods (evaluated as a template)                                                               | `""`                   |
-| `extraEnvVarsSecret`        | Secret containing extra env vars to be added to all pods (evaluated as a template)                                                                  | `""`                   |
-| `sidecars`                  | Add additional sidecar containers to the all opensearch node pod(s)                                                                                 | `[]`                   |
-| `initContainers`            | Add additional init containers to the all opensearch node pod(s)                                                                                    | `[]`                   |
-| `useIstioLabels`            | Use this variable to add Istio labels to all pods                                                                                                   | `true`                 |
-| `image.registry`            | OpenSearch image registry                                                                                                                           | `docker.io`            |
-| `image.repository`          | OpenSearch image repository                                                                                                                         | `bitnami/opensearch`   |
-| `image.tag`                 | OpenSearch image tag (immutable tags are recommended)                                                                                               | `2.10.0-debian-11-r10` |
-| `image.digest`              | OpenSearch image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                          | `""`                   |
-| `image.pullPolicy`          | OpenSearch image pull policy                                                                                                                        | `IfNotPresent`         |
-| `image.pullSecrets`         | OpenSearch image pull secrets                                                                                                                       | `[]`                   |
-| `image.debug`               | Enable OpenSearch image debug mode                                                                                                                  | `false`                |
-| `security.enabled`          | Enable X-Pack Security settings                                                                                                                     | `false`                |
-| `security.adminPassword`    | Password for 'admin' user                                                                                                                           | `""`                   |
-| `security.logstashPassword` | Password for Logstash                                                                                                                               | `""`                   |
-| `security.existingSecret`   | Name of the existing secret containing the OpenSearch password and                                                                                  | `""`                   |
-| `security.fipsMode`         | Configure opensearch with FIPS 140 compliant mode                                                                                                   | `false`                |
+| Name                        | Description                                                                                                                                         | Value                 |
+| --------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
+| `clusterName`               | OpenSearch cluster name                                                                                                                             | `open`                |
+| `containerPorts.restAPI`    | OpenSearch REST API port                                                                                                                            | `9200`                |
+| `containerPorts.transport`  | OpenSearch Transport port                                                                                                                           | `9300`                |
+| `plugins`                   | Comma, semi-colon or space separated list of plugins to install at initialization                                                                   | `""`                  |
+| `snapshotRepoPath`          | File System snapshot repository path                                                                                                                | `""`                  |
+| `config`                    | Override opensearch configuration                                                                                                                   | `{}`                  |
+| `extraConfig`               | Append extra configuration to the opensearch node configuration                                                                                     | `{}`                  |
+| `extraHosts`                | A list of external hosts which are part of this cluster                                                                                             | `[]`                  |
+| `extraVolumes`              | A list of volumes to be added to the pod                                                                                                            | `[]`                  |
+| `extraVolumeMounts`         | A list of volume mounts to be added to the pod                                                                                                      | `[]`                  |
+| `initScripts`               | Dictionary of init scripts. Evaluated as a template.                                                                                                | `{}`                  |
+| `initScriptsCM`             | ConfigMap with the init scripts. Evaluated as a template.                                                                                           | `""`                  |
+| `initScriptsSecret`         | Secret containing `/docker-entrypoint-initdb.d` scripts to be executed at initialization time that contain sensitive data. Evaluated as a template. | `""`                  |
+| `extraEnvVars`              | Array containing extra env vars to be added to all pods (evaluated as a template)                                                                   | `[]`                  |
+| `extraEnvVarsCM`            | ConfigMap containing extra env vars to be added to all pods (evaluated as a template)                                                               | `""`                  |
+| `extraEnvVarsSecret`        | Secret containing extra env vars to be added to all pods (evaluated as a template)                                                                  | `""`                  |
+| `sidecars`                  | Add additional sidecar containers to the all opensearch node pod(s)                                                                                 | `[]`                  |
+| `initContainers`            | Add additional init containers to the all opensearch node pod(s)                                                                                    | `[]`                  |
+| `useIstioLabels`            | Use this variable to add Istio labels to all pods                                                                                                   | `true`                |
+| `image.registry`            | OpenSearch image registry                                                                                                                           | `docker.io`           |
+| `image.repository`          | OpenSearch image repository                                                                                                                         | `bitnami/opensearch`  |
+| `image.tag`                 | OpenSearch image tag (immutable tags are recommended)                                                                                               | `2.11.0-debian-11-r0` |
+| `image.digest`              | OpenSearch image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                          | `""`                  |
+| `image.pullPolicy`          | OpenSearch image pull policy                                                                                                                        | `IfNotPresent`        |
+| `image.pullSecrets`         | OpenSearch image pull secrets                                                                                                                       | `[]`                  |
+| `image.debug`               | Enable OpenSearch image debug mode                                                                                                                  | `false`               |
+| `security.enabled`          | Enable X-Pack Security settings                                                                                                                     | `false`               |
+| `security.adminPassword`    | Password for 'admin' user                                                                                                                           | `""`                  |
+| `security.logstashPassword` | Password for Logstash                                                                                                                               | `""`                  |
+| `security.existingSecret`   | Name of the existing secret containing the OpenSearch password and                                                                                  | `""`                  |
+| `security.fipsMode`         | Configure opensearch with FIPS 140 compliant mode                                                                                                   | `false`               |
 
 ### OpenSearch admin parameters
 

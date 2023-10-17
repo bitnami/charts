@@ -128,6 +128,9 @@ auth:
   ## @param auth.passwordSecretKey Key where the Keycloak admin password is being stored inside the existing secret.
   ##
   passwordSecretKey: ""
+  ## @param auth.annotations Additional custom annotations for Keycloak auth secret object
+  ##
+  annotations: {}
 
 ## HTTPS settings
 ## ref: https://github.com/bitnami/containers/tree/main/bitnami/keycloak#tls-encryption
@@ -1042,6 +1045,7 @@ postgresql:
 ## @param externalDatabase.existingSecretUserKey Name of an existing secret key containing the database user
 ## @param externalDatabase.existingSecretDatabaseKey Name of an existing secret key containing the database name
 ## @param externalDatabase.existingSecretPasswordKey Name of an existing secret key containing the database credentials
+## @param externalDatabase.annotations Additional custom annotations for external database secret object
 ##
 externalDatabase:
   host: ""
@@ -1055,6 +1059,7 @@ externalDatabase:
   existingSecretUserKey: ""
   existingSecretDatabaseKey: ""
   existingSecretPasswordKey: ""
+  annotations: {}
 
 ## @section Keycloak Cache parameters
 
