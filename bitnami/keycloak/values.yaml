@@ -864,7 +864,7 @@ keycloakConfigCli:
   image:
     registry: docker.io
     repository: bitnami/keycloak-config-cli
-    tag: 5.8.0-debian-11-r68
+    tag: 5.9.0-debian-11-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
