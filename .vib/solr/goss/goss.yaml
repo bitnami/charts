@@ -12,7 +12,7 @@ command:
       solr healthcheck -z solr-zookeeper:2181/solr -c {{ $collection }}
     exit-status: 0
     stdout:
-      - healthy
+      - "healthy"
     {{ range $e, $i := until $replicas }}
       - /solr-{{ $i }}/
     {{ end }}
@@ -35,4 +35,4 @@ file:
     filetype: file
     exists: true
     contents:
-    - SOLR_CLOUD_BOOTSTRAP={{ if .Vars.cloudBootstrap }}yes{{ else }}no{{ end }}
+    - "SOLR_CLOUD_BOOTSTRAP={{ if .Vars.cloudBootstrap }}yes{{ else }}no{{ end }}"

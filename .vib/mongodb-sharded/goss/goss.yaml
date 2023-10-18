@@ -41,5 +41,5 @@ file:
     mode: "0600"
     filetype: file
     contents:
-      - {{ .Vars.auth.replicaSetKey }}
+      - "{{ .Vars.auth.replicaSetKey }}"
     exists: true

@@ -15,8 +15,8 @@ file:
     owner: root
     group: root
     contents:
-      - hostname = {{ .Vars.host }}
-      - db_username = {{ .Vars.postgresql.auth.username }}
+      - "hostname = {{ .Vars.host }}"
+      - "db_username = {{ .Vars.postgresql.auth.username }}"
 command:
   discourse-cli:
     exec: cd /opt/bitnami/discourse/ && RAILS_ENV=production bundle exec rake -T

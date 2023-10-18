@@ -27,7 +27,7 @@ file:
     mode: "0777"
     owner: root
     contents:
-    - postgresql://{{ .Vars.postgresql.auth.username }}@jupyterhub-postgresql:{{ .Vars.postgresql.service.ports.postgresql }}/{{ .Vars.postgresql.auth.database }}
+    - "postgresql://{{ .Vars.postgresql.auth.username }}@jupyterhub-postgresql:{{ .Vars.postgresql.service.ports.postgresql }}/{{ .Vars.postgresql.auth.database }}"
     - /type.*dynamic/
 command:
   {{- $uid := .Vars.hub.containerSecurityContext.runAsUser }}
