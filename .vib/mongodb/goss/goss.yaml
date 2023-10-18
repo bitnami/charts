@@ -24,7 +24,7 @@ command:
     exec: mongosh {{ $conn_opts }} --eval "db.{{ $testCollection }}.drop(); db.createCollection('{{ $testCollection }}'); db.getCollectionNames()" {{ (index .Vars.auth.databases 0) }}
     exit-status: 0
     stdout:
-      - {{ $testCollection }}
+      - "{{ $testCollection }}"
   {{- $uid := .Vars.containerSecurityContext.runAsUser }}
   {{- $gid := .Vars.podSecurityContext.fsGroup }}
   check-user-info:

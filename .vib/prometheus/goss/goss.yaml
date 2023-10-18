@@ -70,7 +70,7 @@ command:
     exec: promtool check config /opt/bitnami/prometheus/conf/{{ .Vars.server.existingConfigmapKey }}
     exit-status: 0
     stdout:
-    - SUCCESS
+    - "SUCCESS"
   check-metrics:
     exec: promtool query instant http://localhost:{{ .Vars.server.containerPorts.http }} prometheus_http_requests_total
     exit-status: 0
