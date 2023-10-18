@@ -39,4 +39,4 @@ maintainers:
 name: mongodb
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/mongodb
-version: 14.0.10
+version: 14.1.0
