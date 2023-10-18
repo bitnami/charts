@@ -201,7 +201,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                               | Description                                                                                                                      | Value                    |
 | ---------------------------------- | -------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| `service.type`                     | Service type                                                                                                                     | `LoadBalancer`           |
+| `service.type`                     | Service type                                                                                                                     | `ClusterIP`              |
 | `service.ports.http`               | Service HTTP port                                                                                                                | `80`                     |
 | `service.ports.https`              | Service HTTPS port                                                                                                               | `443`                    |
 | `service.nodePorts`                | Specify the nodePort(s) value(s) for the LoadBalancer and NodePort service types.                                                | `{}`                     |
