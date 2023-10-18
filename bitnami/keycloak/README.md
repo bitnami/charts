@@ -442,45 +442,6 @@ kc.sh export --dir /export/ --users realm_file
 
 This will export the all the realms with users to the `/export` folder.
 
-### Importing and exporting a realm
-
-#### Importing a realm
-
-You can import a realm by setting the `KEYCLOAK_EXTRA_ARGS` to contain the `--import-realm` argument.
-
-This will import all `*.json` under `/opt/bitnami/keycloak/data/import` files as a realm into keycloak as per the
-official documentation [here](https://www.keycloak.org/server/importExport#_importing_a_realm_from_a_directory). You
-can supply the files by mounting a volume e.g. with docker compose as follows:
-
-```yaml
-keycloak:
-  image: bitnami/keycloak:latest
-  volumes:
-    - /local/path/to/realms/folder:/opt/bitnami/keycloak/data/import
-```
-
-#### Exporting a realm
-
-You can export a realm through the GUI but it will not export users even the option is set, this is a known keycloak
-[bug](https://github.com/keycloak/keycloak/issues/23970).
-
-By using the `kc.sh` script you can export a realm with users. Be sure to mount the export folder to a local folder:
-
-```yaml
-keycloak:
-  image: bitnami/keycloak:latest
-  volumes:
-    - /local/path/to/export/folder:/export
-```
-
-Then open a terminal in the running keycloak container and run:
-
-```bash
-kc.sh export --dir /export/ --users realm_file 
-````
-
-This will export the all the realms with users to the `/export` folder.
-
 ### Add extra environment variables
 
 In case you want to add extra environment variables (useful for advanced operations like custom init scripts), you can use the `extraEnvVars` property.
