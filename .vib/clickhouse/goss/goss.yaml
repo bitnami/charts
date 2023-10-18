@@ -7,9 +7,9 @@ file:
     filetype: file
     exists: true
     contents:
-      - zookeeper
-      - remote_servers
-      - logger
+      - "zookeeper"
+      - "remote_servers"
+      - "logger"
   /bitnami/clickhouse/data:
     mode: "2750"
     filetype: directory

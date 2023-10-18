@@ -23,5 +23,5 @@ command:
     exit-status: 0
     stdout:
     {{ range $e, $i := until .Vars.replicaCount }}
-      - consul-{{ $i }}
+      - "consul-{{ $i }}"
     {{ end }}

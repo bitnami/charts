@@ -15,5 +15,5 @@ file:
     owner: root
     group: root
     contents:
-     - db_user = {{ .Vars.postgresql.auth.username }}
-     - http_port = {{ .Vars.containerPorts.http }}
+     - "db_user = {{ .Vars.postgresql.auth.username }}"
+     - "http_port = {{ .Vars.containerPorts.http }}"
