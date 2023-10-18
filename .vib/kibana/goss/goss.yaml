@@ -18,7 +18,7 @@ file:
     exists: true
     group: root
     contents:
-    - {{ toJson .Vars.extraConfiguration }}
+    - "{{ toJson .Vars.extraConfiguration }}"
 command:
   {{- $uid := .Vars.containerSecurityContext.runAsUser }}
   {{- $gid := .Vars.podSecurityContext.fsGroup }}
