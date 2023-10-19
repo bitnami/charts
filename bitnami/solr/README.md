@@ -166,6 +166,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the Solr container(s)                                       | `[]`            |
 | `initContainers`                        | Add init containers to the Solr pod(s)                                                                                   | `[]`            |
 | `sidecars`                              | Add sidecars to the Solr pod(s)                                                                                          | `[]`            |
+| `enableServiceLinks`                    | Whether information about services should be injected into pod's environment variable                                    | `true`          |
 
 ### Traffic Exposure parameters
 
