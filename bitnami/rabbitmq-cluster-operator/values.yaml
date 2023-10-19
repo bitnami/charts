@@ -393,12 +393,12 @@ clusterOperator:
   ## @section RabbitMQ Cluster Operator Metrics parameters
   ##
   metrics:
-    ## @param clusterOperator.metrics.enabled Create a service for accessing the metrics endpoint
-    ##
-    enabled: false
     ## Metrics service parameters
     ##
     service:
+      ## @param clusterOperator.metrics.service.enabled Create a service for accessing the metrics endpoint
+      ##
+      enabled: false
       ## @param clusterOperator.metrics.service.type RabbitMQ Cluster Operator metrics service type
       ##
       type: ClusterIP
@@ -504,7 +504,43 @@ clusterOperator:
       ## @param clusterOperator.metrics.serviceMonitor.params Define the HTTP URL parameters used by ServiceMonitor
       ##
       params: {}
-
+    podMonitor:
+      ## @param clusterOperator.metrics.enabled Create PodMonitor Resource for scraping metrics using PrometheusOperator
+      ##
+      enabled: false
+      ## @param clusterOperator.metrics.podMonitor.jobLabel Specify the jobLabel to use for the prometheus-operator
+      ##
+      jobLabel: app.kubernetes.io/name
+      ## @param clusterOperator.metrics.podMonitor.namespace Namespace which Prometheus is running in
+      ##
+      namespace: ""
+      ## @param clusterOperator.metrics.podMonitor.honorLabels Honor metrics labels
+      ##
+      honorLabels: false
+      ## @param clusterOperator.metrics.podMonitor.selector Prometheus instance selector labels
+      ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
+      selector: {}
+      ## @param clusterOperator.metrics.podMonitor.interval Specify the interval at which metrics should be scraped
+      ##
+      interval: 30s
+      ## @param clusterOperator.metrics.podMonitor.scrapeTimeout Specify the timeout after which the scrape is ended
+      ##
+      scrapeTimeout: 30s
+      ## @param clusterOperator.metrics.podMonitor.additionalLabels [object] Additional labels that can be used so PodMonitors will be discovered by Prometheus
+      ##
+      additionalLabels: {}
+      ## @param clusterOperator.metrics.podMonitor.path Define HTTP path to scrape for metrics.
+      ##
+      path: ""
+      ## @param clusterOperator.metrics.podMonitor.relabelings Specify general relabeling
+      ##
+      relabelings: []
+      ## @param clusterOperator.metrics.serviceMonitor.metricRelabelings Specify additional relabeling of metrics
+      ##
+      metricRelabelings: []
+      ## @param clusterOperator.metrics.serviceMonitor.params Define the HTTP URL parameters used by PodMonitor
+      ##
+      params: {}
 ## @section RabbitMQ Messaging Topology Operator Parameters
 ##
 msgTopologyOperator:
@@ -855,12 +891,12 @@ msgTopologyOperator:
   ## @section RabbitMQ Messaging Topology Operator parameters
   ##
   metrics:
-    ## @param msgTopologyOperator.metrics.enabled Create a service for accessing the metrics endpoint
-    ##
-    enabled: false
     ## Metrics service parameters
     ##
     service:
+      ## @param msgTopologyOperator.metrics.enabled Create a service for accessing the metrics endpoint
+      ##
+      enabled: false
       ## @param msgTopologyOperator.metrics.service.type RabbitMQ Cluster Operator metrics service type
       ##
       type: ClusterIP
@@ -959,7 +995,37 @@ msgTopologyOperator:
       ## @param msgTopologyOperator.metrics.serviceMonitor.labels Extra labels for the ServiceMonitor
       ##
       labels: {}
-
+    podMonitor:
+      ## @param msgTopologyOperator.metrics.enabled Create PodMonitor Resource for scraping metrics using PrometheusOperator
+      ##
+      enabled: false
+      ## @param msgTopologyOperator.metrics.podMonitor.jobLabel Specify the jobLabel to use for the prometheus-operator
+      ##
+      jobLabel: app.kubernetes.io/name
+      ## @param msgTopologyOperator.metrics.podMonitor.namespace Namespace which Prometheus is running in
+      ##
+      namespace: ""
+      ## @param msgTopologyOperator.metrics.podMonitor.honorLabels Honor metrics labels
+      ##
+      honorLabels: false
+      ## @param clusterOperator.metrics.podMonitor.selector Prometheus instance selector labels
+      ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
+      selector: {}
+      ## @param msgTopologyOperator.metrics.podMonitor.interval Specify the interval at which metrics should be scraped
+      ##
+      interval: 30s
+      ## @param msgTopologyOperator.metrics.podMonitor.scrapeTimeout Specify the timeout after which the scrape is ended
+      ##
+      scrapeTimeout: 30s
+      ## @param msgTopologyOperator.metrics.podMonitor.additionalLabels [object] Additional labels that can be used so PodMonitors will be discovered by Prometheus
+      ##
+      additionalLabels: {}
+      ## @param msgTopologyOperator.metrics.podMonitor.relabelings Specify general relabeling
+      ##
+      relabelings: []
+      ## @param msgTopologyOperator.metrics.serviceMonitor.metricRelabelings Specify additional relabeling of metrics
+      ##
+      metricRelabelings: []
 ## @section cert-manager parameters
 ##
 
