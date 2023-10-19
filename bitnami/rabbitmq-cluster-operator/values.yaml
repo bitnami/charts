@@ -497,6 +497,13 @@ clusterOperator:
       ## @param clusterOperator.metrics.serviceMonitor.labels Extra labels for the ServiceMonitor
       ##
       labels: {}
+      ## @param clusterOperator.metrics.serviceMonitor.path Define the path used by ServiceMonitor to scrap metrics
+      ## Could be /metrics for aggregated metrics or /metrics/per-object for more details
+      ##
+      path: ""
+      ## @param clusterOperator.metrics.serviceMonitor.params Define the HTTP URL parameters used by ServiceMonitor
+      ##
+      params: {}
 
 ## @section RabbitMQ Messaging Topology Operator Parameters
 ##

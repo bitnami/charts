@@ -109,11 +109,8 @@ spec:
               valueFrom:
                 fieldRef:
                   fieldPath: metadata.namespace
-            - name: METALLB_ML_SECRET_KEY
-              valueFrom:
-                secretKeyRef:
-                  name: {{ include "metallb.speaker.secretName" . }}
-                  key: {{ include "metallb.speaker.secretKey" . }}
+            - name: METALLB_ML_SECRET_KEY_PATH
+              value: /etc/memberlist
             {{- if .Values.speaker.extraEnvVars }}
             {{- include "common.tplvalues.render" ( dict "value" .Values.speaker.extraEnvVars "context" $ ) | nindent 12 }}
             {{- end }}
@@ -157,13 +154,25 @@ spec:
           {{- if .Values.speaker.resources }}
           resources: {{- toYaml .Values.speaker.resources | nindent 12 }}
           {{- end }}
-          {{- if .Values.speaker.extraVolumeMounts }}
-          volumeMounts: {{- include "common.tplvalues.render" (dict "value" .Values.speaker.extraVolumeMounts "context" $) | nindent 12 }}
-          {{- end }}
+          volumeMounts:
+            - name: memberlist-secret
+              mountPath: /etc/memberlist
+              readOnly: true
+            {{- if .Values.speaker.extraVolumeMounts }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.speaker.extraVolumeMounts "context" $) | nindent 12 }}
+            {{- end }}
         {{- if .Values.speaker.sidecars }}
         {{- include "common.tplvalues.render" ( dict "value" .Values.speaker.sidecars "context" $) | nindent 8 }}
         {{- end }}
-      {{- if .Values.speaker.extraVolumes }}
-      volumes: {{- include "common.tplvalues.render" (dict "value" .Values.speaker.extraVolumes "context" $) | nindent 8 }}
-      {{- end }}
+      volumes:
+        - name: memberlist-secret
+          secret:
+            secretName: {{ include "metallb.speaker.secretName" . }}
+            defaultMode: 0444
+            items:
+              - key: {{ include "metallb.speaker.secretKey" . }}
+                path: secretkey
+        {{- if .Values.speaker.extraVolumes }}
+        {{- include "common.tplvalues.render" (dict "value" .Values.speaker.extraVolumes "context" $) | nindent 8 }}
+        {{- end }}
 {{- end }}

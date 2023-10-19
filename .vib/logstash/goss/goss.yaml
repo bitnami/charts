@@ -15,7 +15,7 @@ file:
     filetype: symlink
     mode: "0777"
     owner: root
-    contains:
+    contents:
     - /port.*{{ (index .Vars.containerPorts 0).containerPort }}/
 command:
   {{- $rnd_ip := printf "%s.%s.%s.%s" (randNumeric 2) (randNumeric 2) (randNumeric 2) (randNumeric 2) }}
@@ -25,7 +25,7 @@ command:
     exec: echo '{{ $rnd_ip }} - - [18/May/2011:19:35:08 -0700] "GET /css/main.css HTTP/1.1" 200 55 "{{ $rnd_address }}" "Mozilla/5.0"' >> /tmp/test_input && sleep 20 && cat /tmp/test_log
     exit-status: 0
     stdout:
-      - {{ $rnd_ip }}
+      - "{{ $rnd_ip }}"
       - /status_code.*200/
       - /referrer.*{{ $rnd_address }}/
     timeout: 30000

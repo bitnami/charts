@@ -82,7 +82,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
 | `image.registry`                      | Kafka image registry                                                                                                                                                                                       | `docker.io`           |
 | `image.repository`                    | Kafka image repository                                                                                                                                                                                     | `bitnami/kafka`       |
-| `image.tag`                           | Kafka image tag (immutable tags are recommended)                                                                                                                                                           | `3.5.1-debian-11-r72` |
+| `image.tag`                           | Kafka image tag (immutable tags are recommended)                                                                                                                                                           | `3.6.0-debian-11-r0`  |
 | `image.digest`                        | Kafka image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                      | `""`                  |
 | `image.pullPolicy`                    | Kafka image pull policy                                                                                                                                                                                    | `IfNotPresent`        |
 | `image.pullSecrets`                   | Specify docker-registry secret names as an array                                                                                                                                                           | `[]`                  |
@@ -1094,6 +1094,10 @@ This guide is an adaptation from upstream documentation: [Migrate from ZooKeeper
     For more information about decommissioning kafka broker check the [Kafka documentation](https://www.confluent.io/blog/remove-kafka-brokers-from-any-cluster-the-easy-way/).
 
 ## Upgrading
+
+### To 26.0.0
+
+This major release bumps the Kafka version to 3.6 [kafka upgrade notes](https://kafka.apache.org/36/documentation.html#upgrade).
 
 ### To 25.0.0
 

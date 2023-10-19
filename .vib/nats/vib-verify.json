@@ -54,6 +54,21 @@
             "endpoint": "lb-nats-tcp-monitoring",
             "app_protocol": "HTTP"
           }
+        },
+        {
+          "action_id": "ginkgo",
+          "params": {
+            "resources": {
+              "path": "/.vib/nats/ginkgo"
+            },
+            "params": {
+              "kubeconfig": "{{kubeconfig}}",
+              "namespace": "{{namespace}}",
+              "name": "nats",
+              "username": "test_nats_client",
+              "password": "ComplicatedPassword123!4"
+            }
+          }
         }
       ]
     }

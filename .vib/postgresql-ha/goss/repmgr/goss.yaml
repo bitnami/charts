@@ -18,11 +18,11 @@ command:
     exec: PGPASSWORD={{ $repmgr_password }} psql -U {{ $repmgr_user }} -d {{ $repmgr_database }} {{ $repmgr_endpoint }} -c "SELECT conninfo FROM repmgr.nodes WHERE type = 'primary'"
     exit-status: 0
     stdout:
-    - user={{ $repmgr_user }}
-    - password={{ $repmgr_password }}
-    - dbname={{ $repmgr_database }}
-    - port={{ $repmgr_port }}
-    - connect_timeout={{ .Vars.postgresql.repmgrConnectTimeout }}
+    - "user={{ $repmgr_user }}"
+    - "password={{ $repmgr_password }}"
+    - "dbname={{ $repmgr_database }}"
+    - "port={{ $repmgr_port }}"
+    - "connect_timeout={{ .Vars.postgresql.repmgrConnectTimeout }}"
   test-replication:
     # We need to first obtain the primary's host to perform write operations
     {{- $database := printf "db_%s" (randAlpha 5 | lower) }}

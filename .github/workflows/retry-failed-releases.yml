@@ -16,15 +16,24 @@ jobs:
     steps:
       - name: Retry "CI Pipeline" failed runs in releases PRs
         env:
+          MAX_RETRY_SLOTS: 15
+          MAX_RUNS_ATTEMPS: 3
           WORKFLOW_ID: "35553382"
           TEMP_FILE: "${{runner.temp}}/failed_runs.json"
-          ACTIONS_API_ENDPOINT: "${{ github.api_url }}/repos/${{ github.repository }}/actions"
         run: |
-          # Obtain "CI Pipeline" failed runs and filter those from release PRs with less than 3 attempts
-          curl -H 'Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' -X GET -Lkso ${{ env.TEMP_FILE }} ${{ env.ACTIONS_API_ENDPOINT }}/workflows/${{ env.WORKFLOW_ID }}/runs?status=failure
-          readarray -t failed_runs_ids < <(jq '.workflow_runs[] | select((.run_attempt < 3) and (.display_title | contains("Release")) and (.head_commit.author.email=="bitnami-bot@vmware.com")).id' ${{ env.TEMP_FILE }})
+          # Obtain "CI Pipeline" failed runs executed by the bitnami-bot and filter those from release PRs with $MAX_RUNS_ATTEMPS or more attempts
+          curl -X GET -GLkso ${{ env.TEMP_FILE }} ${{ github.api_url }}/repos/${{ github.repository }}/actions/workflows/${{ env.WORKFLOW_ID }}/runs \
+            -d "status=failure" -d "author=bitnami-bot" -d "created=>$(date -d '-3 day' '+%Y-%m-%d')" -d "per_page=100"
+          readarray -t retriable_runs_ids < <(jq --argjson runs ${{ env.MAX_RUNS_ATTEMPS }} \
+            '.workflow_runs[] | select((.run_attempt < $runs) and (.display_title | contains("Release"))).id' ${{ env.TEMP_FILE }})
 
-          for run_id in "${failed_runs_ids[@]:0:15}"; do
+          echo "Found ${#retriable_runs_ids[@]} failed runs that need to be retried"
+          if [[ ${#retriable_runs_ids[@]} -gt ${{ env.MAX_RETRY_SLOTS }} ]]; then
+            echo "To avoid potential overload issues in CP, only ${{ env.MAX_RETRY_SLOTS }} runs will be retried in this cron execution"
+          fi
+
+          for run_id in "${retriable_runs_ids[@]:0:${{ env.MAX_RETRY_SLOTS }}}"; do
             echo "Retrying workflow $(jq --argjson id $run_id '.workflow_runs[] | select(.id==$id) | .html_url' ${{ env.TEMP_FILE }})"
-            curl -H 'Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' -X POST -Lks ${{ env.ACTIONS_API_ENDPOINT }}/workflows/runs/${run_id}/rerun
+            rerun_url=$(jq -r --argjson id $run_id '.workflow_runs[] | select(.id==$id) | .rerun_url' ${{ env.TEMP_FILE }})
+            curl -H 'Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' -X POST -Lks ${rerun_url}
           done

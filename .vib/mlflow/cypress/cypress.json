@@ -1,0 +1,9 @@
+{
+  "baseUrl": "http://localhost",
+  "env": {
+    "username": "vib-user",
+    "password": "ComplicatedPassword123!4"
+  },
+  "pageLoadTimeout": 240000,
+  "defaultCommandTimeout": 80000
+}

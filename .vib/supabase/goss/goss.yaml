@@ -22,7 +22,7 @@ file:
     filetype: file
     mode: '0644'
     # Supabase Studio is not included in the declarative Kong configuration, so we don't check for it here.
-    contains:
+    contents:
      - /http://supabase-auth:{{ .Vars.auth.service.ports.http }}/
      - /http://supabase-meta:{{ .Vars.meta.service.ports.http }}/
      - /http://supabase-realtime:{{ .Vars.realtime.service.ports.http }}/

@@ -403,6 +403,10 @@ For annotations, please see [this document](https://github.com/kubernetes/ingres
 
 ## Upgrading
 
+### To 16.0.0
+
+This major updates the Kafka subchart to its newest major, 26.0.0. For more information on this subchart's major, please refer to [Kafka upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/kafka#to-2600).
+
 ### To 14.0.0
 
 This major updates the Kafka subchart to its newest major, 25.0.0. For more information on this subchart's major, please refer to [Kafka upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/kafka#to-2500).
