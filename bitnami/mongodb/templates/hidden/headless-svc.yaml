@@ -28,5 +28,5 @@ spec:
     {{- end }}
   {{- $podLabels := include "common.tplvalues.merge" ( dict "values" ( list .Values.hidden.podLabels .Values.commonLabels ) "context" . ) }}
   selector: {{- include "common.labels.matchLabels" ( dict "customLabels" $podLabels "context" $ ) | nindent 4 }}
-     app.kubernetes.io/component: hidden
+    app.kubernetes.io/component: hidden
 {{- end }}
