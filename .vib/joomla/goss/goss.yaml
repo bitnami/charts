@@ -10,5 +10,5 @@ file:
     exists: true
     filetype: file
     mode: "0664"
-    contains:
+    contents:
       - /db.*{{ .Vars.mariadb.auth.database }}/

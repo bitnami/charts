@@ -6,7 +6,7 @@ file:
     exists: true
     filetype: file
     mode: "0664"
-    contains:
+    contents:
     - /https-port.*{{ .Vars.containerPorts.https }}/
     - /log-console-output.*{{ .Vars.logging.output }}/
 command:

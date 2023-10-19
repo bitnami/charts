@@ -12,7 +12,7 @@ file:
     mode: "0664"
     owner: root
     group: root
-    contains:
+    contents:
       - /listen.*{{ .Vars.containerPorts.http }}/
 command:
   {{- $uid := .Vars.containerSecurityContext.runAsUser }}

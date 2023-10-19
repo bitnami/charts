@@ -26,7 +26,7 @@ file:
   /etc/hosts:
     exists: true
     filetype: file
-    contains:
+    contents:
     {{ range .Vars.hostAliases }}
     {{ $ip := .ip }}
     {{ range $host := .hostnames }}
@@ -42,7 +42,7 @@ file:
     mode: "0644"
     filetype: file
     exists: true
-    contains:
+    contents:
       - /database_name.*{{ .Vars.mariadb.auth.database }}/
       - /database_user.*{{ .Vars.mariadb.auth.username }}/
       - /database_password.*{{ .Vars.mariadb.auth.password }}/
