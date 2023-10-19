@@ -505,7 +505,7 @@ clusterOperator:
       ##
       params: {}
     podMonitor:
-      ## @param clusterOperator.metrics.enabled Create PodMonitor Resource for scraping metrics using PrometheusOperator
+      ## @param clusterOperator.metrics.podMonitor.enabled Create PodMonitor Resource for scraping metrics using PrometheusOperator
       ##
       enabled: false
       ## @param clusterOperator.metrics.podMonitor.jobLabel Specify the jobLabel to use for the prometheus-operator
@@ -535,10 +535,10 @@ clusterOperator:
       ## @param clusterOperator.metrics.podMonitor.relabelings Specify general relabeling
       ##
       relabelings: []
-      ## @param clusterOperator.metrics.serviceMonitor.metricRelabelings Specify additional relabeling of metrics
+      ## @param clusterOperator.metrics.podMonitor.metricRelabelings Specify additional relabeling of metrics
       ##
       metricRelabelings: []
-      ## @param clusterOperator.metrics.serviceMonitor.params Define the HTTP URL parameters used by PodMonitor
+      ## @param clusterOperator.metrics.podMonitor.params Define the HTTP URL parameters used by PodMonitor
       ##
       params: {}
 ## @section RabbitMQ Messaging Topology Operator Parameters
@@ -894,7 +894,7 @@ msgTopologyOperator:
     ## Metrics service parameters
     ##
     service:
-      ## @param msgTopologyOperator.metrics.enabled Create a service for accessing the metrics endpoint
+      ## @param msgTopologyOperator.metrics.service.enabled Create a service for accessing the metrics endpoint
       ##
       enabled: false
       ## @param msgTopologyOperator.metrics.service.type RabbitMQ Cluster Operator metrics service type
@@ -996,7 +996,7 @@ msgTopologyOperator:
       ##
       labels: {}
     podMonitor:
-      ## @param msgTopologyOperator.metrics.enabled Create PodMonitor Resource for scraping metrics using PrometheusOperator
+      ## @param msgTopologyOperator.metrics.podMonitor.enabled Create PodMonitor Resource for scraping metrics using PrometheusOperator
       ##
       enabled: false
       ## @param msgTopologyOperator.metrics.podMonitor.jobLabel Specify the jobLabel to use for the prometheus-operator
@@ -1008,7 +1008,7 @@ msgTopologyOperator:
       ## @param msgTopologyOperator.metrics.podMonitor.honorLabels Honor metrics labels
       ##
       honorLabels: false
-      ## @param clusterOperator.metrics.podMonitor.selector Prometheus instance selector labels
+      ## @param msgTopologyOperator.metrics.podMonitor.selector Prometheus instance selector labels
       ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
       selector: {}
       ## @param msgTopologyOperator.metrics.podMonitor.interval Specify the interval at which metrics should be scraped
@@ -1023,7 +1023,7 @@ msgTopologyOperator:
       ## @param msgTopologyOperator.metrics.podMonitor.relabelings Specify general relabeling
       ##
       relabelings: []
-      ## @param msgTopologyOperator.metrics.serviceMonitor.metricRelabelings Specify additional relabeling of metrics
+      ## @param msgTopologyOperator.metrics.podMonitor.metricRelabelings Specify additional relabeling of metrics
       ##
       metricRelabelings: []
 ## @section cert-manager parameters

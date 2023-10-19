@@ -242,32 +242,44 @@ This solution allows to easily deploy multiple RabbitMQ instances compared to th
 
 ### RabbitMQ Cluster Operator Metrics parameters
 
-| Name                                                       | Description                                                                 | Value                    |
-| ---------------------------------------------------------- | --------------------------------------------------------------------------- | ------------------------ |
-| `clusterOperator.metrics.enabled`                          | Create a service for accessing the metrics endpoint                         | `false`                  |
-| `clusterOperator.metrics.service.type`                     | RabbitMQ Cluster Operator metrics service type                              | `ClusterIP`              |
-| `clusterOperator.metrics.service.ports.http`               | RabbitMQ Cluster Operator metrics service HTTP port                         | `80`                     |
-| `clusterOperator.metrics.service.nodePorts.http`           | Node port for HTTP                                                          | `""`                     |
-| `clusterOperator.metrics.service.clusterIP`                | RabbitMQ Cluster Operator metrics service Cluster IP                        | `""`                     |
-| `clusterOperator.metrics.service.extraPorts`               | Extra ports to expose (normally used with the `sidecar` value)              | `[]`                     |
-| `clusterOperator.metrics.service.loadBalancerIP`           | RabbitMQ Cluster Operator metrics service Load Balancer IP                  | `""`                     |
-| `clusterOperator.metrics.service.loadBalancerSourceRanges` | RabbitMQ Cluster Operator metrics service Load Balancer sources             | `[]`                     |
-| `clusterOperator.metrics.service.externalTrafficPolicy`    | RabbitMQ Cluster Operator metrics service external traffic policy           | `Cluster`                |
-| `clusterOperator.metrics.service.annotations`              | Additional custom annotations for RabbitMQ Cluster Operator metrics service | `{}`                     |
-| `clusterOperator.metrics.service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"        | `None`                   |
-| `clusterOperator.metrics.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                 | `{}`                     |
-| `clusterOperator.metrics.serviceMonitor.enabled`           | Specify if a servicemonitor will be deployed for prometheus-operator        | `false`                  |
-| `clusterOperator.metrics.serviceMonitor.namespace`         | Namespace which Prometheus is running in                                    | `""`                     |
-| `clusterOperator.metrics.serviceMonitor.jobLabel`          | Specify the jobLabel to use for the prometheus-operator                     | `app.kubernetes.io/name` |
-| `clusterOperator.metrics.serviceMonitor.honorLabels`       | Honor metrics labels                                                        | `false`                  |
-| `clusterOperator.metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                         | `{}`                     |
-| `clusterOperator.metrics.serviceMonitor.scrapeTimeout`     | Timeout after which the scrape is ended                                     | `""`                     |
-| `clusterOperator.metrics.serviceMonitor.interval`          | Scrape interval. If not set, the Prometheus default scrape interval is used | `""`                     |
-| `clusterOperator.metrics.serviceMonitor.metricRelabelings` | Specify additional relabeling of metrics                                    | `[]`                     |
-| `clusterOperator.metrics.serviceMonitor.relabelings`       | Specify general relabeling                                                  | `[]`                     |
-| `clusterOperator.metrics.serviceMonitor.labels`            | Extra labels for the ServiceMonitor                                         | `{}`                     |
-| `clusterOperator.metrics.serviceMonitor.path`              | Define the path used by ServiceMonitor to scrap metrics                     | `""`                     |
-| `clusterOperator.metrics.serviceMonitor.params`            | Define the HTTP URL parameters used by ServiceMonitor                       | `{}`                     |
+| Name                                                       | Description                                                                        | Value                    |
+| ---------------------------------------------------------- | ---------------------------------------------------------------------------------- | ------------------------ |
+| `clusterOperator.metrics.service.enabled`                  | Create a service for accessing the metrics endpoint                                | `false`                  |
+| `clusterOperator.metrics.service.type`                     | RabbitMQ Cluster Operator metrics service type                                     | `ClusterIP`              |
+| `clusterOperator.metrics.service.ports.http`               | RabbitMQ Cluster Operator metrics service HTTP port                                | `80`                     |
+| `clusterOperator.metrics.service.nodePorts.http`           | Node port for HTTP                                                                 | `""`                     |
+| `clusterOperator.metrics.service.clusterIP`                | RabbitMQ Cluster Operator metrics service Cluster IP                               | `""`                     |
+| `clusterOperator.metrics.service.extraPorts`               | Extra ports to expose (normally used with the `sidecar` value)                     | `[]`                     |
+| `clusterOperator.metrics.service.loadBalancerIP`           | RabbitMQ Cluster Operator metrics service Load Balancer IP                         | `""`                     |
+| `clusterOperator.metrics.service.loadBalancerSourceRanges` | RabbitMQ Cluster Operator metrics service Load Balancer sources                    | `[]`                     |
+| `clusterOperator.metrics.service.externalTrafficPolicy`    | RabbitMQ Cluster Operator metrics service external traffic policy                  | `Cluster`                |
+| `clusterOperator.metrics.service.annotations`              | Additional custom annotations for RabbitMQ Cluster Operator metrics service        | `{}`                     |
+| `clusterOperator.metrics.service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"               | `None`                   |
+| `clusterOperator.metrics.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                        | `{}`                     |
+| `clusterOperator.metrics.serviceMonitor.enabled`           | Specify if a servicemonitor will be deployed for prometheus-operator               | `false`                  |
+| `clusterOperator.metrics.serviceMonitor.namespace`         | Namespace which Prometheus is running in                                           | `""`                     |
+| `clusterOperator.metrics.serviceMonitor.jobLabel`          | Specify the jobLabel to use for the prometheus-operator                            | `app.kubernetes.io/name` |
+| `clusterOperator.metrics.serviceMonitor.honorLabels`       | Honor metrics labels                                                               | `false`                  |
+| `clusterOperator.metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                                | `{}`                     |
+| `clusterOperator.metrics.serviceMonitor.scrapeTimeout`     | Timeout after which the scrape is ended                                            | `""`                     |
+| `clusterOperator.metrics.serviceMonitor.interval`          | Scrape interval. If not set, the Prometheus default scrape interval is used        | `""`                     |
+| `clusterOperator.metrics.serviceMonitor.metricRelabelings` | Specify additional relabeling of metrics                                           | `[]`                     |
+| `clusterOperator.metrics.serviceMonitor.relabelings`       | Specify general relabeling                                                         | `[]`                     |
+| `clusterOperator.metrics.serviceMonitor.labels`            | Extra labels for the ServiceMonitor                                                | `{}`                     |
+| `clusterOperator.metrics.serviceMonitor.path`              | Define the path used by ServiceMonitor to scrap metrics                            | `""`                     |
+| `clusterOperator.metrics.serviceMonitor.params`            | Define the HTTP URL parameters used by ServiceMonitor                              | `{}`                     |
+| `clusterOperator.metrics.podMonitor.enabled`               | Create PodMonitor Resource for scraping metrics using PrometheusOperator           | `false`                  |
+| `clusterOperator.metrics.podMonitor.jobLabel`              | Specify the jobLabel to use for the prometheus-operator                            | `app.kubernetes.io/name` |
+| `clusterOperator.metrics.podMonitor.namespace`             | Namespace which Prometheus is running in                                           | `""`                     |
+| `clusterOperator.metrics.podMonitor.honorLabels`           | Honor metrics labels                                                               | `false`                  |
+| `clusterOperator.metrics.podMonitor.selector`              | Prometheus instance selector labels                                                | `{}`                     |
+| `clusterOperator.metrics.podMonitor.interval`              | Specify the interval at which metrics should be scraped                            | `30s`                    |
+| `clusterOperator.metrics.podMonitor.scrapeTimeout`         | Specify the timeout after which the scrape is ended                                | `30s`                    |
+| `clusterOperator.metrics.podMonitor.additionalLabels`      | Additional labels that can be used so PodMonitors will be discovered by Prometheus | `{}`                     |
+| `clusterOperator.metrics.podMonitor.path`                  | Define HTTP path to scrape for metrics.                                            | `""`                     |
+| `clusterOperator.metrics.podMonitor.relabelings`           | Specify general relabeling                                                         | `[]`                     |
+| `clusterOperator.metrics.podMonitor.metricRelabelings`     | Specify additional relabeling of metrics                                           | `[]`                     |
+| `clusterOperator.metrics.podMonitor.params`                | Define the HTTP URL parameters used by PodMonitor                                  | `{}`                     |
 
 ### RabbitMQ Messaging Topology Operator Parameters
 
@@ -361,30 +373,40 @@ This solution allows to easily deploy multiple RabbitMQ instances compared to th
 
 ### RabbitMQ Messaging Topology Operator parameters
 
-| Name                                                           | Description                                                                 | Value                    |
-| -------------------------------------------------------------- | --------------------------------------------------------------------------- | ------------------------ |
-| `msgTopologyOperator.metrics.enabled`                          | Create a service for accessing the metrics endpoint                         | `false`                  |
-| `msgTopologyOperator.metrics.service.type`                     | RabbitMQ Cluster Operator metrics service type                              | `ClusterIP`              |
-| `msgTopologyOperator.metrics.service.ports.http`               | RabbitMQ Cluster Operator metrics service HTTP port                         | `80`                     |
-| `msgTopologyOperator.metrics.service.nodePorts.http`           | Node port for HTTP                                                          | `""`                     |
-| `msgTopologyOperator.metrics.service.clusterIP`                | RabbitMQ Cluster Operator metrics service Cluster IP                        | `""`                     |
-| `msgTopologyOperator.metrics.service.extraPorts`               | Extra ports to expose (normally used with the `sidecar` value)              | `[]`                     |
-| `msgTopologyOperator.metrics.service.loadBalancerIP`           | RabbitMQ Cluster Operator metrics service Load Balancer IP                  | `""`                     |
-| `msgTopologyOperator.metrics.service.loadBalancerSourceRanges` | RabbitMQ Cluster Operator metrics service Load Balancer sources             | `[]`                     |
-| `msgTopologyOperator.metrics.service.externalTrafficPolicy`    | RabbitMQ Cluster Operator metrics service external traffic policy           | `Cluster`                |
-| `msgTopologyOperator.metrics.service.annotations`              | Additional custom annotations for RabbitMQ Cluster Operator metrics service | `{}`                     |
-| `msgTopologyOperator.metrics.service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"        | `None`                   |
-| `msgTopologyOperator.metrics.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                 | `{}`                     |
-| `msgTopologyOperator.metrics.serviceMonitor.enabled`           | Specify if a servicemonitor will be deployed for prometheus-operator        | `false`                  |
-| `msgTopologyOperator.metrics.serviceMonitor.namespace`         | Namespace which Prometheus is running in                                    | `""`                     |
-| `msgTopologyOperator.metrics.serviceMonitor.jobLabel`          | Specify the jobLabel to use for the prometheus-operator                     | `app.kubernetes.io/name` |
-| `msgTopologyOperator.metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                         | `{}`                     |
-| `msgTopologyOperator.metrics.serviceMonitor.honorLabels`       | Honor metrics labels                                                        | `false`                  |
-| `msgTopologyOperator.metrics.serviceMonitor.scrapeTimeout`     | Timeout after which the scrape is ended                                     | `""`                     |
-| `msgTopologyOperator.metrics.serviceMonitor.interval`          | Scrape interval. If not set, the Prometheus default scrape interval is used | `""`                     |
-| `msgTopologyOperator.metrics.serviceMonitor.metricRelabelings` | Specify additional relabeling of metrics                                    | `[]`                     |
-| `msgTopologyOperator.metrics.serviceMonitor.relabelings`       | Specify general relabeling                                                  | `[]`                     |
-| `msgTopologyOperator.metrics.serviceMonitor.labels`            | Extra labels for the ServiceMonitor                                         | `{}`                     |
+| Name                                                           | Description                                                                        | Value                    |
+| -------------------------------------------------------------- | ---------------------------------------------------------------------------------- | ------------------------ |
+| `msgTopologyOperator.metrics.service.enabled`                  | Create a service for accessing the metrics endpoint                                | `false`                  |
+| `msgTopologyOperator.metrics.service.type`                     | RabbitMQ Cluster Operator metrics service type                                     | `ClusterIP`              |
+| `msgTopologyOperator.metrics.service.ports.http`               | RabbitMQ Cluster Operator metrics service HTTP port                                | `80`                     |
+| `msgTopologyOperator.metrics.service.nodePorts.http`           | Node port for HTTP                                                                 | `""`                     |
+| `msgTopologyOperator.metrics.service.clusterIP`                | RabbitMQ Cluster Operator metrics service Cluster IP                               | `""`                     |
+| `msgTopologyOperator.metrics.service.extraPorts`               | Extra ports to expose (normally used with the `sidecar` value)                     | `[]`                     |
+| `msgTopologyOperator.metrics.service.loadBalancerIP`           | RabbitMQ Cluster Operator metrics service Load Balancer IP                         | `""`                     |
+| `msgTopologyOperator.metrics.service.loadBalancerSourceRanges` | RabbitMQ Cluster Operator metrics service Load Balancer sources                    | `[]`                     |
+| `msgTopologyOperator.metrics.service.externalTrafficPolicy`    | RabbitMQ Cluster Operator metrics service external traffic policy                  | `Cluster`                |
+| `msgTopologyOperator.metrics.service.annotations`              | Additional custom annotations for RabbitMQ Cluster Operator metrics service        | `{}`                     |
+| `msgTopologyOperator.metrics.service.sessionAffinity`          | Session Affinity for Kubernetes service, can be "None" or "ClientIP"               | `None`                   |
+| `msgTopologyOperator.metrics.service.sessionAffinityConfig`    | Additional settings for the sessionAffinity                                        | `{}`                     |
+| `msgTopologyOperator.metrics.serviceMonitor.enabled`           | Specify if a servicemonitor will be deployed for prometheus-operator               | `false`                  |
+| `msgTopologyOperator.metrics.serviceMonitor.namespace`         | Namespace which Prometheus is running in                                           | `""`                     |
+| `msgTopologyOperator.metrics.serviceMonitor.jobLabel`          | Specify the jobLabel to use for the prometheus-operator                            | `app.kubernetes.io/name` |
+| `msgTopologyOperator.metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                                | `{}`                     |
+| `msgTopologyOperator.metrics.serviceMonitor.honorLabels`       | Honor metrics labels                                                               | `false`                  |
+| `msgTopologyOperator.metrics.serviceMonitor.scrapeTimeout`     | Timeout after which the scrape is ended                                            | `""`                     |
+| `msgTopologyOperator.metrics.serviceMonitor.interval`          | Scrape interval. If not set, the Prometheus default scrape interval is used        | `""`                     |
+| `msgTopologyOperator.metrics.serviceMonitor.metricRelabelings` | Specify additional relabeling of metrics                                           | `[]`                     |
+| `msgTopologyOperator.metrics.serviceMonitor.relabelings`       | Specify general relabeling                                                         | `[]`                     |
+| `msgTopologyOperator.metrics.serviceMonitor.labels`            | Extra labels for the ServiceMonitor                                                | `{}`                     |
+| `msgTopologyOperator.metrics.podMonitor.enabled`               | Create PodMonitor Resource for scraping metrics using PrometheusOperator           | `false`                  |
+| `msgTopologyOperator.metrics.podMonitor.jobLabel`              | Specify the jobLabel to use for the prometheus-operator                            | `app.kubernetes.io/name` |
+| `msgTopologyOperator.metrics.podMonitor.namespace`             | Namespace which Prometheus is running in                                           | `""`                     |
+| `msgTopologyOperator.metrics.podMonitor.honorLabels`           | Honor metrics labels                                                               | `false`                  |
+| `msgTopologyOperator.metrics.podMonitor.selector`              | Prometheus instance selector labels                                                | `{}`                     |
+| `msgTopologyOperator.metrics.podMonitor.interval`              | Specify the interval at which metrics should be scraped                            | `30s`                    |
+| `msgTopologyOperator.metrics.podMonitor.scrapeTimeout`         | Specify the timeout after which the scrape is ended                                | `30s`                    |
+| `msgTopologyOperator.metrics.podMonitor.additionalLabels`      | Additional labels that can be used so PodMonitors will be discovered by Prometheus | `{}`                     |
+| `msgTopologyOperator.metrics.podMonitor.relabelings`           | Specify general relabeling                                                         | `[]`                     |
+| `msgTopologyOperator.metrics.podMonitor.metricRelabelings`     | Specify additional relabeling of metrics                                           | `[]`                     |
 
 ### cert-manager parameters
 
