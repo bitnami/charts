@@ -24,7 +24,7 @@ file:
 command:
   {{- $password := .Vars.config.secret.argocdServerAdminPassword }}
   check-argocd-cli:
-    exec: argocd login argo-cd-server --insecure --username admin --password {{ $password }}
+    exec: argocd login argo-cd-server --insecure --username admin --password falsepass
     exit-status: 0
   {{- if .Vars.server.containerSecurityContext.enabled }}
   check-no-capabilities:
