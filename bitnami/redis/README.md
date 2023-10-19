@@ -97,15 +97,15 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Redis&reg; Image parameters
 
-| Name                | Description                                                                                                | Value                 |
-| ------------------- | ---------------------------------------------------------------------------------------------------------- | --------------------- |
-| `image.registry`    | Redis&reg; image registry                                                                                  | `docker.io`           |
-| `image.repository`  | Redis&reg; image repository                                                                                | `bitnami/redis`       |
-| `image.tag`         | Redis&reg; image tag (immutable tags are recommended)                                                      | `7.2.1-debian-11-r26` |
-| `image.digest`      | Redis&reg; image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
-| `image.pullPolicy`  | Redis&reg; image pull policy                                                                               | `IfNotPresent`        |
-| `image.pullSecrets` | Redis&reg; image pull secrets                                                                              | `[]`                  |
-| `image.debug`       | Enable image debug mode                                                                                    | `false`               |
+| Name                | Description                                                                                                | Value                |
+| ------------------- | ---------------------------------------------------------------------------------------------------------- | -------------------- |
+| `image.registry`    | Redis&reg; image registry                                                                                  | `docker.io`          |
+| `image.repository`  | Redis&reg; image repository                                                                                | `bitnami/redis`      |
+| `image.tag`         | Redis&reg; image tag (immutable tags are recommended)                                                      | `7.2.2-debian-11-r0` |
+| `image.digest`      | Redis&reg; image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                 |
+| `image.pullPolicy`  | Redis&reg; image pull policy                                                                               | `IfNotPresent`       |
+| `image.pullSecrets` | Redis&reg; image pull secrets                                                                              | `[]`                 |
+| `image.debug`       | Enable image debug mode                                                                                    | `false`              |
 
 ### Redis&reg; common configuration parameters
 
@@ -353,7 +353,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sentinel.enabled`                                           | Use Redis&reg; Sentinel on Redis&reg; pods.                                                                                                 | `false`                  |
 | `sentinel.image.registry`                                    | Redis&reg; Sentinel image registry                                                                                                          | `docker.io`              |
 | `sentinel.image.repository`                                  | Redis&reg; Sentinel image repository                                                                                                        | `bitnami/redis-sentinel` |
-| `sentinel.image.tag`                                         | Redis&reg; Sentinel image tag (immutable tags are recommended)                                                                              | `7.2.1-debian-11-r26`    |
+| `sentinel.image.tag`                                         | Redis&reg; Sentinel image tag (immutable tags are recommended)                                                                              | `7.2.2-debian-11-r0`     |
 | `sentinel.image.digest`                                      | Redis&reg; Sentinel image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                         | `""`                     |
 | `sentinel.image.pullPolicy`                                  | Redis&reg; Sentinel image pull policy                                                                                                       | `IfNotPresent`           |
 | `sentinel.image.pullSecrets`                                 | Redis&reg; Sentinel image pull secrets                                                                                                      | `[]`                     |
