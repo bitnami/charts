@@ -61,8 +61,8 @@ diagnosticMode:
 
 ## Bitnami Concourse image
 ## ref: https://hub.docker.com/r/bitnami/redis/tags/
-## @param image.registry image registry
-## @param image.repository image repository
+## @param image.registry [default: REGISTRY_NAME] image registry
+## @param image.repository [default: REPOSITORY_NAME/concourse] image repository
 ## @param image.tag image tag (immutable tags are recommended)
 ## @param image.digest image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy image pull policy
@@ -1202,8 +1202,8 @@ volumePermissions:
   ## @param volumePermissions.enabled Enable init container that changes the owner and group of the persistent volume
   ##
   enabled: false
-  ## @param volumePermissions.image.registry Init container volume-permissions image registry
-  ## @param volumePermissions.image.repository Init container volume-permissions image repository
+  ## @param volumePermissions.image.registry [default: REGISTRY_NAME] Init container volume-permissions image registry
+  ## @param volumePermissions.image.repository [default: REPOSITORY_NAME/os-shell] Init container volume-permissions image repository
   ## @param volumePermissions.image.tag Init container volume-permissions image tag (immutable tags are recommended)
   ## @param volumePermissions.image.digest Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy

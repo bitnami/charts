@@ -61,8 +61,8 @@ diagnosticMode:
 
 ## Bitnami Apache Flink image
 ## ref: https://hub.docker.com/r/bitnami/flink/tags/
-## @param image.registry Apache Flink image registry
-## @param image.repository Apache Flink image repository
+## @param image.registry [default: REGISTRY_NAME] Apache Flink image registry
+## @param image.repository [default: REPOSITORY_NAME/flink] Apache Flink image repository
 ## @param image.tag Apache Flink image tag (immutable tags are recommended)
 ## @param image.digest Apache Flink image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy image pull policy
