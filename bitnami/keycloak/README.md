@@ -11,8 +11,10 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/keycloak
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/keycloak
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 ## Introduction
 
@@ -34,8 +36,10 @@ Looking to use Keycloak in production? Try [VMware Application Catalog](https://
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/keycloak
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/keycloak
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 These commands deploy a Keycloak application on the Kubernetes cluster in the default configuration.
 
@@ -84,8 +88,8 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                             | Description                                                                                                                  | Value                         |
 | -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | ----------------------------- |
-| `image.registry`                 | Keycloak image registry                                                                                                      | `docker.io`                   |
-| `image.repository`               | Keycloak image repository                                                                                                    | `bitnami/keycloak`            |
+| `image.registry`                 | Keycloak image registry                                                                                                      | `REGISTRY_NAME`               |
+| `image.repository`               | Keycloak image repository                                                                                                    | `REPOSITORY_NAME/keycloak`    |
 | `image.tag`                      | Keycloak image tag (immutable tags are recommended)                                                                          | `22.0.4-debian-11-r3`         |
 | `image.digest`                   | Keycloak image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                     | `""`                          |
 | `image.pullPolicy`               | Keycloak image pull policy                                                                                                   | `IfNotPresent`                |
@@ -277,42 +281,42 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### keycloak-config-cli parameters
 
-| Name                                                      | Description                                                                                                                   | Value                         |
-| --------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ----------------------------- |
-| `keycloakConfigCli.enabled`                               | Whether to enable keycloak-config-cli job                                                                                     | `false`                       |
-| `keycloakConfigCli.image.registry`                        | keycloak-config-cli container image registry                                                                                  | `docker.io`                   |
-| `keycloakConfigCli.image.repository`                      | keycloak-config-cli container image repository                                                                                | `bitnami/keycloak-config-cli` |
-| `keycloakConfigCli.image.tag`                             | keycloak-config-cli container image tag                                                                                       | `5.9.0-debian-11-r0`          |
-| `keycloakConfigCli.image.digest`                          | keycloak-config-cli container image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                          |
-| `keycloakConfigCli.image.pullPolicy`                      | keycloak-config-cli container image pull policy                                                                               | `IfNotPresent`                |
-| `keycloakConfigCli.image.pullSecrets`                     | keycloak-config-cli container image pull secrets                                                                              | `[]`                          |
-| `keycloakConfigCli.annotations`                           | Annotations for keycloak-config-cli job                                                                                       | `{}`                          |
-| `keycloakConfigCli.command`                               | Command for running the container (set to default if not set). Use array form                                                 | `[]`                          |
-| `keycloakConfigCli.args`                                  | Args for running the container (set to default if not set). Use array form                                                    | `[]`                          |
-| `keycloakConfigCli.hostAliases`                           | Job pod host aliases                                                                                                          | `[]`                          |
-| `keycloakConfigCli.resources.limits`                      | The resources limits for the keycloak-config-cli container                                                                    | `{}`                          |
-| `keycloakConfigCli.resources.requests`                    | The requested resources for the keycloak-config-cli container                                                                 | `{}`                          |
-| `keycloakConfigCli.containerSecurityContext.enabled`      | Enabled keycloak-config-cli containers' Security Context                                                                      | `true`                        |
-| `keycloakConfigCli.containerSecurityContext.runAsUser`    | Set keycloak-config-cli container's Security Context runAsUser                                                                | `1001`                        |
-| `keycloakConfigCli.containerSecurityContext.runAsNonRoot` | Set keycloak-config-cli container's Security Context runAsNonRoot                                                             | `true`                        |
-| `keycloakConfigCli.podSecurityContext.enabled`            | Enabled keycloak-config-cli pods' Security Context                                                                            | `true`                        |
-| `keycloakConfigCli.podSecurityContext.fsGroup`            | Set keycloak-config-cli pod's Security Context fsGroup                                                                        | `1001`                        |
-| `keycloakConfigCli.backoffLimit`                          | Number of retries before considering a Job as failed                                                                          | `1`                           |
-| `keycloakConfigCli.podLabels`                             | Pod extra labels                                                                                                              | `{}`                          |
-| `keycloakConfigCli.podAnnotations`                        | Annotations for job pod                                                                                                       | `{}`                          |
-| `keycloakConfigCli.extraEnvVars`                          | Additional environment variables to set                                                                                       | `[]`                          |
-| `keycloakConfigCli.nodeSelector`                          | Node labels for pod assignment                                                                                                | `{}`                          |
-| `keycloakConfigCli.podTolerations`                        | Tolerations for job pod assignment                                                                                            | `[]`                          |
-| `keycloakConfigCli.extraEnvVarsCM`                        | ConfigMap with extra environment variables                                                                                    | `""`                          |
-| `keycloakConfigCli.extraEnvVarsSecret`                    | Secret with extra environment variables                                                                                       | `""`                          |
-| `keycloakConfigCli.extraVolumes`                          | Extra volumes to add to the job                                                                                               | `[]`                          |
-| `keycloakConfigCli.extraVolumeMounts`                     | Extra volume mounts to add to the container                                                                                   | `[]`                          |
-| `keycloakConfigCli.initContainers`                        | Add additional init containers to the Keycloak config cli pod                                                                 | `[]`                          |
-| `keycloakConfigCli.sidecars`                              | Add additional sidecar containers to the Keycloak config cli pod                                                              | `[]`                          |
-| `keycloakConfigCli.configuration`                         | keycloak-config-cli realms configuration                                                                                      | `{}`                          |
-| `keycloakConfigCli.existingConfigmap`                     | ConfigMap with keycloak-config-cli configuration                                                                              | `""`                          |
-| `keycloakConfigCli.cleanupAfterFinished.enabled`          | Enables Cleanup for Finished Jobs                                                                                             | `false`                       |
-| `keycloakConfigCli.cleanupAfterFinished.seconds`          | Sets the value of ttlSecondsAfterFinished                                                                                     | `600`                         |
+| Name                                                      | Description                                                                                                                   | Value                                 |
+| --------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ------------------------------------- |
+| `keycloakConfigCli.enabled`                               | Whether to enable keycloak-config-cli job                                                                                     | `false`                               |
+| `keycloakConfigCli.image.registry`                        | keycloak-config-cli container image registry                                                                                  | `REGISTRY_NAME`                       |
+| `keycloakConfigCli.image.repository`                      | keycloak-config-cli container image repository                                                                                | `REPOSITORY_NAME/keycloak-config-cli` |
+| `keycloakConfigCli.image.tag`                             | keycloak-config-cli container image tag                                                                                       | `5.9.0-debian-11-r0`                  |
+| `keycloakConfigCli.image.digest`                          | keycloak-config-cli container image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                                  |
+| `keycloakConfigCli.image.pullPolicy`                      | keycloak-config-cli container image pull policy                                                                               | `IfNotPresent`                        |
+| `keycloakConfigCli.image.pullSecrets`                     | keycloak-config-cli container image pull secrets                                                                              | `[]`                                  |
+| `keycloakConfigCli.annotations`                           | Annotations for keycloak-config-cli job                                                                                       | `{}`                                  |
+| `keycloakConfigCli.command`                               | Command for running the container (set to default if not set). Use array form                                                 | `[]`                                  |
+| `keycloakConfigCli.args`                                  | Args for running the container (set to default if not set). Use array form                                                    | `[]`                                  |
+| `keycloakConfigCli.hostAliases`                           | Job pod host aliases                                                                                                          | `[]`                                  |
+| `keycloakConfigCli.resources.limits`                      | The resources limits for the keycloak-config-cli container                                                                    | `{}`                                  |
+| `keycloakConfigCli.resources.requests`                    | The requested resources for the keycloak-config-cli container                                                                 | `{}`                                  |
+| `keycloakConfigCli.containerSecurityContext.enabled`      | Enabled keycloak-config-cli containers' Security Context                                                                      | `true`                                |
+| `keycloakConfigCli.containerSecurityContext.runAsUser`    | Set keycloak-config-cli container's Security Context runAsUser                                                                | `1001`                                |
+| `keycloakConfigCli.containerSecurityContext.runAsNonRoot` | Set keycloak-config-cli container's Security Context runAsNonRoot                                                             | `true`                                |
+| `keycloakConfigCli.podSecurityContext.enabled`            | Enabled keycloak-config-cli pods' Security Context                                                                            | `true`                                |
+| `keycloakConfigCli.podSecurityContext.fsGroup`            | Set keycloak-config-cli pod's Security Context fsGroup                                                                        | `1001`                                |
+| `keycloakConfigCli.backoffLimit`                          | Number of retries before considering a Job as failed                                                                          | `1`                                   |
+| `keycloakConfigCli.podLabels`                             | Pod extra labels                                                                                                              | `{}`                                  |
+| `keycloakConfigCli.podAnnotations`                        | Annotations for job pod                                                                                                       | `{}`                                  |
+| `keycloakConfigCli.extraEnvVars`                          | Additional environment variables to set                                                                                       | `[]`                                  |
+| `keycloakConfigCli.nodeSelector`                          | Node labels for pod assignment                                                                                                | `{}`                                  |
+| `keycloakConfigCli.podTolerations`                        | Tolerations for job pod assignment                                                                                            | `[]`                                  |
+| `keycloakConfigCli.extraEnvVarsCM`                        | ConfigMap with extra environment variables                                                                                    | `""`                                  |
+| `keycloakConfigCli.extraEnvVarsSecret`                    | Secret with extra environment variables                                                                                       | `""`                                  |
+| `keycloakConfigCli.extraVolumes`                          | Extra volumes to add to the job                                                                                               | `[]`                                  |
+| `keycloakConfigCli.extraVolumeMounts`                     | Extra volume mounts to add to the container                                                                                   | `[]`                                  |
+| `keycloakConfigCli.initContainers`                        | Add additional init containers to the Keycloak config cli pod                                                                 | `[]`                                  |
+| `keycloakConfigCli.sidecars`                              | Add additional sidecar containers to the Keycloak config cli pod                                                              | `[]`                                  |
+| `keycloakConfigCli.configuration`                         | keycloak-config-cli realms configuration                                                                                      | `{}`                                  |
+| `keycloakConfigCli.existingConfigmap`                     | ConfigMap with keycloak-config-cli configuration                                                                              | `""`                                  |
+| `keycloakConfigCli.cleanupAfterFinished.enabled`          | Enables Cleanup for Finished Jobs                                                                                             | `false`                               |
+| `keycloakConfigCli.cleanupAfterFinished.seconds`          | Sets the value of ttlSecondsAfterFinished                                                                                     | `600`                                 |
 
 ### Database parameters
 
@@ -356,8 +360,10 @@ The command removes all the Kubernetes components associated with the chart and 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-helm install my-release --set auth.adminPassword=secretpassword oci://registry-1.docker.io/bitnamicharts/keycloak
+helm install my-release --set auth.adminPassword=secretpassword oci://REGISTRY_NAME/REPOSITORY_NAME/keycloak
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 The above command sets the Keycloak administrator password to `secretpassword`.
 
@@ -366,9 +372,10 @@ The above command sets the Keycloak administrator password to `secretpassword`.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/keycloak
+helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/keycloak
 ```
 
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
 Keycloak realms, users and clients can be created from the Keycloak administration panel. Refer to the [tutorial on adding user authentication to applications with Keycloak](https://docs.bitnami.com/tutorials/integrate-keycloak-authentication-kubernetes) for more details on these operations.
