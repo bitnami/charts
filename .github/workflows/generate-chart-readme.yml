@@ -44,7 +44,7 @@ jobs:
               echo "$line" | grep --quiet "\[default: \(REGISTRY_NAME\|\"\"\)\]" || exit_code=$?
             done < <(grep "@param\s\+[A-Za-z\.]\+\.registry\s\+" "charts/${chart}/values.yaml")
             if [[ $exit_code -ne 0 ]]; then
-              echo "::error:: Please ensure all *.registry params include the [default: REGISTRY_NAME] modifier the ${chart}/values.yaml file"
+              echo "::error:: Please ensure all *.registry params include the [default: REGISTRY_NAME] modifier the chart/${chart}/values.yaml file"
               exit "$exit_code"
             fi
             # Validating *.repository parameters
@@ -52,11 +52,11 @@ jobs:
               param=$(echo "$line" | awk '{print $3}')
               # Checking if it's a image's registry-related param
               registry_param=$(echo ${param} | sed 's/\.repository/\.registry/g')
-              grep --quiet "@param\s\+${registry_param}" "${c}/values.yaml" && ( echo "$line" | grep --quiet "\[default: \(REPOSITORY_NAME/.*\|\"\"\)\]" || exit_code=$? )
+              grep --quiet "@param\s\+${registry_param}" "charts/${chart}/values.yaml" && ( echo "$line" | grep --quiet "\[default: \(REPOSITORY_NAME/.*\|\"\"\)\]" || exit_code=$? )
               echo "$line" | grep --quiet "\[default: \(REPOSITORY_NAME/.*\|\"\"\)\]" || exit_code=$?
             done < <(grep "@param\s\+[A-Za-z\.]\+\.repository\s\+" "charts/${chart}/values.yaml")
             if [[ $exit_code -ne 0 ]]; then
-              echo "::error:: Please ensure all *.repository params include the [default: REPOSITORY_NAME] modifier the ${chart}/values.yaml file"
+              echo "::error:: Please ensure all *.repository params include the [default: REPOSITORY_NAME] modifier the charts/${chart}/values.yaml file"
               exit "$exit_code"
             fi
             # Validating *.tag parameters
