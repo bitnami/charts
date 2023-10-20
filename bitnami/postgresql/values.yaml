@@ -89,7 +89,7 @@ diagnosticMode:
 ## ref: https://hub.docker.com/r/bitnami/postgresql/tags/
 ## @param image.registry [default: REGISTRY_NAME] PostgreSQL image registry
 ## @param image.repository [default: REPOSITORY_NAME/postgresql] PostgreSQL image repository
-## @param image.tag PostgreSQL image tag (immutable tags are recommended)
+## @skip image.tag PostgreSQL image tag (immutable tags are recommended)
 ## @param image.digest PostgreSQL image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy PostgreSQL image pull policy
 ## @param image.pullSecrets Specify image pull secrets
@@ -1291,7 +1291,7 @@ volumePermissions:
   enabled: false
   ## @param volumePermissions.image.registry [default: REGISTRY_NAME] Init container volume-permissions image registry
   ## @param volumePermissions.image.repository [default: REPOSITORY_NAME/os-shell] Init container volume-permissions image repository
-  ## @param volumePermissions.image.tag Init container volume-permissions image tag (immutable tags are recommended)
+  ## @skip volumePermissions.image.tag Init container volume-permissions image tag (immutable tags are recommended)
   ## @param volumePermissions.image.digest Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
   ## @param volumePermissions.image.pullSecrets Init container volume-permissions image pull secrets
@@ -1392,7 +1392,7 @@ metrics:
   enabled: false
   ## @param metrics.image.registry [default: REGISTRY_NAME] PostgreSQL Prometheus Exporter image registry
   ## @param metrics.image.repository [default: REPOSITORY_NAME/postgres-exporter] PostgreSQL Prometheus Exporter image repository
-  ## @param metrics.image.tag PostgreSQL Prometheus Exporter image tag (immutable tags are recommended)
+  ## @skip metrics.image.tag PostgreSQL Prometheus Exporter image tag (immutable tags are recommended)
   ## @param metrics.image.digest PostgreSQL image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param metrics.image.pullPolicy PostgreSQL Prometheus Exporter image pull policy
   ## @param metrics.image.pullSecrets Specify image pull secrets

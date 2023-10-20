@@ -62,7 +62,7 @@ diagnosticMode:
 ## ref: https://hub.docker.com/r/bitnami/schema-registry/tags/
 ## @param image.registry [default: REGISTRY_NAME] Schema Registry image registry
 ## @param image.repository [default: REPOSITORY_NAME/schema-registry] Schema Registry image repository
-## @param image.tag Schema Registry image tag (immutable tags are recommended)
+## @skip image.tag Schema Registry image tag (immutable tags are recommended)
 ## @param image.digest Schema Registry image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy Schema Registry image pull policy
 ## @param image.pullSecrets Schema Registry image pull secrets

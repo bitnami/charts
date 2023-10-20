@@ -85,7 +85,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ---------------------- |
 | `image.registry`                       | etcd image registry                                                                                                  | `REGISTRY_NAME`        |
 | `image.repository`                     | etcd image name                                                                                                      | `REPOSITORY_NAME/etcd` |
-| `image.tag`                            | etcd image tag                                                                                                       | `3.5.9-debian-11-r148` |
 | `image.digest`                         | etcd image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                 | `""`                   |
 | `image.pullPolicy`                     | etcd image pull policy                                                                                               | `IfNotPresent`         |
 | `image.pullSecrets`                    | etcd image pull secrets                                                                                              | `[]`                   |
@@ -242,7 +241,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup`              | `false`                    |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                  | `REGISTRY_NAME`            |
 | `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                                      | `REPOSITORY_NAME/os-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                       | `11-debian-11-r90`         |
 | `volumePermissions.image.digest`       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`             |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                  | `[]`                       |

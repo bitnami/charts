@@ -49,7 +49,7 @@ extraDeploy: []
 ## ref: https://hub.docker.com/r/bitnami/argo-cd/tags/
 ## @param image.registry [default: REGISTRY_NAME] Argo CD image registry
 ## @param image.repository [default: REPOSITORY_NAME/argo-cd] Argo CD image repository
-## @param image.tag Argo CD image tag (immutable tags are recommended)
+## @skip image.tag Argo CD image tag (immutable tags are recommended)
 ## @param image.digest Argo CD image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy Argo CD image pull policy
 ## @param image.pullSecrets Argo CD image pull secrets
@@ -2692,7 +2692,7 @@ dex:
   ## ref: https://hub.docker.com/r/bitnami/argo-cd/tags/
   ## @param dex.image.registry [default: REGISTRY_NAME] Dex image registry
   ## @param dex.image.repository [default: REPOSITORY_NAME/dex] Dex image repository
-  ## @param dex.image.tag Dex image tag (immutable tags are recommended)
+  ## @skip dex.image.tag Dex image tag (immutable tags are recommended)
   ## @param dex.image.digest Dex image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param dex.image.pullPolicy Dex image pull policy
   ## @param dex.image.pullSecrets Dex image pull secrets
@@ -3316,7 +3316,7 @@ volumePermissions:
   ## ref: https://hub.docker.com/r/bitnami/os-shell/tags/
   ## @param volumePermissions.image.registry [default: REGISTRY_NAME] OS Shell + Utility image registry
   ## @param volumePermissions.image.repository [default: REPOSITORY_NAME/os-shell] OS Shell + Utility image repository
-  ## @param volumePermissions.image.tag OS Shell + Utility image tag (immutable tags are recommended)
+  ## @skip volumePermissions.image.tag OS Shell + Utility image tag (immutable tags are recommended)
   ## @param volumePermissions.image.digest OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param volumePermissions.image.pullPolicy OS Shell + Utility image pull policy
   ## @param volumePermissions.image.pullSecrets OS Shell + Utility image pull secrets
@@ -3369,7 +3369,7 @@ redis:
   ## ref: https://hub.docker.com/r/bitnami/redis/tags/
   ## @param redis.image.registry [default: REGISTRY_NAME] Redis image registry
   ## @param redis.image.repository [default: REPOSITORY_NAME/redis] Redis image repository
-  ## @param redis.image.tag Redis image tag (immutable tags are recommended)
+  ## @skip redis.image.tag Redis image tag (immutable tags are recommended)
   ## @param redis.image.digest Redis image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param redis.image.pullPolicy Redis image pull policy
   ## @param redis.image.pullSecrets Redis image pull secrets

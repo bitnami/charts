@@ -88,7 +88,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ------------------------- |
 | `image.registry`                        | Magento image registry                                                                                               | `REGISTRY_NAME`           |
 | `image.repository`                      | Magento image repository                                                                                             | `REPOSITORY_NAME/magento` |
-| `image.tag`                             | Magento image tag (immutable tags are recommended)                                                                   | `2.4.6-debian-11-r114`    |
 | `image.digest`                          | Magento image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag              | `""`                      |
 | `image.pullPolicy`                      | Magento image pull policy                                                                                            | `IfNotPresent`            |
 | `image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                     | `[]`                      |
@@ -194,7 +193,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `mariadb.enabled`                           | Whether to deploy a mariadb server to satisfy the applications database requirements.                   | `true`                    |
 | `mariadb.image.registry`                    | MariaDB image registry                                                                                  | `REGISTRY_NAME`           |
 | `mariadb.image.repository`                  | MariaDB image repository                                                                                | `REPOSITORY_NAME/mariadb` |
-| `mariadb.image.tag`                         | MariaDB image tag (immutable tags are recommended)                                                      | `10.6.15-debian-11-r49`   |
 | `mariadb.image.digest`                      | MariaDB image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
 | `mariadb.architecture`                      | MariaDB architecture. Allowed values: `standalone` or `replication`                                     | `standalone`              |
 | `mariadb.auth.rootPassword`                 | Password for the MariaDB `root` user                                                                    | `""`                      |
@@ -221,7 +219,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `elasticsearch.enabled`                   | Whether to deploy a elasticsearch server to use as magento's search engine                                    | `true`                          |
 | `elasticsearch.image.registry`            | Elasticsearch image registry                                                                                  | `REGISTRY_NAME`                 |
 | `elasticsearch.image.repository`          | Elasticsearch image repository                                                                                | `REPOSITORY_NAME/elasticsearch` |
-| `elasticsearch.image.tag`                 | Elasticsearch image tag (immutable tags are recommended)                                                      | `7.17.14-debian-11-r1`          |
 | `elasticsearch.image.digest`              | Elasticsearch image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                            |
 | `elasticsearch.sysctlImage.enabled`       | Enable kernel settings modifier image for Elasticsearch                                                       | `true`                          |
 | `elasticsearch.master.replicaCount`       | Desired number of Elasticsearch master-eligible nodes                                                         | `1`                             |
@@ -253,7 +250,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                    |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                                          | `REGISTRY_NAME`            |
 | `volumePermissions.image.repository`   | Init container volume-permissions image repository                                                                                                        | `REPOSITORY_NAME/os-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                                                                              | `11-debian-11-r90`         |
 | `volumePermissions.image.digest`       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                         | `""`                       |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`             |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                                          | `[]`                       |
@@ -299,7 +295,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`             | Start a side-car prometheus exporter                                                                            | `false`                           |
 | `metrics.image.registry`      | Apache exporter image registry                                                                                  | `REGISTRY_NAME`                   |
 | `metrics.image.repository`    | Apache exporter image repository                                                                                | `REPOSITORY_NAME/apache-exporter` |
-| `metrics.image.tag`           | Apache exporter image tag (immutable tags are recommended)                                                      | `1.0.2-debian-11-r10`             |
 | `metrics.image.digest`        | Apache exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                              |
 | `metrics.image.pullPolicy`    | Image pull policy                                                                                               | `IfNotPresent`                    |
 | `metrics.image.pullSecrets`   | Specify docker-registry secret names as an array                                                                | `[]`                              |
@@ -327,7 +322,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `certificates.extraEnvVarsSecret`                    | Secret containing extra env vars (in case of sensitive data)                                                      | `""`                                     |
 | `certificates.image.registry`                        | Container sidecar registry                                                                                        | `REGISTRY_NAME`                          |
 | `certificates.image.repository`                      | Container sidecar image                                                                                           | `REPOSITORY_NAME/os-shell`               |
-| `certificates.image.tag`                             | Container sidecar image tag (immutable tags are recommended)                                                      | `11-debian-11-r90`                       |
 | `certificates.image.digest`                          | Container sidecar image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                                     |
 | `certificates.image.pullPolicy`                      | Container sidecar image pull policy                                                                               | `IfNotPresent`                           |
 | `certificates.image.pullSecrets`                     | Container sidecar image pull secrets                                                                              | `[]`                                     |

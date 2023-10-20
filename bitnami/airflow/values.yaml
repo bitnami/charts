@@ -113,7 +113,7 @@ dags:
   ## ref: https://hub.docker.com/r/bitnami/os-shell/tags/
   ## @param dags.image.registry [default: REGISTRY_NAME] Init container load-dags image registry
   ## @param dags.image.repository [default: REPOSITORY_NAME/os-shell] Init container load-dags image repository
-  ## @param dags.image.tag Init container load-dags image tag (immutable tags are recommended)
+  ## @skip dags.image.tag Init container load-dags image tag (immutable tags are recommended)
   ## @param dags.image.digest Init container load-dags image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param dags.image.pullPolicy Init container load-dags image pull policy
   ## @param dags.image.pullSecrets Init container load-dags image pull secrets
@@ -180,7 +180,7 @@ web:
   ## ref: https://hub.docker.com/r/bitnami/airflow/tags/
   ## @param web.image.registry [default: REGISTRY_NAME] Airflow image registry
   ## @param web.image.repository [default: REPOSITORY_NAME/airflow] Airflow image repository
-  ## @param web.image.tag Airflow image tag (immutable tags are recommended)
+  ## @skip web.image.tag Airflow image tag (immutable tags are recommended)
   ## @param web.image.digest Airflow image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param web.image.pullPolicy Airflow image pull policy
   ## @param web.image.pullSecrets Airflow image pull secrets
@@ -437,7 +437,7 @@ scheduler:
   ## ref: https://hub.docker.com/r/bitnami/airflow-scheduler/tags/
   ## @param scheduler.image.registry [default: REGISTRY_NAME] Airflow Scheduler image registry
   ## @param scheduler.image.repository [default: REPOSITORY_NAME/airflow-scheduler] Airflow Scheduler image repository
-  ## @param scheduler.image.tag Airflow Scheduler image tag (immutable tags are recommended)
+  ## @skip scheduler.image.tag Airflow Scheduler image tag (immutable tags are recommended)
   ## @param scheduler.image.digest Airflow Schefuler image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param scheduler.image.pullPolicy Airflow Scheduler image pull policy
   ## @param scheduler.image.pullSecrets Airflow Scheduler image pull secrets
@@ -641,7 +641,7 @@ worker:
   ## ref: https://hub.docker.com/r/bitnami/airflow-worker/tags/
   ## @param worker.image.registry [default: REGISTRY_NAME] Airflow Worker image registry
   ## @param worker.image.repository [default: REPOSITORY_NAME/airflow-worker] Airflow Worker image repository
-  ## @param worker.image.tag Airflow Worker image tag (immutable tags are recommended)
+  ## @skip worker.image.tag Airflow Worker image tag (immutable tags are recommended)
   ## @param worker.image.digest Airflow Worker image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param worker.image.pullPolicy Airflow Worker image pull policy
   ## @param worker.image.pullSecrets Airflow Worker image pull secrets
@@ -915,7 +915,7 @@ git:
   ## ref: https://hub.docker.com/r/bitnami/git/tags/
   ## @param git.image.registry [default: REGISTRY_NAME] Git image registry
   ## @param git.image.repository [default: REPOSITORY_NAME/git] Git image repository
-  ## @param git.image.tag Git image tag (immutable tags are recommended)
+  ## @skip git.image.tag Git image tag (immutable tags are recommended)
   ## @param git.image.digest Git image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param git.image.pullPolicy Git image pull policy
   ## @param git.image.pullSecrets Git image pull secrets
@@ -1278,7 +1278,7 @@ metrics:
   ## ref: https://hub.docker.com/r/bitnami/airflow-exporter/tags/
   ## @param metrics.image.registry [default: REGISTRY_NAME] Airflow exporter image registry
   ## @param metrics.image.repository [default: REPOSITORY_NAME/airflow-exporter] Airflow exporter image repository
-  ## @param metrics.image.tag Airflow exporter image tag (immutable tags are recommended)
+  ## @skip metrics.image.tag Airflow exporter image tag (immutable tags are recommended)
   ## @param metrics.image.digest Airflow exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param metrics.image.pullPolicy Airflow exporter image pull policy
   ## @param metrics.image.pullSecrets Airflow exporter image pull secrets

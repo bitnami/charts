@@ -58,7 +58,7 @@ diagnosticMode:
 ## ref: https://hub.docker.com/r/bitnami/nats/tags/
 ## @param image.registry [default: REGISTRY_NAME] NATS image registry
 ## @param image.repository [default: REPOSITORY_NAME/nats] NATS image repository
-## @param image.tag NATS image tag (immutable tags are recommended)
+## @skip image.tag NATS image tag (immutable tags are recommended)
 ## @param image.digest NATS image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy NATS image pull policy
 ## @param image.pullSecrets NATS image pull secrets
@@ -692,7 +692,7 @@ metrics:
   enabled: false
   ## @param metrics.image.registry [default: REGISTRY_NAME] Prometheus metrics exporter image registry
   ## @param metrics.image.repository [default: REPOSITORY_NAME/nats-exporter] Prometheus metrics exporter image repository
-  ## @param metrics.image.tag Prometheus metrics exporter image tag (immutable tags are recommended)
+  ## @skip metrics.image.tag Prometheus metrics exporter image tag (immutable tags are recommended)
   ## @param metrics.image.digest NATS Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param metrics.image.pullPolicy Prometheus metrics image pull policy
   ## @param metrics.image.pullSecrets Prometheus metrics image pull secrets

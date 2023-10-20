@@ -76,7 +76,7 @@ diagnosticMode:
 ## ref: https://hub.docker.com/r/bitnami/mysql/tags/
 ## @param image.registry [default: REGISTRY_NAME] MySQL image registry
 ## @param image.repository [default: REPOSITORY_NAME/mysql] MySQL image repository
-## @param image.tag MySQL image tag (immutable tags are recommended)
+## @skip image.tag MySQL image tag (immutable tags are recommended)
 ## @param image.digest MySQL image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy MySQL image pull policy
 ## @param image.pullSecrets Specify docker-registry secret names as an array
@@ -1011,7 +1011,7 @@ volumePermissions:
   enabled: false
   ## @param volumePermissions.image.registry [default: REGISTRY_NAME] Init container volume-permissions image registry
   ## @param volumePermissions.image.repository [default: REPOSITORY_NAME/os-shell] Init container volume-permissions image repository
-  ## @param volumePermissions.image.tag Init container volume-permissions image tag (immutable tags are recommended)
+  ## @skip volumePermissions.image.tag Init container volume-permissions image tag (immutable tags are recommended)
   ## @param volumePermissions.image.digest Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
   ## @param volumePermissions.image.pullSecrets Specify docker-registry secret names as an array
@@ -1045,7 +1045,7 @@ metrics:
   enabled: false
   ## @param metrics.image.registry [default: REGISTRY_NAME] Exporter image registry
   ## @param metrics.image.repository [default: REPOSITORY_NAME/mysqld-exporter] Exporter image repository
-  ## @param metrics.image.tag Exporter image tag (immutable tags are recommended)
+  ## @skip metrics.image.tag Exporter image tag (immutable tags are recommended)
   ## @param metrics.image.digest Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param metrics.image.pullPolicy Exporter image pull policy
   ## @param metrics.image.pullSecrets Specify docker-registry secret names as an array

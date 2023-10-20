@@ -143,7 +143,7 @@ operator:
     type: Recreate
   ## @param operator.image.registry [default: REGISTRY_NAME] Grafana Operator image registry
   ## @param operator.image.repository [default: REPOSITORY_NAME/grafana-operator] Grafana Operator image name
-  ## @param operator.image.tag Grafana Operator image tag
+  ## @skip operator.image.tag Grafana Operator image tag
   ## @param operator.image.digest Grafana Operator image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param operator.image.pullPolicy Grafana Operator image pull policy
   ## @param operator.image.pullSecrets Grafana Operator image pull secrets
@@ -416,7 +416,7 @@ grafana:
   enabled: true
   ## @param grafana.image.registry [default: REGISTRY_NAME] Grafana image registry
   ## @param grafana.image.repository [default: REPOSITORY_NAME/grafana] Grafana image name
-  ## @param grafana.image.tag Grafana image tag
+  ## @skip grafana.image.tag Grafana image tag
   ## @param grafana.image.digest Grafana image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param grafana.image.pullPolicy Grafana image pull policy
   ## @param grafana.image.pullSecrets Grafana image pull secrets
