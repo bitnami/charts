@@ -128,7 +128,7 @@ Return true if a secret object should be created
     {{- true -}}
 {{- else if and (eq .Values.provider "ns1") .Values.ns1.apiKey (not .Values.ns1.secretName) -}}
     {{- true -}}
-{{- else if and (eq .Values.provider "civo") .Values.civo.apiToken -}}
+{{- else if and (eq .Values.provider "civo") .Values.civo.apiToken (not .Values.civo.secretName) -}}
     {{- true -}}
 {{- else -}}
 {{- end -}}
@@ -263,10 +263,6 @@ auth:
   passphrase: {{ .Values.oci.privateKeyPassphrase }}
   {{- end }}
 compartment: {{ .Values.oci.compartmentOCID }}
-{{ end }}
-
-{{- define "external-dns.civo-credentials" }}
-{{- .Values.civo.apiToken }}
 {{ end }}
 
 {{/*
