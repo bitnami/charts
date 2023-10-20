@@ -11,8 +11,10 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/phpbb
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/phpbb
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 ## Introduction
 
@@ -26,8 +28,8 @@ Looking to use phpBB in production? Try [VMware Application Catalog](https://bit
 
 ## Prerequisites
 
-- Kubernetes 1.19+
-- Helm 3.2.0+
+- Kubernetes 1.23+
+- Helm 3.8.0+
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -36,8 +38,10 @@ Looking to use phpBB in production? Try [VMware Application Catalog](https://bit
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/phpbb
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/phpbb
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 The command deploys phpBB on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
@@ -77,98 +81,98 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### phpBB parameters
 
-| Name                                    | Description                                                                                                                                               | Value                  |
-| --------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
-| `image.registry`                        | phpBB image registry                                                                                                                                      | `docker.io`            |
-| `image.repository`                      | phpBB image repository                                                                                                                                    | `bitnami/phpbb`        |
-| `image.tag`                             | phpBB image tag (immutable tags are recommended)                                                                                                          | `3.3.10-debian-11-r99` |
-| `image.digest`                          | phpBB image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                     | `""`                   |
-| `image.pullPolicy`                      | phpBB image pull policy                                                                                                                                   | `IfNotPresent`         |
-| `image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                                                          | `[]`                   |
-| `image.debug`                           | Specify if debug logs should be enabled                                                                                                                   | `false`                |
-| `replicaCount`                          | Number of replicas (requires ReadWriteMany PVC support)                                                                                                   | `1`                    |
-| `phpbbSkipInstall`                      | Skip phpBB installation wizard. Useful for migrations and restoring from SQL dump                                                                         | `no`                   |
-| `phpbbDisableSessionValidation`         | Disable session validation                                                                                                                                | `yes`                  |
-| `phpbbUsername`                         | User of the application                                                                                                                                   | `user`                 |
-| `phpbbPassword`                         | Application password                                                                                                                                      | `""`                   |
-| `phpbbEmail`                            | Admin email                                                                                                                                               | `user@example.com`     |
-| `allowEmptyPassword`                    | Allow DB blank passwords                                                                                                                                  | `no`                   |
-| `command`                               | Override default container command (useful when using custom images)                                                                                      | `[]`                   |
-| `args`                                  | Override default container args (useful when using custom images)                                                                                         | `[]`                   |
-| `hostAliases`                           | Add deployment host aliases                                                                                                                               | `[]`                   |
-| `updateStrategy.type`                   | Update strategy - only really applicable for deployments with RWO PVs attached                                                                            | `RollingUpdate`        |
-| `extraEnvVars`                          | An array to add extra env vars                                                                                                                            | `[]`                   |
-| `extraEnvVarsCM`                        | ConfigMap with extra environment variables                                                                                                                | `""`                   |
-| `extraEnvVarsSecret`                    | Secret with extra environment variables                                                                                                                   | `""`                   |
-| `extraVolumes`                          | Extra volumes to add to the deployment. Requires setting `extraVolumeMounts`                                                                              | `[]`                   |
-| `extraVolumeMounts`                     | Extra volume mounts to add to the container. Normally used with `extraVolumes`                                                                            | `[]`                   |
-| `initContainers`                        | Extra init containers to add to the deployment                                                                                                            | `[]`                   |
-| `sidecars`                              | Extra sidecar containers to add to the deployment                                                                                                         | `[]`                   |
-| `tolerations`                           | Tolerations for pod assignment                                                                                                                            | `[]`                   |
-| `existingSecret`                        | Use existing secret for the application password                                                                                                          | `""`                   |
-| `volumePermissions.enabled`             | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                |
-| `volumePermissions.image.registry`      | Init container volume-permissions image registry                                                                                                          | `docker.io`            |
-| `volumePermissions.image.repository`    | Init container volume-permissions image repository                                                                                                        | `bitnami/os-shell`     |
-| `volumePermissions.image.tag`           | Init container volume-permissions image tag (immutable tags are recommended)                                                                              | `11-debian-11-r72`     |
-| `volumePermissions.image.digest`        | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                         | `""`                   |
-| `volumePermissions.image.pullPolicy`    | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`         |
-| `volumePermissions.image.pullSecrets`   | Specify docker-registry secret names as an array                                                                                                          | `[]`                   |
-| `volumePermissions.resources.limits`    | The resources limits for the container                                                                                                                    | `{}`                   |
-| `volumePermissions.resources.requests`  | The requested resources for the container                                                                                                                 | `{}`                   |
-| `smtpHost`                              | SMTP host                                                                                                                                                 | `""`                   |
-| `smtpPort`                              | SMTP port                                                                                                                                                 | `""`                   |
-| `smtpUser`                              | SMTP user                                                                                                                                                 | `""`                   |
-| `smtpPassword`                          | SMTP password                                                                                                                                             | `""`                   |
-| `smtpProtocol`                          | SMTP Protocol (options: ssl,tls, nil)                                                                                                                     | `""`                   |
-| `containerPorts`                        | Container ports                                                                                                                                           | `{}`                   |
-| `persistence.enabled`                   | Enable persistence using PVC                                                                                                                              | `true`                 |
-| `persistence.storageClass`              | Database data Persistent Volume Storage Class                                                                                                             | `""`                   |
-| `persistence.accessModes`               | PVC Access Mode for phpBB volume                                                                                                                          | `["ReadWriteOnce"]`    |
-| `persistence.size`                      | PVC Storage Request for phpBB volume                                                                                                                      | `8Gi`                  |
-| `persistence.existingClaim`             | A manually managed Persistent Volume Claim                                                                                                                | `""`                   |
-| `persistence.hostPath`                  | Host mount path for phpBB volume                                                                                                                          | `""`                   |
-| `persistence.annotations`               | Persistent Volume Claim annotations                                                                                                                       | `{}`                   |
-| `podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                       | `""`                   |
-| `podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                  | `soft`                 |
-| `nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                 | `""`                   |
-| `nodeAffinityPreset.key`                | Node label key to match Ignored if `affinity` is set.                                                                                                     | `""`                   |
-| `nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set.                                                                                                 | `[]`                   |
-| `affinity`                              | Affinity for pod assignment. Evaluated as a template.                                                                                                     | `{}`                   |
-| `nodeSelector`                          | Node labels for pod assignment. Evaluated as a template.                                                                                                  | `{}`                   |
-| `resources.requests`                    | The requested resources for the container                                                                                                                 | `{}`                   |
-| `resources.limits`                      | The resources limits for the container                                                                                                                    | `{}`                   |
-| `podSecurityContext.enabled`            | Enable phpBB pods' Security Context                                                                                                                       | `true`                 |
-| `podSecurityContext.fsGroup`            | phpBB pods' group ID                                                                                                                                      | `1001`                 |
-| `containerSecurityContext.enabled`      | Enable phpBB containers' Security Context                                                                                                                 | `true`                 |
-| `containerSecurityContext.runAsUser`    | phpBB containers' Security Context runAsUser                                                                                                              | `1001`                 |
-| `containerSecurityContext.runAsNonRoot` | phpBB containers' Security Context runAsNonRoot                                                                                                           | `true`                 |
-| `startupProbe.enabled`                  | Enable startupProbe                                                                                                                                       | `false`                |
-| `startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                                                                    | `600`                  |
-| `startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                                                                           | `10`                   |
-| `startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                                                                          | `5`                    |
-| `startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                                                                        | `6`                    |
-| `startupProbe.successThreshold`         | Success threshold for startupProbe                                                                                                                        | `1`                    |
-| `livenessProbe.enabled`                 | Enable livenessProbe                                                                                                                                      | `true`                 |
-| `livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                                                                   | `600`                  |
-| `livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                                                                          | `10`                   |
-| `livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                                                                         | `5`                    |
-| `livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                                                                       | `6`                    |
-| `livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                                                                       | `1`                    |
-| `readinessProbe.enabled`                | Enable readinessProbe                                                                                                                                     | `true`                 |
-| `readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                                                                  | `30`                   |
-| `readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                                                                         | `5`                    |
-| `readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                                                                        | `3`                    |
-| `readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                                                                      | `6`                    |
-| `readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                                                                      | `1`                    |
-| `customStartupProbe`                    | Override default startup probe                                                                                                                            | `{}`                   |
-| `customLivenessProbe`                   | Override default liveness probe                                                                                                                           | `{}`                   |
-| `customReadinessProbe`                  | Override default readiness probe                                                                                                                          | `{}`                   |
-| `priorityClassName`                     | Define the priority class name to use for the phpbb pods                                                                                                  | `""`                   |
-| `schedulerName`                         | Name of the k8s scheduler (other than default)                                                                                                            | `""`                   |
-| `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment                                                                                                            | `[]`                   |
-| `lifecycleHooks`                        | LifecycleHook to set additional configuration before or after startup                                                                                     | `{}`                   |
-| `podAnnotations`                        | Pod annotations                                                                                                                                           | `{}`                   |
-| `podLabels`                             | Pod extra labels                                                                                                                                          | `{}`                   |
+| Name                                    | Description                                                                                                                                               | Value                      |
+| --------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
+| `image.registry`                        | phpBB image registry                                                                                                                                      | `REGISTRY_NAME`            |
+| `image.repository`                      | phpBB image repository                                                                                                                                    | `REPOSITORY_NAME/phpbb`    |
+| `image.tag`                             | phpBB image tag (immutable tags are recommended)                                                                                                          | `3.3.10-debian-11-r120`    |
+| `image.digest`                          | phpBB image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                     | `""`                       |
+| `image.pullPolicy`                      | phpBB image pull policy                                                                                                                                   | `IfNotPresent`             |
+| `image.pullSecrets`                     | Specify docker-registry secret names as an array                                                                                                          | `[]`                       |
+| `image.debug`                           | Specify if debug logs should be enabled                                                                                                                   | `false`                    |
+| `replicaCount`                          | Number of replicas (requires ReadWriteMany PVC support)                                                                                                   | `1`                        |
+| `phpbbSkipInstall`                      | Skip phpBB installation wizard. Useful for migrations and restoring from SQL dump                                                                         | `no`                       |
+| `phpbbDisableSessionValidation`         | Disable session validation                                                                                                                                | `yes`                      |
+| `phpbbUsername`                         | User of the application                                                                                                                                   | `user`                     |
+| `phpbbPassword`                         | Application password                                                                                                                                      | `""`                       |
+| `phpbbEmail`                            | Admin email                                                                                                                                               | `user@example.com`         |
+| `allowEmptyPassword`                    | Allow DB blank passwords                                                                                                                                  | `no`                       |
+| `command`                               | Override default container command (useful when using custom images)                                                                                      | `[]`                       |
+| `args`                                  | Override default container args (useful when using custom images)                                                                                         | `[]`                       |
+| `hostAliases`                           | Add deployment host aliases                                                                                                                               | `[]`                       |
+| `updateStrategy.type`                   | Update strategy - only really applicable for deployments with RWO PVs attached                                                                            | `RollingUpdate`            |
+| `extraEnvVars`                          | An array to add extra env vars                                                                                                                            | `[]`                       |
+| `extraEnvVarsCM`                        | ConfigMap with extra environment variables                                                                                                                | `""`                       |
+| `extraEnvVarsSecret`                    | Secret with extra environment variables                                                                                                                   | `""`                       |
+| `extraVolumes`                          | Extra volumes to add to the deployment. Requires setting `extraVolumeMounts`                                                                              | `[]`                       |
+| `extraVolumeMounts`                     | Extra volume mounts to add to the container. Normally used with `extraVolumes`                                                                            | `[]`                       |
+| `initContainers`                        | Extra init containers to add to the deployment                                                                                                            | `[]`                       |
+| `sidecars`                              | Extra sidecar containers to add to the deployment                                                                                                         | `[]`                       |
+| `tolerations`                           | Tolerations for pod assignment                                                                                                                            | `[]`                       |
+| `existingSecret`                        | Use existing secret for the application password                                                                                                          | `""`                       |
+| `volumePermissions.enabled`             | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                    |
+| `volumePermissions.image.registry`      | Init container volume-permissions image registry                                                                                                          | `REGISTRY_NAME`            |
+| `volumePermissions.image.repository`    | Init container volume-permissions image repository                                                                                                        | `REPOSITORY_NAME/os-shell` |
+| `volumePermissions.image.tag`           | Init container volume-permissions image tag (immutable tags are recommended)                                                                              | `11-debian-11-r90`         |
+| `volumePermissions.image.digest`        | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                         | `""`                       |
+| `volumePermissions.image.pullPolicy`    | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`             |
+| `volumePermissions.image.pullSecrets`   | Specify docker-registry secret names as an array                                                                                                          | `[]`                       |
+| `volumePermissions.resources.limits`    | The resources limits for the container                                                                                                                    | `{}`                       |
+| `volumePermissions.resources.requests`  | The requested resources for the container                                                                                                                 | `{}`                       |
+| `smtpHost`                              | SMTP host                                                                                                                                                 | `""`                       |
+| `smtpPort`                              | SMTP port                                                                                                                                                 | `""`                       |
+| `smtpUser`                              | SMTP user                                                                                                                                                 | `""`                       |
+| `smtpPassword`                          | SMTP password                                                                                                                                             | `""`                       |
+| `smtpProtocol`                          | SMTP Protocol (options: ssl,tls, nil)                                                                                                                     | `""`                       |
+| `containerPorts`                        | Container ports                                                                                                                                           | `{}`                       |
+| `persistence.enabled`                   | Enable persistence using PVC                                                                                                                              | `true`                     |
+| `persistence.storageClass`              | Database data Persistent Volume Storage Class                                                                                                             | `""`                       |
+| `persistence.accessModes`               | PVC Access Mode for phpBB volume                                                                                                                          | `["ReadWriteOnce"]`        |
+| `persistence.size`                      | PVC Storage Request for phpBB volume                                                                                                                      | `8Gi`                      |
+| `persistence.existingClaim`             | A manually managed Persistent Volume Claim                                                                                                                | `""`                       |
+| `persistence.hostPath`                  | Host mount path for phpBB volume                                                                                                                          | `""`                       |
+| `persistence.annotations`               | Persistent Volume Claim annotations                                                                                                                       | `{}`                       |
+| `podAffinityPreset`                     | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                       | `""`                       |
+| `podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                  | `soft`                     |
+| `nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                                 | `""`                       |
+| `nodeAffinityPreset.key`                | Node label key to match Ignored if `affinity` is set.                                                                                                     | `""`                       |
+| `nodeAffinityPreset.values`             | Node label values to match. Ignored if `affinity` is set.                                                                                                 | `[]`                       |
+| `affinity`                              | Affinity for pod assignment. Evaluated as a template.                                                                                                     | `{}`                       |
+| `nodeSelector`                          | Node labels for pod assignment. Evaluated as a template.                                                                                                  | `{}`                       |
+| `resources.requests`                    | The requested resources for the container                                                                                                                 | `{}`                       |
+| `resources.limits`                      | The resources limits for the container                                                                                                                    | `{}`                       |
+| `podSecurityContext.enabled`            | Enable phpBB pods' Security Context                                                                                                                       | `true`                     |
+| `podSecurityContext.fsGroup`            | phpBB pods' group ID                                                                                                                                      | `1001`                     |
+| `containerSecurityContext.enabled`      | Enable phpBB containers' Security Context                                                                                                                 | `true`                     |
+| `containerSecurityContext.runAsUser`    | phpBB containers' Security Context runAsUser                                                                                                              | `1001`                     |
+| `containerSecurityContext.runAsNonRoot` | phpBB containers' Security Context runAsNonRoot                                                                                                           | `true`                     |
+| `startupProbe.enabled`                  | Enable startupProbe                                                                                                                                       | `false`                    |
+| `startupProbe.initialDelaySeconds`      | Initial delay seconds for startupProbe                                                                                                                    | `600`                      |
+| `startupProbe.periodSeconds`            | Period seconds for startupProbe                                                                                                                           | `10`                       |
+| `startupProbe.timeoutSeconds`           | Timeout seconds for startupProbe                                                                                                                          | `5`                        |
+| `startupProbe.failureThreshold`         | Failure threshold for startupProbe                                                                                                                        | `6`                        |
+| `startupProbe.successThreshold`         | Success threshold for startupProbe                                                                                                                        | `1`                        |
+| `livenessProbe.enabled`                 | Enable livenessProbe                                                                                                                                      | `true`                     |
+| `livenessProbe.initialDelaySeconds`     | Initial delay seconds for livenessProbe                                                                                                                   | `600`                      |
+| `livenessProbe.periodSeconds`           | Period seconds for livenessProbe                                                                                                                          | `10`                       |
+| `livenessProbe.timeoutSeconds`          | Timeout seconds for livenessProbe                                                                                                                         | `5`                        |
+| `livenessProbe.failureThreshold`        | Failure threshold for livenessProbe                                                                                                                       | `6`                        |
+| `livenessProbe.successThreshold`        | Success threshold for livenessProbe                                                                                                                       | `1`                        |
+| `readinessProbe.enabled`                | Enable readinessProbe                                                                                                                                     | `true`                     |
+| `readinessProbe.initialDelaySeconds`    | Initial delay seconds for readinessProbe                                                                                                                  | `30`                       |
+| `readinessProbe.periodSeconds`          | Period seconds for readinessProbe                                                                                                                         | `5`                        |
+| `readinessProbe.timeoutSeconds`         | Timeout seconds for readinessProbe                                                                                                                        | `3`                        |
+| `readinessProbe.failureThreshold`       | Failure threshold for readinessProbe                                                                                                                      | `6`                        |
+| `readinessProbe.successThreshold`       | Success threshold for readinessProbe                                                                                                                      | `1`                        |
+| `customStartupProbe`                    | Override default startup probe                                                                                                                            | `{}`                       |
+| `customLivenessProbe`                   | Override default liveness probe                                                                                                                           | `{}`                       |
+| `customReadinessProbe`                  | Override default readiness probe                                                                                                                          | `{}`                       |
+| `priorityClassName`                     | Define the priority class name to use for the phpbb pods                                                                                                  | `""`                       |
+| `schedulerName`                         | Name of the k8s scheduler (other than default)                                                                                                            | `""`                       |
+| `topologySpreadConstraints`             | Topology Spread Constraints for pod assignment                                                                                                            | `[]`                       |
+| `lifecycleHooks`                        | LifecycleHook to set additional configuration before or after startup                                                                                     | `{}`                       |
+| `podAnnotations`                        | Pod annotations                                                                                                                                           | `{}`                       |
+| `podLabels`                             | Pod extra labels                                                                                                                                          | `{}`                       |
 
 ### Traffic Exposure Parameters
 
@@ -226,17 +230,17 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Metrics parameters
 
-| Name                        | Description                                                                                                     | Value                     |
-| --------------------------- | --------------------------------------------------------------------------------------------------------------- | ------------------------- |
-| `metrics.enabled`           | Start a side-car prometheus exporter                                                                            | `false`                   |
-| `metrics.image.registry`    | Apache exporter image registry                                                                                  | `docker.io`               |
-| `metrics.image.repository`  | Apache exporter image repository                                                                                | `bitnami/apache-exporter` |
-| `metrics.image.tag`         | Apache exporter image tag (immutable tags are recommended)                                                      | `1.0.1-debian-11-r50`     |
-| `metrics.image.digest`      | Apache exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
-| `metrics.image.pullPolicy`  | Image pull policy                                                                                               | `IfNotPresent`            |
-| `metrics.image.pullSecrets` | Specify docker-registry secret names as an array                                                                | `[]`                      |
-| `metrics.resources`         | Metrics exporter resource requests and limits                                                                   | `{}`                      |
-| `metrics.podAnnotations`    | Additional annotations for Metrics exporter pod                                                                 | `{}`                      |
+| Name                        | Description                                                                                                     | Value                             |
+| --------------------------- | --------------------------------------------------------------------------------------------------------------- | --------------------------------- |
+| `metrics.enabled`           | Start a side-car prometheus exporter                                                                            | `false`                           |
+| `metrics.image.registry`    | Apache exporter image registry                                                                                  | `REGISTRY_NAME`                   |
+| `metrics.image.repository`  | Apache exporter image repository                                                                                | `REPOSITORY_NAME/apache-exporter` |
+| `metrics.image.tag`         | Apache exporter image tag (immutable tags are recommended)                                                      | `1.0.2-debian-11-r10`             |
+| `metrics.image.digest`      | Apache exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                              |
+| `metrics.image.pullPolicy`  | Image pull policy                                                                                               | `IfNotPresent`                    |
+| `metrics.image.pullSecrets` | Specify docker-registry secret names as an array                                                                | `[]`                              |
+| `metrics.resources`         | Metrics exporter resource requests and limits                                                                   | `{}`                              |
+| `metrics.podAnnotations`    | Additional annotations for Metrics exporter pod                                                                 | `{}`                              |
 
 ### NetworkPolicy parameters
 
@@ -265,8 +269,10 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 helm install my-release \
   --set phpbbUsername=admin,phpbbPassword=password,mariadb.mariadbRootPassword=secretpassword \
-    oci://registry-1.docker.io/bitnamicharts/phpbb
+    oci://REGISTRY_NAME/REPOSITORY_NAME/phpbb
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 The above command sets the phpBB administrator account username and password to `admin` and `password` respectively. Additionally, it sets the MariaDB `root` user password to `secretpassword`.
 
@@ -275,9 +281,10 @@ The above command sets the phpBB administrator account username and password to 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/phpbb
+helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/phpbb
 ```
 
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
 ## Configuration and installation details
@@ -349,6 +356,10 @@ You may want to review the [PV reclaim policy](https://kubernetes.io/docs/tasks/
 Find more information about how to deal with common errors related to Bitnami's Helm charts in [this troubleshooting guide](https://docs.bitnami.com/general/how-to/troubleshoot-helm-chart-issues).
 
 ## Upgrading
+
+### To 15.0.0
+
+This major release bumps the MariaDB version to 11.1. No major issues are expected during the upgrade.
 
 ### To 14.0.0
 
@@ -429,14 +440,18 @@ export MARIADB_PVC=$(kubectl get pvc -l app=mariadb,component=master,release=php
 Upgrade your release (maintaining the version) disabling MariaDB and scaling phpBB replicas to 0:
 
 ```console
-helm upgrade phpbb oci://registry-1.docker.io/bitnamicharts/phpbb --set phpbbPassword=$PHPBB_PASSWORD --set replicaCount=0 --set mariadb.enabled=false --version 8.0.5
+helm upgrade phpbb oci://REGISTRY_NAME/REPOSITORY_NAME/phpbb --set phpbbPassword=$PHPBB_PASSWORD --set replicaCount=0 --set mariadb.enabled=false --version 8.0.5
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 Finally, upgrade you release to 9.0.0 reusing the existing PVC, and enabling back MariaDB:
 
 ```console
-helm upgrade phpbb oci://registry-1.docker.io/bitnamicharts/phpbb --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set phpbbPassword=$PHPBB_PASSWORD
+helm upgrade phpbb oci://REGISTRY_NAME/REPOSITORY_NAME/phpbb --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set phpbbPassword=$PHPBB_PASSWORD
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 You should see the lines below in MariaDB container logs:
 

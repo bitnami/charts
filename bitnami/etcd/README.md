@@ -11,8 +11,10 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/etcd
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/etcd
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 ## Introduction
 
@@ -24,8 +26,8 @@ Looking to use Etcd in production? Try [VMware Application Catalog](https://bitn
 
 ## Prerequisites
 
-- Kubernetes 1.19+
-- Helm 3.2.0+
+- Kubernetes 1.23+
+- Helm 3.8.0+
 - PV provisioner support in the underlying infrastructure
 
 ## Installing the Chart
@@ -33,8 +35,10 @@ Looking to use Etcd in production? Try [VMware Application Catalog](https://bitn
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/etcd
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/etcd
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 These commands deploy etcd on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
@@ -79,9 +83,9 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                                   | Description                                                                                                          | Value                  |
 | -------------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ---------------------- |
-| `image.registry`                       | etcd image registry                                                                                                  | `docker.io`            |
-| `image.repository`                     | etcd image name                                                                                                      | `bitnami/etcd`         |
-| `image.tag`                            | etcd image tag                                                                                                       | `3.5.9-debian-11-r144` |
+| `image.registry`                       | etcd image registry                                                                                                  | `REGISTRY_NAME`        |
+| `image.repository`                     | etcd image name                                                                                                      | `REPOSITORY_NAME/etcd` |
+| `image.tag`                            | etcd image tag                                                                                                       | `3.5.9-debian-11-r148` |
 | `image.digest`                         | etcd image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                 | `""`                   |
 | `image.pullPolicy`                     | etcd image pull policy                                                                                               | `IfNotPresent`         |
 | `image.pullSecrets`                    | etcd image pull secrets                                                                                              | `[]`                   |
@@ -233,17 +237,17 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Volume Permissions parameters
 
-| Name                                   | Description                                                                                                                       | Value              |
-| -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ------------------ |
-| `volumePermissions.enabled`            | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup`              | `false`            |
-| `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                  | `docker.io`        |
-| `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                                      | `bitnami/os-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                       | `11-debian-11-r86` |
-| `volumePermissions.image.digest`       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`               |
-| `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`     |
-| `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                  | `[]`               |
-| `volumePermissions.resources.limits`   | Init container volume-permissions resource  limits                                                                                | `{}`               |
-| `volumePermissions.resources.requests` | Init container volume-permissions resource  requests                                                                              | `{}`               |
+| Name                                   | Description                                                                                                                       | Value                      |
+| -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
+| `volumePermissions.enabled`            | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup`              | `false`                    |
+| `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                  | `REGISTRY_NAME`            |
+| `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                                      | `REPOSITORY_NAME/os-shell` |
+| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                       | `11-debian-11-r90`         |
+| `volumePermissions.image.digest`       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
+| `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`             |
+| `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                  | `[]`                       |
+| `volumePermissions.resources.limits`   | Init container volume-permissions resource  limits                                                                                | `{}`                       |
+| `volumePermissions.resources.requests` | Init container volume-permissions resource  requests                                                                              | `{}`                       |
 
 ### Network Policy parameters
 
@@ -320,8 +324,10 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```console
 helm install my-release \
-  --set auth.rbac.rootPassword=secretpassword oci://registry-1.docker.io/bitnamicharts/etcd
+  --set auth.rbac.rootPassword=secretpassword oci://REGISTRY_NAME/REPOSITORY_NAME/etcd
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 The above command sets the etcd `root` account password to `secretpassword`.
 
@@ -330,9 +336,10 @@ The above command sets the etcd `root` account password to `secretpassword`.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/etcd
+helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/etcd
 ```
 
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
 ## Configuration and installation details
@@ -470,8 +477,10 @@ This version adds a new label `app.kubernetes.io/component=etcd` to the Stateful
 3. Upgrade your cluster:
 
     ```console
-    helm upgrade my-release oci://registry-1.docker.io/bitnamicharts/etcd --set auth.rbac.rootPassword=$ETCD_ROOT_PASSWORD
+    helm upgrade my-release oci://REGISTRY_NAME/REPOSITORY_NAME/etcd --set auth.rbac.rootPassword=$ETCD_ROOT_PASSWORD
     ```
+
+    > Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 ### To 8.0.0
 
@@ -535,7 +544,7 @@ To upgrade from previous charts versions, create a snapshot of the keyspace and 
 You can use the command below to upgrade your chart by starting a new cluster using an existing snapshot, available in an existing PVC, to initialize the members:
 
 ```console
-helm install new-release oci://registry-1.docker.io/bitnamicharts/etcd \
+helm install new-release oci://REGISTRY_NAME/REPOSITORY_NAME/etcd \
   --set statefulset.replicaCount=3 \
   --set persistence.enabled=true \
   --set persistence.size=8Gi \
@@ -543,6 +552,8 @@ helm install new-release oci://registry-1.docker.io/bitnamicharts/etcd \
   --set startFromSnapshot.existingClaim=my-claim \
   --set startFromSnapshot.snapshotFilename=my-snapshot.db
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 ### To 1.0.0
 

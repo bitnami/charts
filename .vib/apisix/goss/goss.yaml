@@ -18,10 +18,6 @@ http:
     status: 404
   http://127.0.0.1:{{ .Vars.dataPlane.containerPorts.control }}/v1/healthcheck:
     status: 200
-  http://{{ (index (index .Vars.extraDeploy 2).spec.rules 0).host }}:{{ .Vars.dataPlane.containerPorts.http }}/:
-    status: 200
-    body:
-      - /nginx/
   https://apisix-control-plane:{{ .Vars.controlPlane.service.ports.adminAPI }}/apisix/admin/routes:
     status: 401
     allow-insecure: true
@@ -29,9 +25,6 @@ http:
     status: 200
     request-headers:
       - "X-API-KEY: {{ .Vars.controlPlane.apiTokenAdmin }}"
-    allow-insecure: true
-  https://apisix-control-plane:{{ .Vars.controlPlane.service.ports.configServer }}:
-    status: 404
     allow-insecure: true
   http://apisix-control-plane:{{ .Vars.controlPlane.service.ports.metrics }}/apisix/prometheus/metrics:
     status: 200
@@ -46,9 +39,6 @@ http:
     status: 200
     body:
       - /apisix_ingress_controller.*/
-  https://apisix-ingress-controller:{{ .Vars.ingressController.service.ports.https }}:
-    status: 404
-    allow-insecure: true
 addr:
   # The user needs to add objects of type SSL using the API in order for the radixtree SSL provider to work
   tcp://apisix-data-plane:{{ .Vars.dataPlane.service.ports.https }}:
@@ -62,7 +52,7 @@ file:
     exists: true
     filetype: file
     mode: '0644'
-    contains:
+    contents:
       - /max_running_timers.*{{ .Vars.dataPlane.extraConfig.nginx_config.max_running_timers }}/
       - /apisix-control-plane.*{{ .Vars.controlPlane.service.ports.configServer }}/
       - /node_listen.*{{ .Vars.dataPlane.containerPorts.http }}/
@@ -71,7 +61,7 @@ file:
     exists: true
     filetype: file
     mode: '0644'
-    contains:
+    contents:
       - /listen.*{{ .Vars.dataPlane.containerPorts.http }}/
       - /listen.*{{ .Vars.dataPlane.containerPorts.https }}.*ssl/
       - /listen.*{{ .Vars.dataPlane.containerPorts.control }}/
@@ -79,7 +69,7 @@ file:
   /etc/hosts:
     exists: true
     filetype: file
-    contains:
+    contents:
     {{ range .Vars.dataPlane.hostAliases }}
     {{ $ip := .ip }}
     {{ range $host := .hostnames }}

@@ -11,8 +11,10 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/zookeeper
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/zookeeper
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 ## Introduction
 
@@ -24,8 +26,8 @@ Looking to use Apache ZooKeeper in production? Try [VMware Application Catalog](
 
 ## Prerequisites
 
-- Kubernetes 1.19+
-- Helm 3.2.0+
+- Kubernetes 1.23+
+- Helm 3.8.0+
 - PV provisioner support in the underlying infrastructure
 
 ## Installing the Chart
@@ -33,8 +35,10 @@ Looking to use Apache ZooKeeper in production? Try [VMware Application Catalog](
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/zookeeper
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/zookeeper
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 These commands deploy ZooKeeper on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
@@ -78,50 +82,50 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### ZooKeeper chart parameters
 
-| Name                          | Description                                                                                                                | Value                   |
-| ----------------------------- | -------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
-| `image.registry`              | ZooKeeper image registry                                                                                                   | `docker.io`             |
-| `image.repository`            | ZooKeeper image repository                                                                                                 | `bitnami/zookeeper`     |
-| `image.tag`                   | ZooKeeper image tag (immutable tags are recommended)                                                                       | `3.9.0-debian-11-r11`   |
-| `image.digest`                | ZooKeeper image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                  | `""`                    |
-| `image.pullPolicy`            | ZooKeeper image pull policy                                                                                                | `IfNotPresent`          |
-| `image.pullSecrets`           | Specify docker-registry secret names as an array                                                                           | `[]`                    |
-| `image.debug`                 | Specify if debug values should be set                                                                                      | `false`                 |
-| `auth.client.enabled`         | Enable ZooKeeper client-server authentication. It uses SASL/Digest-MD5                                                     | `false`                 |
-| `auth.client.clientUser`      | User that will use ZooKeeper clients to auth                                                                               | `""`                    |
-| `auth.client.clientPassword`  | Password that will use ZooKeeper clients to auth                                                                           | `""`                    |
-| `auth.client.serverUsers`     | Comma, semicolon or whitespace separated list of user to be created                                                        | `""`                    |
-| `auth.client.serverPasswords` | Comma, semicolon or whitespace separated list of passwords to assign to users when created                                 | `""`                    |
-| `auth.client.existingSecret`  | Use existing secret (ignores previous passwords)                                                                           | `""`                    |
-| `auth.quorum.enabled`         | Enable ZooKeeper server-server authentication. It uses SASL/Digest-MD5                                                     | `false`                 |
-| `auth.quorum.learnerUser`     | User that the ZooKeeper quorumLearner will use to authenticate to quorumServers.                                           | `""`                    |
-| `auth.quorum.learnerPassword` | Password that the ZooKeeper quorumLearner will use to authenticate to quorumServers.                                       | `""`                    |
-| `auth.quorum.serverUsers`     | Comma, semicolon or whitespace separated list of users for the quorumServers.                                              | `""`                    |
-| `auth.quorum.serverPasswords` | Comma, semicolon or whitespace separated list of passwords to assign to users when created                                 | `""`                    |
-| `auth.quorum.existingSecret`  | Use existing secret (ignores previous passwords)                                                                           | `""`                    |
-| `tickTime`                    | Basic time unit (in milliseconds) used by ZooKeeper for heartbeats                                                         | `2000`                  |
-| `initLimit`                   | ZooKeeper uses to limit the length of time the ZooKeeper servers in quorum have to connect to a leader                     | `10`                    |
-| `syncLimit`                   | How far out of date a server can be from a leader                                                                          | `5`                     |
-| `preAllocSize`                | Block size for transaction log file                                                                                        | `65536`                 |
-| `snapCount`                   | The number of transactions recorded in the transaction log before a snapshot can be taken (and the transaction log rolled) | `100000`                |
-| `maxClientCnxns`              | Limits the number of concurrent connections that a single client may make to a single member of the ZooKeeper ensemble     | `60`                    |
-| `maxSessionTimeout`           | Maximum session timeout (in milliseconds) that the server will allow the client to negotiate                               | `40000`                 |
-| `heapSize`                    | Size (in MB) for the Java Heap options (Xmx and Xms)                                                                       | `1024`                  |
-| `fourlwCommandsWhitelist`     | A list of comma separated Four Letter Words commands that can be executed                                                  | `srvr, mntr, ruok`      |
-| `minServerId`                 | Minimal SERVER_ID value, nodes increment their IDs respectively                                                            | `1`                     |
-| `listenOnAllIPs`              | Allow ZooKeeper to listen for connections from its peers on all available IP addresses                                     | `false`                 |
-| `autopurge.snapRetainCount`   | The most recent snapshots amount (and corresponding transaction logs) to retain                                            | `3`                     |
-| `autopurge.purgeInterval`     | The time interval (in hours) for which the purge task has to be triggered                                                  | `0`                     |
-| `logLevel`                    | Log level for the ZooKeeper server. ERROR by default                                                                       | `ERROR`                 |
-| `jvmFlags`                    | Default JVM flags for the ZooKeeper process                                                                                | `""`                    |
-| `dataLogDir`                  | Dedicated data log directory                                                                                               | `""`                    |
-| `configuration`               | Configure ZooKeeper with a custom zoo.cfg file                                                                             | `""`                    |
-| `existingConfigmap`           | The name of an existing ConfigMap with your custom configuration for ZooKeeper                                             | `""`                    |
-| `extraEnvVars`                | Array with extra environment variables to add to ZooKeeper nodes                                                           | `[]`                    |
-| `extraEnvVarsCM`              | Name of existing ConfigMap containing extra env vars for ZooKeeper nodes                                                   | `""`                    |
-| `extraEnvVarsSecret`          | Name of existing Secret containing extra env vars for ZooKeeper nodes                                                      | `""`                    |
-| `command`                     | Override default container command (useful when using custom images)                                                       | `["/scripts/setup.sh"]` |
-| `args`                        | Override default container args (useful when using custom images)                                                          | `[]`                    |
+| Name                          | Description                                                                                                                | Value                       |
+| ----------------------------- | -------------------------------------------------------------------------------------------------------------------------- | --------------------------- |
+| `image.registry`              | ZooKeeper image registry                                                                                                   | `REGISTRY_NAME`             |
+| `image.repository`            | ZooKeeper image repository                                                                                                 | `REPOSITORY_NAME/zookeeper` |
+| `image.tag`                   | ZooKeeper image tag (immutable tags are recommended)                                                                       | `3.9.1-debian-11-r1`        |
+| `image.digest`                | ZooKeeper image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                  | `""`                        |
+| `image.pullPolicy`            | ZooKeeper image pull policy                                                                                                | `IfNotPresent`              |
+| `image.pullSecrets`           | Specify docker-registry secret names as an array                                                                           | `[]`                        |
+| `image.debug`                 | Specify if debug values should be set                                                                                      | `false`                     |
+| `auth.client.enabled`         | Enable ZooKeeper client-server authentication. It uses SASL/Digest-MD5                                                     | `false`                     |
+| `auth.client.clientUser`      | User that will use ZooKeeper clients to auth                                                                               | `""`                        |
+| `auth.client.clientPassword`  | Password that will use ZooKeeper clients to auth                                                                           | `""`                        |
+| `auth.client.serverUsers`     | Comma, semicolon or whitespace separated list of user to be created                                                        | `""`                        |
+| `auth.client.serverPasswords` | Comma, semicolon or whitespace separated list of passwords to assign to users when created                                 | `""`                        |
+| `auth.client.existingSecret`  | Use existing secret (ignores previous passwords)                                                                           | `""`                        |
+| `auth.quorum.enabled`         | Enable ZooKeeper server-server authentication. It uses SASL/Digest-MD5                                                     | `false`                     |
+| `auth.quorum.learnerUser`     | User that the ZooKeeper quorumLearner will use to authenticate to quorumServers.                                           | `""`                        |
+| `auth.quorum.learnerPassword` | Password that the ZooKeeper quorumLearner will use to authenticate to quorumServers.                                       | `""`                        |
+| `auth.quorum.serverUsers`     | Comma, semicolon or whitespace separated list of users for the quorumServers.                                              | `""`                        |
+| `auth.quorum.serverPasswords` | Comma, semicolon or whitespace separated list of passwords to assign to users when created                                 | `""`                        |
+| `auth.quorum.existingSecret`  | Use existing secret (ignores previous passwords)                                                                           | `""`                        |
+| `tickTime`                    | Basic time unit (in milliseconds) used by ZooKeeper for heartbeats                                                         | `2000`                      |
+| `initLimit`                   | ZooKeeper uses to limit the length of time the ZooKeeper servers in quorum have to connect to a leader                     | `10`                        |
+| `syncLimit`                   | How far out of date a server can be from a leader                                                                          | `5`                         |
+| `preAllocSize`                | Block size for transaction log file                                                                                        | `65536`                     |
+| `snapCount`                   | The number of transactions recorded in the transaction log before a snapshot can be taken (and the transaction log rolled) | `100000`                    |
+| `maxClientCnxns`              | Limits the number of concurrent connections that a single client may make to a single member of the ZooKeeper ensemble     | `60`                        |
+| `maxSessionTimeout`           | Maximum session timeout (in milliseconds) that the server will allow the client to negotiate                               | `40000`                     |
+| `heapSize`                    | Size (in MB) for the Java Heap options (Xmx and Xms)                                                                       | `1024`                      |
+| `fourlwCommandsWhitelist`     | A list of comma separated Four Letter Words commands that can be executed                                                  | `srvr, mntr, ruok`          |
+| `minServerId`                 | Minimal SERVER_ID value, nodes increment their IDs respectively                                                            | `1`                         |
+| `listenOnAllIPs`              | Allow ZooKeeper to listen for connections from its peers on all available IP addresses                                     | `false`                     |
+| `autopurge.snapRetainCount`   | The most recent snapshots amount (and corresponding transaction logs) to retain                                            | `3`                         |
+| `autopurge.purgeInterval`     | The time interval (in hours) for which the purge task has to be triggered                                                  | `0`                         |
+| `logLevel`                    | Log level for the ZooKeeper server. ERROR by default                                                                       | `ERROR`                     |
+| `jvmFlags`                    | Default JVM flags for the ZooKeeper process                                                                                | `""`                        |
+| `dataLogDir`                  | Dedicated data log directory                                                                                               | `""`                        |
+| `configuration`               | Configure ZooKeeper with a custom zoo.cfg file                                                                             | `""`                        |
+| `existingConfigmap`           | The name of an existing ConfigMap with your custom configuration for ZooKeeper                                             | `""`                        |
+| `extraEnvVars`                | Array with extra environment variables to add to ZooKeeper nodes                                                           | `[]`                        |
+| `extraEnvVarsCM`              | Name of existing ConfigMap containing extra env vars for ZooKeeper nodes                                                   | `""`                        |
+| `extraEnvVarsSecret`          | Name of existing Secret containing extra env vars for ZooKeeper nodes                                                      | `""`                        |
+| `command`                     | Override default container command (useful when using custom images)                                                       | `["/scripts/setup.sh"]`     |
+| `args`                        | Override default container args (useful when using custom images)                                                          | `[]`                        |
 
 ### Statefulset parameters
 
@@ -243,19 +247,19 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Volume Permissions parameters
 
-| Name                                                   | Description                                                                                                                       | Value              |
-| ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------- | ------------------ |
-| `volumePermissions.enabled`                            | Enable init container that changes the owner and group of the persistent volume                                                   | `false`            |
-| `volumePermissions.image.registry`                     | Init container volume-permissions image registry                                                                                  | `docker.io`        |
-| `volumePermissions.image.repository`                   | Init container volume-permissions image repository                                                                                | `bitnami/os-shell` |
-| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r51` |
-| `volumePermissions.image.digest`                       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`               |
-| `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`     |
-| `volumePermissions.image.pullSecrets`                  | Init container volume-permissions image pull secrets                                                                              | `[]`               |
-| `volumePermissions.resources.limits`                   | Init container volume-permissions resource limits                                                                                 | `{}`               |
-| `volumePermissions.resources.requests`                 | Init container volume-permissions resource requests                                                                               | `{}`               |
-| `volumePermissions.containerSecurityContext.enabled`   | Enabled init container Security Context                                                                                           | `true`             |
-| `volumePermissions.containerSecurityContext.runAsUser` | User ID for the init container                                                                                                    | `0`                |
+| Name                                                   | Description                                                                                                                       | Value                      |
+| ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
+| `volumePermissions.enabled`                            | Enable init container that changes the owner and group of the persistent volume                                                   | `false`                    |
+| `volumePermissions.image.registry`                     | Init container volume-permissions image registry                                                                                  | `REGISTRY_NAME`            |
+| `volumePermissions.image.repository`                   | Init container volume-permissions image repository                                                                                | `REPOSITORY_NAME/os-shell` |
+| `volumePermissions.image.tag`                          | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r90`         |
+| `volumePermissions.image.digest`                       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
+| `volumePermissions.image.pullPolicy`                   | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`             |
+| `volumePermissions.image.pullSecrets`                  | Init container volume-permissions image pull secrets                                                                              | `[]`                       |
+| `volumePermissions.resources.limits`                   | Init container volume-permissions resource limits                                                                                 | `{}`                       |
+| `volumePermissions.resources.requests`                 | Init container volume-permissions resource requests                                                                               | `{}`                       |
+| `volumePermissions.containerSecurityContext.enabled`   | Enabled init container Security Context                                                                                           | `true`                     |
+| `volumePermissions.containerSecurityContext.runAsUser` | User ID for the init container                                                                                                    | `0`                        |
 
 ### Metrics parameters
 
@@ -319,8 +323,10 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 helm install my-release \
   --set auth.clientUser=newUser \
-    oci://registry-1.docker.io/bitnamicharts/zookeeper
+    oci://REGISTRY_NAME/REPOSITORY_NAME/zookeeper
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 The above command sets the ZooKeeper user to `newUser`.
 
@@ -329,9 +335,10 @@ The above command sets the ZooKeeper user to `newUser`.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/zookeeper
+helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/zookeeper
 ```
 
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
 ## Configuration and installation details

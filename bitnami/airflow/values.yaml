@@ -111,8 +111,8 @@ dags:
   existingConfigmap: ""
   ## OS Shell + Utility image
   ## ref: https://hub.docker.com/r/bitnami/os-shell/tags/
-  ## @param dags.image.registry Init container load-dags image registry
-  ## @param dags.image.repository Init container load-dags image repository
+  ## @param dags.image.registry [default: REGISTRY_NAME] Init container load-dags image registry
+  ## @param dags.image.repository [default: REPOSITORY_NAME/os-shell] Init container load-dags image repository
   ## @param dags.image.tag Init container load-dags image tag (immutable tags are recommended)
   ## @param dags.image.digest Init container load-dags image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param dags.image.pullPolicy Init container load-dags image pull policy
@@ -121,7 +121,7 @@ dags:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r75
+    tag: 11-debian-11-r90
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -178,8 +178,8 @@ extraVolumes: []
 web:
   ## Bitnami Airflow image version
   ## ref: https://hub.docker.com/r/bitnami/airflow/tags/
-  ## @param web.image.registry Airflow image registry
-  ## @param web.image.repository Airflow image repository
+  ## @param web.image.registry [default: REGISTRY_NAME] Airflow image registry
+  ## @param web.image.repository [default: REPOSITORY_NAME/airflow] Airflow image repository
   ## @param web.image.tag Airflow image tag (immutable tags are recommended)
   ## @param web.image.digest Airflow image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param web.image.pullPolicy Airflow image pull policy
@@ -188,7 +188,7 @@ web:
   image:
     registry: docker.io
     repository: bitnami/airflow
-    tag: 2.7.1-debian-11-r15
+    tag: 2.7.2-debian-11-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -435,8 +435,8 @@ web:
 scheduler:
   ## Bitnami Airflow Scheduler image version
   ## ref: https://hub.docker.com/r/bitnami/airflow-scheduler/tags/
-  ## @param scheduler.image.registry Airflow Scheduler image registry
-  ## @param scheduler.image.repository Airflow Scheduler image repository
+  ## @param scheduler.image.registry [default: REGISTRY_NAME] Airflow Scheduler image registry
+  ## @param scheduler.image.repository [default: REPOSITORY_NAME/airflow-scheduler] Airflow Scheduler image repository
   ## @param scheduler.image.tag Airflow Scheduler image tag (immutable tags are recommended)
   ## @param scheduler.image.digest Airflow Schefuler image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param scheduler.image.pullPolicy Airflow Scheduler image pull policy
@@ -446,7 +446,7 @@ scheduler:
   image:
     registry: docker.io
     repository: bitnami/airflow-scheduler
-    tag: 2.7.1-debian-11-r14
+    tag: 2.7.2-debian-11-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -639,8 +639,8 @@ scheduler:
 worker:
   ## Bitnami Airflow Worker image version
   ## ref: https://hub.docker.com/r/bitnami/airflow-worker/tags/
-  ## @param worker.image.registry Airflow Worker image registry
-  ## @param worker.image.repository Airflow Worker image repository
+  ## @param worker.image.registry [default: REGISTRY_NAME] Airflow Worker image registry
+  ## @param worker.image.repository [default: REPOSITORY_NAME/airflow-worker] Airflow Worker image repository
   ## @param worker.image.tag Airflow Worker image tag (immutable tags are recommended)
   ## @param worker.image.digest Airflow Worker image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param worker.image.pullPolicy Airflow Worker image pull policy
@@ -650,7 +650,7 @@ worker:
   image:
     registry: docker.io
     repository: bitnami/airflow-worker
-    tag: 2.7.1-debian-11-r14
+    tag: 2.7.2-debian-11-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -913,8 +913,8 @@ worker:
 git:
   ## Bitnami Git image version
   ## ref: https://hub.docker.com/r/bitnami/git/tags/
-  ## @param git.image.registry Git image registry
-  ## @param git.image.repository Git image repository
+  ## @param git.image.registry [default: REGISTRY_NAME] Git image registry
+  ## @param git.image.repository [default: REPOSITORY_NAME/git] Git image repository
   ## @param git.image.tag Git image tag (immutable tags are recommended)
   ## @param git.image.digest Git image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param git.image.pullPolicy Git image pull policy
@@ -923,7 +923,7 @@ git:
   image:
     registry: docker.io
     repository: bitnami/git
-    tag: 2.42.0-debian-11-r29
+    tag: 2.42.0-debian-11-r45
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1276,8 +1276,8 @@ metrics:
   enabled: false
   ## Bitnami Airflow exporter image
   ## ref: https://hub.docker.com/r/bitnami/airflow-exporter/tags/
-  ## @param metrics.image.registry Airflow exporter image registry
-  ## @param metrics.image.repository Airflow exporter image repository
+  ## @param metrics.image.registry [default: REGISTRY_NAME] Airflow exporter image registry
+  ## @param metrics.image.repository [default: REPOSITORY_NAME/airflow-exporter] Airflow exporter image repository
   ## @param metrics.image.tag Airflow exporter image tag (immutable tags are recommended)
   ## @param metrics.image.digest Airflow exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param metrics.image.pullPolicy Airflow exporter image pull policy
@@ -1286,7 +1286,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/airflow-exporter
-    tag: 0.20220314.0-debian-11-r422
+    tag: 0.20220314.0-debian-11-r438
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

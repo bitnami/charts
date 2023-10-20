@@ -65,8 +65,8 @@ diagnosticMode:
 milvus:
   ## Bitnami Milvus image
   ## ref: https://hub.docker.com/r/bitnami/milvus/tags/
-  ## @param milvus.image.registry Milvus image registry
-  ## @param milvus.image.repository Milvus image repository
+  ## @param milvus.image.registry [default: REGISTRY_NAME] Milvus image registry
+  ## @param milvus.image.repository [default: REPOSITORY_NAME/milvus] Milvus image repository
   ## @param milvus.image.tag Milvus image tag (immutable tags are recommended)
   ## @param milvus.image.digest Milvus image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param milvus.image.pullPolicy Milvus image pull policy
@@ -76,7 +76,7 @@ milvus:
   image:
     registry: docker.io
     repository: bitnami/milvus
-    tag: 2.2.14-debian-11-r26
+    tag: 2.2.14-debian-11-r37
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -245,8 +245,8 @@ initJob:
   forceRun: false
   ## Bitnami PyMilvus image
   ## ref: https://hub.docker.com/r/bitnami/jwt-cli/tags/
-  ## @param initJob.image.registry PyMilvus image registry
-  ## @param initJob.image.repository PyMilvus image repository
+  ## @param initJob.image.registry [default: REGISTRY_NAME] PyMilvus image registry
+  ## @param initJob.image.repository [default: REPOSITORY_NAME/pymilvus] PyMilvus image repository
   ## @param initJob.image.tag PyMilvus image tag (immutable tags are recommended)
   ## @param initJob.image.digest PyMilvus image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
   ## @param initJob.image.pullPolicy PyMilvus image pull policy
@@ -255,7 +255,7 @@ initJob:
   image:
     registry: docker.io
     repository: bitnami/pymilvus
-    tag: 2.3.1-debian-11-r0
+    tag: 2.3.1-debian-11-r12
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -4253,8 +4253,8 @@ attu:
   enabled: true
   ## Bitnami Attu image
   ## ref: https://hub.docker.com/r/bitnami/attu/tags/
-  ## @param attu.image.registry Attu image registry
-  ## @param attu.image.repository Attu image repository
+  ## @param attu.image.registry [default: REGISTRY_NAME] Attu image registry
+  ## @param attu.image.repository [default: REPOSITORY_NAME/attu] Attu image repository
   ## @param attu.image.tag Attu image tag (immutable tags are recommended)
   ## @param attu.image.digest Attu image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param attu.image.pullPolicy Attu image pull policy
@@ -4264,7 +4264,7 @@ attu:
   image:
     registry: docker.io
     repository: bitnami/attu
-    tag: 2.3.1-debian-11-r8
+    tag: 2.3.1-debian-11-r22
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -4795,15 +4795,15 @@ attu:
 ##
 
 waitContainer:
-  ## @param waitContainer.image.registry Init container wait-container image registry
-  ## @param waitContainer.image.repository Init container wait-container image name
+  ## @param waitContainer.image.registry [default: REGISTRY_NAME] Init container wait-container image registry
+  ## @param waitContainer.image.repository [default: REPOSITORY_NAME/os-shell] Init container wait-container image name
   ## @param waitContainer.image.tag Init container wait-container image tag
   ## @param waitContainer.image.digest Init container wait-container image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ##
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r77
+    tag: 11-debian-11-r90
     digest: ""
     ## @param waitContainer.image.pullPolicy Init container wait-container image pull policy
     ##

@@ -11,8 +11,10 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/oauth2-proxy
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/oauth2-proxy
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 ## Introduction
 
@@ -26,8 +28,8 @@ Looking to use OAuth2 Proxy in production? Try [VMware Application Catalog](http
 
 ## Prerequisites
 
-- Kubernetes 1.19+
-- Helm 3.2.0+
+- Kubernetes 1.23+
+- Helm 3.8.0+
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -36,8 +38,10 @@ Looking to use OAuth2 Proxy in production? Try [VMware Application Catalog](http
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/oauth2-proxy
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/oauth2-proxy
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 The command deploys OAuth2 Proxy on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
@@ -112,14 +116,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### OAuth2 Proxy Image parameters
 
-| Name                | Description                                                                                                  | Value                  |
-| ------------------- | ------------------------------------------------------------------------------------------------------------ | ---------------------- |
-| `image.registry`    | OAuth2 Proxy image registry                                                                                  | `docker.io`            |
-| `image.repository`  | OAuth2 Proxy image repository                                                                                | `bitnami/oauth2-proxy` |
-| `image.tag`         | OAuth2 Proxy image tag (immutable tags are recommended)                                                      | `7.5.1-debian-11-r7`   |
-| `image.digest`      | OAuth2 Proxy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
-| `image.pullPolicy`  | OAuth2 Proxy image pull policy                                                                               | `IfNotPresent`         |
-| `image.pullSecrets` | OAuth2 Proxy image pull secrets                                                                              | `[]`                   |
+| Name                | Description                                                                                                  | Value                          |
+| ------------------- | ------------------------------------------------------------------------------------------------------------ | ------------------------------ |
+| `image.registry`    | OAuth2 Proxy image registry                                                                                  | `REGISTRY_NAME`                |
+| `image.repository`  | OAuth2 Proxy image repository                                                                                | `REPOSITORY_NAME/oauth2-proxy` |
+| `image.tag`         | OAuth2 Proxy image tag (immutable tags are recommended)                                                      | `7.5.1-debian-11-r10`          |
+| `image.digest`      | OAuth2 Proxy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                           |
+| `image.pullPolicy`  | OAuth2 Proxy image pull policy                                                                               | `IfNotPresent`                 |
+| `image.pullSecrets` | OAuth2 Proxy image pull secrets                                                                              | `[]`                           |
 
 ### OAuth2 Proxy configuration parameters
 
@@ -251,8 +255,10 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 helm install my-release \
   --set replicaCount=2 \
-    oci://registry-1.docker.io/bitnamicharts/oauth2-proxy
+    oci://REGISTRY_NAME/REPOSITORY_NAME/oauth2-proxy
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 The above command increase the default number of replicas.
 
@@ -261,9 +267,10 @@ The above command increase the default number of replicas.
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/oauth2-proxy
+helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/oauth2-proxy
 ```
 
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
 ## Configuration and installation details

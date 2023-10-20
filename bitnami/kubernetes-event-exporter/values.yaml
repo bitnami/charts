@@ -70,8 +70,8 @@ containerPorts:
 extraContainerPorts: []
 
 image:
-  ## @param image.registry Container image registry
-  ## @param image.repository Container image name
+  ## @param image.registry [default: REGISTRY_NAME] Container image registry
+  ## @param image.repository [default: REPOSITORY_NAME/kubernetes-event-exporter] Container image name
   ## @param image.tag Container image tag
   ## @param image.digest Container image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param image.pullPolicy Container image pull policy
@@ -79,7 +79,7 @@ image:
   ##
   registry: docker.io
   repository: bitnami/kubernetes-event-exporter
-  tag: 1.4.0-debian-11-r57
+  tag: 1.4.0-debian-11-r60
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

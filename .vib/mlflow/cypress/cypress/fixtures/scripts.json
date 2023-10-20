@@ -1,0 +1,6 @@
+{
+  "script": {
+    "title": "vib_test.py",
+    "modelFile": "model.pkl"
+  }
+}

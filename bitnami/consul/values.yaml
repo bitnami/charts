@@ -65,8 +65,8 @@ diagnosticMode:
 
 ## Bitnami HashiCorp Consul image
 ## ref: https://hub.docker.com/r/bitnami/consul/tags/
-## @param image.registry HashiCorp Consul image registry
-## @param image.repository HashiCorp Consul image repository
+## @param image.registry [default: REGISTRY_NAME] HashiCorp Consul image registry
+## @param image.repository [default: REPOSITORY_NAME/consul] HashiCorp Consul image repository
 ## @param image.tag HashiCorp Consul image tag (immutable tags are recommended)
 ## @param image.digest HashiCorp Consul image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy HashiCorp Consul image pull policy
@@ -76,7 +76,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/consul
-  tag: 1.16.2-debian-11-r13
+  tag: 1.16.2-debian-11-r17
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -612,8 +612,8 @@ volumePermissions:
   enabled: false
   ## OS Shell + Utility image
   ## ref: https://hub.docker.com/r/bitnami/os-shell/tags/
-  ## @param volumePermissions.image.registry OS Shell + Utility image registry
-  ## @param volumePermissions.image.repository OS Shell + Utility image repository
+  ## @param volumePermissions.image.registry [default: REGISTRY_NAME] OS Shell + Utility image registry
+  ## @param volumePermissions.image.repository [default: REPOSITORY_NAME/os-shell] OS Shell + Utility image repository
   ## @param volumePermissions.image.tag OS Shell + Utility image tag (immutable tags are recommended)
   ## @param volumePermissions.image.digest OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param volumePermissions.image.pullPolicy OS Shell + Utility image pull policy
@@ -622,7 +622,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r86
+    tag: 11-debian-11-r90
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -663,8 +663,8 @@ metrics:
   enabled: false
   ## Bitnami HashiCorp Consul Prometheus Exporter image
   ## ref: https://hub.docker.com/r/bitnami/consul-exporter/tags/
-  ## @param metrics.image.registry HashiCorp Consul Prometheus Exporter image registry
-  ## @param metrics.image.repository HashiCorp Consul Prometheus Exporter image repository
+  ## @param metrics.image.registry [default: REGISTRY_NAME] HashiCorp Consul Prometheus Exporter image registry
+  ## @param metrics.image.repository [default: REPOSITORY_NAME/consul-exporter] HashiCorp Consul Prometheus Exporter image repository
   ## @param metrics.image.tag HashiCorp Consul Prometheus Exporter image tag (immutable tags are recommended)
   ## @param metrics.image.digest HashiCorp Consul Prometheus Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param metrics.image.pullPolicy HashiCorp Consul Prometheus Exporter image pull policy
@@ -673,7 +673,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/consul-exporter
-    tag: 0.9.0-debian-11-r295
+    tag: 0.9.0-debian-11-r299
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

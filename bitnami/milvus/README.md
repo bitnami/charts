@@ -11,8 +11,10 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/milvus
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/milvus
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 ## Introduction
 
@@ -28,8 +30,8 @@ Looking to use Milvus in production? Try [VMware Application Catalog](https://bi
 
 ## Prerequisites
 
-- Kubernetes 1.19+
-- Helm 3.2.0+
+- Kubernetes 1.23+
+- Helm 3.8.0+
 - PV provisioner support in the underlying infrastructure
 
 ## Installing the Chart
@@ -37,8 +39,10 @@ Looking to use Milvus in production? Try [VMware Application Catalog](https://bi
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/milvus
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/milvus
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 The command deploys milvus on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
@@ -81,55 +85,55 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common Milvus Parameters
 
-| Name                                                        | Description                                                                                                                                         | Value                  |
-| ----------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
-| `milvus.image.registry`                                     | Milvus image registry                                                                                                                               | `docker.io`            |
-| `milvus.image.repository`                                   | Milvus image repository                                                                                                                             | `bitnami/milvus`       |
-| `milvus.image.tag`                                          | Milvus image tag (immutable tags are recommended)                                                                                                   | `2.2.14-debian-11-r26` |
-| `milvus.image.digest`                                       | Milvus image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                              | `""`                   |
-| `milvus.image.pullPolicy`                                   | Milvus image pull policy                                                                                                                            | `IfNotPresent`         |
-| `milvus.image.pullSecrets`                                  | Milvus image pull secrets                                                                                                                           | `[]`                   |
-| `milvus.image.debug`                                        | Enable debug mode                                                                                                                                   | `false`                |
-| `milvus.auth.enabled`                                       | enable Milvus authentication                                                                                                                        | `false`                |
-| `milvus.auth.username`                                      | Milvus username                                                                                                                                     | `user`                 |
-| `milvus.auth.password`                                      | Milvus username password                                                                                                                            | `""`                   |
-| `milvus.auth.rootPassword`                                  | Milvus root password                                                                                                                                | `""`                   |
-| `milvus.auth.existingSecret`                                | Name of a secret containing the Milvus password                                                                                                     | `""`                   |
-| `milvus.auth.existingSecretPasswordKey`                     | Name of the secret key containing the Milvus password                                                                                               | `""`                   |
-| `milvus.defaultConfig`                                      | Milvus components default configuration                                                                                                             | `""`                   |
-| `milvus.extraConfig`                                        | Extra configuration parameters                                                                                                                      | `{}`                   |
-| `milvus.existingConfigMap`                                  | name of a ConfigMap with existing configuration for the default configuration                                                                       | `""`                   |
-| `milvus.extraConfigExistingConfigMap`                       | name of a ConfigMap with existing configuration for the Dashboard                                                                                   | `""`                   |
-| `initJob.forceRun`                                          | Force the run of the credential job                                                                                                                 | `false`                |
-| `initJob.image.registry`                                    | PyMilvus image registry                                                                                                                             | `docker.io`            |
-| `initJob.image.repository`                                  | PyMilvus image repository                                                                                                                           | `bitnami/pymilvus`     |
-| `initJob.image.tag`                                         | PyMilvus image tag (immutable tags are recommended)                                                                                                 | `2.3.1-debian-11-r0`   |
-| `initJob.image.digest`                                      | PyMilvus image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended) | `""`                   |
-| `initJob.image.pullPolicy`                                  | PyMilvus image pull policy                                                                                                                          | `IfNotPresent`         |
-| `initJob.image.pullSecrets`                                 | PyMilvus image pull secrets                                                                                                                         | `[]`                   |
-| `initJob.enableDefaultInitContainers`                       | Deploy default init containers                                                                                                                      | `true`                 |
-| `initJob.backoffLimit`                                      | set backoff limit of the job                                                                                                                        | `10`                   |
-| `initJob.extraVolumes`                                      | Optionally specify extra list of additional volumes for the credential init job                                                                     | `[]`                   |
-| `initJob.extraCommands`                                     | Extra commands to pass to the generation job                                                                                                        | `""`                   |
-| `initJob.containerSecurityContext.enabled`                  | Enabled credential init job containers' Security Context                                                                                            | `true`                 |
-| `initJob.containerSecurityContext.runAsUser`                | Set credential init job containers' Security Context runAsUser                                                                                      | `1001`                 |
-| `initJob.containerSecurityContext.runAsNonRoot`             | Set credential init job containers' Security Context runAsNonRoot                                                                                   | `true`                 |
-| `initJob.containerSecurityContext.readOnlyRootFilesystem`   | Set credential init job containers' Security Context runAsNonRoot                                                                                   | `true`                 |
-| `initJob.containerSecurityContext.allowPrivilegeEscalation` | Set container's privilege escalation                                                                                                                | `false`                |
-| `initJob.containerSecurityContext.capabilities.drop`        | Set container's Security Context runAsNonRoot                                                                                                       | `["ALL"]`              |
-| `initJob.podSecurityContext.enabled`                        | Enabled credential init job pods' Security Context                                                                                                  | `true`                 |
-| `initJob.podSecurityContext.fsGroup`                        | Set credential init job pod's Security Context fsGroup                                                                                              | `1001`                 |
-| `initJob.podSecurityContext.seccompProfile.type`            | Set container's Security Context seccomp profile                                                                                                    | `RuntimeDefault`       |
-| `initJob.extraEnvVars`                                      | Array containing extra env vars to configure the credential init job                                                                                | `[]`                   |
-| `initJob.extraEnvVarsCM`                                    | ConfigMap containing extra env vars to configure the credential init job                                                                            | `""`                   |
-| `initJob.extraEnvVarsSecret`                                | Secret containing extra env vars to configure the credential init job (in case of sensitive data)                                                   | `""`                   |
-| `initJob.extraVolumeMounts`                                 | Array of extra volume mounts to be added to the jwt Container (evaluated as template). Normally used with `extraVolumes`.                           | `[]`                   |
-| `initJob.resources.limits`                                  | The resources limits for the container                                                                                                              | `{}`                   |
-| `initJob.resources.requests`                                | The requested resources for the container                                                                                                           | `{}`                   |
-| `initJob.hostAliases`                                       | Add deployment host aliases                                                                                                                         | `[]`                   |
-| `initJob.annotations`                                       | Add annotations to the job                                                                                                                          | `{}`                   |
-| `initJob.podLabels`                                         | Additional pod labels                                                                                                                               | `{}`                   |
-| `initJob.podAnnotations`                                    | Additional pod annotations                                                                                                                          | `{}`                   |
+| Name                                                        | Description                                                                                                                                         | Value                      |
+| ----------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
+| `milvus.image.registry`                                     | Milvus image registry                                                                                                                               | `REGISTRY_NAME`            |
+| `milvus.image.repository`                                   | Milvus image repository                                                                                                                             | `REPOSITORY_NAME/milvus`   |
+| `milvus.image.tag`                                          | Milvus image tag (immutable tags are recommended)                                                                                                   | `2.2.14-debian-11-r37`     |
+| `milvus.image.digest`                                       | Milvus image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                              | `""`                       |
+| `milvus.image.pullPolicy`                                   | Milvus image pull policy                                                                                                                            | `IfNotPresent`             |
+| `milvus.image.pullSecrets`                                  | Milvus image pull secrets                                                                                                                           | `[]`                       |
+| `milvus.image.debug`                                        | Enable debug mode                                                                                                                                   | `false`                    |
+| `milvus.auth.enabled`                                       | enable Milvus authentication                                                                                                                        | `false`                    |
+| `milvus.auth.username`                                      | Milvus username                                                                                                                                     | `user`                     |
+| `milvus.auth.password`                                      | Milvus username password                                                                                                                            | `""`                       |
+| `milvus.auth.rootPassword`                                  | Milvus root password                                                                                                                                | `""`                       |
+| `milvus.auth.existingSecret`                                | Name of a secret containing the Milvus password                                                                                                     | `""`                       |
+| `milvus.auth.existingSecretPasswordKey`                     | Name of the secret key containing the Milvus password                                                                                               | `""`                       |
+| `milvus.defaultConfig`                                      | Milvus components default configuration                                                                                                             | `""`                       |
+| `milvus.extraConfig`                                        | Extra configuration parameters                                                                                                                      | `{}`                       |
+| `milvus.existingConfigMap`                                  | name of a ConfigMap with existing configuration for the default configuration                                                                       | `""`                       |
+| `milvus.extraConfigExistingConfigMap`                       | name of a ConfigMap with existing configuration for the Dashboard                                                                                   | `""`                       |
+| `initJob.forceRun`                                          | Force the run of the credential job                                                                                                                 | `false`                    |
+| `initJob.image.registry`                                    | PyMilvus image registry                                                                                                                             | `REGISTRY_NAME`            |
+| `initJob.image.repository`                                  | PyMilvus image repository                                                                                                                           | `REPOSITORY_NAME/pymilvus` |
+| `initJob.image.tag`                                         | PyMilvus image tag (immutable tags are recommended)                                                                                                 | `2.3.1-debian-11-r12`      |
+| `initJob.image.digest`                                      | PyMilvus image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended) | `""`                       |
+| `initJob.image.pullPolicy`                                  | PyMilvus image pull policy                                                                                                                          | `IfNotPresent`             |
+| `initJob.image.pullSecrets`                                 | PyMilvus image pull secrets                                                                                                                         | `[]`                       |
+| `initJob.enableDefaultInitContainers`                       | Deploy default init containers                                                                                                                      | `true`                     |
+| `initJob.backoffLimit`                                      | set backoff limit of the job                                                                                                                        | `10`                       |
+| `initJob.extraVolumes`                                      | Optionally specify extra list of additional volumes for the credential init job                                                                     | `[]`                       |
+| `initJob.extraCommands`                                     | Extra commands to pass to the generation job                                                                                                        | `""`                       |
+| `initJob.containerSecurityContext.enabled`                  | Enabled credential init job containers' Security Context                                                                                            | `true`                     |
+| `initJob.containerSecurityContext.runAsUser`                | Set credential init job containers' Security Context runAsUser                                                                                      | `1001`                     |
+| `initJob.containerSecurityContext.runAsNonRoot`             | Set credential init job containers' Security Context runAsNonRoot                                                                                   | `true`                     |
+| `initJob.containerSecurityContext.readOnlyRootFilesystem`   | Set credential init job containers' Security Context runAsNonRoot                                                                                   | `true`                     |
+| `initJob.containerSecurityContext.allowPrivilegeEscalation` | Set container's privilege escalation                                                                                                                | `false`                    |
+| `initJob.containerSecurityContext.capabilities.drop`        | Set container's Security Context runAsNonRoot                                                                                                       | `["ALL"]`                  |
+| `initJob.podSecurityContext.enabled`                        | Enabled credential init job pods' Security Context                                                                                                  | `true`                     |
+| `initJob.podSecurityContext.fsGroup`                        | Set credential init job pod's Security Context fsGroup                                                                                              | `1001`                     |
+| `initJob.podSecurityContext.seccompProfile.type`            | Set container's Security Context seccomp profile                                                                                                    | `RuntimeDefault`           |
+| `initJob.extraEnvVars`                                      | Array containing extra env vars to configure the credential init job                                                                                | `[]`                       |
+| `initJob.extraEnvVarsCM`                                    | ConfigMap containing extra env vars to configure the credential init job                                                                            | `""`                       |
+| `initJob.extraEnvVarsSecret`                                | Secret containing extra env vars to configure the credential init job (in case of sensitive data)                                                   | `""`                       |
+| `initJob.extraVolumeMounts`                                 | Array of extra volume mounts to be added to the jwt Container (evaluated as template). Normally used with `extraVolumes`.                           | `[]`                       |
+| `initJob.resources.limits`                                  | The resources limits for the container                                                                                                              | `{}`                       |
+| `initJob.resources.requests`                                | The requested resources for the container                                                                                                           | `{}`                       |
+| `initJob.hostAliases`                                       | Add deployment host aliases                                                                                                                         | `[]`                       |
+| `initJob.annotations`                                       | Add annotations to the job                                                                                                                          | `{}`                       |
+| `initJob.podLabels`                                         | Additional pod labels                                                                                                                               | `{}`                       |
+| `initJob.podAnnotations`                                    | Additional pod annotations                                                                                                                          | `{}`                       |
 
 ### Data Coordinator Deployment Parameters
 
@@ -1246,85 +1250,85 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Attu Deployment Parameters
 
-| Name                                                     | Description                                                                                          | Value                |
-| -------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- | -------------------- |
-| `attu.enabled`                                           | Enable Attu deployment                                                                               | `true`               |
-| `attu.image.registry`                                    | Attu image registry                                                                                  | `docker.io`          |
-| `attu.image.repository`                                  | Attu image repository                                                                                | `bitnami/attu`       |
-| `attu.image.tag`                                         | Attu image tag (immutable tags are recommended)                                                      | `2.3.1-debian-11-r8` |
-| `attu.image.digest`                                      | Attu image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                 |
-| `attu.image.pullPolicy`                                  | Attu image pull policy                                                                               | `IfNotPresent`       |
-| `attu.image.pullSecrets`                                 | Attu image pull secrets                                                                              | `[]`                 |
-| `attu.image.debug`                                       | Enable debug mode                                                                                    | `false`              |
-| `attu.extraEnvVars`                                      | Array with extra environment variables to add to attu nodes                                          | `[]`                 |
-| `attu.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars for attu nodes                                  | `""`                 |
-| `attu.extraEnvVarsSecret`                                | Name of existing Secret containing extra env vars for attu nodes                                     | `""`                 |
-| `attu.command`                                           | Override default container command (useful when using custom images)                                 | `[]`                 |
-| `attu.args`                                              | Override default container args (useful when using custom images)                                    | `[]`                 |
-| `attu.replicaCount`                                      | Number of Attu replicas to deploy                                                                    | `1`                  |
-| `attu.containerPorts.http`                               | HTTP port for Attu                                                                                   | `3000`               |
-| `attu.livenessProbe.enabled`                             | Enable livenessProbe on Attu nodes                                                                   | `true`               |
-| `attu.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                              | `5`                  |
-| `attu.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                     | `10`                 |
-| `attu.livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                    | `5`                  |
-| `attu.livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                  | `5`                  |
-| `attu.livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                  | `1`                  |
-| `attu.readinessProbe.enabled`                            | Enable readinessProbe on Attu nodes                                                                  | `true`               |
-| `attu.readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                             | `5`                  |
-| `attu.readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                    | `10`                 |
-| `attu.readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                   | `5`                  |
-| `attu.readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                 | `5`                  |
-| `attu.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                 | `1`                  |
-| `attu.startupProbe.enabled`                              | Enable startupProbe on Attu containers                                                               | `false`              |
-| `attu.startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                               | `5`                  |
-| `attu.startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                      | `10`                 |
-| `attu.startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                                     | `5`                  |
-| `attu.startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                   | `5`                  |
-| `attu.startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                   | `1`                  |
-| `attu.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                  | `{}`                 |
-| `attu.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                 | `{}`                 |
-| `attu.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                   | `{}`                 |
-| `attu.resources.limits`                                  | The resources limits for the attu containers                                                         | `{}`                 |
-| `attu.resources.requests`                                | The requested resources for the attu containers                                                      | `{}`                 |
-| `attu.podSecurityContext.enabled`                        | Enabled Attu pods' Security Context                                                                  | `true`               |
-| `attu.podSecurityContext.fsGroup`                        | Set Attu pod's Security Context fsGroup                                                              | `1001`               |
-| `attu.podSecurityContext.seccompProfile.type`            | Set Attu container's Security Context seccomp profile                                                | `RuntimeDefault`     |
-| `attu.containerSecurityContext.enabled`                  | Enabled Attu containers' Security Context                                                            | `true`               |
-| `attu.containerSecurityContext.runAsUser`                | Set Attu containers' Security Context runAsUser                                                      | `1001`               |
-| `attu.containerSecurityContext.runAsNonRoot`             | Set Attu containers' Security Context runAsNonRoot                                                   | `true`               |
-| `attu.containerSecurityContext.readOnlyRootFilesystem`   | Set Attu containers' Security Context runAsNonRoot                                                   | `true`               |
-| `attu.containerSecurityContext.allowPrivilegeEscalation` | Set Attu container's privilege escalation                                                            | `false`              |
-| `attu.containerSecurityContext.capabilities.drop`        | Set Attu container's Security Context runAsNonRoot                                                   | `["ALL"]`            |
-| `attu.lifecycleHooks`                                    | for the attu container(s) to automate configuration before or after startup                          | `{}`                 |
-| `attu.runtimeClassName`                                  | Name of the runtime class to be used by pod(s)                                                       | `""`                 |
-| `attu.hostAliases`                                       | attu pods host aliases                                                                               | `[]`                 |
-| `attu.podLabels`                                         | Extra labels for attu pods                                                                           | `{}`                 |
-| `attu.podAnnotations`                                    | Annotations for attu pods                                                                            | `{}`                 |
-| `attu.podAffinityPreset`                                 | Pod affinity preset. Ignored if `attu.affinity` is set. Allowed values: `soft` or `hard`             | `""`                 |
-| `attu.podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `attu.affinity` is set. Allowed values: `soft` or `hard`        | `soft`               |
-| `attu.nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `attu.affinity` is set. Allowed values: `soft` or `hard`       | `""`                 |
-| `attu.nodeAffinityPreset.key`                            | Node label key to match. Ignored if `attu.affinity` is set                                           | `""`                 |
-| `attu.nodeAffinityPreset.values`                         | Node label values to match. Ignored if `attu.affinity` is set                                        | `[]`                 |
-| `attu.affinity`                                          | Affinity for Attu pods assignment                                                                    | `{}`                 |
-| `attu.nodeSelector`                                      | Node labels for Attu pods assignment                                                                 | `{}`                 |
-| `attu.tolerations`                                       | Tolerations for Attu pods assignment                                                                 | `[]`                 |
-| `attu.topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains      | `[]`                 |
-| `attu.priorityClassName`                                 | Attu pods' priorityClassName                                                                         | `""`                 |
-| `attu.schedulerName`                                     | Kubernetes pod scheduler registry                                                                    | `""`                 |
-| `attu.updateStrategy.type`                               | Attu statefulset strategy type                                                                       | `RollingUpdate`      |
-| `attu.updateStrategy.rollingUpdate`                      | Attu statefulset rolling update configuration parameters                                             | `{}`                 |
-| `attu.extraVolumes`                                      | Optionally specify extra list of additional volumes for the Attu pod(s)                              | `[]`                 |
-| `attu.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Attu container(s)                   | `[]`                 |
-| `attu.sidecars`                                          | Add additional sidecar containers to the Attu pod(s)                                                 | `[]`                 |
-| `attu.enableDefaultInitContainers`                       | Deploy default init containers                                                                       | `true`               |
-| `attu.initContainers`                                    | Add additional init containers to the Attu pod(s)                                                    | `[]`                 |
-| `attu.serviceAccount.create`                             | Enable creation of ServiceAccount for Attu pods                                                      | `false`              |
-| `attu.serviceAccount.name`                               | The name of the ServiceAccount to use                                                                | `""`                 |
-| `attu.serviceAccount.automountServiceAccountToken`       | Allows auto mount of ServiceAccountToken on the serviceAccount created                               | `false`              |
-| `attu.serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                                 | `{}`                 |
-| `attu.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                      | `false`              |
-| `attu.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                       | `1`                  |
-| `attu.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable                                       | `""`                 |
+| Name                                                     | Description                                                                                          | Value                  |
+| -------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- | ---------------------- |
+| `attu.enabled`                                           | Enable Attu deployment                                                                               | `true`                 |
+| `attu.image.registry`                                    | Attu image registry                                                                                  | `REGISTRY_NAME`        |
+| `attu.image.repository`                                  | Attu image repository                                                                                | `REPOSITORY_NAME/attu` |
+| `attu.image.tag`                                         | Attu image tag (immutable tags are recommended)                                                      | `2.3.1-debian-11-r22`  |
+| `attu.image.digest`                                      | Attu image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
+| `attu.image.pullPolicy`                                  | Attu image pull policy                                                                               | `IfNotPresent`         |
+| `attu.image.pullSecrets`                                 | Attu image pull secrets                                                                              | `[]`                   |
+| `attu.image.debug`                                       | Enable debug mode                                                                                    | `false`                |
+| `attu.extraEnvVars`                                      | Array with extra environment variables to add to attu nodes                                          | `[]`                   |
+| `attu.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars for attu nodes                                  | `""`                   |
+| `attu.extraEnvVarsSecret`                                | Name of existing Secret containing extra env vars for attu nodes                                     | `""`                   |
+| `attu.command`                                           | Override default container command (useful when using custom images)                                 | `[]`                   |
+| `attu.args`                                              | Override default container args (useful when using custom images)                                    | `[]`                   |
+| `attu.replicaCount`                                      | Number of Attu replicas to deploy                                                                    | `1`                    |
+| `attu.containerPorts.http`                               | HTTP port for Attu                                                                                   | `3000`                 |
+| `attu.livenessProbe.enabled`                             | Enable livenessProbe on Attu nodes                                                                   | `true`                 |
+| `attu.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                              | `5`                    |
+| `attu.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                     | `10`                   |
+| `attu.livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                    | `5`                    |
+| `attu.livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                  | `5`                    |
+| `attu.livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                  | `1`                    |
+| `attu.readinessProbe.enabled`                            | Enable readinessProbe on Attu nodes                                                                  | `true`                 |
+| `attu.readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                             | `5`                    |
+| `attu.readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                    | `10`                   |
+| `attu.readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                   | `5`                    |
+| `attu.readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                 | `5`                    |
+| `attu.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                 | `1`                    |
+| `attu.startupProbe.enabled`                              | Enable startupProbe on Attu containers                                                               | `false`                |
+| `attu.startupProbe.initialDelaySeconds`                  | Initial delay seconds for startupProbe                                                               | `5`                    |
+| `attu.startupProbe.periodSeconds`                        | Period seconds for startupProbe                                                                      | `10`                   |
+| `attu.startupProbe.timeoutSeconds`                       | Timeout seconds for startupProbe                                                                     | `5`                    |
+| `attu.startupProbe.failureThreshold`                     | Failure threshold for startupProbe                                                                   | `5`                    |
+| `attu.startupProbe.successThreshold`                     | Success threshold for startupProbe                                                                   | `1`                    |
+| `attu.customLivenessProbe`                               | Custom livenessProbe that overrides the default one                                                  | `{}`                   |
+| `attu.customReadinessProbe`                              | Custom readinessProbe that overrides the default one                                                 | `{}`                   |
+| `attu.customStartupProbe`                                | Custom startupProbe that overrides the default one                                                   | `{}`                   |
+| `attu.resources.limits`                                  | The resources limits for the attu containers                                                         | `{}`                   |
+| `attu.resources.requests`                                | The requested resources for the attu containers                                                      | `{}`                   |
+| `attu.podSecurityContext.enabled`                        | Enabled Attu pods' Security Context                                                                  | `true`                 |
+| `attu.podSecurityContext.fsGroup`                        | Set Attu pod's Security Context fsGroup                                                              | `1001`                 |
+| `attu.podSecurityContext.seccompProfile.type`            | Set Attu container's Security Context seccomp profile                                                | `RuntimeDefault`       |
+| `attu.containerSecurityContext.enabled`                  | Enabled Attu containers' Security Context                                                            | `true`                 |
+| `attu.containerSecurityContext.runAsUser`                | Set Attu containers' Security Context runAsUser                                                      | `1001`                 |
+| `attu.containerSecurityContext.runAsNonRoot`             | Set Attu containers' Security Context runAsNonRoot                                                   | `true`                 |
+| `attu.containerSecurityContext.readOnlyRootFilesystem`   | Set Attu containers' Security Context runAsNonRoot                                                   | `true`                 |
+| `attu.containerSecurityContext.allowPrivilegeEscalation` | Set Attu container's privilege escalation                                                            | `false`                |
+| `attu.containerSecurityContext.capabilities.drop`        | Set Attu container's Security Context runAsNonRoot                                                   | `["ALL"]`              |
+| `attu.lifecycleHooks`                                    | for the attu container(s) to automate configuration before or after startup                          | `{}`                   |
+| `attu.runtimeClassName`                                  | Name of the runtime class to be used by pod(s)                                                       | `""`                   |
+| `attu.hostAliases`                                       | attu pods host aliases                                                                               | `[]`                   |
+| `attu.podLabels`                                         | Extra labels for attu pods                                                                           | `{}`                   |
+| `attu.podAnnotations`                                    | Annotations for attu pods                                                                            | `{}`                   |
+| `attu.podAffinityPreset`                                 | Pod affinity preset. Ignored if `attu.affinity` is set. Allowed values: `soft` or `hard`             | `""`                   |
+| `attu.podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `attu.affinity` is set. Allowed values: `soft` or `hard`        | `soft`                 |
+| `attu.nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `attu.affinity` is set. Allowed values: `soft` or `hard`       | `""`                   |
+| `attu.nodeAffinityPreset.key`                            | Node label key to match. Ignored if `attu.affinity` is set                                           | `""`                   |
+| `attu.nodeAffinityPreset.values`                         | Node label values to match. Ignored if `attu.affinity` is set                                        | `[]`                   |
+| `attu.affinity`                                          | Affinity for Attu pods assignment                                                                    | `{}`                   |
+| `attu.nodeSelector`                                      | Node labels for Attu pods assignment                                                                 | `{}`                   |
+| `attu.tolerations`                                       | Tolerations for Attu pods assignment                                                                 | `[]`                   |
+| `attu.topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains      | `[]`                   |
+| `attu.priorityClassName`                                 | Attu pods' priorityClassName                                                                         | `""`                   |
+| `attu.schedulerName`                                     | Kubernetes pod scheduler registry                                                                    | `""`                   |
+| `attu.updateStrategy.type`                               | Attu statefulset strategy type                                                                       | `RollingUpdate`        |
+| `attu.updateStrategy.rollingUpdate`                      | Attu statefulset rolling update configuration parameters                                             | `{}`                   |
+| `attu.extraVolumes`                                      | Optionally specify extra list of additional volumes for the Attu pod(s)                              | `[]`                   |
+| `attu.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the Attu container(s)                   | `[]`                   |
+| `attu.sidecars`                                          | Add additional sidecar containers to the Attu pod(s)                                                 | `[]`                   |
+| `attu.enableDefaultInitContainers`                       | Deploy default init containers                                                                       | `true`                 |
+| `attu.initContainers`                                    | Add additional init containers to the Attu pod(s)                                                    | `[]`                   |
+| `attu.serviceAccount.create`                             | Enable creation of ServiceAccount for Attu pods                                                      | `false`                |
+| `attu.serviceAccount.name`                               | The name of the ServiceAccount to use                                                                | `""`                   |
+| `attu.serviceAccount.automountServiceAccountToken`       | Allows auto mount of ServiceAccountToken on the serviceAccount created                               | `false`                |
+| `attu.serviceAccount.annotations`                        | Additional custom annotations for the ServiceAccount                                                 | `{}`                   |
+| `attu.pdb.create`                                        | Enable/disable a Pod Disruption Budget creation                                                      | `false`                |
+| `attu.pdb.minAvailable`                                  | Minimum number/percentage of pods that should remain scheduled                                       | `1`                    |
+| `attu.pdb.maxUnavailable`                                | Maximum number/percentage of pods that may be made unavailable                                       | `""`                   |
 
 ### Attu Autoscaling configuration
 
@@ -1381,20 +1385,20 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Init Container Parameters
 
-| Name                                                              | Description                                                                                                                   | Value              |
-| ----------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | ------------------ |
-| `waitContainer.image.registry`                                    | Init container wait-container image registry                                                                                  | `docker.io`        |
-| `waitContainer.image.repository`                                  | Init container wait-container image name                                                                                      | `bitnami/os-shell` |
-| `waitContainer.image.tag`                                         | Init container wait-container image tag                                                                                       | `11-debian-11-r77` |
-| `waitContainer.image.digest`                                      | Init container wait-container image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`               |
-| `waitContainer.image.pullPolicy`                                  | Init container wait-container image pull policy                                                                               | `IfNotPresent`     |
-| `waitContainer.image.pullSecrets`                                 | Specify docker-registry secret names as an array                                                                              | `[]`               |
-| `waitContainer.containerSecurityContext.enabled`                  | Enabled Milvus containers' Security Context                                                                                   | `true`             |
-| `waitContainer.containerSecurityContext.runAsUser`                | Set Milvus containers' Security Context runAsUser                                                                             | `1001`             |
-| `waitContainer.containerSecurityContext.runAsNonRoot`             | Set Milvus containers' Security Context runAsNonRoot                                                                          | `true`             |
-| `waitContainer.containerSecurityContext.readOnlyRootFilesystem`   | Set Milvus containers' Security Context runAsNonRoot                                                                          | `true`             |
-| `waitContainer.containerSecurityContext.allowPrivilegeEscalation` | Set Milvus container's privilege escalation                                                                                   | `false`            |
-| `waitContainer.containerSecurityContext.capabilities.drop`        | Set Milvus container's Security Context runAsNonRoot                                                                          | `["ALL"]`          |
+| Name                                                              | Description                                                                                                                   | Value                      |
+| ----------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
+| `waitContainer.image.registry`                                    | Init container wait-container image registry                                                                                  | `REGISTRY_NAME`            |
+| `waitContainer.image.repository`                                  | Init container wait-container image name                                                                                      | `REPOSITORY_NAME/os-shell` |
+| `waitContainer.image.tag`                                         | Init container wait-container image tag                                                                                       | `11-debian-11-r90`         |
+| `waitContainer.image.digest`                                      | Init container wait-container image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
+| `waitContainer.image.pullPolicy`                                  | Init container wait-container image pull policy                                                                               | `IfNotPresent`             |
+| `waitContainer.image.pullSecrets`                                 | Specify docker-registry secret names as an array                                                                              | `[]`                       |
+| `waitContainer.containerSecurityContext.enabled`                  | Enabled Milvus containers' Security Context                                                                                   | `true`                     |
+| `waitContainer.containerSecurityContext.runAsUser`                | Set Milvus containers' Security Context runAsUser                                                                             | `1001`                     |
+| `waitContainer.containerSecurityContext.runAsNonRoot`             | Set Milvus containers' Security Context runAsNonRoot                                                                          | `true`                     |
+| `waitContainer.containerSecurityContext.readOnlyRootFilesystem`   | Set Milvus containers' Security Context runAsNonRoot                                                                          | `true`                     |
+| `waitContainer.containerSecurityContext.allowPrivilegeEscalation` | Set Milvus container's privilege escalation                                                                                   | `false`                    |
+| `waitContainer.containerSecurityContext.capabilities.drop`        | Set Milvus container's Security Context runAsNonRoot                                                                          | `["ALL"]`                  |
 
 ### External etcd parameters
 
@@ -1482,17 +1486,20 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 helm install my-release \
   --set loki.traces.jaeger.grpc=true \
-  oci://registry-1.docker.io/bitnamicharts/milvus
+  oci://REGISTRY_NAME/REPOSITORY_NAME/milvus
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 The above command enables the Jaeger GRPC traces.
 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/milvus
+helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/milvus
 ```
 
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
 ## Configuration and installation details
@@ -1601,6 +1608,10 @@ To enable Ingress integration, set `attu.ingress.enabled` to `true`. The `attu.i
 The chart also facilitates the creation of TLS secrets for use with the Ingress controller, with different options for certificate management. [Learn more about TLS secrets](https://docs.bitnami.com/kubernetes/apps/mastodon/administration/enable-tls-ingress/).
 
 ## Upgrading
+
+### To 4.0.0
+
+This major updates the Kafka subchart to its newest major, 26.0.0. For more information on this subchart's major, please refer to [Kafka upgrade notes](https://github.com/bitnami/charts/tree/main/bitnami/kafka#to-2600).
 
 ### To 3.0.0
 

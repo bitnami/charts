@@ -12,6 +12,6 @@ file:
     filetype: file
     exists: true
     group: root
-    contains:
+    contents:
       - /username.*{{ .Vars.mariadb.auth.username }}/
       - /password.*{{ .Vars.mariadb.auth.password }}/
