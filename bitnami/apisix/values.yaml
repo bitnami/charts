@@ -65,9 +65,9 @@ diagnosticMode:
 
 ## Bitnami APISIX image
 ## ref: https://hub.docker.com/r/bitnami/apisix/tags/
-## @param image.registry APISIX image registry
-## @param image.repository APISIX image repository
-## @param image.tag APISIX image tag (immutable tags are recommended)
+## @param image.registry [default: REGISTRY_NAME] APISIX image registry
+## @param image.repository [default: REPOSITORY_NAME/apisix] APISIX image repository
+## @skip image.tag APISIX image tag (immutable tags are recommended)
 ## @param image.digest APISIX image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
 ## @param image.pullPolicy APISIX image pull policy
 ## @param image.pullSecrets APISIX image pull secrets
@@ -76,7 +76,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/apisix
-  tag: 3.5.0-debian-11-r0
+  tag: 3.6.0-debian-11-r3
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -259,7 +259,7 @@ dataPlane:
     deployment:
       role: data_plane
       role_data_plane:
-        config_provider: control_plane
+        config_provider: etcd
         {{- if .Values.controlPlane.enabled }}
         control_plane:
           host:
@@ -1501,9 +1501,9 @@ dashboard:
   replicaCount: 1
   ## Bitnami APISIX Dashboard image
   ## ref: https://hub.docker.com/r/bitnami/apisix-dashboard/tags/
-  ## @param dashboard.image.registry APISIX Dashboard image registry
-  ## @param dashboard.image.repository APISIX Dashboard image repository
-  ## @param dashboard.image.tag APISIX Dashboard image tag (immutable tags are recommended)
+  ## @param dashboard.image.registry [default: REGISTRY_NAME] APISIX Dashboard image registry
+  ## @param dashboard.image.repository [default: REPOSITORY_NAME/apisix-dashboard] APISIX Dashboard image repository
+  ## @skip dashboard.image.tag APISIX Dashboard image tag (immutable tags are recommended)
   ## @param dashboard.image.digest APISIX Dashboard image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
   ## @param dashboard.image.pullPolicy APISIX Dashboard image pull policy
   ## @param dashboard.image.pullSecrets APISIX Dashboard image pull secrets
@@ -1512,7 +1512,7 @@ dashboard:
   image:
     registry: docker.io
     repository: bitnami/apisix-dashboard
-    tag: 3.0.1-debian-11-r98
+    tag: 3.0.1-debian-11-r135
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2179,9 +2179,9 @@ ingressController:
   enabled: true
   ## Bitnami APISIX Ingress Controller image
   ## ref: https://hub.docker.com/r/bitnami/vault-k8s/tags/
-  ## @param ingressController.image.registry APISIX Ingress Controller image registry
-  ## @param ingressController.image.repository APISIX Ingress Controller image repository
-  ## @param ingressController.image.tag APISIX Ingress Controller image tag (immutable tags are recommended)
+  ## @param ingressController.image.registry [default: REGISTRY_NAME] APISIX Ingress Controller image registry
+  ## @param ingressController.image.repository [default: REPOSITORY_NAME/apisix-ingress-controller] APISIX Ingress Controller image repository
+  ## @skip ingressController.image.tag APISIX Ingress Controller image tag (immutable tags are recommended)
   ## @param ingressController.image.digest APISIX Ingress Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
   ## @param ingressController.image.pullPolicy APISIX Ingress Controller image pull policy
   ## @param ingressController.image.pullSecrets APISIX Ingress Controller image pull secrets
@@ -2190,7 +2190,7 @@ ingressController:
   image:
     registry: docker.io
     repository: bitnami/apisix-ingress-controller
-    tag: 1.6.1-debian-11-r97
+    tag: 1.7.0-debian-11-r15
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2819,15 +2819,15 @@ ingressController:
 ## @section Init containers parameters
 ##
 waitContainer:
-  ## @param waitContainer.image.registry Init container wait-container image registry
-  ## @param waitContainer.image.repository Init container wait-container image name
-  ## @param waitContainer.image.tag Init container wait-container image tag
+  ## @param waitContainer.image.registry [default: REGISTRY_NAME] Init container wait-container image registry
+  ## @param waitContainer.image.repository [default: REPOSITORY_NAME/os-shell] Init container wait-container image name
+  ## @skip waitContainer.image.tag Init container wait-container image tag
   ## @param waitContainer.image.digest Init container wait-container image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ##
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r54
+    tag: 11-debian-11-r90
     digest: ""
     ## @param waitContainer.image.pullPolicy Init container wait-container image pull policy
     ##

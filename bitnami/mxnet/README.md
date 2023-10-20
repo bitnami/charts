@@ -11,8 +11,10 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/mxnet
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/mxnet
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 ## Introduction
 
@@ -24,8 +26,8 @@ Looking to use Apache MXNet (Incubating) in production? Try [VMware Application 
 
 ## Prerequisites
 
-- Kubernetes 1.19+
-- Helm 3.2.0+
+- Kubernetes 1.23+
+- Helm 3.8.0+
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -34,8 +36,10 @@ Looking to use Apache MXNet (Incubating) in production? Try [VMware Application 
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/mxnet
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/mxnet
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 These commands deploy Apache MXNet (Incubating) on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured.
 
@@ -79,37 +83,36 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common Mxnet parameters
 
-| Name                                  | Description                                                                                                               | Value                  |
-| ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
-| `image.registry`                      | Apache MXNet (Incubating) image registry                                                                                  | `docker.io`            |
-| `image.repository`                    | Apache MXNet (Incubating) image repository                                                                                | `bitnami/mxnet`        |
-| `image.tag`                           | Apache MXNet (Incubating) image tag (immutable tags are recommended)                                                      | `1.9.1-debian-11-r379` |
-| `image.digest`                        | Apache MXNet (Incubating) image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
-| `image.pullPolicy`                    | Apache MXNet (Incubating) image pull policy                                                                               | `IfNotPresent`         |
-| `image.pullSecrets`                   | Specify docker-registry secret names as an array                                                                          | `[]`                   |
-| `image.debug`                         | Specify if debug logs should be enabled                                                                                   | `false`                |
-| `entrypoint`                          | The main entrypoint of your app, this will be executed as:                                                                | `{}`                   |
-| `mode`                                | Apache MXNet (Incubating) deployment mode. Can be `standalone` or `distributed`                                           | `standalone`           |
-| `existingSecret`                      | Name of a secret with sensitive data to mount in the pods                                                                 | `""`                   |
-| `configMap`                           | Name of an existing config map containing all the files you want to load in Apache MXNet (Incubating)                     | `""`                   |
-| `cloneFilesFromGit.enabled`           | Enable in order to download files from git repository                                                                     | `false`                |
-| `cloneFilesFromGit.repository`        | Repository to clone                                                                                                       | `""`                   |
-| `cloneFilesFromGit.revision`          | Branch name to clone                                                                                                      | `master`               |
-| `cloneFilesFromGit.extraVolumeMounts` | Add extra volume mounts for the GIT container                                                                             | `[]`                   |
-| `persistence.enabled`                 | Use a PVC to persist data                                                                                                 | `false`                |
-| `persistence.storageClass`            | discourse & sidekiq data Persistent Volume Storage Class                                                                  | `""`                   |
-| `persistence.existingClaim`           | Use a existing PVC which must be created manually before bound                                                            | `""`                   |
-| `persistence.mountPath`               | Path to mount the volume at                                                                                               | `/bitnami/mxnet`       |
-| `persistence.accessModes`             | Persistent Volume Access Mode                                                                                             | `["ReadWriteOnce"]`    |
-| `persistence.size`                    | Size of data volume                                                                                                       | `8Gi`                  |
-| `persistence.annotations`             | Persistent Volume annotations                                                                                             | `{}`                   |
-| `extraEnvVars`                        | Array with extra environment variables to add to all the pods                                                             | `[]`                   |
-| `extraEnvVarsCM`                      | Name of existing ConfigMap containing extra env vars for all the pods                                                     | `""`                   |
-| `extraEnvVarsSecret`                  | Name of existing Secret containing extra env vars for all the pods                                                        | `""`                   |
-| `extraVolumes`                        | Array to add extra volumes (evaluated as a template)                                                                      | `[]`                   |
-| `extraVolumeMounts`                   | Array to add extra mounts (normally used with extraVolumes, evaluated as a template)                                      | `[]`                   |
-| `sidecars`                            | Attach additional containers to the pods (scheduler, worker and server nodes)                                             | `[]`                   |
-| `initContainers`                      | Attach additional init containers to the pods (scheduler, worker and server nodes)                                        | `[]`                   |
+| Name                                  | Description                                                                                                               | Value                   |
+| ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
+| `image.registry`                      | Apache MXNet (Incubating) image registry                                                                                  | `REGISTRY_NAME`         |
+| `image.repository`                    | Apache MXNet (Incubating) image repository                                                                                | `REPOSITORY_NAME/mxnet` |
+| `image.digest`                        | Apache MXNet (Incubating) image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
+| `image.pullPolicy`                    | Apache MXNet (Incubating) image pull policy                                                                               | `IfNotPresent`          |
+| `image.pullSecrets`                   | Specify docker-registry secret names as an array                                                                          | `[]`                    |
+| `image.debug`                         | Specify if debug logs should be enabled                                                                                   | `false`                 |
+| `entrypoint`                          | The main entrypoint of your app, this will be executed as:                                                                | `{}`                    |
+| `mode`                                | Apache MXNet (Incubating) deployment mode. Can be `standalone` or `distributed`                                           | `standalone`            |
+| `existingSecret`                      | Name of a secret with sensitive data to mount in the pods                                                                 | `""`                    |
+| `configMap`                           | Name of an existing config map containing all the files you want to load in Apache MXNet (Incubating)                     | `""`                    |
+| `cloneFilesFromGit.enabled`           | Enable in order to download files from git repository                                                                     | `false`                 |
+| `cloneFilesFromGit.repository`        | Repository to clone                                                                                                       | `""`                    |
+| `cloneFilesFromGit.revision`          | Branch name to clone                                                                                                      | `master`                |
+| `cloneFilesFromGit.extraVolumeMounts` | Add extra volume mounts for the GIT container                                                                             | `[]`                    |
+| `persistence.enabled`                 | Use a PVC to persist data                                                                                                 | `false`                 |
+| `persistence.storageClass`            | discourse & sidekiq data Persistent Volume Storage Class                                                                  | `""`                    |
+| `persistence.existingClaim`           | Use a existing PVC which must be created manually before bound                                                            | `""`                    |
+| `persistence.mountPath`               | Path to mount the volume at                                                                                               | `/bitnami/mxnet`        |
+| `persistence.accessModes`             | Persistent Volume Access Mode                                                                                             | `["ReadWriteOnce"]`     |
+| `persistence.size`                    | Size of data volume                                                                                                       | `8Gi`                   |
+| `persistence.annotations`             | Persistent Volume annotations                                                                                             | `{}`                    |
+| `extraEnvVars`                        | Array with extra environment variables to add to all the pods                                                             | `[]`                    |
+| `extraEnvVarsCM`                      | Name of existing ConfigMap containing extra env vars for all the pods                                                     | `""`                    |
+| `extraEnvVarsSecret`                  | Name of existing Secret containing extra env vars for all the pods                                                        | `""`                    |
+| `extraVolumes`                        | Array to add extra volumes (evaluated as a template)                                                                      | `[]`                    |
+| `extraVolumeMounts`                   | Array to add extra mounts (normally used with extraVolumes, evaluated as a template)                                      | `[]`                    |
+| `sidecars`                            | Attach additional containers to the pods (scheduler, worker and server nodes)                                             | `[]`                    |
+| `initContainers`                      | Attach additional init containers to the pods (scheduler, worker and server nodes)                                        | `[]`                    |
 
 ### Mxnet Standalone parameters (only for standalone mode)
 
@@ -366,23 +369,21 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Init containers parameters
 
-| Name                                   | Description                                                                                                                       | Value                  |
-| -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ---------------------- |
-| `git.registry`                         | Git image registry                                                                                                                | `docker.io`            |
-| `git.repository`                       | Git image repository                                                                                                              | `bitnami/git`          |
-| `git.tag`                              | Git image tag (immutable tags are recommended)                                                                                    | `2.42.0-debian-11-r11` |
-| `git.digest`                           | Git image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                               | `""`                   |
-| `git.pullPolicy`                       | Git image pull policy                                                                                                             | `IfNotPresent`         |
-| `git.pullSecrets`                      | Specify docker-registry secret names as an array                                                                                  | `[]`                   |
-| `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory                                                       | `false`                |
-| `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                  | `docker.io`            |
-| `volumePermissions.image.repository`   | Init container volume-permissions image repository                                                                                | `bitnami/os-shell`     |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r57`     |
-| `volumePermissions.image.digest`       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
-| `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`         |
-| `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                  | `[]`                   |
-| `volumePermissions.resources.limits`   | The resources limits for the container                                                                                            | `{}`                   |
-| `volumePermissions.resources.requests` | The requested resources for the container                                                                                         | `{}`                   |
+| Name                                   | Description                                                                                                                       | Value                      |
+| -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
+| `git.registry`                         | Git image registry                                                                                                                | `REGISTRY_NAME`            |
+| `git.repository`                       | Git image repository                                                                                                              | `REPOSITORY_NAME/git`      |
+| `git.digest`                           | Git image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                               | `""`                       |
+| `git.pullPolicy`                       | Git image pull policy                                                                                                             | `IfNotPresent`             |
+| `git.pullSecrets`                      | Specify docker-registry secret names as an array                                                                                  | `[]`                       |
+| `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory                                                       | `false`                    |
+| `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                  | `REGISTRY_NAME`            |
+| `volumePermissions.image.repository`   | Init container volume-permissions image repository                                                                                | `REPOSITORY_NAME/os-shell` |
+| `volumePermissions.image.digest`       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
+| `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`             |
+| `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                  | `[]`                       |
+| `volumePermissions.resources.limits`   | The resources limits for the container                                                                                            | `{}`                       |
+| `volumePermissions.resources.requests` | The requested resources for the container                                                                                         | `{}`                       |
 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
@@ -391,17 +392,20 @@ helm install my-release \
   --set mode=distributed \
   --set server.replicaCount=2 \
   --set worker.replicaCount=3 \
-    oci://registry-1.docker.io/bitnamicharts/mxnet
+    oci://REGISTRY_NAME/REPOSITORY_NAME/mxnet
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 The above command creates 6 pods for Apache MXNet (Incubating): one scheduler, two servers, and three workers.
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/mxnet
+helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/mxnet
 ```
 
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
 ## Configuration and installation details
@@ -430,7 +434,7 @@ Finally, if you want to clone a git repository you can use the following paramet
 
 ```console
 cloneFilesFromGit.enabled=true
-cloneFilesFromGit.repository=https://github.com/my-user/oci://registry-1.docker.io/bitnamicharts
+cloneFilesFromGit.repository=https://github.com/my-user/oci://REGISTRY_NAME/REPOSITORY_NAME
 cloneFilesFromGit.revision=master
 ```
 

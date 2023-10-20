@@ -24,7 +24,7 @@ command:
     exec: PGPASSWORD='{{ .Vars.auth.postgresPassword }}' psql -tA -U postgres -p {{ $port }} -h postgresql-{{ .Vars.primary.name }} -c "SELECT COUNT(*) FROM pg_stat_replication WHERE usename='{{ .Vars.auth.replicationUsername }}';"
     exit-status: 0
     stdout:
-      - '2'
+      - "2"
   {{- $uid := .Vars.primary.containerSecurityContext.runAsUser }}
   {{- $gid := .Vars.primary.podSecurityContext.fsGroup }}
   check-user-info:
@@ -48,6 +48,6 @@ file:
     filetype: file
     mode: "0664"
     group: root
-    contains:
+    contents:
       - /shared_preload_libraries.*{{ .Vars.postgresqlSharedPreloadLibraries }}/
       - /port.*{{ $port }}/

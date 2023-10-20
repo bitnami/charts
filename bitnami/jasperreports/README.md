@@ -11,8 +11,10 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/jasperreports
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/jasperreports
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 ## Introduction
 
@@ -26,8 +28,8 @@ Looking to use JasperReports in production? Try [VMware Application Catalog](htt
 
 ## Prerequisites
 
-- Kubernetes 1.19+
-- Helm 3.2.0+
+- Kubernetes 1.23+
+- Helm 3.8.0+
 - PV provisioner support in the underlying infrastructure
 - ReadWriteMany volumes for deployment scaling
 
@@ -36,8 +38,10 @@ Looking to use JasperReports in production? Try [VMware Application Catalog](htt
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/jasperreports
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/jasperreports
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 The command deploys JasperReports on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
@@ -77,32 +81,31 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### JasperReports parameters
 
-| Name                          | Description                                                                                                   | Value                   |
-| ----------------------------- | ------------------------------------------------------------------------------------------------------------- | ----------------------- |
-| `image.registry`              | JasperReports image registry                                                                                  | `docker.io`             |
-| `image.repository`            | JasperReports image repository                                                                                | `bitnami/jasperreports` |
-| `image.tag`                   | JasperReports image tag (immutable tags are recommended)                                                      | `8.2.0-debian-11-r76`   |
-| `image.digest`                | JasperReports image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
-| `image.pullPolicy`            | JasperReports image pull policy                                                                               | `IfNotPresent`          |
-| `image.pullSecrets`           | Specify docker-registry secret names as an array                                                              | `[]`                    |
-| `jasperreportsUsername`       | JasperReports user                                                                                            | `jasperadmin`           |
-| `jasperreportsExistingSecret` | Name of existing secret containing the key `jasperreports-password`                                           | `""`                    |
-| `jasperreportsPassword`       | JasperReports password (Ignored if `jasperreportsExistingSecret` is provided)                                 | `""`                    |
-| `jasperreportsEmail`          | JasperReports user email                                                                                      | `user@example.com`      |
-| `allowEmptyPassword`          | Set to `yes` to allow the container to be started with blank passwords                                        | `no`                    |
-| `smtpHost`                    | SMTP host                                                                                                     | `""`                    |
-| `smtpPort`                    | SMTP port                                                                                                     | `""`                    |
-| `smtpEmail`                   | SMTP email                                                                                                    | `""`                    |
-| `smtpUser`                    | SMTP user                                                                                                     | `""`                    |
-| `smtpExistingSecret`          | Name of existing secret containing the key `smtp-password`                                                    | `""`                    |
-| `smtpPassword`                | SMTP password (Ignored if `smtpExistingSecret` is provided)                                                   | `""`                    |
-| `smtpProtocol`                | SMTP protocol [`ssl`, `none`]                                                                                 | `""`                    |
-| `command`                     | Override default container command (useful when using custom images)                                          | `[]`                    |
-| `args`                        | Override default container args (useful when using custom images)                                             | `[]`                    |
-| `extraEnvVars`                | Extra environment variables to be set on Jasperreports container                                              | `[]`                    |
-| `extraEnvVarsCM`              | Name of existing ConfigMap containing extra env vars                                                          | `""`                    |
-| `extraEnvVarsSecret`          | Name of existing Secret containing extra env vars                                                             | `""`                    |
-| `updateStrategy.type`         | StrategyType                                                                                                  | `RollingUpdate`         |
+| Name                          | Description                                                                                                   | Value                           |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------- | ------------------------------- |
+| `image.registry`              | JasperReports image registry                                                                                  | `REGISTRY_NAME`                 |
+| `image.repository`            | JasperReports image repository                                                                                | `REPOSITORY_NAME/jasperreports` |
+| `image.digest`                | JasperReports image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                            |
+| `image.pullPolicy`            | JasperReports image pull policy                                                                               | `IfNotPresent`                  |
+| `image.pullSecrets`           | Specify docker-registry secret names as an array                                                              | `[]`                            |
+| `jasperreportsUsername`       | JasperReports user                                                                                            | `jasperadmin`                   |
+| `jasperreportsExistingSecret` | Name of existing secret containing the key `jasperreports-password`                                           | `""`                            |
+| `jasperreportsPassword`       | JasperReports password (Ignored if `jasperreportsExistingSecret` is provided)                                 | `""`                            |
+| `jasperreportsEmail`          | JasperReports user email                                                                                      | `user@example.com`              |
+| `allowEmptyPassword`          | Set to `yes` to allow the container to be started with blank passwords                                        | `no`                            |
+| `smtpHost`                    | SMTP host                                                                                                     | `""`                            |
+| `smtpPort`                    | SMTP port                                                                                                     | `""`                            |
+| `smtpEmail`                   | SMTP email                                                                                                    | `""`                            |
+| `smtpUser`                    | SMTP user                                                                                                     | `""`                            |
+| `smtpExistingSecret`          | Name of existing secret containing the key `smtp-password`                                                    | `""`                            |
+| `smtpPassword`                | SMTP password (Ignored if `smtpExistingSecret` is provided)                                                   | `""`                            |
+| `smtpProtocol`                | SMTP protocol [`ssl`, `none`]                                                                                 | `""`                            |
+| `command`                     | Override default container command (useful when using custom images)                                          | `[]`                            |
+| `args`                        | Override default container args (useful when using custom images)                                             | `[]`                            |
+| `extraEnvVars`                | Extra environment variables to be set on Jasperreports container                                              | `[]`                            |
+| `extraEnvVarsCM`              | Name of existing ConfigMap containing extra env vars                                                          | `""`                            |
+| `extraEnvVarsSecret`          | Name of existing Secret containing extra env vars                                                             | `""`                            |
+| `updateStrategy.type`         | StrategyType                                                                                                  | `RollingUpdate`                 |
 
 ### Jasperreports deployment parameters
 
@@ -243,8 +246,10 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 helm install my-release \
   --set jasperreportsUsername=admin,jasperreportsPassword=password,mariadb.auth.rootPassword=secretpassword \
-    oci://registry-1.docker.io/bitnamicharts/jasperreports
+    oci://REGISTRY_NAME/REPOSITORY_NAME/jasperreports
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 The above command sets the JasperReports administrator account username and password to `admin` and `password` respectively. Additionally, it sets the MariaDB `root` user password to `secretpassword`.
 
@@ -253,9 +258,10 @@ The above command sets the JasperReports administrator account username and pass
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/jasperreports
+helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/jasperreports
 ```
 
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
 ## Configuration and installation details
@@ -323,6 +329,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 ## Upgrading
 
+### To 17.0.0
+
+This major release bumps the MariaDB version to 11.1. No major issues are expected during the upgrade.
+
 ### To 16.0.0
 
 This major release bumps the MariaDB version to 11.0. Follow the [upstream instructions](https://mariadb.com/kb/en/upgrading-from-mariadb-10-11-to-mariadb-11-0/) for upgrading from MariaDB 10.11 to 11.0. No major issues are expected during the upgrade.
@@ -376,8 +386,10 @@ export JASPER_PASSWORD=$(kubectl get secret --namespace default jasperreports -o
 export MARIADB_ROOT_PASSWORD=$(kubectl get secret --namespace default jasperreports-mariadb -o jsonpath="{.data.mariadb-root-password}" | base64 -d)
 export MARIADB_PASSWORD=$(kubectl get secret --namespace default jasperreports-mariadb -o jsonpath="{.data.mariadb-password}" | base64 -d)
 kubectl delete deployments.apps jasperreports
-helm upgrade jasperreports oci://registry-1.docker.io/bitnamicharts/jasperreports --set jasperreportsPassword=$JASPER_PASSWORD,mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD,mariadb.auth.password=$MARIADB_PASSWORD
+helm upgrade jasperreports oci://REGISTRY_NAME/REPOSITORY_NAME/jasperreports --set jasperreportsPassword=$JASPER_PASSWORD,mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD,mariadb.auth.password=$MARIADB_PASSWORD
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 ### To 9.0.0
 
@@ -439,8 +451,10 @@ Delete the JasperReports deployment and delete the MariaDB statefulset. Notice t
 Now the upgrade works:
 
 ```console
-helm upgrade jasperreports oci://registry-1.docker.io/bitnamicharts/jasperreports --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set jasperreportsPassword=$JASPERREPORTS_PASSWORD --set allowEmptyPasswords=false
+helm upgrade jasperreports oci://REGISTRY_NAME/REPOSITORY_NAME/jasperreports --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set jasperreportsPassword=$JASPERREPORTS_PASSWORD --set allowEmptyPasswords=false
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 You will have to delete the existing MariaDB pod and the new statefulset is going to create a new one
 

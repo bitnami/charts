@@ -18,7 +18,7 @@ command:
     exec: export INFLUX_TOKEN='{{ $adminToken }}' && influx write --host http://influxdb:{{ $port }} --org {{ $org }} --bucket {{ $bucket }} 'cpu_error,host=bitnami-server value="{{ $msg }}"' && export INFLUX_TOKEN=$(influx auth list | grep {{ $user }} | awk '{print $2}') && influx query --host http://influxdb:{{ $port }} --org {{ $org }} 'from(bucket:"{{ $bucket }}") |> range(start:-2m)'
     exit-status: 0
     stdout:
-      - {{ $msg }}
+      - "{{ $msg }}"
   {{- $uid := .Vars.influxdb.containerSecurityContext.runAsUser }}
   {{- $gid := .Vars.influxdb.podSecurityContext.fsGroup }}
   check-user-info:

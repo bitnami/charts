@@ -65,9 +65,9 @@ diagnosticMode:
 
 ## Bitnami Redmine image
 ## ref: https://hub.docker.com/r/bitnami/redmine/tags/
-## @param image.registry Redmine image registry
-## @param image.repository Redmine image repository
-## @param image.tag Redmine image tag (immutable tags are recommended)
+## @param image.registry [default: REGISTRY_NAME] Redmine image registry
+## @param image.repository [default: REPOSITORY_NAME/redmine] Redmine image repository
+## @skip image.tag Redmine image tag (immutable tags are recommended)
 ## @param image.digest Redmine image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy Redmine image pull policy
 ## @param image.pullSecrets [array] Redmine image pull secrets
@@ -76,7 +76,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/redmine
-  tag: 5.0.5-debian-11-r96
+  tag: 5.0.6-debian-11-r7
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -935,9 +935,9 @@ certificates:
   customCA: []
   # - secret: custom-CA
   # - secret: more-custom-CAs
-  ## @param certificates.image.registry Redmine image registry
-  ## @param certificates.image.repository Redmine image repository
-  ## @param certificates.image.tag Redmine image tag (immutable tags are recommended)
+  ## @param certificates.image.registry [default: REGISTRY_NAME] Redmine image registry
+  ## @param certificates.image.repository [default: REPOSITORY_NAME/os-shell] Redmine image repository
+  ## @skip certificates.image.tag Redmine image tag (immutable tags are recommended)
   ## @param certificates.image.digest Redmine image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param certificates.image.pullPolicy Redmine image pull policy
   ## @param certificates.image.pullSecrets [array] Redmine image pull secrets
@@ -945,7 +945,7 @@ certificates:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r72
+    tag: 11-debian-11-r90
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

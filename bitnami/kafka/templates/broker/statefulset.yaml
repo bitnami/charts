@@ -152,7 +152,7 @@ spec:
             - name: KAFKA_KRAFT_CLUSTER_ID
               valueFrom:
                 secretKeyRef:
-                  name: {{ printf "%s-kraft-cluster-id" (include "common.names.fullname" .) }}
+                  name: {{ default (printf "%s-kraft-cluster-id" (include "common.names.fullname" .)) .Values.kraft.existingClusterIdSecret }}
                   key: kraft-cluster-id
             {{- if .Values.broker.zookeeperMigrationMode }}
             - name: KAFKA_SKIP_KRAFT_STORAGE_INIT
@@ -167,7 +167,7 @@ spec:
             - name: KAFKA_KRAFT_BOOTSTRAP_SCRAM_USERS
               value: "true"
             {{- end }}
-            {{- if and (include "kafka.client.saslEnabled" . ) .Values.sasl.client.users }}
+            {{- if and (include "kafka.client.saslEnabled" . ) .Values.sasl.client.users (include "kafka.saslUserPasswordsEnabled" .) }}
             - name: KAFKA_CLIENT_USERS
               value: {{ join "," .Values.sasl.client.users | quote }}
             - name: KAFKA_CLIENT_PASSWORDS
@@ -177,6 +177,7 @@ spec:
                   key: client-passwords
             {{- end }}
             {{- if regexFind "SASL" (upper .Values.listeners.interbroker.protocol) }}
+            {{- if (include "kafka.saslUserPasswordsEnabled" .) }}
             - name: KAFKA_INTER_BROKER_USER
               value: {{ .Values.sasl.interbroker.user | quote }}
             - name: KAFKA_INTER_BROKER_PASSWORD
@@ -185,7 +186,18 @@ spec:
                   name: {{ include "kafka.saslSecretName" . }}
                   key: inter-broker-password
             {{- end }}
+            {{- if (include "kafka.saslClientSecretsEnabled" .) }}
+            - name: KAFKA_INTER_BROKER_CLIENT_ID
+              value: {{ .Values.sasl.interbroker.clientId | quote }}
+            - name: KAFKA_INTER_BROKER_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "kafka.saslSecretName" . }}
+                  key: inter-broker-client-secret
+            {{- end }}
+            {{- end }}
             {{- if and .Values.kraft.enabled (regexFind "SASL" (upper .Values.listeners.controller.protocol)) }}
+            {{- if (include "kafka.saslUserPasswordsEnabled" .) }}
             - name: KAFKA_CONTROLLER_USER
               value: {{ .Values.sasl.controller.user | quote }}
             - name: KAFKA_CONTROLLER_PASSWORD
@@ -193,6 +205,16 @@ spec:
                 secretKeyRef:
                   name: {{ include "kafka.saslSecretName" . }}
                   key: controller-password
+            {{- end }}
+            {{- if (include "kafka.saslClientSecretsEnabled" .) }}
+            - name: KAFKA_CONTROLLER_CLIENT_ID
+              value: {{ .Values.sasl.controller.clientId | quote }}
+            - name: KAFKA_CONTROLLER_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: {{ include "kafka.saslSecretName" . }}
+                  key: controller-client-secret
+            {{- end }}
             {{- end }}
             {{- end }}
             {{- if .Values.metrics.jmx.enabled }}

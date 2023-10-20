@@ -97,9 +97,9 @@ jwt:
     forceRun: false
     ## Bitnami JWT CLI image
     ## ref: https://hub.docker.com/r/bitnami/jwt-cli/tags/
-    ## @param jwt.autoGenerate.image.registry JWT CLI image registry
-    ## @param jwt.autoGenerate.image.repository JWT CLI image repository
-    ## @param jwt.autoGenerate.image.tag JWT CLI image tag (immutable tags are recommended)
+    ## @param jwt.autoGenerate.image.registry [default: REGISTRY_NAME] JWT CLI image registry
+    ## @param jwt.autoGenerate.image.repository [default: REPOSITORY_NAME/jwt-cli] JWT CLI image repository
+    ## @skip jwt.autoGenerate.image.tag JWT CLI image tag (immutable tags are recommended)
     ## @param jwt.autoGenerate.image.digest JWT CLI image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
     ## @param jwt.autoGenerate.image.pullPolicy JWT CLI image pull policy
     ## @param jwt.autoGenerate.image.pullSecrets JWT CLI image pull secrets
@@ -107,7 +107,7 @@ jwt:
     image:
       registry: docker.io
       repository: bitnami/jwt-cli
-      tag: 6.0.0-debian-11-r0
+      tag: 6.0.0-debian-11-r21
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -125,16 +125,16 @@ jwt:
     kubectlImage:
       ## Bitnami Kubectl image
       ## ref: https://hub.docker.com/r/bitnami/kubectl/tags/
-      ## @param jwt.autoGenerate.kubectlImage.registry Kubectl image registry
-      ## @param jwt.autoGenerate.kubectlImage.repository Kubectl image repository
-      ## @param jwt.autoGenerate.kubectlImage.tag Kubectl image tag (immutable tags are recommended)
+      ## @param jwt.autoGenerate.kubectlImage.registry [default: REGISTRY_NAME] Kubectl image registry
+      ## @param jwt.autoGenerate.kubectlImage.repository [default: REPOSITORY_NAME/kubectl] Kubectl image repository
+      ## @skip jwt.autoGenerate.kubectlImage.tag Kubectl image tag (immutable tags are recommended)
       ## @param jwt.autoGenerate.kubectlImage.digest Kubectl image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
       ## @param jwt.autoGenerate.kubectlImage.pullPolicy Kubectl image pull policy
       ## @param jwt.autoGenerate.kubectlImage.pullSecrets Kubectl image pull secrets
       ##
       registry: docker.io
       repository: bitnami/kubectl
-      tag: 1.26.9-debian-11-r0
+      tag: 1.28.2-debian-11-r16
       digest: ""
       ## Specify a imagePullPolicy
       ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -286,9 +286,9 @@ auth:
 
   ## Bitnami Gotrue image
   ## ref: https://hub.docker.com/r/bitnami/gotrue/tags/
-  ## @param auth.image.registry Gotrue image registry
-  ## @param auth.image.repository Gotrue image repository
-  ## @param auth.image.tag Gotrue image tag (immutable tags are recommended)
+  ## @param auth.image.registry [default: REGISTRY_NAME] Gotrue image registry
+  ## @param auth.image.repository [default: REPOSITORY_NAME/gotrue] Gotrue image repository
+  ## @skip auth.image.tag Gotrue image tag (immutable tags are recommended)
   ## @param auth.image.digest Gotrue image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
   ## @param auth.image.pullPolicy Gotrue image pull policy
   ## @param auth.image.pullSecrets Gotrue image pull secrets
@@ -296,7 +296,7 @@ auth:
   image:
     registry: docker.io
     repository: bitnami/gotrue
-    tag: 1.0.1-debian-11-r192
+    tag: 1.0.1-debian-11-r216
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -610,9 +610,9 @@ meta:
 
   ## Bitnami Supabase Postgres Meta image
   ## ref: https://hub.docker.com/r/bitnami/supabase-postgres-meta/tags/
-  ## @param meta.image.registry Supabase Postgres Meta image registry
-  ## @param meta.image.repository Supabase Postgres Meta image repository
-  ## @param meta.image.tag Supabase Postgres Meta image tag (immutable tags are recommended)
+  ## @param meta.image.registry [default: REGISTRY_NAME] Supabase Postgres Meta image registry
+  ## @param meta.image.repository [default: REPOSITORY_NAME/supabase-postgres-meta] Supabase Postgres Meta image repository
+  ## @skip meta.image.tag Supabase Postgres Meta image tag (immutable tags are recommended)
   ## @param meta.image.digest Supabase Postgres Meta image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
   ## @param meta.image.pullPolicy Supabase Postgres Meta image pull policy
   ## @param meta.image.pullSecrets Supabase Postgres Meta image pull secrets
@@ -620,7 +620,7 @@ meta:
   image:
     registry: docker.io
     repository: bitnami/supabase-postgres-meta
-    tag: 0.69.0-debian-11-r22
+    tag: 0.72.0-debian-11-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -953,9 +953,9 @@ realtime:
 
   ## Bitnami Realtime image
   ## ref: https://hub.docker.com/r/bitnami/supabase-realtime/tags/
-  ## @param realtime.image.registry Realtime image registry
-  ## @param realtime.image.repository Realtime image repository
-  ## @param realtime.image.tag Realtime image tag (immutable tags are recommended)
+  ## @param realtime.image.registry [default: REGISTRY_NAME] Realtime image registry
+  ## @param realtime.image.repository [default: REPOSITORY_NAME/supabase-realtime] Realtime image repository
+  ## @skip realtime.image.tag Realtime image tag (immutable tags are recommended)
   ## @param realtime.image.digest Realtime image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
   ## @param realtime.image.pullPolicy Realtime image pull policy
   ## @param realtime.image.pullSecrets Realtime image pull secrets
@@ -963,7 +963,7 @@ realtime:
   image:
     registry: docker.io
     repository: bitnami/supabase-realtime
-    tag: 2.22.18-debian-11-r0
+    tag: 2.24.2-debian-11-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1275,9 +1275,9 @@ rest:
 
   ## Bitnami PostgREST image
   ## ref: https://hub.docker.com/r/bitnami/postgrest/tags/
-  ## @param rest.image.registry PostgREST image registry
-  ## @param rest.image.repository PostgREST image repository
-  ## @param rest.image.tag PostgREST image tag (immutable tags are recommended)
+  ## @param rest.image.registry [default: REGISTRY_NAME] PostgREST image registry
+  ## @param rest.image.repository [default: REPOSITORY_NAME/postgrest] PostgREST image repository
+  ## @skip rest.image.tag PostgREST image tag (immutable tags are recommended)
   ## @param rest.image.digest PostgREST image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
   ## @param rest.image.pullPolicy PostgREST image pull policy
   ## @param rest.image.pullSecrets PostgREST image pull secrets
@@ -1285,7 +1285,7 @@ rest:
   image:
     registry: docker.io
     repository: bitnami/postgrest
-    tag: 11.2.0-debian-11-r31
+    tag: 11.2.1-debian-11-r1
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1602,9 +1602,9 @@ storage:
 
   ## Bitnami Storage image
   ## ref: https://hub.docker.com/r/bitnami/supabase-storage/tags/
-  ## @param storage.image.registry Storage image registry
-  ## @param storage.image.repository Storage image repository
-  ## @param storage.image.tag Storage image tag (immutable tags are recommended)
+  ## @param storage.image.registry [default: REGISTRY_NAME] Storage image registry
+  ## @param storage.image.repository [default: REPOSITORY_NAME/supabase-storage] Storage image repository
+  ## @skip storage.image.tag Storage image tag (immutable tags are recommended)
   ## @param storage.image.digest Storage image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
   ## @param storage.image.pullPolicy Storage image pull policy
   ## @param storage.image.pullSecrets Storage image pull secrets
@@ -1612,7 +1612,7 @@ storage:
   image:
     registry: docker.io
     repository: bitnami/supabase-storage
-    tag: 0.41.6-debian-11-r11
+    tag: 0.43.3-debian-11-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1976,9 +1976,9 @@ studio:
 
   ## Bitnami Studio image
   ## ref: https://hub.docker.com/r/bitnami/supabase-studio/tags/
-  ## @param studio.image.registry Studio image registry
-  ## @param studio.image.repository Studio image repository
-  ## @param studio.image.tag Studio image tag (immutable tags are recommended)
+  ## @param studio.image.registry [default: REGISTRY_NAME] Studio image registry
+  ## @param studio.image.repository [default: REPOSITORY_NAME/supabase-studio] Studio image repository
+  ## @skip studio.image.tag Studio image tag (immutable tags are recommended)
   ## @param studio.image.digest Studio image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
   ## @param studio.image.pullPolicy Studio image pull policy
   ## @param studio.image.pullSecrets Studio image pull secrets
@@ -1986,7 +1986,7 @@ studio:
   image:
     registry: docker.io
     repository: bitnami/supabase-studio
-    tag: 0.23.8-debian-11-r4
+    tag: 0.23.9-debian-11-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2380,16 +2380,16 @@ volumePermissions:
   enabled: false
   ## OS Shell + Utility image
   ## ref: https://hub.docker.com/r/bitnami/os-shell/tags/
-  ## @param volumePermissions.image.registry OS Shell + Utility image registry
-  ## @param volumePermissions.image.repository OS Shell + Utility image repository
-  ## @param volumePermissions.image.tag OS Shell + Utility image tag (immutable tags are recommended)
+  ## @param volumePermissions.image.registry [default: REGISTRY_NAME] OS Shell + Utility image registry
+  ## @param volumePermissions.image.repository [default: REPOSITORY_NAME/os-shell] OS Shell + Utility image repository
+  ## @skip volumePermissions.image.tag OS Shell + Utility image tag (immutable tags are recommended)
   ## @param volumePermissions.image.pullPolicy OS Shell + Utility image pull policy
   ## @param volumePermissions.image.pullSecrets OS Shell + Utility image pull secrets
   ##
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r66
+    tag: 11-debian-11-r90
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
     ## Secrets must be manually created in the namespace.
@@ -2419,10 +2419,10 @@ volumePermissions:
 
 ## Bitnami PostgreSQL image
 ## ref: https://hub.docker.com/r/bitnami/supabase-postgres/tags/
-## @param psqlImage.registry PostgreSQL client image registry
-## @param psqlImage.repository PostgreSQL client image repository
+## @param psqlImage.registry [default: REGISTRY_NAME] PostgreSQL client image registry
+## @param psqlImage.repository [default: REPOSITORY_NAME/supabase-postgres] PostgreSQL client image repository
 ## @param psqlImage.digest PostgreSQL client image digest (overrides image tag)
-## @param psqlImage.tag PostgreSQL client image tag (immutable tags are recommended)
+## @skip psqlImage.tag PostgreSQL client image tag (immutable tags are recommended)
 ## @param psqlImage.pullPolicy PostgreSQL client image pull policy
 ## @param psqlImage.pullSecrets PostgreSQL client image pull secrets
 ## @param psqlImage.debug Enable PostgreSQL client image debug mode
@@ -2430,7 +2430,7 @@ volumePermissions:
 psqlImage:
   registry: docker.io
   repository: bitnami/supabase-postgres
-  tag: 15.1.0-debian-11-r153
+  tag: 15.1.0-debian-11-r175
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2583,9 +2583,9 @@ postgresql:
   enabled: true
   ## Bitnami PostgreSQL image version
   ## ref: https://hub.docker.com/r/bitnami/supabase-postgres/tags/
-  ## @param postgresql.image.registry PostgreSQL image registry
-  ## @param postgresql.image.repository PostgreSQL image repository
-  ## @param postgresql.image.tag PostgreSQL image tag (immutable tags are recommended)
+  ## @param postgresql.image.registry [default: REGISTRY_NAME] PostgreSQL image registry
+  ## @param postgresql.image.repository [default: REPOSITORY_NAME/supabase-postgres] PostgreSQL image repository
+  ## @skip postgresql.image.tag PostgreSQL image tag (immutable tags are recommended)
   ## @param postgresql.image.digest PostgreSQL image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param postgresql.image.pullPolicy PostgreSQL image pull policy
   ## @param postgresql.image.pullSecrets Specify image pull secrets
@@ -2594,7 +2594,7 @@ postgresql:
   image:
     registry: docker.io
     repository: bitnami/supabase-postgres
-    tag: 15.1.0-debian-11-r153
+    tag: 15.1.0-debian-11-r175
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -2649,4 +2649,4 @@ externalDatabase:
   database: postgres
   password: ""
   existingSecret: ""
-  existingSecretPasswordKey: "db-password"
+  existingSecretPasswordKey: ""

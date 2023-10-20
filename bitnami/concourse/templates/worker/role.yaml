@@ -22,8 +22,7 @@ rules:
   {{- include "common.tplvalues.render" ( dict "value" .Values.worker.rbac.rules "context" $ ) | nindent 2 }}
   {{- end }}
 {{- end }}
-{{- $pspAvailable := (semverCompare "<1.25-0" (include "common.capabilities.kubeVersion" .)) }}
-{{- if and $pspAvailable .Values.worker.psp.create }}
+{{- if and (include "common.capabilities.psp.supported" .) .Values.worker.psp.create }}
 ---
 apiVersion: {{ include "common.capabilities.rbac.apiVersion" . }}
 kind: ClusterRole

@@ -60,16 +60,16 @@ func createTestingPodOrDie(ctx context.Context, c cv1.PodsGetter) *v1.Pod {
 	podData := &v1.Pod{
 		ObjectMeta: metav1.ObjectMeta{
 			Namespace: *namespace,
-			Name:      "vib-minideb-" + fmt.Sprint(rand.Intn(100)),
+			Name:      "vib-cli-" + fmt.Sprint(rand.Intn(100)),
 			Labels: map[string]string{
-				"app": "vib-minideb",
+				"app": "vib-cli",
 			},
 		},
 		Spec: v1.PodSpec{
 			Containers: []v1.Container{
 				{
-					Name:       "vib-minideb",
-					Image:      "docker.io/bitnami/minideb",
+					Name:       "vib-cli",
+					Image:      "docker.io/bitnami/pinniped-cli",
 					WorkingDir: "/tmp",
 					Command: []string{
 						"/bin/bash", "-c", "printenv PINNIPED_SCRIPT | base64 -d > pinniped-script.sh && chmod +x pinniped-script.sh && ./pinniped-script.sh && sleep infinity"},

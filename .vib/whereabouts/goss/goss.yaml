@@ -25,5 +25,5 @@ file:
     exists: true
     filetype: file
     mode: '0600'
-    contains:
+    contents:
      - /whereabouts.kubeconfig/

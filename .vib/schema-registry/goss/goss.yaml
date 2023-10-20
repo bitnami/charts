@@ -6,7 +6,7 @@ file:
     mode: "0664"
     filetype: file
     exists: true
-    contains:
+    contents:
       - "listeners = {{ .Vars.listeners }}"
       - "avro.compatibility.level = {{ .Vars.avroCompatibilityLevel }}"
 command:

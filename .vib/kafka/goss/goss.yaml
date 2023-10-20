@@ -16,8 +16,8 @@ file:
     exists: true
     filetype: file
     mode: "0644"
-    contains:
-      - listeners=CLIENT://:{{ .Vars.listeners.client.containerPort }},INTERNAL://:{{ .Vars.listeners.interbroker.containerPort }},EXTERNAL://:{{ .Vars.listeners.external.containerPort }},CONTROLLER://:{{ .Vars.listeners.controller.containerPort }}
+    contents:
+      - "listeners=CLIENT://:{{ .Vars.listeners.client.containerPort }},INTERNAL://:{{ .Vars.listeners.interbroker.containerPort }},EXTERNAL://:{{ .Vars.listeners.external.containerPort }},CONTROLLER://:{{ .Vars.listeners.controller.containerPort }}"
 command:
   create-kafka-topic:
     exec: kafka-topics.sh --create --topic quickstart-events{{randAlpha 5}} --bootstrap-server kafka:{{ .Vars.service.ports.client }}
