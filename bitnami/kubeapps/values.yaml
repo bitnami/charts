@@ -197,9 +197,9 @@ packaging:
 frontend:
   ## Bitnami NGINX image
   ## ref: https://hub.docker.com/r/bitnami/nginx/tags/
-  ## @param frontend.image.registry NGINX image registry
-  ## @param frontend.image.repository NGINX image repository
-  ## @param frontend.image.tag NGINX image tag (immutable tags are recommended)
+  ## @param frontend.image.registry [default: REGISTRY_NAME] NGINX image registry
+  ## @param frontend.image.repository [default: REPOSITORY_NAME/nginx] NGINX image repository
+  ## @skip frontend.image.tag NGINX image tag (immutable tags are recommended)
   ## @param frontend.image.digest NGINX image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param frontend.image.pullPolicy NGINX image pull policy
   ## @param frontend.image.pullSecrets NGINX image pull secrets
@@ -516,9 +516,9 @@ dashboard:
   enabled: true
   ## Bitnami Kubeapps Dashboard image
   ## ref: https://hub.docker.com/r/bitnami/kubeapps-dashboard/
-  ## @param dashboard.image.registry Dashboard image registry
-  ## @param dashboard.image.repository Dashboard image repository
-  ## @param dashboard.image.tag Dashboard image tag (immutable tags are recommended)
+  ## @param dashboard.image.registry [default: REGISTRY_NAME] Dashboard image registry
+  ## @param dashboard.image.repository [default: REPOSITORY_NAME/kubeapps-dashboard] Dashboard image repository
+  ## @skip dashboard.image.tag Dashboard image tag (immutable tags are recommended)
   ## @param dashboard.image.digest Dashboard image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param dashboard.image.pullPolicy Dashboard image pull policy
   ## @param dashboard.image.pullSecrets Dashboard image pull secrets
@@ -824,9 +824,9 @@ dashboard:
 apprepository:
   ## Bitnami Kubeapps AppRepository Controller image
   ## ref: https://hub.docker.com/r/bitnami/kubeapps-apprepository-controller/tags/
-  ## @param apprepository.image.registry Kubeapps AppRepository Controller image registry
-  ## @param apprepository.image.repository Kubeapps AppRepository Controller image repository
-  ## @param apprepository.image.tag Kubeapps AppRepository Controller image tag (immutable tags are recommended)
+  ## @param apprepository.image.registry [default: REGISTRY_NAME] Kubeapps AppRepository Controller image registry
+  ## @param apprepository.image.repository [default: REPOSITORY_NAME/kubeapps-apprepository-controller] Kubeapps AppRepository Controller image repository
+  ## @skip apprepository.image.tag Kubeapps AppRepository Controller image tag (immutable tags are recommended)
   ## @param apprepository.image.digest Kubeapps AppRepository Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param apprepository.image.pullPolicy Kubeapps AppRepository Controller image pull policy
   ## @param apprepository.image.pullSecrets Kubeapps AppRepository Controller image pull secrets
@@ -851,9 +851,9 @@ apprepository:
     pullSecrets: []
   ## Bitnami Kubeapps Asset Syncer image
   ## ref: https://hub.docker.com/r/bitnami/kubeapps-asset-syncer/tags/
-  ## @param apprepository.syncImage.registry Kubeapps Asset Syncer image registry
-  ## @param apprepository.syncImage.repository Kubeapps Asset Syncer image repository
-  ## @param apprepository.syncImage.tag Kubeapps Asset Syncer image tag (immutable tags are recommended)
+  ## @param apprepository.syncImage.registry [default: REGISTRY_NAME] Kubeapps Asset Syncer image registry
+  ## @param apprepository.syncImage.repository [default: REPOSITORY_NAME/kubeapps-asset-syncer] Kubeapps Asset Syncer image repository
+  ## @skip apprepository.syncImage.tag Kubeapps Asset Syncer image tag (immutable tags are recommended)
   ## @param apprepository.syncImage.digest Kubeapps Asset Syncer image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param apprepository.syncImage.pullPolicy Kubeapps Asset Syncer image pull policy
   ## @param apprepository.syncImage.pullSecrets Kubeapps Asset Syncer image pull secrets
@@ -1135,9 +1135,9 @@ authProxy:
   enabled: false
   ## Bitnami OAuth2 Proxy image
   ## ref: https://hub.docker.com/r/bitnami/oauth2-proxy/tags/
-  ## @param authProxy.image.registry OAuth2 Proxy image registry
-  ## @param authProxy.image.repository OAuth2 Proxy image repository
-  ## @param authProxy.image.tag OAuth2 Proxy image tag (immutable tags are recommended)
+  ## @param authProxy.image.registry [default: REGISTRY_NAME] OAuth2 Proxy image registry
+  ## @param authProxy.image.repository [default: REPOSITORY_NAME/oauth2-proxy] OAuth2 Proxy image repository
+  ## @skip authProxy.image.tag OAuth2 Proxy image tag (immutable tags are recommended)
   ## @param authProxy.image.digest OAuth2 Proxy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param authProxy.image.pullPolicy OAuth2 Proxy image pull policy
   ## @param authProxy.image.pullSecrets OAuth2 Proxy image pull secrets
@@ -1273,9 +1273,9 @@ pinnipedProxy:
   enabled: false
   ## Bitnami Pinniped Proxy image
   ## ref: https://hub.docker.com/r/bitnami/kubeapps-pinniped-proxy/tags/
-  ## @param pinnipedProxy.image.registry Pinniped Proxy image registry
-  ## @param pinnipedProxy.image.repository Pinniped Proxy image repository
-  ## @param pinnipedProxy.image.tag Pinniped Proxy image tag (immutable tags are recommended)
+  ## @param pinnipedProxy.image.registry [default: REGISTRY_NAME] Pinniped Proxy image registry
+  ## @param pinnipedProxy.image.repository [default: REPOSITORY_NAME/kubeapps-pinniped-proxy] Pinniped Proxy image repository
+  ## @skip pinnipedProxy.image.tag Pinniped Proxy image tag (immutable tags are recommended)
   ## @param pinnipedProxy.image.digest Pinniped Proxy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param pinnipedProxy.image.pullPolicy Pinniped Proxy image pull policy
   ## @param pinnipedProxy.image.pullSecrets Pinniped Proxy image pull secrets
@@ -1566,9 +1566,9 @@ kubeappsapis:
             headerPattern: ""
   ## Bitnami Kubeapps-APIs image
   ## ref: https://hub.docker.com/r/bitnami/kubeapps-apis/tags/
-  ## @param kubeappsapis.image.registry Kubeapps-APIs image registry
-  ## @param kubeappsapis.image.repository Kubeapps-APIs image repository
-  ## @param kubeappsapis.image.tag Kubeapps-APIs image tag (immutable tags are recommended)
+  ## @param kubeappsapis.image.registry [default: REGISTRY_NAME] Kubeapps-APIs image registry
+  ## @param kubeappsapis.image.repository [default: REPOSITORY_NAME/kubeapps-apis] Kubeapps-APIs image repository
+  ## @skip kubeappsapis.image.tag Kubeapps-APIs image tag (immutable tags are recommended)
   ## @param kubeappsapis.image.digest Kubeapps-APIs image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param kubeappsapis.image.pullPolicy Kubeapps-APIs image pull policy
   ## @param kubeappsapis.image.pullSecrets Kubeapps-APIs image pull secrets
@@ -1850,9 +1850,9 @@ ociCatalog:
   enabled: false
   ## Bitnami Kubeapps OCI Catalog image
   ## ref: https://hub.docker.com/r/bitnami/kubeapps-ocicatalog/
-  ## @param ociCatalog.image.registry OCI Catalog image registry
-  ## @param ociCatalog.image.repository OCI Catalog image repository
-  ## @param ociCatalog.image.tag OCI Catalog image tag (immutable tags are recommended)
+  ## @param ociCatalog.image.registry [default: REGISTRY_NAME] OCI Catalog image registry
+  ## @param ociCatalog.image.repository [default: REPOSITORY_NAME/kubeapps-oci-catalog] OCI Catalog image repository
+  ## @skip ociCatalog.image.tag OCI Catalog image tag (immutable tags are recommended)
   ## @param ociCatalog.image.digest OCI Catalog image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param ociCatalog.image.pullPolicy OCI Catalog image pull policy
   ## @param ociCatalog.image.pullSecrets OCI Catalog image pull secrets

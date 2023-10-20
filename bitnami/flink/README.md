@@ -11,8 +11,10 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/flink
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/flink
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 ## Introduction
 
@@ -34,8 +36,10 @@ Looking to use Apache Flink in production? Try [VMware Application Catalog](http
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/flink
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/flink
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 These commands deploy flink on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
@@ -79,9 +83,8 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                | Description                                                                                                  | Value                   |
 | ------------------- | ------------------------------------------------------------------------------------------------------------ | ----------------------- |
-| `image.registry`    | Apache Flink image registry                                                                                  | `docker.io`             |
-| `image.repository`  | Apache Flink image repository                                                                                | `bitnami/flink`         |
-| `image.tag`         | Apache Flink image tag (immutable tags are recommended)                                                      | `1.17.1-debian-11-r120` |
+| `image.registry`    | Apache Flink image registry                                                                                  | `REGISTRY_NAME`         |
+| `image.repository`  | Apache Flink image repository                                                                                | `REPOSITORY_NAME/flink` |
 | `image.digest`      | Apache Flink image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `image.pullPolicy`  | image pull policy                                                                                            | `IfNotPresent`          |
 | `image.pullSecrets` | Apache Flink image pull secrets                                                                              | `[]`                    |

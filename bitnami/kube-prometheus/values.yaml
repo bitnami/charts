@@ -57,9 +57,9 @@ operator:
   enabled: true
   ## Bitnami Prometheus Operator image version
   ## ref: https://hub.docker.com/r/bitnami/prometheus-operator/tags/
-  ## @param operator.image.registry Prometheus Operator image registry
-  ## @param operator.image.repository Prometheus Operator image repository
-  ## @param operator.image.tag Prometheus Operator image tag (immutable tags are recommended)
+  ## @param operator.image.registry [default: REGISTRY_NAME] Prometheus Operator image registry
+  ## @param operator.image.repository [default: REPOSITORY_NAME/prometheus-operator] Prometheus Operator image repository
+  ## @skip operator.image.tag Prometheus Operator image tag (immutable tags are recommended)
   ## @param operator.image.digest Prometheus Operator image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param operator.image.pullPolicy Prometheus Operator image pull policy
   ## @param operator.image.pullSecrets Specify docker-registry secret names as an array
@@ -515,9 +515,9 @@ prometheus:
   enabled: true
   ## Bitnami Prometheus image version
   ## ref: https://hub.docker.com/r/bitnami/prometheus/tags/
-  ## @param prometheus.image.registry Prometheus image registry
-  ## @param prometheus.image.repository Prometheus image repository
-  ## @param prometheus.image.tag Prometheus image tag (immutable tags are recommended)
+  ## @param prometheus.image.registry [default: REGISTRY_NAME] Prometheus image registry
+  ## @param prometheus.image.repository [default: REPOSITORY_NAME/prometheus] Prometheus image repository
+  ## @skip prometheus.image.tag Prometheus image tag (immutable tags are recommended)
   ## @param prometheus.image.digest Prometheus image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param prometheus.image.pullSecrets Specify docker-registry secret names as an array
   ##
@@ -1192,9 +1192,9 @@ prometheus:
     create: false
     ## Bitnami Thanos image
     ## ref: https://hub.docker.com/r/bitnami/thanos/tags/
-    ## @param prometheus.thanos.image.registry Thanos image registry
-    ## @param prometheus.thanos.image.repository Thanos image name
-    ## @param prometheus.thanos.image.tag Thanos image tag
+    ## @param prometheus.thanos.image.registry [default: REGISTRY_NAME] Thanos image registry
+    ## @param prometheus.thanos.image.repository [default: REPOSITORY_NAME/thanos] Thanos image name
+    ## @skip prometheus.thanos.image.tag Thanos image tag
     ## @param prometheus.thanos.image.digest Thanos image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
     ## @param prometheus.thanos.image.pullPolicy Thanos image pull policy
     ## @param prometheus.thanos.image.pullSecrets Specify docker-registry secret names as an array
@@ -1592,9 +1592,9 @@ alertmanager:
   enabled: true
   ## Bitnami Alertmanager image version
   ## ref: https://hub.docker.com/r/bitnami/prometheus-operator/tags/
-  ## @param alertmanager.image.registry Prometheus image registry
-  ## @param alertmanager.image.repository Prometheus image repository
-  ## @param alertmanager.image.tag Prometheus image tag (immutable tags are recommended)
+  ## @param alertmanager.image.registry [default: REGISTRY_NAME] Prometheus image registry
+  ## @param alertmanager.image.repository [default: REPOSITORY_NAME/alertmanager] Prometheus image repository
+  ## @skip alertmanager.image.tag Prometheus image tag (immutable tags are recommended)
   ## @param alertmanager.image.digest Prometheus image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param alertmanager.image.pullSecrets Specify docker-registry secret names as an array
   ##
@@ -2188,10 +2188,10 @@ blackboxExporter:
   enabled: true
   ## Bitnami Alertmanager image version
   ## ref: https://hub.docker.com/r/bitnami/prometheus-operator/tags/
-  ## @param blackboxExporter.image.registry Blackbox Exporter image registry
-  ## @param blackboxExporter.image.repository Blackbox Exporter image repository
+  ## @param blackboxExporter.image.registry [default: REGISTRY_NAME] Blackbox Exporter image registry
+  ## @param blackboxExporter.image.repository [default: REPOSITORY_NAME/blackbox-exporter] Blackbox Exporter image repository
   ## @param blackboxExporter.image.pullPolicy Blackbox Exporter image pull policy
-  ## @param blackboxExporter.image.tag Blackbox Exporter image tag (immutable tags are recommended)
+  ## @skip blackboxExporter.image.tag Blackbox Exporter image tag (immutable tags are recommended)
   ## @param blackboxExporter.image.digest Blackbox Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param blackboxExporter.image.pullSecrets Specify docker-registry secret names as an array
   ##
