@@ -64,9 +64,9 @@ diagnosticMode:
 
 ## Bitnami Solr image version
 ## ref: https://hub.docker.com/r/bitnami/solr/tags
-## @param image.registry Solr image registry
-## @param image.repository Solr image repository
-## @param image.tag Solr image tag (immutable tags are recommended)
+## @param image.registry [default: REGISTRY_NAME] Solr image registry
+## @param image.repository [default: REPOSITORY_NAME/solr] Solr image repository
+## @skip image.tag Solr image tag (immutable tags are recommended)
 ## @param image.digest Solr image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy image pull policy
 ## @param image.pullSecrets Specify docker-registry secret names as an array
@@ -590,9 +590,9 @@ volumePermissions:
   ## @param volumePermissions.enabled Enable init container that changes the owner and group of the persistent volume
   ##
   enabled: false
-  ## @param volumePermissions.image.registry Init container volume-permissions image registry
-  ## @param volumePermissions.image.repository Init container volume-permissions image repository
-  ## @param volumePermissions.image.tag Init container volume-permissions image tag (immutable tags are recommended)
+  ## @param volumePermissions.image.registry [default: REGISTRY_NAME] Init container volume-permissions image registry
+  ## @param volumePermissions.image.repository [default: REPOSITORY_NAME/os-shell] Init container volume-permissions image repository
+  ## @skip volumePermissions.image.tag Init container volume-permissions image tag (immutable tags are recommended)
   ## @param volumePermissions.image.digest Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
   ## @param volumePermissions.image.pullSecrets Init container volume-permissions image pull secrets

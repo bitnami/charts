@@ -94,9 +94,9 @@ prometheusRule:
 ## ref: https://hub.docker.com/r/bitnami/metallb-controller/tags
 ##
 controller:
-  ## @param controller.image.registry MetalLB Controller image registry
-  ## @param controller.image.repository MetalLB Controller image repository
-  ## @param controller.image.tag MetalLB Controller  image tag (immutable tags are recommended)
+  ## @param controller.image.registry [default: REGISTRY_NAME] MetalLB Controller image registry
+  ## @param controller.image.repository [default: REPOSITORY_NAME/metallb-controller] MetalLB Controller image repository
+  ## @skip controller.image.tag MetalLB Controller  image tag (immutable tags are recommended)
   ## @param controller.image.digest MetalLB Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param controller.image.pullPolicy MetalLB Controller image pull policy
   ## @param controller.image.pullSecrets Specify docker-registry secret names as an array
@@ -104,7 +104,7 @@ controller:
   image:
     registry: docker.io
     repository: bitnami/metallb-controller
-    tag: 0.13.11-debian-11-r29
+    tag: 0.13.12-debian-11-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -460,9 +460,9 @@ speaker:
   ## Some CNI implementations (e.g. Calico) does not require speakers
   ##
   enabled: true
-  ## @param speaker.image.registry MetalLB Speaker image registry
-  ## @param speaker.image.repository MetalLB Speaker image repository
-  ## @param speaker.image.tag MetalLB Speaker  image tag (immutable tags are recommended)
+  ## @param speaker.image.registry [default: REGISTRY_NAME] MetalLB Speaker image registry
+  ## @param speaker.image.repository [default: REPOSITORY_NAME/metallb-speaker] MetalLB Speaker image repository
+  ## @skip speaker.image.tag MetalLB Speaker  image tag (immutable tags are recommended)
   ## @param speaker.image.digest MetalLB Speaker image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param speaker.image.pullPolicy MetalLB Speaker image pull policy
   ## @param speaker.image.pullSecrets Specify docker-registry secret names as an array
@@ -470,7 +470,7 @@ speaker:
   image:
     registry: docker.io
     repository: bitnami/metallb-speaker
-    tag: 0.13.11-debian-11-r31
+    tag: 0.13.12-debian-11-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

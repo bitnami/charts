@@ -11,8 +11,10 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/fluent-bit
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/fluent-bit
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 ## Introduction
 
@@ -34,8 +36,10 @@ Looking to use Fluent Bit in production? Try [VMware Application Catalog](https:
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/fluent-bit
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/fluent-bit
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 These commands deploy fluent-bit on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
@@ -76,15 +80,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Fluent Bit parameters
 
-| Name                | Description                                                                                                | Value                 |
-| ------------------- | ---------------------------------------------------------------------------------------------------------- | --------------------- |
-| `image.registry`    | Fluent Bit image registry                                                                                  | `docker.io`           |
-| `image.repository`  | Fluent Bit image repository                                                                                | `bitnami/fluent-bit`  |
-| `image.tag`         | Fluent Bit image tag (immutable tags are recommended)                                                      | `2.1.10-debian-11-r0` |
-| `image.digest`      | Fluent Bit image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
-| `image.pullPolicy`  | image pull policy                                                                                          | `IfNotPresent`        |
-| `image.pullSecrets` | Fluent Bit image pull secrets                                                                              | `[]`                  |
-| `image.debug`       | Enable image debug mode                                                                                    | `false`               |
+| Name                | Description                                                                                                | Value                        |
+| ------------------- | ---------------------------------------------------------------------------------------------------------- | ---------------------------- |
+| `image.registry`    | Fluent Bit image registry                                                                                  | `REGISTRY_NAME`              |
+| `image.repository`  | Fluent Bit image repository                                                                                | `REPOSITORY_NAME/fluent-bit` |
+| `image.digest`      | Fluent Bit image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                         |
+| `image.pullPolicy`  | image pull policy                                                                                          | `IfNotPresent`               |
+| `image.pullSecrets` | Fluent Bit image pull secrets                                                                              | `[]`                         |
+| `image.debug`       | Enable image debug mode                                                                                    | `false`                      |
 
 ### Fluent Bit daemonset configuration
 

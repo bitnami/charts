@@ -83,9 +83,9 @@ diagnosticMode:
 
 ## Bitnami Keycloak image version
 ## ref: https://hub.docker.com/r/bitnami/keycloak/tags/
-## @param image.registry Keycloak image registry
-## @param image.repository Keycloak image repository
-## @param image.tag Keycloak image tag (immutable tags are recommended)
+## @param image.registry [default: REGISTRY_NAME] Keycloak image registry
+## @param image.repository [default: REPOSITORY_NAME/keycloak] Keycloak image repository
+## @skip image.tag Keycloak image tag (immutable tags are recommended)
 ## @param image.digest Keycloak image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy Keycloak image pull policy
 ## @param image.pullSecrets Specify docker-registry secret names as an array
@@ -854,9 +854,9 @@ keycloakConfigCli:
   enabled: false
   ## Bitnami keycloak-config-cli image
   ## ref: https://hub.docker.com/r/bitnami/keycloak-config-cli/tags/
-  ## @param keycloakConfigCli.image.registry keycloak-config-cli container image registry
-  ## @param keycloakConfigCli.image.repository keycloak-config-cli container image repository
-  ## @param keycloakConfigCli.image.tag keycloak-config-cli container image tag
+  ## @param keycloakConfigCli.image.registry [default: REGISTRY_NAME] keycloak-config-cli container image registry
+  ## @param keycloakConfigCli.image.repository [default: REPOSITORY_NAME/keycloak-config-cli] keycloak-config-cli container image repository
+  ## @skip keycloakConfigCli.image.tag keycloak-config-cli container image tag
   ## @param keycloakConfigCli.image.digest keycloak-config-cli container image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param keycloakConfigCli.image.pullPolicy keycloak-config-cli container image pull policy
   ## @param keycloakConfigCli.image.pullSecrets keycloak-config-cli container image pull secrets

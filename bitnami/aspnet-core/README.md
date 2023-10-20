@@ -11,8 +11,10 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/aspnet-core
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/aspnet-core
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 ## Introduction
 
@@ -34,7 +36,7 @@ Looking to use ASP.NET Core in production? Try [VMware Application Catalog](http
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/aspnet-core
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/aspnet-core
 ```
 
 These commands deploy a ASP.NET Core Core application on the Kubernetes cluster in the default configuration.
@@ -76,21 +78,20 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### ASP.NET Core Core parameters
 
-| Name                 | Description                                                                                                       | Value                 |
-| -------------------- | ----------------------------------------------------------------------------------------------------------------- | --------------------- |
-| `image.registry`     | ASP.NET Core Core image registry                                                                                  | `docker.io`           |
-| `image.repository`   | ASP.NET Core Core image repository                                                                                | `bitnami/aspnet-core` |
-| `image.tag`          | ASP.NET Core Core image tag (immutable tags are recommended)                                                      | `7.0.12-debian-11-r1` |
-| `image.digest`       | ASP.NET Core Core image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
-| `image.pullPolicy`   | ASP.NET Core Core image pull policy                                                                               | `IfNotPresent`        |
-| `image.pullSecrets`  | ASP.NET Core Core image pull secrets                                                                              | `[]`                  |
-| `image.debug`        | Enable image debug mode                                                                                           | `false`               |
-| `command`            | Override default container command (useful when using custom images)                                              | `[]`                  |
-| `args`               | Override default container args (useful when using custom images)                                                 | `[]`                  |
-| `bindURLs`           | URLs to bind                                                                                                      | `http://+:8080`       |
-| `extraEnvVars`       | Extra environment variables to be set on ASP.NET Core Core container                                              | `[]`                  |
-| `extraEnvVarsCM`     | ConfigMap with extra environment variables                                                                        | `""`                  |
-| `extraEnvVarsSecret` | Secret with extra environment variables                                                                           | `""`                  |
+| Name                 | Description                                                                                                       | Value                         |
+| -------------------- | ----------------------------------------------------------------------------------------------------------------- | ----------------------------- |
+| `image.registry`     | ASP.NET Core Core image registry                                                                                  | `REGISTRY_NAME`               |
+| `image.repository`   | ASP.NET Core Core image repository                                                                                | `REPOSITORY_NAME/aspnet-core` |
+| `image.digest`       | ASP.NET Core Core image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                          |
+| `image.pullPolicy`   | ASP.NET Core Core image pull policy                                                                               | `IfNotPresent`                |
+| `image.pullSecrets`  | ASP.NET Core Core image pull secrets                                                                              | `[]`                          |
+| `image.debug`        | Enable image debug mode                                                                                           | `false`                       |
+| `command`            | Override default container command (useful when using custom images)                                              | `[]`                          |
+| `args`               | Override default container args (useful when using custom images)                                                 | `[]`                          |
+| `bindURLs`           | URLs to bind                                                                                                      | `http://+:8080`               |
+| `extraEnvVars`       | Extra environment variables to be set on ASP.NET Core Core container                                              | `[]`                          |
+| `extraEnvVarsCM`     | ConfigMap with extra environment variables                                                                        | `""`                          |
+| `extraEnvVarsSecret` | Secret with extra environment variables                                                                           | `""`                          |
 
 ### ASP.NET Core Core deployment parameters
 
@@ -161,18 +162,16 @@ The command removes all the Kubernetes components associated with the chart and 
 | Name                                            | Description                                                                                              | Value                                                |
 | ----------------------------------------------- | -------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- |
 | `appFromExternalRepo.enabled`                   | Enable to download/build ASP.NET Core Core app from external git repository                              | `true`                                               |
-| `appFromExternalRepo.clone.image.registry`      | Git image registry                                                                                       | `docker.io`                                          |
-| `appFromExternalRepo.clone.image.repository`    | Git image repository                                                                                     | `bitnami/git`                                        |
-| `appFromExternalRepo.clone.image.tag`           | Git image tag (immutable tags are recommended)                                                           | `2.42.0-debian-11-r45`                               |
+| `appFromExternalRepo.clone.image.registry`      | Git image registry                                                                                       | `REGISTRY_NAME`                                      |
+| `appFromExternalRepo.clone.image.repository`    | Git image repository                                                                                     | `REPOSITORY_NAME/git`                                |
 | `appFromExternalRepo.clone.image.digest`        | Git image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag      | `""`                                                 |
 | `appFromExternalRepo.clone.image.pullPolicy`    | Git image pull policy                                                                                    | `IfNotPresent`                                       |
 | `appFromExternalRepo.clone.image.pullSecrets`   | Git image pull secrets                                                                                   | `[]`                                                 |
 | `appFromExternalRepo.clone.repository`          | Git repository to clone                                                                                  | `https://github.com/dotnet/AspNetCore.Docs.git`      |
 | `appFromExternalRepo.clone.revision`            | Git revision to checkout                                                                                 | `main`                                               |
 | `appFromExternalRepo.clone.extraVolumeMounts`   | Add extra volume mounts for the GIT container                                                            | `[]`                                                 |
-| `appFromExternalRepo.publish.image.registry`    | .NET SDK image registry                                                                                  | `docker.io`                                          |
-| `appFromExternalRepo.publish.image.repository`  | .NET SDK image repository                                                                                | `bitnami/dotnet-sdk`                                 |
-| `appFromExternalRepo.publish.image.tag`         | .NET SDK image tag (immutable tags are recommended)                                                      | `7.0.402-debian-11-r1`                               |
+| `appFromExternalRepo.publish.image.registry`    | .NET SDK image registry                                                                                  | `REGISTRY_NAME`                                      |
+| `appFromExternalRepo.publish.image.repository`  | .NET SDK image repository                                                                                | `REPOSITORY_NAME/dotnet-sdk`                         |
 | `appFromExternalRepo.publish.image.digest`      | .NET SDK image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                                                 |
 | `appFromExternalRepo.publish.image.pullPolicy`  | .NET SDK image pull policy                                                                               | `IfNotPresent`                                       |
 | `appFromExternalRepo.publish.image.pullSecrets` | .NET SDK image pull secrets                                                                              | `[]`                                                 |
@@ -236,7 +235,7 @@ The command removes all the Kubernetes components associated with the chart and 
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-helm install my-release --set replicaCount=2 oci://registry-1.docker.io/bitnamicharts/aspnet-core
+helm install my-release --set replicaCount=2 oci://REGISTRY_NAME/REPOSITORY_NAME/aspnet-core
 ```
 
 The above command install ASP.NET Core Core chart with 2 replicas.
@@ -244,9 +243,10 @@ The above command install ASP.NET Core Core chart with 2 replicas.
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/aspnet-core
+helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/aspnet-core
 ```
 
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
 ## Configuration and installation details

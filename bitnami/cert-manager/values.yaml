@@ -61,9 +61,9 @@ controller:
   replicaCount: 1
   ## Bitnami cert-manager image
   ## ref: https://hub.docker.com/r/bitnami/cert-manager/tags/
-  ## @param controller.image.registry Controller image registry
-  ## @param controller.image.repository Controller image repository
-  ## @param controller.image.tag Controller image tag (immutable tags are recommended)
+  ## @param controller.image.registry [default: REGISTRY_NAME] Controller image registry
+  ## @param controller.image.repository [default: REPOSITORY_NAME/cert-manager] Controller image repository
+  ## @skip controller.image.tag Controller image tag (immutable tags are recommended)
   ## @param controller.image.digest Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param controller.image.pullPolicy Controller image pull policy
   ## @param controller.image.pullSecrets Controller image pull secrets
@@ -92,9 +92,9 @@ controller:
     ##
     debug: false
   acmesolver:
-    ## @param controller.acmesolver.image.registry Controller image registry
-    ## @param controller.acmesolver.image.repository Controller image repository
-    ## @param controller.acmesolver.image.tag Controller image tag (immutable tags are recommended)
+    ## @param controller.acmesolver.image.registry [default: REGISTRY_NAME] Controller image registry
+    ## @param controller.acmesolver.image.repository [default: REPOSITORY_NAME/acmesolver] Controller image repository
+    ## @skip controller.acmesolver.image.tag Controller image tag (immutable tags are recommended)
     ## @param controller.acmesolver.image.digest Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
     ## @param controller.acmesolver.image.pullPolicy Controller image pull policy
     ## @param controller.acmesolver.image.pullSecrets Controller image pull secrets
@@ -318,9 +318,9 @@ webhook:
   replicaCount: 1
   ## Bitnami cert-manager Webhook image
   ## ref: https://hub.docker.com/r/bitnami/cert-manager-webhook/tags/
-  ## @param webhook.image.registry Webhook image registry
-  ## @param webhook.image.repository Webhook image repository
-  ## @param webhook.image.tag Webhook image tag (immutable tags are recommended)
+  ## @param webhook.image.registry [default: REGISTRY_NAME] Webhook image registry
+  ## @param webhook.image.repository [default: REPOSITORY_NAME/cert-manager-webhook] Webhook image repository
+  ## @skip webhook.image.tag Webhook image tag (immutable tags are recommended)
   ## @param webhook.image.digest Webhook image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param webhook.image.pullPolicy Webhook image pull policy
   ## @param webhook.image.pullSecrets Webhook image pull secrets
@@ -584,9 +584,9 @@ cainjector:
 
   ## Bitnami CAInjector image
   ## ref: https://hub.docker.com/r/bitnami/cainjector/tags/
-  ## @param cainjector.image.registry CAInjector image registry
-  ## @param cainjector.image.repository CAInjector image repository
-  ## @param cainjector.image.tag CAInjector image tag (immutable tags are recommended)
+  ## @param cainjector.image.registry [default: REGISTRY_NAME] CAInjector image registry
+  ## @param cainjector.image.repository [default: REPOSITORY_NAME/cainjector] CAInjector image repository
+  ## @skip cainjector.image.tag CAInjector image tag (immutable tags are recommended)
   ## @param cainjector.image.digest CAInjector image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param cainjector.image.pullPolicy CAInjector image pull policy
   ## @param cainjector.image.pullSecrets CAInjector image pull secrets

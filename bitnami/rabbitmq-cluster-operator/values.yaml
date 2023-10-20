@@ -56,9 +56,9 @@ diagnosticMode:
 
 ## Bitnami RabbitMQ Image
 ## ref: https://hub.docker.com/r/bitnami/rabbitmq/tags/
-## @param rabbitmqImage.registry RabbitMQ Image registry
-## @param rabbitmqImage.repository RabbitMQ Image repository
-## @param rabbitmqImage.tag RabbitMQ Image tag (immutable tags are recommended)
+## @param rabbitmqImage.registry [default: REGISTRY_NAME] RabbitMQ Image registry
+## @param rabbitmqImage.repository [default: REPOSITORY_NAME/rabbitmq] RabbitMQ Image repository
+## @skip rabbitmqImage.tag RabbitMQ Image tag (immutable tags are recommended)
 ## @param rabbitmqImage.digest RabbitMQ image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param rabbitmqImage.pullSecrets RabbitMQ Image pull secrets
 ##
@@ -78,9 +78,9 @@ rabbitmqImage:
 
 ## Bitnami RabbitMQ Default User Credential Updater Image
 ## ref: https://hub.docker.com/r/bitnami/rmq-default-credential-updater/tags/
-## @param credentialUpdaterImage.registry RabbitMQ Default User Credential Updater image registry
-## @param credentialUpdaterImage.repository RabbitMQ Default User Credential Updater image repository
-## @param credentialUpdaterImage.tag RabbitMQ Default User Credential Updater image tag (immutable tags are recommended)
+## @param credentialUpdaterImage.registry [default: REGISTRY_NAME] RabbitMQ Default User Credential Updater image registry
+## @param credentialUpdaterImage.repository [default: REPOSITORY_NAME/rmq-default-credential-updater] RabbitMQ Default User Credential Updater image repository
+## @skip credentialUpdaterImage.tag RabbitMQ Default User Credential Updater image tag (immutable tags are recommended)
 ## @param credentialUpdaterImage.digest RabbitMQ Default User Credential Updater image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param credentialUpdaterImage.pullSecrets RabbitMQ Default User Credential Updater image pull secrets
 ##
@@ -101,9 +101,9 @@ credentialUpdaterImage:
 clusterOperator:
   ## Bitnami RabbitMQ Cluster Operator image
   ## ref: https://hub.docker.com/r/bitnami/rabbitmq-cluster-operator/tags/
-  ## @param clusterOperator.image.registry RabbitMQ Cluster Operator image registry
-  ## @param clusterOperator.image.repository RabbitMQ Cluster Operator image repository
-  ## @param clusterOperator.image.tag RabbitMQ Cluster Operator image tag (immutable tags are recommended)
+  ## @param clusterOperator.image.registry [default: REGISTRY_NAME] RabbitMQ Cluster Operator image registry
+  ## @param clusterOperator.image.repository [default: REPOSITORY_NAME/rabbitmq-cluster-operator] RabbitMQ Cluster Operator image repository
+  ## @skip clusterOperator.image.tag RabbitMQ Cluster Operator image tag (immutable tags are recommended)
   ## @param clusterOperator.image.digest RabbitMQ Cluster Operator image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param clusterOperator.image.pullPolicy RabbitMQ Cluster Operator image pull policy
   ## @param clusterOperator.image.pullSecrets RabbitMQ Cluster Operator image pull secrets
@@ -393,12 +393,12 @@ clusterOperator:
   ## @section RabbitMQ Cluster Operator Metrics parameters
   ##
   metrics:
-    ## @param clusterOperator.metrics.enabled Create a service for accessing the metrics endpoint
-    ##
-    enabled: false
     ## Metrics service parameters
     ##
     service:
+      ## @param clusterOperator.metrics.service.enabled Create a service for accessing the metrics endpoint
+      ##
+      enabled: false
       ## @param clusterOperator.metrics.service.type RabbitMQ Cluster Operator metrics service type
       ##
       type: ClusterIP
@@ -504,7 +504,43 @@ clusterOperator:
       ## @param clusterOperator.metrics.serviceMonitor.params Define the HTTP URL parameters used by ServiceMonitor
       ##
       params: {}
-
+    podMonitor:
+      ## @param clusterOperator.metrics.podMonitor.enabled Create PodMonitor Resource for scraping metrics using PrometheusOperator
+      ##
+      enabled: false
+      ## @param clusterOperator.metrics.podMonitor.jobLabel Specify the jobLabel to use for the prometheus-operator
+      ##
+      jobLabel: app.kubernetes.io/name
+      ## @param clusterOperator.metrics.podMonitor.namespace Namespace which Prometheus is running in
+      ##
+      namespace: ""
+      ## @param clusterOperator.metrics.podMonitor.honorLabels Honor metrics labels
+      ##
+      honorLabels: false
+      ## @param clusterOperator.metrics.podMonitor.selector Prometheus instance selector labels
+      ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
+      selector: {}
+      ## @param clusterOperator.metrics.podMonitor.interval Specify the interval at which metrics should be scraped
+      ##
+      interval: 30s
+      ## @param clusterOperator.metrics.podMonitor.scrapeTimeout Specify the timeout after which the scrape is ended
+      ##
+      scrapeTimeout: 30s
+      ## @param clusterOperator.metrics.podMonitor.additionalLabels [object] Additional labels that can be used so PodMonitors will be discovered by Prometheus
+      ##
+      additionalLabels: {}
+      ## @param clusterOperator.metrics.podMonitor.path Define HTTP path to scrape for metrics.
+      ##
+      path: ""
+      ## @param clusterOperator.metrics.podMonitor.relabelings Specify general relabeling
+      ##
+      relabelings: []
+      ## @param clusterOperator.metrics.podMonitor.metricRelabelings Specify additional relabeling of metrics
+      ##
+      metricRelabelings: []
+      ## @param clusterOperator.metrics.podMonitor.params Define the HTTP URL parameters used by PodMonitor
+      ##
+      params: {}
 ## @section RabbitMQ Messaging Topology Operator Parameters
 ##
 msgTopologyOperator:
@@ -513,9 +549,9 @@ msgTopologyOperator:
   enabled: true
   ## Bitnami RabbitMQ Messaging Topology Operator image
   ## ref: https://hub.docker.com/r/bitnami/rmq-messaging-topology-operator/tags/
-  ## @param msgTopologyOperator.image.registry RabbitMQ Messaging Topology Operator image registry
-  ## @param msgTopologyOperator.image.repository RabbitMQ Messaging Topology Operator image repository
-  ## @param msgTopologyOperator.image.tag RabbitMQ Messaging Topology Operator image tag (immutable tags are recommended)
+  ## @param msgTopologyOperator.image.registry [default: REGISTRY_NAME] RabbitMQ Messaging Topology Operator image registry
+  ## @param msgTopologyOperator.image.repository [default: REPOSITORY_NAME/rmq-messaging-topology-operator] RabbitMQ Messaging Topology Operator image repository
+  ## @skip msgTopologyOperator.image.tag RabbitMQ Messaging Topology Operator image tag (immutable tags are recommended)
   ## @param msgTopologyOperator.image.digest RabbitMQ Messaging Topology Operator image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param msgTopologyOperator.image.pullPolicy RabbitMQ Messaging Topology Operator image pull policy
   ## @param msgTopologyOperator.image.pullSecrets RabbitMQ Messaging Topology Operator image pull secrets
@@ -855,12 +891,12 @@ msgTopologyOperator:
   ## @section RabbitMQ Messaging Topology Operator parameters
   ##
   metrics:
-    ## @param msgTopologyOperator.metrics.enabled Create a service for accessing the metrics endpoint
-    ##
-    enabled: false
     ## Metrics service parameters
     ##
     service:
+      ## @param msgTopologyOperator.metrics.service.enabled Create a service for accessing the metrics endpoint
+      ##
+      enabled: false
       ## @param msgTopologyOperator.metrics.service.type RabbitMQ Cluster Operator metrics service type
       ##
       type: ClusterIP
@@ -959,7 +995,37 @@ msgTopologyOperator:
       ## @param msgTopologyOperator.metrics.serviceMonitor.labels Extra labels for the ServiceMonitor
       ##
       labels: {}
-
+    podMonitor:
+      ## @param msgTopologyOperator.metrics.podMonitor.enabled Create PodMonitor Resource for scraping metrics using PrometheusOperator
+      ##
+      enabled: false
+      ## @param msgTopologyOperator.metrics.podMonitor.jobLabel Specify the jobLabel to use for the prometheus-operator
+      ##
+      jobLabel: app.kubernetes.io/name
+      ## @param msgTopologyOperator.metrics.podMonitor.namespace Namespace which Prometheus is running in
+      ##
+      namespace: ""
+      ## @param msgTopologyOperator.metrics.podMonitor.honorLabels Honor metrics labels
+      ##
+      honorLabels: false
+      ## @param msgTopologyOperator.metrics.podMonitor.selector Prometheus instance selector labels
+      ## ref: https://github.com/bitnami/charts/tree/main/bitnami/prometheus-operator#prometheus-configuration
+      selector: {}
+      ## @param msgTopologyOperator.metrics.podMonitor.interval Specify the interval at which metrics should be scraped
+      ##
+      interval: 30s
+      ## @param msgTopologyOperator.metrics.podMonitor.scrapeTimeout Specify the timeout after which the scrape is ended
+      ##
+      scrapeTimeout: 30s
+      ## @param msgTopologyOperator.metrics.podMonitor.additionalLabels [object] Additional labels that can be used so PodMonitors will be discovered by Prometheus
+      ##
+      additionalLabels: {}
+      ## @param msgTopologyOperator.metrics.podMonitor.relabelings Specify general relabeling
+      ##
+      relabelings: []
+      ## @param msgTopologyOperator.metrics.podMonitor.metricRelabelings Specify additional relabeling of metrics
+      ##
+      metricRelabelings: []
 ## @section cert-manager parameters
 ##
 

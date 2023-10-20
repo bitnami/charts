@@ -61,9 +61,9 @@ diagnosticMode:
 ## @section Hub deployment parameters
 
 hub:
-  ## @param hub.image.registry Hub image registry
-  ## @param hub.image.repository Hub image repository
-  ## @param hub.image.tag Hub image tag (immutable tags are recommended)
+  ## @param hub.image.registry [default: REGISTRY_NAME] Hub image registry
+  ## @param hub.image.repository [default: REPOSITORY_NAME/jupyterhub] Hub image repository
+  ## @skip hub.image.tag Hub image tag (immutable tags are recommended)
   ## @param hub.image.digest Hub image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param hub.image.pullPolicy Hub image pull policy
   ## @param hub.image.pullSecrets Hub image pull secrets
@@ -625,9 +625,9 @@ hub:
 ## @section Proxy deployment parameters
 
 proxy:
-  ## @param proxy.image.registry Proxy image registry
-  ## @param proxy.image.repository Proxy image repository
-  ## @param proxy.image.tag Proxy image tag (immutable tags are recommended)
+  ## @param proxy.image.registry [default: REGISTRY_NAME] Proxy image registry
+  ## @param proxy.image.repository [default: REPOSITORY_NAME/configurable-http-proxy] Proxy image repository
+  ## @skip proxy.image.tag Proxy image tag (immutable tags are recommended)
   ## @param proxy.image.digest Proxy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param proxy.image.pullPolicy Proxy image pull policy
   ## @param proxy.image.pullSecrets Proxy image pull secrets
@@ -1402,9 +1402,9 @@ imagePuller:
 ## Singleuser deployment parameters
 ## NOTE: The values in this section are used for generating the hub.configuration value. In case you provide
 ## a custom hub.configuration or a configmap, these will be ignored.
-## @param singleuser.image.registry Single User image registry
-## @param singleuser.image.repository Single User image repository
-## @param singleuser.image.tag Single User image tag (immutabe tags are recommended)
+## @param singleuser.image.registry [default: REGISTRY_NAME] Single User image registry
+## @param singleuser.image.repository [default: REPOSITORY_NAME/jupyter-base-notebook] Single User image repository
+## @skip singleuser.image.tag Single User image tag (immutabe tags are recommended)
 ## @param singleuser.image.digest Single User image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param singleuser.image.pullPolicy Single User image pull policy
 ## @param singleuser.image.pullSecrets Single User image pull secrets
@@ -1587,9 +1587,9 @@ singleuser:
 ## @section Auxiliary image parameters
 ##
 
-## @param auxiliaryImage.registry Auxiliary image registry
-## @param auxiliaryImage.repository Auxiliary image repository
-## @param auxiliaryImage.tag Auxiliary image tag (immutabe tags are recommended)
+## @param auxiliaryImage.registry [default: REGISTRY_NAME] Auxiliary image registry
+## @param auxiliaryImage.repository [default: REPOSITORY_NAME/os-shell] Auxiliary image repository
+## @skip auxiliaryImage.tag Auxiliary image tag (immutabe tags are recommended)
 ## @param auxiliaryImage.digest Auxiliary image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param auxiliaryImage.pullPolicy Auxiliary image pull policy
 ## @param auxiliaryImage.pullSecrets Auxiliary image pull secrets

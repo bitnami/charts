@@ -3,7 +3,7 @@ Copyright VMware, Inc.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if and .Values.clusterOperator.metrics.serviceMonitor.enabled .Values.clusterOperator.metrics.enabled }}
+{{- if and .Values.clusterOperator.metrics.serviceMonitor.enabled .Values.clusterOperator.metrics.service.enabled }}
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:

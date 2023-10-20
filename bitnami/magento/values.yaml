@@ -61,9 +61,9 @@ diagnosticMode:
 
 ## Bitnami Magento image version
 ## ref: https://hub.docker.com/r/bitnami/magento/tags/
-## @param image.registry Magento image registry
-## @param image.repository Magento image repository
-## @param image.tag Magento image tag (immutable tags are recommended)
+## @param image.registry [default: REGISTRY_NAME] Magento image registry
+## @param image.repository [default: REPOSITORY_NAME/magento] Magento image repository
+## @skip image.tag Magento image tag (immutable tags are recommended)
 ## @param image.digest Magento image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy Magento image pull policy
 ## @param image.pullSecrets Specify docker-registry secret names as an array
@@ -486,9 +486,9 @@ mariadb:
   enabled: true
   ## Override MariaDB default image as 10.6 is not supported https://devdocs.magento.com/guides/v2.4/install-gde/system-requirements.html#database
   ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mariadb
-  ## @param mariadb.image.registry MariaDB image registry
-  ## @param mariadb.image.repository MariaDB image repository
-  ## @param mariadb.image.tag MariaDB image tag (immutable tags are recommended)
+  ## @param mariadb.image.registry [default: REGISTRY_NAME] MariaDB image registry
+  ## @param mariadb.image.repository [default: REPOSITORY_NAME/mariadb] MariaDB image repository
+  ## @skip mariadb.image.tag MariaDB image tag (immutable tags are recommended)
   ## @param mariadb.image.digest MariaDB image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ##
   image:
@@ -580,9 +580,9 @@ elasticsearch:
   enabled: true
   ## Override Elasticsearch default image as version 8 is not supported https://devdocs.magento.com/guides/v2.4/install-gde/system-requirements.html#database
   ## ref: https://github.com/bitnami/containers/tree/main/bitnami/elasticsearch
-  ## @param elasticsearch.image.registry Elasticsearch image registry
-  ## @param elasticsearch.image.repository Elasticsearch image repository
-  ## @param elasticsearch.image.tag Elasticsearch image tag (immutable tags are recommended)
+  ## @param elasticsearch.image.registry [default: REGISTRY_NAME] Elasticsearch image registry
+  ## @param elasticsearch.image.repository [default: REPOSITORY_NAME/elasticsearch] Elasticsearch image repository
+  ## @skip elasticsearch.image.tag Elasticsearch image tag (immutable tags are recommended)
   ## @param elasticsearch.image.digest Elasticsearch image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ##
   image:
@@ -688,9 +688,9 @@ volumePermissions:
   ## @param volumePermissions.enabled Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work)
   ##
   enabled: false
-  ## @param volumePermissions.image.registry Init container volume-permissions image registry
-  ## @param volumePermissions.image.repository Init container volume-permissions image repository
-  ## @param volumePermissions.image.tag Init container volume-permissions image tag (immutable tags are recommended)
+  ## @param volumePermissions.image.registry [default: REGISTRY_NAME] Init container volume-permissions image registry
+  ## @param volumePermissions.image.repository [default: REPOSITORY_NAME/os-shell] Init container volume-permissions image repository
+  ## @skip volumePermissions.image.tag Init container volume-permissions image tag (immutable tags are recommended)
   ## @param volumePermissions.image.digest Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
   ## @param volumePermissions.image.pullSecrets Specify docker-registry secret names as an array
@@ -889,9 +889,9 @@ metrics:
   ## @param metrics.enabled Start a side-car prometheus exporter
   ##
   enabled: false
-  ## @param metrics.image.registry Apache exporter image registry
-  ## @param metrics.image.repository Apache exporter image repository
-  ## @param metrics.image.tag Apache exporter image tag (immutable tags are recommended)
+  ## @param metrics.image.registry [default: REGISTRY_NAME] Apache exporter image registry
+  ## @param metrics.image.repository [default: REPOSITORY_NAME/apache-exporter] Apache exporter image repository
+  ## @skip metrics.image.tag Apache exporter image tag (immutable tags are recommended)
   ## @param metrics.image.digest Apache exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param metrics.image.pullPolicy Image pull policy
   ## @param metrics.image.pullSecrets Specify docker-registry secret names as an array
@@ -989,9 +989,9 @@ certificates:
   ## @param certificates.extraEnvVarsSecret Secret containing extra env vars (in case of sensitive data)
   ##
   extraEnvVarsSecret: ""
-  ## @param certificates.image.registry Container sidecar registry
-  ## @param certificates.image.repository Container sidecar image
-  ## @param certificates.image.tag Container sidecar image tag (immutable tags are recommended)
+  ## @param certificates.image.registry [default: REGISTRY_NAME] Container sidecar registry
+  ## @param certificates.image.repository [default: REPOSITORY_NAME/os-shell] Container sidecar image
+  ## @skip certificates.image.tag Container sidecar image tag (immutable tags are recommended)
   ## @param certificates.image.digest Container sidecar image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param certificates.image.pullPolicy Container sidecar image pull policy
   ## @param certificates.image.pullSecrets Container sidecar image pull secrets
