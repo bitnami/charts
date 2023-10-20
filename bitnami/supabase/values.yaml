@@ -97,8 +97,8 @@ jwt:
     forceRun: false
     ## Bitnami JWT CLI image
     ## ref: https://hub.docker.com/r/bitnami/jwt-cli/tags/
-    ## @param jwt.autoGenerate.image.registry JWT CLI image registry
-    ## @param jwt.autoGenerate.image.repository JWT CLI image repository
+    ## @param jwt.autoGenerate.image.registry [default: REGISTRY_NAME] JWT CLI image registry
+    ## @param jwt.autoGenerate.image.repository [default: REPOSITORY_NAME/jwt-cli] JWT CLI image repository
     ## @param jwt.autoGenerate.image.tag JWT CLI image tag (immutable tags are recommended)
     ## @param jwt.autoGenerate.image.digest JWT CLI image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
     ## @param jwt.autoGenerate.image.pullPolicy JWT CLI image pull policy
@@ -125,8 +125,8 @@ jwt:
     kubectlImage:
       ## Bitnami Kubectl image
       ## ref: https://hub.docker.com/r/bitnami/kubectl/tags/
-      ## @param jwt.autoGenerate.kubectlImage.registry Kubectl image registry
-      ## @param jwt.autoGenerate.kubectlImage.repository Kubectl image repository
+      ## @param jwt.autoGenerate.kubectlImage.registry [default: REGISTRY_NAME] Kubectl image registry
+      ## @param jwt.autoGenerate.kubectlImage.repository [default: REPOSITORY_NAME/kubectl] Kubectl image repository
       ## @param jwt.autoGenerate.kubectlImage.tag Kubectl image tag (immutable tags are recommended)
       ## @param jwt.autoGenerate.kubectlImage.digest Kubectl image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
       ## @param jwt.autoGenerate.kubectlImage.pullPolicy Kubectl image pull policy
@@ -286,8 +286,8 @@ auth:
 
   ## Bitnami Gotrue image
   ## ref: https://hub.docker.com/r/bitnami/gotrue/tags/
-  ## @param auth.image.registry Gotrue image registry
-  ## @param auth.image.repository Gotrue image repository
+  ## @param auth.image.registry [default: REGISTRY_NAME] Gotrue image registry
+  ## @param auth.image.repository [default: REPOSITORY_NAME/gotrue] Gotrue image repository
   ## @param auth.image.tag Gotrue image tag (immutable tags are recommended)
   ## @param auth.image.digest Gotrue image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
   ## @param auth.image.pullPolicy Gotrue image pull policy
@@ -610,8 +610,8 @@ meta:
 
   ## Bitnami Supabase Postgres Meta image
   ## ref: https://hub.docker.com/r/bitnami/supabase-postgres-meta/tags/
-  ## @param meta.image.registry Supabase Postgres Meta image registry
-  ## @param meta.image.repository Supabase Postgres Meta image repository
+  ## @param meta.image.registry [default: REGISTRY_NAME] Supabase Postgres Meta image registry
+  ## @param meta.image.repository [default: REPOSITORY_NAME/supabase-postgres-meta] Supabase Postgres Meta image repository
   ## @param meta.image.tag Supabase Postgres Meta image tag (immutable tags are recommended)
   ## @param meta.image.digest Supabase Postgres Meta image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
   ## @param meta.image.pullPolicy Supabase Postgres Meta image pull policy
@@ -953,8 +953,8 @@ realtime:
 
   ## Bitnami Realtime image
   ## ref: https://hub.docker.com/r/bitnami/supabase-realtime/tags/
-  ## @param realtime.image.registry Realtime image registry
-  ## @param realtime.image.repository Realtime image repository
+  ## @param realtime.image.registry [default: REGISTRY_NAME] Realtime image registry
+  ## @param realtime.image.repository [default: REPOSITORY_NAME/supabase-realtime] Realtime image repository
   ## @param realtime.image.tag Realtime image tag (immutable tags are recommended)
   ## @param realtime.image.digest Realtime image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
   ## @param realtime.image.pullPolicy Realtime image pull policy
@@ -1275,8 +1275,8 @@ rest:
 
   ## Bitnami PostgREST image
   ## ref: https://hub.docker.com/r/bitnami/postgrest/tags/
-  ## @param rest.image.registry PostgREST image registry
-  ## @param rest.image.repository PostgREST image repository
+  ## @param rest.image.registry [default: REGISTRY_NAME] PostgREST image registry
+  ## @param rest.image.repository [default: REPOSITORY_NAME/postgrest] PostgREST image repository
   ## @param rest.image.tag PostgREST image tag (immutable tags are recommended)
   ## @param rest.image.digest PostgREST image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
   ## @param rest.image.pullPolicy PostgREST image pull policy
@@ -1602,8 +1602,8 @@ storage:
 
   ## Bitnami Storage image
   ## ref: https://hub.docker.com/r/bitnami/supabase-storage/tags/
-  ## @param storage.image.registry Storage image registry
-  ## @param storage.image.repository Storage image repository
+  ## @param storage.image.registry [default: REGISTRY_NAME] Storage image registry
+  ## @param storage.image.repository [default: REPOSITORY_NAME/supabase-storage] Storage image repository
   ## @param storage.image.tag Storage image tag (immutable tags are recommended)
   ## @param storage.image.digest Storage image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
   ## @param storage.image.pullPolicy Storage image pull policy
@@ -1976,8 +1976,8 @@ studio:
 
   ## Bitnami Studio image
   ## ref: https://hub.docker.com/r/bitnami/supabase-studio/tags/
-  ## @param studio.image.registry Studio image registry
-  ## @param studio.image.repository Studio image repository
+  ## @param studio.image.registry [default: REGISTRY_NAME] Studio image registry
+  ## @param studio.image.repository [default: REPOSITORY_NAME/supabase-studio] Studio image repository
   ## @param studio.image.tag Studio image tag (immutable tags are recommended)
   ## @param studio.image.digest Studio image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
   ## @param studio.image.pullPolicy Studio image pull policy
@@ -2380,8 +2380,8 @@ volumePermissions:
   enabled: false
   ## OS Shell + Utility image
   ## ref: https://hub.docker.com/r/bitnami/os-shell/tags/
-  ## @param volumePermissions.image.registry OS Shell + Utility image registry
-  ## @param volumePermissions.image.repository OS Shell + Utility image repository
+  ## @param volumePermissions.image.registry [default: REGISTRY_NAME] OS Shell + Utility image registry
+  ## @param volumePermissions.image.repository [default: REPOSITORY_NAME/os-shell] OS Shell + Utility image repository
   ## @param volumePermissions.image.tag OS Shell + Utility image tag (immutable tags are recommended)
   ## @param volumePermissions.image.pullPolicy OS Shell + Utility image pull policy
   ## @param volumePermissions.image.pullSecrets OS Shell + Utility image pull secrets
@@ -2419,8 +2419,8 @@ volumePermissions:
 
 ## Bitnami PostgreSQL image
 ## ref: https://hub.docker.com/r/bitnami/supabase-postgres/tags/
-## @param psqlImage.registry PostgreSQL client image registry
-## @param psqlImage.repository PostgreSQL client image repository
+## @param psqlImage.registry [default: REGISTRY_NAME] PostgreSQL client image registry
+## @param psqlImage.repository [default: REPOSITORY_NAME/supabase-postgres] PostgreSQL client image repository
 ## @param psqlImage.digest PostgreSQL client image digest (overrides image tag)
 ## @param psqlImage.tag PostgreSQL client image tag (immutable tags are recommended)
 ## @param psqlImage.pullPolicy PostgreSQL client image pull policy
@@ -2583,8 +2583,8 @@ postgresql:
   enabled: true
   ## Bitnami PostgreSQL image version
   ## ref: https://hub.docker.com/r/bitnami/supabase-postgres/tags/
-  ## @param postgresql.image.registry PostgreSQL image registry
-  ## @param postgresql.image.repository PostgreSQL image repository
+  ## @param postgresql.image.registry [default: REGISTRY_NAME] PostgreSQL image registry
+  ## @param postgresql.image.repository [default: REPOSITORY_NAME/supabase-postgres] PostgreSQL image repository
   ## @param postgresql.image.tag PostgreSQL image tag (immutable tags are recommended)
   ## @param postgresql.image.digest PostgreSQL image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param postgresql.image.pullPolicy PostgreSQL image pull policy

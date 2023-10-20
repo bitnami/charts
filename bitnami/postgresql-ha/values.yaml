@@ -93,8 +93,8 @@ diagnosticMode:
 ##
 postgresql:
   ## ref: https://hub.docker.com/r/bitnami/postgresql/tags/
-  ## @param postgresql.image.registry PostgreSQL with Repmgr image registry
-  ## @param postgresql.image.repository PostgreSQL with Repmgr image repository
+  ## @param postgresql.image.registry [default: REGISTRY_NAME] PostgreSQL with Repmgr image registry
+  ## @param postgresql.image.repository [default: REPOSITORY_NAME/postgresql-repmgr] PostgreSQL with Repmgr image repository
   ## @param postgresql.image.tag PostgreSQL with Repmgr image tag
   ## @param postgresql.image.digest PostgreSQL image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param postgresql.image.pullPolicy PostgreSQL with Repmgr image pull policy
@@ -1032,8 +1032,8 @@ witness:
 pgpool:
   ## Bitnami Pgpool image
   ## ref: https://hub.docker.com/r/bitnami/pgpool/tags/
-  ## @param pgpool.image.registry Pgpool image registry
-  ## @param pgpool.image.repository Pgpool image repository
+  ## @param pgpool.image.registry [default: REGISTRY_NAME] Pgpool image registry
+  ## @param pgpool.image.repository [default: REPOSITORY_NAME/pgpool] Pgpool image repository
   ## @param pgpool.image.tag Pgpool image tag
   ## @param pgpool.image.digest Pgpool image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param pgpool.image.pullPolicy Pgpool image pull policy
@@ -1551,8 +1551,8 @@ metrics:
   ##
   enabled: false
   ## ref: https://hub.docker.com/r/bitnami/pgpool/tags/
-  ## @param metrics.image.registry PostgreSQL Prometheus exporter image registry
-  ## @param metrics.image.repository PostgreSQL Prometheus exporter image repository
+  ## @param metrics.image.registry [default: REGISTRY_NAME] PostgreSQL Prometheus exporter image registry
+  ## @param metrics.image.repository [default: REPOSITORY_NAME/postgres-exporter] PostgreSQL Prometheus exporter image repository
   ## @param metrics.image.tag PostgreSQL Prometheus exporter image tag
   ## @param metrics.image.digest PostgreSQL Prometheus exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param metrics.image.pullPolicy PostgreSQL Prometheus exporter image pull policy
@@ -1801,8 +1801,8 @@ volumePermissions:
   ## @param volumePermissions.enabled Enable init container to adapt volume permissions
   ##
   enabled: false
-  ## @param volumePermissions.image.registry Init container volume-permissions image registry
-  ## @param volumePermissions.image.repository Init container volume-permissions image repository
+  ## @param volumePermissions.image.registry [default: REGISTRY_NAME] Init container volume-permissions image registry
+  ## @param volumePermissions.image.repository [default: REPOSITORY_NAME/os-shell] Init container volume-permissions image repository
   ## @param volumePermissions.image.tag Init container volume-permissions image tag
   ## @param volumePermissions.image.digest Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
