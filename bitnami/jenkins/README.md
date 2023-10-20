@@ -86,7 +86,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------- |
 | `image.registry`    | Jenkins image registry                                                                                  | `REGISTRY_NAME`           |
 | `image.repository`  | Jenkins image repository                                                                                | `REPOSITORY_NAME/jenkins` |
-| `image.tag`         | Jenkins image tag (immutable tags are recommended)                                                      | `2.414.3-debian-11-r0`    |
 | `image.digest`      | Jenkins image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
 | `image.pullPolicy`  | Jenkins image pull policy                                                                               | `IfNotPresent`            |
 | `image.pullSecrets` | Jenkins image pull secrets                                                                              | `[]`                      |
@@ -164,7 +163,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `agent.enabled`                                                           | Set to true to enable the configuration of Jenkins kubernetes agents                                    | `false`                         |
 | `agent.image.registry`                                                    | Jenkins image registry                                                                                  | `REGISTRY_NAME`                 |
 | `agent.image.repository`                                                  | Jenkins image repository                                                                                | `REPOSITORY_NAME/jenkins-agent` |
-| `agent.image.tag`                                                         | Jenkins image tag (immutable tags are recommended)                                                      | `0.3174.0-debian-11-r0`         |
 | `agent.image.digest`                                                      | Jenkins image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                            |
 | `agent.image.pullPolicy`                                                  | Jenkins image pull policy                                                                               | `IfNotPresent`                  |
 | `agent.image.pullSecrets`                                                 | Jenkins image pull secrets                                                                              | `[]`                            |
@@ -300,7 +298,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                   | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`                    | `false`                    |
 | `volumePermissions.image.registry`            | OS Shell + Utility image registry                                                                                  | `REGISTRY_NAME`            |
 | `volumePermissions.image.repository`          | OS Shell + Utility image repository                                                                                | `REPOSITORY_NAME/os-shell` |
-| `volumePermissions.image.tag`                 | OS Shell + Utility image tag (immutable tags are recommended)                                                      | `11-debian-11-r90`         |
 | `volumePermissions.image.digest`              | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
 | `volumePermissions.image.pullPolicy`          | OS Shell + Utility image pull policy                                                                               | `IfNotPresent`             |
 | `volumePermissions.image.pullSecrets`         | OS Shell + Utility image pull secrets                                                                              | `[]`                       |

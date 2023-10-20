@@ -84,7 +84,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | ------------------------------------------------------------------------------------------------------- | ------------------------- |
 | `image.registry`    | Osclass image registry                                                                                  | `REGISTRY_NAME`           |
 | `image.repository`  | Osclass image repository                                                                                | `REPOSITORY_NAME/osclass` |
-| `image.tag`         | Osclass image tag (immutable tags are recommended)                                                      | `8.1.2-debian-11-r100`    |
 | `image.digest`      | Osclass image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                      |
 | `image.pullPolicy`  | Osclass image pull policy                                                                               | `IfNotPresent`            |
 | `image.pullSecrets` | Osclass image pull secrets                                                                              | `[]`                      |
@@ -155,7 +154,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `certificates.extraEnvVarsSecret`                    | Secret with extra environment variables                                                                         | `""`                                     |
 | `certificates.image.registry`                        | Apache Exporter image registry                                                                                  | `REGISTRY_NAME`                          |
 | `certificates.image.repository`                      | Apache Exporter image repository                                                                                | `REPOSITORY_NAME/os-shell`               |
-| `certificates.image.tag`                             | Apache Exporter image tag (immutable tags are recommended)                                                      | `11-debian-11-r90`                       |
 | `certificates.image.digest`                          | Apache Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                                     |
 | `certificates.image.pullPolicy`                      | Apache Exporter image pull policy                                                                               | `IfNotPresent`                           |
 | `certificates.image.pullSecrets`                     | Apache Exporter image pull secrets                                                                              | `[]`                                     |
@@ -251,7 +249,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`                    | `false`                    |
 | `volumePermissions.image.registry`         | OS Shell + Utility image registry                                                                                  | `REGISTRY_NAME`            |
 | `volumePermissions.image.repository`       | OS Shell + Utility image repository                                                                                | `REPOSITORY_NAME/os-shell` |
-| `volumePermissions.image.tag`              | OS Shell + Utility image tag (immutable tags are recommended)                                                      | `11-debian-11-r90`         |
 | `volumePermissions.image.digest`           | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
 | `volumePermissions.image.pullPolicy`       | OS Shell + Utility image pull policy                                                                               | `IfNotPresent`             |
 | `volumePermissions.image.pullSecrets`      | OS Shell + Utility image pull secrets                                                                              | `[]`                       |
@@ -278,7 +275,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.enabled`                          | Start a sidecar prometheus exporter to expose metrics                                                           | `false`                           |
 | `metrics.image.registry`                   | Apache Exporter image registry                                                                                  | `REGISTRY_NAME`                   |
 | `metrics.image.repository`                 | Apache Exporter image repository                                                                                | `REPOSITORY_NAME/apache-exporter` |
-| `metrics.image.tag`                        | Apache Exporter image tag (immutable tags are recommended)                                                      | `1.0.2-debian-11-r10`             |
 | `metrics.image.digest`                     | Apache Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                              |
 | `metrics.image.pullPolicy`                 | Apache Exporter image pull policy                                                                               | `IfNotPresent`                    |
 | `metrics.image.pullSecrets`                | Apache Exporter image pull secrets                                                                              | `[]`                              |

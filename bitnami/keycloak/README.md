@@ -90,7 +90,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | ----------------------------- |
 | `image.registry`                 | Keycloak image registry                                                                                                      | `REGISTRY_NAME`               |
 | `image.repository`               | Keycloak image repository                                                                                                    | `REPOSITORY_NAME/keycloak`    |
-| `image.tag`                      | Keycloak image tag (immutable tags are recommended)                                                                          | `22.0.4-debian-11-r3`         |
 | `image.digest`                   | Keycloak image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                     | `""`                          |
 | `image.pullPolicy`               | Keycloak image pull policy                                                                                                   | `IfNotPresent`                |
 | `image.pullSecrets`              | Specify docker-registry secret names as an array                                                                             | `[]`                          |
@@ -286,7 +285,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `keycloakConfigCli.enabled`                               | Whether to enable keycloak-config-cli job                                                                                     | `false`                               |
 | `keycloakConfigCli.image.registry`                        | keycloak-config-cli container image registry                                                                                  | `REGISTRY_NAME`                       |
 | `keycloakConfigCli.image.repository`                      | keycloak-config-cli container image repository                                                                                | `REPOSITORY_NAME/keycloak-config-cli` |
-| `keycloakConfigCli.image.tag`                             | keycloak-config-cli container image tag                                                                                       | `5.9.0-debian-11-r0`                  |
 | `keycloakConfigCli.image.digest`                          | keycloak-config-cli container image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                                  |
 | `keycloakConfigCli.image.pullPolicy`                      | keycloak-config-cli container image pull policy                                                                               | `IfNotPresent`                        |
 | `keycloakConfigCli.image.pullSecrets`                     | keycloak-config-cli container image pull secrets                                                                              | `[]`                                  |

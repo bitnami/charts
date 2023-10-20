@@ -81,7 +81,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `extraDeploy`       | Array of extra objects to deploy with the release                                                        | `[]`                       |
 | `image.registry`    | Pinniped image registry                                                                                  | `REGISTRY_NAME`            |
 | `image.repository`  | Pinniped image repository                                                                                | `REPOSITORY_NAME/pinniped` |
-| `image.tag`         | Pinniped image tag (immutable tags are recommended)                                                      | `0.27.0-debian-11-r0`      |
 | `image.digest`      | Pinniped image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
 | `image.pullPolicy`  | Pinniped image pull policy                                                                               | `IfNotPresent`             |
 | `image.pullSecrets` | Pinniped image pull secrets                                                                              | `[]`                       |

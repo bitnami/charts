@@ -52,7 +52,7 @@ server:
   ## ref: https://hub.docker.com/r/bitnami/spring-cloud-dataflow/tags/
   ## @param server.image.registry [default: REGISTRY_NAME] Spring Cloud Dataflow image registry
   ## @param server.image.repository [default: REPOSITORY_NAME/spring-cloud-dataflow] Spring Cloud Dataflow image repository
-  ## @param server.image.tag Spring Cloud Dataflow image tag (immutable tags are recommended)
+  ## @skip server.image.tag Spring Cloud Dataflow image tag (immutable tags are recommended)
   ## @param server.image.digest Spring Cloud Dataflow image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param server.image.pullPolicy Spring Cloud Dataflow image pull policy
   ## @param server.image.pullSecrets Specify docker-registry secret names as an array
@@ -87,7 +87,7 @@ server:
     ## ref: https://hub.docker.com/r/bitnami/spring-cloud-dataflow/tags/
     ## @param server.composedTaskRunner.image.registry [default: REGISTRY_NAME] Spring Cloud Dataflow Composed Task Runner image registry
     ## @param server.composedTaskRunner.image.repository [default: REPOSITORY_NAME/spring-cloud-dataflow-composed-task-runner] Spring Cloud Dataflow Composed Task Runner image repository
-    ## @param server.composedTaskRunner.image.tag Spring Cloud Dataflow Composed Task Runner image tag (immutable tags are recommended)
+    ## @skip server.composedTaskRunner.image.tag Spring Cloud Dataflow Composed Task Runner image tag (immutable tags are recommended)
     ## @param server.composedTaskRunner.image.digest Spring Cloud Dataflow Composed Task Runner image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
     ##
     image:
@@ -587,7 +587,7 @@ skipper:
   ## ref: https://hub.docker.com/r/bitnami/spring-cloud-skipper/tags/
   ## @param skipper.image.registry [default: REGISTRY_NAME] Spring Cloud Skipper image registry
   ## @param skipper.image.repository [default: REPOSITORY_NAME/spring-cloud-skipper] Spring Cloud Skipper image repository
-  ## @param skipper.image.tag Spring Cloud Skipper image tag (immutable tags are recommended)
+  ## @skip skipper.image.tag Spring Cloud Skipper image tag (immutable tags are recommended)
   ## @param skipper.image.digest Spring Cloud Skipper image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param skipper.image.pullPolicy Spring Cloud Skipper image pull policy
   ## @param skipper.image.pullSecrets Specify docker-registry secret names as an array
@@ -1059,7 +1059,7 @@ metrics:
   ## ref: https://hub.docker.com/r/bitnami/prometheus-rsocket-proxy/tags/
   ## @param metrics.image.registry [default: REGISTRY_NAME] Prometheus Rsocket Proxy image registry
   ## @param metrics.image.repository [default: REPOSITORY_NAME/prometheus-rsocket-proxy] Prometheus Rsocket Proxy image repository
-  ## @param metrics.image.tag Prometheus Rsocket Proxy image tag (immutable tags are recommended)
+  ## @skip metrics.image.tag Prometheus Rsocket Proxy image tag (immutable tags are recommended)
   ## @param metrics.image.digest Prometheus Rsocket Proxy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param metrics.image.pullPolicy Prometheus Rsocket Proxy image pull policy
   ## @param metrics.image.pullSecrets Specify docker-registry secret names as an array
@@ -1394,7 +1394,7 @@ waitForBackends:
   enabled: true
   ## @param waitForBackends.image.registry [default: REGISTRY_NAME] Init container wait-for-backend image registry
   ## @param waitForBackends.image.repository [default: REPOSITORY_NAME/kubectl] Init container wait-for-backend image name
-  ## @param waitForBackends.image.tag Init container wait-for-backend image tag
+  ## @skip waitForBackends.image.tag Init container wait-for-backend image tag
   ## @param waitForBackends.image.digest Init container wait-for-backend image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param waitForBackends.image.pullPolicy Init container wait-for-backend image pull policy
   ## @param waitForBackends.image.pullSecrets Specify docker-registry secret names as an array
@@ -1449,7 +1449,7 @@ mariadb:
   ## ref: https://github.com/bitnami/containers/tree/main/bitnami/mariadb
   ## @param mariadb.image.registry [default: REGISTRY_NAME] MariaDB image registry
   ## @param mariadb.image.repository [default: REPOSITORY_NAME/mariadb] MariaDB image repository
-  ## @param mariadb.image.tag MariaDB image tag (immutable tags are recommended)
+  ## @skip mariadb.image.tag MariaDB image tag (immutable tags are recommended)
   ## @param mariadb.image.digest MariaDB image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ##
   image:

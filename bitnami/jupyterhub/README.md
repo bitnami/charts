@@ -89,7 +89,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ---------------------------- |
 | `hub.image.registry`                        | Hub image registry                                                                                                       | `REGISTRY_NAME`              |
 | `hub.image.repository`                      | Hub image repository                                                                                                     | `REPOSITORY_NAME/jupyterhub` |
-| `hub.image.tag`                             | Hub image tag (immutable tags are recommended)                                                                           | `4.0.2-debian-11-r55`        |
 | `hub.image.digest`                          | Hub image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                      | `""`                         |
 | `hub.image.pullPolicy`                      | Hub image pull policy                                                                                                    | `IfNotPresent`               |
 | `hub.image.pullSecrets`                     | Hub image pull secrets                                                                                                   | `[]`                         |
@@ -213,7 +212,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------- |
 | `proxy.image.registry`                        | Proxy image registry                                                                                                     | `REGISTRY_NAME`                           |
 | `proxy.image.repository`                      | Proxy image repository                                                                                                   | `REPOSITORY_NAME/configurable-http-proxy` |
-| `proxy.image.tag`                             | Proxy image tag (immutable tags are recommended)                                                                         | `4.6.0-debian-11-r16`                     |
 | `proxy.image.digest`                          | Proxy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                    | `""`                                      |
 | `proxy.image.pullPolicy`                      | Proxy image pull policy                                                                                                  | `IfNotPresent`                            |
 | `proxy.image.pullSecrets`                     | Proxy image pull secrets                                                                                                 | `[]`                                      |
@@ -411,7 +409,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------------------------------- | ----------------------------------------------------------------------------------------------------------- | --------------------------------------- |
 | `singleuser.image.registry`                     | Single User image registry                                                                                  | `REGISTRY_NAME`                         |
 | `singleuser.image.repository`                   | Single User image repository                                                                                | `REPOSITORY_NAME/jupyter-base-notebook` |
-| `singleuser.image.tag`                          | Single User image tag (immutabe tags are recommended)                                                       | `4.0.2-debian-11-r55`                   |
 | `singleuser.image.digest`                       | Single User image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                                    |
 | `singleuser.image.pullPolicy`                   | Single User image pull policy                                                                               | `IfNotPresent`                          |
 | `singleuser.image.pullSecrets`                  | Single User image pull secrets                                                                              | `[]`                                    |
@@ -471,7 +468,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | ---------------------------- | --------------------------------------------------------------------------------------------------------- | -------------------------- |
 | `auxiliaryImage.registry`    | Auxiliary image registry                                                                                  | `REGISTRY_NAME`            |
 | `auxiliaryImage.repository`  | Auxiliary image repository                                                                                | `REPOSITORY_NAME/os-shell` |
-| `auxiliaryImage.tag`         | Auxiliary image tag (immutabe tags are recommended)                                                       | `11-debian-11-r90`         |
 | `auxiliaryImage.digest`      | Auxiliary image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
 | `auxiliaryImage.pullPolicy`  | Auxiliary image pull policy                                                                               | `IfNotPresent`             |
 | `auxiliaryImage.pullSecrets` | Auxiliary image pull secrets                                                                              | `[]`                       |

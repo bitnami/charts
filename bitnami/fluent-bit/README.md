@@ -84,7 +84,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | ---------------------------------------------------------------------------------------------------------- | ---------------------------- |
 | `image.registry`    | Fluent Bit image registry                                                                                  | `REGISTRY_NAME`              |
 | `image.repository`  | Fluent Bit image repository                                                                                | `REPOSITORY_NAME/fluent-bit` |
-| `image.tag`         | Fluent Bit image tag (immutable tags are recommended)                                                      | `2.1.10-debian-11-r0`        |
 | `image.digest`      | Fluent Bit image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                         |
 | `image.pullPolicy`  | image pull policy                                                                                          | `IfNotPresent`               |
 | `image.pullSecrets` | Fluent Bit image pull secrets                                                                              | `[]`                         |

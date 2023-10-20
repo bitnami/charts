@@ -64,7 +64,7 @@ diagnosticMode:
 ## ref: https://hub.docker.com/r/bitnami/kibana/tags/
 ## @param image.registry [default: REGISTRY_NAME] Kibana image registry
 ## @param image.repository [default: REPOSITORY_NAME/kibana] Kibana image repository
-## @param image.tag Kibana image tag (immutable tags are recommended)
+## @skip image.tag Kibana image tag (immutable tags are recommended)
 ## @param image.digest Kibana image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy Kibana image pull policy
 ## @param image.pullSecrets Specify docker-registry secret names as an array
@@ -187,7 +187,7 @@ volumePermissions:
   enabled: false
   ## @param volumePermissions.image.registry [default: REGISTRY_NAME] Init container volume-permissions image registry
   ## @param volumePermissions.image.repository [default: REPOSITORY_NAME/os-shell] Init container volume-permissions image name
-  ## @param volumePermissions.image.tag Init container volume-permissions image tag
+  ## @skip volumePermissions.image.tag Init container volume-permissions image tag
   ## @param volumePermissions.image.digest Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
   ## @param volumePermissions.image.pullSecrets Init container volume-permissions image pull secrets

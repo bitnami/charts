@@ -70,7 +70,7 @@ diagnosticMode:
 ## ref: https://hub.docker.com/r/bitnami/mongodb-sharded/tags/
 ## @param image.registry [default: REGISTRY_NAME] MongoDB(&reg;) Sharded image registry
 ## @param image.repository [default: REPOSITORY_NAME/mongodb-sharded] MongoDB(&reg;) Sharded Image name
-## @param image.tag MongoDB(&reg;) Sharded image tag (immutable tags are recommended)
+## @skip image.tag MongoDB(&reg;) Sharded image tag (immutable tags are recommended)
 ## @param image.digest MongoDB(&reg;) Sharded image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy MongoDB(&reg;) Sharded image pull policy
 ## @param image.pullSecrets Specify docker-registry secret names as an array
@@ -240,7 +240,7 @@ volumePermissions:
   enabled: false
   ## @param volumePermissions.image.registry [default: REGISTRY_NAME] Init container volume-permissions image registry
   ## @param volumePermissions.image.repository [default: REPOSITORY_NAME/os-shell] Init container volume-permissions image name
-  ## @param volumePermissions.image.tag Init container volume-permissions image tag
+  ## @skip volumePermissions.image.tag Init container volume-permissions image tag
   ## @param volumePermissions.image.digest Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
   ## @param volumePermissions.image.pullSecrets Init container volume-permissions image pull secrets
@@ -1542,7 +1542,7 @@ metrics:
   enabled: false
   ## @param metrics.image.registry [default: REGISTRY_NAME] MongoDB&reg; exporter image registry
   ## @param metrics.image.repository [default: REPOSITORY_NAME/mongodb-exporter] MongoDB&reg; exporter image name
-  ## @param metrics.image.tag MongoDB&reg; exporter image tag
+  ## @skip metrics.image.tag MongoDB&reg; exporter image tag
   ## @param metrics.image.digest MongoDB&reg; exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param metrics.image.pullPolicy MongoDB&reg; exporter image pull policy
   ## @param metrics.image.pullSecrets MongoDB&reg; exporter image pull secrets

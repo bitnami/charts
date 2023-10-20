@@ -46,7 +46,7 @@ extraDeploy: []
 ## ref: https://hub.docker.com/r/bitnami/apache/tags/
 ## @param image.registry [default: REGISTRY_NAME] Apache image registry
 ## @param image.repository [default: REPOSITORY_NAME/apache] Apache image repository
-## @param image.tag Apache image tag (immutable tags are recommended)
+## @skip image.tag Apache image tag (immutable tags are recommended)
 ## @param image.digest Apache image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy Apache image pull policy
 ## @param image.pullSecrets Apache image pull secrets
@@ -77,7 +77,7 @@ image:
 ## ref: https://hub.docker.com/r/bitnami/git/tags/
 ## @param git.registry [default: REGISTRY_NAME] Git image registry
 ## @param git.repository [default: REPOSITORY_NAME/git] Git image name
-## @param git.tag Git image tag (immutable tags are recommended)
+## @skip git.tag Git image tag (immutable tags are recommended)
 ## @param git.digest Git image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param git.pullPolicy Git image pull policy
 ## @param git.pullSecrets Specify docker-registry secret names as an array
@@ -586,7 +586,7 @@ metrics:
   ## ref: https://hub.docker.com/r/bitnami/apache-exporter/tags/
   ## @param metrics.image.registry [default: REGISTRY_NAME] Apache Exporter image registry
   ## @param metrics.image.repository [default: REPOSITORY_NAME/apache-exporter] Apache Exporter image repository
-  ## @param metrics.image.tag Apache Exporter image tag (immutable tags are recommended)
+  ## @skip metrics.image.tag Apache Exporter image tag (immutable tags are recommended)
   ## @param metrics.image.digest Apache Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param metrics.image.pullPolicy Apache Exporter image pull policy
   ## @param metrics.image.pullSecrets Apache Exporter image pull secrets
