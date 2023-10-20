@@ -97,7 +97,7 @@ helm delete --purge my-release
 | `datacenterName`                | Datacenter name for Consul. If not supplied, will use the Consul                                                 | `dc1`                    |
 | `domain`                        | Consul domain name                                                                                               | `consul`                 |
 | `raftMultiplier`                | Multiplier used to scale key Raft timing parameters                                                              | `1`                      |
-| `gossipKey`                     | Gossip key for all members. The key must be 16-bytes, can be generated with $(consul keygen)                     | `""`                     |
+| `gossipKey`                     | Gossip key for all members. The key must be base64-encoded, can be generated with $(consul keygen)               | `""`                     |
 | `tlsEncryptionSecretName`       | Name of existing secret with TLS encryption data                                                                 | `""`                     |
 | `hostAliases`                   | Deployment pod host aliases                                                                                      | `[]`                     |
 | `configuration`                 | HashiCorp Consul configuration to be injected as ConfigMap                                                       | `""`                     |
