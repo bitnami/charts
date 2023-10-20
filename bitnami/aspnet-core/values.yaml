@@ -53,8 +53,8 @@ extraDeploy: []
 
 ## Bitnami ASP.NET Core Core image
 ## ref: https://hub.docker.com/r/bitnami/aspnet-core/tags/
-## @param image.registry ASP.NET Core Core image registry
-## @param image.repository ASP.NET Core Core image repository
+## @param image.registry [default: REGISTRY_NAME] ASP.NET Core Core image registry
+## @param image.repository [default: REPOSITORY_NAME/aspnet-core] ASP.NET Core Core image repository
 ## @param image.tag ASP.NET Core Core image tag (immutable tags are recommended)
 ## @param image.digest ASP.NET Core Core image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy ASP.NET Core Core image pull policy
@@ -366,8 +366,8 @@ appFromExternalRepo:
   clone:
     ## Bitnami Git image version
     ## ref: https://hub.docker.com/r/bitnami/git/tags/
-    ## @param appFromExternalRepo.clone.image.registry Git image registry
-    ## @param appFromExternalRepo.clone.image.repository Git image repository
+    ## @param appFromExternalRepo.clone.image.registry [default: REGISTRY_NAME] Git image registry
+    ## @param appFromExternalRepo.clone.image.repository [default: REPOSITORY_NAME/git] Git image repository
     ## @param appFromExternalRepo.clone.image.tag Git image tag (immutable tags are recommended)
     ## @param appFromExternalRepo.clone.image.digest Git image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
     ## @param appFromExternalRepo.clone.image.pullPolicy Git image pull policy
@@ -408,8 +408,8 @@ appFromExternalRepo:
   publish:
     ## Bitnami .NET SDK image version
     ## ref: https://hub.docker.com/r/bitnami/dotnet-sdk/tags/
-    ## @param appFromExternalRepo.publish.image.registry .NET SDK image registry
-    ## @param appFromExternalRepo.publish.image.repository .NET SDK image repository
+    ## @param appFromExternalRepo.publish.image.registry [default: REGISTRY_NAME] .NET SDK image registry
+    ## @param appFromExternalRepo.publish.image.repository [default: REPOSITORY_NAME/dotnet-sdk] .NET SDK image repository
     ## @param appFromExternalRepo.publish.image.tag .NET SDK image tag (immutable tags are recommended)
     ## @param appFromExternalRepo.publish.image.digest .NET SDK image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
     ## @param appFromExternalRepo.publish.image.pullPolicy .NET SDK image pull policy
