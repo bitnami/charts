@@ -95,7 +95,7 @@ postgresql:
   ## ref: https://hub.docker.com/r/bitnami/postgresql/tags/
   ## @param postgresql.image.registry [default: REGISTRY_NAME] PostgreSQL with Repmgr image registry
   ## @param postgresql.image.repository [default: REPOSITORY_NAME/postgresql-repmgr] PostgreSQL with Repmgr image repository
-  ## @param postgresql.image.tag PostgreSQL with Repmgr image tag
+  ## @skip postgresql.image.tag PostgreSQL with Repmgr image tag
   ## @param postgresql.image.digest PostgreSQL image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param postgresql.image.pullPolicy PostgreSQL with Repmgr image pull policy
   ## @param postgresql.image.pullSecrets Specify docker-registry secret names as an array
@@ -1034,7 +1034,7 @@ pgpool:
   ## ref: https://hub.docker.com/r/bitnami/pgpool/tags/
   ## @param pgpool.image.registry [default: REGISTRY_NAME] Pgpool image registry
   ## @param pgpool.image.repository [default: REPOSITORY_NAME/pgpool] Pgpool image repository
-  ## @param pgpool.image.tag Pgpool image tag
+  ## @skip pgpool.image.tag Pgpool image tag
   ## @param pgpool.image.digest Pgpool image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param pgpool.image.pullPolicy Pgpool image pull policy
   ## @param pgpool.image.pullSecrets Specify docker-registry secret names as an array
@@ -1553,7 +1553,7 @@ metrics:
   ## ref: https://hub.docker.com/r/bitnami/pgpool/tags/
   ## @param metrics.image.registry [default: REGISTRY_NAME] PostgreSQL Prometheus exporter image registry
   ## @param metrics.image.repository [default: REPOSITORY_NAME/postgres-exporter] PostgreSQL Prometheus exporter image repository
-  ## @param metrics.image.tag PostgreSQL Prometheus exporter image tag
+  ## @skip metrics.image.tag PostgreSQL Prometheus exporter image tag
   ## @param metrics.image.digest PostgreSQL Prometheus exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param metrics.image.pullPolicy PostgreSQL Prometheus exporter image pull policy
   ## @param metrics.image.pullSecrets Specify docker-registry secret names as an array
@@ -1803,7 +1803,7 @@ volumePermissions:
   enabled: false
   ## @param volumePermissions.image.registry [default: REGISTRY_NAME] Init container volume-permissions image registry
   ## @param volumePermissions.image.repository [default: REPOSITORY_NAME/os-shell] Init container volume-permissions image repository
-  ## @param volumePermissions.image.tag Init container volume-permissions image tag
+  ## @skip volumePermissions.image.tag Init container volume-permissions image tag
   ## @param volumePermissions.image.digest Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
   ## @param volumePermissions.image.pullSecrets Specify docker-registry secret names as an array

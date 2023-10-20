@@ -89,7 +89,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------- | ------------------------------------------------------------------------------------------------------------- | ------------------------------- |
 | `tempo.image.registry`                 | Grafana Tempo image registry                                                                                  | `REGISTRY_NAME`                 |
 | `tempo.image.repository`               | Grafana Tempo image repository                                                                                | `REPOSITORY_NAME/grafana-tempo` |
-| `tempo.image.tag`                      | Grafana Tempo image tag (immutable tags are recommended)                                                      | `2.2.3-debian-11-r23`           |
 | `tempo.image.digest`                   | Grafana Tempo image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                            |
 | `tempo.image.pullPolicy`               | Grafana Tempo image pull policy                                                                               | `IfNotPresent`                  |
 | `tempo.image.pullSecrets`              | Grafana Tempo image pull secrets                                                                              | `[]`                            |
@@ -576,7 +575,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `queryFrontend.initContainers`                              | Add additional init containers to the queryFrontend pod(s)                                                          | `[]`                                  |
 | `queryFrontend.query.image.registry`                        | Grafana Tempo Query image registry                                                                                  | `REGISTRY_NAME`                       |
 | `queryFrontend.query.image.repository`                      | Grafana Tempo Query image repository                                                                                | `REPOSITORY_NAME/grafana-tempo-query` |
-| `queryFrontend.query.image.tag`                             | Grafana Tempo Query image tag (immutable tags are recommended)                                                      | `2.2.3-debian-11-r12`                 |
 | `queryFrontend.query.image.digest`                          | Grafana Tempo Query image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                                  |
 | `queryFrontend.query.image.pullPolicy`                      | Grafana Tempo Query image pull policy                                                                               | `IfNotPresent`                        |
 | `queryFrontend.query.image.pullSecrets`                     | Grafana Tempo Query image pull secrets                                                                              | `[]`                                  |
@@ -644,7 +642,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `vulture.enabled`                               | Enable vulture deployment                                                                                       | `true`                                  |
 | `vulture.image.registry`                        | Grafana Vulture image registry                                                                                  | `REGISTRY_NAME`                         |
 | `vulture.image.repository`                      | Grafana Vulture image repository                                                                                | `REPOSITORY_NAME/grafana-tempo-vulture` |
-| `vulture.image.tag`                             | Grafana Vulture image tag (immutable tags are recommended)                                                      | `2.2.3-debian-11-r10`                   |
 | `vulture.image.digest`                          | Grafana Vulture image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                                    |
 | `vulture.image.pullPolicy`                      | Grafana Vulture image pull policy                                                                               | `IfNotPresent`                          |
 | `vulture.image.pullSecrets`                     | Grafana Vulture image pull secrets                                                                              | `[]`                                    |
@@ -728,7 +725,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`                    | `false`                    |
 | `volumePermissions.image.registry`                     | OS Shell + Utility image registry                                                                                  | `REGISTRY_NAME`            |
 | `volumePermissions.image.repository`                   | OS Shell + Utility image repository                                                                                | `REPOSITORY_NAME/os-shell` |
-| `volumePermissions.image.tag`                          | OS Shell + Utility image tag (immutable tags are recommended)                                                      | `11-debian-11-r90`         |
 | `volumePermissions.image.digest`                       | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
 | `volumePermissions.image.pullPolicy`                   | OS Shell + Utility image pull policy                                                                               | `IfNotPresent`             |
 | `volumePermissions.image.pullSecrets`                  | OS Shell + Utility image pull secrets                                                                              | `[]`                       |

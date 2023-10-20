@@ -94,7 +94,7 @@ serviceAccount:
 ## ref: https://hub.docker.com/r/bitnami/node-exporter/tags/
 ## @param image.registry [default: REGISTRY_NAME] Node Exporter image registry
 ## @param image.repository [default: REPOSITORY_NAME/node-exporter] Node Exporter image repository
-## @param image.tag Node Exporter image tag (immutable tags are recommended)
+## @skip image.tag Node Exporter image tag (immutable tags are recommended)
 ## @param image.digest Node Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy Node Exporter image pull policy
 ## @param image.pullSecrets Specify docker-registry secret names as an array

@@ -87,7 +87,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | ----------------------------------- | --------------------------------------------------------------------------------------------------------- | --------------------------- |
 | `image.registry`                    | Deepspeed image registry                                                                                  | `REGISTRY_NAME`             |
 | `image.repository`                  | Deepspeed image repository                                                                                | `REPOSITORY_NAME/deepspeed` |
-| `image.tag`                         | Deepspeed image tag (immutable tags are recommended)                                                      | `0.10.3-debian-11-r24`      |
 | `image.digest`                      | Deepspeed image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                        |
 | `image.pullPolicy`                  | Deepspeed image pull policy                                                                               | `IfNotPresent`              |
 | `image.pullSecrets`                 | Specify docker-registry secret names as an array                                                          | `[]`                        |
@@ -325,14 +324,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `worker.persistence.annotations`       | Persistent Volume annotations                                                                                                     | `{}`                       |
 | `gitImage.registry`                    | Git image registry                                                                                                                | `REGISTRY_NAME`            |
 | `gitImage.repository`                  | Git image repository                                                                                                              | `REPOSITORY_NAME/git`      |
-| `gitImage.tag`                         | Git image tag (immutable tags are recommended)                                                                                    | `2.42.0-debian-11-r45`     |
 | `gitImage.digest`                      | Git image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                               | `""`                       |
 | `gitImage.pullPolicy`                  | Git image pull policy                                                                                                             | `IfNotPresent`             |
 | `gitImage.pullSecrets`                 | Specify docker-registry secret names as an array                                                                                  | `[]`                       |
 | `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory                                                       | `false`                    |
 | `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                  | `REGISTRY_NAME`            |
 | `volumePermissions.image.repository`   | Init container volume-permissions image repository                                                                                | `REPOSITORY_NAME/os-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r90`         |
 | `volumePermissions.image.digest`       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
 | `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`             |
 | `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                  | `[]`                       |

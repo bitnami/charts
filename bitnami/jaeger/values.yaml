@@ -60,7 +60,7 @@ diagnosticMode:
 ## ref: https://hub.docker.com/r/bitnami/jaeger/tags/
 ## @param image.registry [default: REGISTRY_NAME] Jaeger image registry
 ## @param image.repository [default: REPOSITORY_NAME/jaeger] Jaeger image repository
-## @param image.tag Jaeger image tag (immutable tags are recommended)
+## @skip image.tag Jaeger image tag (immutable tags are recommended)
 ## @param image.digest Jaeger image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy image pull policy
 ## @param image.pullSecrets Jaeger image pull secrets
@@ -1095,7 +1095,7 @@ migration:
 ## @section Set the image to use for the migration job
 ## @param cqlshImage.registry [default: REGISTRY_NAME] Cassandra image registry
 ## @param cqlshImage.repository [default: REPOSITORY_NAME/cassandra] Cassandra image repository
-## @param cqlshImage.tag Cassandra image tag (immutable tags are recommended)
+## @skip cqlshImage.tag Cassandra image tag (immutable tags are recommended)
 ## @param cqlshImage.digest Cassandra image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param cqlshImage.pullPolicy image pull policy
 ## @param cqlshImage.pullSecrets Cassandra image pull secrets

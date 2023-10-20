@@ -67,7 +67,7 @@ milvus:
   ## ref: https://hub.docker.com/r/bitnami/milvus/tags/
   ## @param milvus.image.registry [default: REGISTRY_NAME] Milvus image registry
   ## @param milvus.image.repository [default: REPOSITORY_NAME/milvus] Milvus image repository
-  ## @param milvus.image.tag Milvus image tag (immutable tags are recommended)
+  ## @skip milvus.image.tag Milvus image tag (immutable tags are recommended)
   ## @param milvus.image.digest Milvus image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param milvus.image.pullPolicy Milvus image pull policy
   ## @param milvus.image.pullSecrets Milvus image pull secrets
@@ -247,7 +247,7 @@ initJob:
   ## ref: https://hub.docker.com/r/bitnami/jwt-cli/tags/
   ## @param initJob.image.registry [default: REGISTRY_NAME] PyMilvus image registry
   ## @param initJob.image.repository [default: REPOSITORY_NAME/pymilvus] PyMilvus image repository
-  ## @param initJob.image.tag PyMilvus image tag (immutable tags are recommended)
+  ## @skip initJob.image.tag PyMilvus image tag (immutable tags are recommended)
   ## @param initJob.image.digest PyMilvus image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
   ## @param initJob.image.pullPolicy PyMilvus image pull policy
   ## @param initJob.image.pullSecrets PyMilvus image pull secrets
@@ -4255,7 +4255,7 @@ attu:
   ## ref: https://hub.docker.com/r/bitnami/attu/tags/
   ## @param attu.image.registry [default: REGISTRY_NAME] Attu image registry
   ## @param attu.image.repository [default: REPOSITORY_NAME/attu] Attu image repository
-  ## @param attu.image.tag Attu image tag (immutable tags are recommended)
+  ## @skip attu.image.tag Attu image tag (immutable tags are recommended)
   ## @param attu.image.digest Attu image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param attu.image.pullPolicy Attu image pull policy
   ## @param attu.image.pullSecrets Attu image pull secrets
@@ -4797,7 +4797,7 @@ attu:
 waitContainer:
   ## @param waitContainer.image.registry [default: REGISTRY_NAME] Init container wait-container image registry
   ## @param waitContainer.image.repository [default: REPOSITORY_NAME/os-shell] Init container wait-container image name
-  ## @param waitContainer.image.tag Init container wait-container image tag
+  ## @skip waitContainer.image.tag Init container wait-container image tag
   ## @param waitContainer.image.digest Init container wait-container image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ##
   image:

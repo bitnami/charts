@@ -84,7 +84,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | ------------------- | ---------------------------------------------------------------------------------------------------------------- | --------------------------- |
 | `image.registry`    | SonarQube&trade; image registry                                                                                  | `REGISTRY_NAME`             |
 | `image.repository`  | SonarQube&trade; image repository                                                                                | `REPOSITORY_NAME/sonarqube` |
-| `image.tag`         | SonarQube&trade; image tag (immutable tags are recommended)                                                      | `10.2.1-debian-11-r10`      |
 | `image.digest`      | SonarQube&trade; image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                        |
 | `image.pullPolicy`  | SonarQube&trade; image pull policy                                                                               | `IfNotPresent`              |
 | `image.pullSecrets` | SonarQube&trade; image pull secrets                                                                              | `[]`                        |
@@ -230,7 +229,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `caCerts.enabled`                            | Enable the use of caCerts                                                                                          | `false`                    |
 | `caCerts.image.registry`                     | OS Shell + Utility image registry                                                                                  | `REGISTRY_NAME`            |
 | `caCerts.image.repository`                   | OS Shell + Utility image repository                                                                                | `REPOSITORY_NAME/os-shell` |
-| `caCerts.image.tag`                          | OS Shell + Utility image tag (immutable tags are recommended)                                                      | `11-debian-11-r90`         |
 | `caCerts.image.digest`                       | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
 | `caCerts.image.pullPolicy`                   | OS Shell + Utility image pull policy                                                                               | `IfNotPresent`             |
 | `caCerts.image.pullSecrets`                  | OS Shell + Utility image pull secrets                                                                              | `[]`                       |
@@ -248,7 +246,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `plugins.noCheckCertificate`                 | Set to true to not validate the server's certificate to download plugin                                            | `true`                     |
 | `plugins.image.registry`                     | OS Shell + Utility image registry                                                                                  | `REGISTRY_NAME`            |
 | `plugins.image.repository`                   | OS Shell + Utility image repository                                                                                | `REPOSITORY_NAME/os-shell` |
-| `plugins.image.tag`                          | OS Shell + Utility image tag (immutable tags are recommended)                                                      | `11-debian-11-r90`         |
 | `plugins.image.digest`                       | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
 | `plugins.image.pullPolicy`                   | OS Shell + Utility image pull policy                                                                               | `IfNotPresent`             |
 | `plugins.image.pullSecrets`                  | OS Shell + Utility image pull secrets                                                                              | `[]`                       |
@@ -270,7 +267,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`                    | `false`                    |
 | `volumePermissions.image.registry`                     | OS Shell + Utility image registry                                                                                  | `REGISTRY_NAME`            |
 | `volumePermissions.image.repository`                   | OS Shell + Utility image repository                                                                                | `REPOSITORY_NAME/os-shell` |
-| `volumePermissions.image.tag`                          | OS Shell + Utility image tag (immutable tags are recommended)                                                      | `11-debian-11-r90`         |
 | `volumePermissions.image.digest`                       | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
 | `volumePermissions.image.pullPolicy`                   | OS Shell + Utility image pull policy                                                                               | `IfNotPresent`             |
 | `volumePermissions.image.pullSecrets`                  | OS Shell + Utility image pull secrets                                                                              | `[]`                       |
@@ -285,7 +281,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `sysctl.enabled`            | Enable kernel settings modifier image                                                                              | `true`                     |
 | `sysctl.image.registry`     | OS Shell + Utility image registry                                                                                  | `REGISTRY_NAME`            |
 | `sysctl.image.repository`   | OS Shell + Utility image repository                                                                                | `REPOSITORY_NAME/os-shell` |
-| `sysctl.image.tag`          | OS Shell + Utility image tag (immutable tags are recommended)                                                      | `11-debian-11-r90`         |
 | `sysctl.image.digest`       | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
 | `sysctl.image.pullPolicy`   | OS Shell + Utility image pull policy                                                                               | `IfNotPresent`             |
 | `sysctl.image.pullSecrets`  | OS Shell + Utility image pull secrets                                                                              | `[]`                       |
@@ -314,7 +309,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `metrics.jmx.enabled`                               | Whether or not to expose JMX metrics to Prometheus                                                           | `false`                        |
 | `metrics.jmx.image.registry`                        | JMX exporter image registry                                                                                  | `REGISTRY_NAME`                |
 | `metrics.jmx.image.repository`                      | JMX exporter image repository                                                                                | `REPOSITORY_NAME/jmx-exporter` |
-| `metrics.jmx.image.tag`                             | JMX exporter image tag (immutable tags are recommended)                                                      | `0.19.0-debian-11-r95`         |
 | `metrics.jmx.image.digest`                          | JMX exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                           |
 | `metrics.jmx.image.pullPolicy`                      | JMX exporter image pull policy                                                                               | `IfNotPresent`                 |
 | `metrics.jmx.image.pullSecrets`                     | Specify docker-registry secret names as an array                                                             | `[]`                           |

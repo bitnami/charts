@@ -86,7 +86,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `diagnosticMode.args`    | Args to override all containers in the deployment                                                                                                   | `["infinity"]`             |
 | `image.registry`         | Appsmith image registry                                                                                                                             | `REGISTRY_NAME`            |
 | `image.repository`       | Appsmith image repository                                                                                                                           | `REPOSITORY_NAME/appsmith` |
-| `image.tag`              | Appsmith image tag (immutable tags are recommended)                                                                                                 | `1.9.38-debian-11-r1`      |
 | `image.digest`           | Appsmith image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended) | `""`                       |
 | `image.pullPolicy`       | Appsmith image pull policy                                                                                                                          | `IfNotPresent`             |
 | `image.pullSecrets`      | Appsmith image pull secrets                                                                                                                         | `[]`                       |
@@ -372,7 +371,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                    |
 | `volumePermissions.image.registry`                     | OS Shell + Utility image registry                                                               | `REGISTRY_NAME`            |
 | `volumePermissions.image.repository`                   | OS Shell + Utility image repository                                                             | `REPOSITORY_NAME/os-shell` |
-| `volumePermissions.image.tag`                          | OS Shell + Utility image tag (immutable tags are recommended)                                   | `11-debian-11-r90`         |
 | `volumePermissions.image.pullPolicy`                   | OS Shell + Utility image pull policy                                                            | `IfNotPresent`             |
 | `volumePermissions.image.pullSecrets`                  | OS Shell + Utility image pull secrets                                                           | `[]`                       |
 | `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                       |

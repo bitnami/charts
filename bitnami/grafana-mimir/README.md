@@ -90,7 +90,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------- |
 | `mimir.image.registry`                 | Grafana Mimir image registry                                                                                                                             | `REGISTRY_NAME`                 |
 | `mimir.image.repository`               | Grafana Mimir image repository                                                                                                                           | `REPOSITORY_NAME/grafana-mimir` |
-| `mimir.image.tag`                      | Grafana Mimir image tag (immutable tags are recommended)                                                                                                 | `2.10.3-debian-11-r0`           |
 | `mimir.image.digest`                   | Grafana Mimir image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended) | `""`                            |
 | `mimir.image.pullPolicy`               | Grafana Mimir image pull policy                                                                                                                          | `IfNotPresent`                  |
 | `mimir.image.pullSecrets`              | Grafana Mimir image pull secrets                                                                                                                         | `[]`                            |
@@ -385,7 +384,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `gateway.enabled`                               | Enable Gateway deployment                                                                             | `true`                  |
 | `gateway.image.registry`                        | Nginx image registry                                                                                  | `REGISTRY_NAME`         |
 | `gateway.image.repository`                      | Nginx image repository                                                                                | `REPOSITORY_NAME/nginx` |
-| `gateway.image.tag`                             | Nginx image tag (immutable tags are recommended)                                                      | `1.25.2-debian-11-r47`  |
 | `gateway.image.digest`                          | Nginx image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
 | `gateway.image.pullPolicy`                      | Nginx image pull policy                                                                               | `IfNotPresent`          |
 | `gateway.image.pullSecrets`                     | Nginx image pull secrets                                                                              | `[]`                    |
@@ -1102,7 +1100,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                    |
 | `volumePermissions.image.registry`                     | OS Shell + Utility image registry                                                               | `REGISTRY_NAME`            |
 | `volumePermissions.image.repository`                   | OS Shell + Utility image repository                                                             | `REPOSITORY_NAME/os-shell` |
-| `volumePermissions.image.tag`                          | OS Shell + Utility image tag (immutable tags are recommended)                                   | `11-debian-11-r90`         |
 | `volumePermissions.image.pullPolicy`                   | OS Shell + Utility image pull policy                                                            | `IfNotPresent`             |
 | `volumePermissions.image.pullSecrets`                  | OS Shell + Utility image pull secrets                                                           | `[]`                       |
 | `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                       |
@@ -1158,7 +1155,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `memcachedchunks.enabled`                 | Deploy memcached sub-chart                                                                                | `true`                      |
 | `memcachedchunks.image.registry`          | Memcached image registry                                                                                  | `REGISTRY_NAME`             |
 | `memcachedchunks.image.repository`        | Memcached image repository                                                                                | `REPOSITORY_NAME/memcached` |
-| `memcachedchunks.image.tag`               | Memcached image tag (immutable tags are recommended)                                                      | `1.6.22-debian-11-r0`       |
 | `memcachedchunks.image.digest`            | Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                        |
 | `memcachedchunks.nameOverride`            | override the subchart name                                                                                | `""`                        |
 | `memcachedchunks.architecture`            | Memcached architecture                                                                                    | `high-availability`         |
@@ -1178,7 +1174,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `memcachedfrontend.enabled`                 | Deploy memcached sub-chart                                                                                | `true`                      |
 | `memcachedfrontend.image.registry`          | Memcached image registry                                                                                  | `REGISTRY_NAME`             |
 | `memcachedfrontend.image.repository`        | Memcached image repository                                                                                | `REPOSITORY_NAME/memcached` |
-| `memcachedfrontend.image.tag`               | Memcached image tag (immutable tags are recommended)                                                      | `1.6.22-debian-11-r0`       |
 | `memcachedfrontend.image.digest`            | Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                        |
 | `memcachedfrontend.architecture`            | Memcached architecture                                                                                    | `high-availability`         |
 | `memcachedfrontend.nameOverride`            | override the subchart name                                                                                | `""`                        |
@@ -1198,7 +1193,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `memcachedindex.enabled`                 | Deploy memcached sub-chart                                                                                | `true`                      |
 | `memcachedindex.image.registry`          | Memcached image registry                                                                                  | `REGISTRY_NAME`             |
 | `memcachedindex.image.repository`        | Memcached image repository                                                                                | `REPOSITORY_NAME/memcached` |
-| `memcachedindex.image.tag`               | Memcached image tag (immutable tags are recommended)                                                      | `1.6.22-debian-11-r0`       |
 | `memcachedindex.image.digest`            | Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                        |
 | `memcachedindex.architecture`            | Memcached architecture                                                                                    | `high-availability`         |
 | `memcachedindex.nameOverride`            | override the subchart name                                                                                | `""`                        |
@@ -1218,7 +1212,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `memcachedmetadata.enabled`                 | Deploy memcached sub-chart                                                                                | `true`                      |
 | `memcachedmetadata.image.registry`          | Memcached image registry                                                                                  | `REGISTRY_NAME`             |
 | `memcachedmetadata.image.repository`        | Memcached image repository                                                                                | `REPOSITORY_NAME/memcached` |
-| `memcachedmetadata.image.tag`               | Memcached image tag (immutable tags are recommended)                                                      | `1.6.22-debian-11-r0`       |
 | `memcachedmetadata.image.digest`            | Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                        |
 | `memcachedmetadata.architecture`            | Memcached architecture                                                                                    | `high-availability`         |
 | `memcachedmetadata.nameOverride`            | override the subchart name                                                                                | `""`                        |

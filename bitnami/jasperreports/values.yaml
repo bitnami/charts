@@ -52,7 +52,7 @@ extraDeploy: []
 ## ref: https://hub.docker.com/r/bitnami/dokuwiki/tags/
 ## @param image.registry [default: REGISTRY_NAME] JasperReports image registry
 ## @param image.repository [default: REPOSITORY_NAME/jasperreports] JasperReports image repository
-## @param image.tag JasperReports image tag (immutable tags are recommended)
+## @skip image.tag JasperReports image tag (immutable tags are recommended)
 ## @param image.digest JasperReports image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy JasperReports image pull policy
 ## @param image.pullSecrets Specify docker-registry secret names as an array

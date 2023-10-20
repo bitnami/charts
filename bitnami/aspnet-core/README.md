@@ -82,7 +82,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | -------------------- | ----------------------------------------------------------------------------------------------------------------- | ----------------------------- |
 | `image.registry`     | ASP.NET Core Core image registry                                                                                  | `REGISTRY_NAME`               |
 | `image.repository`   | ASP.NET Core Core image repository                                                                                | `REPOSITORY_NAME/aspnet-core` |
-| `image.tag`          | ASP.NET Core Core image tag (immutable tags are recommended)                                                      | `7.0.12-debian-11-r1`         |
 | `image.digest`       | ASP.NET Core Core image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                          |
 | `image.pullPolicy`   | ASP.NET Core Core image pull policy                                                                               | `IfNotPresent`                |
 | `image.pullSecrets`  | ASP.NET Core Core image pull secrets                                                                              | `[]`                          |
@@ -165,7 +164,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `appFromExternalRepo.enabled`                   | Enable to download/build ASP.NET Core Core app from external git repository                              | `true`                                               |
 | `appFromExternalRepo.clone.image.registry`      | Git image registry                                                                                       | `REGISTRY_NAME`                                      |
 | `appFromExternalRepo.clone.image.repository`    | Git image repository                                                                                     | `REPOSITORY_NAME/git`                                |
-| `appFromExternalRepo.clone.image.tag`           | Git image tag (immutable tags are recommended)                                                           | `2.42.0-debian-11-r45`                               |
 | `appFromExternalRepo.clone.image.digest`        | Git image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag      | `""`                                                 |
 | `appFromExternalRepo.clone.image.pullPolicy`    | Git image pull policy                                                                                    | `IfNotPresent`                                       |
 | `appFromExternalRepo.clone.image.pullSecrets`   | Git image pull secrets                                                                                   | `[]`                                                 |
@@ -174,7 +172,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `appFromExternalRepo.clone.extraVolumeMounts`   | Add extra volume mounts for the GIT container                                                            | `[]`                                                 |
 | `appFromExternalRepo.publish.image.registry`    | .NET SDK image registry                                                                                  | `REGISTRY_NAME`                                      |
 | `appFromExternalRepo.publish.image.repository`  | .NET SDK image repository                                                                                | `REPOSITORY_NAME/dotnet-sdk`                         |
-| `appFromExternalRepo.publish.image.tag`         | .NET SDK image tag (immutable tags are recommended)                                                      | `7.0.402-debian-11-r1`                               |
 | `appFromExternalRepo.publish.image.digest`      | .NET SDK image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                                                 |
 | `appFromExternalRepo.publish.image.pullPolicy`  | .NET SDK image pull policy                                                                               | `IfNotPresent`                                       |
 | `appFromExternalRepo.publish.image.pullSecrets` | .NET SDK image pull secrets                                                                              | `[]`                                                 |

@@ -52,7 +52,7 @@ extraDeploy: []
 ## ref: https://hub.docker.com/r/bitnami/joomla/tags/
 ## @param image.registry [default: REGISTRY_NAME] Joomla! image registry
 ## @param image.repository [default: REPOSITORY_NAME/joomla] Joomla! Image name
-## @param image.tag Joomla! Image tag
+## @skip image.tag Joomla! Image tag
 ## @param image.digest Joomla! image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy Joomla! image pull policy
 ## @param image.pullSecrets Specify docker-registry secret names as an array
@@ -613,7 +613,7 @@ metrics:
   enabled: false
   ## @param metrics.image.registry [default: REGISTRY_NAME] Apache exporter image registry
   ## @param metrics.image.repository [default: REPOSITORY_NAME/apache-exporter] Apache exporter image name
-  ## @param metrics.image.tag Apache exporter image tag
+  ## @skip metrics.image.tag Apache exporter image tag
   ## @param metrics.image.digest Apache exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param metrics.image.pullPolicy Image pull policy
   ## @param metrics.image.pullSecrets Specify docker-registry secret names as an array
