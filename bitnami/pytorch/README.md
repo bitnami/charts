@@ -256,7 +256,7 @@ Finally, if you want to clone a git repository you can use those parameters:
 
 ```console
 cloneFilesFromGit.enabled=true
-cloneFilesFromGit.repository=https://github.com/my-user/oci://REGISTRY_NAME/REPOSITORY_NAME
+cloneFilesFromGit.repository=https://github.com/my-user/my-repo
 cloneFilesFromGit.revision=master
 ```
 
