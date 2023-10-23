@@ -1398,11 +1398,16 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### External etcd parameters
 
-| Name                           | Description                                 | Value   |
-| ------------------------------ | ------------------------------------------- | ------- |
-| `externalEtcd.servers`         | List of hostnames of the external etcd      | `[]`    |
-| `externalEtcd.port`            | Port of the external etcd instance          | `2379`  |
-| `externalEtcd.secureTransport` | Use TLS for client-to-server communications | `false` |
+| Name                              | Description                                                                                          | Value     |
+| --------------------------------- | ---------------------------------------------------------------------------------------------------- | --------- |
+| `externalEtcd.servers`            | List of hostnames of the external etcd                                                               | `[]`      |
+| `externalEtcd.port`               | Port of the external etcd instance                                                                   | `2379`    |
+| `externalEtcd.tls.enabled`        | Enable TLS for etcd client connections.                                                              | `false`   |
+| `externalEtcd.tls.existingSecret` | Name of the existing secret containing the TLS certificates for external etcd client communications. | `""`      |
+| `externalEtcd.tls.cert`           | The secret key from the existingSecret if 'cert' key different from the default (tls.crt)            | `tls.crt` |
+| `externalEtcd.tls.key`            | The secret key from the existingSecret if 'key' key different from the default (tls.key)             | `tls.key` |
+| `externalEtcd.tls.caCert`         | The secret key from the existingSecret if 'caCert' key different from the default (ca.crt)           | `ca.crt`  |
+| `externalEtcd.tls.keyPassword`    | Password to access the password-protected PEM key if necessary.                                      | `""`      |
 
 ### External S3 parameters
 
