@@ -27,7 +27,7 @@ file:
   /bitnami/gitea/custom/conf/app.ini:
     exists: true
     filetype: file
-    contains:
+    contents:
       - /NAME.*{{ .Vars.postgresql.auth.database }}/
       - /USER.*{{ .Vars.postgresql.auth.username }}/
       - /HOST.*{{ .Vars.postgresql.primary.service.ports.postgresql }}/

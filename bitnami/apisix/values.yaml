@@ -65,9 +65,9 @@ diagnosticMode:
 
 ## Bitnami APISIX image
 ## ref: https://hub.docker.com/r/bitnami/apisix/tags/
-## @param image.registry APISIX image registry
-## @param image.repository APISIX image repository
-## @param image.tag APISIX image tag (immutable tags are recommended)
+## @param image.registry [default: REGISTRY_NAME] APISIX image registry
+## @param image.repository [default: REPOSITORY_NAME/apisix] APISIX image repository
+## @skip image.tag APISIX image tag (immutable tags are recommended)
 ## @param image.digest APISIX image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
 ## @param image.pullPolicy APISIX image pull policy
 ## @param image.pullSecrets APISIX image pull secrets
@@ -1501,9 +1501,9 @@ dashboard:
   replicaCount: 1
   ## Bitnami APISIX Dashboard image
   ## ref: https://hub.docker.com/r/bitnami/apisix-dashboard/tags/
-  ## @param dashboard.image.registry APISIX Dashboard image registry
-  ## @param dashboard.image.repository APISIX Dashboard image repository
-  ## @param dashboard.image.tag APISIX Dashboard image tag (immutable tags are recommended)
+  ## @param dashboard.image.registry [default: REGISTRY_NAME] APISIX Dashboard image registry
+  ## @param dashboard.image.repository [default: REPOSITORY_NAME/apisix-dashboard] APISIX Dashboard image repository
+  ## @skip dashboard.image.tag APISIX Dashboard image tag (immutable tags are recommended)
   ## @param dashboard.image.digest APISIX Dashboard image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
   ## @param dashboard.image.pullPolicy APISIX Dashboard image pull policy
   ## @param dashboard.image.pullSecrets APISIX Dashboard image pull secrets
@@ -2179,9 +2179,9 @@ ingressController:
   enabled: true
   ## Bitnami APISIX Ingress Controller image
   ## ref: https://hub.docker.com/r/bitnami/vault-k8s/tags/
-  ## @param ingressController.image.registry APISIX Ingress Controller image registry
-  ## @param ingressController.image.repository APISIX Ingress Controller image repository
-  ## @param ingressController.image.tag APISIX Ingress Controller image tag (immutable tags are recommended)
+  ## @param ingressController.image.registry [default: REGISTRY_NAME] APISIX Ingress Controller image registry
+  ## @param ingressController.image.repository [default: REPOSITORY_NAME/apisix-ingress-controller] APISIX Ingress Controller image repository
+  ## @skip ingressController.image.tag APISIX Ingress Controller image tag (immutable tags are recommended)
   ## @param ingressController.image.digest APISIX Ingress Controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended)
   ## @param ingressController.image.pullPolicy APISIX Ingress Controller image pull policy
   ## @param ingressController.image.pullSecrets APISIX Ingress Controller image pull secrets
@@ -2819,9 +2819,9 @@ ingressController:
 ## @section Init containers parameters
 ##
 waitContainer:
-  ## @param waitContainer.image.registry Init container wait-container image registry
-  ## @param waitContainer.image.repository Init container wait-container image name
-  ## @param waitContainer.image.tag Init container wait-container image tag
+  ## @param waitContainer.image.registry [default: REGISTRY_NAME] Init container wait-container image registry
+  ## @param waitContainer.image.repository [default: REPOSITORY_NAME/os-shell] Init container wait-container image name
+  ## @skip waitContainer.image.tag Init container wait-container image tag
   ## @param waitContainer.image.digest Init container wait-container image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ##
   image:

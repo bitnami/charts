@@ -14,6 +14,6 @@ file:
     mode: "0644"
     owner: root
     group: root
-    contains:
-     - db_user = {{ .Vars.postgresql.auth.username }}
-     - http_port = {{ .Vars.containerPorts.http }}
+    contents:
+     - "db_user = {{ .Vars.postgresql.auth.username }}"
+     - "http_port = {{ .Vars.containerPorts.http }}"

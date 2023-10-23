@@ -8,7 +8,7 @@ annotations:
     - name: fluxcd-helm-controller
       image: docker.io/bitnami/fluxcd-helm-controller:0.36.2-debian-11-r0
     - name: fluxcd-image-automation-controller
-      image: docker.io/bitnami/fluxcd-image-automation-controller:0.36.1-debian-11-r15
+      image: docker.io/bitnami/fluxcd-image-automation-controller:0.36.1-debian-11-r6
     - name: fluxcd-image-reflector-controller
       image: docker.io/bitnami/fluxcd-image-reflector-controller:0.30.0-debian-11-r43
     - name: fluxcd-kustomize-controller
@@ -43,4 +43,4 @@ maintainers:
 name: flux
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/flux
-version: 1.0.5
+version: 1.0.6

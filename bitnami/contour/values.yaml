@@ -85,9 +85,9 @@ contour:
   ## @param contour.enabled Contour Deployment creation.
   ##
   enabled: true
-  ## @param contour.image.registry Contour image registry
-  ## @param contour.image.repository Contour image name
-  ## @param contour.image.tag Contour image tag
+  ## @param contour.image.registry [default: REGISTRY_NAME] Contour image registry
+  ## @param contour.image.repository [default: REPOSITORY_NAME/contour] Contour image name
+  ## @skip contour.image.tag Contour image tag
   ## @param contour.image.digest Contour image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param contour.image.pullPolicy Contour Image pull policy
   ## @param contour.image.pullSecrets [array] Contour Image pull secrets
@@ -96,7 +96,7 @@ contour:
   image:
     registry: docker.io
     repository: bitnami/contour
-    tag: 1.26.0-debian-11-r17
+    tag: 1.26.1-debian-11-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -498,9 +498,9 @@ envoy:
   enabled: true
   ## Bitnami Envoy image
   ## ref: https://hub.docker.com/r/bitnami/envoy/tags/
-  ## @param envoy.image.registry Envoy Proxy image registry
-  ## @param envoy.image.repository Envoy Proxy image repository
-  ## @param envoy.image.tag Envoy Proxy image tag (immutable tags are recommended)
+  ## @param envoy.image.registry [default: REGISTRY_NAME] Envoy Proxy image registry
+  ## @param envoy.image.repository [default: REPOSITORY_NAME/envoy] Envoy Proxy image repository
+  ## @skip envoy.image.tag Envoy Proxy image tag (immutable tags are recommended)
   ## @param envoy.image.digest Envoy Proxy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param envoy.image.pullPolicy Envoy image pull policy
   ## @param envoy.image.pullSecrets [array] Envoy image pull secrets
@@ -508,7 +508,7 @@ envoy:
   image:
     registry: docker.io
     repository: bitnami/envoy
-    tag: 1.26.5-debian-11-r0
+    tag: 1.26.6-debian-11-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -970,9 +970,9 @@ defaultBackend:
   enabled: false
   ## Bitnami NGINX image
   ## ref: https://hub.docker.com/r/bitnami/nginx/tags/
-  ## @param defaultBackend.image.registry Default backend image registry
-  ## @param defaultBackend.image.repository Default backend image name
-  ## @param defaultBackend.image.tag Default backend image tag
+  ## @param defaultBackend.image.registry [default: REGISTRY_NAME] Default backend image registry
+  ## @param defaultBackend.image.repository [default: REPOSITORY_NAME/nginx] Default backend image name
+  ## @skip defaultBackend.image.tag Default backend image tag
   ## @param defaultBackend.image.digest Default backend image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param defaultBackend.image.pullPolicy Image pull policy
   ## @param defaultBackend.image.pullSecrets [array] Specify docker-registry secret names as an array

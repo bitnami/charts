@@ -58,9 +58,9 @@ createAggregateRoles: true
 server:
   ## Bitnami Argo Workflow CLI image
   ## ref: https://hub.docker.com/r/bitnami/argo-workflow-cli/tags/
-  ## @param server.image.registry server image registry
-  ## @param server.image.repository server image repository
-  ## @param server.image.tag server image tag (immutable tags are recommended)
+  ## @param server.image.registry [default: REGISTRY_NAME] server image registry
+  ## @param server.image.repository [default: REPOSITORY_NAME/argo-workflow-cli] server image repository
+  ## @skip server.image.tag server image tag (immutable tags are recommended)
   ## @param server.image.digest server image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param server.image.pullPolicy server image pull policy
   ## @param server.image.pullSecrets server image pull secrets
@@ -68,7 +68,7 @@ server:
   image:
     registry: docker.io
     repository: bitnami/argo-workflow-cli
-    tag: 3.4.11-debian-11-r28
+    tag: 3.5.0-debian-11-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -467,9 +467,9 @@ server:
 controller:
   ## Bitnami Argo Workflow Controller image
   ## ref: https://hub.docker.com/r/bitnami/argo-workflow-controller/tags/
-  ## @param controller.image.registry controller image registry
-  ## @param controller.image.repository controller image repository
-  ## @param controller.image.tag controller image tag (immutable tags are recommended)
+  ## @param controller.image.registry [default: REGISTRY_NAME] controller image registry
+  ## @param controller.image.repository [default: REPOSITORY_NAME/argo-workflow-controller] controller image repository
+  ## @skip controller.image.tag controller image tag (immutable tags are recommended)
   ## @param controller.image.digest controller image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param controller.image.pullPolicy controller image pull policy
   ## @param controller.image.pullSecrets controller image pull secrets
@@ -477,7 +477,7 @@ controller:
   image:
     registry: docker.io
     repository: bitnami/argo-workflow-controller
-    tag: 3.4.11-debian-11-r28
+    tag: 3.5.0-debian-11-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -946,9 +946,9 @@ controller:
 executor:
   ## Bitnami Argo Workflow Executor image
   ## ref: https://hub.docker.com/r/bitnami/argo-workflow-exec/tags/
-  ## @param executor.image.registry executor image registry
-  ## @param executor.image.repository executor image repository
-  ## @param executor.image.tag executor image tag (immutable tags are recommended)
+  ## @param executor.image.registry [default: REGISTRY_NAME] executor image registry
+  ## @param executor.image.repository [default: REPOSITORY_NAME/argo-workflow-exec] executor image repository
+  ## @skip executor.image.tag executor image tag (immutable tags are recommended)
   ## @param executor.image.digest executor image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param executor.image.pullPolicy executor image pull policy
   ## @param executor.image.pullSecrets executor image pull secrets
@@ -956,7 +956,7 @@ executor:
   image:
     registry: docker.io
     repository: bitnami/argo-workflow-exec
-    tag: 3.4.11-debian-11-r27
+    tag: 3.5.0-debian-11-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

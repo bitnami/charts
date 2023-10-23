@@ -62,9 +62,9 @@ diagnosticMode:
 
 ## Bitnami InfluxDB&trade; image
 ## ref: https://hub.docker.com/r/bitnami/influxdb/tags/
-## @param image.registry InfluxDB&trade; image registry
-## @param image.repository InfluxDB&trade; image repository
-## @param image.tag InfluxDB&trade; image tag (immutable tags are recommended)
+## @param image.registry [default: REGISTRY_NAME] InfluxDB&trade; image registry
+## @param image.repository [default: REPOSITORY_NAME/influxdb] InfluxDB&trade; image repository
+## @skip image.tag InfluxDB&trade; image tag (immutable tags are recommended)
 ## @param image.digest InfluxDB&trade; image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy InfluxDB&trade; image pull policy
 ## @param image.pullSecrets Specify docker-registry secret names as an array
@@ -73,7 +73,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/influxdb
-  tag: 2.7.1-debian-11-r154
+  tag: 2.7.3-debian-11-r0
   digest: ""
   ## Specify a imagePullPolicy. Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
   ## ref: https://kubernetes.io/docs/user-guide/images/#pre-pulling-images
@@ -825,9 +825,9 @@ volumePermissions:
   ## @param volumePermissions.enabled Enable init container that changes the owner and group of the persistent volume mountpoint to `runAsUser:fsGroup`
   ##
   enabled: false
-  ## @param volumePermissions.image.registry Init container volume-permissions image registry
-  ## @param volumePermissions.image.repository Init container volume-permissions image name
-  ## @param volumePermissions.image.tag Init container volume-permissions image tag
+  ## @param volumePermissions.image.registry [default: REGISTRY_NAME] Init container volume-permissions image registry
+  ## @param volumePermissions.image.repository [default: REPOSITORY_NAME/os-shell] Init container volume-permissions image name
+  ## @skip volumePermissions.image.tag Init container volume-permissions image tag
   ## @param volumePermissions.image.digest Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
   ## @param volumePermissions.image.pullSecrets Specify docker-registry secret names as an array
@@ -976,9 +976,9 @@ backup:
       bucketName: "gs://bucket/influxdb"
       ## Bitnami Google Cloud SDK image
       ## ref: https://hub.docker.com/r/bitnami/google-cloud-sdk/tags/
-      ## @param backup.uploadProviders.google.image.registry Google Cloud SDK image registry
-      ## @param backup.uploadProviders.google.image.repository Google Cloud SDK image name
-      ## @param backup.uploadProviders.google.image.tag Google Cloud SDK image tag
+      ## @param backup.uploadProviders.google.image.registry [default: REGISTRY_NAME] Google Cloud SDK image registry
+      ## @param backup.uploadProviders.google.image.repository [default: REPOSITORY_NAME/google-cloud-sdk] Google Cloud SDK image name
+      ## @skip backup.uploadProviders.google.image.tag Google Cloud SDK image tag
       ## @param backup.uploadProviders.google.image.digest Google Cloud SDK image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
       ## @param backup.uploadProviders.google.image.pullPolicy Google Cloud SDK image pull policy
       ## @param backup.uploadProviders.google.image.pullSecrets Specify docker-registry secret names as an array
@@ -1015,9 +1015,9 @@ backup:
       containerName: "influxdb-container"
       ## Bitnami Azure CLI image
       ## ref: https://hub.docker.com/r/bitnami/azure-cli/tags/
-      ## @param backup.uploadProviders.azure.image.registry Azure CLI image registry
-      ## @param backup.uploadProviders.azure.image.repository Azure CLI image repository
-      ## @param backup.uploadProviders.azure.image.tag Azure CLI image tag (immutable tags are recommended)
+      ## @param backup.uploadProviders.azure.image.registry [default: REGISTRY_NAME] Azure CLI image registry
+      ## @param backup.uploadProviders.azure.image.repository [default: REPOSITORY_NAME/azure-cli] Azure CLI image repository
+      ## @skip backup.uploadProviders.azure.image.tag Azure CLI image tag (immutable tags are recommended)
       ## @param backup.uploadProviders.azure.image.digest Azure CLI image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
       ## @param backup.uploadProviders.azure.image.pullPolicy Azure CLI image pull policy
       ## @param backup.uploadProviders.azure.image.pullSecrets Specify docker-registry secret names as an array
@@ -1054,9 +1054,9 @@ backup:
       bucketName: "s3://bucket/influxdb"
       ## Bitnami AWS CLI image
       ## ref: https://hub.docker.com/r/bitnami/aws-cli/tags
-      ## @param backup.uploadProviders.aws.image.registry AWS CLI image registry
-      ## @param backup.uploadProviders.aws.image.repository AWS CLI image repository
-      ## @param backup.uploadProviders.aws.image.tag AWS CLI image tag (immutable tags are recommended)
+      ## @param backup.uploadProviders.aws.image.registry [default: REGISTRY_NAME] AWS CLI image registry
+      ## @param backup.uploadProviders.aws.image.repository [default: REPOSITORY_NAME/aws-cli] AWS CLI image repository
+      ## @skip backup.uploadProviders.aws.image.tag AWS CLI image tag (immutable tags are recommended)
       ## @param backup.uploadProviders.aws.image.digest AWS CLI image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
       ## @param backup.uploadProviders.aws.image.pullPolicy AWS CLI image pull policy
       ## @param backup.uploadProviders.aws.image.pullSecrets Specify docker-registry secret names as an array

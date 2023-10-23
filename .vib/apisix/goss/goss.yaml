@@ -52,7 +52,7 @@ file:
     exists: true
     filetype: file
     mode: '0644'
-    contains:
+    contents:
       - /max_running_timers.*{{ .Vars.dataPlane.extraConfig.nginx_config.max_running_timers }}/
       - /apisix-control-plane.*{{ .Vars.controlPlane.service.ports.configServer }}/
       - /node_listen.*{{ .Vars.dataPlane.containerPorts.http }}/
@@ -61,7 +61,7 @@ file:
     exists: true
     filetype: file
     mode: '0644'
-    contains:
+    contents:
       - /listen.*{{ .Vars.dataPlane.containerPorts.http }}/
       - /listen.*{{ .Vars.dataPlane.containerPorts.https }}.*ssl/
       - /listen.*{{ .Vars.dataPlane.containerPorts.control }}/
@@ -69,7 +69,7 @@ file:
   /etc/hosts:
     exists: true
     filetype: file
-    contains:
+    contents:
     {{ range .Vars.dataPlane.hostAliases }}
     {{ $ip := .ip }}
     {{ range $host := .hostnames }}

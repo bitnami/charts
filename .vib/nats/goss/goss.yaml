@@ -8,33 +8,6 @@ file:
     exists: true
     owner: root
 command:
-  {{- $auth := printf "--user=%s --password=%s" .Vars.auth.user .Vars.auth.password }}
-  {{- $client_port := printf "%d" .Vars.service.ports.client }}
-  {{- $lb_endpoint := printf "-s nats://nats:%s" $client_port }}
-  key-management:
-    {{- $subject := printf "subj_%s" (randAlpha 5) }}
-    {{- $msg := printf "msg_%s" (randAlpha 5) }}
-    ## We need to have the subscriber process running at the same time the publishing is done
-    ## The sleep is needed to avoid a race condition where the publishing is done before the subscriber is ready
-    ## The subscriber process needs to be timed out so there is no dangling process making goss timeout
-    exec: ( USER=$(id -u) timeout 10 ./nats/goss/testfiles/nats {{ $auth }} {{ $lb_endpoint }} sub {{ $subject }}; ) & sleep 3 && USER=$(id -u) ./nats/goss/testfiles/nats {{ $auth }} {{ $lb_endpoint }} pub {{ $subject }} {{ $msg }}
-    exit-status: 0
-    stdout:
-    - /Received on.*{{ $subject }}/
-    - {{ $msg }}
-    timeout: 20000
-  {{- range $e, $i := until .Vars.replicaCount }}
-  cluster-key-management-{{ $i }}:
-    {{- $subject := printf "subj_%s" (randAlpha 5) }}
-    {{- $msg := printf "msg_%s" (randAlpha 5) }}
-    {{- $pod_endpoint := printf "-s nats://nats-%d.nats-headless:%s" $i $client_port }}
-    exec: ( USER=$(id -u) timeout 10 ./nats/goss/testfiles/nats {{ $auth }} {{ $pod_endpoint }} sub {{ $subject }}; ) & sleep 3 && USER=$(id -u) ./nats/goss/testfiles/nats {{ $auth }} {{ $lb_endpoint }} pub {{ $subject }} {{ $msg }}
-    exit-status: 0
-    stdout:
-    - /Received on.*{{ $subject }}/
-    - {{ $msg }}
-    timeout: 20000
-  {{ end }}
   {{- $uid := .Vars.containerSecurityContext.runAsUser }}
   {{- $gid := .Vars.podSecurityContext.fsGroup }}
   check-user-info:

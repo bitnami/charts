@@ -6,7 +6,7 @@ annotations:
   licenses: Apache-2.0
   images: |
     - name: keycloak-config-cli
-      image: docker.io/bitnami/keycloak-config-cli:5.8.0-debian-11-r68
+      image: docker.io/bitnami/keycloak-config-cli:5.9.0-debian-11-r0
     - name: keycloak
       image: docker.io/bitnami/keycloak:22.0.4-debian-11-r3
 apiVersion: v2
@@ -33,4 +33,4 @@ maintainers:
 name: keycloak
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/keycloak
-version: 17.0.4
+version: 17.1.1

@@ -40,6 +40,6 @@ file:
   /opt/bitnami/mongodb/conf/keyfile:
     mode: "0600"
     filetype: file
-    contains:
-      - {{ .Vars.auth.replicaSetKey }}
+    contents:
+      - "{{ .Vars.auth.replicaSetKey }}"
     exists: true

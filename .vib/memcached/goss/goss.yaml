@@ -14,8 +14,8 @@ command:
     exec: bash -c 'printf "set {{ $key }} 0 300 11\r\n{{ $value }}\r\nquit\n" | {{ $server_connection }} && printf "get {{ $key }}\r\nquit\n" | {{ $server_connection }}'
     exit-status: 0
     stdout:
-    - STORED
-    - {{ $value }}
+    - "STORED"
+    - "{{ $value }}"
   {{- $uid := .Vars.containerSecurityContext.runAsUser }}
   {{- $gid := .Vars.podSecurityContext.fsGroup }}
   check-user-info:

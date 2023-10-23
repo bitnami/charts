@@ -5,7 +5,7 @@ file:
   /opt/bitnami/fluentd/conf/fluentd-inputs.conf:
     exists: true
     filetype: symlink
-    contains:
+    contents:
       - "type http"
       - "type kubernetes_metadata"
       - "path /var/log/containers/*.log"
@@ -26,6 +26,6 @@ command:
     exec: "cd /var/log/containers && echo '{\"time\": \"2022-07-29T11:33:47.408955753Z\", \"data\": \"zwiebel\"}' > {{.}} && sleep 90 && find . -name \"*fluentd-0*\" -exec tail -n 500 {} \\;"
     exit-status: 0
     stdout:
-      - {{.}}
+      - "{{.}}"
     timeout: 120000
   {{end}}

@@ -73,7 +73,7 @@ file:
     exists: true
     filetype: file
     mode: '0644'
-    contains:
+    contents:
       - /timeTickInterval.*{{ .Vars.proxy.extraConfig.proxy.timeTickInterval }}/
       - /gracefulStopTimeout.*{{ .Vars.milvus.extraConfig.common.gracefulStopTimeout }}/
 command:

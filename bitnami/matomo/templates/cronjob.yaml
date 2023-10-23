@@ -133,7 +133,7 @@ spec:
                 defaultMode: 0755
             {{- end }}
             {{- if .Values.extraVolumes }}
-            {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 12 }}
             {{- end }}
 ---
 apiVersion: {{ include "common.capabilities.cronjob.apiVersion" . }}
@@ -256,6 +256,6 @@ spec:
                 defaultMode: 0755
             {{- end }}
             {{- if .Values.extraVolumes }}
-            {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 8 }}
+            {{- include "common.tplvalues.render" (dict "value" .Values.extraVolumes "context" $) | nindent 12 }}
             {{- end }}
 {{- end }}

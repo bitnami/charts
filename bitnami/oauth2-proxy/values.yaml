@@ -238,9 +238,9 @@ ingress:
 
 ## Bitnami OAuth2 Proxy image
 ## ref: https://hub.docker.com/r/bitnami/redis/tags/
-## @param image.registry OAuth2 Proxy image registry
-## @param image.repository OAuth2 Proxy image repository
-## @param image.tag OAuth2 Proxy image tag (immutable tags are recommended)
+## @param image.registry [default: REGISTRY_NAME] OAuth2 Proxy image registry
+## @param image.repository [default: REPOSITORY_NAME/oauth2-proxy] OAuth2 Proxy image repository
+## @skip image.tag OAuth2 Proxy image tag (immutable tags are recommended)
 ## @param image.digest OAuth2 Proxy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy OAuth2 Proxy image pull policy
 ## @param image.pullSecrets OAuth2 Proxy image pull secrets
