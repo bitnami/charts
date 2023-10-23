@@ -22,6 +22,9 @@ spec:
   {{- if and (eq .Values.server.thanos.service.type "LoadBalancer") (not (empty .Values.server.thanos.service.loadBalancerIP)) }}
   loadBalancerIP: {{ .Values.server.thanos.service.loadBalancerIP }}
   {{- end }}
+  {{- if and (eq .Values.server.thanos.service.type "LoadBalancer") (not (empty .Values.server.thanos.service.loadBalancerClass)) }}
+  loadBalancerClass: {{ .Values.server.thanos.service.loadBalancerClass }}
+  {{- end }}
   {{- if and (eq .Values.server.thanos.service.type "LoadBalancer") (not (empty .Values.server.thanos.service.loadBalancerSourceRanges)) }}
   loadBalancerSourceRanges: {{ .Values.server.thanos.service.loadBalancerSourceRanges }}
   {{- end }}

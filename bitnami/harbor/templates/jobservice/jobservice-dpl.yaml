@@ -83,7 +83,11 @@ spec:
             - -ec
             - |
               mkdir -p /var/log/jobs
+              chown {{ .Values.jobservice.containerSecurityContext.runAsUser }}:{{ .Values.jobservice.podSecurityContext.fsGroup }} /var/log/jobs
               find /var/log/jobs -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs -r chown -R {{ .Values.jobservice.containerSecurityContext.runAsUser }}:{{ .Values.jobservice.podSecurityContext.fsGroup }}
+              mkdir -p /var/scandata_exports
+              chown {{ .Values.jobservice.containerSecurityContext.runAsUser }}:{{ .Values.jobservice.podSecurityContext.fsGroup }} /var/scandata_exports
+              find /var/scandata_exports -mindepth 1 -maxdepth 1 -not -name ".snapshot" -not -name "lost+found" | xargs -r chown -R {{ .Values.jobservice.containerSecurityContext.runAsUser }}:{{ .Values.jobservice.podSecurityContext.fsGroup }}
           {{- if .Values.volumePermissions.containerSecurityContext.enabled }}
           securityContext: {{- omit .Values.volumePermissions.containerSecurityContext "enabled" | toYaml | nindent 12 }}
           {{- end }}
@@ -94,6 +98,9 @@ spec:
             - name: job-logs
               mountPath: /var/log/jobs
               subPath: {{ .Values.persistence.persistentVolumeClaim.jobservice.subPath }}
+            - name: jobservice-scandata
+              mountPath: /var/scandata_exports
+              subPath: {{ .Values.persistence.persistentVolumeClaim.jobservice.scanData.subPath }}
         {{- end }}
         {{- if .Values.jobservice.initContainers }}
         {{- include "common.tplvalues.render" (dict "value" .Values.jobservice.initContainers "context" $) | nindent 8 }}

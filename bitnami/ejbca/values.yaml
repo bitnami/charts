@@ -62,9 +62,9 @@ diagnosticMode:
 
 ## Bitnami EJBCA image version
 ## ref: https://hub.docker.com/r/bitnami/ejbca/tags/
-## @param image.registry EJBCA image registry
-## @param image.repository EJBCA image name
-## @param image.tag EJBCA image tag
+## @param image.registry [default: REGISTRY_NAME] EJBCA image registry
+## @param image.repository [default: REPOSITORY_NAME/ejbca] EJBCA image name
+## @skip image.tag EJBCA image tag
 ## @param image.digest EJBCA image image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy EJBCA image pull policy
 ## @param image.pullSecrets Specify docker-registry secret names as an array
@@ -73,7 +73,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/ejbca
-  tag: 8.0.20230531-debian-11-r0
+  tag: 8.0.0-debian-11-r7
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

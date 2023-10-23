@@ -536,10 +536,10 @@ Retrieve key of the postgresql secret
         {{- if .Values.externalDatabase.existingSecretPasswordKey -}}
             {{- printf "%s" .Values.externalDatabase.existingSecretPasswordKey -}}
         {{- else -}}
-            {{- print "postgres-password" -}}
+            {{- print "db-password" -}}
         {{- end -}}
     {{- else -}}
-        {{- print "postgres-password" -}}
+        {{- print "db-password" -}}
     {{- end -}}
 {{- end -}}
 {{- end -}}

@@ -53,9 +53,9 @@ extraDeploy: []
 
 ## Bitnami Sealed Secrets image
 ## ref: https://hub.docker.com/r/bitnami/redis/tags/
-## @param image.registry Sealed Secrets image registry
-## @param image.repository Sealed Secrets image repository
-## @param image.tag Sealed Secrets image tag (immutable tags are recommended)
+## @param image.registry [default: REGISTRY_NAME] Sealed Secrets image registry
+## @param image.repository [default: REPOSITORY_NAME/sealed-secrets] Sealed Secrets image repository
+## @skip image.tag Sealed Secrets image tag (immutable tags are recommended)
 ## @param image.digest Sealed Secrets image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy Sealed Secrets image pull policy
 ## @param image.pullSecrets [array]  Sealed Secrets image pull secrets
@@ -64,7 +64,7 @@ extraDeploy: []
 image:
   registry: docker.io
   repository: bitnami/sealed-secrets
-  tag: 0.24.0-debian-11-r0
+  tag: 0.24.2-debian-11-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'

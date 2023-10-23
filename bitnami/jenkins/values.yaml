@@ -61,9 +61,9 @@ diagnosticMode:
 
 ## Bitnami Jenkins image
 ## ref: https://hub.docker.com/r/bitnami/jenkins/tags/
-## @param image.registry Jenkins image registry
-## @param image.repository Jenkins image repository
-## @param image.tag Jenkins image tag (immutable tags are recommended)
+## @param image.registry [default: REGISTRY_NAME] Jenkins image registry
+## @param image.repository [default: REPOSITORY_NAME/jenkins] Jenkins image repository
+## @skip image.tag Jenkins image tag (immutable tags are recommended)
 ## @param image.digest Jenkins image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy Jenkins image pull policy
 ## @param image.pullSecrets Jenkins image pull secrets
@@ -72,7 +72,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/jenkins
-  tag: 2.414.1-debian-11-r0
+  tag: 2.414.3-debian-11-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -333,9 +333,9 @@ agent:
   enabled: false
   ## Bitnami Jenkins agent image
   ## ref: https://hub.docker.com/r/bitnami/jenkins/tags/
-  ## @param agent.image.registry Jenkins image registry
-  ## @param agent.image.repository Jenkins image repository
-  ## @param agent.image.tag Jenkins image tag (immutable tags are recommended)
+  ## @param agent.image.registry [default: REGISTRY_NAME] Jenkins image registry
+  ## @param agent.image.repository [default: REPOSITORY_NAME/jenkins-agent] Jenkins image repository
+  ## @skip agent.image.tag Jenkins image tag (immutable tags are recommended)
   ## @param agent.image.digest Jenkins image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param agent.image.pullPolicy Jenkins image pull policy
   ## @param agent.image.pullSecrets Jenkins image pull secrets
@@ -344,7 +344,7 @@ agent:
   image:
     registry: docker.io
     repository: bitnami/jenkins-agent
-    tag: 0.3148.0-debian-11-r8
+    tag: 0.3174.0-debian-11-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -888,9 +888,9 @@ volumePermissions:
   enabled: false
   ## OS Shell + Utility image
   ## ref: https://hub.docker.com/r/bitnami/os-shell/tags/
-  ## @param volumePermissions.image.registry OS Shell + Utility image registry
-  ## @param volumePermissions.image.repository OS Shell + Utility image repository
-  ## @param volumePermissions.image.tag OS Shell + Utility image tag (immutable tags are recommended)
+  ## @param volumePermissions.image.registry [default: REGISTRY_NAME] OS Shell + Utility image registry
+  ## @param volumePermissions.image.repository [default: REPOSITORY_NAME/os-shell] OS Shell + Utility image repository
+  ## @skip volumePermissions.image.tag OS Shell + Utility image tag (immutable tags are recommended)
   ## @param volumePermissions.image.digest OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param volumePermissions.image.pullPolicy OS Shell + Utility image pull policy
   ## @param volumePermissions.image.pullSecrets OS Shell + Utility image pull secrets
@@ -898,7 +898,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r54
+    tag: 11-debian-11-r90
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

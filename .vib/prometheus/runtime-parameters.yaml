@@ -1,5 +1,3 @@
-volumePermissions:
-  enabled: true
 server:
   replicaCount: 1
   serviceAccount:
@@ -26,6 +24,7 @@ server:
     type: LoadBalancer
     ports:
       http: 80
+    sessionAffinity: None
   enableFeatures: [ "memory-snapshot-on-shutdown" ]
   containerPorts:
     http: 8080

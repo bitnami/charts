@@ -3,12 +3,13 @@ Copyright VMware, Inc.
 SPDX-License-Identifier: APACHE-2.0
 */}}
 
-{{- if and .Values.msgTopologyOperator.enabled .Values.msgTopologyOperator.metrics.serviceMonitor.enabled .Values.msgTopologyOperator.metrics.enabled }}
+{{- if and .Values.msgTopologyOperator.enabled .Values.msgTopologyOperator.metrics.serviceMonitor.enabled .Values.msgTopologyOperator.metrics.service.enabled }}
 apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: {{ template "rmqco.msgTopologyOperator.fullname" . }}
-  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.msgTopologyOperator.metrics.serviceMonitor.labels .Values.commonLabels ) "context" . ) }}
+  {{- $versionLabel := dict "app.kubernetes.io/version" ( include "common.images.version" ( dict "imageRoot" .Values.msgTopologyOperator.image "chart" .Chart ) ) }}
+  {{- $labels := include "common.tplvalues.merge" ( dict "values" ( list .Values.msgTopologyOperator.metrics.serviceMonitor.labels .Values.commonLabels $versionLabel ) "context" . ) }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" $labels "context" $ ) | nindent 4 }}
     app.kubernetes.io/component: messaging-topology-operator
     app.kubernetes.io/part-of: rabbitmq

@@ -10,7 +10,7 @@ file:
   /opt/bitnami/sonarqube/conf/sonar.properties:
     exists: true
     filetype: file
-    contains:
+    contents:
      - /web.*port.*{{ .Vars.containerPorts.http }}/
      - /search.*port.*{{ .Vars.containerPorts.elastic }}/
      - /postgresql.*{{ .Vars.postgresql.service.ports.postgresql }}/{{ .Vars.postgresql.auth.database }}/

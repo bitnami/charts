@@ -38,13 +38,21 @@ Return the proper Docker Image Registry Secret Names (deprecated: use common.ima
 
   {{- if .global }}
     {{- range .global.imagePullSecrets -}}
-      {{- $pullSecrets = append $pullSecrets . -}}
+      {{- if kindIs "map" . -}}
+        {{- $pullSecrets = append $pullSecrets .name -}}
+      {{- else -}}
+        {{- $pullSecrets = append $pullSecrets . -}}
+      {{- end }}
     {{- end -}}
   {{- end -}}
 
   {{- range .images -}}
     {{- range .pullSecrets -}}
-      {{- $pullSecrets = append $pullSecrets . -}}
+      {{- if kindIs "map" . -}}
+        {{- $pullSecrets = append $pullSecrets .name -}}
+      {{- else -}}
+        {{- $pullSecrets = append $pullSecrets . -}}
+      {{- end -}}
     {{- end -}}
   {{- end -}}
 
@@ -66,13 +74,21 @@ Return the proper Docker Image Registry Secret Names evaluating values as templa
 
   {{- if $context.Values.global }}
     {{- range $context.Values.global.imagePullSecrets -}}
-      {{- $pullSecrets = append $pullSecrets (include "common.tplvalues.render" (dict "value" . "context" $context)) -}}
+      {{- if kindIs "map" . -}}
+        {{- $pullSecrets = append $pullSecrets (include "common.tplvalues.render" (dict "value" .name "context" $context)) -}}
+      {{- else -}}
+        {{- $pullSecrets = append $pullSecrets (include "common.tplvalues.render" (dict "value" . "context" $context)) -}}
+      {{- end -}}
     {{- end -}}
   {{- end -}}
 
   {{- range .images -}}
     {{- range .pullSecrets -}}
-      {{- $pullSecrets = append $pullSecrets (include "common.tplvalues.render" (dict "value" . "context" $context)) -}}
+      {{- if kindIs "map" . -}}
+        {{- $pullSecrets = append $pullSecrets (include "common.tplvalues.render" (dict "value" .name "context" $context)) -}}
+      {{- else -}}
+        {{- $pullSecrets = append $pullSecrets (include "common.tplvalues.render" (dict "value" . "context" $context)) -}}
+      {{- end -}}
     {{- end -}}
   {{- end -}}
 
