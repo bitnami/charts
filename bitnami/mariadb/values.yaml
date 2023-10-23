@@ -314,10 +314,13 @@ primary:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param primary.podSecurityContext.enabled Enable security context for MariaDB primary pods
   ## @param primary.podSecurityContext.fsGroup Group ID for the mounted volumes' filesystem
+  ## @param primary.podSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
+    seccompProfile:
+      type: "RuntimeDefault"
   ## MariaDB primary container security context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param primary.containerSecurityContext.enabled MariaDB primary container securityContext
@@ -325,6 +328,7 @@ primary:
   ## @param primary.containerSecurityContext.runAsNonRoot Set primary container's Security Context runAsNonRoot
   ## @param primary.containerSecurityContext.privileged Set primary container's Security Context privileged
   ## @param primary.containerSecurityContext.allowPrivilegeEscalation Set primary container's Security Context allowPrivilegeEscalation
+  ## @param primary.containerSecurityContext.capabilities.drop Set container's Security Context runAsNonRoot
   ##
   containerSecurityContext:
     enabled: true
@@ -332,6 +336,8 @@ primary:
     runAsNonRoot: true
     privileged: false
     allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
   ## MariaDB primary container's resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -710,10 +716,13 @@ secondary:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param secondary.podSecurityContext.enabled Enable security context for MariaDB secondary pods
   ## @param secondary.podSecurityContext.fsGroup Group ID for the mounted volumes' filesystem
+  ## @param secondary.podSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
+    seccompProfile:
+      type: "RuntimeDefault"
   ## MariaDB secondary container security context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param secondary.containerSecurityContext.enabled MariaDB secondary container securityContext
@@ -721,6 +730,7 @@ secondary:
   ## @param secondary.containerSecurityContext.runAsNonRoot Set secondary container's Security Context runAsNonRoot
   ## @param secondary.containerSecurityContext.privileged Set secondary container's Security Context privileged
   ## @param secondary.containerSecurityContext.allowPrivilegeEscalation Set secondary container's Security Context allowPrivilegeEscalation
+  ## @param secondary.containerSecurityContext.capabilities.drop Set container's Security Context runAsNonRoot
   ##
   containerSecurityContext:
     enabled: true
@@ -728,6 +738,8 @@ secondary:
     runAsNonRoot: true
     privileged: false
     allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
   ## MariaDB secondary container's resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -1104,8 +1116,11 @@ metrics:
   ## MariaDB metrics container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param metrics.containerSecurityContext.enabled Enable security context for MariaDB metrics container
+  ## @param metrics.containerSecurityContext.runAsUser User ID for the MariaDB metrics container
+  ## @param metrics.containerSecurityContext.runAsNonRoot Set metrics container's Security Context runAsNonRoot
   ## @param metrics.containerSecurityContext.privileged Set metrics container's Security Context privileged
   ## @param metrics.containerSecurityContext.allowPrivilegeEscalation Set metrics container's Security Context allowPrivilegeEscalation
+  ## @param metrics.containerSecurityContext.capabilities.drop Set container's Security Context runAsNonRoot
   ## Example:
   ##   containerSecurityContext:
   ##     enabled: true
@@ -1116,7 +1131,11 @@ metrics:
   containerSecurityContext:
     enabled: false
     privileged: false
+    runAsNonRoot: true
+    runAsUser: 1001
     allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
   ## Mysqld Prometheus exporter resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
