@@ -153,7 +153,7 @@ auth:
   ## @param auth.defaultAuthenticationPlugin Sets the default authentication plugin, by default it will use `mysql_native_password`
   ## NOTE: `mysql_native_password` will be deprecated in future mysql version and it is used here for compatibility with previous version. If you want to use the new default authentication method set it to `caching_sha2_password`.
   ##
-  defaultAuthenticationPlugin: {}
+  defaultAuthenticationPlugin: ""
 ## @param initdbScripts Dictionary of initdb scripts
 ## Specify dictionary of scripts to be run at first boot
 ## Example:
