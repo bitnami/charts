@@ -30,7 +30,7 @@ func init() {
 	flag.StringVar(&namespace, "namespace", "", "namespace where the application is running")
 	flag.StringVar(&username, "username", "", "database user")
 	flag.StringVar(&password, "password", "", "database password for username")
-	flag.IntVar(&timeoutSeconds, "timeout", 180, "timeout in seconds")
+	flag.IntVar(&timeoutSeconds, "timeout", 120, "timeout in seconds")
 	timeout = time.Duration(timeoutSeconds) * time.Second
 }
 
