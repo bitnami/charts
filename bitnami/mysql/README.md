@@ -136,12 +136,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `primary.podManagementPolicy`                               | podManagementPolicy to manage scaling operation of MySQL primary pods                                           | `""`                |
 | `primary.podSecurityContext.enabled`                        | Enable security context for MySQL primary pods                                                                  | `true`              |
 | `primary.podSecurityContext.fsGroup`                        | Group ID for the mounted volumes' filesystem                                                                    | `1001`              |
-| `primary.podSecurityContext.seccompProfile.type`            | Set Client container's Security Context seccomp profile                                                         | `RuntimeDefault`    |
 | `primary.containerSecurityContext.enabled`                  | MySQL primary container securityContext                                                                         | `true`              |
 | `primary.containerSecurityContext.runAsUser`                | User ID for the MySQL primary container                                                                         | `1001`              |
 | `primary.containerSecurityContext.runAsNonRoot`             | Set MySQL primary container's Security Context runAsNonRoot                                                     | `true`              |
 | `primary.containerSecurityContext.allowPrivilegeEscalation` | Set container's privilege escalation                                                                            | `false`             |
 | `primary.containerSecurityContext.capabilities.drop`        | Set container's Security Context runAsNonRoot                                                                   | `["ALL"]`           |
+| `primary.containerSecurityContext.seccompProfile.type`      | Set Client container's Security Context seccomp profile                                                         | `RuntimeDefault`    |
 | `primary.resources.limits`                                  | The resources limits for MySQL primary containers                                                               | `{}`                |
 | `primary.resources.requests`                                | The requested resources for MySQL primary containers                                                            | `{}`                |
 | `primary.livenessProbe.enabled`                             | Enable livenessProbe                                                                                            | `true`              |
@@ -229,12 +229,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `secondary.podManagementPolicy`                               | podManagementPolicy to manage scaling operation of MySQL secondary pods                                             | `""`                |
 | `secondary.podSecurityContext.enabled`                        | Enable security context for MySQL secondary pods                                                                    | `true`              |
 | `secondary.podSecurityContext.fsGroup`                        | Group ID for the mounted volumes' filesystem                                                                        | `1001`              |
-| `secondary.podSecurityContext.seccompProfile.type`            | Set container's Security Context seccomp profile                                                                    | `RuntimeDefault`    |
 | `secondary.containerSecurityContext.enabled`                  | MySQL secondary container securityContext                                                                           | `true`              |
 | `secondary.containerSecurityContext.runAsUser`                | User ID for the MySQL secondary container                                                                           | `1001`              |
 | `secondary.containerSecurityContext.runAsNonRoot`             | Set MySQL secondary container's Security Context runAsNonRoot                                                       | `true`              |
 | `secondary.containerSecurityContext.allowPrivilegeEscalation` | Set container's privilege escalation                                                                                | `false`             |
 | `secondary.containerSecurityContext.capabilities.drop`        | Set container's Security Context runAsNonRoot                                                                       | `["ALL"]`           |
+| `secondary.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                    | `RuntimeDefault`    |
 | `secondary.resources.limits`                                  | The resources limits for MySQL secondary containers                                                                 | `{}`                |
 | `secondary.resources.requests`                                | The requested resources for MySQL secondary containers                                                              | `{}`                |
 | `secondary.livenessProbe.enabled`                             | Enable livenessProbe                                                                                                | `true`              |

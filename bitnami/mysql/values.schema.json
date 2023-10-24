@@ -366,16 +366,6 @@
                             "type": "number",
                             "description": "Group ID for the mounted volumes' filesystem",
                             "default": 1001
-                        },
-                        "seccompProfile": {
-                            "type": "object",
-                            "properties": {
-                                "type": {
-                                    "type": "string",
-                                    "description": "Set Client container's Security Context seccomp profile",
-                                    "default": "RuntimeDefault"
-                                }
-                            }
                         }
                     }
                 },
@@ -414,6 +404,16 @@
                                     "items": {
                                         "type": "string"
                                     }
+                                }
+                            }
+                        },
+                        "seccompProfile": {
+                            "type": "object",
+                            "properties": {
+                                "type": {
+                                    "type": "string",
+                                    "description": "Set Client container's Security Context seccomp profile",
+                                    "default": "RuntimeDefault"
                                 }
                             }
                         }
@@ -915,16 +915,6 @@
                             "type": "number",
                             "description": "Group ID for the mounted volumes' filesystem",
                             "default": 1001
-                        },
-                        "seccompProfile": {
-                            "type": "object",
-                            "properties": {
-                                "type": {
-                                    "type": "string",
-                                    "description": "Set container's Security Context seccomp profile",
-                                    "default": "RuntimeDefault"
-                                }
-                            }
                         }
                     }
                 },
@@ -963,6 +953,16 @@
                                     "items": {
                                         "type": "string"
                                     }
+                                }
+                            }
+                        },
+                        "seccompProfile": {
+                            "type": "object",
+                            "properties": {
+                                "type": {
+                                    "type": "string",
+                                    "description": "Set container's Security Context seccomp profile",
+                                    "default": "RuntimeDefault"
                                 }
                             }
                         }
