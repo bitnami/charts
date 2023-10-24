@@ -24,7 +24,7 @@ Python is built for full integration into Python that enables you to use it with
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
-Looking to use PyTorch in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use PyTorch in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -256,7 +256,7 @@ Finally, if you want to clone a git repository you can use those parameters:
 
 ```console
 cloneFilesFromGit.enabled=true
-cloneFilesFromGit.repository=https://github.com/my-user/oci://REGISTRY_NAME/REPOSITORY_NAME
+cloneFilesFromGit.repository=https://github.com/my-user/my-repo
 cloneFilesFromGit.revision=master
 ```
 
