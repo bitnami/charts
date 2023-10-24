@@ -138,13 +138,13 @@ The command removes all the Kubernetes components associated with the chart and 
 | `primary.runtimeClassName`                                  | Runtime Class for MariaDB primary pods                                                                            | `""`                |
 | `primary.podSecurityContext.enabled`                        | Enable security context for MariaDB primary pods                                                                  | `true`              |
 | `primary.podSecurityContext.fsGroup`                        | Group ID for the mounted volumes' filesystem                                                                      | `1001`              |
-| `primary.podSecurityContext.seccompProfile.type`            | Set container's Security Context seccomp profile                                                                  | `RuntimeDefault`    |
 | `primary.containerSecurityContext.enabled`                  | MariaDB primary container securityContext                                                                         | `true`              |
 | `primary.containerSecurityContext.runAsUser`                | User ID for the MariaDB primary container                                                                         | `1001`              |
 | `primary.containerSecurityContext.runAsNonRoot`             | Set primary container's Security Context runAsNonRoot                                                             | `true`              |
 | `primary.containerSecurityContext.privileged`               | Set primary container's Security Context privileged                                                               | `false`             |
 | `primary.containerSecurityContext.allowPrivilegeEscalation` | Set primary container's Security Context allowPrivilegeEscalation                                                 | `false`             |
 | `primary.containerSecurityContext.capabilities.drop`        | Set container's Security Context runAsNonRoot                                                                     | `["ALL"]`           |
+| `primary.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                  | `RuntimeDefault`    |
 | `primary.resources.limits`                                  | The resources limits for MariaDB primary containers                                                               | `{}`                |
 | `primary.resources.requests`                                | The requested resources for MariaDB primary containers                                                            | `{}`                |
 | `primary.startupProbe.enabled`                              | Enable startupProbe                                                                                               | `false`             |
