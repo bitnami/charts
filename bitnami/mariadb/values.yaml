@@ -325,7 +325,7 @@ primary:
   ## @param primary.containerSecurityContext.runAsNonRoot Set primary container's Security Context runAsNonRoot
   ## @param primary.containerSecurityContext.privileged Set primary container's Security Context privileged
   ## @param primary.containerSecurityContext.allowPrivilegeEscalation Set primary container's Security Context allowPrivilegeEscalation
-  ## @param primary.containerSecurityContext.capabilities.drop Set container's Security Context runAsNonRoot
+  ## @param primary.containerSecurityContext.capabilities.drop List of capabilities to be dropped
   ## @param primary.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
