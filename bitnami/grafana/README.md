@@ -602,7 +602,7 @@ spec:
     app.kubernetes.io/component: image-renderer-plugin
 ```
 
-2. Upgrade your chart release adding the following block to your `values.yaml` file:
+1. Upgrade your chart release adding the following block to your `values.yaml` file:
 
 ```yaml
 imageRenderer:
