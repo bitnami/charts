@@ -716,13 +716,10 @@ secondary:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param secondary.podSecurityContext.enabled Enable security context for MariaDB secondary pods
   ## @param secondary.podSecurityContext.fsGroup Group ID for the mounted volumes' filesystem
-  ## @param secondary.podSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
-    seccompProfile:
-      type: "RuntimeDefault"
   ## MariaDB secondary container security context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param secondary.containerSecurityContext.enabled MariaDB secondary container securityContext
@@ -731,6 +728,7 @@ secondary:
   ## @param secondary.containerSecurityContext.privileged Set secondary container's Security Context privileged
   ## @param secondary.containerSecurityContext.allowPrivilegeEscalation Set secondary container's Security Context allowPrivilegeEscalation
   ## @param secondary.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param secondary.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
@@ -740,6 +738,8 @@ secondary:
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## MariaDB secondary container's resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
