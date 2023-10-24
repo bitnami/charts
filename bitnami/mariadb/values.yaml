@@ -325,7 +325,7 @@ primary:
   ## @param primary.containerSecurityContext.runAsNonRoot Set primary container's Security Context runAsNonRoot
   ## @param primary.containerSecurityContext.privileged Set primary container's Security Context privileged
   ## @param primary.containerSecurityContext.allowPrivilegeEscalation Set primary container's Security Context allowPrivilegeEscalation
-  ## @param primary.containerSecurityContext.capabilities.drop Set container's Security Context runAsNonRoot
+  ## @param primary.containerSecurityContext.capabilities.drop List of capabilities to be dropped
   ## @param primary.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
@@ -730,7 +730,7 @@ secondary:
   ## @param secondary.containerSecurityContext.runAsNonRoot Set secondary container's Security Context runAsNonRoot
   ## @param secondary.containerSecurityContext.privileged Set secondary container's Security Context privileged
   ## @param secondary.containerSecurityContext.allowPrivilegeEscalation Set secondary container's Security Context allowPrivilegeEscalation
-  ## @param secondary.containerSecurityContext.capabilities.drop Set container's Security Context runAsNonRoot
+  ## @param secondary.containerSecurityContext.capabilities.drop List of capabilities to be dropped
   ##
   containerSecurityContext:
     enabled: true
@@ -1120,7 +1120,7 @@ metrics:
   ## @param metrics.containerSecurityContext.runAsNonRoot Set metrics container's Security Context runAsNonRoot
   ## @param metrics.containerSecurityContext.privileged Set metrics container's Security Context privileged
   ## @param metrics.containerSecurityContext.allowPrivilegeEscalation Set metrics container's Security Context allowPrivilegeEscalation
-  ## @param metrics.containerSecurityContext.capabilities.drop Set container's Security Context runAsNonRoot
+  ## @param metrics.containerSecurityContext.capabilities.drop List of capabilities to be dropped
   ## Example:
   ##   containerSecurityContext:
   ##     enabled: true
