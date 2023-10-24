@@ -213,12 +213,12 @@ The command removes all the Kubernetes components associated with the chart and 
 | `topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`             |
 | `podSecurityContext.enabled`                        | Enable RabbitMQ pods' Security Context                                                                                   | `true`           |
 | `podSecurityContext.fsGroup`                        | Set RabbitMQ pod's Security Context fsGroup                                                                              | `1001`           |
-| `podSecurityContext.seccompProfile.type`            | Set container's Security Context seccomp profile                                                                         | `RuntimeDefault` |
 | `containerSecurityContext.enabled`                  | Enabled RabbitMQ containers' Security Context                                                                            | `true`           |
 | `containerSecurityContext.runAsUser`                | Set RabbitMQ containers' Security Context runAsUser                                                                      | `1001`           |
 | `containerSecurityContext.runAsNonRoot`             | Set RabbitMQ container's Security Context runAsNonRoot                                                                   | `true`           |
 | `containerSecurityContext.allowPrivilegeEscalation` | Set container's privilege escalation                                                                                     | `false`          |
 | `containerSecurityContext.capabilities.drop`        | Set container's Security Context runAsNonRoot                                                                            | `["ALL"]`        |
+| `containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                         | `RuntimeDefault` |
 | `resources.limits`                                  | The resources limits for RabbitMQ containers                                                                             | `{}`             |
 | `resources.requests`                                | The requested resources for RabbitMQ containers                                                                          | `{}`             |
 | `livenessProbe.enabled`                             | Enable livenessProbe                                                                                                     | `true`           |

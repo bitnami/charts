@@ -731,19 +731,17 @@ topologySpreadConstraints: []
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
 ## @param podSecurityContext.enabled Enable RabbitMQ pods' Security Context
 ## @param podSecurityContext.fsGroup Set RabbitMQ pod's Security Context fsGroup
-## @param podSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
 ##
 podSecurityContext:
   enabled: true
   fsGroup: 1001
-  seccompProfile:
-    type: "RuntimeDefault"
 
 ## @param containerSecurityContext.enabled Enabled RabbitMQ containers' Security Context
 ## @param containerSecurityContext.runAsUser Set RabbitMQ containers' Security Context runAsUser
 ## @param containerSecurityContext.runAsNonRoot Set RabbitMQ container's Security Context runAsNonRoot
 ## @param containerSecurityContext.allowPrivilegeEscalation Set container's privilege escalation
 ## @param containerSecurityContext.capabilities.drop Set container's Security Context runAsNonRoot
+## @param containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
 ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
 ## Example:
 ##   containerSecurityContext:
@@ -758,6 +756,8 @@ containerSecurityContext:
   allowPrivilegeEscalation: false
   capabilities:
     drop: ["ALL"]
+  seccompProfile:
+    type: "RuntimeDefault"
 
 ## RabbitMQ containers' resource requests and limits
 ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
