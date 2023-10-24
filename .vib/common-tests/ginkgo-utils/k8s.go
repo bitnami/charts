@@ -48,7 +48,7 @@ func StsScale(ctx context.Context, c kubernetes.Interface, ss *appsv1.StatefulSe
 		if err != nil {
 			return nil, fmt.Errorf("failed to get statefulset %q: %v", name, err)
 		}
-		if ss.Status.Replicas == count {
+		if ss.Status.Replicas == count && ss.Status.AvailableReplicas == count {
 			return ss, nil
 		}
 		*(ss.Spec.Replicas) = count
