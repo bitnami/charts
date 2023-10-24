@@ -730,7 +730,7 @@ secondary:
   ## @param secondary.containerSecurityContext.runAsNonRoot Set secondary container's Security Context runAsNonRoot
   ## @param secondary.containerSecurityContext.privileged Set secondary container's Security Context privileged
   ## @param secondary.containerSecurityContext.allowPrivilegeEscalation Set secondary container's Security Context allowPrivilegeEscalation
-  ## @param secondary.containerSecurityContext.capabilities.drop Set container's Security Context runAsNonRoot
+  ## @param secondary.containerSecurityContext.capabilities.drop List of capabilities to be dropped
   ##
   containerSecurityContext:
     enabled: true
