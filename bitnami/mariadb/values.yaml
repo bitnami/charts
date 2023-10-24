@@ -314,13 +314,10 @@ primary:
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-pod
   ## @param primary.podSecurityContext.enabled Enable security context for MariaDB primary pods
   ## @param primary.podSecurityContext.fsGroup Group ID for the mounted volumes' filesystem
-  ## @param primary.podSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   podSecurityContext:
     enabled: true
     fsGroup: 1001
-    seccompProfile:
-      type: "RuntimeDefault"
   ## MariaDB primary container security context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param primary.containerSecurityContext.enabled MariaDB primary container securityContext
@@ -329,6 +326,7 @@ primary:
   ## @param primary.containerSecurityContext.privileged Set primary container's Security Context privileged
   ## @param primary.containerSecurityContext.allowPrivilegeEscalation Set primary container's Security Context allowPrivilegeEscalation
   ## @param primary.containerSecurityContext.capabilities.drop Set container's Security Context runAsNonRoot
+  ## @param primary.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
@@ -338,6 +336,8 @@ primary:
     allowPrivilegeEscalation: false
     capabilities:
       drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## MariaDB primary container's resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
