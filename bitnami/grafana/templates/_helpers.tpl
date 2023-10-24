@@ -13,13 +13,6 @@ Return the proper Grafana image name
 {{- end -}}
 
 {{/*
-Return the proper Grafana Image Renderer image name
-*/}}
-{{- define "grafana.imageRenderer.image" -}}
-{{- include "common.images.image" (dict "imageRoot" .Values.imageRenderer.image "global" .Values.global) -}}
-{{- end -}}
-
-{{/*
 Return the proper image name (for the init container volume-permissions image)
 */}}
 {{- define "volumePermissions.image" -}}
@@ -30,7 +23,7 @@ Return the proper image name (for the init container volume-permissions image)
 Return the proper Docker Image Registry Secret Names
 */}}
 {{- define "grafana.imagePullSecrets" -}}
-{{- include "common.images.pullSecrets" (dict "images" (list .Values.image .Values.imageRenderer.image) "global" .Values.global) -}}
+{{- include "common.images.pullSecrets" (dict "images" (list .Values.image) "global" .Values.global) -}}
 {{- end }}
 
 {{/*

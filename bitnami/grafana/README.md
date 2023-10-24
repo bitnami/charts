@@ -59,7 +59,7 @@ The command removes all the Kubernetes components associated with the chart and 
 
 In the Bitnami catalog we offer both the bitnami/grafana and bitnami/grafana-operator charts. Each solution covers different needs and use cases.
 
-The *bitnami/grafana* chart deploys a single Grafana installation (with grafana-image-renderer) using a Kubernetes Deployment object (together with Services, PVCs, ConfigMaps, etc.). The figure below shows the deployed objects in the cluster after executing *helm install*:
+The *bitnami/grafana* chart deploys a single Grafana installation using a Kubernetes Deployment object (together with Services, PVCs, ConfigMaps, etc.). The figure below shows the deployed objects in the cluster after executing *helm install*:
 
 ```text
                     +--------------+             +-----+
@@ -204,6 +204,9 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `ldap.tls.CAFilename`              | CA certificate filename. Should match with the CA entry key in the ldap.tls.certificatesSecret.                                                      | `""`                              |
 | `ldap.tls.certFilename`            | Client certificate filename to authenticate against the LDAP server. Should match with certificate the entry key in the ldap.tls.certificatesSecret. | `""`                              |
 | `ldap.tls.certKeyFilename`         | Client Key filename to authenticate against the LDAP server. Should match with certificate the entry key in the ldap.tls.certificatesSecret.         | `""`                              |
+| `imageRenderer.enabled`            | Enable using a remote rendering service to render PNG images                                                                                         | `false`                           |
+| `imageRenderer.serverURL`          | URL of the remote rendering service                                                                                                                  | `""`                              |
+| `imageRenderer.callbackURL`        | URL of the callback service                                                                                                                          | `""`                              |
 | `config.useGrafanaIniFile`         | Allows to load a `grafana.ini` file                                                                                                                  | `false`                           |
 | `config.grafanaIniConfigMap`       | Name of the ConfigMap containing the `grafana.ini` file                                                                                              | `""`                              |
 | `config.grafanaIniSecret`          | Name of the Secret containing the `grafana.ini` file                                                                                                 | `""`                              |
@@ -241,8 +244,8 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `grafana.podSecurityContext.fsGroup`         | Group to configure permissions for volumes                                                              | `1001`          |
 | `grafana.podSecurityContext.runAsUser`       | User for the security context                                                                           | `1001`          |
 | `grafana.podSecurityContext.runAsNonRoot`    | Run containers as non-root users                                                                        | `true`          |
-| `grafana.containerSecurityContext.enabled`   | Enabled Grafana Image Renderer containers' Security Context                                             | `true`          |
-| `grafana.containerSecurityContext.runAsUser` | Set Grafana Image Renderer containers' Security Context runAsUser                                       | `1001`          |
+| `grafana.containerSecurityContext.enabled`   | Enabled Grafana containers' Security Context                                                            | `true`          |
+| `grafana.containerSecurityContext.runAsUser` | Set Grafana containers' Security Context runAsUser                                                      | `1001`          |
 | `grafana.resources.limits`                   | The resources limits for Grafana containers                                                             | `{}`            |
 | `grafana.resources.requests`                 | The requested resources for Grafana containers                                                          | `{}`            |
 | `grafana.livenessProbe.enabled`              | Enable livenessProbe                                                                                    | `true`          |
@@ -357,79 +360,6 @@ This solution allows to easily deploy multiple Grafana instances compared to the
 | `metrics.prometheusRule.namespace`         | Namespace for the PrometheusRule Resource (defaults to the Release Namespace)                                                             | `""`    |
 | `metrics.prometheusRule.additionalLabels`  | Additional labels that can be used so PrometheusRule will be discovered by Prometheus                                                     | `{}`    |
 | `metrics.prometheusRule.rules`             | PrometheusRule rules to configure                                                                                                         | `[]`    |
-
-### Grafana Image Renderer parameters
-
-| Name                                                     | Description                                                                                                                               | Value                                    |
-| -------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------- |
-| `imageRenderer.enabled`                                  | Enable using a remote rendering service to render PNG images                                                                              | `false`                                  |
-| `imageRenderer.image.registry`                           | Grafana Image Renderer image registry                                                                                                     | `REGISTRY_NAME`                          |
-| `imageRenderer.image.repository`                         | Grafana Image Renderer image repository                                                                                                   | `REPOSITORY_NAME/grafana-image-renderer` |
-| `imageRenderer.image.digest`                             | Grafana Image Renderer image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                    | `""`                                     |
-| `imageRenderer.image.pullPolicy`                         | Grafana Image Renderer image pull policy                                                                                                  | `IfNotPresent`                           |
-| `imageRenderer.image.pullSecrets`                        | Grafana image Renderer pull secrets                                                                                                       | `[]`                                     |
-| `imageRenderer.replicaCount`                             | Number of Grafana Image Renderer Pod replicas                                                                                             | `1`                                      |
-| `imageRenderer.updateStrategy.type`                      | Grafana Image Renderer deployment strategy type.                                                                                          | `RollingUpdate`                          |
-| `imageRenderer.podAnnotations`                           | Grafana Image Renderer Pod annotations                                                                                                    | `{}`                                     |
-| `imageRenderer.podLabels`                                | Extra labels for Grafana Image Renderer pods                                                                                              | `{}`                                     |
-| `imageRenderer.nodeSelector`                             | Node labels for pod assignment                                                                                                            | `{}`                                     |
-| `imageRenderer.hostAliases`                              | Grafana Image Renderer pods host aliases                                                                                                  | `[]`                                     |
-| `imageRenderer.tolerations`                              | Tolerations for pod assignment                                                                                                            | `[]`                                     |
-| `imageRenderer.priorityClassName`                        | Grafana Image Renderer pods' priorityClassName                                                                                            | `""`                                     |
-| `imageRenderer.schedulerName`                            | Name of the k8s scheduler (other than default)                                                                                            | `""`                                     |
-| `imageRenderer.terminationGracePeriodSeconds`            | In seconds, time the given to the Grafana Image Renderer pod needs to terminate gracefully                                                | `""`                                     |
-| `imageRenderer.topologySpreadConstraints`                | Topology Spread Constraints for pod assignment                                                                                            | `[]`                                     |
-| `imageRenderer.podAffinityPreset`                        | Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                       | `""`                                     |
-| `imageRenderer.podAntiAffinityPreset`                    | Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                  | `soft`                                   |
-| `imageRenderer.nodeAffinityPreset.type`                  | Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                                 | `""`                                     |
-| `imageRenderer.nodeAffinityPreset.key`                   | Node label key to match Ignored if `affinity` is set.                                                                                     | `""`                                     |
-| `imageRenderer.nodeAffinityPreset.values`                | Node label values to match. Ignored if `affinity` is set.                                                                                 | `[]`                                     |
-| `imageRenderer.extraEnvVars`                             | Array containing extra env vars to configure Grafana                                                                                      | `[]`                                     |
-| `imageRenderer.affinity`                                 | Affinity for pod assignment                                                                                                               | `{}`                                     |
-| `imageRenderer.resources.limits`                         | The resources limits for Grafana containers                                                                                               | `{}`                                     |
-| `imageRenderer.resources.requests`                       | The requested resources for Grafana containers                                                                                            | `{}`                                     |
-| `imageRenderer.podSecurityContext.enabled`               | Enable securityContext on for Grafana Image Renderer deployment                                                                           | `true`                                   |
-| `imageRenderer.podSecurityContext.fsGroup`               | Group to configure permissions for volumes                                                                                                | `1001`                                   |
-| `imageRenderer.podSecurityContext.runAsUser`             | User for the security context                                                                                                             | `1001`                                   |
-| `imageRenderer.podSecurityContext.runAsNonRoot`          | Run containers as non-root users                                                                                                          | `true`                                   |
-| `imageRenderer.containerSecurityContext.enabled`         | Enabled Grafana Image Renderer containers' Security Context                                                                               | `true`                                   |
-| `imageRenderer.containerSecurityContext.runAsUser`       | Set Grafana Image Renderer containers' Security Context runAsUser                                                                         | `1001`                                   |
-| `imageRenderer.service.type`                             | Kubernetes Service type                                                                                                                   | `ClusterIP`                              |
-| `imageRenderer.service.clusterIP`                        | Grafana service Cluster IP                                                                                                                | `""`                                     |
-| `imageRenderer.service.ports.imageRenderer`              | Grafana Image Renderer metrics port                                                                                                       | `8080`                                   |
-| `imageRenderer.service.nodePorts.grafana`                | Specify the nodePort value for the LoadBalancer and NodePort service types                                                                | `""`                                     |
-| `imageRenderer.service.loadBalancerIP`                   | loadBalancerIP if Grafana service type is `LoadBalancer` (optional, cloud specific)                                                       | `""`                                     |
-| `imageRenderer.service.loadBalancerSourceRanges`         | loadBalancerSourceRanges if Grafana service type is `LoadBalancer` (optional, cloud specific)                                             | `[]`                                     |
-| `imageRenderer.service.annotations`                      | Provide any additional annotations which may be required.                                                                                 | `{}`                                     |
-| `imageRenderer.service.externalTrafficPolicy`            | Grafana service external traffic policy                                                                                                   | `Cluster`                                |
-| `imageRenderer.service.extraPorts`                       | Extra port to expose on Grafana service                                                                                                   | `[]`                                     |
-| `imageRenderer.service.sessionAffinity`                  | Session Affinity for Kubernetes service, can be "None" or "ClientIP"                                                                      | `None`                                   |
-| `imageRenderer.service.sessionAffinityConfig`            | Additional settings for the sessionAffinity                                                                                               | `{}`                                     |
-| `imageRenderer.metrics.enabled`                          | Enable the export of Prometheus metrics                                                                                                   | `false`                                  |
-| `imageRenderer.metrics.annotations`                      | Annotations for Prometheus metrics service[object] Prometheus annotations                                                                 | `{}`                                     |
-| `imageRenderer.metrics.serviceMonitor.enabled`           | if `true`, creates a Prometheus Operator ServiceMonitor (also requires `metrics.enabled` to be `true`)                                    | `false`                                  |
-| `imageRenderer.metrics.serviceMonitor.namespace`         | Namespace in which Prometheus is running                                                                                                  | `""`                                     |
-| `imageRenderer.metrics.serviceMonitor.jobLabel`          | The name of the label on the target service to use as the job name in prometheus.                                                         | `""`                                     |
-| `imageRenderer.metrics.serviceMonitor.interval`          | Interval at which metrics should be scraped.                                                                                              | `""`                                     |
-| `imageRenderer.metrics.serviceMonitor.scrapeTimeout`     | Timeout after which the scrape is ended                                                                                                   | `""`                                     |
-| `imageRenderer.metrics.serviceMonitor.relabelings`       | RelabelConfigs to apply to samples before scraping                                                                                        | `[]`                                     |
-| `imageRenderer.metrics.serviceMonitor.metricRelabelings` | MetricRelabelConfigs to apply to samples before ingestion                                                                                 | `[]`                                     |
-| `imageRenderer.metrics.serviceMonitor.selector`          | ServiceMonitor selector labels                                                                                                            | `{}`                                     |
-| `imageRenderer.metrics.serviceMonitor.labels`            | Extra labels for the ServiceMonitor                                                                                                       | `{}`                                     |
-| `imageRenderer.metrics.serviceMonitor.honorLabels`       | honorLabels chooses the metric's labels on collisions with target labels                                                                  | `false`                                  |
-| `imageRenderer.metrics.prometheusRule.enabled`           | if `true`, creates a Prometheus Operator PrometheusRule (also requires `metrics.enabled` to be `true` and `metrics.prometheusRule.rules`) | `false`                                  |
-| `imageRenderer.metrics.prometheusRule.namespace`         | Namespace for the PrometheusRule Resource (defaults to the Release Namespace)                                                             | `""`                                     |
-| `imageRenderer.metrics.prometheusRule.additionalLabels`  | Additional labels that can be used so PrometheusRule will be discovered by Prometheus                                                     | `{}`                                     |
-| `imageRenderer.metrics.prometheusRule.rules`             | Prometheus Rule definitions                                                                                                               | `[]`                                     |
-| `imageRenderer.initContainers`                           | Add additional init containers to the Grafana Image Renderer pod(s)                                                                       | `[]`                                     |
-| `imageRenderer.sidecars`                                 | Add additional sidecar containers to the Grafana Image Renderer pod(s)                                                                    | `[]`                                     |
-| `imageRenderer.extraEnvVarsCM`                           | Name of existing ConfigMap containing extra env vars for Grafana Image Renderer nodes                                                     | `""`                                     |
-| `imageRenderer.extraEnvVarsSecret`                       | Name of existing Secret containing extra env vars for Grafana Image Renderer nodes                                                        | `""`                                     |
-| `imageRenderer.extraVolumes`                             | Optionally specify extra list of additional volumes for the Grafana Image Renderer pod(s)                                                 | `[]`                                     |
-| `imageRenderer.extraVolumeMounts`                        | Optionally specify extra list of additional volumeMounts for the Grafana Image Renderer container(s)                                      | `[]`                                     |
-| `imageRenderer.command`                                  | Override default container command (useful when using custom images)                                                                      | `[]`                                     |
-| `imageRenderer.args`                                     | Override default container args (useful when using custom images)                                                                         | `[]`                                     |
-| `imageRenderer.lifecycleHooks`                           | for the Grafana Image Renderer container(s) to automate configuration before or after startup                                             | `{}`                                     |
 
 ### Volume permissions init Container Parameters
 
@@ -593,6 +523,95 @@ ldap.enabled=true
 ldap.configMapName=ldap-config
 ldap.allowSignUp=true
 ```
+
+### Installing Grafana Image Renderer Plugin
+
+In order to install the [Grafana Image Renderer Plugin](https://github.com/grafana/grafana-image-renderer) so you rely on it to render images and save memory on Grafana pods, follow the steps below:
+
+1. Create a Grafana Image Renderer deployment and service using the K8s manifests below:
+
+```yaml
+# deployment.yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: grafana-image-renderer
+  namespace: default
+  labels:
+    app.kubernetes.io/name: grafana-image-renderer
+    app.kubernetes.io/instance: grafana-image-renderer
+    app.kubernetes.io/component: image-renderer-plugin
+    app.kubernetes.io/part-of: grafana
+spec:
+  replicas: 1
+  strategy:
+    type: RollingUpdate
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: grafana-image-renderer
+      app.kubernetes.io/instance: grafana-image-renderer
+      app.kubernetes.io/component: image-renderer-plugin
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: grafana-image-renderer
+        app.kubernetes.io/instance: grafana-image-renderer
+        app.kubernetes.io/component: image-renderer-plugin
+        app.kubernetes.io/part-of: grafana
+    spec:
+      securityContext:
+        fsGroup: 1001
+        runAsNonRoot: true
+        runAsUser: 1001
+      containers:
+        - name: grafana-image-renderer
+          image: docker.io/bitnami/grafana-image-renderer:3
+          securityContext:
+            runAsUser: 1001
+          env:
+            - name: HTTP_HOST
+              value: "::"
+            - name: HTTP_PORT
+              value: "8080"
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+# service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: grafana-image-renderer
+  namespace: default
+  labels:
+    app.kubernetes.io/name: grafana-image-renderer
+    app.kubernetes.io/instance: grafana-image-renderer
+    app.kubernetes.io/component: image-renderer-plugin
+    app.kubernetes.io/part-of: grafana
+spec:
+  type: ClusterIP
+  sessionAffinity: None
+  ports:
+    - port: 8080
+      targetPort: http
+      protocol: TCP
+      name: http
+  selector:
+    app.kubernetes.io/name: grafana-image-renderer
+    app.kubernetes.io/instance: grafana-image-renderer
+    app.kubernetes.io/component: image-renderer-plugin
+```
+
+2. Upgrade your chart release adding the following block to your `values.yaml` file:
+
+```yaml
+imageRenderer:
+  enabled: true
+  serverURL: "http://grafana-image-renderer.default.svc.cluster.local:8080/render"
+  callbackURL: "http://grafana.default.svc.cluster.local:3000/"
+```
+
+> Note: the steps above assume an installation in the `default` namespace. If you are installing the chart in a different namespace, adjust the manifests and the `serverURL` & `callbackURL` values accordingly.
 
 ### Supporting HA (High Availability)
 
