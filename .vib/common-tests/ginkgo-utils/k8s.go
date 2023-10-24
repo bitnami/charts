@@ -89,7 +89,7 @@ func DplScale(ctx context.Context, c kubernetes.Interface, dpl *appsv1.Deploymen
 		if err != nil {
 			return nil, fmt.Errorf("failed to get deployment %q: %v", name, err)
 		}
-		if currentDpl.Status.Replicas == count {
+		if currentDpl.Status.Replicas == count && currentDpl.Status.AvailableReplicas == count {
 			return currentDpl, nil
 		}
 		*(currentDpl.Spec.Replicas) = count
