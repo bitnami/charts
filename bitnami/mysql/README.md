@@ -22,7 +22,7 @@ This chart bootstraps a [MySQL](https://github.com/bitnami/containers/tree/main/
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
-Looking to use MySQL in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use MySQL in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -83,29 +83,30 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### MySQL common parameters
 
-| Name                       | Description                                                                                                                                                                         | Value                   |
-| -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
-| `image.registry`           | MySQL image registry                                                                                                                                                                | `REGISTRY_NAME`         |
-| `image.repository`         | MySQL image repository                                                                                                                                                              | `REPOSITORY_NAME/mysql` |
-| `image.digest`             | MySQL image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                               | `""`                    |
-| `image.pullPolicy`         | MySQL image pull policy                                                                                                                                                             | `IfNotPresent`          |
-| `image.pullSecrets`        | Specify docker-registry secret names as an array                                                                                                                                    | `[]`                    |
-| `image.debug`              | Specify if debug logs should be enabled                                                                                                                                             | `false`                 |
-| `architecture`             | MySQL architecture (`standalone` or `replication`)                                                                                                                                  | `standalone`            |
-| `auth.rootPassword`        | Password for the `root` user. Ignored if existing secret is provided                                                                                                                | `""`                    |
-| `auth.createDatabase`      | Whether to create the .Values.auth.database or not                                                                                                                                  | `true`                  |
-| `auth.database`            | Name for a custom database to create                                                                                                                                                | `my_database`           |
-| `auth.username`            | Name for a custom user to create                                                                                                                                                    | `""`                    |
-| `auth.password`            | Password for the new user. Ignored if existing secret is provided                                                                                                                   | `""`                    |
-| `auth.replicationUser`     | MySQL replication user                                                                                                                                                              | `replicator`            |
-| `auth.replicationPassword` | MySQL replication user password. Ignored if existing secret is provided                                                                                                             | `""`                    |
-| `auth.existingSecret`      | Use existing secret for password details. The secret has to contain the keys `mysql-root-password`, `mysql-replication-password` and `mysql-password`                               | `""`                    |
-| `auth.usePasswordFiles`    | Mount credentials as files instead of using an environment variable                                                                                                                 | `false`                 |
-| `auth.customPasswordFiles` | Use custom password files when `auth.usePasswordFiles` is set to `true`. Define path for keys `root` and `user`, also define `replicator` if `architecture` is set to `replication` | `{}`                    |
-| `initdbScripts`            | Dictionary of initdb scripts                                                                                                                                                        | `{}`                    |
-| `initdbScriptsConfigMap`   | ConfigMap with the initdb scripts (Note: Overrides `initdbScripts`)                                                                                                                 | `""`                    |
-| `startdbScripts`           | Dictionary of startdb scripts                                                                                                                                                       | `{}`                    |
-| `startdbScriptsConfigMap`  | ConfigMap with the startdb scripts (Note: Overrides `startdbScripts`)                                                                                                               | `""`                    |
+| Name                               | Description                                                                                                                                                                         | Value                   |
+| ---------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------- |
+| `image.registry`                   | MySQL image registry                                                                                                                                                                | `REGISTRY_NAME`         |
+| `image.repository`                 | MySQL image repository                                                                                                                                                              | `REPOSITORY_NAME/mysql` |
+| `image.digest`                     | MySQL image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                               | `""`                    |
+| `image.pullPolicy`                 | MySQL image pull policy                                                                                                                                                             | `IfNotPresent`          |
+| `image.pullSecrets`                | Specify docker-registry secret names as an array                                                                                                                                    | `[]`                    |
+| `image.debug`                      | Specify if debug logs should be enabled                                                                                                                                             | `false`                 |
+| `architecture`                     | MySQL architecture (`standalone` or `replication`)                                                                                                                                  | `standalone`            |
+| `auth.rootPassword`                | Password for the `root` user. Ignored if existing secret is provided                                                                                                                | `""`                    |
+| `auth.createDatabase`              | Whether to create the .Values.auth.database or not                                                                                                                                  | `true`                  |
+| `auth.database`                    | Name for a custom database to create                                                                                                                                                | `my_database`           |
+| `auth.username`                    | Name for a custom user to create                                                                                                                                                    | `""`                    |
+| `auth.password`                    | Password for the new user. Ignored if existing secret is provided                                                                                                                   | `""`                    |
+| `auth.replicationUser`             | MySQL replication user                                                                                                                                                              | `replicator`            |
+| `auth.replicationPassword`         | MySQL replication user password. Ignored if existing secret is provided                                                                                                             | `""`                    |
+| `auth.existingSecret`              | Use existing secret for password details. The secret has to contain the keys `mysql-root-password`, `mysql-replication-password` and `mysql-password`                               | `""`                    |
+| `auth.usePasswordFiles`            | Mount credentials as files instead of using an environment variable                                                                                                                 | `false`                 |
+| `auth.customPasswordFiles`         | Use custom password files when `auth.usePasswordFiles` is set to `true`. Define path for keys `root` and `user`, also define `replicator` if `architecture` is set to `replication` | `{}`                    |
+| `auth.defaultAuthenticationPlugin` | Sets the default authentication plugin, by default it will use `mysql_native_password`                                                                                              | `""`                    |
+| `initdbScripts`                    | Dictionary of initdb scripts                                                                                                                                                        | `{}`                    |
+| `initdbScriptsConfigMap`           | ConfigMap with the initdb scripts (Note: Overrides `initdbScripts`)                                                                                                                 | `""`                    |
+| `startdbScripts`                   | Dictionary of startdb scripts                                                                                                                                                       | `{}`                    |
+| `startdbScriptsConfigMap`          | ConfigMap with the startdb scripts (Note: Overrides `startdbScripts`)                                                                                                               | `""`                    |
 
 ### MySQL Primary parameters
 
