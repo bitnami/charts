@@ -96,6 +96,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | `odooEmail`             | Odoo user email                                                      | `user@example.com` |
 | `odooPassword`          | Odoo user password                                                   | `""`               |
 | `odooSkipInstall`       | Skip Odoo installation wizard                                        | `false`            |
+| `odooDatabaseFilter`    | Filter odoo database by using a regex                                | `.*`               |
 | `loadDemoData`          | Whether to load demo data for all modules during initialization      | `false`            |
 | `customPostInitScripts` | Custom post-init.d user scripts                                      | `{}`               |
 | `smtpHost`              | SMTP server host                                                     | `""`               |
