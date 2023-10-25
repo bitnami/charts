@@ -113,6 +113,7 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------- | ----------------------------------------------------------------------------------------- | -------------------------- |
 | `hostAliases`                           | Add deployment host aliases                                                               | `[]`                       |
 | `containerPorts.http`                   | HTTP port to expose at container level                                                    | `8080`                     |
+| `dnsConfig`                             | Pod DNS configuration.                                                                    | `{}`                       |
 | `podSecurityContext.enabled`            | Enable pod's Security Context                                                             | `true`                     |
 | `podSecurityContext.fsGroup`            | Set pod's Security Context fsGroup                                                        | `1001`                     |
 | `containerSecurityContext.enabled`      | Enable container's Security Context                                                       | `true`                     |
