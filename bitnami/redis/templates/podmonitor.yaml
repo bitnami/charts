@@ -8,10 +8,10 @@ apiVersion: monitoring.coreos.com/v1
 kind: PodMonitor
 metadata:
   name: {{ template "common.names.fullname" . }}
-  namespace: {{ default .Release.Namespace .Values.metrics.PodMonitor.namespace | quote }}
+  namespace: {{ default .Release.Namespace .Values.metrics.podMonitor.namespace | quote }}
   labels: {{- include "common.labels.standard" ( dict "customLabels" .Values.commonLabels "context" $ ) | nindent 4 }}
-    {{- if .Values.metrics.PodMonitor.additionalLabels }}
-    {{- include "common.tplvalues.render" (dict "value" .Values.metrics.PodMonitor.additionalLabels "context" $) | nindent 4 }}
+    {{- if .Values.metrics.podMonitor.additionalLabels }}
+    {{- include "common.tplvalues.render" (dict "value" .Values.metrics.podMonitor.additionalLabels "context" $) | nindent 4 }}
     {{- end }}
   {{- if .Values.commonAnnotations }}
   annotations: {{- include "common.tplvalues.render" ( dict "value" .Values.commonAnnotations "context" $ ) | nindent 4 }}
@@ -37,10 +37,10 @@ spec:
   {{- if .Values.metrics.serviceMonitor.podTargetLabels }}
   podTargetLabels: {{- toYaml .Values.metrics.podMonitor.podTargetLabels | nindent 4 }}
   {{- end }}
-  {{ with .Values.metrics.podMonitor.sampleLimit }}
+  {{- with .Values.metrics.podMonitor.sampleLimit -}}
   sampleLimit: {{ . }}
   {{- end }}
-  {{ with .Values.metrics.podMonitor.targetLimit }}
+  {{- with .Values.metrics.podMonitor.targetLimit -}}
   targetLimit: {{ . }}
   {{- end }}
   namespaceSelector:
