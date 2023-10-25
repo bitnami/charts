@@ -335,8 +335,8 @@ helm uninstall my-release
 | `envoy.hostIPs.http`                                                      | Sets `hostIP` http IP                                                                                                 | `127.0.0.1`             |
 | `envoy.hostIPs.https`                                                     | Sets `hostIP` https IP                                                                                                | `127.0.0.1`             |
 | `envoy.hostIPs.metrics`                                                   | Sets `hostIP` metrics IP                                                                                              | `127.0.0.1`             |
-| `envoy.containerPorts.http`                                               | Sets http port inside Envoy pod  (change this to >1024 to run envoy as a non-root user)                               | `8080`                  |
-| `envoy.containerPorts.https`                                              | Sets https port inside Envoy pod  (change this to >1024 to run envoy as a non-root user)                              | `8443`                  |
+| `envoy.containerPorts.http`                                               | Sets http port inside Envoy pod (change this to >1024 to run envoy as a non-root user)                                | `8080`                  |
+| `envoy.containerPorts.https`                                              | Sets https port inside Envoy pod (change this to >1024 to run envoy as a non-root user)                               | `8443`                  |
 | `envoy.containerPorts.metrics`                                            | Sets metrics port inside Envoy pod (change this to >1024 to run envoy as a non-root user)                             | `8002`                  |
 | `envoy.initContainers`                                                    | Attach additional init containers to Envoy pods                                                                       | `[]`                    |
 | `envoy.sidecars`                                                          | Add additional sidecar containers to the Envoy pods                                                                   | `[]`                    |
@@ -511,11 +511,11 @@ configInline:
   # disable ingressroute permitInsecure field
   disablePermitInsecure: false
   tls:
-  #   minimum TLS version that Contour will negotiate
-  #   minimum-protocol-version: "1.1"
-  # Defines the Kubernetes name/namespace matching a secret to use
-  # as the fallback certificate when requests which don't match the
-  # SNI defined for a vhost.
+    #   minimum TLS version that Contour will negotiate
+    #   minimum-protocol-version: "1.1"
+    # Defines the Kubernetes name/namespace matching a secret to use
+    # as the fallback certificate when requests which don't match the
+    # SNI defined for a vhost.
     fallback-certificate:
   #   name: fallback-secret-name
   #   namespace: projectcontour
@@ -600,6 +600,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 
 Please carefully read through the guide "Upgrading Contour" at <https://projectcontour.io/resources/upgrading/>.
 
+### To 14.0.0
+
+This major release adds support for Kubernetes PSA restricted mode out of the box. In order to do so, `hostNetwork` is disabled by default in envoy. In order to maintain `hostNetwork` in your current installation set `envoy.useHostNetwork=true`.
+
 ### To 7.0.0
 
 This major release renames several values in this chart and adds missing features, in order to be inline with the rest of assets in the Bitnami charts repository.
@@ -659,7 +663,7 @@ If required, back up your existing Custom Resources:
 kubectl get -o yaml extensionservice,httpproxy,tlscertificatedelegation -A > backup.yaml
 ```
 
-Delete the existing Contour CRDs. Note that this step will *also delete* the associated CRs and impact availability until the upgrade is complete and the backup restored:
+Delete the existing Contour CRDs. Note that this step will _also delete_ the associated CRs and impact availability until the upgrade is complete and the backup restored:
 
 ```console
 kubectl delete extensionservices.projectcontour.io
@@ -688,9 +692,9 @@ kubectl apply -f backup.yaml
 #### What changes were introduced in 3.0.0?
 
 - Previous versions of this Helm Chart use `apiVersion: v1` (installable by both Helm 2 and 3), this Helm Chart was updated to `apiVersion: v2` (installable by Helm 3 only). [Here](https://helm.sh/docs/topics/charts/#the-apiversion-field) you can find more information about the `apiVersion` field.
-- Move dependency information from the *requirements.yaml* to the *Chart.yaml*
-- After running `helm dependency update`, a *Chart.lock* file is generated containing the same structure used in the previous *requirements.lock*
-- The different fields present in the *Chart.yaml* file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
+- Move dependency information from the _requirements.yaml_ to the _Chart.yaml_
+- After running `helm dependency update`, a _Chart.lock_ file is generated containing the same structure used in the previous _requirements.lock_
+- The different fields present in the _Chart.yaml_ file has been ordered alphabetically in a homogeneous way for all the Bitnami Helm Charts
 
 #### Considerations when upgrading to 3.0.0
 
