@@ -4836,7 +4836,7 @@ waitContainer:
     capabilities:
       drop: ["ALL"]
 
-## @section External etcd parameters
+## @section External etcd settings
 ##
 externalEtcd:
   ## @param externalEtcd.servers List of hostnames of the external etcd
@@ -4845,6 +4845,18 @@ externalEtcd:
   ## @param externalEtcd.port Port of the external etcd instance
   ##
   port: 2379
+  ## @param externalEtcd.user User of the external etcd instance
+  ##
+  user: root
+  ## @param externalEtcd.password Password of the external etcd instance
+  ##
+  password: ""
+  ## @param externalEtcd.existingSecret Name of a secret containing the external etcd password
+  ##
+  existingSecret: ""
+  ## @param externalEtcd.existingSecretPasswordKey Key inside the secret containing the external etcd password
+  ##
+  existingSecretPasswordKey: "etcd-root-password"
   ## @param externalEtcd.secureTransport Use TLS for client-to-server communications
   ##
   secureTransport: false

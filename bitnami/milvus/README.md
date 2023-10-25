@@ -1396,13 +1396,17 @@ The command removes all the Kubernetes components associated with the chart and 
 | `waitContainer.containerSecurityContext.allowPrivilegeEscalation` | Set Milvus container's privilege escalation                                                                                   | `false`                    |
 | `waitContainer.containerSecurityContext.capabilities.drop`        | Set Milvus container's Security Context runAsNonRoot                                                                          | `["ALL"]`                  |
 
-### External etcd parameters
+### External etcd settings
 
-| Name                           | Description                                 | Value   |
-| ------------------------------ | ------------------------------------------- | ------- |
-| `externalEtcd.servers`         | List of hostnames of the external etcd      | `[]`    |
-| `externalEtcd.port`            | Port of the external etcd instance          | `2379`  |
-| `externalEtcd.secureTransport` | Use TLS for client-to-server communications | `false` |
+| Name                                     | Description                                                 | Value                |
+| ---------------------------------------- | ----------------------------------------------------------- | -------------------- |
+| `externalEtcd.servers`                   | List of hostnames of the external etcd                      | `[]`                 |
+| `externalEtcd.port`                      | Port of the external etcd instance                          | `2379`               |
+| `externalEtcd.user`                      | User of the external etcd instance                          | `root`               |
+| `externalEtcd.password`                  | Password of the external etcd instance                      | `""`                 |
+| `externalEtcd.existingSecret`            | Name of a secret containing the external etcd password      | `""`                 |
+| `externalEtcd.existingSecretPasswordKey` | Key inside the secret containing the external etcd password | `etcd-root-password` |
+| `externalEtcd.secureTransport`           | Use TLS for client-to-server communications                 | `false`              |
 
 ### External S3 parameters
 
