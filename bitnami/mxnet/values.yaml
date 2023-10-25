@@ -65,9 +65,9 @@ diagnosticMode:
 
 ## Bitnami Apache MXNet (Incubating) image version
 ## ref: https://hub.docker.com/r/bitnami/mxnet/tags/
-## @param image.registry Apache MXNet (Incubating) image registry
-## @param image.repository Apache MXNet (Incubating) image repository
-## @param image.tag Apache MXNet (Incubating) image tag (immutable tags are recommended)
+## @param image.registry [default: REGISTRY_NAME] Apache MXNet (Incubating) image registry
+## @param image.repository [default: REPOSITORY_NAME/mxnet] Apache MXNet (Incubating) image repository
+## @skip image.tag Apache MXNet (Incubating) image tag (immutable tags are recommended)
 ## @param image.digest Apache MXNet (Incubating) image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy Apache MXNet (Incubating) image pull policy
 ## @param image.pullSecrets Specify docker-registry secret names as an array
@@ -1167,9 +1167,9 @@ scheduler:
 ## @section Init containers parameters
 ## Bitnami git image version
 ## ref: https://hub.docker.com/r/bitnami/git/tags/
-## @param git.registry Git image registry
-## @param git.repository Git image repository
-## @param git.tag Git image tag (immutable tags are recommended)
+## @param git.registry [default: REGISTRY_NAME] Git image registry
+## @param git.repository [default: REPOSITORY_NAME/git] Git image repository
+## @skip git.tag Git image tag (immutable tags are recommended)
 ## @param git.digest Git image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param git.pullPolicy Git image pull policy
 ## @param git.pullSecrets Specify docker-registry secret names as an array
@@ -1195,9 +1195,9 @@ volumePermissions:
   ## @param volumePermissions.enabled Enable init container that changes volume permissions in the data directory
   ##
   enabled: false
-  ## @param volumePermissions.image.registry Init container volume-permissions image registry
-  ## @param volumePermissions.image.repository Init container volume-permissions image repository
-  ## @param volumePermissions.image.tag Init container volume-permissions image tag (immutable tags are recommended)
+  ## @param volumePermissions.image.registry [default: REGISTRY_NAME] Init container volume-permissions image registry
+  ## @param volumePermissions.image.repository [default: REPOSITORY_NAME/os-shell] Init container volume-permissions image repository
+  ## @skip volumePermissions.image.tag Init container volume-permissions image tag (immutable tags are recommended)
   ## @param volumePermissions.image.digest Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
   ## @param volumePermissions.image.pullSecrets Specify docker-registry secret names as an array

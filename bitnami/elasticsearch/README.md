@@ -11,8 +11,10 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/elasticsearch
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/elasticsearch
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 ## Introduction
 
@@ -20,7 +22,7 @@ This chart bootstraps a [Elasticsearch](https://github.com/bitnami/containers/tr
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
-Looking to use Elasticsearch in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Elasticsearch in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -33,8 +35,10 @@ Looking to use Elasticsearch in production? Try [VMware Application Catalog](htt
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/elasticsearch
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/elasticsearch
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 These commands deploy Elasticsearch on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
@@ -85,55 +89,54 @@ helm delete --purge my-release
 
 ### Elasticsearch cluster Parameters
 
-| Name                                       | Description                                                                                                                                         | Value                          |
-| ------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------ |
-| `clusterName`                              | Elasticsearch cluster name                                                                                                                          | `elastic`                      |
-| `containerPorts.restAPI`                   | Elasticsearch REST API port                                                                                                                         | `9200`                         |
-| `containerPorts.transport`                 | Elasticsearch Transport port                                                                                                                        | `9300`                         |
-| `plugins`                                  | Comma, semi-colon or space separated list of plugins to install at initialization                                                                   | `""`                           |
-| `snapshotRepoPath`                         | File System snapshot repository path                                                                                                                | `""`                           |
-| `config`                                   | Override elasticsearch configuration                                                                                                                | `{}`                           |
-| `extraConfig`                              | Append extra configuration to the elasticsearch node configuration                                                                                  | `{}`                           |
-| `extraHosts`                               | A list of external hosts which are part of this cluster                                                                                             | `[]`                           |
-| `extraVolumes`                             | A list of volumes to be added to the pod                                                                                                            | `[]`                           |
-| `extraVolumeMounts`                        | A list of volume mounts to be added to the pod                                                                                                      | `[]`                           |
-| `initScripts`                              | Dictionary of init scripts. Evaluated as a template.                                                                                                | `{}`                           |
-| `initScriptsCM`                            | ConfigMap with the init scripts. Evaluated as a template.                                                                                           | `""`                           |
-| `initScriptsSecret`                        | Secret containing `/docker-entrypoint-initdb.d` scripts to be executed at initialization time that contain sensitive data. Evaluated as a template. | `""`                           |
-| `extraEnvVars`                             | Array containing extra env vars to be added to all pods (evaluated as a template)                                                                   | `[]`                           |
-| `extraEnvVarsCM`                           | ConfigMap containing extra env vars to be added to all pods (evaluated as a template)                                                               | `""`                           |
-| `extraEnvVarsSecret`                       | Secret containing extra env vars to be added to all pods (evaluated as a template)                                                                  | `""`                           |
-| `sidecars`                                 | Add additional sidecar containers to the all elasticsearch node pod(s)                                                                              | `[]`                           |
-| `initContainers`                           | Add additional init containers to the all elasticsearch node pod(s)                                                                                 | `[]`                           |
-| `useIstioLabels`                           | Use this variable to add Istio labels to all pods                                                                                                   | `true`                         |
-| `image.registry`                           | Elasticsearch image registry                                                                                                                        | `docker.io`                    |
-| `image.repository`                         | Elasticsearch image repository                                                                                                                      | `bitnami/elasticsearch`        |
-| `image.tag`                                | Elasticsearch image tag (immutable tags are recommended)                                                                                            | `8.10.3-debian-11-r1`          |
-| `image.digest`                             | Elasticsearch image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                       | `""`                           |
-| `image.pullPolicy`                         | Elasticsearch image pull policy                                                                                                                     | `IfNotPresent`                 |
-| `image.pullSecrets`                        | Elasticsearch image pull secrets                                                                                                                    | `[]`                           |
-| `image.debug`                              | Enable Elasticsearch image debug mode                                                                                                               | `false`                        |
-| `security.enabled`                         | Enable X-Pack Security settings                                                                                                                     | `false`                        |
-| `security.elasticPassword`                 | Password for 'elastic' user                                                                                                                         | `""`                           |
-| `security.existingSecret`                  | Name of the existing secret containing the Elasticsearch password and                                                                               | `""`                           |
-| `security.fipsMode`                        | Configure elasticsearch with FIPS 140 compliant mode                                                                                                | `false`                        |
-| `security.tls.restEncryption`              | Enable SSL/TLS encryption for Elasticsearch REST API.                                                                                               | `true`                         |
-| `security.tls.autoGenerated`               | Create self-signed TLS certificates.                                                                                                                | `false`                        |
-| `security.tls.verificationMode`            | Verification mode for SSL communications.                                                                                                           | `full`                         |
-| `security.tls.master.existingSecret`       | Existing secret containing the certificates for the master nodes                                                                                    | `""`                           |
-| `security.tls.data.existingSecret`         | Existing secret containing the certificates for the data nodes                                                                                      | `""`                           |
-| `security.tls.ingest.existingSecret`       | Existing secret containing the certificates for the ingest nodes                                                                                    | `""`                           |
-| `security.tls.coordinating.existingSecret` | Existing secret containing the certificates for the coordinating nodes                                                                              | `""`                           |
-| `security.tls.keystoreFilename`            | Name of the keystore file                                                                                                                           | `elasticsearch.keystore.jks`   |
-| `security.tls.truststoreFilename`          | Name of the truststore                                                                                                                              | `elasticsearch.truststore.jks` |
-| `security.tls.usePemCerts`                 | Use this variable if your secrets contain PEM certificates instead of JKS/PKCS12                                                                    | `false`                        |
-| `security.tls.passwordsSecret`             | Existing secret containing the Keystore and Truststore passwords, or key password if PEM certs are used                                             | `""`                           |
-| `security.tls.keystorePassword`            | Password to access the JKS/PKCS12 keystore or PEM key when they are password-protected.                                                             | `""`                           |
-| `security.tls.truststorePassword`          | Password to access the JKS/PKCS12 truststore when they are password-protected.                                                                      | `""`                           |
-| `security.tls.keyPassword`                 | Password to access the PEM key when they are password-protected.                                                                                    | `""`                           |
-| `security.tls.secretKeystoreKey`           | Name of the secret key containing the Keystore password                                                                                             | `""`                           |
-| `security.tls.secretTruststoreKey`         | Name of the secret key containing the Truststore password                                                                                           | `""`                           |
-| `security.tls.secretKey`                   | Name of the secret key containing the PEM key password                                                                                              | `""`                           |
+| Name                                       | Description                                                                                                                                         | Value                           |
+| ------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------- |
+| `clusterName`                              | Elasticsearch cluster name                                                                                                                          | `elastic`                       |
+| `containerPorts.restAPI`                   | Elasticsearch REST API port                                                                                                                         | `9200`                          |
+| `containerPorts.transport`                 | Elasticsearch Transport port                                                                                                                        | `9300`                          |
+| `plugins`                                  | Comma, semi-colon or space separated list of plugins to install at initialization                                                                   | `""`                            |
+| `snapshotRepoPath`                         | File System snapshot repository path                                                                                                                | `""`                            |
+| `config`                                   | Override elasticsearch configuration                                                                                                                | `{}`                            |
+| `extraConfig`                              | Append extra configuration to the elasticsearch node configuration                                                                                  | `{}`                            |
+| `extraHosts`                               | A list of external hosts which are part of this cluster                                                                                             | `[]`                            |
+| `extraVolumes`                             | A list of volumes to be added to the pod                                                                                                            | `[]`                            |
+| `extraVolumeMounts`                        | A list of volume mounts to be added to the pod                                                                                                      | `[]`                            |
+| `initScripts`                              | Dictionary of init scripts. Evaluated as a template.                                                                                                | `{}`                            |
+| `initScriptsCM`                            | ConfigMap with the init scripts. Evaluated as a template.                                                                                           | `""`                            |
+| `initScriptsSecret`                        | Secret containing `/docker-entrypoint-initdb.d` scripts to be executed at initialization time that contain sensitive data. Evaluated as a template. | `""`                            |
+| `extraEnvVars`                             | Array containing extra env vars to be added to all pods (evaluated as a template)                                                                   | `[]`                            |
+| `extraEnvVarsCM`                           | ConfigMap containing extra env vars to be added to all pods (evaluated as a template)                                                               | `""`                            |
+| `extraEnvVarsSecret`                       | Secret containing extra env vars to be added to all pods (evaluated as a template)                                                                  | `""`                            |
+| `sidecars`                                 | Add additional sidecar containers to the all elasticsearch node pod(s)                                                                              | `[]`                            |
+| `initContainers`                           | Add additional init containers to the all elasticsearch node pod(s)                                                                                 | `[]`                            |
+| `useIstioLabels`                           | Use this variable to add Istio labels to all pods                                                                                                   | `true`                          |
+| `image.registry`                           | Elasticsearch image registry                                                                                                                        | `REGISTRY_NAME`                 |
+| `image.repository`                         | Elasticsearch image repository                                                                                                                      | `REPOSITORY_NAME/elasticsearch` |
+| `image.digest`                             | Elasticsearch image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                       | `""`                            |
+| `image.pullPolicy`                         | Elasticsearch image pull policy                                                                                                                     | `IfNotPresent`                  |
+| `image.pullSecrets`                        | Elasticsearch image pull secrets                                                                                                                    | `[]`                            |
+| `image.debug`                              | Enable Elasticsearch image debug mode                                                                                                               | `false`                         |
+| `security.enabled`                         | Enable X-Pack Security settings                                                                                                                     | `false`                         |
+| `security.elasticPassword`                 | Password for 'elastic' user                                                                                                                         | `""`                            |
+| `security.existingSecret`                  | Name of the existing secret containing the Elasticsearch password and                                                                               | `""`                            |
+| `security.fipsMode`                        | Configure elasticsearch with FIPS 140 compliant mode                                                                                                | `false`                         |
+| `security.tls.restEncryption`              | Enable SSL/TLS encryption for Elasticsearch REST API.                                                                                               | `true`                          |
+| `security.tls.autoGenerated`               | Create self-signed TLS certificates.                                                                                                                | `false`                         |
+| `security.tls.verificationMode`            | Verification mode for SSL communications.                                                                                                           | `full`                          |
+| `security.tls.master.existingSecret`       | Existing secret containing the certificates for the master nodes                                                                                    | `""`                            |
+| `security.tls.data.existingSecret`         | Existing secret containing the certificates for the data nodes                                                                                      | `""`                            |
+| `security.tls.ingest.existingSecret`       | Existing secret containing the certificates for the ingest nodes                                                                                    | `""`                            |
+| `security.tls.coordinating.existingSecret` | Existing secret containing the certificates for the coordinating nodes                                                                              | `""`                            |
+| `security.tls.keystoreFilename`            | Name of the keystore file                                                                                                                           | `elasticsearch.keystore.jks`    |
+| `security.tls.truststoreFilename`          | Name of the truststore                                                                                                                              | `elasticsearch.truststore.jks`  |
+| `security.tls.usePemCerts`                 | Use this variable if your secrets contain PEM certificates instead of JKS/PKCS12                                                                    | `false`                         |
+| `security.tls.passwordsSecret`             | Existing secret containing the Keystore and Truststore passwords, or key password if PEM certs are used                                             | `""`                            |
+| `security.tls.keystorePassword`            | Password to access the JKS/PKCS12 keystore or PEM key when they are password-protected.                                                             | `""`                            |
+| `security.tls.truststorePassword`          | Password to access the JKS/PKCS12 truststore when they are password-protected.                                                                      | `""`                            |
+| `security.tls.keyPassword`                 | Password to access the PEM key when they are password-protected.                                                                                    | `""`                            |
+| `security.tls.secretKeystoreKey`           | Name of the secret key containing the Keystore password                                                                                             | `""`                            |
+| `security.tls.secretTruststoreKey`         | Name of the secret key containing the Truststore password                                                                                           | `""`                            |
+| `security.tls.secretKey`                   | Name of the secret key containing the PEM key password                                                                                              | `""`                            |
 
 ### Traffic Exposure Parameters
 
@@ -533,110 +536,107 @@ helm delete --purge my-release
 
 ### Metrics parameters
 
-| Name                                            | Description                                                                                                                    | Value                            |
-| ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | -------------------------------- |
-| `metrics.enabled`                               | Enable prometheus exporter                                                                                                     | `false`                          |
-| `metrics.nameOverride`                          | Metrics pod name                                                                                                               | `""`                             |
-| `metrics.fullnameOverride`                      | String to fully override common.names.fullname                                                                                 | `""`                             |
-| `metrics.image.registry`                        | Metrics exporter image registry                                                                                                | `docker.io`                      |
-| `metrics.image.repository`                      | Metrics exporter image repository                                                                                              | `bitnami/elasticsearch-exporter` |
-| `metrics.image.tag`                             | Metrics exporter image tag                                                                                                     | `1.6.0-debian-11-r95`            |
-| `metrics.image.digest`                          | Metrics exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag               | `""`                             |
-| `metrics.image.pullPolicy`                      | Metrics exporter image pull policy                                                                                             | `IfNotPresent`                   |
-| `metrics.image.pullSecrets`                     | Metrics exporter image pull secrets                                                                                            | `[]`                             |
-| `metrics.annotations`                           | Annotations for metrics                                                                                                        | `{}`                             |
-| `metrics.extraArgs`                             | Extra arguments to add to the default exporter command                                                                         | `[]`                             |
-| `metrics.hostAliases`                           | Add deployment host aliases                                                                                                    | `[]`                             |
-| `metrics.schedulerName`                         | Name of the k8s scheduler (other than default)                                                                                 | `""`                             |
-| `metrics.priorityClassName`                     | Elasticsearch metrics exporter pods' priorityClassName                                                                         | `""`                             |
-| `metrics.service.type`                          | Metrics exporter endpoint service type                                                                                         | `ClusterIP`                      |
-| `metrics.service.port`                          | Metrics exporter endpoint service port                                                                                         | `9114`                           |
-| `metrics.service.annotations`                   | Provide any additional annotations which may be required.                                                                      | `{}`                             |
-| `metrics.podAffinityPreset`                     | Metrics Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                    | `""`                             |
-| `metrics.podAntiAffinityPreset`                 | Metrics Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                               | `""`                             |
-| `metrics.nodeAffinityPreset.type`               | Metrics Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                              | `""`                             |
-| `metrics.nodeAffinityPreset.key`                | Metrics Node label key to match Ignored if `affinity` is set.                                                                  | `""`                             |
-| `metrics.nodeAffinityPreset.values`             | Metrics Node label values to match. Ignored if `affinity` is set.                                                              | `[]`                             |
-| `metrics.affinity`                              | Metrics Affinity for pod assignment                                                                                            | `{}`                             |
-| `metrics.nodeSelector`                          | Metrics Node labels for pod assignment                                                                                         | `{}`                             |
-| `metrics.tolerations`                           | Metrics Tolerations for pod assignment                                                                                         | `[]`                             |
-| `metrics.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template       | `[]`                             |
-| `metrics.resources.limits`                      | The resources limits for the container                                                                                         | `{}`                             |
-| `metrics.resources.requests`                    | The requested resources for the container                                                                                      | `{}`                             |
-| `metrics.livenessProbe.enabled`                 | Enable/disable the liveness probe (metrics pod)                                                                                | `true`                           |
-| `metrics.livenessProbe.initialDelaySeconds`     | Delay before liveness probe is initiated (metrics pod)                                                                         | `60`                             |
-| `metrics.livenessProbe.periodSeconds`           | How often to perform the probe (metrics pod)                                                                                   | `10`                             |
-| `metrics.livenessProbe.timeoutSeconds`          | When the probe times out (metrics pod)                                                                                         | `5`                              |
-| `metrics.livenessProbe.failureThreshold`        | Minimum consecutive failures for the probe to be considered failed after having succeeded                                      | `5`                              |
-| `metrics.livenessProbe.successThreshold`        | Minimum consecutive successes for the probe to be considered successful after having failed (metrics pod)                      | `1`                              |
-| `metrics.readinessProbe.enabled`                | Enable/disable the readiness probe (metrics pod)                                                                               | `true`                           |
-| `metrics.readinessProbe.initialDelaySeconds`    | Delay before readiness probe is initiated (metrics pod)                                                                        | `5`                              |
-| `metrics.readinessProbe.periodSeconds`          | How often to perform the probe (metrics pod)                                                                                   | `10`                             |
-| `metrics.readinessProbe.timeoutSeconds`         | When the probe times out (metrics pod)                                                                                         | `1`                              |
-| `metrics.readinessProbe.failureThreshold`       | Minimum consecutive failures for the probe to be considered failed after having succeeded                                      | `5`                              |
-| `metrics.readinessProbe.successThreshold`       | Minimum consecutive successes for the probe to be considered successful after having failed (metrics pod)                      | `1`                              |
-| `metrics.startupProbe.enabled`                  | Enable/disable the startup probe (metrics pod)                                                                                 | `false`                          |
-| `metrics.startupProbe.initialDelaySeconds`      | Delay before startup probe is initiated (metrics pod)                                                                          | `5`                              |
-| `metrics.startupProbe.periodSeconds`            | How often to perform the probe (metrics pod)                                                                                   | `10`                             |
-| `metrics.startupProbe.timeoutSeconds`           | When the probe times out (metrics pod)                                                                                         | `1`                              |
-| `metrics.startupProbe.failureThreshold`         | Minimum consecutive failures for the probe to be considered failed after having succeeded                                      | `5`                              |
-| `metrics.startupProbe.successThreshold`         | Minimum consecutive successes for the probe to be considered successful after having failed (metrics pod)                      | `1`                              |
-| `metrics.customStartupProbe`                    | Custom liveness probe for the Web component                                                                                    | `{}`                             |
-| `metrics.customLivenessProbe`                   | Custom liveness probe for the Web component                                                                                    | `{}`                             |
-| `metrics.customReadinessProbe`                  | Custom readiness probe for the Web component                                                                                   | `{}`                             |
-| `metrics.podAnnotations`                        | Metrics exporter pod Annotation and Labels                                                                                     | `{}`                             |
-| `metrics.podLabels`                             | Extra labels to add to Pod                                                                                                     | `{}`                             |
-| `metrics.podSecurityContext.enabled`            | Enabled Elasticsearch metrics exporter pods' Security Context                                                                  | `true`                           |
-| `metrics.podSecurityContext.fsGroup`            | Set Elasticsearch metrics exporter pod's Security Context fsGroup                                                              | `1001`                           |
-| `metrics.containerSecurityContext.enabled`      | Enabled Elasticsearch metrics exporter containers' Security Context                                                            | `true`                           |
-| `metrics.containerSecurityContext.runAsUser`    | Set Elasticsearch metrics exporter containers' Security Context runAsUser                                                      | `1001`                           |
-| `metrics.containerSecurityContext.runAsNonRoot` | Set Elasticsearch metrics exporter container's Security Context runAsNonRoot                                                   | `true`                           |
-| `metrics.command`                               | Override default container command (useful when using custom images)                                                           | `[]`                             |
-| `metrics.args`                                  | Override default container args (useful when using custom images)                                                              | `[]`                             |
-| `metrics.extraEnvVars`                          | Array with extra environment variables to add to Elasticsearch metrics exporter nodes                                          | `[]`                             |
-| `metrics.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars for Elasticsearch metrics exporter nodes                                  | `""`                             |
-| `metrics.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for Elasticsearch metrics exporter nodes                                     | `""`                             |
-| `metrics.extraVolumes`                          | Optionally specify extra list of additional volumes for the Elasticsearch metrics exporter pod(s)                              | `[]`                             |
-| `metrics.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the Elasticsearch metrics exporter container(s)                   | `[]`                             |
-| `metrics.sidecars`                              | Add additional sidecar containers to the Elasticsearch metrics exporter pod(s)                                                 | `[]`                             |
-| `metrics.initContainers`                        | Add additional init containers to the Elasticsearch metrics exporter pod(s)                                                    | `[]`                             |
-| `metrics.serviceMonitor.enabled`                | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator                                                   | `false`                          |
-| `metrics.serviceMonitor.namespace`              | Namespace which Prometheus is running in                                                                                       | `""`                             |
-| `metrics.serviceMonitor.jobLabel`               | The name of the label on the target service to use as the job name in prometheus.                                              | `""`                             |
-| `metrics.serviceMonitor.interval`               | Interval at which metrics should be scraped                                                                                    | `""`                             |
-| `metrics.serviceMonitor.scrapeTimeout`          | Timeout after which the scrape is ended                                                                                        | `""`                             |
-| `metrics.serviceMonitor.relabelings`            | RelabelConfigs to apply to samples before scraping                                                                             | `[]`                             |
-| `metrics.serviceMonitor.metricRelabelings`      | MetricRelabelConfigs to apply to samples before ingestion                                                                      | `[]`                             |
-| `metrics.serviceMonitor.selector`               | ServiceMonitor selector labels                                                                                                 | `{}`                             |
-| `metrics.serviceMonitor.labels`                 | Extra labels for the ServiceMonitor                                                                                            | `{}`                             |
-| `metrics.serviceMonitor.honorLabels`            | honorLabels chooses the metric's labels on collisions with target labels                                                       | `false`                          |
-| `metrics.prometheusRule.enabled`                | Creates a Prometheus Operator PrometheusRule (also requires `metrics.enabled` to be `true` and `metrics.prometheusRule.rules`) | `false`                          |
-| `metrics.prometheusRule.namespace`              | Namespace for the PrometheusRule Resource (defaults to the Release Namespace)                                                  | `""`                             |
-| `metrics.prometheusRule.additionalLabels`       | Additional labels that can be used so PrometheusRule will be discovered by Prometheus                                          | `{}`                             |
-| `metrics.prometheusRule.rules`                  | Prometheus Rule definitions                                                                                                    | `[]`                             |
+| Name                                            | Description                                                                                                                    | Value                                    |
+| ----------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------- |
+| `metrics.enabled`                               | Enable prometheus exporter                                                                                                     | `false`                                  |
+| `metrics.nameOverride`                          | Metrics pod name                                                                                                               | `""`                                     |
+| `metrics.fullnameOverride`                      | String to fully override common.names.fullname                                                                                 | `""`                                     |
+| `metrics.image.registry`                        | Metrics exporter image registry                                                                                                | `REGISTRY_NAME`                          |
+| `metrics.image.repository`                      | Metrics exporter image repository                                                                                              | `REPOSITORY_NAME/elasticsearch-exporter` |
+| `metrics.image.digest`                          | Metrics exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag               | `""`                                     |
+| `metrics.image.pullPolicy`                      | Metrics exporter image pull policy                                                                                             | `IfNotPresent`                           |
+| `metrics.image.pullSecrets`                     | Metrics exporter image pull secrets                                                                                            | `[]`                                     |
+| `metrics.annotations`                           | Annotations for metrics                                                                                                        | `{}`                                     |
+| `metrics.extraArgs`                             | Extra arguments to add to the default exporter command                                                                         | `[]`                                     |
+| `metrics.hostAliases`                           | Add deployment host aliases                                                                                                    | `[]`                                     |
+| `metrics.schedulerName`                         | Name of the k8s scheduler (other than default)                                                                                 | `""`                                     |
+| `metrics.priorityClassName`                     | Elasticsearch metrics exporter pods' priorityClassName                                                                         | `""`                                     |
+| `metrics.service.type`                          | Metrics exporter endpoint service type                                                                                         | `ClusterIP`                              |
+| `metrics.service.port`                          | Metrics exporter endpoint service port                                                                                         | `9114`                                   |
+| `metrics.service.annotations`                   | Provide any additional annotations which may be required.                                                                      | `{}`                                     |
+| `metrics.podAffinityPreset`                     | Metrics Pod affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                                    | `""`                                     |
+| `metrics.podAntiAffinityPreset`                 | Metrics Pod anti-affinity preset. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                               | `""`                                     |
+| `metrics.nodeAffinityPreset.type`               | Metrics Node affinity preset type. Ignored if `affinity` is set. Allowed values: `soft` or `hard`                              | `""`                                     |
+| `metrics.nodeAffinityPreset.key`                | Metrics Node label key to match Ignored if `affinity` is set.                                                                  | `""`                                     |
+| `metrics.nodeAffinityPreset.values`             | Metrics Node label values to match. Ignored if `affinity` is set.                                                              | `[]`                                     |
+| `metrics.affinity`                              | Metrics Affinity for pod assignment                                                                                            | `{}`                                     |
+| `metrics.nodeSelector`                          | Metrics Node labels for pod assignment                                                                                         | `{}`                                     |
+| `metrics.tolerations`                           | Metrics Tolerations for pod assignment                                                                                         | `[]`                                     |
+| `metrics.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template       | `[]`                                     |
+| `metrics.resources.limits`                      | The resources limits for the container                                                                                         | `{}`                                     |
+| `metrics.resources.requests`                    | The requested resources for the container                                                                                      | `{}`                                     |
+| `metrics.livenessProbe.enabled`                 | Enable/disable the liveness probe (metrics pod)                                                                                | `true`                                   |
+| `metrics.livenessProbe.initialDelaySeconds`     | Delay before liveness probe is initiated (metrics pod)                                                                         | `60`                                     |
+| `metrics.livenessProbe.periodSeconds`           | How often to perform the probe (metrics pod)                                                                                   | `10`                                     |
+| `metrics.livenessProbe.timeoutSeconds`          | When the probe times out (metrics pod)                                                                                         | `5`                                      |
+| `metrics.livenessProbe.failureThreshold`        | Minimum consecutive failures for the probe to be considered failed after having succeeded                                      | `5`                                      |
+| `metrics.livenessProbe.successThreshold`        | Minimum consecutive successes for the probe to be considered successful after having failed (metrics pod)                      | `1`                                      |
+| `metrics.readinessProbe.enabled`                | Enable/disable the readiness probe (metrics pod)                                                                               | `true`                                   |
+| `metrics.readinessProbe.initialDelaySeconds`    | Delay before readiness probe is initiated (metrics pod)                                                                        | `5`                                      |
+| `metrics.readinessProbe.periodSeconds`          | How often to perform the probe (metrics pod)                                                                                   | `10`                                     |
+| `metrics.readinessProbe.timeoutSeconds`         | When the probe times out (metrics pod)                                                                                         | `1`                                      |
+| `metrics.readinessProbe.failureThreshold`       | Minimum consecutive failures for the probe to be considered failed after having succeeded                                      | `5`                                      |
+| `metrics.readinessProbe.successThreshold`       | Minimum consecutive successes for the probe to be considered successful after having failed (metrics pod)                      | `1`                                      |
+| `metrics.startupProbe.enabled`                  | Enable/disable the startup probe (metrics pod)                                                                                 | `false`                                  |
+| `metrics.startupProbe.initialDelaySeconds`      | Delay before startup probe is initiated (metrics pod)                                                                          | `5`                                      |
+| `metrics.startupProbe.periodSeconds`            | How often to perform the probe (metrics pod)                                                                                   | `10`                                     |
+| `metrics.startupProbe.timeoutSeconds`           | When the probe times out (metrics pod)                                                                                         | `1`                                      |
+| `metrics.startupProbe.failureThreshold`         | Minimum consecutive failures for the probe to be considered failed after having succeeded                                      | `5`                                      |
+| `metrics.startupProbe.successThreshold`         | Minimum consecutive successes for the probe to be considered successful after having failed (metrics pod)                      | `1`                                      |
+| `metrics.customStartupProbe`                    | Custom liveness probe for the Web component                                                                                    | `{}`                                     |
+| `metrics.customLivenessProbe`                   | Custom liveness probe for the Web component                                                                                    | `{}`                                     |
+| `metrics.customReadinessProbe`                  | Custom readiness probe for the Web component                                                                                   | `{}`                                     |
+| `metrics.podAnnotations`                        | Metrics exporter pod Annotation and Labels                                                                                     | `{}`                                     |
+| `metrics.podLabels`                             | Extra labels to add to Pod                                                                                                     | `{}`                                     |
+| `metrics.podSecurityContext.enabled`            | Enabled Elasticsearch metrics exporter pods' Security Context                                                                  | `true`                                   |
+| `metrics.podSecurityContext.fsGroup`            | Set Elasticsearch metrics exporter pod's Security Context fsGroup                                                              | `1001`                                   |
+| `metrics.containerSecurityContext.enabled`      | Enabled Elasticsearch metrics exporter containers' Security Context                                                            | `true`                                   |
+| `metrics.containerSecurityContext.runAsUser`    | Set Elasticsearch metrics exporter containers' Security Context runAsUser                                                      | `1001`                                   |
+| `metrics.containerSecurityContext.runAsNonRoot` | Set Elasticsearch metrics exporter container's Security Context runAsNonRoot                                                   | `true`                                   |
+| `metrics.command`                               | Override default container command (useful when using custom images)                                                           | `[]`                                     |
+| `metrics.args`                                  | Override default container args (useful when using custom images)                                                              | `[]`                                     |
+| `metrics.extraEnvVars`                          | Array with extra environment variables to add to Elasticsearch metrics exporter nodes                                          | `[]`                                     |
+| `metrics.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars for Elasticsearch metrics exporter nodes                                  | `""`                                     |
+| `metrics.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars for Elasticsearch metrics exporter nodes                                     | `""`                                     |
+| `metrics.extraVolumes`                          | Optionally specify extra list of additional volumes for the Elasticsearch metrics exporter pod(s)                              | `[]`                                     |
+| `metrics.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for the Elasticsearch metrics exporter container(s)                   | `[]`                                     |
+| `metrics.sidecars`                              | Add additional sidecar containers to the Elasticsearch metrics exporter pod(s)                                                 | `[]`                                     |
+| `metrics.initContainers`                        | Add additional init containers to the Elasticsearch metrics exporter pod(s)                                                    | `[]`                                     |
+| `metrics.serviceMonitor.enabled`                | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator                                                   | `false`                                  |
+| `metrics.serviceMonitor.namespace`              | Namespace which Prometheus is running in                                                                                       | `""`                                     |
+| `metrics.serviceMonitor.jobLabel`               | The name of the label on the target service to use as the job name in prometheus.                                              | `""`                                     |
+| `metrics.serviceMonitor.interval`               | Interval at which metrics should be scraped                                                                                    | `""`                                     |
+| `metrics.serviceMonitor.scrapeTimeout`          | Timeout after which the scrape is ended                                                                                        | `""`                                     |
+| `metrics.serviceMonitor.relabelings`            | RelabelConfigs to apply to samples before scraping                                                                             | `[]`                                     |
+| `metrics.serviceMonitor.metricRelabelings`      | MetricRelabelConfigs to apply to samples before ingestion                                                                      | `[]`                                     |
+| `metrics.serviceMonitor.selector`               | ServiceMonitor selector labels                                                                                                 | `{}`                                     |
+| `metrics.serviceMonitor.labels`                 | Extra labels for the ServiceMonitor                                                                                            | `{}`                                     |
+| `metrics.serviceMonitor.honorLabels`            | honorLabels chooses the metric's labels on collisions with target labels                                                       | `false`                                  |
+| `metrics.prometheusRule.enabled`                | Creates a Prometheus Operator PrometheusRule (also requires `metrics.enabled` to be `true` and `metrics.prometheusRule.rules`) | `false`                                  |
+| `metrics.prometheusRule.namespace`              | Namespace for the PrometheusRule Resource (defaults to the Release Namespace)                                                  | `""`                                     |
+| `metrics.prometheusRule.additionalLabels`       | Additional labels that can be used so PrometheusRule will be discovered by Prometheus                                          | `{}`                                     |
+| `metrics.prometheusRule.rules`                  | Prometheus Rule definitions                                                                                                    | `[]`                                     |
 
 ### Init Container Parameters
 
-| Name                                   | Description                                                                                                                                               | Value              |
-| -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------ |
-| `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`            |
-| `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                                          | `docker.io`        |
-| `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                                                              | `bitnami/os-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                                               | `11-debian-11-r90` |
-| `volumePermissions.image.digest`       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                         | `""`               |
-| `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`     |
-| `volumePermissions.image.pullSecrets`  | Init container volume-permissions image pull secrets                                                                                                      | `[]`               |
-| `volumePermissions.resources.limits`   | The resources limits for the container                                                                                                                    | `{}`               |
-| `volumePermissions.resources.requests` | The requested resources for the container                                                                                                                 | `{}`               |
-| `sysctlImage.enabled`                  | Enable kernel settings modifier image                                                                                                                     | `true`             |
-| `sysctlImage.registry`                 | Kernel settings modifier image registry                                                                                                                   | `docker.io`        |
-| `sysctlImage.repository`               | Kernel settings modifier image repository                                                                                                                 | `bitnami/os-shell` |
-| `sysctlImage.tag`                      | Kernel settings modifier image tag                                                                                                                        | `11-debian-11-r90` |
-| `sysctlImage.digest`                   | Kernel settings modifier image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                  | `""`               |
-| `sysctlImage.pullPolicy`               | Kernel settings modifier image pull policy                                                                                                                | `IfNotPresent`     |
-| `sysctlImage.pullSecrets`              | Kernel settings modifier image pull secrets                                                                                                               | `[]`               |
-| `sysctlImage.resources.limits`         | The resources limits for the container                                                                                                                    | `{}`               |
-| `sysctlImage.resources.requests`       | The requested resources for the container                                                                                                                 | `{}`               |
+| Name                                   | Description                                                                                                                                               | Value                      |
+| -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
+| `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work) | `false`                    |
+| `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                                          | `REGISTRY_NAME`            |
+| `volumePermissions.image.repository`   | Init container volume-permissions image name                                                                                                              | `REPOSITORY_NAME/os-shell` |
+| `volumePermissions.image.digest`       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                         | `""`                       |
+| `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                                                       | `IfNotPresent`             |
+| `volumePermissions.image.pullSecrets`  | Init container volume-permissions image pull secrets                                                                                                      | `[]`                       |
+| `volumePermissions.resources.limits`   | The resources limits for the container                                                                                                                    | `{}`                       |
+| `volumePermissions.resources.requests` | The requested resources for the container                                                                                                                 | `{}`                       |
+| `sysctlImage.enabled`                  | Enable kernel settings modifier image                                                                                                                     | `true`                     |
+| `sysctlImage.registry`                 | Kernel settings modifier image registry                                                                                                                   | `REGISTRY_NAME`            |
+| `sysctlImage.repository`               | Kernel settings modifier image repository                                                                                                                 | `REPOSITORY_NAME/os-shell` |
+| `sysctlImage.digest`                   | Kernel settings modifier image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                  | `""`                       |
+| `sysctlImage.pullPolicy`               | Kernel settings modifier image pull policy                                                                                                                | `IfNotPresent`             |
+| `sysctlImage.pullSecrets`              | Kernel settings modifier image pull secrets                                                                                                               | `[]`                       |
+| `sysctlImage.resources.limits`         | The resources limits for the container                                                                                                                    | `{}`                       |
+| `sysctlImage.resources.requests`       | The requested resources for the container                                                                                                                 | `{}`                       |
 
 ### Kibana Parameters
 
@@ -650,17 +650,20 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 helm install my-release \
   --set name=my-elastic,client.service.port=8080 \
-  oci://registry-1.docker.io/bitnamicharts/elasticsearch
+  oci://REGISTRY_NAME/REPOSITORY_NAME/elasticsearch
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 The above command sets the Elasticsearch cluster name to `my-elastic` and REST port number to `8080`.
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/elasticsearch
+helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/elasticsearch
 ```
 
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > **Tip**: You can use the default [values.yaml](values.yaml).
 
 ## Configuration and installation details
@@ -759,8 +762,10 @@ If you want to scale up to more replicas, make sure you refresh the configuratio
 
 ```console
 kubectl scale statefulset <DEPLOYMENT_NAME>-master --replicas=0
-helm upgrade <DEPLOYMENT_NAME> oci://registry-1.docker.io/bitnamicharts/elasticsearch --reset-values --set master.masterOnly=false
+helm upgrade <DEPLOYMENT_NAME> oci://REGISTRY_NAME/REPOSITORY_NAME/elasticsearch --reset-values --set master.masterOnly=false
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 Please note that the master nodes should continue assuming all the roles (`master.masterOnly: false`) since there is shard data on the first replica.
 
@@ -958,8 +963,10 @@ The field `podManagementPolicy` can't be updated in a StatefulSet, so you need t
 
 ```console
 kubectl delete statefulset elasticsearch-master
-helm upgrade <DEPLOYMENT_NAME> oci://registry-1.docker.io/bitnamicharts/elasticsearch
+helm upgrade <DEPLOYMENT_NAME> oci://REGISTRY_NAME/REPOSITORY_NAME/elasticsearch
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 ### TO 10.0.0
 

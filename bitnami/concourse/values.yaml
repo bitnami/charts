@@ -61,9 +61,9 @@ diagnosticMode:
 
 ## Bitnami Concourse image
 ## ref: https://hub.docker.com/r/bitnami/redis/tags/
-## @param image.registry image registry
-## @param image.repository image repository
-## @param image.tag image tag (immutable tags are recommended)
+## @param image.registry [default: REGISTRY_NAME] image registry
+## @param image.repository [default: REPOSITORY_NAME/concourse] image repository
+## @skip image.tag image tag (immutable tags are recommended)
 ## @param image.digest image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy image pull policy
 ## @param image.pullSecrets image pull secrets
@@ -71,7 +71,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/concourse
-  tag: 7.10.0-debian-11-r57
+  tag: 7.10.0-debian-11-r62
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1202,9 +1202,9 @@ volumePermissions:
   ## @param volumePermissions.enabled Enable init container that changes the owner and group of the persistent volume
   ##
   enabled: false
-  ## @param volumePermissions.image.registry Init container volume-permissions image registry
-  ## @param volumePermissions.image.repository Init container volume-permissions image repository
-  ## @param volumePermissions.image.tag Init container volume-permissions image tag (immutable tags are recommended)
+  ## @param volumePermissions.image.registry [default: REGISTRY_NAME] Init container volume-permissions image registry
+  ## @param volumePermissions.image.repository [default: REPOSITORY_NAME/os-shell] Init container volume-permissions image repository
+  ## @skip volumePermissions.image.tag Init container volume-permissions image tag (immutable tags are recommended)
   ## @param volumePermissions.image.digest Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
   ## @param volumePermissions.image.pullSecrets Init container volume-permissions image pull secrets
@@ -1212,7 +1212,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r89
+    tag: 11-debian-11-r90
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

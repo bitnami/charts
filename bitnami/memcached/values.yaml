@@ -62,9 +62,9 @@ diagnosticMode:
 
 ## Bitnami Memcached image version
 ## ref: https://hub.docker.com/r/bitnami/memcached/tags/
-## @param image.registry Memcached image registry
-## @param image.repository Memcached image repository
-## @param image.tag Memcached image tag (immutable tags are recommended)
+## @param image.registry [default: REGISTRY_NAME] Memcached image registry
+## @param image.repository [default: REPOSITORY_NAME/memcached] Memcached image repository
+## @skip image.tag Memcached image tag (immutable tags are recommended)
 ## @param image.digest Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy Memcached image pull policy
 ## @param image.pullSecrets Specify docker-registry secret names as an array
@@ -73,7 +73,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/memcached
-  tag: 1.6.21-debian-11-r107
+  tag: 1.6.22-debian-11-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -505,9 +505,9 @@ volumePermissions:
   ## @param volumePermissions.enabled Enable init container that changes the owner and group of the persistent volume
   ##
   enabled: false
-  ## @param volumePermissions.image.registry Init container volume-permissions image registry
-  ## @param volumePermissions.image.repository Init container volume-permissions image repository
-  ## @param volumePermissions.image.tag Init container volume-permissions image tag (immutable tags are recommended)
+  ## @param volumePermissions.image.registry [default: REGISTRY_NAME] Init container volume-permissions image registry
+  ## @param volumePermissions.image.repository [default: REPOSITORY_NAME/os-shell] Init container volume-permissions image repository
+  ## @skip volumePermissions.image.tag Init container volume-permissions image tag (immutable tags are recommended)
   ## @param volumePermissions.image.digest Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
   ## @param volumePermissions.image.pullSecrets Init container volume-permissions image pull secrets
@@ -550,9 +550,9 @@ metrics:
   enabled: false
   ## Bitnami Memcached Prometheus Exporter image
   ## ref: https://hub.docker.com/r/bitnami/memcached-exporter/tags/
-  ## @param metrics.image.registry Memcached exporter image registry
-  ## @param metrics.image.repository Memcached exporter image repository
-  ## @param metrics.image.tag Memcached exporter image tag (immutable tags are recommended)
+  ## @param metrics.image.registry [default: REGISTRY_NAME] Memcached exporter image registry
+  ## @param metrics.image.repository [default: REPOSITORY_NAME/memcached-exporter] Memcached exporter image repository
+  ## @skip metrics.image.tag Memcached exporter image tag (immutable tags are recommended)
   ## @param metrics.image.digest Memcached exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param metrics.image.pullPolicy Image pull policy
   ## @param metrics.image.pullSecrets Specify docker-registry secret names as an array

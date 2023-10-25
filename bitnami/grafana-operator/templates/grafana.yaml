@@ -50,7 +50,7 @@ spec:
       {{- end }}
   {{- if .Values.grafana.serviceAccount }}
   serviceAccount:
-    {{- include "common.tplvalues.render" ( dict "value" .Values.serviceAccount "context" $ ) | nindent 4 }}
+    {{- include "common.tplvalues.render" ( dict "value" .Values.grafana.serviceAccount "context" $ ) | nindent 4 }}
   {{- end }}
   deployment:
     metadata:

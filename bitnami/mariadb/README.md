@@ -11,8 +11,10 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/mariadb
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/mariadb
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 ## Introduction
 
@@ -22,7 +24,7 @@ MariaDB is developed as open source software and as a relational database it pro
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
-Looking to use MariaDB in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use MariaDB in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -35,8 +37,10 @@ Looking to use MariaDB in production? Try [VMware Application Catalog](https://b
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/mariadb
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/mariadb
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 The command deploys MariaDB on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
@@ -82,28 +86,27 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### MariaDB common parameters
 
-| Name                       | Description                                                                                                                                                                                                                                                                   | Value                 |
-| -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
-| `image.registry`           | MariaDB image registry                                                                                                                                                                                                                                                        | `docker.io`           |
-| `image.repository`         | MariaDB image repository                                                                                                                                                                                                                                                      | `bitnami/mariadb`     |
-| `image.tag`                | MariaDB image tag (immutable tags are recommended)                                                                                                                                                                                                                            | `11.1.2-debian-11-r0` |
-| `image.digest`             | MariaDB image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                                                                                       | `""`                  |
-| `image.pullPolicy`         | MariaDB image pull policy                                                                                                                                                                                                                                                     | `IfNotPresent`        |
-| `image.pullSecrets`        | Specify docker-registry secret names as an array                                                                                                                                                                                                                              | `[]`                  |
-| `image.debug`              | Specify if debug logs should be enabled                                                                                                                                                                                                                                       | `false`               |
-| `architecture`             | MariaDB architecture (`standalone` or `replication`)                                                                                                                                                                                                                          | `standalone`          |
-| `auth.rootPassword`        | Password for the `root` user. Ignored if existing secret is provided.                                                                                                                                                                                                         | `""`                  |
-| `auth.database`            | Name for a custom database to create                                                                                                                                                                                                                                          | `my_database`         |
-| `auth.username`            | Name for a custom user to create                                                                                                                                                                                                                                              | `""`                  |
-| `auth.password`            | Password for the new user. Ignored if existing secret is provided                                                                                                                                                                                                             | `""`                  |
-| `auth.replicationUser`     | MariaDB replication user                                                                                                                                                                                                                                                      | `replicator`          |
-| `auth.replicationPassword` | MariaDB replication user password. Ignored if existing secret is provided                                                                                                                                                                                                     | `""`                  |
-| `auth.existingSecret`      | Use existing secret for password details (`auth.rootPassword`, `auth.password`, `auth.replicationPassword` will be ignored and picked up from this secret). The secret has to contain the keys `mariadb-root-password`, `mariadb-replication-password` and `mariadb-password` | `""`                  |
-| `auth.forcePassword`       | Force users to specify required passwords                                                                                                                                                                                                                                     | `false`               |
-| `auth.usePasswordFiles`    | Mount credentials as files instead of using environment variables                                                                                                                                                                                                             | `false`               |
-| `auth.customPasswordFiles` | Use custom password files when `auth.usePasswordFiles` is set to `true`. Define path for keys `root` and `user`, also define `replicator` if `architecture` is set to `replication`                                                                                           | `{}`                  |
-| `initdbScripts`            | Dictionary of initdb scripts                                                                                                                                                                                                                                                  | `{}`                  |
-| `initdbScriptsConfigMap`   | ConfigMap with the initdb scripts (Note: Overrides `initdbScripts`)                                                                                                                                                                                                           | `""`                  |
+| Name                       | Description                                                                                                                                                                                                                                                                   | Value                     |
+| -------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
+| `image.registry`           | MariaDB image registry                                                                                                                                                                                                                                                        | `REGISTRY_NAME`           |
+| `image.repository`         | MariaDB image repository                                                                                                                                                                                                                                                      | `REPOSITORY_NAME/mariadb` |
+| `image.digest`             | MariaDB image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                                                                                                                                                       | `""`                      |
+| `image.pullPolicy`         | MariaDB image pull policy                                                                                                                                                                                                                                                     | `IfNotPresent`            |
+| `image.pullSecrets`        | Specify docker-registry secret names as an array                                                                                                                                                                                                                              | `[]`                      |
+| `image.debug`              | Specify if debug logs should be enabled                                                                                                                                                                                                                                       | `false`                   |
+| `architecture`             | MariaDB architecture (`standalone` or `replication`)                                                                                                                                                                                                                          | `standalone`              |
+| `auth.rootPassword`        | Password for the `root` user. Ignored if existing secret is provided.                                                                                                                                                                                                         | `""`                      |
+| `auth.database`            | Name for a custom database to create                                                                                                                                                                                                                                          | `my_database`             |
+| `auth.username`            | Name for a custom user to create                                                                                                                                                                                                                                              | `""`                      |
+| `auth.password`            | Password for the new user. Ignored if existing secret is provided                                                                                                                                                                                                             | `""`                      |
+| `auth.replicationUser`     | MariaDB replication user                                                                                                                                                                                                                                                      | `replicator`              |
+| `auth.replicationPassword` | MariaDB replication user password. Ignored if existing secret is provided                                                                                                                                                                                                     | `""`                      |
+| `auth.existingSecret`      | Use existing secret for password details (`auth.rootPassword`, `auth.password`, `auth.replicationPassword` will be ignored and picked up from this secret). The secret has to contain the keys `mariadb-root-password`, `mariadb-replication-password` and `mariadb-password` | `""`                      |
+| `auth.forcePassword`       | Force users to specify required passwords                                                                                                                                                                                                                                     | `false`                   |
+| `auth.usePasswordFiles`    | Mount credentials as files instead of using environment variables                                                                                                                                                                                                             | `false`                   |
+| `auth.customPasswordFiles` | Use custom password files when `auth.usePasswordFiles` is set to `true`. Define path for keys `root` and `user`, also define `replicator` if `architecture` is set to `replication`                                                                                           | `{}`                      |
+| `initdbScripts`            | Dictionary of initdb scripts                                                                                                                                                                                                                                                  | `{}`                      |
+| `initdbScriptsConfigMap`   | ConfigMap with the initdb scripts (Note: Overrides `initdbScripts`)                                                                                                                                                                                                           | `""`                      |
 
 ### MariaDB Primary parameters
 
@@ -140,6 +143,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `primary.containerSecurityContext.runAsNonRoot`             | Set primary container's Security Context runAsNonRoot                                                             | `true`              |
 | `primary.containerSecurityContext.privileged`               | Set primary container's Security Context privileged                                                               | `false`             |
 | `primary.containerSecurityContext.allowPrivilegeEscalation` | Set primary container's Security Context allowPrivilegeEscalation                                                 | `false`             |
+| `primary.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                | `["ALL"]`           |
+| `primary.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                  | `RuntimeDefault`    |
 | `primary.resources.limits`                                  | The resources limits for MariaDB primary containers                                                               | `{}`                |
 | `primary.resources.requests`                                | The requested resources for MariaDB primary containers                                                            | `{}`                |
 | `primary.startupProbe.enabled`                              | Enable startupProbe                                                                                               | `false`             |
@@ -234,6 +239,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | `secondary.containerSecurityContext.runAsNonRoot`             | Set secondary container's Security Context runAsNonRoot                                                               | `true`              |
 | `secondary.containerSecurityContext.privileged`               | Set secondary container's Security Context privileged                                                                 | `false`             |
 | `secondary.containerSecurityContext.allowPrivilegeEscalation` | Set secondary container's Security Context allowPrivilegeEscalation                                                   | `false`             |
+| `secondary.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                    | `["ALL"]`           |
+| `secondary.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                      | `RuntimeDefault`    |
 | `secondary.resources.limits`                                  | The resources limits for MariaDB secondary containers                                                                 | `{}`                |
 | `secondary.resources.requests`                                | The requested resources for MariaDB secondary containers                                                              | `{}`                |
 | `secondary.startupProbe.enabled`                              | Enable startupProbe                                                                                                   | `false`             |
@@ -303,63 +310,65 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Volume Permissions parameters
 
-| Name                                   | Description                                                                                                                       | Value              |
-| -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ------------------ |
-| `volumePermissions.enabled`            | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup`              | `false`            |
-| `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                  | `docker.io`        |
-| `volumePermissions.image.repository`   | Init container volume-permissions image repository                                                                                | `bitnami/os-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag (immutable tags are recommended)                                                      | `11-debian-11-r86` |
-| `volumePermissions.image.digest`       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`               |
-| `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`     |
-| `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                  | `[]`               |
-| `volumePermissions.resources.limits`   | Init container volume-permissions resource limits                                                                                 | `{}`               |
-| `volumePermissions.resources.requests` | Init container volume-permissions resource requests                                                                               | `{}`               |
+| Name                                   | Description                                                                                                                       | Value                      |
+| -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
+| `volumePermissions.enabled`            | Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup`              | `false`                    |
+| `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                  | `REGISTRY_NAME`            |
+| `volumePermissions.image.repository`   | Init container volume-permissions image repository                                                                                | `REPOSITORY_NAME/os-shell` |
+| `volumePermissions.image.digest`       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
+| `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`             |
+| `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                  | `[]`                       |
+| `volumePermissions.resources.limits`   | Init container volume-permissions resource limits                                                                                 | `{}`                       |
+| `volumePermissions.resources.requests` | Init container volume-permissions resource requests                                                                               | `{}`                       |
 
 ### Metrics parameters
 
-| Name                                                        | Description                                                                                                                               | Value                     |
-| ----------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
-| `metrics.enabled`                                           | Start a side-car prometheus exporter                                                                                                      | `false`                   |
-| `metrics.image.registry`                                    | Exporter image registry                                                                                                                   | `docker.io`               |
-| `metrics.image.repository`                                  | Exporter image repository                                                                                                                 | `bitnami/mysqld-exporter` |
-| `metrics.image.tag`                                         | Exporter image tag (immutable tags are recommended)                                                                                       | `0.15.0-debian-11-r69`    |
-| `metrics.image.digest`                                      | Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                  | `""`                      |
-| `metrics.image.pullPolicy`                                  | Exporter image pull policy                                                                                                                | `IfNotPresent`            |
-| `metrics.image.pullSecrets`                                 | Specify docker-registry secret names as an array                                                                                          | `[]`                      |
-| `metrics.annotations`                                       | Annotations for the Exporter pod                                                                                                          | `{}`                      |
-| `metrics.extraArgs`                                         | Extra args to be passed to mysqld_exporter                                                                                                | `{}`                      |
-| `metrics.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the MariaDB metrics container(s)                                             | `{}`                      |
-| `metrics.containerSecurityContext.enabled`                  | Enable security context for MariaDB metrics container                                                                                     | `false`                   |
-| `metrics.containerSecurityContext.privileged`               | Set metrics container's Security Context privileged                                                                                       | `false`                   |
-| `metrics.containerSecurityContext.allowPrivilegeEscalation` | Set metrics container's Security Context allowPrivilegeEscalation                                                                         | `false`                   |
-| `metrics.resources.limits`                                  | The resources limits for MariaDB prometheus exporter containers                                                                           | `{}`                      |
-| `metrics.resources.requests`                                | The requested resources for MariaDB prometheus exporter containers                                                                        | `{}`                      |
-| `metrics.livenessProbe.enabled`                             | Enable livenessProbe                                                                                                                      | `true`                    |
-| `metrics.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                                   | `120`                     |
-| `metrics.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                                          | `10`                      |
-| `metrics.livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                                                         | `1`                       |
-| `metrics.livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                                                       | `3`                       |
-| `metrics.livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                                                       | `1`                       |
-| `metrics.readinessProbe.enabled`                            | Enable readinessProbe                                                                                                                     | `true`                    |
-| `metrics.readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                                                  | `30`                      |
-| `metrics.readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                                                         | `10`                      |
-| `metrics.readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                                                        | `1`                       |
-| `metrics.readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                                                      | `3`                       |
-| `metrics.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                                                      | `1`                       |
-| `metrics.serviceMonitor.enabled`                            | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator                                                              | `false`                   |
-| `metrics.serviceMonitor.namespace`                          | Namespace which Prometheus is running in                                                                                                  | `""`                      |
-| `metrics.serviceMonitor.jobLabel`                           | The name of the label on the target service to use as the job name in prometheus.                                                         | `""`                      |
-| `metrics.serviceMonitor.interval`                           | Interval at which metrics should be scraped                                                                                               | `30s`                     |
-| `metrics.serviceMonitor.scrapeTimeout`                      | Specify the timeout after which the scrape is ended                                                                                       | `""`                      |
-| `metrics.serviceMonitor.relabelings`                        | RelabelConfigs to apply to samples before scraping                                                                                        | `[]`                      |
-| `metrics.serviceMonitor.metricRelabelings`                  | MetricRelabelConfigs to apply to samples before ingestion                                                                                 | `[]`                      |
-| `metrics.serviceMonitor.honorLabels`                        | honorLabels chooses the metric's labels on collisions with target labels                                                                  | `false`                   |
-| `metrics.serviceMonitor.selector`                           | ServiceMonitor selector labels                                                                                                            | `{}`                      |
-| `metrics.serviceMonitor.labels`                             | Extra labels for the ServiceMonitor                                                                                                       | `{}`                      |
-| `metrics.prometheusRule.enabled`                            | if `true`, creates a Prometheus Operator PrometheusRule (also requires `metrics.enabled` to be `true` and `metrics.prometheusRule.rules`) | `false`                   |
-| `metrics.prometheusRule.namespace`                          | Namespace for the PrometheusRule Resource (defaults to the Release Namespace)                                                             | `""`                      |
-| `metrics.prometheusRule.additionalLabels`                   | Additional labels that can be used so PrometheusRule will be discovered by Prometheus                                                     | `{}`                      |
-| `metrics.prometheusRule.rules`                              | Prometheus Rule definitions                                                                                                               | `[]`                      |
+| Name                                                        | Description                                                                                                                               | Value                             |
+| ----------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------- |
+| `metrics.enabled`                                           | Start a side-car prometheus exporter                                                                                                      | `false`                           |
+| `metrics.image.registry`                                    | Exporter image registry                                                                                                                   | `REGISTRY_NAME`                   |
+| `metrics.image.repository`                                  | Exporter image repository                                                                                                                 | `REPOSITORY_NAME/mysqld-exporter` |
+| `metrics.image.digest`                                      | Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag                                  | `""`                              |
+| `metrics.image.pullPolicy`                                  | Exporter image pull policy                                                                                                                | `IfNotPresent`                    |
+| `metrics.image.pullSecrets`                                 | Specify docker-registry secret names as an array                                                                                          | `[]`                              |
+| `metrics.annotations`                                       | Annotations for the Exporter pod                                                                                                          | `{}`                              |
+| `metrics.extraArgs`                                         | Extra args to be passed to mysqld_exporter                                                                                                | `{}`                              |
+| `metrics.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for the MariaDB metrics container(s)                                             | `{}`                              |
+| `metrics.containerSecurityContext.enabled`                  | Enable security context for MariaDB metrics container                                                                                     | `false`                           |
+| `metrics.containerSecurityContext.runAsUser`                | User ID for the MariaDB metrics container                                                                                                 | `1001`                            |
+| `metrics.containerSecurityContext.runAsNonRoot`             | Set metrics container's Security Context runAsNonRoot                                                                                     | `true`                            |
+| `metrics.containerSecurityContext.privileged`               | Set metrics container's Security Context privileged                                                                                       | `false`                           |
+| `metrics.containerSecurityContext.allowPrivilegeEscalation` | Set metrics container's Security Context allowPrivilegeEscalation                                                                         | `false`                           |
+| `metrics.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                                        | `["ALL"]`                         |
+| `metrics.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                                          | `RuntimeDefault`                  |
+| `metrics.resources.limits`                                  | The resources limits for MariaDB prometheus exporter containers                                                                           | `{}`                              |
+| `metrics.resources.requests`                                | The requested resources for MariaDB prometheus exporter containers                                                                        | `{}`                              |
+| `metrics.livenessProbe.enabled`                             | Enable livenessProbe                                                                                                                      | `true`                            |
+| `metrics.livenessProbe.initialDelaySeconds`                 | Initial delay seconds for livenessProbe                                                                                                   | `120`                             |
+| `metrics.livenessProbe.periodSeconds`                       | Period seconds for livenessProbe                                                                                                          | `10`                              |
+| `metrics.livenessProbe.timeoutSeconds`                      | Timeout seconds for livenessProbe                                                                                                         | `1`                               |
+| `metrics.livenessProbe.failureThreshold`                    | Failure threshold for livenessProbe                                                                                                       | `3`                               |
+| `metrics.livenessProbe.successThreshold`                    | Success threshold for livenessProbe                                                                                                       | `1`                               |
+| `metrics.readinessProbe.enabled`                            | Enable readinessProbe                                                                                                                     | `true`                            |
+| `metrics.readinessProbe.initialDelaySeconds`                | Initial delay seconds for readinessProbe                                                                                                  | `30`                              |
+| `metrics.readinessProbe.periodSeconds`                      | Period seconds for readinessProbe                                                                                                         | `10`                              |
+| `metrics.readinessProbe.timeoutSeconds`                     | Timeout seconds for readinessProbe                                                                                                        | `1`                               |
+| `metrics.readinessProbe.failureThreshold`                   | Failure threshold for readinessProbe                                                                                                      | `3`                               |
+| `metrics.readinessProbe.successThreshold`                   | Success threshold for readinessProbe                                                                                                      | `1`                               |
+| `metrics.serviceMonitor.enabled`                            | Create ServiceMonitor Resource for scraping metrics using PrometheusOperator                                                              | `false`                           |
+| `metrics.serviceMonitor.namespace`                          | Namespace which Prometheus is running in                                                                                                  | `""`                              |
+| `metrics.serviceMonitor.jobLabel`                           | The name of the label on the target service to use as the job name in prometheus.                                                         | `""`                              |
+| `metrics.serviceMonitor.interval`                           | Interval at which metrics should be scraped                                                                                               | `30s`                             |
+| `metrics.serviceMonitor.scrapeTimeout`                      | Specify the timeout after which the scrape is ended                                                                                       | `""`                              |
+| `metrics.serviceMonitor.relabelings`                        | RelabelConfigs to apply to samples before scraping                                                                                        | `[]`                              |
+| `metrics.serviceMonitor.metricRelabelings`                  | MetricRelabelConfigs to apply to samples before ingestion                                                                                 | `[]`                              |
+| `metrics.serviceMonitor.honorLabels`                        | honorLabels chooses the metric's labels on collisions with target labels                                                                  | `false`                           |
+| `metrics.serviceMonitor.selector`                           | ServiceMonitor selector labels                                                                                                            | `{}`                              |
+| `metrics.serviceMonitor.labels`                             | Extra labels for the ServiceMonitor                                                                                                       | `{}`                              |
+| `metrics.prometheusRule.enabled`                            | if `true`, creates a Prometheus Operator PrometheusRule (also requires `metrics.enabled` to be `true` and `metrics.prometheusRule.rules`) | `false`                           |
+| `metrics.prometheusRule.namespace`                          | Namespace for the PrometheusRule Resource (defaults to the Release Namespace)                                                             | `""`                              |
+| `metrics.prometheusRule.additionalLabels`                   | Additional labels that can be used so PrometheusRule will be discovered by Prometheus                                                     | `{}`                              |
+| `metrics.prometheusRule.rules`                              | Prometheus Rule definitions                                                                                                               | `[]`                              |
 
 ### NetworkPolicy parameters
 
@@ -387,8 +396,10 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 helm install my-release \
   --set auth.rootPassword=secretpassword,auth.database=app_database \
-    oci://registry-1.docker.io/bitnamicharts/mariadb
+    oci://REGISTRY_NAME/REPOSITORY_NAME/mariadb
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 The above command sets the MariaDB `root` account password to `secretpassword`. Additionally it creates a database named `my_database`.
 
@@ -397,9 +408,10 @@ The above command sets the MariaDB `root` account password to `secretpassword`. 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/mariadb
+helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/mariadb
 ```
 
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
 ## Configuration and installation details
@@ -457,8 +469,10 @@ Find more information about how to deal with common errors related to Bitnami's 
 It's necessary to set the `auth.rootPassword` parameter when upgrading for readiness/liveness probes to work properly. When you install this chart for the first time, some notes will be displayed providing the credentials you must use under the 'Administrator credentials' section. Please note down the password and run the command below to upgrade your chart:
 
 ```console
-helm upgrade my-release oci://registry-1.docker.io/bitnamicharts/mariadb --set auth.rootPassword=[ROOT_PASSWORD]
+helm upgrade my-release oci://REGISTRY_NAME/REPOSITORY_NAME/mariadb --set auth.rootPassword=[ROOT_PASSWORD]
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 | Note: you need to substitute the placeholder _[ROOT_PASSWORD]_ with the value obtained in the installation notes.
 
@@ -522,8 +536,10 @@ Backwards compatibility is not guaranteed. To upgrade to `8.0.0`, install a new 
 - Reuse the PVC used to hold the master data on your previous release. To do so, use the `primary.persistence.existingClaim` parameter. The following example assumes that the release name is `mariadb`:
 
 ```console
-helm install mariadb oci://registry-1.docker.io/bitnamicharts/mariadb --set auth.rootPassword=[ROOT_PASSWORD] --set primary.persistence.existingClaim=[EXISTING_PVC]
+helm install mariadb oci://REGISTRY_NAME/REPOSITORY_NAME/mariadb --set auth.rootPassword=[ROOT_PASSWORD] --set primary.persistence.existingClaim=[EXISTING_PVC]
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 | Note: you need to substitute the placeholder _[EXISTING_PVC]_ with the name of the PVC used on your previous release, and _[ROOT_PASSWORD]_ with the root password used in your previous release.
 

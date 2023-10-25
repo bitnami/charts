@@ -65,9 +65,9 @@ diagnosticMode:
 loki:
   ## Bitnami Grafana Loki image
   ## ref: https://hub.docker.com/r/bitnami/grafana-loki/tags/
-  ## @param loki.image.registry Grafana Loki image registry
-  ## @param loki.image.repository Grafana Loki image repository
-  ## @param loki.image.tag Grafana Loki image tag (immutable tags are recommended)
+  ## @param loki.image.registry [default: REGISTRY_NAME] Grafana Loki image registry
+  ## @param loki.image.repository [default: REPOSITORY_NAME/grafana-loki] Grafana Loki image repository
+  ## @skip loki.image.tag Grafana Loki image tag (immutable tags are recommended)
   ## @param loki.image.digest Grafana Loki image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param loki.image.pullPolicy Grafana Loki image pull policy
   ## @param loki.image.pullSecrets Grafana Loki image pull secrets
@@ -75,7 +75,7 @@ loki:
   image:
     registry: docker.io
     repository: bitnami/grafana-loki
-    tag: 2.9.1-debian-11-r22
+    tag: 2.9.2-debian-11-r0
     digest: ""
     ## Specify a imagePullPolicy
     ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -584,9 +584,9 @@ gateway:
 
   ## Bitnami Nginx image
   ## ref: https://hub.docker.com/r/bitnami/grafana-nginx/tags/
-  ## @param gateway.image.registry Nginx image registry
-  ## @param gateway.image.repository Nginx image repository
-  ## @param gateway.image.tag Nginx image tag (immutable tags are recommended)
+  ## @param gateway.image.registry [default: REGISTRY_NAME] Nginx image registry
+  ## @param gateway.image.repository [default: REPOSITORY_NAME/nginx] Nginx image repository
+  ## @skip gateway.image.tag Nginx image tag (immutable tags are recommended)
   ## @param gateway.image.digest Nginx image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param gateway.image.pullPolicy Nginx image pull policy
   ## @param gateway.image.pullSecrets Nginx image pull secrets
@@ -3282,9 +3282,9 @@ promtail:
   enabled: true
   ## Bitnami Promtail image
   ## ref: https://hub.docker.com/r/bitnami/grafana-promtail/tags/
-  ## @param promtail.image.registry Grafana Promtail image registry
-  ## @param promtail.image.repository Grafana Promtail image repository
-  ## @param promtail.image.tag Grafana Promtail image tag (immutable tags are recommended)
+  ## @param promtail.image.registry [default: REGISTRY_NAME] Grafana Promtail image registry
+  ## @param promtail.image.repository [default: REPOSITORY_NAME/promtail] Grafana Promtail image repository
+  ## @skip promtail.image.tag Grafana Promtail image tag (immutable tags are recommended)
   ## @param promtail.image.digest Grafana Promtail image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param promtail.image.pullPolicy Grafana Promtail image pull policy
   ## @param promtail.image.pullSecrets Grafana Promtail image pull secrets
@@ -3700,9 +3700,9 @@ volumePermissions:
   enabled: false
   ## OS Shell + Utility image
   ## ref: https://hub.docker.com/r/bitnami/os-shell/tags/
-  ## @param volumePermissions.image.registry OS Shell + Utility image registry
-  ## @param volumePermissions.image.repository OS Shell + Utility image repository
-  ## @param volumePermissions.image.tag OS Shell + Utility image tag (immutable tags are recommended)
+  ## @param volumePermissions.image.registry [default: REGISTRY_NAME] OS Shell + Utility image registry
+  ## @param volumePermissions.image.repository [default: REPOSITORY_NAME/os-shell] OS Shell + Utility image repository
+  ## @skip volumePermissions.image.tag OS Shell + Utility image tag (immutable tags are recommended)
   ## @param volumePermissions.image.digest OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param volumePermissions.image.pullPolicy OS Shell + Utility image pull policy
   ## @param volumePermissions.image.pullSecrets OS Shell + Utility image pull secrets
@@ -3824,15 +3824,15 @@ memcachedchunks:
   enabled: true
   ## Bitnami Memcached image version
   ## ref: https://hub.docker.com/r/bitnami/memcached/tags/
-  ## @param memcachedchunks.image.registry Memcached image registry
-  ## @param memcachedchunks.image.repository Memcached image repository
-  ## @param memcachedchunks.image.tag Memcached image tag (immutable tags are recommended)
+  ## @param memcachedchunks.image.registry [default: REGISTRY_NAME] Memcached image registry
+  ## @param memcachedchunks.image.repository [default: REPOSITORY_NAME/memcached] Memcached image repository
+  ## @skip memcachedchunks.image.tag Memcached image tag (immutable tags are recommended)
   ## @param memcachedchunks.image.digest Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ##
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.21-debian-11-r107
+    tag: 1.6.22-debian-11-r0
     digest: ""
   ## @param memcachedchunks.nameOverride override the subchart name
   ##
@@ -3865,15 +3865,15 @@ memcachedfrontend:
   enabled: true
   ## Bitnami Memcached image version
   ## ref: https://hub.docker.com/r/bitnami/memcached/tags/
-  ## @param memcachedfrontend.image.registry Memcached image registry
-  ## @param memcachedfrontend.image.repository Memcached image repository
-  ## @param memcachedfrontend.image.tag Memcached image tag (immutable tags are recommended)
+  ## @param memcachedfrontend.image.registry [default: REGISTRY_NAME] Memcached image registry
+  ## @param memcachedfrontend.image.repository [default: REPOSITORY_NAME/memcached] Memcached image repository
+  ## @skip memcachedfrontend.image.tag Memcached image tag (immutable tags are recommended)
   ## @param memcachedfrontend.image.digest Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ##
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.21-debian-11-r107
+    tag: 1.6.22-debian-11-r0
     digest: ""
   ## @param memcachedfrontend.architecture Memcached architecture
   ##
@@ -3907,15 +3907,15 @@ memcachedindexqueries:
 
   ## Bitnami Memcached image version
   ## ref: https://hub.docker.com/r/bitnami/memcached/tags/
-  ## @param memcachedindexqueries.image.registry Memcached image registry
-  ## @param memcachedindexqueries.image.repository Memcached image repository
-  ## @param memcachedindexqueries.image.tag Memcached image tag (immutable tags are recommended)
+  ## @param memcachedindexqueries.image.registry [default: REGISTRY_NAME] Memcached image registry
+  ## @param memcachedindexqueries.image.repository [default: REPOSITORY_NAME/memcached] Memcached image repository
+  ## @skip memcachedindexqueries.image.tag Memcached image tag (immutable tags are recommended)
   ## @param memcachedindexqueries.image.digest Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ##
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.21-debian-11-r107
+    tag: 1.6.22-debian-11-r0
     digest: ""
   ## @param memcachedindexqueries.architecture Memcached architecture
   ##
@@ -3948,15 +3948,15 @@ memcachedindexwrites:
   enabled: false
   ## Bitnami Memcached image version
   ## ref: https://hub.docker.com/r/bitnami/memcached/tags/
-  ## @param memcachedindexwrites.image.registry Memcached image registry
-  ## @param memcachedindexwrites.image.repository Memcached image repository
-  ## @param memcachedindexwrites.image.tag Memcached image tag (immutable tags are recommended)
+  ## @param memcachedindexwrites.image.registry [default: REGISTRY_NAME] Memcached image registry
+  ## @param memcachedindexwrites.image.repository [default: REPOSITORY_NAME/memcached] Memcached image repository
+  ## @skip memcachedindexwrites.image.tag Memcached image tag (immutable tags are recommended)
   ## @param memcachedindexwrites.image.digest Memcached image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ##
   image:
     registry: docker.io
     repository: bitnami/memcached
-    tag: 1.6.21-debian-11-r107
+    tag: 1.6.22-debian-11-r0
     digest: ""
   ## @param memcachedindexwrites.architecture Memcached architecture
   ##

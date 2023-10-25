@@ -11,8 +11,10 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/appsmith
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/appsmith
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 ## Introduction
 
@@ -24,7 +26,7 @@ Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment
 
 [Learn more about the default configuration of the chart](https://docs.bitnami.com/kubernetes/apps/appsmith/get-started/).
 
-Looking to use Appsmith in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Appsmith in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -38,8 +40,10 @@ Looking to use Appsmith in production? Try [VMware Application Catalog](https://
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/appsmith
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/appsmith
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 The command deploys Appsmith on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
@@ -67,26 +71,25 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Common parameters
 
-| Name                     | Description                                                                                                                                         | Value                 |
-| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- |
-| `kubeVersion`            | Override Kubernetes version                                                                                                                         | `""`                  |
-| `nameOverride`           | String to partially override common.names.name                                                                                                      | `""`                  |
-| `fullnameOverride`       | String to fully override common.names.fullname                                                                                                      | `""`                  |
-| `namespaceOverride`      | String to fully override common.names.namespace                                                                                                     | `""`                  |
-| `commonLabels`           | Labels to add to all deployed objects                                                                                                               | `{}`                  |
-| `commonAnnotations`      | Annotations to add to all deployed objects                                                                                                          | `{}`                  |
-| `clusterDomain`          | Kubernetes cluster domain name                                                                                                                      | `cluster.local`       |
-| `extraDeploy`            | Array of extra objects to deploy with the release                                                                                                   | `[]`                  |
-| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                                                             | `false`               |
-| `diagnosticMode.command` | Command to override all containers in the deployment                                                                                                | `["sleep"]`           |
-| `diagnosticMode.args`    | Args to override all containers in the deployment                                                                                                   | `["infinity"]`        |
-| `image.registry`         | Appsmith image registry                                                                                                                             | `docker.io`           |
-| `image.repository`       | Appsmith image repository                                                                                                                           | `bitnami/appsmith`    |
-| `image.tag`              | Appsmith image tag (immutable tags are recommended)                                                                                                 | `1.9.38-debian-11-r1` |
-| `image.digest`           | Appsmith image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended) | `""`                  |
-| `image.pullPolicy`       | Appsmith image pull policy                                                                                                                          | `IfNotPresent`        |
-| `image.pullSecrets`      | Appsmith image pull secrets                                                                                                                         | `[]`                  |
-| `image.debug`            | Enable Appsmith image debug mode                                                                                                                    | `false`               |
+| Name                     | Description                                                                                                                                         | Value                      |
+| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
+| `kubeVersion`            | Override Kubernetes version                                                                                                                         | `""`                       |
+| `nameOverride`           | String to partially override common.names.name                                                                                                      | `""`                       |
+| `fullnameOverride`       | String to fully override common.names.fullname                                                                                                      | `""`                       |
+| `namespaceOverride`      | String to fully override common.names.namespace                                                                                                     | `""`                       |
+| `commonLabels`           | Labels to add to all deployed objects                                                                                                               | `{}`                       |
+| `commonAnnotations`      | Annotations to add to all deployed objects                                                                                                          | `{}`                       |
+| `clusterDomain`          | Kubernetes cluster domain name                                                                                                                      | `cluster.local`            |
+| `extraDeploy`            | Array of extra objects to deploy with the release                                                                                                   | `[]`                       |
+| `diagnosticMode.enabled` | Enable diagnostic mode (all probes will be disabled and the command will be overridden)                                                             | `false`                    |
+| `diagnosticMode.command` | Command to override all containers in the deployment                                                                                                | `["sleep"]`                |
+| `diagnosticMode.args`    | Args to override all containers in the deployment                                                                                                   | `["infinity"]`             |
+| `image.registry`         | Appsmith image registry                                                                                                                             | `REGISTRY_NAME`            |
+| `image.repository`       | Appsmith image repository                                                                                                                           | `REPOSITORY_NAME/appsmith` |
+| `image.digest`           | Appsmith image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag image tag (immutable tags are recommended) | `""`                       |
+| `image.pullPolicy`       | Appsmith image pull policy                                                                                                                          | `IfNotPresent`             |
+| `image.pullSecrets`      | Appsmith image pull secrets                                                                                                                         | `[]`                       |
+| `image.debug`            | Enable Appsmith image debug mode                                                                                                                    | `false`                    |
 
 ### Appsmith Client Parameters
 
@@ -363,17 +366,16 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Init Container Parameters
 
-| Name                                                   | Description                                                                                     | Value              |
-| ------------------------------------------------------ | ----------------------------------------------------------------------------------------------- | ------------------ |
-| `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`            |
-| `volumePermissions.image.registry`                     | OS Shell + Utility image registry                                                               | `docker.io`        |
-| `volumePermissions.image.repository`                   | OS Shell + Utility image repository                                                             | `bitnami/os-shell` |
-| `volumePermissions.image.tag`                          | OS Shell + Utility image tag (immutable tags are recommended)                                   | `11-debian-11-r90` |
-| `volumePermissions.image.pullPolicy`                   | OS Shell + Utility image pull policy                                                            | `IfNotPresent`     |
-| `volumePermissions.image.pullSecrets`                  | OS Shell + Utility image pull secrets                                                           | `[]`               |
-| `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`               |
-| `volumePermissions.resources.requests`                 | The requested resources for the init container                                                  | `{}`               |
-| `volumePermissions.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                 | `0`                |
+| Name                                                   | Description                                                                                     | Value                      |
+| ------------------------------------------------------ | ----------------------------------------------------------------------------------------------- | -------------------------- |
+| `volumePermissions.enabled`                            | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup` | `false`                    |
+| `volumePermissions.image.registry`                     | OS Shell + Utility image registry                                                               | `REGISTRY_NAME`            |
+| `volumePermissions.image.repository`                   | OS Shell + Utility image repository                                                             | `REPOSITORY_NAME/os-shell` |
+| `volumePermissions.image.pullPolicy`                   | OS Shell + Utility image pull policy                                                            | `IfNotPresent`             |
+| `volumePermissions.image.pullSecrets`                  | OS Shell + Utility image pull secrets                                                           | `[]`                       |
+| `volumePermissions.resources.limits`                   | The resources limits for the init container                                                     | `{}`                       |
+| `volumePermissions.resources.requests`                 | The requested resources for the init container                                                  | `{}`                       |
+| `volumePermissions.containerSecurityContext.runAsUser` | Set init container's Security Context runAsUser                                                 | `0`                        |
 
 ### Other Parameters
 
@@ -439,8 +441,10 @@ helm install my-release \
   --set appsmithUsername=admin \
   --set appsmithPassword=password \
   --set mariadb.auth.rootPassword=secretpassword \
-    oci://registry-1.docker.io/bitnamicharts/appsmith
+    oci://REGISTRY_NAME/REPOSITORY_NAME/appsmith
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 The above command sets the appsmith administrator account username and password to `admin` and `password` respectively. Additionally, it sets the MariaDB `root` user password to `secretpassword`.
 
@@ -449,9 +453,10 @@ The above command sets the appsmith administrator account username and password 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/appsmith
+helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/appsmith
 ```
 
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
 ## Configuration and installation details

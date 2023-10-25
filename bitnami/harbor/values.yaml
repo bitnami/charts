@@ -605,9 +605,9 @@ volumePermissions:
   ## @param volumePermissions.enabled Enable init container that changes the owner and group of the persistent volume
   ##
   enabled: false
-  ## @param volumePermissions.image.registry Init container volume-permissions image registry
-  ## @param volumePermissions.image.repository Init container volume-permissions image repository
-  ## @param volumePermissions.image.tag Init container volume-permissions image tag (immutable tags are recommended)
+  ## @param volumePermissions.image.registry [default: REGISTRY_NAME] Init container volume-permissions image registry
+  ## @param volumePermissions.image.repository [default: REPOSITORY_NAME/os-shell] Init container volume-permissions image repository
+  ## @skip volumePermissions.image.tag Init container volume-permissions image tag (immutable tags are recommended)
   ## @param volumePermissions.image.digest Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
   ## @param volumePermissions.image.pullSecrets Init container volume-permissions image pull secrets
@@ -650,9 +650,9 @@ volumePermissions:
 nginx:
   ## Bitnami NGINX image
   ## ref: https://hub.docker.com/r/bitnami/nginx/tags/
-  ## @param nginx.image.registry NGINX image registry
-  ## @param nginx.image.repository NGINX image repository
-  ## @param nginx.image.tag NGINX image tag (immutable tags are recommended)
+  ## @param nginx.image.registry [default: REGISTRY_NAME] NGINX image registry
+  ## @param nginx.image.repository [default: REPOSITORY_NAME/nginx] NGINX image repository
+  ## @skip nginx.image.tag NGINX image tag (immutable tags are recommended)
   ## @param nginx.image.digest NGINX image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param nginx.image.pullPolicy NGINX image pull policy
   ## @param nginx.image.pullSecrets NGINX image pull secrets
@@ -913,9 +913,9 @@ nginx:
 portal:
   ## Bitnami Harbor Portal image
   ## ref: https://hub.docker.com/r/bitnami/harbor-portal/tags/
-  ## @param portal.image.registry Harbor Portal image registry
-  ## @param portal.image.repository Harbor Portal image repository
-  ## @param portal.image.tag Harbor Portal image tag (immutable tags are recommended)
+  ## @param portal.image.registry [default: REGISTRY_NAME] Harbor Portal image registry
+  ## @param portal.image.repository [default: REPOSITORY_NAME/harbor-portal] Harbor Portal image repository
+  ## @skip portal.image.tag Harbor Portal image tag (immutable tags are recommended)
   ## @param portal.image.digest Harbor Portal image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param portal.image.pullPolicy Harbor Portal image pull policy
   ## @param portal.image.pullSecrets Harbor Portal image pull secrets
@@ -1173,9 +1173,9 @@ portal:
 core:
   ## Bitnami Harbor Core image
   ## ref: https://hub.docker.com/r/bitnami/harbor-core/tags/
-  ## @param core.image.registry Harbor Core image registry
-  ## @param core.image.repository Harbor Core image repository
-  ## @param core.image.tag Harbor Core image tag (immutable tags are recommended)
+  ## @param core.image.registry [default: REGISTRY_NAME] Harbor Core image registry
+  ## @param core.image.repository [default: REPOSITORY_NAME/harbor-core] Harbor Core image repository
+  ## @skip core.image.tag Harbor Core image tag (immutable tags are recommended)
   ## @param core.image.digest Harbor Core image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param core.image.pullPolicy Harbor Core image pull policy
   ## @param core.image.pullSecrets Harbor Core image pull secrets
@@ -1494,9 +1494,9 @@ core:
 jobservice:
   ## Bitnami Harbor Jobservice image
   ## ref: https://hub.docker.com/r/bitnami/harbor-jobservice/tags/
-  ## @param jobservice.image.registry Harbor Jobservice image registry
-  ## @param jobservice.image.repository Harbor Jobservice image repository
-  ## @param jobservice.image.tag Harbor Jobservice image tag (immutable tags are recommended)
+  ## @param jobservice.image.registry [default: REGISTRY_NAME] Harbor Jobservice image registry
+  ## @param jobservice.image.repository [default: REPOSITORY_NAME/harbor-jobservice] Harbor Jobservice image repository
+  ## @skip jobservice.image.tag Harbor Jobservice image tag (immutable tags are recommended)
   ## @param jobservice.image.digest Harbor Jobservice image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param jobservice.image.pullPolicy Harbor Jobservice image pull policy
   ## @param jobservice.image.pullSecrets Harbor Jobservice image pull secrets
@@ -1949,9 +1949,9 @@ registry:
   server:
     ## Bitnami Harbor Registry image
     ## ref: https://hub.docker.com/r/bitnami/harbor-registry/tags/
-    ## @param registry.server.image.registry Harbor Registry image registry
-    ## @param registry.server.image.repository Harbor Registry image repository
-    ## @param registry.server.image.tag Harbor Registry image tag (immutable tags are recommended)
+    ## @param registry.server.image.registry [default: REGISTRY_NAME] Harbor Registry image registry
+    ## @param registry.server.image.repository [default: REPOSITORY_NAME/harbor-registry] Harbor Registry image repository
+    ## @skip registry.server.image.tag Harbor Registry image tag (immutable tags are recommended)
     ## @param registry.server.image.digest Harbor Registry image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
     ## @param registry.server.image.pullPolicy Harbor Registry image pull policy
     ## @param registry.server.image.pullSecrets Harbor Registry image pull secrets
@@ -2096,9 +2096,9 @@ registry:
   controller:
     ## Bitnami Harbor Registryctl image
     ## ref: https://hub.docker.com/r/bitnami/harbor-registryctl/tags/
-    ## @param registry.controller.image.registry Harbor Registryctl image registry
-    ## @param registry.controller.image.repository Harbor Registryctl image repository
-    ## @param registry.controller.image.tag Harbor Registryctl image tag (immutable tags are recommended)
+    ## @param registry.controller.image.registry [default: REGISTRY_NAME] Harbor Registryctl image registry
+    ## @param registry.controller.image.repository [default: REPOSITORY_NAME/harbor-registryctl] Harbor Registryctl image repository
+    ## @skip registry.controller.image.tag Harbor Registryctl image tag (immutable tags are recommended)
     ## @param registry.controller.image.digest Harbor Registryctl image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
     ## @param registry.controller.image.pullPolicy Harbor Registryctl image pull policy
     ## @param registry.controller.image.pullSecrets Harbor Registryctl image pull secrets
@@ -2239,9 +2239,9 @@ registry:
 trivy:
   ## Bitnami Harbor Adapter Trivy image
   ## ref: https://hub.docker.com/r/bitnami/harbor-adapter-trivy/tags/
-  ## @param trivy.image.registry Harbor Adapter Trivy image registry
-  ## @param trivy.image.repository Harbor Adapter Trivy image repository
-  ## @param trivy.image.tag Harbor Adapter Trivy image tag (immutable tags are recommended)
+  ## @param trivy.image.registry [default: REGISTRY_NAME] Harbor Adapter Trivy image registry
+  ## @param trivy.image.repository [default: REPOSITORY_NAME/harbor-adapter-trivy] Harbor Adapter Trivy image repository
+  ## @skip trivy.image.tag Harbor Adapter Trivy image tag (immutable tags are recommended)
   ## @param trivy.image.digest Harbor Adapter Trivy image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param trivy.image.pullPolicy Harbor Adapter Trivy image pull policy
   ## @param trivy.image.pullSecrets Harbor Adapter Trivy image pull secrets
@@ -2547,9 +2547,9 @@ trivy:
 exporter:
   ## Bitnami Harbor Exporter image
   ## ref: https://hub.docker.com/r/bitnami/harbor-exporter/tags/
-  ## @param exporter.image.registry Harbor Exporter image registry
-  ## @param exporter.image.repository Harbor Exporter image repository
-  ## @param exporter.image.tag Harbor Exporter image tag
+  ## @param exporter.image.registry [default: REGISTRY_NAME] Harbor Exporter image registry
+  ## @param exporter.image.repository [default: REPOSITORY_NAME/harbor-exporter] Harbor Exporter image repository
+  ## @skip exporter.image.tag Harbor Exporter image tag
   ## @param exporter.image.digest Harbor Exporter image image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param exporter.image.pullPolicy Harbor exporter image pull policy
   ## @param exporter.image.pullSecrets Specify docker-registry secret names as an array
@@ -2799,9 +2799,9 @@ postgresql:
   enabled: true
   ## Override PostgreSQL default image as 14.x is not supported https://goharbor.io/docs/2.4.0/install-config/
   ## ref: https://github.com/bitnami/containers/tree/main/bitnami/postgresql
-  ## @param postgresql.image.registry PostgreSQL image registry
-  ## @param postgresql.image.repository PostgreSQL image repository
-  ## @param postgresql.image.tag PostgreSQL image tag (immutable tags are recommended)
+  ## @param postgresql.image.registry [default: REGISTRY_NAME] PostgreSQL image registry
+  ## @param postgresql.image.repository [default: REPOSITORY_NAME/postgresql] PostgreSQL image repository
+  ## @skip postgresql.image.tag PostgreSQL image tag (immutable tags are recommended)
   ## @param postgresql.image.digest PostgreSQL image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ##
   image:

@@ -178,9 +178,9 @@ initContainers: []
 useIstioLabels: true
 
 ## Bitnami Elasticsearch image
-## @param image.registry Elasticsearch image registry
-## @param image.repository Elasticsearch image repository
-## @param image.tag Elasticsearch image tag (immutable tags are recommended)
+## @param image.registry [default: REGISTRY_NAME] Elasticsearch image registry
+## @param image.repository [default: REPOSITORY_NAME/elasticsearch] Elasticsearch image repository
+## @skip image.tag Elasticsearch image tag (immutable tags are recommended)
 ## @param image.digest Elasticsearch image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy Elasticsearch image pull policy
 ## @param image.pullSecrets Elasticsearch image pull secrets
@@ -189,7 +189,7 @@ useIstioLabels: true
 image:
   registry: docker.io
   repository: bitnami/elasticsearch
-  tag: 8.10.3-debian-11-r1
+  tag: 8.10.4-debian-11-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1829,9 +1829,9 @@ metrics:
   ## @param metrics.fullnameOverride String to fully override common.names.fullname
   ##
   fullnameOverride: ""
-  ## @param metrics.image.registry Metrics exporter image registry
-  ## @param metrics.image.repository Metrics exporter image repository
-  ## @param metrics.image.tag Metrics exporter image tag
+  ## @param metrics.image.registry [default: REGISTRY_NAME] Metrics exporter image registry
+  ## @param metrics.image.repository [default: REPOSITORY_NAME/elasticsearch-exporter] Metrics exporter image repository
+  ## @skip metrics.image.tag Metrics exporter image tag
   ## @param metrics.image.digest Metrics exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param metrics.image.pullPolicy Metrics exporter image pull policy
   ## @param metrics.image.pullSecrets Metrics exporter image pull secrets
@@ -2162,9 +2162,9 @@ volumePermissions:
   ## @param volumePermissions.enabled Enable init container that changes volume permissions in the data directory (for cases where the default k8s `runAsUser` and `fsUser` values do not work)
   ##
   enabled: false
-  ## @param volumePermissions.image.registry Init container volume-permissions image registry
-  ## @param volumePermissions.image.repository Init container volume-permissions image name
-  ## @param volumePermissions.image.tag Init container volume-permissions image tag
+  ## @param volumePermissions.image.registry [default: REGISTRY_NAME] Init container volume-permissions image registry
+  ## @param volumePermissions.image.repository [default: REPOSITORY_NAME/os-shell] Init container volume-permissions image name
+  ## @skip volumePermissions.image.tag Init container volume-permissions image tag
   ## @param volumePermissions.image.digest Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
   ## @param volumePermissions.image.pullSecrets Init container volume-permissions image pull secrets
@@ -2210,9 +2210,9 @@ sysctlImage:
   ## @param sysctlImage.enabled Enable kernel settings modifier image
   ##
   enabled: true
-  ## @param sysctlImage.registry Kernel settings modifier image registry
-  ## @param sysctlImage.repository Kernel settings modifier image repository
-  ## @param sysctlImage.tag Kernel settings modifier image tag
+  ## @param sysctlImage.registry [default: REGISTRY_NAME] Kernel settings modifier image registry
+  ## @param sysctlImage.repository [default: REPOSITORY_NAME/os-shell] Kernel settings modifier image repository
+  ## @skip sysctlImage.tag Kernel settings modifier image tag
   ## @param sysctlImage.digest Kernel settings modifier image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param sysctlImage.pullPolicy Kernel settings modifier image pull policy
   ## @param sysctlImage.pullSecrets Kernel settings modifier image pull secrets

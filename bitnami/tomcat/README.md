@@ -11,8 +11,10 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/tomcat
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/tomcat
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 ## Introduction
 
@@ -22,7 +24,7 @@ Tomcat implements several Java EE specifications including Java Servlet, JavaSer
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
-Looking to use Apache Tomcat in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Apache Tomcat in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -36,8 +38,10 @@ Looking to use Apache Tomcat in production? Try [VMware Application Catalog](htt
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/tomcat
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/tomcat
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 These commands deploy Tomcat on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
@@ -77,25 +81,24 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Tomcat parameters
 
-| Name                          | Description                                                                                            | Value                  |
-| ----------------------------- | ------------------------------------------------------------------------------------------------------ | ---------------------- |
-| `image.registry`              | Tomcat image registry                                                                                  | `docker.io`            |
-| `image.repository`            | Tomcat image repository                                                                                | `bitnami/tomcat`       |
-| `image.tag`                   | Tomcat image tag (immutable tags are recommended)                                                      | `10.1.14-debian-11-r0` |
-| `image.digest`                | Tomcat image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                   |
-| `image.pullPolicy`            | Tomcat image pull policy                                                                               | `IfNotPresent`         |
-| `image.pullSecrets`           | Specify docker-registry secret names as an array                                                       | `[]`                   |
-| `image.debug`                 | Specify if debug logs should be enabled                                                                | `false`                |
-| `hostAliases`                 | Deployment pod host aliases                                                                            | `[]`                   |
-| `tomcatUsername`              | Tomcat admin user                                                                                      | `user`                 |
-| `tomcatPassword`              | Tomcat admin password                                                                                  | `""`                   |
-| `tomcatAllowRemoteManagement` | Enable remote access to management interface                                                           | `0`                    |
-| `catalinaOpts`                | Java runtime option used by tomcat JVM                                                                 | `""`                   |
-| `command`                     | Override default container command (useful when using custom images)                                   | `[]`                   |
-| `args`                        | Override default container args (useful when using custom images)                                      | `[]`                   |
-| `extraEnvVars`                | Extra environment variables to be set on Tomcat container                                              | `[]`                   |
-| `extraEnvVarsCM`              | Name of existing ConfigMap containing extra environment variables                                      | `""`                   |
-| `extraEnvVarsSecret`          | Name of existing Secret containing extra environment variables                                         | `""`                   |
+| Name                          | Description                                                                                            | Value                    |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------ | ------------------------ |
+| `image.registry`              | Tomcat image registry                                                                                  | `REGISTRY_NAME`          |
+| `image.repository`            | Tomcat image repository                                                                                | `REPOSITORY_NAME/tomcat` |
+| `image.digest`                | Tomcat image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                     |
+| `image.pullPolicy`            | Tomcat image pull policy                                                                               | `IfNotPresent`           |
+| `image.pullSecrets`           | Specify docker-registry secret names as an array                                                       | `[]`                     |
+| `image.debug`                 | Specify if debug logs should be enabled                                                                | `false`                  |
+| `hostAliases`                 | Deployment pod host aliases                                                                            | `[]`                     |
+| `tomcatUsername`              | Tomcat admin user                                                                                      | `user`                   |
+| `tomcatPassword`              | Tomcat admin password                                                                                  | `""`                     |
+| `tomcatAllowRemoteManagement` | Enable remote access to management interface                                                           | `0`                      |
+| `catalinaOpts`                | Java runtime option used by tomcat JVM                                                                 | `""`                     |
+| `command`                     | Override default container command (useful when using custom images)                                   | `[]`                     |
+| `args`                        | Override default container args (useful when using custom images)                                      | `[]`                     |
+| `extraEnvVars`                | Extra environment variables to be set on Tomcat container                                              | `[]`                     |
+| `extraEnvVarsCM`              | Name of existing ConfigMap containing extra environment variables                                      | `""`                     |
+| `extraEnvVarsSecret`          | Name of existing Secret containing extra environment variables                                         | `""`                     |
 
 ### Tomcat deployment parameters
 
@@ -198,17 +201,16 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Volume Permissions parameters
 
-| Name                                   | Description                                                                                                                       | Value              |
-| -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ------------------ |
-| `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory                                                       | `false`            |
-| `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                  | `docker.io`        |
-| `volumePermissions.image.repository`   | Init container volume-permissions image repository                                                                                | `bitnami/os-shell` |
-| `volumePermissions.image.tag`          | Init container volume-permissions image tag                                                                                       | `11-debian-11-r90` |
-| `volumePermissions.image.digest`       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`               |
-| `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`     |
-| `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                  | `[]`               |
-| `volumePermissions.resources.limits`   | Init container volume-permissions resource  limits                                                                                | `{}`               |
-| `volumePermissions.resources.requests` | Init container volume-permissions resource  requests                                                                              | `{}`               |
+| Name                                   | Description                                                                                                                       | Value                      |
+| -------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
+| `volumePermissions.enabled`            | Enable init container that changes volume permissions in the data directory                                                       | `false`                    |
+| `volumePermissions.image.registry`     | Init container volume-permissions image registry                                                                                  | `REGISTRY_NAME`            |
+| `volumePermissions.image.repository`   | Init container volume-permissions image repository                                                                                | `REPOSITORY_NAME/os-shell` |
+| `volumePermissions.image.digest`       | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
+| `volumePermissions.image.pullPolicy`   | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`             |
+| `volumePermissions.image.pullSecrets`  | Specify docker-registry secret names as an array                                                                                  | `[]`                       |
+| `volumePermissions.resources.limits`   | Init container volume-permissions resource  limits                                                                                | `{}`                       |
+| `volumePermissions.resources.requests` | Init container volume-permissions resource  requests                                                                              | `{}`                       |
 
 ### Metrics parameters
 
@@ -216,9 +218,8 @@ The command removes all the Kubernetes components associated with the chart and 
 | --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | `metrics.jmx.enabled`                               | Whether or not to expose JMX metrics to Prometheus                                                           | `false`                                                                                                                                                                                                             |
 | `metrics.jmx.catalinaOpts`                          | custom option used to enabled JMX on tomcat jvm evaluated as template                                        | `-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=5555 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dcom.sun.management.jmxremote.local.only=true` |
-| `metrics.jmx.image.registry`                        | JMX exporter image registry                                                                                  | `docker.io`                                                                                                                                                                                                         |
-| `metrics.jmx.image.repository`                      | JMX exporter image repository                                                                                | `bitnami/jmx-exporter`                                                                                                                                                                                              |
-| `metrics.jmx.image.tag`                             | JMX exporter image tag (immutable tags are recommended)                                                      | `0.19.0-debian-11-r95`                                                                                                                                                                                              |
+| `metrics.jmx.image.registry`                        | JMX exporter image registry                                                                                  | `REGISTRY_NAME`                                                                                                                                                                                                     |
+| `metrics.jmx.image.repository`                      | JMX exporter image repository                                                                                | `REPOSITORY_NAME/jmx-exporter`                                                                                                                                                                                      |
 | `metrics.jmx.image.digest`                          | JMX exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                                                                                                                                                                                                                |
 | `metrics.jmx.image.pullPolicy`                      | JMX exporter image pull policy                                                                               | `IfNotPresent`                                                                                                                                                                                                      |
 | `metrics.jmx.image.pullSecrets`                     | Specify docker-registry secret names as an array                                                             | `[]`                                                                                                                                                                                                                |
@@ -250,8 +251,10 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```console
 helm install my-release \
-  --set tomcatUsername=manager,tomcatPassword=password oci://registry-1.docker.io/bitnamicharts/tomcat
+  --set tomcatUsername=manager,tomcatPassword=password oci://REGISTRY_NAME/REPOSITORY_NAME/tomcat
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 The above command sets the Tomcat management username and password to `manager` and `password` respectively.
 
@@ -260,9 +263,10 @@ The above command sets the Tomcat management username and password to `manager` 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/tomcat
+helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/tomcat
 ```
 
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
 ## Configuration and installation details
@@ -346,8 +350,10 @@ Consequences:
 ```console
 export TOMCAT_PASSWORD=$(kubectl get secret --namespace default tomcat -o jsonpath="{.data.tomcat-password}" | base64 -d)
 kubectl delete deployments.apps tomcat
-helm upgrade tomcat oci://registry-1.docker.io/bitnamicharts/tomcat --set tomcatPassword=$TOMCAT_PASSWORD
+helm upgrade tomcat oci://REGISTRY_NAME/REPOSITORY_NAME/tomcat --set tomcatPassword=$TOMCAT_PASSWORD
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 ### To 7.0.0
 
@@ -364,14 +370,18 @@ This release updates the Bitnami Tomcat container to `9.0.26-debian-9-r0`, which
 Tomcat container was moved to a non-root approach. There shouldn't be any issue when upgrading since the corresponding `securityContext` is enabled by default. Both the container image and the chart can be upgraded by running the command below:
 
 ```console
-helm upgrade my-release oci://registry-1.docker.io/bitnamicharts/tomcat
+helm upgrade my-release oci://REGISTRY_NAME/REPOSITORY_NAME/tomcat
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 If you use a previous container image (previous to **8.5.35-r26**) disable the `securityContext` by running the command below:
 
 ```console
-helm upgrade my-release oci://registry-1.docker.io/bitnamicharts/tomcat --set securityContext.enabled=false,image.tag=XXX
+helm upgrade my-release oci://REGISTRY_NAME/REPOSITORY_NAME/tomcat --set securityContext.enabled=false,image.tag=XXX
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 ### To 1.0.0
 

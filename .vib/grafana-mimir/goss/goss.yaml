@@ -4,7 +4,7 @@
 file:
   {{ .Vars.mimir.dataDir }}/conf/mimir.yaml:
     exists: true
-    contains:
+    contents:
     - "memcachedchunks:{{ .Vars.memcachedchunks.service.ports.memcached }}"
     - "memcachedfrontend:{{ .Vars.memcachedfrontend.service.ports.memcached }}"
     - "memcachedindex:{{ .Vars.memcachedindex.service.ports.memcached }}"

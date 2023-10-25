@@ -27,4 +27,4 @@ maintainers:
 name: pinniped
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/pinniped
-version: 1.3.9
+version: 1.3.10
