@@ -11,8 +11,10 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/thanos
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/thanos
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 ## Introduction
 
@@ -20,7 +22,7 @@ This chart bootstraps a [Thanos](https://github.com/bitnami/containers/tree/main
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
-Looking to use Thanos in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Thanos in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -33,8 +35,10 @@ Looking to use Thanos in production? Try [VMware Application Catalog](https://bi
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/thanos
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/thanos
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 These commands deploy Thanos on the Kubernetes cluster with the default configuration. The [configuration](#configuration-and-installation-details) section lists the parameters that can be configured during installation.
 
@@ -105,36 +109,35 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 
 ### Thanos common parameters
 
-| Name                                          | Description                                                                                                         | Value                 |
-| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | --------------------- |
-| `image.registry`                              | Thanos image registry                                                                                               | `docker.io`           |
-| `image.repository`                            | Thanos image repository                                                                                             | `bitnami/thanos`      |
-| `image.tag`                                   | Thanos image tag (immutable tags are recommended)                                                                   | `0.32.4-debian-11-r3` |
-| `image.digest`                                | Thanos image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag              | `""`                  |
-| `image.pullPolicy`                            | Thanos image pull policy                                                                                            | `IfNotPresent`        |
-| `image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                    | `[]`                  |
-| `objstoreConfig`                              | The [objstore configuration](https://thanos.io/tip/thanos/storage.md/)                                              | `""`                  |
-| `indexCacheConfig`                            | The [index cache configuration](https://thanos.io/tip/components/store.md/)                                         | `""`                  |
-| `bucketCacheConfig`                           | The [bucket cache configuration](https://thanos.io/tip/components/store.md/)                                        | `""`                  |
-| `existingObjstoreSecret`                      | Secret with Objstore Configuration                                                                                  | `""`                  |
-| `existingObjstoreSecretItems`                 | Optional item list for specifying a custom Secret key. If so, path should be objstore.yml                           | `[]`                  |
-| `httpConfig`                                  | The [https and basic auth configuration](https://thanos.io/tip/operating/https.md/)                                 | `""`                  |
-| `existingHttpConfigSecret`                    | Secret containing the HTTPS and Basic auth configuration                                                            | `""`                  |
-| `https.enabled`                               | Set to true to enable HTTPS. Requires a secret containing the certificate and key.                                  | `false`               |
-| `https.autoGenerated`                         | Create self-signed TLS certificates.                                                                                | `false`               |
-| `https.existingSecret`                        | Existing secret containing your own server key and certificate                                                      | `""`                  |
-| `https.certFilename`                          |                                                                                                                     | `tls.crt`             |
-| `https.keyFilename`                           |                                                                                                                     | `tls.key`             |
-| `https.caFilename`                            |                                                                                                                     | `ca.crt`              |
-| `https.key`                                   | TLS Key for Thanos HTTPS - ignored if existingSecret is provided                                                    | `""`                  |
-| `https.cert`                                  | TLS Certificate for Thanos HTTPS - ignored if existingSecret is provided                                            | `""`                  |
-| `https.ca`                                    | (Optional, used for client) CA Certificate for Thanos HTTPS - ignored if existingSecret is provided                 | `""`                  |
-| `https.clientAuthType`                        | Server policy for client authentication using certificates. Maps to ClientAuth Policies.                            | `""`                  |
-| `auth.basicAuthUsers`                         | Object containing <user>:<passwords> key-value pairs for each user that will have access via basic authentication   | `{}`                  |
-| `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                                | `false`               |
-| `serviceAccount.name`                         | Name of the service account to use. If not set and create is true, a name is generated using the fullname template. | `""`                  |
-| `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                      | `true`                |
-| `serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                          | `{}`                  |
+| Name                                          | Description                                                                                                         | Value                    |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------- | ------------------------ |
+| `image.registry`                              | Thanos image registry                                                                                               | `REGISTRY_NAME`          |
+| `image.repository`                            | Thanos image repository                                                                                             | `REPOSITORY_NAME/thanos` |
+| `image.digest`                                | Thanos image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag              | `""`                     |
+| `image.pullPolicy`                            | Thanos image pull policy                                                                                            | `IfNotPresent`           |
+| `image.pullSecrets`                           | Specify docker-registry secret names as an array                                                                    | `[]`                     |
+| `objstoreConfig`                              | The [objstore configuration](https://thanos.io/tip/thanos/storage.md/)                                              | `""`                     |
+| `indexCacheConfig`                            | The [index cache configuration](https://thanos.io/tip/components/store.md/)                                         | `""`                     |
+| `bucketCacheConfig`                           | The [bucket cache configuration](https://thanos.io/tip/components/store.md/)                                        | `""`                     |
+| `existingObjstoreSecret`                      | Secret with Objstore Configuration                                                                                  | `""`                     |
+| `existingObjstoreSecretItems`                 | Optional item list for specifying a custom Secret key. If so, path should be objstore.yml                           | `[]`                     |
+| `httpConfig`                                  | The [https and basic auth configuration](https://thanos.io/tip/operating/https.md/)                                 | `""`                     |
+| `existingHttpConfigSecret`                    | Secret containing the HTTPS and Basic auth configuration                                                            | `""`                     |
+| `https.enabled`                               | Set to true to enable HTTPS. Requires a secret containing the certificate and key.                                  | `false`                  |
+| `https.autoGenerated`                         | Create self-signed TLS certificates.                                                                                | `false`                  |
+| `https.existingSecret`                        | Existing secret containing your own server key and certificate                                                      | `""`                     |
+| `https.certFilename`                          |                                                                                                                     | `tls.crt`                |
+| `https.keyFilename`                           |                                                                                                                     | `tls.key`                |
+| `https.caFilename`                            |                                                                                                                     | `ca.crt`                 |
+| `https.key`                                   | TLS Key for Thanos HTTPS - ignored if existingSecret is provided                                                    | `""`                     |
+| `https.cert`                                  | TLS Certificate for Thanos HTTPS - ignored if existingSecret is provided                                            | `""`                     |
+| `https.ca`                                    | (Optional, used for client) CA Certificate for Thanos HTTPS - ignored if existingSecret is provided                 | `""`                     |
+| `https.clientAuthType`                        | Server policy for client authentication using certificates. Maps to ClientAuth Policies.                            | `""`                     |
+| `auth.basicAuthUsers`                         | Object containing <user>:<passwords> key-value pairs for each user that will have access via basic authentication   | `{}`                     |
+| `serviceAccount.create`                       | Specifies whether a ServiceAccount should be created                                                                | `false`                  |
+| `serviceAccount.name`                         | Name of the service account to use. If not set and create is true, a name is generated using the fullname template. | `""`                     |
+| `serviceAccount.automountServiceAccountToken` | Automount service account token for the server service account                                                      | `true`                   |
+| `serviceAccount.annotations`                  | Annotations for service account. Evaluated as a template. Only used if `create` is `true`.                          | `{}`                     |
 
 ### Thanos Query parameters
 
@@ -1182,15 +1185,14 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 
 ### Volume Permissions parameters
 
-| Name                                  | Description                                                                                                                       | Value              |
-| ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | ------------------ |
-| `volumePermissions.enabled`           | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`                                   | `false`            |
-| `volumePermissions.image.registry`    | Init container volume-permissions image registry                                                                                  | `docker.io`        |
-| `volumePermissions.image.repository`  | Init container volume-permissions image repository                                                                                | `bitnami/os-shell` |
-| `volumePermissions.image.tag`         | Init container volume-permissions image tag                                                                                       | `11-debian-11-r90` |
-| `volumePermissions.image.digest`      | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`               |
-| `volumePermissions.image.pullPolicy`  | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`     |
-| `volumePermissions.image.pullSecrets` | Specify docker-registry secret names as an array                                                                                  | `[]`               |
+| Name                                  | Description                                                                                                                       | Value                      |
+| ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- | -------------------------- |
+| `volumePermissions.enabled`           | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`                                   | `false`                    |
+| `volumePermissions.image.registry`    | Init container volume-permissions image registry                                                                                  | `REGISTRY_NAME`            |
+| `volumePermissions.image.repository`  | Init container volume-permissions image repository                                                                                | `REPOSITORY_NAME/os-shell` |
+| `volumePermissions.image.digest`      | Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
+| `volumePermissions.image.pullPolicy`  | Init container volume-permissions image pull policy                                                                               | `IfNotPresent`             |
+| `volumePermissions.image.pullSecrets` | Specify docker-registry secret names as an array                                                                                  | `[]`                       |
 
 ### MinIO&reg; chart parameters
 
@@ -1213,17 +1215,20 @@ Check the section [Integrate Thanos with Prometheus and Alertmanager](#integrate
 Specify each parameter using the `--set key=value[,key=value]` argument to `helm install`. For example,
 
 ```console
-helm install my-release --set query.replicaCount=2 oci://registry-1.docker.io/bitnamicharts/thanos
+helm install my-release --set query.replicaCount=2 oci://REGISTRY_NAME/REPOSITORY_NAME/thanos
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 The above command install Thanos chart with 2 Thanos Query replicas.
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/thanos
+helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/thanos
 ```
 
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
 ## Configuration and installation details
@@ -1420,8 +1425,10 @@ helm install kube-prometheus \
 helm install thanos \
     --values values.yaml \
     --namespace monitoring \
-    oci://registry-1.docker.io/bitnamicharts/thanos
+    oci://REGISTRY_NAME/REPOSITORY_NAME/thanos
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 That's all! Now you have Thanos fully integrated with Prometheus and Alertmanager.
 

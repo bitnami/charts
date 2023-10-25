@@ -11,8 +11,10 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/nats
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/nats
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 ## Introduction
 
@@ -20,7 +22,7 @@ This chart bootstraps a [NATS](https://github.com/bitnami/containers/tree/main/b
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
-Looking to use NATS in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use NATS in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -32,8 +34,10 @@ Looking to use NATS in production? Try [VMware Application Catalog](https://bitn
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/nats
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/nats
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 The command deploys NATS on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
@@ -75,44 +79,43 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### NATS parameters
 
-| Name                     | Description                                                                                           | Value                 |
-| ------------------------ | ----------------------------------------------------------------------------------------------------- | --------------------- |
-| `image.registry`         | NATS image registry                                                                                   | `docker.io`           |
-| `image.repository`       | NATS image repository                                                                                 | `bitnami/nats`        |
-| `image.tag`              | NATS image tag (immutable tags are recommended)                                                       | `2.10.3-debian-11-r0` |
-| `image.digest`           | NATS image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag  | `""`                  |
-| `image.pullPolicy`       | NATS image pull policy                                                                                | `IfNotPresent`        |
-| `image.pullSecrets`      | NATS image pull secrets                                                                               | `[]`                  |
-| `image.debug`            | Enable NATS image debug mode                                                                          | `false`               |
-| `auth.enabled`           | Switch to enable/disable client authentication                                                        | `true`                |
-| `auth.user`              | Client authentication user                                                                            | `nats_client`         |
-| `auth.password`          | Client authentication password                                                                        | `""`                  |
-| `auth.token`             | Client authentication token                                                                           | `""`                  |
-| `auth.timeout`           | Client authentication timeout (seconds)                                                               | `1`                   |
-| `auth.usersCredentials`  | Client authentication users credentials collection                                                    | `[]`                  |
-| `auth.noAuthUser`        | Client authentication username from auth.usersCredentials map to be used when no credentials provided | `""`                  |
-| `cluster.name`           | Cluster name                                                                                          | `nats`                |
-| `cluster.connectRetries` | Configure number of connect retries for implicit routes, otherwise leave blank                        | `""`                  |
-| `cluster.auth.enabled`   | Switch to enable/disable cluster authentication                                                       | `true`                |
-| `cluster.auth.user`      | Cluster authentication user                                                                           | `nats_cluster`        |
-| `cluster.auth.password`  | Cluster authentication password                                                                       | `""`                  |
-| `jetstream.enabled`      | Switch to enable/disable JetStream                                                                    | `false`               |
-| `jetstream.maxMemory`    | Max memory usage for JetStream                                                                        | `1G`                  |
-| `debug.enabled`          | Switch to enable/disable debug on logging                                                             | `false`               |
-| `debug.trace`            | Switch to enable/disable trace debug level on logging                                                 | `false`               |
-| `debug.logtime`          | Switch to enable/disable logtime on logging                                                           | `false`               |
-| `maxConnections`         | Max. number of client connections                                                                     | `""`                  |
-| `maxControlLine`         | Max. protocol control line                                                                            | `""`                  |
-| `maxPayload`             | Max. payload                                                                                          | `""`                  |
-| `writeDeadline`          | Duration the server can block on a socket write to a client                                           | `""`                  |
-| `natsFilename`           | Filename used by several NATS files (binary, configuration file, and pid file)                        | `nats-server`         |
-| `configuration`          | Specify content for NATS configuration file (generated based on other parameters otherwise)           | `""`                  |
-| `existingSecret`         | The name of an existing Secret with your custom configuration for NATS                                | `""`                  |
-| `command`                | Override default container command (useful when using custom images)                                  | `[]`                  |
-| `args`                   | Override default container args (useful when using custom images)                                     | `[]`                  |
-| `extraEnvVars`           | Extra environment variables to be set on NATS container                                               | `[]`                  |
-| `extraEnvVarsCM`         | ConfigMap with extra environment variables                                                            | `""`                  |
-| `extraEnvVarsSecret`     | Secret with extra environment variables                                                               | `""`                  |
+| Name                     | Description                                                                                           | Value                  |
+| ------------------------ | ----------------------------------------------------------------------------------------------------- | ---------------------- |
+| `image.registry`         | NATS image registry                                                                                   | `REGISTRY_NAME`        |
+| `image.repository`       | NATS image repository                                                                                 | `REPOSITORY_NAME/nats` |
+| `image.digest`           | NATS image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag  | `""`                   |
+| `image.pullPolicy`       | NATS image pull policy                                                                                | `IfNotPresent`         |
+| `image.pullSecrets`      | NATS image pull secrets                                                                               | `[]`                   |
+| `image.debug`            | Enable NATS image debug mode                                                                          | `false`                |
+| `auth.enabled`           | Switch to enable/disable client authentication                                                        | `true`                 |
+| `auth.user`              | Client authentication user                                                                            | `nats_client`          |
+| `auth.password`          | Client authentication password                                                                        | `""`                   |
+| `auth.token`             | Client authentication token                                                                           | `""`                   |
+| `auth.timeout`           | Client authentication timeout (seconds)                                                               | `1`                    |
+| `auth.usersCredentials`  | Client authentication users credentials collection                                                    | `[]`                   |
+| `auth.noAuthUser`        | Client authentication username from auth.usersCredentials map to be used when no credentials provided | `""`                   |
+| `cluster.name`           | Cluster name                                                                                          | `nats`                 |
+| `cluster.connectRetries` | Configure number of connect retries for implicit routes, otherwise leave blank                        | `""`                   |
+| `cluster.auth.enabled`   | Switch to enable/disable cluster authentication                                                       | `true`                 |
+| `cluster.auth.user`      | Cluster authentication user                                                                           | `nats_cluster`         |
+| `cluster.auth.password`  | Cluster authentication password                                                                       | `""`                   |
+| `jetstream.enabled`      | Switch to enable/disable JetStream                                                                    | `false`                |
+| `jetstream.maxMemory`    | Max memory usage for JetStream                                                                        | `1G`                   |
+| `debug.enabled`          | Switch to enable/disable debug on logging                                                             | `false`                |
+| `debug.trace`            | Switch to enable/disable trace debug level on logging                                                 | `false`                |
+| `debug.logtime`          | Switch to enable/disable logtime on logging                                                           | `false`                |
+| `maxConnections`         | Max. number of client connections                                                                     | `""`                   |
+| `maxControlLine`         | Max. protocol control line                                                                            | `""`                   |
+| `maxPayload`             | Max. payload                                                                                          | `""`                   |
+| `writeDeadline`          | Duration the server can block on a socket write to a client                                           | `""`                   |
+| `natsFilename`           | Filename used by several NATS files (binary, configuration file, and pid file)                        | `nats-server`          |
+| `configuration`          | Specify content for NATS configuration file (generated based on other parameters otherwise)           | `""`                   |
+| `existingSecret`         | The name of an existing Secret with your custom configuration for NATS                                | `""`                   |
+| `command`                | Override default container command (useful when using custom images)                                  | `[]`                   |
+| `args`                   | Override default container args (useful when using custom images)                                     | `[]`                   |
+| `extraEnvVars`           | Extra environment variables to be set on NATS container                                               | `[]`                   |
+| `extraEnvVarsCM`         | ConfigMap with extra environment variables                                                            | `""`                   |
+| `extraEnvVarsSecret`     | Secret with extra environment variables                                                               | `""`                   |
 
 ### NATS deployment/statefulset parameters
 
@@ -212,32 +215,31 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Metrics parameters
 
-| Name                                       | Description                                                                                                   | Value                   |
-| ------------------------------------------ | ------------------------------------------------------------------------------------------------------------- | ----------------------- |
-| `metrics.enabled`                          | Enable Prometheus metrics via exporter side-car                                                               | `false`                 |
-| `metrics.image.registry`                   | Prometheus metrics exporter image registry                                                                    | `docker.io`             |
-| `metrics.image.repository`                 | Prometheus metrics exporter image repository                                                                  | `bitnami/nats-exporter` |
-| `metrics.image.tag`                        | Prometheus metrics exporter image tag (immutable tags are recommended)                                        | `0.12.0-debian-11-r97`  |
-| `metrics.image.digest`                     | NATS Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
-| `metrics.image.pullPolicy`                 | Prometheus metrics image pull policy                                                                          | `IfNotPresent`          |
-| `metrics.image.pullSecrets`                | Prometheus metrics image pull secrets                                                                         | `[]`                    |
-| `metrics.resources`                        | Metrics exporter resource requests and limits                                                                 | `{}`                    |
-| `metrics.containerPort`                    | Prometheus metrics exporter port                                                                              | `7777`                  |
-| `metrics.flags`                            | Flags to be passed to Prometheus metrics                                                                      | `[]`                    |
-| `metrics.service.type`                     | Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`)                                           | `ClusterIP`             |
-| `metrics.service.port`                     | Prometheus metrics service port                                                                               | `7777`                  |
-| `metrics.service.loadBalancerIP`           | Use serviceLoadBalancerIP to request a specific static IP, otherwise leave blank                              | `""`                    |
-| `metrics.service.annotations`              | Annotations for Prometheus metrics service                                                                    | `{}`                    |
-| `metrics.service.labels`                   | Labels for Prometheus metrics service                                                                         | `{}`                    |
-| `metrics.serviceMonitor.enabled`           | Specify if a ServiceMonitor will be deployed for Prometheus Operator                                          | `false`                 |
-| `metrics.serviceMonitor.namespace`         | Namespace in which Prometheus is running                                                                      | `monitoring`            |
-| `metrics.serviceMonitor.labels`            | Extra labels for the ServiceMonitor                                                                           | `{}`                    |
-| `metrics.serviceMonitor.jobLabel`          | The name of the label on the target service to use as the job name in Prometheus                              | `""`                    |
-| `metrics.serviceMonitor.interval`          | How frequently to scrape metrics                                                                              | `""`                    |
-| `metrics.serviceMonitor.scrapeTimeout`     | Timeout after which the scrape is ended                                                                       | `""`                    |
-| `metrics.serviceMonitor.metricRelabelings` | Specify additional relabeling of metrics                                                                      | `[]`                    |
-| `metrics.serviceMonitor.relabelings`       | Specify general relabeling                                                                                    | `[]`                    |
-| `metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                                                           | `{}`                    |
+| Name                                       | Description                                                                                                   | Value                           |
+| ------------------------------------------ | ------------------------------------------------------------------------------------------------------------- | ------------------------------- |
+| `metrics.enabled`                          | Enable Prometheus metrics via exporter side-car                                                               | `false`                         |
+| `metrics.image.registry`                   | Prometheus metrics exporter image registry                                                                    | `REGISTRY_NAME`                 |
+| `metrics.image.repository`                 | Prometheus metrics exporter image repository                                                                  | `REPOSITORY_NAME/nats-exporter` |
+| `metrics.image.digest`                     | NATS Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                            |
+| `metrics.image.pullPolicy`                 | Prometheus metrics image pull policy                                                                          | `IfNotPresent`                  |
+| `metrics.image.pullSecrets`                | Prometheus metrics image pull secrets                                                                         | `[]`                            |
+| `metrics.resources`                        | Metrics exporter resource requests and limits                                                                 | `{}`                            |
+| `metrics.containerPort`                    | Prometheus metrics exporter port                                                                              | `7777`                          |
+| `metrics.flags`                            | Flags to be passed to Prometheus metrics                                                                      | `[]`                            |
+| `metrics.service.type`                     | Kubernetes service type (`ClusterIP`, `NodePort` or `LoadBalancer`)                                           | `ClusterIP`                     |
+| `metrics.service.port`                     | Prometheus metrics service port                                                                               | `7777`                          |
+| `metrics.service.loadBalancerIP`           | Use serviceLoadBalancerIP to request a specific static IP, otherwise leave blank                              | `""`                            |
+| `metrics.service.annotations`              | Annotations for Prometheus metrics service                                                                    | `{}`                            |
+| `metrics.service.labels`                   | Labels for Prometheus metrics service                                                                         | `{}`                            |
+| `metrics.serviceMonitor.enabled`           | Specify if a ServiceMonitor will be deployed for Prometheus Operator                                          | `false`                         |
+| `metrics.serviceMonitor.namespace`         | Namespace in which Prometheus is running                                                                      | `monitoring`                    |
+| `metrics.serviceMonitor.labels`            | Extra labels for the ServiceMonitor                                                                           | `{}`                            |
+| `metrics.serviceMonitor.jobLabel`          | The name of the label on the target service to use as the job name in Prometheus                              | `""`                            |
+| `metrics.serviceMonitor.interval`          | How frequently to scrape metrics                                                                              | `""`                            |
+| `metrics.serviceMonitor.scrapeTimeout`     | Timeout after which the scrape is ended                                                                       | `""`                            |
+| `metrics.serviceMonitor.metricRelabelings` | Specify additional relabeling of metrics                                                                      | `[]`                            |
+| `metrics.serviceMonitor.relabelings`       | Specify general relabeling                                                                                    | `[]`                            |
+| `metrics.serviceMonitor.selector`          | Prometheus instance selector labels                                                                           | `{}`                            |
 
 ### Persistence parameters
 
@@ -263,8 +265,10 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 helm install my-release \
   --set auth.enabled=true,auth.user=my-user,auth.password=T0pS3cr3t \
-    oci://registry-1.docker.io/bitnamicharts/nats
+    oci://REGISTRY_NAME/REPOSITORY_NAME/nats
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 The above command enables NATS client authentication with `my-user` as user and `T0pS3cr3t` as password credentials.
 
@@ -273,9 +277,10 @@ The above command enables NATS client authentication with `my-user` as user and 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/nats
+helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/nats
 ```
 
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
 ## Configuration and installation details
@@ -326,8 +331,10 @@ NATS version 2.0.0 has renamed the server binary filename from `gnatsd` to `nats
 however, it is still possible to use the chart to deploy NATS version 1.x.x using the `natsFilename` property.
 
 ```console
-helm install nats-v1 --set natsFilename=gnatsd --set image.tag=1.4.1 oci://registry-1.docker.io/bitnamicharts/nats
+helm install nats-v1 --set natsFilename=gnatsd --set image.tag=1.4.1 oci://REGISTRY_NAME/REPOSITORY_NAME/nats
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 ### To 7.0.0
 

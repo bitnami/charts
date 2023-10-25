@@ -178,7 +178,10 @@ spec:
               value: {{ ternary "no" "yes" .Values.auth.enabled | quote }}
             {{- $extraFlags := .Values.arbiter.extraFlags | join " " -}}
             {{- if and .Values.tls.enabled .Values.arbiter.enabled  }}
-              {{- $extraFlags = printf "--tlsMode=%s --tlsCertificateKeyFile=/certs/mongodb.pem --tlsCAFile=/certs/mongodb-ca-cert %s" .Values.tls.mode $extraFlags  }}
+              {{- if .Values.tls.mTLS.enabled }}
+              {{- $extraFlags = printf "--tlsCAFile=/certs/mongodb-ca-cert %s" $extraFlags  }}
+              {{- end }}
+              {{- $extraFlags = printf "--tlsMode=%s --tlsCertificateKeyFile=/certs/mongodb.pem %s" .Values.tls.mode $extraFlags  }}
             {{- end }}
             {{- if ne $extraFlags "" }}
             - name: MONGODB_EXTRA_FLAGS
@@ -186,7 +189,7 @@ spec:
             {{- end }}
             {{- if and .Values.tls.enabled  .Values.arbiter.enabled }}
             - name: MONGODB_CLIENT_EXTRA_FLAGS
-              value: --tls --tlsCertificateKeyFile=/certs/mongodb.pem --tlsCAFile=/certs/mongodb-ca-cert
+              value: --tls {{ if .Values.tls.mTLS.enabled }}--tlsCertificateKeyFile=/certs/mongodb.pem {{ end }}--tlsCAFile=/certs/mongodb-ca-cert
             {{- end }}
             {{- if .Values.arbiter.extraEnvVars }}
             {{- include "common.tplvalues.render" (dict "value" .Values.arbiter.extraEnvVars "context" $) | nindent 12 }}

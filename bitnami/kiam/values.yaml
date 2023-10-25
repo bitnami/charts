@@ -57,9 +57,9 @@ diagnosticMode:
 
 ## @section kiam image parameters
 
-## @param image.registry kiam image registry
-## @param image.repository kiam image name
-## @param image.tag kiam image tag
+## @param image.registry [default: REGISTRY_NAME] kiam image registry
+## @param image.repository [default: REPOSITORY_NAME/kiam] kiam image name
+## @skip image.tag kiam image tag
 ## @param image.digest kiam image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy kiam image pull policy
 ## @param image.pullSecrets Specify docker-registry secret names as an array
