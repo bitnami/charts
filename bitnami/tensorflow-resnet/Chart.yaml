@@ -8,7 +8,7 @@ annotations:
     - name: tensorflow-resnet
       image: docker.io/bitnami/tensorflow-resnet:2.13.1-debian-11-r7
     - name: tensorflow-serving
-      image: docker.io/bitnami/tensorflow-serving:2.13.1-debian-11-r5
+      image: docker.io/bitnami/tensorflow-serving:2.13.1-debian-11-r6
 apiVersion: v2
 appVersion: 2.13.1
 dependencies:
@@ -33,4 +33,4 @@ maintainers:
 name: tensorflow-resnet
 sources:
 - https://github.com/bitnami/charts/tree/main/bitnami/tensorflow-resnet
-version: 3.9.6
+version: 3.9.7
