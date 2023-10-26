@@ -372,46 +372,51 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Image puller deployment parameters
 
-| Name                                                | Description                                                                                                              | Value           |
-| --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | --------------- |
-| `imagePuller.enabled`                               | Deploy ImagePuller daemonset                                                                                             | `true`          |
-| `imagePuller.command`                               | Override ImagePuller default command                                                                                     | `[]`            |
-| `imagePuller.args`                                  | Override ImagePuller default args                                                                                        | `[]`            |
-| `imagePuller.extraEnvVars`                          | Add extra environment variables to the ImagePuller container                                                             | `[]`            |
-| `imagePuller.extraEnvVarsCM`                        | Name of existing ConfigMap containing extra env vars                                                                     | `""`            |
-| `imagePuller.extraEnvVarsSecret`                    | Name of existing Secret containing extra env vars                                                                        | `""`            |
-| `imagePuller.customStartupProbe`                    | Override default startup probe                                                                                           | `{}`            |
-| `imagePuller.customLivenessProbe`                   | Override default liveness probe                                                                                          | `{}`            |
-| `imagePuller.customReadinessProbe`                  | Override default readiness probe                                                                                         | `{}`            |
-| `imagePuller.resources.limits`                      | The resources limits for the ImagePuller containers                                                                      | `{}`            |
-| `imagePuller.resources.requests`                    | The requested resources for the ImagePuller containers                                                                   | `{}`            |
-| `imagePuller.containerSecurityContext.enabled`      | Enabled ImagePuller containers' Security Context                                                                         | `true`          |
-| `imagePuller.containerSecurityContext.runAsUser`    | Set ImagePuller container's Security Context runAsUser                                                                   | `1001`          |
-| `imagePuller.containerSecurityContext.runAsNonRoot` | Set ImagePuller container's Security Context runAsNonRoot                                                                | `true`          |
-| `imagePuller.podSecurityContext.enabled`            | Enabled ImagePuller pods' Security Context                                                                               | `true`          |
-| `imagePuller.podSecurityContext.fsGroup`            | Set ImagePuller pod's Security Context fsGroup                                                                           | `1001`          |
-| `imagePuller.lifecycleHooks`                        | Add lifecycle hooks to the ImagePuller deployment                                                                        | `{}`            |
-| `imagePuller.hostAliases`                           | Add deployment host aliases                                                                                              | `[]`            |
-| `imagePuller.podLabels`                             | Pod extra labels                                                                                                         | `{}`            |
-| `imagePuller.podAnnotations`                        | Annotations for ImagePuller pods                                                                                         | `{}`            |
-| `imagePuller.podAffinityPreset`                     | Pod affinity preset. Ignored if `imagePuller.affinity` is set. Allowed values: `soft` or `hard`                          | `""`            |
-| `imagePuller.podAntiAffinityPreset`                 | Pod anti-affinity preset. Ignored if `imagePuller.affinity` is set. Allowed values: `soft` or `hard`                     | `soft`          |
-| `imagePuller.nodeAffinityPreset.type`               | Node affinity preset type. Ignored if `imagePuller.affinity` is set. Allowed values: `soft` or `hard`                    | `""`            |
-| `imagePuller.nodeAffinityPreset.key`                | Node label key to match. Ignored if `imagePuller.affinity` is set                                                        | `""`            |
-| `imagePuller.nodeAffinityPreset.values`             | Node label values to match. Ignored if `imagePuller.affinity` is set                                                     | `[]`            |
-| `imagePuller.affinity`                              | Affinity for pod assignment. Evaluated as a template.                                                                    | `{}`            |
-| `imagePuller.nodeSelector`                          | Node labels for pod assignment. Evaluated as a template.                                                                 | `{}`            |
-| `imagePuller.tolerations`                           | Tolerations for pod assignment. Evaluated as a template.                                                                 | `[]`            |
-| `imagePuller.topologySpreadConstraints`             | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`            |
-| `imagePuller.priorityClassName`                     | Priority Class Name                                                                                                      | `""`            |
-| `imagePuller.schedulerName`                         | Use an alternate scheduler, e.g. "stork".                                                                                | `""`            |
-| `imagePuller.terminationGracePeriodSeconds`         | Seconds ImagePuller pod needs to terminate gracefully                                                                    | `""`            |
-| `imagePuller.updateStrategy.type`                   | Update strategy - only really applicable for deployments with RWO PVs attached                                           | `RollingUpdate` |
-| `imagePuller.updateStrategy.rollingUpdate`          | ImagePuller deployment rolling update configuration parameters                                                           | `{}`            |
-| `imagePuller.extraVolumes`                          | Optionally specify extra list of additional volumes for ImagePuller pods                                                 | `[]`            |
-| `imagePuller.extraVolumeMounts`                     | Optionally specify extra list of additional volumeMounts for ImagePuller container(s)                                    | `[]`            |
-| `imagePuller.initContainers`                        | Add additional init containers to the ImagePuller pods                                                                   | `[]`            |
-| `imagePuller.sidecars`                              | Add additional sidecar containers to the ImagePuller pod                                                                 | `[]`            |
+| Name                                                            | Description                                                                                                              | Value            |
+| --------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ | ---------------- |
+| `imagePuller.enabled`                                           | Deploy ImagePuller daemonset                                                                                             | `true`           |
+| `imagePuller.command`                                           | Override ImagePuller default command                                                                                     | `[]`             |
+| `imagePuller.args`                                              | Override ImagePuller default args                                                                                        | `[]`             |
+| `imagePuller.extraEnvVars`                                      | Add extra environment variables to the ImagePuller container                                                             | `[]`             |
+| `imagePuller.extraEnvVarsCM`                                    | Name of existing ConfigMap containing extra env vars                                                                     | `""`             |
+| `imagePuller.extraEnvVarsSecret`                                | Name of existing Secret containing extra env vars                                                                        | `""`             |
+| `imagePuller.customStartupProbe`                                | Override default startup probe                                                                                           | `{}`             |
+| `imagePuller.customLivenessProbe`                               | Override default liveness probe                                                                                          | `{}`             |
+| `imagePuller.customReadinessProbe`                              | Override default readiness probe                                                                                         | `{}`             |
+| `imagePuller.resources.limits`                                  | The resources limits for the ImagePuller containers                                                                      | `{}`             |
+| `imagePuller.resources.requests`                                | The requested resources for the ImagePuller containers                                                                   | `{}`             |
+| `imagePuller.containerSecurityContext.enabled`                  | Enabled containers' Security Context                                                                                     | `true`           |
+| `imagePuller.containerSecurityContext.runAsUser`                | Set containers' Security Context runAsUser                                                                               | `1001`           |
+| `imagePuller.containerSecurityContext.runAsNonRoot`             | Set container's Security Context runAsNonRoot                                                                            | `true`           |
+| `imagePuller.containerSecurityContext.privileged`               | Set container's Security Context privileged                                                                              | `false`          |
+| `imagePuller.containerSecurityContext.readOnlyRootFilesystem`   | Set container's Security Context readOnlyRootFilesystem                                                                  | `false`          |
+| `imagePuller.containerSecurityContext.allowPrivilegeEscalation` | Set container's Security Context allowPrivilegeEscalation                                                                | `false`          |
+| `imagePuller.containerSecurityContext.capabilities.drop`        | List of capabilities to be dropped                                                                                       | `["ALL"]`        |
+| `imagePuller.containerSecurityContext.seccompProfile.type`      | Set container's Security Context seccomp profile                                                                         | `RuntimeDefault` |
+| `imagePuller.podSecurityContext.enabled`                        | Enabled ImagePuller pods' Security Context                                                                               | `true`           |
+| `imagePuller.podSecurityContext.fsGroup`                        | Set ImagePuller pod's Security Context fsGroup                                                                           | `1001`           |
+| `imagePuller.lifecycleHooks`                                    | Add lifecycle hooks to the ImagePuller deployment                                                                        | `{}`             |
+| `imagePuller.hostAliases`                                       | Add deployment host aliases                                                                                              | `[]`             |
+| `imagePuller.podLabels`                                         | Pod extra labels                                                                                                         | `{}`             |
+| `imagePuller.podAnnotations`                                    | Annotations for ImagePuller pods                                                                                         | `{}`             |
+| `imagePuller.podAffinityPreset`                                 | Pod affinity preset. Ignored if `imagePuller.affinity` is set. Allowed values: `soft` or `hard`                          | `""`             |
+| `imagePuller.podAntiAffinityPreset`                             | Pod anti-affinity preset. Ignored if `imagePuller.affinity` is set. Allowed values: `soft` or `hard`                     | `soft`           |
+| `imagePuller.nodeAffinityPreset.type`                           | Node affinity preset type. Ignored if `imagePuller.affinity` is set. Allowed values: `soft` or `hard`                    | `""`             |
+| `imagePuller.nodeAffinityPreset.key`                            | Node label key to match. Ignored if `imagePuller.affinity` is set                                                        | `""`             |
+| `imagePuller.nodeAffinityPreset.values`                         | Node label values to match. Ignored if `imagePuller.affinity` is set                                                     | `[]`             |
+| `imagePuller.affinity`                                          | Affinity for pod assignment. Evaluated as a template.                                                                    | `{}`             |
+| `imagePuller.nodeSelector`                                      | Node labels for pod assignment. Evaluated as a template.                                                                 | `{}`             |
+| `imagePuller.tolerations`                                       | Tolerations for pod assignment. Evaluated as a template.                                                                 | `[]`             |
+| `imagePuller.topologySpreadConstraints`                         | Topology Spread Constraints for pod assignment spread across your cluster among failure-domains. Evaluated as a template | `[]`             |
+| `imagePuller.priorityClassName`                                 | Priority Class Name                                                                                                      | `""`             |
+| `imagePuller.schedulerName`                                     | Use an alternate scheduler, e.g. "stork".                                                                                | `""`             |
+| `imagePuller.terminationGracePeriodSeconds`                     | Seconds ImagePuller pod needs to terminate gracefully                                                                    | `""`             |
+| `imagePuller.updateStrategy.type`                               | Update strategy - only really applicable for deployments with RWO PVs attached                                           | `RollingUpdate`  |
+| `imagePuller.updateStrategy.rollingUpdate`                      | ImagePuller deployment rolling update configuration parameters                                                           | `{}`             |
+| `imagePuller.extraVolumes`                                      | Optionally specify extra list of additional volumes for ImagePuller pods                                                 | `[]`             |
+| `imagePuller.extraVolumeMounts`                                 | Optionally specify extra list of additional volumeMounts for ImagePuller container(s)                                    | `[]`             |
+| `imagePuller.initContainers`                                    | Add additional init containers to the ImagePuller pods                                                                   | `[]`             |
+| `imagePuller.sidecars`                                          | Add additional sidecar containers to the ImagePuller pod                                                                 | `[]`             |
 
 ### Singleuser deployment parameters
 
