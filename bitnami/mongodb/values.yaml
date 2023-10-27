@@ -1011,7 +1011,7 @@ externalAccess:
 networkPolicy:
   ## @param networkPolicy.enabled Enable MongoDB(&reg;) network policies
   ##
-  enabled: true
+  enabled: false
 
   ## Ingress rules - Allow incoming connections
   ##
