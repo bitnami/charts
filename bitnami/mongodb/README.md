@@ -294,15 +294,15 @@ Refer to the [chart documentation for more information on each of these architec
 | `externalAccess.hidden.service.sessionAffinity`               | Control where client requests go, to the same pod or round-robin                                                                                | `None`                    |
 | `externalAccess.hidden.service.sessionAffinityConfig`         | Additional settings for the sessionAffinity                                                                                                     | `{}`                      |
 
-### NetworkPolicy parameters
+### Network policy parameters
 
-| Name                                          | Description                                                                                                                           | Value               |
-| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- | ------------------- |
-| `networkPolicy.enabled`                         | Enable MongoDB(&reg;) network policy                                                                                      | `false`              |
-| `networkPolicy.ingress.namespaceSelector`                         | Namespace selector label that is allowed to access the MongoDB node. This label will be used to identify the allowed namespace(s).                                                                                      | `{}`              |
-| `networkPolicy.ingress.podSelector`                         | Pod selector label that is allowed to access the MongoDB node. This label will be used to identify the allowed pod(s).                                                                                      | `{}`              |
-| `networkPolicy.ingress.customRules`                         | Custom network policy for the MongoDB node                                                                                      | `[]`              |
-| `networkPolicy.egress.customRules`                         | Custom network policy for the MongoDB node                                                                                      | `[]`              |
+| Name                                      | Description                                                                                                                        | Value  |
+| ----------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| `networkPolicy.enabled`                   | Enable MongoDB(&reg;) network policies                                                                                             | `true` |
+| `networkPolicy.ingress.namespaceSelector` | Namespace selector label that is allowed to access the MongoDB node. This label will be used to identify the allowed namespace(s). | `{}`   |
+| `networkPolicy.ingress.podSelector`       | Pod selector label that is allowed to access the MongoDB node. This label will be used to identify the allowed pod(s).             | `{}`   |
+| `networkPolicy.ingress.customRules`       | Custom network policy for the MongoDB node.                                                                                        | `[]`   |
+| `networkPolicy.egress.customRules`        | Custom network policy for the MongoDB node.                                                                                        | `[]`   |
 
 ### Persistence parameters
 
