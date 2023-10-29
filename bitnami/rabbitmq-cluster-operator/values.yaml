@@ -244,6 +244,22 @@ clusterOperator:
   ## @param clusterOperator.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @section clusterOperator.logging RabbitMQ Cluster Operator logging configuration
+  ##
+  logging:
+    ## @param clusterOperator.logging.development Enable/disable development logging mode.
+    ## ref: https://github.com/kubernetes-sigs/controller-runtime/blob/v0.10.2/pkg/log/zap/zap.go#L240-L246
+    ##
+    development: false
+    ## @param clusterOperator.logging.encoder Set the logging encoder. Allowed values: `json`, `console`
+    ##
+    encoder: json
+    ## @param clusterOperator.logging.logLevel Set the logging level. Allowed values: `error`, `warn`, `info`, `debug`
+    ##
+    logLevel: error
+    ## @param clusterOperator.logging.stacktraceLevel Set the stacktrace log level. Allowed values: `error`, `warn`, `info`, `debug`
+    ##
+    stacktraceLevel: error
   ## @param clusterOperator.hostAliases RabbitMQ Cluster Operator pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##
@@ -699,6 +715,22 @@ msgTopologyOperator:
   ## @param msgTopologyOperator.args Override default container args (useful when using custom images)
   ##
   args: []
+  ## @section msgTopologyOperator.logging RabbitMQ Message Topology Operator logging configuration
+  ##
+  logging:
+    ## @param msgTopologyOperator.logging.development Enable/disable development logging mode.
+    ## ref: https://github.com/kubernetes-sigs/controller-runtime/blob/v0.10.2/pkg/log/zap/zap.go#L240-L246
+    ##
+    development: false
+    ## @param msgTopologyOperator.logging.encoder Set the logging encoder. Allowed values: `json`, `console`
+    ##
+    encoder: json
+    ## @param msgTopologyOperator.logging.logLevel Set the logging level. Allowed values: `error`, `warn`, `info`, `debug`
+    ##
+    logLevel: error
+    ## @param msgTopologyOperator.logging.stacktraceLevel Set the stacktrace log level. Allowed values: `error`, `warn`, `info`, `debug`
+    ##
+    stacktraceLevel: error
   ## @param msgTopologyOperator.hostAliases RabbitMQ Messaging Topology Operator pods host aliases
   ## https://kubernetes.io/docs/concepts/services-networking/add-entries-to-pod-etc-hosts-with-host-aliases/
   ##

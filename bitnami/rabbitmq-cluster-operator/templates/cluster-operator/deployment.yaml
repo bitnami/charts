@@ -88,6 +88,10 @@ spec:
           {{- else }}
           args:
             - --metrics-bind-address=:{{ .Values.clusterOperator.containerPorts.metrics }}
+            - --zap-devel={{ with .Values.clusterOperator.logging }}{{ default "false" .development }}{{ else }}"false"{{ end }}
+            - --zap-encoder={{ with .Values.clusterOperator.logging }}{{ default "json" .encoder }}{{ else }}"json"{{ end }}
+            - --zap-log-level={{ with .Values.clusterOperator.logging }}{{ default "error" .logLevel }}{{ else }}"error"{{ end }}
+            - --zap-stacktrace-level={{ with .Values.clusterOperator.logging }}{{ default "error" .stacktraceLevel }}{{ else }}"error"{{ end }}
           {{- end }}
           env:
             - name: OPERATOR_NAMESPACE
