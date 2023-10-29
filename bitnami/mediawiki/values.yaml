@@ -47,9 +47,9 @@ extraDeploy: []
 
 ## Bitnami DokuWiki image version
 ## ref: https://hub.docker.com/r/bitnami/mediawiki/tags/
-## @param image.registry MediaWiki image registry
-## @param image.repository MediaWiki image repository
-## @param image.tag MediaWiki image tag (immutable tags are recommended)
+## @param image.registry [default: REGISTRY_NAME] MediaWiki image registry
+## @param image.repository [default: REPOSITORY_NAME/mediawiki] MediaWiki image repository
+## @skip image.tag MediaWiki image tag (immutable tags are recommended)
 ## @param image.digest MediaWiki image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy Image pull policy
 ## @param image.pullSecrets Specify docker-registry secret names as an array
@@ -152,6 +152,10 @@ extraEnvVarsSecret: ""
 
 ## @section Mediawiki deployment parameters
 
+## @param replicaCount Number of Mediawiki replicas to deploy
+## NOTE: ReadWriteMany PVC(s) are required if replicaCount > 1
+##
+replicaCount: 1
 ## Strategy to use to update Pods
 ## @param updateStrategy.type StrategyType can be set to RollingUpdate or OnDelete
 ##
@@ -655,9 +659,9 @@ metrics:
   ## @param metrics.enabled Start a side-car prometheus exporter
   ##
   enabled: false
-  ## @param metrics.image.registry Apache exporter image registry
-  ## @param metrics.image.repository Apache exporter image repository
-  ## @param metrics.image.tag Apache exporter image tag (immutable tags are recommended)
+  ## @param metrics.image.registry [default: REGISTRY_NAME] Apache exporter image registry
+  ## @param metrics.image.repository [default: REPOSITORY_NAME/apache-exporter] Apache exporter image repository
+  ## @skip metrics.image.tag Apache exporter image tag (immutable tags are recommended)
   ## @param metrics.image.digest Apache exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param metrics.image.pullPolicy Image pull policy
   ## @param metrics.image.pullSecrets Specify docker-registry secret names as an array

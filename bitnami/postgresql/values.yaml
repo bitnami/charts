@@ -87,9 +87,9 @@ diagnosticMode:
 
 ## Bitnami PostgreSQL image version
 ## ref: https://hub.docker.com/r/bitnami/postgresql/tags/
-## @param image.registry PostgreSQL image registry
-## @param image.repository PostgreSQL image repository
-## @param image.tag PostgreSQL image tag (immutable tags are recommended)
+## @param image.registry [default: REGISTRY_NAME] PostgreSQL image registry
+## @param image.repository [default: REPOSITORY_NAME/postgresql] PostgreSQL image repository
+## @skip image.tag PostgreSQL image tag (immutable tags are recommended)
 ## @param image.digest PostgreSQL image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy PostgreSQL image pull policy
 ## @param image.pullSecrets Specify image pull secrets
@@ -98,7 +98,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/postgresql
-  tag: 16.0.0-debian-11-r10
+  tag: 16.0.0-debian-11-r13
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -1289,9 +1289,9 @@ volumePermissions:
   ## @param volumePermissions.enabled Enable init container that changes the owner and group of the persistent volume
   ##
   enabled: false
-  ## @param volumePermissions.image.registry Init container volume-permissions image registry
-  ## @param volumePermissions.image.repository Init container volume-permissions image repository
-  ## @param volumePermissions.image.tag Init container volume-permissions image tag (immutable tags are recommended)
+  ## @param volumePermissions.image.registry [default: REGISTRY_NAME] Init container volume-permissions image registry
+  ## @param volumePermissions.image.repository [default: REPOSITORY_NAME/os-shell] Init container volume-permissions image repository
+  ## @skip volumePermissions.image.tag Init container volume-permissions image tag (immutable tags are recommended)
   ## @param volumePermissions.image.digest Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
   ## @param volumePermissions.image.pullSecrets Init container volume-permissions image pull secrets
@@ -1299,7 +1299,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r89
+    tag: 11-debian-11-r90
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.
@@ -1390,9 +1390,9 @@ metrics:
   ## @param metrics.enabled Start a prometheus exporter
   ##
   enabled: false
-  ## @param metrics.image.registry PostgreSQL Prometheus Exporter image registry
-  ## @param metrics.image.repository PostgreSQL Prometheus Exporter image repository
-  ## @param metrics.image.tag PostgreSQL Prometheus Exporter image tag (immutable tags are recommended)
+  ## @param metrics.image.registry [default: REGISTRY_NAME] PostgreSQL Prometheus Exporter image registry
+  ## @param metrics.image.repository [default: REPOSITORY_NAME/postgres-exporter] PostgreSQL Prometheus Exporter image repository
+  ## @skip metrics.image.tag PostgreSQL Prometheus Exporter image tag (immutable tags are recommended)
   ## @param metrics.image.digest PostgreSQL image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param metrics.image.pullPolicy PostgreSQL Prometheus Exporter image pull policy
   ## @param metrics.image.pullSecrets Specify image pull secrets
@@ -1400,7 +1400,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/postgres-exporter
-    tag: 0.14.0-debian-11-r14
+    tag: 0.14.0-debian-11-r15
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets.

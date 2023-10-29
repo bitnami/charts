@@ -1,9 +1,9 @@
 dependencies:
 - name: kibana
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 10.5.7
+  version: 10.5.9
 - name: common
   repository: oci://registry-1.docker.io/bitnamicharts
-  version: 2.13.2
-digest: sha256:9c8817b8889e7d3178f2206fb89757189f9a384e89eead32f116061b6323f4f0
-generated: "2023-10-12T11:25:42.517797949Z"
+  version: 2.13.3
+digest: sha256:057dd4064705a5d94628b598a0e904d8e4055240c127fd3b75e5b88cfea86c33
+generated: "2023-10-17T16:14:36.152788114Z"

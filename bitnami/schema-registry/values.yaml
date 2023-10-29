@@ -60,9 +60,9 @@ diagnosticMode:
 ## @section Schema Registry parameters
 ## Bitnami Schema Registry image
 ## ref: https://hub.docker.com/r/bitnami/schema-registry/tags/
-## @param image.registry Schema Registry image registry
-## @param image.repository Schema Registry image repository
-## @param image.tag Schema Registry image tag (immutable tags are recommended)
+## @param image.registry [default: REGISTRY_NAME] Schema Registry image registry
+## @param image.repository [default: REPOSITORY_NAME/schema-registry] Schema Registry image repository
+## @skip image.tag Schema Registry image tag (immutable tags are recommended)
 ## @param image.digest Schema Registry image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy Schema Registry image pull policy
 ## @param image.pullSecrets Schema Registry image pull secrets
@@ -439,6 +439,12 @@ autoscaling:
   maxReplicas: 11
   targetCPU: ""
   targetMemory: ""
+  ## @param autoscaling.customPodMetrics allows you to set a list of custom metrics to trigger the scaling.
+  ## e.g:
+  ## customPodMetrics:
+  ##   - name: "requests_per_second"
+  ##     averageValue: "2000m"
+  customPodMetrics: []
 
 ## @section Exposure Parameters
 ## Schema Registry Service paramaters.

@@ -11,8 +11,10 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/ghost
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/ghost
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 ## Introduction
 
@@ -22,7 +24,7 @@ It also packages the [Bitnami MySQL chart](https://github.com/bitnami/charts/tre
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
-Looking to use Ghost in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Ghost in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -36,8 +38,10 @@ Looking to use Ghost in production? Try [VMware Application Catalog](https://bit
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/ghost
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/ghost
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 The command deploys Ghost on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
@@ -80,15 +84,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Ghost Image parameters
 
-| Name                | Description                                                                                           | Value                 |
-| ------------------- | ----------------------------------------------------------------------------------------------------- | --------------------- |
-| `image.registry`    | Ghost image registry                                                                                  | `docker.io`           |
-| `image.repository`  | Ghost image repository                                                                                | `bitnami/ghost`       |
-| `image.tag`         | Ghost image tag (immutable tags are recommended)                                                      | `5.69.0-debian-11-r0` |
-| `image.digest`      | Ghost image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                  |
-| `image.pullPolicy`  | Ghost image pull policy                                                                               | `IfNotPresent`        |
-| `image.pullSecrets` | Ghost image pull secrets                                                                              | `[]`                  |
-| `image.debug`       | Enable image debug mode                                                                               | `false`               |
+| Name                | Description                                                                                           | Value                   |
+| ------------------- | ----------------------------------------------------------------------------------------------------- | ----------------------- |
+| `image.registry`    | Ghost image registry                                                                                  | `REGISTRY_NAME`         |
+| `image.repository`  | Ghost image repository                                                                                | `REPOSITORY_NAME/ghost` |
+| `image.digest`      | Ghost image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                    |
+| `image.pullPolicy`  | Ghost image pull policy                                                                               | `IfNotPresent`          |
+| `image.pullSecrets` | Ghost image pull secrets                                                                              | `[]`                    |
+| `image.debug`       | Enable image debug mode                                                                               | `false`                 |
 
 ### Ghost Configuration parameters
 
@@ -206,25 +209,24 @@ The command removes all the Kubernetes components associated with the chart and 
 
 ### Persistence Parameters
 
-| Name                                          | Description                                                                                                        | Value              |
-| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | ------------------ |
-| `persistence.enabled`                         | Enable persistence using Persistent Volume Claims                                                                  | `true`             |
-| `persistence.storageClass`                    | Persistent Volume storage class                                                                                    | `""`               |
-| `persistence.annotations`                     | Additional custom annotations for the PVC                                                                          | `{}`               |
-| `persistence.accessModes`                     | Persistent Volume access modes                                                                                     | `[]`               |
-| `persistence.size`                            | Persistent Volume size                                                                                             | `8Gi`              |
-| `persistence.existingClaim`                   | The name of an existing PVC to use for persistence                                                                 | `""`               |
-| `persistence.subPath`                         | The name of a volume's sub path to mount for persistence                                                           | `""`               |
-| `volumePermissions.enabled`                   | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`                    | `false`            |
-| `volumePermissions.image.registry`            | OS Shell + Utility image registry                                                                                  | `docker.io`        |
-| `volumePermissions.image.repository`          | OS Shell + Utility image repository                                                                                | `bitnami/os-shell` |
-| `volumePermissions.image.tag`                 | OS Shell + Utility image tag (immutable tags are recommended)                                                      | `11-debian-11-r89` |
-| `volumePermissions.image.digest`              | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`               |
-| `volumePermissions.image.pullPolicy`          | OS Shell + Utility image pull policy                                                                               | `IfNotPresent`     |
-| `volumePermissions.image.pullSecrets`         | OS Shell + Utility image pull secrets                                                                              | `[]`               |
-| `volumePermissions.resources.limits`          | The resources limits for the init container                                                                        | `{}`               |
-| `volumePermissions.resources.requests`        | The requested resources for the init container                                                                     | `{}`               |
-| `volumePermissions.securityContext.runAsUser` | Set init container's Security Context runAsUser                                                                    | `0`                |
+| Name                                          | Description                                                                                                        | Value                      |
+| --------------------------------------------- | ------------------------------------------------------------------------------------------------------------------ | -------------------------- |
+| `persistence.enabled`                         | Enable persistence using Persistent Volume Claims                                                                  | `true`                     |
+| `persistence.storageClass`                    | Persistent Volume storage class                                                                                    | `""`                       |
+| `persistence.annotations`                     | Additional custom annotations for the PVC                                                                          | `{}`                       |
+| `persistence.accessModes`                     | Persistent Volume access modes                                                                                     | `[]`                       |
+| `persistence.size`                            | Persistent Volume size                                                                                             | `8Gi`                      |
+| `persistence.existingClaim`                   | The name of an existing PVC to use for persistence                                                                 | `""`                       |
+| `persistence.subPath`                         | The name of a volume's sub path to mount for persistence                                                           | `""`                       |
+| `volumePermissions.enabled`                   | Enable init container that changes the owner/group of the PV mount point to `runAsUser:fsGroup`                    | `false`                    |
+| `volumePermissions.image.registry`            | OS Shell + Utility image registry                                                                                  | `REGISTRY_NAME`            |
+| `volumePermissions.image.repository`          | OS Shell + Utility image repository                                                                                | `REPOSITORY_NAME/os-shell` |
+| `volumePermissions.image.digest`              | OS Shell + Utility image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag | `""`                       |
+| `volumePermissions.image.pullPolicy`          | OS Shell + Utility image pull policy                                                                               | `IfNotPresent`             |
+| `volumePermissions.image.pullSecrets`         | OS Shell + Utility image pull secrets                                                                              | `[]`                       |
+| `volumePermissions.resources.limits`          | The resources limits for the init container                                                                        | `{}`                       |
+| `volumePermissions.resources.requests`        | The requested resources for the init container                                                                     | `{}`                       |
+| `volumePermissions.securityContext.runAsUser` | Set init container's Security Context runAsUser                                                                    | `0`                        |
 
 ### Database Parameters
 
@@ -292,8 +294,10 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 ```console
 helm install my-release \
   --set ghostUsername=admin,ghostPassword=password,mysql.auth.rootPassword=secretpassword \
-    oci://registry-1.docker.io/bitnamicharts/ghost
+    oci://REGISTRY_NAME/REPOSITORY_NAME/ghost
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 The above command sets the Ghost administrator account username and password to `admin` and `password` respectively. Additionally, it sets the MySQL `root` user password to `secretpassword`.
 
@@ -302,9 +306,10 @@ The above command sets the Ghost administrator account username and password to 
 Alternatively, a YAML file that specifies the values for the above parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/ghost
+helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/ghost
 ```
 
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
 ## Configuration and installation details
@@ -473,8 +478,10 @@ Delete the Ghost deployment and delete the MariaDB statefulset. Notice the optio
 Upgrade you release to 11.0.0 reusing the existing PVC, and enabling back MariaDB:
 
 ```console
-helm upgrade ghost oci://registry-1.docker.io/bitnamicharts/ghost --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set ghostPassword=$GHOST_PASSWORD --set ghostHost=$GHOST_HOST
+helm upgrade ghost oci://REGISTRY_NAME/REPOSITORY_NAME/ghost --set mariadb.primary.persistence.existingClaim=$MARIADB_PVC --set mariadb.auth.rootPassword=$MARIADB_ROOT_PASSWORD --set mariadb.auth.password=$MARIADB_PASSWORD --set ghostPassword=$GHOST_PASSWORD --set ghostHost=$GHOST_HOST
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 You will need to kill the existing MariaDB pod now as the new statefulset is going to create a new one:
 

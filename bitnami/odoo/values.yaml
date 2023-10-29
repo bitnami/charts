@@ -61,9 +61,9 @@ diagnosticMode:
 
 ## Bitnami Odoo image
 ## ref: https://hub.docker.com/r/bitnami/odoo/tags/
-## @param image.registry Odoo image registry
-## @param image.repository Odoo image repository
-## @param image.tag Odoo image tag (immutable tags are recommended)
+## @param image.registry [default: REGISTRY_NAME] Odoo image registry
+## @param image.repository [default: REPOSITORY_NAME/odoo] Odoo image repository
+## @skip image.tag Odoo image tag (immutable tags are recommended)
 ## @param image.digest Odoo image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy Odoo image pull policy
 ## @param image.pullSecrets Odoo image pull secrets
@@ -72,7 +72,7 @@ diagnosticMode:
 image:
   registry: docker.io
   repository: bitnami/odoo
-  tag: 16.0.20230915-debian-11-r20
+  tag: 16.0.20231015-debian-11-r0
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -108,6 +108,9 @@ odooPassword: ""
 ## @param odooSkipInstall Skip Odoo installation wizard
 ##
 odooSkipInstall: false
+## @param odooDatabaseFilter Filter odoo database by using a regex
+##
+odooDatabaseFilter: .*
 ## @param loadDemoData Whether to load demo data for all modules during initialization
 ## ref: https://github.com/bitnami/containers/tree/main/bitnami/odoo#configuration
 ##

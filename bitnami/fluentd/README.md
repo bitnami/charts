@@ -11,8 +11,10 @@ Trademarks: This software listing is packaged by Bitnami. The respective tradema
 ## TL;DR
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/fluentd
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/fluentd
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 ## Introduction
 
@@ -20,7 +22,7 @@ This chart bootstraps a [Fluentd](https://github.com/bitnami/containers/tree/mai
 
 Bitnami charts can be used with [Kubeapps](https://kubeapps.dev/) for deployment and management of Helm Charts in clusters.
 
-Looking to use Fluentd in production? Try [VMware Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
+Looking to use Fluentd in production? Try [VMware Tanzu Application Catalog](https://bitnami.com/enterprise), the enterprise edition of Bitnami Application Catalog.
 
 ## Prerequisites
 
@@ -35,8 +37,10 @@ Looking to use Fluentd in production? Try [VMware Application Catalog](https://b
 To install the chart with the release name `my-release`:
 
 ```console
-helm install my-release oci://registry-1.docker.io/bitnamicharts/fluentd
+helm install my-release oci://REGISTRY_NAME/REPOSITORY_NAME/fluentd
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 These commands deploy Fluentd on the Kubernetes cluster in the default configuration. The [Parameters](#parameters) section lists the parameters that can be configured during installation.
 
@@ -81,16 +85,14 @@ The command removes all the Kubernetes components associated with the chart and 
 
 | Name                                                           | Description                                                                                                                                                        | Value                                                      |
 | -------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ---------------------------------------------------------- |
-| `image.registry`                                               | Fluentd image registry                                                                                                                                             | `docker.io`                                                |
-| `image.repository`                                             | Fluentd image repository                                                                                                                                           | `bitnami/fluentd`                                          |
-| `image.tag`                                                    | Fluentd image tag (immutable tags are recommended)                                                                                                                 | `1.16.2-debian-11-r72`                                     |
+| `image.registry`                                               | Fluentd image registry                                                                                                                                             | `REGISTRY_NAME`                                            |
+| `image.repository`                                             | Fluentd image repository                                                                                                                                           | `REPOSITORY_NAME/fluentd`                                  |
 | `image.pullPolicy`                                             | Fluentd image pull policy                                                                                                                                          | `IfNotPresent`                                             |
 | `image.pullSecrets`                                            | Fluentd image pull secrets                                                                                                                                         | `[]`                                                       |
 | `image.debug`                                                  | Enable image debug mode                                                                                                                                            | `false`                                                    |
 | `forwarder.enabled`                                            | Enable forwarder daemonset                                                                                                                                         | `true`                                                     |
 | `forwarder.image.registry`                                     | Fluentd forwarder image registry override                                                                                                                          | `""`                                                       |
 | `forwarder.image.repository`                                   | Fluentd forwarder image repository override                                                                                                                        | `""`                                                       |
-| `forwarder.image.tag`                                          | Fluentd forwarder image tag override (immutable tags are recommended)                                                                                              | `""`                                                       |
 | `forwarder.daemonUser`                                         | Forwarder daemon user and group (set to root by default because it reads from host paths)                                                                          | `root`                                                     |
 | `forwarder.daemonGroup`                                        | Fluentd forwarder daemon system group                                                                                                                              | `root`                                                     |
 | `forwarder.hostAliases`                                        | Add deployment host aliases                                                                                                                                        | `[]`                                                       |
@@ -187,7 +189,6 @@ The command removes all the Kubernetes components associated with the chart and 
 | `aggregator.enabled`                                           | Enable Fluentd aggregator statefulset                                                                                                                              | `true`                                                     |
 | `aggregator.image.registry`                                    | Fluentd aggregator image registry override                                                                                                                         | `""`                                                       |
 | `aggregator.image.repository`                                  | Fluentd aggregator image repository override                                                                                                                       | `""`                                                       |
-| `aggregator.image.tag`                                         | Fluentd aggregator image tag override (immutable tags are recommended)                                                                                             | `""`                                                       |
 | `aggregator.replicaCount`                                      | Number of aggregator pods to deploy in the Stateful Set                                                                                                            | `1`                                                        |
 | `aggregator.podSecurityContext.enabled`                        | Enable security context for aggregator pods                                                                                                                        | `true`                                                     |
 | `aggregator.podSecurityContext.runAsUser`                      | User ID for aggregator's containers                                                                                                                                | `1001`                                                     |
@@ -333,17 +334,20 @@ Specify each parameter using the `--set key=value[,key=value]` argument to `helm
 
 ```console
 helm install my-release \
-  --set aggregator.port=24444 oci://registry-1.docker.io/bitnamicharts/fluentd
+  --set aggregator.port=24444 oci://REGISTRY_NAME/REPOSITORY_NAME/fluentd
 ```
+
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 
 The above command sets the aggregators to listen on port 24444.
 
 Alternatively, a YAML file that specifies the values for the parameters can be provided while installing the chart. For example,
 
 ```console
-helm install my-release -f values.yaml oci://registry-1.docker.io/bitnamicharts/fluentd
+helm install my-release -f values.yaml oci://REGISTRY_NAME/REPOSITORY_NAME/fluentd
 ```
 
+> Note: You need to substitute the placeholders `REGISTRY_NAME` and `REPOSITORY_NAME` with a reference to your Helm chart registry and repository. For example, in the case of Bitnami, you need to use `REGISTRY_NAME=registry-1.docker.io` and `REPOSITORY_NAME=bitnamicharts`.
 > **Tip**: You can use the default [values.yaml](values.yaml)
 
 ## Configuration and installation details

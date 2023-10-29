@@ -79,9 +79,9 @@ serviceBindings:
 
 ## Bitnami MariaDB image
 ## ref: https://hub.docker.com/r/bitnami/mariadb/tags/
-## @param image.registry MariaDB image registry
-## @param image.repository MariaDB image repository
-## @param image.tag MariaDB image tag (immutable tags are recommended)
+## @param image.registry [default: REGISTRY_NAME] MariaDB image registry
+## @param image.repository [default: REPOSITORY_NAME/mariadb] MariaDB image repository
+## @skip image.tag MariaDB image tag (immutable tags are recommended)
 ## @param image.digest MariaDB image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
 ## @param image.pullPolicy MariaDB image pull policy
 ## @param image.pullSecrets Specify docker-registry secret names as an array
@@ -90,7 +90,7 @@ serviceBindings:
 image:
   registry: docker.io
   repository: bitnami/mariadb
-  tag: 11.1.2-debian-11-r0
+  tag: 11.1.2-debian-11-r1
   digest: ""
   ## Specify a imagePullPolicy
   ## Defaults to 'Always' if image tag is 'latest', else set to 'IfNotPresent'
@@ -325,6 +325,8 @@ primary:
   ## @param primary.containerSecurityContext.runAsNonRoot Set primary container's Security Context runAsNonRoot
   ## @param primary.containerSecurityContext.privileged Set primary container's Security Context privileged
   ## @param primary.containerSecurityContext.allowPrivilegeEscalation Set primary container's Security Context allowPrivilegeEscalation
+  ## @param primary.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param primary.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
@@ -332,6 +334,10 @@ primary:
     runAsNonRoot: true
     privileged: false
     allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## MariaDB primary container's resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -721,6 +727,8 @@ secondary:
   ## @param secondary.containerSecurityContext.runAsNonRoot Set secondary container's Security Context runAsNonRoot
   ## @param secondary.containerSecurityContext.privileged Set secondary container's Security Context privileged
   ## @param secondary.containerSecurityContext.allowPrivilegeEscalation Set secondary container's Security Context allowPrivilegeEscalation
+  ## @param secondary.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param secondary.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ##
   containerSecurityContext:
     enabled: true
@@ -728,6 +736,10 @@ secondary:
     runAsNonRoot: true
     privileged: false
     allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## MariaDB secondary container's resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious
@@ -994,9 +1006,9 @@ volumePermissions:
   ## @param volumePermissions.enabled Enable init container that changes the owner and group of the persistent volume(s) mountpoint to `runAsUser:fsGroup`
   ##
   enabled: false
-  ## @param volumePermissions.image.registry Init container volume-permissions image registry
-  ## @param volumePermissions.image.repository Init container volume-permissions image repository
-  ## @param volumePermissions.image.tag Init container volume-permissions image tag (immutable tags are recommended)
+  ## @param volumePermissions.image.registry [default: REGISTRY_NAME] Init container volume-permissions image registry
+  ## @param volumePermissions.image.repository [default: REPOSITORY_NAME/os-shell] Init container volume-permissions image repository
+  ## @skip volumePermissions.image.tag Init container volume-permissions image tag (immutable tags are recommended)
   ## @param volumePermissions.image.digest Init container volume-permissions image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param volumePermissions.image.pullPolicy Init container volume-permissions image pull policy
   ## @param volumePermissions.image.pullSecrets Specify docker-registry secret names as an array
@@ -1004,7 +1016,7 @@ volumePermissions:
   image:
     registry: docker.io
     repository: bitnami/os-shell
-    tag: 11-debian-11-r86
+    tag: 11-debian-11-r90
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
@@ -1030,9 +1042,9 @@ metrics:
   ## @param metrics.enabled Start a side-car prometheus exporter
   ##
   enabled: false
-  ## @param metrics.image.registry Exporter image registry
-  ## @param metrics.image.repository Exporter image repository
-  ## @param metrics.image.tag Exporter image tag (immutable tags are recommended)
+  ## @param metrics.image.registry [default: REGISTRY_NAME] Exporter image registry
+  ## @param metrics.image.repository [default: REPOSITORY_NAME/mysqld-exporter] Exporter image repository
+  ## @skip metrics.image.tag Exporter image tag (immutable tags are recommended)
   ## @param metrics.image.digest Exporter image digest in the way sha256:aa.... Please note this parameter, if set, will override the tag
   ## @param metrics.image.pullPolicy Exporter image pull policy
   ## @param metrics.image.pullSecrets Specify docker-registry secret names as an array
@@ -1040,7 +1052,7 @@ metrics:
   image:
     registry: docker.io
     repository: bitnami/mysqld-exporter
-    tag: 0.15.0-debian-11-r69
+    tag: 0.15.0-debian-11-r70
     digest: ""
     pullPolicy: IfNotPresent
     ## Optionally specify an array of imagePullSecrets (secrets must be manually created in the namespace)
@@ -1104,8 +1116,12 @@ metrics:
   ## MariaDB metrics container Security Context
   ## ref: https://kubernetes.io/docs/tasks/configure-pod-container/security-context/#set-the-security-context-for-a-container
   ## @param metrics.containerSecurityContext.enabled Enable security context for MariaDB metrics container
+  ## @param metrics.containerSecurityContext.runAsUser User ID for the MariaDB metrics container
+  ## @param metrics.containerSecurityContext.runAsNonRoot Set metrics container's Security Context runAsNonRoot
   ## @param metrics.containerSecurityContext.privileged Set metrics container's Security Context privileged
   ## @param metrics.containerSecurityContext.allowPrivilegeEscalation Set metrics container's Security Context allowPrivilegeEscalation
+  ## @param metrics.containerSecurityContext.capabilities.drop List of capabilities to be dropped
+  ## @param metrics.containerSecurityContext.seccompProfile.type Set container's Security Context seccomp profile
   ## Example:
   ##   containerSecurityContext:
   ##     enabled: true
@@ -1116,7 +1132,13 @@ metrics:
   containerSecurityContext:
     enabled: false
     privileged: false
+    runAsNonRoot: true
+    runAsUser: 1001
     allowPrivilegeEscalation: false
+    capabilities:
+      drop: ["ALL"]
+    seccompProfile:
+      type: "RuntimeDefault"
   ## Mysqld Prometheus exporter resource requests and limits
   ## ref: https://kubernetes.io/docs/user-guide/compute-resources/
   ## We usually recommend not to specify default resources and to leave this as a conscious

@@ -6,8 +6,8 @@ file:
     exists: true
     filetype: file
     mode: "0664"
-    contains:
-    - /http-port.*{{ .Vars.containerPorts.http }}/
+    contents:
+    - /https-port.*{{ .Vars.containerPorts.https }}/
     - /log-console-output.*{{ .Vars.logging.output }}/
 command:
   {{ if and .Vars.serviceAccount.create .Vars.serviceAccount.automountServiceAccountToken }}

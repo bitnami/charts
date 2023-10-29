@@ -266,7 +266,7 @@ compartment: {{ .Values.oci.compartmentOCID }}
 {{ end }}
 
 {{/*
-Compile all warnings into a single message, and call fail.
+Compile all warnings into a single message, and call fail if the validation is enabled
 */}}
 {{- define "external-dns.validateValues" -}}
 {{- $messages := list -}}
@@ -312,8 +312,10 @@ Compile all warnings into a single message, and call fail.
 {{- $messages := without $messages "" -}}
 {{- $message := join "\n" $messages -}}
 
+{{- if .Values.validation.enabled -}}
 {{- if $message -}}
 {{-   printf "\nVALUES VALIDATION:\n%s" $message | fail -}}
+{{- end -}}
 {{- end -}}
 {{- end -}}
 
